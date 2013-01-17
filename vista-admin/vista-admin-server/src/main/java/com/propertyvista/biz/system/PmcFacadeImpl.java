@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,13 +28,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.upgrade.VistaUpgrade;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.ReservedPmcNames;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcAccountNumbers;
+import com.propertyvista.domain.pmc.ReservedPmcNames;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -69,12 +71,32 @@ public class PmcFacadeImpl implements PmcFacade {
         }
     }
 
+    @Override
+    public void deleteAllPmcData(Pmc pmcId) {
+        if (pmcId == null) {
+            return;
+        }
+        remove(pmcId);
+    }
+
     private void remove(Pmc pmc) {
-        EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-        for (OnboardingUserCredential credential : Persistence.service().query(criteria)) {
-            Persistence.service().delete(credential);
-            Persistence.service().delete(credential.user());
+        {
+            EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            for (OnboardingUserCredential credential : Persistence.service().query(criteria)) {
+                Persistence.service().delete(credential);
+                Persistence.service().delete(credential.user());
+            }
+        }
+        {
+            EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            Persistence.service().delete(criteria);
+        }
+        {
+            EntityQueryCriteria<PmcAccountNumbers> criteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            Persistence.service().delete(criteria);
         }
 
         Persistence.service().delete(pmc);

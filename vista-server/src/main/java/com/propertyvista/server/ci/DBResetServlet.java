@@ -58,6 +58,7 @@ import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -100,7 +101,10 @@ public class DBResetServlet extends HttpServlet {
         clear,
 
         @Translate("Preload this PMC")
-        preloadPmc,
+        preloadPmc(true),
+
+        @Translate("Drop Tables and Preload one PMC")
+        resetPmc(true),
 
         @Translate("Preload this PMC : Mockup version  (~5 minutes)")
         preloadPmcWithMockup,
@@ -111,7 +115,7 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Generate Mockup on top of existing data - Only MockupTenantPreloader")
         addPmcMockupTest1,
 
-        clearPmc,
+        clearPmc(true),
 
         dropForeignKeys,
 
@@ -120,6 +124,16 @@ public class DBResetServlet extends HttpServlet {
 
         @Translate("Reset Data Cache for All PMC")
         resetAllCache;
+
+        private final boolean pmcParam;
+
+        ResetType() {
+            this.pmcParam = false;
+        }
+
+        ResetType(boolean pmcParam) {
+            this.pmcParam = pmcParam;
+        }
 
         @Override
         public String toString() {
@@ -179,11 +193,32 @@ public class DBResetServlet extends HttpServlet {
                         o(out, "Current PMC is '", requestNamespace, "'<br/>");
                         h(out, "Usage:<br/><table>");
                         for (ResetType t : EnumSet.allOf(ResetType.class)) {
-                            h(out, "<tr><td><a href=\"");
-                            h(out, "?type=", t.name(), "\">");
-                            h(out, "?type=", t.name());
-                            h(out, "</a></td><td>", t.toString());
-                            h(out, "</td></tr>");
+                            if (t.pmcParam) {
+                                h(out, "<tr><td>");
+                                h(out, "</td><td>", t.toString());
+                                h(out, "</td></tr>");
+                                for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
+                                    h(out, "<tr><td>&nbsp;&nbsp;<a href=\"");
+                                    h(out, "?type=", t.name());
+                                    h(out, "&pmc=", demoPmc.name());
+                                    h(out, "\">");
+
+                                    h(out, "?type=", t.name());
+                                    h(out, "&pmc=", demoPmc.name());
+
+                                    h(out, "</a></td><td>", demoPmc.name(), t.toString());
+                                    h(out, "</td></tr>");
+                                }
+                                h(out, "<tr><td>&nbsp;");
+                                h(out, "</td><td>");
+                                h(out, "</td></tr>");
+                            } else {
+                                h(out, "<tr><td><a href=\"");
+                                h(out, "?type=", t.name(), "\">");
+                                h(out, "?type=", t.name());
+                                h(out, "</a></td><td>", t.toString());
+                                h(out, "</td></tr>");
+                            }
                         }
                         h(out, "</table>");
                     } else {
@@ -243,6 +278,12 @@ public class DBResetServlet extends HttpServlet {
                                             NamespaceManager.setNamespace(requestNamespace);
                                         }
                                     }
+                                } else if (type == ResetType.resetPmc) {
+                                    String pmc = req.getParameter("pmc");
+                                    if (pmc == null) {
+                                        pmc = NamespaceManager.getNamespace();
+                                    }
+                                    resetPmcTables(pmc);
                                 }
 
                                 switch (type) {
@@ -260,13 +301,13 @@ public class DBResetServlet extends HttpServlet {
                                 case addPmcMockup:
                                 case addPmcMockupTest1:
                                 case preloadPmcWithMockup:
+                                case resetPmc:
                                 case preloadPmc: {
                                     String pmc = req.getParameter("pmc");
                                     if (pmc == null) {
                                         pmc = NamespaceManager.getNamespace();
                                     }
                                     preloadPmc(req, out, pmc, type);
-
                                     break;
                                 }
                                 case clearPmc: {
@@ -325,6 +366,18 @@ public class DBResetServlet extends HttpServlet {
 
     }
 
+    private void resetPmcTables(String pmc) {
+        final String requestNamespace = NamespaceManager.getNamespace();
+        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        try {
+            CacheService.resetAll();
+            RDBUtils.resetSchema(pmc);
+            Persistence.service().commit();
+        } finally {
+            NamespaceManager.setNamespace(requestNamespace);
+        }
+    }
+
     private String prodPmcNameCorrections(String name) {
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             return name;
@@ -340,7 +393,7 @@ public class DBResetServlet extends HttpServlet {
 
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
-        Persistence.service().delete(criteria);
+        ServerSideFactory.create(PmcFacade.class).deleteAllPmcData(Persistence.service().retrieve(criteria));
 
         Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName);
         Persistence.service().commit();
@@ -382,6 +435,7 @@ public class DBResetServlet extends HttpServlet {
             cfg = VistaDevPreloadConfig.createDefault();
         }
         if (pmcDnsName.equals(DemoPmc.star.name())) {
+            cfg.numResidentialBuildings = 0;
             cfg.numPotentialTenants2CreditCheck = 0;
             cfg.numPotentialTenants = 0;
             cfg.numTenants = 0;
