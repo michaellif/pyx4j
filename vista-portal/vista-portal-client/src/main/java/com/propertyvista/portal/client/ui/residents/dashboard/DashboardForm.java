@@ -38,6 +38,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -49,6 +50,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> implements DashboardView {
 
@@ -131,11 +133,11 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
         }
 
-//        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-        rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
-        rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
-        get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-//        }
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
+            rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
+            get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        }
         return container;
     }
 
