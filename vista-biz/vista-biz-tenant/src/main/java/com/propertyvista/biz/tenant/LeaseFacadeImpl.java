@@ -238,9 +238,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         leaseTerm = persist(leaseTerm);
 
         // update lease deposits if current term:
-        if (leaseTerm.lease().isValueDetached()) {
-            Persistence.service().retrieve(leaseTerm.lease());
-        }
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
         if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
             updateLeaseDeposits(leaseTerm.lease());
         }
@@ -694,9 +692,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
         assert item != null;
@@ -782,9 +778,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
     }
@@ -809,9 +803,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     // Internals: -----------------------------------------------------------------------------------------------------
 
     private Lease setUnit(Lease lease, LeaseTerm leaseTerm, AptUnit unitId) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         if (!Lease.Status.draft().contains(lease.status().getValue())) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
@@ -819,9 +811,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
             AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
-            if (unit.building().isValueDetached()) {
-                Persistence.service().retrieve(unit.building());
-            }
+            Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
 
             lease.unit().set(unit);
 
@@ -836,28 +826,19 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private LeaseTerm setService(Lease lease, LeaseTerm leaseTerm, ProductItem serviceId) {
-        if (lease.isValueDetached()) {
-            Persistence.service().retrieve(lease);
-        }
-        if (leaseTerm.isValueDetached()) {
-            Persistence.service().retrieve(leaseTerm);
-        }
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm, AttachLevel.Attached);
 
         // find/load all necessary ingredients:
         assert !lease.unit().isNull();
-        if (lease.unit().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit());
-        }
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+
         assert !lease.unit().building().isNull();
-        if (lease.unit().building().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit().building());
-        }
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
         assert serviceItem != null;
-        if (serviceItem.element().isValueDetached()) {
-            Persistence.service().retrieve(serviceItem.element());
-        }
+        Persistence.ensureRetrieve(serviceItem.element(), AttachLevel.Attached);
 
         // double check:
         if (!lease.unit().equals(serviceItem.element())) {
@@ -1027,9 +1008,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void updateLeaseDeposits(Lease lease) {
-        if (lease.currentTerm().isValueDetached()) {
-            Persistence.service().retrieve(lease.currentTerm());
-        }
+        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
 
         List<Deposit> currentDeposits = new ArrayList<Deposit>();
         currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
@@ -1047,15 +1026,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
-        if (unit.isValueDetached()) {
-            Persistence.service().retrieve(unit);
-        }
-        if (unit.building().isValueDetached()) {
-            Persistence.service().retrieve(unit.building());
-        }
-        if (leaseTerm.lease().isValueDetached()) {
-            Persistence.service().retrieve(leaseTerm.lease());
-        }
+        Persistence.ensureRetrieve(unit, AttachLevel.Attached);
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
 
         boolean succeeded = false;
 
@@ -1091,9 +1064,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void updateUnitRentPrice(Lease lease) {
-        if (lease.unit().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit());
-        }
+        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
 
         BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
         BigDecimal currentPrice = null;
