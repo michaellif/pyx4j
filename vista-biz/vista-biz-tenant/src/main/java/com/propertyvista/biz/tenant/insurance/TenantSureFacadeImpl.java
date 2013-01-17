@@ -49,6 +49,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
 
@@ -65,7 +66,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     public TenantSureFacadeImpl() {
-        this(USE_CFC_API_MOCKUP_CLIENT ? new MockupCfcApiClient() : new CfcApiClient());
+        this((VistaDemo.isDemo() | USE_CFC_API_MOCKUP_CLIENT) ? new MockupCfcApiClient() : new CfcApiClient());
     }
 
     @Override
