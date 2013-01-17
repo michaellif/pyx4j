@@ -126,7 +126,11 @@ public class YardiGetResidentTransactionsService {
                 criteria.eq(criteria.proto().info().number(), getUnitId(rtCustomer));
                 AptUnit unit = Persistence.service().query(criteria).get(0);
 
-                createLease(rtCustomer, unit, propertyCode);
+                try {
+                    createLease(rtCustomer, unit, propertyCode);
+                } catch (Throwable t) {
+                    log.info("ERROR - lease not created: ", t);
+                }
             }
         }
         log.info("All leases updated.");
@@ -187,8 +191,7 @@ public class YardiGetResidentTransactionsService {
     }
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
-        // TODO Auto-generated method stub
-
+        YardiTransactionFacade.updateCharges(allTransactions);
     }
 
     private void merge(List<Building> imported, List<Building> existing) {
