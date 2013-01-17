@@ -43,14 +43,27 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void createFor(Building building) {
-        if (building.isValueDetached()) {
-            Persistence.service().retrieve(building);
-        }
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
-        if (building.productCatalog().isValueDetached()) {
-            Persistence.service().retrieve(building.productCatalog());
-        }
+        building.productCatalog().services().addAll(createDefaultServices(building.productCatalog()));
+        building.productCatalog().features().addAll(createDefaultFeatures(building.productCatalog()));
 
+        updateEligibilityMatrixes(building.productCatalog());
+    }
+
+    @Override
+    public void updateFor(Building building) {
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
+
+        // TODO: review this! 
+
+        // remove all default catalog items:
         Iterator<Service> serviceIterator = building.productCatalog().services().iterator();
         while (serviceIterator.hasNext()) {
             Service service = serviceIterator.next();
@@ -58,7 +71,6 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
                 serviceIterator.remove();
             }
         }
-        building.productCatalog().services().addAll(createDefaultServices(building.productCatalog()));
 
         Iterator<Feature> featureIterator = building.productCatalog().features().iterator();
         while (featureIterator.hasNext()) {
@@ -67,34 +79,27 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
                 featureIterator.remove();
             }
         }
-        building.productCatalog().features().addAll(createDefaultFeatures(building.productCatalog()));
 
-        updateEligibilityMatrixes(building.productCatalog());
-    }
-
-    @Override
-    public void updateFor(Building building) {
-        if (building.isValueDetached()) {
-            Persistence.service().retrieve(building);
-        }
-
-        if (building.productCatalog().isValueDetached()) {
-            Persistence.service().retrieve(building.productCatalog());
-        }
-
-        // TODO Auto-generated method stub
+        // create new ones:
+        createFor(building);
     }
 
     @Override
     public void persistFor(Building building) {
         Persistence.service().merge(building);
 
-        // Save Versioned Items, 
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
+
+        // Save services and features: 
         for (Feature feature : building.productCatalog().features()) {
             if (feature.isDefaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(feature);
             }
         }
+
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(service);
@@ -104,15 +109,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void addUnit(Building building, AptUnit unit, boolean persist) {
-        if (building.isValueDetached()) {
-            Persistence.service().retrieve(building);
-        }
-
-        if (building.productCatalog().isValueDetached()) {
-            Persistence.service().retrieve(building.productCatalog());
-        }
-
-        Persistence.service().retrieveMember(building.productCatalog().services());
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
@@ -134,15 +133,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void updateUnit(Building building, AptUnit unit) {
-        if (building.isValueDetached()) {
-            Persistence.service().retrieve(building);
-        }
-
-        if (building.productCatalog().isValueDetached()) {
-            Persistence.service().retrieve(building.productCatalog());
-        }
-
-        Persistence.service().retrieveMember(building.productCatalog().services());
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
@@ -163,16 +156,12 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private List<Service> createDefaultServices(ProductCatalog catalog) {
         EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-        List<ServiceItemType> itemTypes = Persistence.service().query(criteria);
+        criteria.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated());
 
         // create services of unique types:
         List<Service> items = new ArrayList<Service>();
-        List<Service.ServiceType> types = new ArrayList<Service.ServiceType>();
-        for (ServiceItemType itemType : itemTypes) {
-            if (!types.contains(itemType.serviceType().getValue())) {
-                types.add(itemType.serviceType().getValue());
-                items.add(createService(catalog, itemType));
-            }
+        for (ServiceItemType itemType : Persistence.service().query(criteria)) {
+            items.add(createService(catalog, itemType));
         }
 
         return items;
@@ -244,9 +233,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            Persistence.ensureRetrieve(service, AttachLevel.Attached);
-            if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue()) && service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
+                    Persistence.ensureRetrieve(feature, AttachLevel.Attached);
                     if (feature.isDefaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
                     }
