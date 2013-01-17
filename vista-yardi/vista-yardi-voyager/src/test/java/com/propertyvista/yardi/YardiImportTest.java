@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.config.VistaDeployment;
@@ -21,6 +22,7 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiImportTest extends YardiTestBase {
 
+    @Ignore
     @Test
     public void testImport() throws Exception {
         preloadData();
