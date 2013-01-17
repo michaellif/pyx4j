@@ -1,10 +1,10 @@
 .vista-pmsite-findAptPage .vista-pmsite-content {
-    color:#fff;
+	color: #FFFFFF;
     font-size: 16px;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
-//  background-color:#fff;
+/*  background-color:#fff; */
     border-top: 5px solid #000000;
     background: url("images/FreeCableTV.png") no-repeat right;
 }
@@ -19,6 +19,7 @@
 	overflow: hidden;
     background: #fff;
     padding: 0 20px 20px;
+    *padding-bottom: 90px;
     width: 920px;
 }
 
@@ -34,7 +35,7 @@
   }
 
 .advancedSearchWideWrap {
-//	padding: 0 80px;
+	_padding: 0 80px;
 	width:620px;
 	background-color: #999999;
 }
@@ -64,12 +65,12 @@
 
 .advancedSearchWideWrap label {
 	display:block;
-//	padding:6px 0;
+/*	padding:6px 0; */
 	white-space:nowrap;
 }
 .advancedSearchWideWrap .searchTypeSelBox {
 	float:left;
-	clear:both;
+	/*clear:both; */
 	margin-top:25px;
 	padding: 0 80px;
 }
@@ -99,13 +100,14 @@
 
 .advancedSearchWideWrap .searchTypeBox {
 	float:left;
-	clear:both;
+	_clear:both;
 	margin-top:30px;
 	padding: 0 80px;
 }
 .advancedSearchWideWrap .searchTypeBox .searchField {
 	float:left;
 	margin-left:30px;
+	padding-right: 0;
 }
 .advancedSearchWideWrap .searchTypeBox .searchField:first-child {
 	margin-left:0;
@@ -123,21 +125,27 @@
 	border: 1px solid #000000;
 }
 .advancedSearchWideWrap .searchCommonBox {
-	clear:both;
+	_clear:both;
 	float:left;
 	padding: 0 80px;
+	*padding-bottom: 8px;
 	margin-top:30px;
 }
-.advancedSearchWideWrap .searchCommonBox .searchField {;
+.advancedSearchWideWrap .searchCommonBox .searchField {
 	margin-left:23px;
 	display: inline-block;
 	float:left;
+	zoom: 1;
+	*display: inline;
+	*float:none;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField:first-child {
 	margin-left:0px;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
+	zoom: 1;
+	*display: inline;
 	width:25px;
 	text-align:center;
 }
@@ -149,15 +157,16 @@
 }
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
 	color:${background_100};
-//	display:inline-block;
+	display:inline-block;
+	zoom: 1;
+	*display: inline;
 	width:53px;
-//	float: left;
 	margin:0px;
 	border: 1px solid #000000;
 }
 .advancedSearchWideWrap .searchAmenityBox {
 	float:left;
-	clear:both;
+	_clear:both;
 	border-top: 1px solid #fff;
 	padding: 20px 80px 0 80px;
 	margin-top:30px;
@@ -169,13 +178,20 @@
 .advancedSearchWideWrap .searchAmenityBox .amenityList {
 	float:left;
 	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	clear: both;
 }
 
 
 .advancedSearchWideWrap .searchAmenityBox .amenityList label {
 	display:inline-block;
-	width:90px;
+	zoom: 1;
+	*display: inline;
+	width:91px;
 	font-size:13px;
+	_float: left;
+	_clear: both;
 }
 .advancedSearchWideWrap .typeselActiveHover {
 	color:${object1_20} !important;
