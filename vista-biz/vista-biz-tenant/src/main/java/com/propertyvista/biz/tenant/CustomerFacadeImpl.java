@@ -14,10 +14,15 @@
 package com.propertyvista.biz.tenant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -29,11 +34,13 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 import com.propertyvista.admin.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -42,6 +49,8 @@ import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {
+
+    private static Logger log = LoggerFactory.getLogger(CustomerFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(CustomerFacadeImpl.class);
 
@@ -182,7 +191,33 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public void selfRegistration(SelfRegistrationDTO selfRegistration) {
-        // TODO Auto-generated method stub
+        // TODO do we need protection from attacks that check names of the user?
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
+        criteria.eq(criteria.proto().customer().person().name().firstName(), selfRegistration.firstName());
+        criteria.eq(criteria.proto().customer().person().name().lastName(), selfRegistration.lastName());
+        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode());
+
+        Tenant tenant = Persistence.service().retrieve(criteria);
+        if (tenant == null) {
+            throw new UserRuntimeException(i18n.tr("One of the fileds you entered was incorrect"));
+        }
+        tenant.customer().person().email().setValue(selfRegistration.email().getValue());
+        tenant.customer().portalRegistrationToken().setValue(null);
+        persistCustomer(tenant.customer());
+
+        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());
+        credential.accessKey().setValue(null);
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(selfRegistration.password().getValue()));
+
+        credential.passwordUpdated().setValue(new Date());
+        credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+
+        Persistence.service().persist(credential);
+        Persistence.service().commit();
+        log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
     }
 }

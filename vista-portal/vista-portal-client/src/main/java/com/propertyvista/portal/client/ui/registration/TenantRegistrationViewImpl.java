@@ -66,6 +66,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     @Override
     public void populate(List<SelfRegistrationBuildingDTO> buildings) {
         form.setBuildingOptions(buildings);
+        form.populateNew();
     }
 
     @Override
