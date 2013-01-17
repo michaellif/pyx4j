@@ -27,8 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.ws.operations.AddReceiptsToBatch;
-import com.yardi.ws.operations.AddReceiptsToBatchResponse;
 import com.yardi.ws.operations.ExportChartOfAccounts;
 import com.yardi.ws.operations.ExportChartOfAccountsResponse;
 import com.yardi.ws.operations.GetPropertyConfigurations;
@@ -51,12 +49,6 @@ import com.yardi.ws.operations.GetVendors_Login;
 import com.yardi.ws.operations.GetVendors_LoginResponse;
 import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
-import com.yardi.ws.operations.OpenReceiptBatch;
-import com.yardi.ws.operations.OpenReceiptBatchResponse;
-import com.yardi.ws.operations.Ping;
-import com.yardi.ws.operations.PingResponse;
-import com.yardi.ws.operations.PostReceiptBatch;
-import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
@@ -67,23 +59,6 @@ import com.propertyvista.yardi.bean.Properties;
 public class YardiTransactions {
 
     private final static Logger log = LoggerFactory.getLogger(YardiTransactions.class);
-
-    /**
-     * The Ping function accepts no parameters, but will return the
-     * assembly name of the function being called. Use it to test
-     * connectivity.
-     * 
-     * @throws RemoteException
-     * @throws AxisFault
-     */
-    public static void ping(YardiClient c) throws AxisFault, RemoteException {
-        c.transactionId++;
-        c.setCurrentAction(Action.ping);
-
-        Ping ping = new Ping();
-        PingResponse pr = c.getResidentTransactionsService().ping(ping);
-        log.info("Connection to Yardi works: {}", pr.getPingResult());
-    }
 
     /**
      * Allows export of the Property Configuration with the
@@ -408,65 +383,6 @@ public class YardiTransactions {
         log.info("Result: {}", xml);
 //        Properties properties = MarshallUtil.unmarshall(Properties.class, xml);
 //        log.info("\n--- ImportResidentTransactions ---\n{}\n", properties);
-    }
-
-    public static void openReceiptBatch(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
-        c.transactionId++;
-        c.setCurrentAction(Action.OpenReceiptBatch);
-
-        OpenReceiptBatch l = new OpenReceiptBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
-        l.setYardiPropertyId(yp.getYardiPropertyId());
-
-        OpenReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().openReceiptBatch(l);
-        long result = response.getOpenReceiptBatchResult();
-        log.info("OpenReceiptBatch: {}", result);
-    }
-
-    public static void addReceiptsToBatch(YardiClient c, YardiParameters yp, long batchId) throws AxisFault, RemoteException, XMLStreamException {
-        c.transactionId++;
-        c.setCurrentAction(Action.AddReceiptsToBatch);
-
-        AddReceiptsToBatch l = new AddReceiptsToBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
-        l.setBatchId(batchId);
-
-        TransactionXml_type1 transactionXml = new TransactionXml_type1();
-        OMElement element = AXIOMUtil.stringToOM(yp.getTransactionXml());
-        transactionXml.setExtraElement(element);
-        l.setTransactionXml(transactionXml);
-
-        AddReceiptsToBatchResponse response = c.getResidentTransactionsSysBatchService().addReceiptsToBatch(l);
-        String xml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
-        log.info("AddReceiptsToBatch: {}", xml);
-    }
-
-    public static void postReceiptBatch(YardiClient c, YardiParameters yp, long batchId) throws AxisFault, RemoteException {
-        c.transactionId++;
-        c.setCurrentAction(Action.PostReceiptBatch);
-
-        PostReceiptBatch l = new PostReceiptBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
-        l.setBatchId(batchId);
-
-        PostReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().postReceiptBatch(l);
-        String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
-        log.info("PostReceiptBatch: {}", xml);
     }
 
 }

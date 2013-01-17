@@ -46,7 +46,7 @@ public class YardiExample {
         // execute different actions
         try {
             // the order of this call should match the document order
-            // YardiTransactions.ping(c);
+            //YardiAbstarctService.ping(c);
             YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
             System.out.println("+++++++++++++");
