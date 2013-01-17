@@ -85,6 +85,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadge
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
@@ -159,6 +160,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
@@ -169,7 +171,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
     public VistaCrmAccessControlList() {
 
-        if (allowAllDuringDevelopment) {
+        if (allowAllDuringDevelopment || VistaDemo.isDemo()) {
             // Debug
             grant(VistaBasicBehavior.CRM, new IServiceExecutePermission("*"));
             grant(VistaBasicBehavior.CRM, new ServiceExecutePermission("*"));
@@ -222,6 +224,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MaintenanceGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoticesGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentReportService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordListService.class));
 
 // - Building-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Complex.class, EntityPermission.ALL));
