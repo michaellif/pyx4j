@@ -19,4 +19,10 @@ import com.propertyvista.dto.TenantDTO;
 
 public interface TenantListerView extends IListerView<TenantDTO> {
 
+    interface Presenter extends IListerView.Presenter<TenantDTO> {
+
+        void downloadTenantsSecrets();
+
+    }
+
 }

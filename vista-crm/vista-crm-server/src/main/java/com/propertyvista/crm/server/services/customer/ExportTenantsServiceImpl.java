@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.admin.server.services;
+package com.propertyvista.crm.server.services.customer;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,17 +20,15 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
-import com.propertyvista.admin.rpc.PmcExportTenantsParamsDTO;
-import com.propertyvista.admin.rpc.services.ExportTenantsService;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 
 public class ExportTenantsServiceImpl extends ReportServiceImpl<IEntity> implements ExportTenantsService {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(
-                new ExportTenantsDeferredProcess((PmcExportTenantsParamsDTO) reportRequest.getParameters().get(ExportTenantsService.PARAMS_KEY)),
-                ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPortalSecretsDeferredProcess(VistaDeployment.getCurrentPmc()), ThreadPoolNames.DOWNLOADS));
     }
 
 }

@@ -62,6 +62,7 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.PastTenantCrudService;
@@ -268,6 +269,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Tenant-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lead.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeadCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ExportTenantsService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Appointment.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AppointmentCrudService.class));

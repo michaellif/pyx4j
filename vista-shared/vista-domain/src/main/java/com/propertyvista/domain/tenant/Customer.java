@@ -90,4 +90,6 @@ public interface Customer extends IEntity {
     @Owned
     @Detached(level = AttachLevel.Detached)
     CustomerAcceptedTerms signedTerms();
+
+    IPrimitive<String> portalRegistrationToken();
 }

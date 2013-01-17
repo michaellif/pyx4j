@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -70,6 +71,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 credential.enabled().setValue(Boolean.TRUE);
                 Persistence.service().persist(credential);
             }
+        } else {
+            customer.portalRegistrationToken().setValue(AccessKey.createPortalSecureToken());
         }
 
         Persistence.service().merge(customer);

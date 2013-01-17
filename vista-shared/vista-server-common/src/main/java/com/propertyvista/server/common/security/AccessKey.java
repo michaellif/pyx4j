@@ -35,6 +35,8 @@ public class AccessKey {
 
     public static final int ACCESS_KEY_LEN = 17;
 
+    public static final int PORTAL_KEY_LEN = 5;
+
     public static class TokenParser {
 
         public String email;
@@ -76,6 +78,15 @@ public class AccessKey {
                 throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
         }
+    }
+
+    public static String createPortalSecureToken() {
+        StringBuilder tokenBuilder = new StringBuilder();
+        Random rnd = new SecureRandom();
+        for (int i = 0; i < PORTAL_KEY_LEN; ++i) {
+            tokenBuilder.append((char) (rnd.nextInt('Z' - 'A') + 'A'));
+        }
+        return tokenBuilder.toString();
     }
 
     public static String createAccessKey(boolean behaviorPasswordChangeRequired) {

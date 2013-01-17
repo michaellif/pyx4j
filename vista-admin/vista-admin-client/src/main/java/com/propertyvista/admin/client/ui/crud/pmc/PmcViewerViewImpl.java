@@ -29,9 +29,7 @@ import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.PmcExportDownloadDTO;
-import com.propertyvista.admin.rpc.PmcExportTenantsParamsDTO;
 import com.propertyvista.admin.rpc.services.ExportDownloadService;
-import com.propertyvista.admin.rpc.services.ExportTenantsService;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -86,22 +84,6 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
                 d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
-        });
-        downloadMenu.addItem("yardi tenants", new Command() {
-
-            @Override
-            public void execute() {
-                PmcExportTenantsParamsDTO params = EntityFactory.create(PmcExportTenantsParamsDTO.class);
-                params.pmcKey().setValue(getForm().getValue().getPrimaryKey());
-
-                HashMap<String, Serializable> paramsHolder = new HashMap<String, Serializable>();
-                paramsHolder.put(ExportTenantsService.PARAMS_KEY, params);
-
-                ReportDialog d = new ReportDialog("Exporting Yardi Tenants", "Exporting Tenants...");
-                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
-                d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, paramsHolder);
-            }
-
         });
         download.setMenu(downloadMenu);
         addHeaderToolbarItem(download);
