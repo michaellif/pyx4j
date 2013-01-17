@@ -63,8 +63,10 @@
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.remember label {
 	display:inline;
+	width: auto;
 }
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput .pwdreset {
+	*margin-top: -20px;
 	float:right;
 	text-decoration:underline;
 	color: #fff;

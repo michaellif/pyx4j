@@ -2,15 +2,16 @@
 	margin: 0px auto 0px;
 	width: 960px;
 	background: #fff;
-	//padding: 0 20px 20px 20px;
+	/* padding: 0 20px 20px 20px; */
 }
 
 .vista-pmsite-content {
     margin: 0 auto;
     margin-bottom:0;
-	//width: 960px;
+	/*width: 960px; */
 	/* anti-space trick */
 	font-size:0;
+	background-color: #FFFFFF;
 }
 
 .infobox_body {
@@ -94,12 +95,13 @@
 	background: ${object1_100};
 	float: right;
 	overflow: hidden;
-	border: 2px splid ${object1_100};
+	border: 2px solid ${object1_100};
 }
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
 	background: #fff;
+	background-color: #FFFFFF;
 	font-size:13px;
 	width: 100%;
 }

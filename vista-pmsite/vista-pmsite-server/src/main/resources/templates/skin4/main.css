@@ -158,6 +158,8 @@ select {
 
 .navigation ul li {
 	 display: inline-block;
+	 zoom: 1;
+	*display: inline;
      margin: 0 4px;
 }
 
@@ -177,6 +179,7 @@ select {
 .navigation ul li span:hover {
 	border-top: 4px solid #000;
     padding-top: 7px;
+    cursor: pointer;
 }
 
 .navigation .active span {
@@ -203,6 +206,7 @@ select {
  
 #footer {
 	position: relative;
+	z-index: 10;
 }
 
 #footer .main {
@@ -211,10 +215,15 @@ select {
 }
 .footer_wrap {
 	padding: 0px 20px;
+	*padding-top: 10px;
 }
 
 ul.footer_locations {
+	width: 100%;
     display: inline-block;
+    zoom: 1;
+	*display: inline;
+	*margin-left: 0;
     list-style-type: none;
     padding: 0;
     vertical-align: top;
@@ -230,8 +239,12 @@ ul.footer_locations label {
 
 ul.footer_locations li {
 	float: left;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
     width: 192px;
     font-weight: bold;
+    text-align: left;
 }
 
 .footer_locations a {
@@ -254,9 +267,9 @@ ul.footer_locations li {
 .footer_link {
 	padding: 0 10px;
 	border-left: 1px solid #000000;
-//	position: relative;
+	_position: relative;
 	display: inline-block;
-//	top: 200px;
+	_top: 200px;
 }
 
 .footer_link a {
@@ -350,27 +363,34 @@ ul.footer_locations li {
 	height: 30px;
 	overflow: hidden;
 	padding: 5px 0 5px 0;
+	display: block;
 }
 
 .vista-pmsite-main .caption h1 {
 	font-family: monospace;
     font-size: 14pt;
     font-weight: normal;
-//  line-height: 70px;
-//  color: ${object2_10};
+/*  line-height: 70px; */
+/*  color: ${object2_10}; */
+	color: black;
 }
 .caption2 {
+	border-top: 1px solid black;
+	height: 30px;
+	padding: 5px 0;
 }
 .vista-pmsite-main .caption2 h1 {
+	float: left;
 	font-family: monospace;
     font-size: 14pt;
     font-weight: normal;
 	padding: 5px 0;
-	border-top: 1px solid #000000;
+	padding-left: 8px;
+	/* border-top: 1px solid #000000; */
 }
 .vista-pmsite-main .caption2 .rightControl {
 	height:25px;
-	margin:22px 30px 0 0;
+	margin:9px 30px 0 0;
 	float:right;
 	color:${object2_30};
 	font-weight:bold;
@@ -382,7 +402,8 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-//	background-color:${object2_10};	
+	background-color:${object2_10};
+	*background-color: #FFFFFF;
 }
 
 .vista-pmsite-main .content{
