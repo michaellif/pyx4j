@@ -24,6 +24,8 @@ import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.ws.ItfResidentTransactions20_SysBatch;
+import com.yardi.ws.ItfResidentTransactions20_SysBatchStub;
 import com.yardi.ws.ItfResidentTransactions2_0;
 import com.yardi.ws.ItfResidentTransactions2_0Stub;
 
@@ -50,12 +52,6 @@ public class YardiClient {
 
     public Long transactionId = 0l;
 
-    @Deprecated
-    public YardiClient() {
-        //default service URL
-        serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
-    }
-
     public YardiClient(PmcYardiCredential credential) {
         serviceURL = credential.serviceURL().getValue();
     }
@@ -66,6 +62,13 @@ public class YardiClient {
 
     public ItfResidentTransactions2_0 getResidentTransactionsService() throws AxisFault {
         ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(serviceURL);
+        addMessageContextListener("ResidentTransactions", serviceStub, null);
+        setTransportOptions(serviceStub);
+        return serviceStub;
+    }
+
+    public ItfResidentTransactions20_SysBatch getResidentTransactionsSysBatchService() throws AxisFault {
+        ItfResidentTransactions20_SysBatchStub serviceStub = new ItfResidentTransactions20_SysBatchStub(serviceURL);
         addMessageContextListener("ResidentTransactions", serviceStub, null);
         setTransportOptions(serviceStub);
         return serviceStub;

@@ -41,6 +41,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
+import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
 
 public class XmlBeanTest {
 

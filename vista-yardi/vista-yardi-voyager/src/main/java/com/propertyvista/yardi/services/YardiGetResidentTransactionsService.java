@@ -11,7 +11,7 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.yardi;
+package com.propertyvista.yardi.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +50,10 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.yardi.YardiClient;
+import com.propertyvista.yardi.YardiParameters;
+import com.propertyvista.yardi.YardiServiceException;
+import com.propertyvista.yardi.YardiTransactions;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
@@ -85,7 +89,7 @@ public class YardiGetResidentTransactionsService {
         log.info("Get all resident transactions...");
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(client, yp, propertyCodes);
 
-        updateBuildingsAndUnits(allTransactions);
+        updateBuildings(allTransactions);
 
         updateLeases(allTransactions);
 
@@ -93,7 +97,7 @@ public class YardiGetResidentTransactionsService {
 
     }
 
-    private void updateBuildingsAndUnits(List<ResidentTransactions> allTransactions) {
+    private void updateBuildings(List<ResidentTransactions> allTransactions) {
 
         List<Building> importedBuildings = getBuildings(allTransactions);
         Map<String, List<AptUnit>> importedUnits = getUnits(allTransactions);
@@ -191,7 +195,7 @@ public class YardiGetResidentTransactionsService {
     }
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
-        YardiTransactionFacade.updateCharges(allTransactions);
+        YardiChargeProcessor.updateCharges(allTransactions);
     }
 
     private void merge(List<Building> imported, List<Building> existing) {
@@ -266,12 +270,12 @@ public class YardiGetResidentTransactionsService {
         return Persistence.service().query(criteria);
     }
 
-    List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
+    public List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
         BuildingsMapper mapper = new BuildingsMapper();
         return mapper.map(getProperties(allTransactions));
     }
 
-    Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {
+    public Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {
         UnitsMapper mapper = new UnitsMapper();
         Map<String, List<AptUnit>> units = new HashMap<String, List<AptUnit>>();
         Map<String, List<RTUnit>> imported = getYardiUnits(allTransactions);

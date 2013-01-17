@@ -27,7 +27,7 @@ public class VistaSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Skin skin() {
-        return Skin.skin1;
+        return Skin.skin5;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class YardiExample {
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
 
     public static void main(String[] args) {
-        YardiClient c = new YardiClient();
+        YardiClient c = new YardiClient("https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx");
 
         // Anya, use this code section to configure the parameters you would like to be sending
         YardiParameters yp = new YardiParameters();
@@ -46,9 +46,10 @@ public class YardiExample {
         // execute different actions
         try {
             // the order of this call should match the document order
-            YardiTransactions.ping(c);
+            // YardiTransactions.ping(c);
             YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
+            System.out.println("+++++++++++++");
             // ANYA, use the first line if you want to send stuff, second to retrieve
             //send(c, yp);
             //retrieve(c, yp);

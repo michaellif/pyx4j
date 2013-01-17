@@ -19,4 +19,6 @@ public interface YardiProcessFacade {
 
     void doAllImport(StatisticsRecord dynamicStatisticsRecord);
 
+    void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord);
+
 }

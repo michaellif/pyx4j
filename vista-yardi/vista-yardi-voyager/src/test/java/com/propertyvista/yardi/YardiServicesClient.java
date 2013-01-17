@@ -22,6 +22,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
 
 public class YardiServicesClient {
 

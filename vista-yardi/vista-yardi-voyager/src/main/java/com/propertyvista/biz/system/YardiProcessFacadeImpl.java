@@ -21,9 +21,9 @@ import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.jobs.YardiImportProcess;
 import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.YardiGetResidentTransactionsService;
 import com.propertyvista.yardi.YardiParameters;
 import com.propertyvista.yardi.YardiServiceException;
+import com.propertyvista.yardi.services.YardiGetResidentTransactionsService;
 
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
@@ -49,6 +49,11 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
         } catch (YardiServiceException e) {
             log.error("Error", e);
         }
+
+    }
+
+    @Override
+    public void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord) {
 
     }
 

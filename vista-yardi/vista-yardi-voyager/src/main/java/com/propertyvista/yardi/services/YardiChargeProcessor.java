@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi;
+package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,10 +37,10 @@ import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.financial.yardi.YardiTransactionDetail;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class YardiTransactionFacade {
-    private final static Logger log = LoggerFactory.getLogger(YardiTransactionFacade.class);
+public class YardiChargeProcessor {
+    private final static Logger log = LoggerFactory.getLogger(YardiChargeProcessor.class);
 
-    static void updateCharges(List<ResidentTransactions> allTransactions) {
+    public static void updateCharges(List<ResidentTransactions> allTransactions) {
         log.info("updateCharges: started...");
         // check available leases
         EntityQueryCriteria<Lease> availLeases = EntityQueryCriteria.create(Lease.class);
