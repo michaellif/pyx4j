@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,7 @@ import com.propertyvista.yardi.merger.UnitsMerger;
  * @author Mykola
  * 
  */
-public class YardiGetResidentTransactionsService {
+public class YardiGetResidentTransactionsService extends YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiGetResidentTransactionsService.class);
 
@@ -345,16 +344,6 @@ public class YardiGetResidentTransactionsService {
 
     private String getUnitId(RTCustomer customer) {
         return customer.getRTUnit() != null ? customer.getRTUnit().getUnitID() : null;
-    }
-
-    private void validate(YardiParameters yp) {
-        Validate.notEmpty(yp.getServiceURL(), "ServiceURL parameter can not be empty or null");
-        Validate.notEmpty(yp.getUsername(), "Username parameter can not be empty or null");
-        Validate.notEmpty(yp.getPassword(), "Password parameter can not be empty or null");
-        Validate.notEmpty(yp.getServerName(), "ServerName parameter can not be empty or null");
-        Validate.notEmpty(yp.getDatabase(), "Database parameter can not be empty or null");
-        Validate.notEmpty(yp.getPlatform(), "Platform parameter can not be empty or null");
-        Validate.notEmpty(yp.getInterfaceEntity(), "InterfaceEntity parameter can not be empty or null");
     }
 
     private List<String> getPropertyCodes(YardiClient client, YardiParameters yp) throws YardiServiceException {
