@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi;
 
+import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
 import com.propertyvista.test.preloader.PmcDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.preloader.ProductItemTypesDataModel;
+import com.propertyvista.test.preloader.TaxesDataModel;
 
 public class YardiTestBase {
 
@@ -50,6 +53,11 @@ public class YardiTestBase {
 
     }
 
+    @After
+    public void end() {
+        Persistence.service().commit();
+    }
+
     protected void preloadData() {
 
         PreloadConfig config = new PreloadConfig();
@@ -60,6 +68,12 @@ public class YardiTestBase {
 
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate();
+
+        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
+        taxesDataModel.generate();
+
+        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
+        productItemTypesDataModel.generate();
 
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
         leaseBillingPolicyDataModel.generate();
