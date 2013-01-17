@@ -18,6 +18,14 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface DefaultProductCatalogFacade {
 
+    /*
+     * Some conventions:
+     * 
+     * Input parameter like: Building building - means in-memory object (already loaded by caller).
+     * 
+     * Input parameter like: Building buildingId - means DB-object (should be loaded from DB by callee).
+     */
+
     /**
      * Creates new empty catalog for the specified building.
      * 
@@ -30,7 +38,7 @@ public interface DefaultProductCatalogFacade {
      * 
      * @param building
      */
-    void updateFor(Building building);
+    void updateFor(Building buildingId);
 
     /**
      * Persist catalog for the specified building.
@@ -55,5 +63,5 @@ public interface DefaultProductCatalogFacade {
      * @param building
      * @param unit
      */
-    void updateUnit(Building building, AptUnit unit);
+    void updateUnit(Building buildingId, AptUnit unit);
 }

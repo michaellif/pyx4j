@@ -55,8 +55,12 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     @Override
-    public void updateFor(Building building) {
-        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+    public void updateFor(Building buildingId) {
+        Building building = Persistence.secureRetrieve(Building.class, buildingId.getPrimaryKey());
+        if (building == null) {
+            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found");
+        }
+
         Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
@@ -86,12 +90,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void persistFor(Building building) {
-        Persistence.service().merge(building);
-
-        Persistence.ensureRetrieve(building, AttachLevel.Attached);
-        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
+        assert (building.productCatalog().isValueDetached());
 
         // Save services and features: 
         for (Feature feature : building.productCatalog().features()) {
@@ -132,8 +131,12 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     @Override
-    public void updateUnit(Building building, AptUnit unit) {
-        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+    public void updateUnit(Building buildingId, AptUnit unit) {
+        Building building = Persistence.secureRetrieve(Building.class, buildingId.getPrimaryKey());
+        if (building == null) {
+            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found");
+        }
+
         Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
 
