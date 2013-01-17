@@ -115,7 +115,6 @@ public class PortalScreen extends SimplePanel {
         @Override
         public void setWidget(IsWidget w) {
             super.setWidget(w);
-            System.out.println("UtilityDisplayPanel set " + w);
             if (w != null) {
                 navigDisplayPanel.setVisible(false);
                 contentDisplayPanel.setVisible(false);
