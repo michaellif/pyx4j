@@ -38,6 +38,12 @@ public class RSOapiTestBase extends JerseyTest {
         VistaTestDBSetup.init();
     }
 
+    @Override
+    protected int getPort(int defaultPort) {
+        // See README-ports.txt
+        return 7771;
+    }
+
     protected void preloadData() {
         PreloadConfig config = new PreloadConfig();
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
