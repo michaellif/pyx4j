@@ -8,12 +8,18 @@
 ***     ===========================================================================================================
 **/                                                     
 
+BEGIN TRANSACTION;
 
  SET search_path = 'public';
   
  -- Sequences to drop
+ DROP SEQUENCE contact_email_seq;
+ DROP SEQUENCE contact_internal_seq;
+ DROP SEQUENCE contact_phone_seq;
+ DROP SEQUENCE contact_postal_seq;
  DROP SEQUENCE document_seq;
  DROP SEQUENCE existing_insurance_seq;
+
   
  -- New sequences
  CREATE SEQUENCE admin_pmc$credit_check_transaction_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -50,6 +56,12 @@
  CREATE SEQUENCE tenant_insurance_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE tenant_sure_merchant_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE vista_merchant_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_account$payments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_account$pending_charges_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_charge_detail_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_payment_detail_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+
   
  -- Change owner to vista
  ALTER SEQUENCE admin_pmc$credit_check_transaction_seq OWNER TO vista ;
@@ -86,5 +98,12 @@
  ALTER SEQUENCE tenant_insurance_policy_seq OWNER TO vista ;
  ALTER SEQUENCE tenant_sure_merchant_account_seq OWNER TO vista ;
  ALTER SEQUENCE vista_merchant_account_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_account$payments_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_account$pending_charges_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_account_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_charge_detail_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_payment_detail_seq OWNER TO vista ;
+
+COMMIT;
 
 

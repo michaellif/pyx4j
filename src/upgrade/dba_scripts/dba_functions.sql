@@ -648,7 +648,7 @@ $$
         		        e.ref_colname AS ref_column_name,
                         CASE WHEN      a.contype::char = 'c' THEN
                                 regexp_replace(regexp_replace(regexp_replace(a.consrc,'((::[a-z\s]+)|((ARRAY)?\[)|\])','','g'),
-                                '(\()?(''([a-zA-Z0-9_]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
+                                '(\()?(''([a-zA-Z0-9_\s]+)'')(\))?','\2','g'),'= ANY',' IN','g')  
                         ELSE a.consrc END AS constraint_text,
         		        f.nspname AS schema_name
 	                FROM            pg_constraint a
@@ -939,53 +939,11 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-/**
-***     ====================================================================================
-***
-***             Yet another attempt to auto-generate SQL script
-***             This is aimed at low-hanging fruit - sequences
-***     
-***     ====================================================================================
-**/
+CREATE OR REPLACE FUNCTION _dba_.convert_id_to_string(TEXT) RETURNS TEXT AS
+$$
+    SELECT  CASE WHEN $1 ~ '^[0-9]+$' THEN LPAD($1,7,'0')
+        ELSE regexp_replace($1,'([0-9]+)',LPAD('\1',7,'0'),'g') END;
+$$
+LANGUAGE SQL IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION _dba_.generate_sql_sequences(TEXT, TEXT) 
-RETURNS TABLE ( sql_text TEXT)
-AS 
-$$
-       
-        (SELECT  'SET search_path = '''||$1||''';' AS sql_text) 
-        UNION ALL
-        (SELECT ' ')
-        UNION ALL
-        -- Sequences to drop
-        (SELECT '-- Sequences to drop')
-        UNION ALL 
-        (SELECT  'DROP SEQUENCE '||sequence_name||';' AS sql_text
-        FROM    _dba_.compare_schema_sequences($1,$2)
-        WHERE   schema_version = $1 
-        ORDER BY 1 ASC) 
-        UNION ALL
-        (SELECT ' ')
-        UNION ALL
-        -- New sequences 
-        (SELECT '-- New sequences')
-        UNION ALL
-        (SELECT  'CREATE SEQUENCE '||sequence_name||' START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;'
-        AS      sql_text
-        FROM    _dba_.compare_schema_sequences($1,$2)
-        WHERE   schema_version = $2 
-        ORDER BY 1 ASC) 
-        UNION ALL
-        (SELECT ' ')
-        UNION ALL 
-        (SELECT '-- Change owner to vista')
-        UNION ALL
-        (SELECT  'ALTER SEQUENCE '||sequence_name||' OWNER TO vista ;'
-        AS      sql_text
-        FROM    _dba_.compare_schema_sequences($1,$2)
-        WHERE   schema_version = $2 
-        ORDER BY 1 ASC) 
-        
-        
-$$
-LANGUAGE SQL VOLATILE;
+
