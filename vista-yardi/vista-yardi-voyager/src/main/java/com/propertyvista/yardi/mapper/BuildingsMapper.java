@@ -16,6 +16,7 @@ package com.propertyvista.yardi.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.yardi.YardiConstants;
 
 /**
  * Maps buildings information from YARDI System to domain entities.
@@ -83,9 +85,9 @@ public class BuildingsMapper {
         address.streetName().setValue(streetName);
         address.city().setValue(addressImported.getCity());
 
-        //TODO fix me
-        // address.province().set(findProvinceByCode(property.getState()));
-        address.country().set(address.province().country());
+        address.province().code().setValue(addressImported.getState());
+        address.country().name()
+                .setValue(StringUtils.isEmpty(addressImported.getCountry()) ? YardiConstants.YARDI_DEFAULT_COUNTRY : addressImported.getCountry());
         address.postalCode().setValue(addressImported.getPostalCode());
 
         building.info().address().set(address);

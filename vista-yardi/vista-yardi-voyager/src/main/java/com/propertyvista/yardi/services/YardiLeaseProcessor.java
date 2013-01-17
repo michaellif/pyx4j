@@ -67,6 +67,7 @@ public class YardiLeaseProcessor {
                 } catch (Throwable t) {
                     log.info("ERROR - lease not created: ", t);
                 }
+                Persistence.service().commit();
             }
         }
         log.info("All leases updated.");

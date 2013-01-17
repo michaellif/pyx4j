@@ -67,6 +67,8 @@ public class YardiTestBase {
         IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
         idAssignmentPolicyDataModel.generate();
 
+        Persistence.service().commit();
+
     }
 
 }

@@ -61,6 +61,7 @@ public class YardiBuildingProcessor {
         List<Building> merged = new BuildingsMerger().merge(imported, existing);
         for (Building building : merged) {
             update(building);
+            Persistence.service().commit();
         }
     }
 
@@ -69,6 +70,7 @@ public class YardiBuildingProcessor {
             String propertyCode = building.propertyCode().getValue();
             if (importedUnits.containsKey(propertyCode)) {
                 mergeUnits(building, importedUnits.get(propertyCode), getUnits(propertyCode));
+                Persistence.service().commit();
             }
         }
     }
