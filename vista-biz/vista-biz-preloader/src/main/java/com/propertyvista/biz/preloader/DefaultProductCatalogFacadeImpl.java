@@ -90,7 +90,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void persistFor(Building building) {
-        assert (building.productCatalog().isValueDetached());
+        assert (!building.productCatalog().isValueDetached());
 
         // Save services and features: 
         for (Feature feature : building.productCatalog().features()) {
