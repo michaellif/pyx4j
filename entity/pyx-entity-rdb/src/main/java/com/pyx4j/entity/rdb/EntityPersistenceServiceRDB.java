@@ -1646,6 +1646,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadeDeleteMembers()) {
                 if (member instanceof MemberExternalOperationsMeta) {
                     IEntity childEntity = (IEntity) member.getMember(cascadedeleteDataEntity);
+                    if ((AttachLevel.Detached == member.getMemberMeta().getAttachLevel())) {
+                        tm.retrieveMember(getPersistenceContext(), cascadedeleteDataEntity, childEntity);
+                    }
                     if (childEntity.getPrimaryKey() != null) {
                         if (trace) {
                             log.info(Trace.id() + "cascadeDelete member {}", member.getMemberName());

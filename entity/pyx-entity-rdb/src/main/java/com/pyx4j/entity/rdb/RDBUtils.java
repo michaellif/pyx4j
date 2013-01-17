@@ -178,6 +178,40 @@ public class RDBUtils implements Closeable {
         }
     }
 
+    public static void resetSchema(String schema) {
+        long start = System.currentTimeMillis();
+        RDBUtils utils = new RDBUtils();
+        try {
+            log.debug("recreate DB/SCHEMA {}", schema);
+            switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
+            case PostgreSQL:
+                DatabaseMetaData dbMeta = utils.connection().getMetaData();
+                ResultSet rs = null;
+                try {
+                    rs = dbMeta.getSchemas();
+                    while (rs.next()) {
+                        String schemaExists = rs.getString(1).toLowerCase(Locale.ENGLISH);
+                        if (schema.equals(schemaExists)) {
+                            utils.execute("DROP SCHEMA " + schema + " CASCADE");
+                            break;
+                        }
+                    }
+                } finally {
+                    SQLUtils.closeQuietly(rs);
+                }
+                break;
+            default:
+                throw new Error("Unsupported dialect");
+            }
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            log.info("Database '{}' recreated in {}", ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
+        } catch (SQLException e) {
+            throw new Error(e);
+        } finally {
+            utils.close();
+        }
+    }
+
     public static void dropAllEntityTables() {
         long start = System.currentTimeMillis();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
