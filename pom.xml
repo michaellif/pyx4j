@@ -369,6 +369,7 @@
                 <version>${axis2Version}</version>
                 <exclusions>
                     <exclusion><groupId>org.apache.httpcomponents</groupId><artifactId>httpclient</artifactId></exclusion>
+                    <exclusion><groupId>org.apache.httpcomponents</groupId><artifactId>httpcore</artifactId></exclusion>
                 </exclusions>
             </dependency>
 
