@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -243,6 +244,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
+            Persistence.ensureRetrieve(service, AttachLevel.Attached);
             if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue()) && service.isDefaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
                     if (feature.isDefaultCatalogItem().isBooleanTrue()) {
