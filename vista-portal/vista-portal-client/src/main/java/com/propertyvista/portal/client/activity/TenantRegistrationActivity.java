@@ -14,14 +14,24 @@
 package com.propertyvista.portal.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
+
 import com.propertyvista.portal.client.ui.registration.TenantRegistrationView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 
-public class TenantRegistrationActivity extends AbstractActivity {
+public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
 
     private final TenantRegistrationView view;
 
@@ -36,8 +46,37 @@ public class TenantRegistrationActivity extends AbstractActivity {
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
+        GWT.<SelfRegistrationBuildingsSourceService> create(SelfRegistrationBuildingsSourceService.class).obtainBuildings(
+                new DefaultAsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>>() {
+
+                    @Override
+                    public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
+                        view.setPresenter(TenantRegistrationActivity.this);
+                        view.populate(result.getData());
+                        panel.setWidget(view);
+                    }
+                });
+
+    }
+
+    @Override
+    public void onRegister() {
+        ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), view.getValue(), new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.showError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        });
     }
 }

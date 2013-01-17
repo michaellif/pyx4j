@@ -44,6 +44,7 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
@@ -57,6 +58,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
@@ -95,6 +97,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         }
 
         grant(new IServiceExecutePermission(PortalAuthenticationService.class));
+        grant(new IServiceExecutePermission(SelfRegistrationBuildingsSourceService.class));
+        grant(new EntityPermission(SelfRegistrationBuildingDTO.class, EntityPermission.READ));
+
         grant(new IServiceExecutePermission(PtAuthenticationService.class));
 
         grant(VistaCustomerBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));

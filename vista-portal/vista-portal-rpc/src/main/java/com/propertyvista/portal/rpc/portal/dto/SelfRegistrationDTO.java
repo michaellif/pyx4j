@@ -14,6 +14,8 @@
 package com.propertyvista.portal.rpc.portal.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 @Transient
@@ -22,9 +24,14 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
     //building  ComboBox
     SelfRegistrationBuildingDTO building();
 
-    //tenant name, first last
+    @NotNull
+    IPrimitive<String> firstName();
 
-    //security code
+    @NotNull
+    IPrimitive<String> lastName();
+
+    @NotNull
+    IPrimitive<String> secuirtyCode();
 
     // email and password inherited
 }

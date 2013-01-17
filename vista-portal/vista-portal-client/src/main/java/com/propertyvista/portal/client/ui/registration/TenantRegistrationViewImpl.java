@@ -13,14 +13,74 @@
  */
 package com.propertyvista.portal.client.ui.registration;
 
-import com.google.gwt.user.client.ui.HTML;
+import java.util.List;
+
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class TenantRegistrationViewImpl extends SimplePanel implements TenantRegistrationView {
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+
+public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
+
+    private static I18n i18n = I18n.get(TenantRegistrationForm.class);
+
+    private final TenantRegistrationForm form;
+
+    private Presenter presenter;
 
     public TenantRegistrationViewImpl() {
-        HTML label = new HTML("Tenant Self Registration");
-        setWidget(label);
+        FlowPanel viewPanel = new FlowPanel();
 
+        form = new TenantRegistrationForm();
+        form.initContent();
+        viewPanel.add(form);
+
+        SimplePanel buttonHolder = new SimplePanel();
+        buttonHolder.setWidth("100%");
+        buttonHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+        Button register = new Button(i18n.tr("Register"), new Command() {
+            @Override
+            public void execute() {
+                form.revalidate();
+                if (form.isValid()) {
+                    TenantRegistrationViewImpl.this.presenter.onRegister();
+                }
+            }
+        });
+        buttonHolder.setWidget(register);
+
+        viewPanel.add(buttonHolder);
+
+        initWidget(viewPanel);
     }
+
+    @Override
+    public void populate(List<SelfRegistrationBuildingDTO> buildings) {
+        form.setBuildingOptions(buildings);
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public SelfRegistrationDTO getValue() {
+        return form.getValue();
+    }
+
+    @Override
+    public void showError(String message) {
+        MessageDialog.error(i18n.tr("Registration Error"), message);
+    }
+
 }

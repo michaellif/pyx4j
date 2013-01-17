@@ -13,8 +13,27 @@
  */
 package com.propertyvista.portal.client.ui.registration;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+
 public interface TenantRegistrationView extends IsWidget {
+
+    interface Presenter {
+
+        void onRegister();
+
+    }
+
+    void setPresenter(Presenter presenter);
+
+    void populate(List<SelfRegistrationBuildingDTO> buildings);
+
+    SelfRegistrationDTO getValue();
+
+    void showError(String message);
 
 }

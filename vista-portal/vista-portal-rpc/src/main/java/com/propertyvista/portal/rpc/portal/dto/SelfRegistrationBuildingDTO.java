@@ -13,12 +13,20 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface SelfRegistrationBuildingDTO extends IEntity {
 
+    Building buildingKey();
+
+    @ToString(index = 0)
     // Building Address String
+    IPrimitive<String> address();
 
 }
