@@ -17,30 +17,54 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.NamespaceManager;
+import com.pyx4j.unit.server.mock.TestLifecycle;
+
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
+import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
+import com.propertyvista.test.preloader.PmcDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
 
 public class YardiTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(YardiTestBase.class);
 
-    public YardiTestBase() {
-        super();
-    }
-
     @Before
-    public void initDB() throws Exception {
+    public void init() throws Exception {
         VistaTestDBSetup.init();
+
+        Persistence.service().startBackgroundProcessTransaction();
+
+        Lifecycle.startElevatedUserContext();
+
+        NamespaceManager.setNamespace("t" + System.currentTimeMillis());
+
+        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.testNamespace(NamespaceManager.getNamespace());
+        TestLifecycle.beginRequest();
+
     }
 
     protected void preloadData() {
+
         PreloadConfig config = new PreloadConfig();
+        config.yardiIntegration = true;
+
+        PmcDataModel pmcDataModel = new PmcDataModel(config);
+        pmcDataModel.generate();
+
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate();
 
-        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
+        leaseBillingPolicyDataModel.generate();
+
+        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
         idAssignmentPolicyDataModel.generate();
 
     }

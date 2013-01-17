@@ -31,9 +31,10 @@ import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiClient;
+import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.YardiParameters;
 import com.propertyvista.yardi.YardiServiceException;
 
 public class YardiSystemBatchesService extends YardiAbstarctService {
@@ -48,46 +49,45 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
      * @throws YardiServiceException
      *             if operation fails
      */
-    public void updateAll(YardiParameters yp) throws YardiServiceException {
-        validate(yp);
+    public void updateAll(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
 
-        YardiClient client = new YardiClient(yp.getServiceURL());
+        YardiClient client = new YardiClient(yc.serviceURL().getValue());
 
     }
 
-    public static void openReceiptBatch(YardiClient c, YardiParameters yp) throws AxisFault, RemoteException {
+    private void openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.OpenReceiptBatch);
 
         OpenReceiptBatch l = new OpenReceiptBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
-        l.setYardiPropertyId(yp.getYardiPropertyId());
+        l.setUserName(yc.username().getValue());
+        l.setPassword(yc.credential().getValue());
+        l.setServerName(yc.serverName().getValue());
+        l.setDatabase(yc.database().getValue());
+        l.setPlatform(yc.platform().getValue().name());
+        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        l.setYardiPropertyId(propertyId);
 
         OpenReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().openReceiptBatch(l);
         long result = response.getOpenReceiptBatchResult();
         log.info("OpenReceiptBatch: {}", result);
     }
 
-    public static void addReceiptsToBatch(YardiClient c, YardiParameters yp, long batchId) throws AxisFault, RemoteException, XMLStreamException {
+    private void addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws AxisFault, RemoteException, XMLStreamException {
         c.transactionId++;
         c.setCurrentAction(Action.AddReceiptsToBatch);
 
         AddReceiptsToBatch l = new AddReceiptsToBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setUserName(yc.username().getValue());
+        l.setPassword(yc.credential().getValue());
+        l.setServerName(yc.serverName().getValue());
+        l.setDatabase(yc.database().getValue());
+        l.setPlatform(yc.platform().getValue().name());
+        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
         l.setBatchId(batchId);
 
         TransactionXml_type1 transactionXml = new TransactionXml_type1();
-        OMElement element = AXIOMUtil.stringToOM(yp.getTransactionXml());
+        OMElement element = AXIOMUtil.stringToOM(batchXml);
         transactionXml.setExtraElement(element);
         l.setTransactionXml(transactionXml);
 
@@ -96,17 +96,17 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         log.info("AddReceiptsToBatch: {}", xml);
     }
 
-    public static void postReceiptBatch(YardiClient c, YardiParameters yp, long batchId) throws AxisFault, RemoteException {
+    private void postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.PostReceiptBatch);
 
         PostReceiptBatch l = new PostReceiptBatch();
-        l.setUserName(yp.getUsername());
-        l.setPassword(yp.getPassword());
-        l.setServerName(yp.getServerName());
-        l.setDatabase(yp.getDatabase());
-        l.setPlatform(yp.getPlatform());
-        l.setInterfaceEntity(yp.getInterfaceEntity());
+        l.setUserName(yc.username().getValue());
+        l.setPassword(yc.credential().getValue());
+        l.setServerName(yc.serverName().getValue());
+        l.setDatabase(yc.database().getValue());
+        l.setPlatform(yc.platform().getValue().name());
+        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
         l.setBatchId(batchId);
 
         PostReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().postReceiptBatch(l);

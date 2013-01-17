@@ -24,8 +24,18 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.server.config.DevYardiCredentials;
 
 public class PmcDataModel {
+
+    private final PreloadConfig config;
+
+    private OrganizationPoliciesNode orgNode;
+
+    public PmcDataModel(PreloadConfig config) {
+        this.config = config;
+    }
 
     public void generate() {
         if (VistaDeployment.getCurrentPmc() != null) {
@@ -42,6 +52,15 @@ public class PmcDataModel {
 
         pmc.status().setValue(PmcStatus.Active);
 
+        if (config.yardiIntegration) {
+            pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
+            pmc.features().yardiIntegration().setValue(Boolean.TRUE);
+            pmc.features().occupancyModel().setValue(Boolean.FALSE);
+        }
+
+        orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
+        Persistence.service().persist(orgNode);
+
         NamespaceManager.runInTargetNamespace(VistaNamespace.adminNamespace, new Callable<Void>() {
             @Override
             public Void call() {
@@ -51,5 +70,9 @@ public class PmcDataModel {
             }
         });
 
+    }
+
+    public OrganizationPoliciesNode getOrgNode() {
+        return orgNode;
     }
 }

@@ -194,7 +194,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         setDate("01-Jan-2010");
 
-        pmcDataModel = new PmcDataModel();
+        pmcDataModel = new PmcDataModel(config);
         pmcDataModel.generate();
 
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
@@ -209,10 +209,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
         leaseAdjustmentReasonDataModel.generate();
 
-        buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
+        buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
         buildingDataModel.generate();
 
-        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
+        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
         idAssignmentPolicyDataModel.generate();
 
         ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
@@ -229,8 +229,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         tenantDataModel = new TenantDataModel(config);
         tenantDataModel.generate();
 
-        //TODO if commented - check exception
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
         leaseBillingPolicyDataModel.generate();
 
         arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);

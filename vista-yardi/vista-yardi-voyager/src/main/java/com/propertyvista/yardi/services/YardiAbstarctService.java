@@ -16,7 +16,6 @@ package com.propertyvista.yardi.services;
 import java.rmi.RemoteException;
 
 import org.apache.axis2.AxisFault;
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,21 +24,10 @@ import com.yardi.ws.operations.PingResponse;
 
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.YardiParameters;
 
 public class YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiAbstarctService.class);
-
-    void validate(YardiParameters yp) {
-        Validate.notEmpty(yp.getServiceURL(), "ServiceURL parameter can not be empty or null");
-        Validate.notEmpty(yp.getUsername(), "Username parameter can not be empty or null");
-        Validate.notEmpty(yp.getPassword(), "Password parameter can not be empty or null");
-        Validate.notEmpty(yp.getServerName(), "ServerName parameter can not be empty or null");
-        Validate.notEmpty(yp.getDatabase(), "Database parameter can not be empty or null");
-        Validate.notEmpty(yp.getPlatform(), "Platform parameter can not be empty or null");
-        Validate.notEmpty(yp.getInterfaceEntity(), "InterfaceEntity parameter can not be empty or null");
-    }
 
     /**
      * The Ping function accepts no parameters, but will return the

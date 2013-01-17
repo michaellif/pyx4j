@@ -92,4 +92,8 @@ public class LocationsDataModel {
                 IOUtils.resourceFileName("City-Canada-town.csv", LocationsDataModel.class))));
         return all;
     }
+
+    Province getProvinceByCode(String code) {
+        return provincesMap.get(code);
+    }
 }

@@ -16,7 +16,6 @@ package com.propertyvista.test.preloader;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
@@ -26,8 +25,11 @@ public class IdAssignmentPolicyDataModel {
 
     final private IdAssignmentPolicy policy;
 
-    public IdAssignmentPolicyDataModel(PreloadConfig config) {
+    private final PmcDataModel pmcDataModel;
+
+    public IdAssignmentPolicyDataModel(PreloadConfig config, PmcDataModel pmcDataModel) {
         policy = EntityFactory.create(IdAssignmentPolicy.class);
+        this.pmcDataModel = pmcDataModel;
     }
 
     public void generate() {
@@ -44,10 +46,7 @@ public class IdAssignmentPolicyDataModel {
             policy.items().add(item);
         }
 
-        OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
-        Persistence.service().persist(orgNode);
-
-        policy.node().set(orgNode);
+        policy.node().set(pmcDataModel.getOrgNode());
 
         Persistence.service().persist(policy);
     }

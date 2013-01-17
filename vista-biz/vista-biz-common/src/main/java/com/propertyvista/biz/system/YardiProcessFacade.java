@@ -13,15 +13,12 @@
  */
 package com.propertyvista.biz.system;
 
-import java.util.Set;
-
 import com.propertyvista.domain.StatisticsRecord;
-import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface YardiProcessFacade {
 
     void doAllImport(StatisticsRecord dynamicStatisticsRecord);
 
-    void postAllPayments(Set<PaymentRecord> payments, StatisticsRecord dynamicStatisticsRecord);
+    void postAllPayments(StatisticsRecord dynamicStatisticsRecord);
 
 }

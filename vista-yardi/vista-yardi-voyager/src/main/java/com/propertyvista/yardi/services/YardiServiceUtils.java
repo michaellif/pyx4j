@@ -7,20 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 13, 2012
- * @author michaellif
+ * Created on May 23, 2011
+ * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.yardi.services;
 
-import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class PreloadConfig {
+public class YardiServiceUtils {
 
-    public Integer defaultBillingCycleSartDay = 1;
-
-    public LeaseBillingPolicy.BillConfirmationMethod billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.manual;
-
-    public boolean yardiIntegration = false;
+    private final static Logger log = LoggerFactory.getLogger(YardiServiceUtils.class);
 
 }

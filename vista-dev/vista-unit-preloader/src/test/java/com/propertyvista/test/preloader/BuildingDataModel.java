@@ -50,12 +50,15 @@ public class BuildingDataModel {
 
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
+    private final LocationsDataModel locationsDataModel;
+
     private Building building;
 
     private Service standardResidentialService;
 
-    public BuildingDataModel(PreloadConfig config, ProductItemTypesDataModel productItemTypesDataModel) {
+    public BuildingDataModel(PreloadConfig config, LocationsDataModel locationsDataModel, ProductItemTypesDataModel productItemTypesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
+        this.locationsDataModel = locationsDataModel;
         createServiceMeta();
     }
 
@@ -88,6 +91,7 @@ public class BuildingDataModel {
 
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
+        building.info().address().province().set(locationsDataModel.getProvinceByCode("ON"));
 
         generateParking();
         generateLockerArea();

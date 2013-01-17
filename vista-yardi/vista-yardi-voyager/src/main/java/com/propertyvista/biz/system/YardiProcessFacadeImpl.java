@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.system;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +20,8 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.jobs.YardiImportProcess;
-import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.YardiParameters;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
@@ -38,18 +33,9 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
 
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
-        YardiParameters yp = new YardiParameters();
-        yp.setServiceURL(yardiCredential.serviceURL().getValue());
-        yp.setUsername(yardiCredential.username().getValue());
-        yp.setPassword(yardiCredential.credential().getValue());
-        yp.setServerName(yardiCredential.serverName().getValue());
-        yp.setDatabase(yardiCredential.database().getValue());
-        yp.setPlatform(yardiCredential.platform().toString());
-        yp.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
 
         try {
-            YardiResidentTransactionsService.getInstance().updateAll(yp);
+            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
             Persistence.service().commit();
         } catch (YardiServiceException e) {
             log.error("Error", e);
@@ -58,7 +44,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postAllPayments(Set<PaymentRecord> payments, StatisticsRecord dynamicStatisticsRecord) {
+    public void postAllPayments(StatisticsRecord dynamicStatisticsRecord) {
 
         // YardiSystemBatchesService.getInstance().postAllPayments(yp);
 

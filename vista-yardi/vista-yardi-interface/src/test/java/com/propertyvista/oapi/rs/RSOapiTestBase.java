@@ -89,7 +89,7 @@ public class RSOapiTestBase extends JerseyTest {
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
         productItemTypesDataModel.generate();
 
-        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
+        BuildingDataModel buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
         buildingDataModel.generate(propertyCode);
     }
 }

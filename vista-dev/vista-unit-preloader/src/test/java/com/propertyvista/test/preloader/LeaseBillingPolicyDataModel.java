@@ -26,15 +26,16 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
 public class LeaseBillingPolicyDataModel {
-    private final BuildingDataModel buildingDataModel;
 
     private LeaseBillingPolicy policy;
 
     private final PreloadConfig config;
 
-    public LeaseBillingPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
+    private final PmcDataModel pmcDataModel;
+
+    public LeaseBillingPolicyDataModel(PreloadConfig config, PmcDataModel pmcDataModel) {
         this.config = config;
-        this.buildingDataModel = buildingDataModel;
+        this.pmcDataModel = pmcDataModel;
     }
 
     public void generate() {
@@ -68,7 +69,7 @@ public class LeaseBillingPolicyDataModel {
 
         policy.confirmationMethod().setValue(config.billConfirmationMethod);
 
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(pmcDataModel.getOrgNode());
 
         Persistence.service().persist(policy);
     }

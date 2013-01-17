@@ -13,6 +13,19 @@
  */
 package com.propertyvista.yardi;
 
+import org.junit.Test;
+
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
+
 public class YardiImportTest extends YardiTestBase {
 
+    @Test
+    public void testImport() throws Exception {
+        preloadData();
+        PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
+
+        YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+    }
 }
