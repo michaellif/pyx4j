@@ -28,8 +28,6 @@ public class YardiServicesClient {
 
     private static final String serviceURL = "https://www.iyardiasp.com/8223thirddev/webservices/itfresidenttransactions20.asmx";
 
-    private static YardiGetResidentTransactionsService getResidentTransactions = new YardiGetResidentTransactionsService();
-
     /**
      * @param args
      * @throws YardiServiceException
@@ -56,7 +54,8 @@ public class YardiServicesClient {
         }
 
         //test services
-        getResidentTransactions.updateAll(yp);
+        YardiGetResidentTransactionsService.getInstance().updateAll(yp);
+
         Persistence.service().commit();
     }
 }

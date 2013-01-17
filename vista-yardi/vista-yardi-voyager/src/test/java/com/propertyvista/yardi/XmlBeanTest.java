@@ -77,7 +77,7 @@ public class XmlBeanTest {
         String xml = IOUtils.getTextResource(IOUtils.resourceFileName("GetResidentTransactions.xml", getClass()));
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-        YardiGetResidentTransactionsService residentTransactionsService = new YardiGetResidentTransactionsService();
+        YardiGetResidentTransactionsService residentTransactionsService = YardiGetResidentTransactionsService.getInstance();
 
         log.info("Loaded transactions:\n{}", transactions);
 

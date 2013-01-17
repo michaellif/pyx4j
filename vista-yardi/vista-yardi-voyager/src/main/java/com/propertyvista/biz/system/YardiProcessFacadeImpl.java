@@ -13,11 +13,14 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.jobs.YardiImportProcess;
 import com.propertyvista.yardi.YardiConstants;
@@ -29,10 +32,9 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     private static final Logger log = LoggerFactory.getLogger(YardiImportProcess.class);
 
-    private static YardiGetResidentTransactionsService getResidentTransactions = new YardiGetResidentTransactionsService();
-
     @Override
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
+
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
         YardiParameters yp = new YardiParameters();
         yp.setServiceURL(yardiCredential.serviceURL().getValue());
@@ -45,7 +47,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
 
         try {
-            getResidentTransactions.updateAll(yp);
+            YardiGetResidentTransactionsService.getInstance().updateAll(yp);
         } catch (YardiServiceException e) {
             log.error("Error", e);
         }
@@ -53,7 +55,9 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord) {
+    public void postAllPayments(Set<PaymentRecord> payments, StatisticsRecord dynamicStatisticsRecord) {
+
+        // YardiSystemBatchesService.getInstance().postAllPayments(yp);
 
     }
 

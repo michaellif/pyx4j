@@ -69,6 +69,17 @@ public class YardiGetResidentTransactionsService extends YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiGetResidentTransactionsService.class);
 
+    private static class SingletonHolder {
+        public static final YardiGetResidentTransactionsService INSTANCE = new YardiGetResidentTransactionsService();
+    }
+
+    private YardiGetResidentTransactionsService() {
+    }
+
+    public static YardiGetResidentTransactionsService getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     /**
      * Updates/creates entities basing on data from YARDI System.
      * 

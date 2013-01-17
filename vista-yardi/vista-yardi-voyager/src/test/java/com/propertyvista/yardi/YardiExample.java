@@ -49,7 +49,6 @@ public class YardiExample {
             //YardiAbstarctService.ping(c);
             YardiTransactions.getResidentTransactions(c, yp, yp.getYardiPropertyId());
 
-            System.out.println("+++++++++++++");
             // ANYA, use the first line if you want to send stuff, second to retrieve
             //send(c, yp);
             //retrieve(c, yp);
