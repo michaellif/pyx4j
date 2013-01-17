@@ -18,6 +18,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -48,6 +50,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
         try {
             YardiResidentTransactionsService.getInstance().updateAll(yp);
+            Persistence.service().commit();
         } catch (YardiServiceException e) {
             log.error("Error", e);
         }
