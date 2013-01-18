@@ -40,7 +40,11 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
     public IsWidget createContent() {
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
+        contentPanel.setH2(++row, 0, 1, i18n.tr("Personal Info and Contact Information"));
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantName())).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantPhone())).build());
 
+        contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage"));
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
@@ -56,6 +60,9 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
     public void setCoverageParams(TenantSureQuotationRequestParamsDTO params) {
         TenantSureCoverageDTO coverageRequest = EntityFactory.create(TenantSureCoverageDTO.class);
         setValue(coverageRequest, false);
+
+        (get(proto().tenantName())).setValue(params.tenantName().getValue());
+        (get(proto().tenantPhone())).setValue(params.tenantPhone().getValue());
 
         ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());

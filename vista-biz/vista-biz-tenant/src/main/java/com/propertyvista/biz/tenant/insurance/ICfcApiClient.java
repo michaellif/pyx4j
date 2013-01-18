@@ -41,7 +41,7 @@ public interface ICfcApiClient {
      * 
      * @return reference ID for the client
      */
-    public String createClient(Tenant tenant);
+    public String createClient(Tenant tenant, String tenantName, String tenantPhone);
 
     public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest);
 

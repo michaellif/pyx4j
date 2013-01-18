@@ -117,13 +117,15 @@ public class CfcApiClient implements ICfcApiClient {
     }
 
     @Override
-    public String createClient(Tenant tenant) {
+    public String createClient(Tenant tenant, String tenantName, String tenantPhone) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
         SimpleClient simpleClient = new ObjectFactory().createSimpleClient();
         simpleClient.setSessionID(sessionId);
         TenantSureTenantAdapter.fillClient(tenant, simpleClient);
+        simpleClient.setCompanyName(tenantName);
+        simpleClient.setContactName(tenantPhone);
 
         SimpleClientResponse createClientRssult = api.runCreateClient(simpleClient);
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {

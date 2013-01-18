@@ -78,7 +78,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId) {
         if (coverage.numberOfPreviousClaims().getValue() != PreviousClaims.MoreThanTwo) {
-            InsuranceTenantSureClient client = initializeClient(tenantId);
+            InsuranceTenantSureClient client = initializeClient(tenantId, coverage.tenantName().getValue(), coverage.tenantPhone().getValue());
             TenantSureQuoteDTO quote = cfcApiClient.getQuote(client, coverage);
             return quote;
         } else {
@@ -100,12 +100,12 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      * Function implements this: http://jira.birchwoodsoftwaregroup.com/wiki/pages/viewpage.action?pageId=10027234
      */
     @Override
-    public void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId) {
+    public void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantPhone, String tenantName) {
         Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
         InsuranceTenantSure insuranceTenantSure = EntityFactory.create(InsuranceTenantSure.class);
         insuranceTenantSure.quoteId().setValue(quote.quoteId().getValue());
-        insuranceTenantSure.client().set(initializeClient(tenantId));
+        insuranceTenantSure.client().set(initializeClient(tenantId, tenantPhone, tenantName));
         insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Draft);
 
         insuranceTenantSure.inceptionDate().setValue(new LogicalDate());
@@ -392,14 +392,14 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().commit();
     }
 
-    private InsuranceTenantSureClient initializeClient(Tenant tenantId) {
+    private InsuranceTenantSureClient initializeClient(Tenant tenantId, String name, String phone) {
         EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
         criteria.eq(criteria.proto().tenant(), tenantId);
         InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
         if (tenantSureClient == null) {
             tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
             tenantSureClient.tenant().set(tenantId);
-            String clientReferenceNumber = cfcApiClient.createClient(tenantId);
+            String clientReferenceNumber = cfcApiClient.createClient(tenantId, name, phone);
             tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
             Persistence.service().persist(tenantSureClient);
             Persistence.service().commit();

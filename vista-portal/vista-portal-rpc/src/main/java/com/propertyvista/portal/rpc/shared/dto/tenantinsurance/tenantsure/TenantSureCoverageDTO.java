@@ -77,6 +77,15 @@ public interface TenantSureCoverageDTO extends IEntity {
         public abstract int numericValue();
     }
 
+    @NotNull
+    @Caption(name = "Name")
+    IPrimitive<String> tenantName();
+
+    @NotNull
+    @Editor(type = EditorType.phone)
+    @Caption(name = "Phone")
+    IPrimitive<String> tenantPhone();
+
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     @NotNull

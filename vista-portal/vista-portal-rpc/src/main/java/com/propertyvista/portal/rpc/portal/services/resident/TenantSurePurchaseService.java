@@ -30,7 +30,8 @@ public interface TenantSurePurchaseService extends IService {
 
     void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
 
-    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, InsurancePaymentMethod paymentMethod);
+    void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
+            InsurancePaymentMethod paymentMethod);
 
     void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback);
 }

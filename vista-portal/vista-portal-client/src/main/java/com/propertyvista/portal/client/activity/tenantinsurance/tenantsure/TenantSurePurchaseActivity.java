@@ -111,7 +111,8 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
                     view.reportError(i18n.tr("Payment failed due to: {0}", caught.getMessage()));
                 }
             }
-        }, view.getAcceptedQuote(), view.getPaymentMethod());
+        }, view.getAcceptedQuote(), view.getCoverageRequest().tenantName().getValue(), view.getCoverageRequest().tenantPhone().getValue(),
+                view.getPaymentMethod());
     }
 
     @Override

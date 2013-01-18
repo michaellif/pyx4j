@@ -40,7 +40,7 @@ public interface TenantSureFacade {
      * 
      * If any action failed: status set to Failed and record is kept in DB
      */
-    void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId);
+    void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone);
 
     /**
      * Sends a cancellation request

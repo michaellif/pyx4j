@@ -26,9 +26,6 @@ public class TenantSureTenantAdapter {
     public static void fillClient(Tenant tenantId, SimpleClient parameters) {
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
 
-        parameters.setCompanyName(tenant.customer().person().name().getStringView());
-        parameters.setContactName(tenant.customer().person().name().getStringView());
-
         Persistence.service().retrieveMember(tenant.lease());
         Persistence.service().retrieveMember(tenant.lease().unit().building());
         AddressStructured address = tenant.lease().unit().building().info().address();
@@ -63,6 +60,5 @@ public class TenantSureTenantAdapter {
         }
 
         parameters.setEmailAddress(tenant.customer().person().email().getValue());
-        parameters.setTelephoneNumber(tenant.customer().person().homePhone().getValue());
     }
 }

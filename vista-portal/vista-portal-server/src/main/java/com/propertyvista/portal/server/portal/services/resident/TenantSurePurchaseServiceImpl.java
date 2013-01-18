@@ -29,6 +29,7 @@ import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -50,9 +51,14 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
         TenantSureQuotationRequestParamsDTO params = EntityFactory.create(TenantSureQuotationRequestParamsDTO.class);
 
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
+        params.tenantName().setValue(tenant.customer().person().name().getStringView());
+        params.tenantPhone().setValue(getPhone(tenant.customer().person()));
+
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
+
         // these values are taken from the TenantSure API document: Appendix I        
         for (BigDecimal libilityCoverage : Arrays.asList(new BigDecimal("1000000"), new BigDecimal("2000000"), new BigDecimal("5000000"))) {
             if (!tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue()
@@ -100,12 +106,14 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, InsurancePaymentMethod paymentMethod) {
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
+            InsurancePaymentMethod paymentMethod) {
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
-        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
+        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(), tenantName,
+                tenantPhone);
 
         callback.onSuccess(null);
     }
@@ -115,4 +123,13 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
     }
 
+    private String getPhone(Person person) {
+        if (!person.homePhone().isNull()) {
+            return person.homePhone().getValue();
+        } else if (person.mobilePhone().isNull()) {
+            return person.mobilePhone().getValue();
+        } else {
+            return "";
+        }
+    }
 }

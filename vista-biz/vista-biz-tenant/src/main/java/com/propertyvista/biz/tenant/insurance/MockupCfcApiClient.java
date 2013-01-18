@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class MockupCfcApiClient implements ICfcApiClient {
 
     @Override
-    public String createClient(Tenant tenant) {
+    public String createClient(Tenant tenant, String name, String phone) {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
