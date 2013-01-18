@@ -27,6 +27,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -58,6 +59,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         Persistence.service().startTransaction();
 
         final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
         criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
         List<Tenant> tenants = TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<List<Tenant>>() {
             @Override
