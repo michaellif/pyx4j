@@ -46,7 +46,7 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
-        row = -1;
+        row = 3;
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
