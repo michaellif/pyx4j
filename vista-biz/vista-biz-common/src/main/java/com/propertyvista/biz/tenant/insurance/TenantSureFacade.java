@@ -55,6 +55,8 @@ public interface TenantSureFacade {
 
     void cancelDueToSkippedPayment(Tenant tenantId);
 
+    void reinstate(Tenant tenantId);
+
     InsurancePaymentMethod getPaymentMethod(Tenant tenantId);
 
     /**

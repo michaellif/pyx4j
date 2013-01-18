@@ -49,6 +49,13 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     }
 
     @Override
+    public void reinstate(AsyncCallback<VoidSerializable> callback) {
+        ServerSideFactory.create(TenantSureFacade.class).reinstate(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void getFaq(AsyncCallback<String> faqHtml) {
         faqHtml.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getFaq());
     }

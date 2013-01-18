@@ -104,6 +104,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     private Button sendDocumentationButton;
 
+    private Button reinstateTenantSureButton;
+
     public TenantSureManagementViewImpl() {
 
         FlowPanel viewPanel = new FlowPanel();
@@ -119,11 +121,13 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     public void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus) {
         statusForm.populate(detailedStatus);
         boolean isCancelled = !detailedStatus.expiryDate().isNull();
+
         updateCCButton.setEnabled(!isCancelled);
         cancelTenantSureButton.setEnabled(!isCancelled);
 
         setControlButtonLayout(updateCCButton, !detailedStatus.isPaymentFailed().isBooleanTrue()); // because setVisible for some reason screws up other style settings        
         setControlButtonLayout(updateCCAndPay, detailedStatus.isPaymentFailed().isBooleanTrue()); // because setVisible for some reason screws up other style settings
+        setControlButtonLayout(reinstateTenantSureButton, isCancelled);
     }
 
     @Override
@@ -227,8 +231,13 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         });
         setControlButtonLayout(cancelTenantSureButton);
 
-        Button viewCertificateButton = new Button(i18n.tr("View Insurance Certificate"));
-        setControlButtonLayout(viewCertificateButton);
+        reinstateTenantSureButton = new Button(i18n.tr("Reinstate"), new Command() {
+            @Override
+            public void execute() {
+                presenter.reinstate();
+            }
+        });
+        setControlButtonLayout(reinstateTenantSureButton);
 
         Button viewFaq = new Button(i18n.tr("FAQ"), new Command() {
             @Override
@@ -259,6 +268,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.add(updateCCButton);
         actionsPanel.add(updateCCAndPay);
         actionsPanel.add(cancelTenantSureButton);
+        actionsPanel.add(reinstateTenantSureButton);
 
         actionsPanel.add(new HTML("&nbsp;")); // add separator 
 

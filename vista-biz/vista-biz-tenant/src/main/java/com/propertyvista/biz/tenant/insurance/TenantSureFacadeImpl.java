@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
+import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
@@ -358,6 +359,35 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
         Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
+
+        Persistence.service().commit();
+    }
+
+    @Override
+    public void reinstate(Tenant tenantId) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        if (insuranceTenantSure.status().getValue() != InsuranceTenantSure.Status.PendingCancellation) {
+            throw new UserRuntimeException(i18n.tr("Cannot be reinstanted because it's not cancelled"));
+        }
+        insuranceTenantSure.cancellationDate().setValue(null);
+        insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+        insuranceTenantSure.cancellation().setValue(null);
+        insuranceTenantSure.expiryDate().setValue(null);
+        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(null);
+        Persistence.service().merge(insuranceTenantSure);
+        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
+
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        String tenantsEmail;
+
+        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+            tenantsEmail = mailConfig.getForwardAllTo();
+        } else {
+            tenantsEmail = tenant.customer().user().email().getValue();
+        }
+        cfcApiClient.reinstate(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(), ReinstatementType.REINSTATEMENT_PROACTIVE,
+                tenantsEmail);
 
         Persistence.service().commit();
     }

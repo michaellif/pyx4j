@@ -31,6 +31,8 @@ public interface TenantSureManagementService extends IService {
 
     void cancelTenantSure(AsyncCallback<VoidSerializable> callback);
 
+    void reinstate(AsyncCallback<VoidSerializable> callback);
+
     void sendDocumentation(AsyncCallback<VoidSerializable> defaultAsyncCallback, String email);
 
 }

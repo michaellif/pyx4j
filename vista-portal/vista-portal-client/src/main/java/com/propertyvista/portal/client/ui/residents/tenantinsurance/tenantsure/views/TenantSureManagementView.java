@@ -25,6 +25,8 @@ public interface TenantSureManagementView extends IsWidget {
 
         void cancelTenantSure();
 
+        void reinstate();
+
         void viewFaq();
 
         void viewAboutTenantSure();

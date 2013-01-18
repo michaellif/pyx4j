@@ -71,15 +71,6 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.About());
     }
 
-    private void populateStatus() {
-        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
-            @Override
-            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
-                view.populate(status);
-            }
-        });
-    }
-
     @Override
     public void sendDocumentation(String email) {
         service.sendDocumentation(new DefaultAsyncCallback<VoidSerializable>() {
@@ -90,6 +81,28 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
             }
 
         }, email);
+    }
+
+    @Override
+    public void reinstate() {
+        service.reinstate(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populateStatus();
+            }
+
+        });
+
+    }
+
+    private void populateStatus() {
+        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
+            @Override
+            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
+                view.populate(status);
+            }
+        });
     }
 
 }

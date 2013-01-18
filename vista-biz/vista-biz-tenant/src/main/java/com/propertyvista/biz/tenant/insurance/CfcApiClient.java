@@ -208,7 +208,8 @@ public class CfcApiClient implements ICfcApiClient {
         Result result = cfcApiSoap.mtaCancelPolicy(sessionId, policyId, null, cancellationType.name(), toEmailArray, bccEmailArray);
         assertSuccessfulResponse(result);
 
-        return new LogicalDate(result.getQuoteData().getExpiryDate().toGregorianCalendar().getTime());
+        // TODO try to get the expiry date
+        return new LogicalDate();
     }
 
     @Override
