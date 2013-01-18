@@ -15,15 +15,13 @@
 }
 .floorplanInfoPanel .pictureBox .gallery span {
 	float:left;
-	margin:5px 0 5px 8px;
 }
 .floorplanInfoPanel .pictureBox .gallery span:first-child {
-	margin-left:0;
+	margin-left:10px;
 }
 .floorplanInfoPanel .infoBox {
-	width:100%;
 	font-weight:bold;
-	color: ${object2_100};
+	padding-left: 10px;
 } 
 .floorplanInfoPanel .infoBoxEntry {
 	padding-top:15px;

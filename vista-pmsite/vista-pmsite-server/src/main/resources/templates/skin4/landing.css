@@ -41,23 +41,27 @@
     height: 375px;
     width: 920px;
     margin-left: 20px;
-    padding: 0 0 30px;
+    margin-bottom: 30px;
 }
 
 .banner .infobox_header {
 	background: #fff;
+	height: 30px;
+	padding: 5px 0;
 }
 
 .quickSearchPanel {
 	width: 280px;
 	background: #fff;
+	height: 100%;
+	overflow: hidden;
 }
 .quickSearchPanel .infobox_body {
       float:none;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       background: #999999;
       border-top: 5px solid #000000;
-      padding: 25px 20px;
+      padding: 18px 20px;
 }
 
 .quickSearchPanel h3 {
@@ -72,7 +76,6 @@
 	color: #fff;
 	display: block;
 	font-size: 12px;
-//	width: 128px;
 }
 
 .quickSearchPanel select {
@@ -96,6 +99,7 @@
 	float: right;
 	overflow: hidden;
 	border: 2px solid ${object1_100};
+	
 }
 
 .vista-pmsite-mainWrap {
@@ -135,9 +139,12 @@
 	float: left;
 	overflow:hidden;
 	width: 100%;
+	padding-bottom: 20px;
 }
 
 .testimBox .infobox_header {
+	height: 30px;
+	padding: 5px 0;
 }
 
 .testimBox .infobox_body {
@@ -146,6 +153,7 @@
 
 .testimBox .infobox_decor {
 	float: right;
+	max-height: 250px;
 }
 
 .testimBox .infobox_decor:first-child {
@@ -161,6 +169,7 @@
 .testimBox .callout {
 	position: relative;
 	left:135px;
+	max-height: 5%;
 }
 
 .testimBox .infobox_content {
@@ -179,11 +188,12 @@
 }
 
 .newsBox {
-	min-height: 380px;
 }
 
 .newsBox .infobox_header {
 	background: #fff;
+	height: 30px;
+	padding: 5px 0;
 }
 
 
@@ -205,8 +215,8 @@
 
 .newsBox .text {
 	color: ${object2_100};
-//	font-family: monospace;
-//  font-size: 1em;
+	font-family: monospace;
+	font-size: 1em;
     margin-bottom: 15px;
     font-family: Arial, Helvetica, sans-serif;
  	font-size: 9pt;
@@ -240,7 +250,8 @@
     font-weight: normal;
 	font-size: 14pt;
     display: inline-block;
-    margin: 5px 20px 5px 0;
+	margin: 0 20px 0 0;
+
 }
 .infobox_header_title:lang(fr) {
 	font-size: 18px;
@@ -263,11 +274,14 @@
 }
 
 .promoBox .infobox_header {
+	height: 30px;
+	padding: 5px 0;
 }
 
 .address {
 	display: inline-block;
 	margin: 12px 0;
+	color: #000000;
 }
 
 .promoBox .infobox_content:first-child {

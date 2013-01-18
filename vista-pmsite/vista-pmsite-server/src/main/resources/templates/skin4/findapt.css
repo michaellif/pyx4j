@@ -58,9 +58,9 @@
 	height: 42px;
 	display:block;
 	float: right;
-	margin:20px 0;
 	border: medium none;
 	font-size: 16px;
+	margin: 20px 0;
 }
 
 .advancedSearchWideWrap label {
@@ -87,6 +87,7 @@
 .advancedSearchWideWrap .searchTypeSelButton:first-child {
 	margin-left:0px;
 }
+
 .advancedSearchWideWrap .searchTypeSelButton label {
 	display:inline-block;
 	padding:6px 0;
@@ -96,6 +97,7 @@
 }
 
 .advancedSearchWideWrap .amenityList input[type=checkbox] {
+//	margin: 0 2px; /*for IE7*/
 }
 
 .advancedSearchWideWrap .searchTypeBox {
@@ -188,7 +190,7 @@
 	display:inline-block;
 	zoom: 1;
 	*display: inline;
-	width:91px;
+	width:88px;
 	font-size:13px;
 	_float: left;
 	_clear: both;

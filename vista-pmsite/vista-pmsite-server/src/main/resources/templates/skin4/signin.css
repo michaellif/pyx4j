@@ -1,5 +1,4 @@
 .vista-pmsite-signInPage {
-    color: #fff;
     font-size: 16px;
 }
 
@@ -28,11 +27,9 @@
 }
 
 .vista-pmsite-signInPage .content {
-//	min-height: 383px;
-//	color: ${foreground_100};
-	line-height: 20px;
+	background: url("images/resident.jpg") no-repeat right;
+	background-position: right bottom;
 	overflow: hidden;
-//	padding: 30px 30px 0;
 	background-color: white;
 	border-top: 5px solid #000;	
 }
@@ -41,6 +38,8 @@
 	width: 380px;
 	background: #999999;
 	padding: 20px 120px 20px 120px;
+	color: #fff;
+	height: 299px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {

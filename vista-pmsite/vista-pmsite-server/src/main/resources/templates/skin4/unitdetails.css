@@ -5,29 +5,35 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-    background: ${background_10};
+    background: #fff;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
 	display: inline-block;
-	width: 318px;
+	width: 300px;
 	vertical-align: top;
-	padding:20px 16px;
+	float: left;
+	padding-bottom: 20px;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	display: inline-block;
-	width: 606px;
+	width: 600px;
 	vertical-align: top;
 	min-height:600px;
+	float: right;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main .caption2 {
 }
 
 .vista-pmsite-unitDetailsPage .apartmentDetailsWrap {
 	min-height: 550px;
-	background: ${object2_100};
+	border-top: 5px solid #000000;
 }
+
+.vista-pmsite-sidebarWrap {
+	margin: 0 20px 20px 20px;
+}
+
 .apartmentDetailsWrap .detailBox {
-	color:${foreground_100};
 	padding: 20px 0;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
@@ -46,17 +52,16 @@
 	display:inline-block;
 	vertical-align:top;
 	width:80px;
-	padding: 0 20px 6px 20px;
 	font-size:12px;
 	font-weight:bold;
 	text-transform:uppercase;
 	text-align:right;
-	color:${foreground_80};
+	padding-right: 10px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;
 	vertical-align:top;
-	width:460px;'
+	width:460px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
 	padding-left:10px;

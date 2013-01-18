@@ -3,7 +3,6 @@
 
 .vista-pmsite-staticPage .vista-pmsite-main {
 	background: #fff;
-//	border-top: 1px solid #000;
 }
 
 .vista-pmsite-main .caption {
@@ -19,25 +18,24 @@
 }
 
 .vista-pmsite-staticPage .secondaryNavig {
-	padding: 41px 0;
+	border-top: 1px solid #000;
 	width: 300px;
 	float: left;
 	min-height: 400px;
 	margin-right: 20px;
+	padding-top: 20px;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul {
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
-	border-top: 5px solid #000000;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li {
 	font-size: 16px;
 	font-weight: normal;
 	height: 28px;
-//	line-height: 38px;
 	overflow: hidden;
 	padding: 0 10px 0 20px;
 }

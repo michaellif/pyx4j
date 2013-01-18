@@ -32,6 +32,7 @@
 	padding: 5px 0;
 	font-family: monospace;
 	font-weight: normal;
+	height: 30px;
 }
 
 .advancedSearchNarrowWrap {
@@ -201,7 +202,9 @@
 .vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
 	background: #fff;
+	overflow: hidden;
 }
+
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	padding-bottom:40px;
 	min-height:600px;
@@ -215,7 +218,6 @@
 	height:25px;
 	padding-top:5px;
 	padding-left:30px;
-	margin-top:20px;
 	float:right;
 	color:${object2_30};
 	font-weight:bold;
