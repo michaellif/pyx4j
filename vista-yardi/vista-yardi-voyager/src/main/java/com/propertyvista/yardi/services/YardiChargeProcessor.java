@@ -78,7 +78,7 @@ public class YardiChargeProcessor {
 
     private YardiAccount getYardiAccount(RTCustomer customer) {
         EntityQueryCriteria<Lease> leaseCrit = EntityQueryCriteria.create(Lease.class);
-        leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getRTUnit().getUnitID()));
+        leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getCustomerID()));
         Lease lease = Persistence.service().retrieve(leaseCrit);
         if (lease == null) {
             // no lease found - quit
