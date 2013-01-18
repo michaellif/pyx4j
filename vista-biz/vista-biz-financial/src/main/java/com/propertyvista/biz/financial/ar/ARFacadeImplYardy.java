@@ -1,0 +1,127 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-01-18
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.biz.financial.ar;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Vector;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.dto.TransactionHistoryDTO;
+
+public class ARFacadeImplYardy implements ARFacade {
+
+    @Override
+    public void postPayment(PaymentRecord payment) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void rejectPayment(PaymentRecord payment, boolean applyNSF) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void postImmediateAdjustment(LeaseAdjustment adjustment) {
+        throw new UnsupportedOperationException();
+
+    }
+
+    @Override
+    public DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeHardLink(DebitCreditLink link) {
+        throw new UnsupportedOperationException();
+
+    }
+
+    @Override
+    public void postDepositRefund(Deposit deposit) {
+        throw new UnsupportedOperationException();
+
+    }
+
+    @Override
+    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
+            Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateArrearsHistory(BillingAccount billingAccount) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateArrearsHistory(Building building) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount) {
+        throw new UnsupportedOperationException();
+    }
+
+}
