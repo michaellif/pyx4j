@@ -21,8 +21,6 @@ public class YardiConstants {
 
     public static final long TIMEOUT = 10; // minutes
 
-    public static final String NAMESPACE = "http://yardi.com/ResidentTransactions20";
-
     public static final String INTERFACE_ENTITY = "Property Vista";
 
     public static final String YARDI_PROPERTY_ID = "prvista1";

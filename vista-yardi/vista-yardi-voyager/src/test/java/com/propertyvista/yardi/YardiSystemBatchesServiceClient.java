@@ -23,11 +23,11 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
+import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
-public class YardiServicesClient {
+public class YardiSystemBatchesServiceClient {
 
-    public static void main(String[] args) throws YardiServiceException {
+    public static void main(String[] args) throws Exception {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.PostgreSQL));
         NamespaceManager.setNamespace(DemoPmc.star.name());
         Persistence.service().startBackgroundProcessTransaction();
@@ -35,7 +35,7 @@ public class YardiServicesClient {
 
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
         try {
-            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+            YardiSystemBatchesService.getInstance().postAllPayments(yardiCredential);
         } finally {
             Persistence.service().commit();
         }

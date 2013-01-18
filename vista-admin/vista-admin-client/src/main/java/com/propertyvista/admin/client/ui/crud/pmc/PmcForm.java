@@ -215,7 +215,9 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serviceURL()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().residentTransactionsServiceURL()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().sysBatchServiceURL()), 25).build());
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().username()), 15).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().credential()), 15).build());

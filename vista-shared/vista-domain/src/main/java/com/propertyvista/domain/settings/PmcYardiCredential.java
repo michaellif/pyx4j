@@ -44,8 +44,11 @@ public interface PmcYardiCredential extends IEntity {
         SQL, Oracle
     }
 
-    @Caption(name = "Web Service URL")
-    IPrimitive<String> serviceURL();
+    @Caption(name = "Resident Transactions Service URL")
+    IPrimitive<String> residentTransactionsServiceURL();
+
+    @Caption(name = "Sys Batch Service URL")
+    IPrimitive<String> sysBatchServiceURL();
 
     @Caption(name = "Web Service User")
     IPrimitive<String> username();

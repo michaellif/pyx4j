@@ -13,8 +13,11 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.GregorianCalendar;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
@@ -23,6 +26,13 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.resident.Detail;
+import com.yardi.entity.resident.Payment;
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.RTCustomer;
+import com.yardi.entity.resident.RTServiceTransactions;
+import com.yardi.entity.resident.ResidentTransactions;
+import com.yardi.entity.resident.Transactions;
 import com.yardi.ws.operations.AddReceiptsToBatch;
 import com.yardi.ws.operations.AddReceiptsToBatchResponse;
 import com.yardi.ws.operations.OpenReceiptBatch;
@@ -30,6 +40,8 @@ import com.yardi.ws.operations.OpenReceiptBatchResponse;
 import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
+
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiClient;
@@ -41,15 +53,51 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
 
-    public void postAllPayments(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
-        YardiClient client = new YardiClient(yc.serviceURL().getValue());
-
-        //openReceiptBatch
-        //addReceiptsToBatch
-        //postReceiptBatch
+    private static class SingletonHolder {
+        public static final YardiSystemBatchesService INSTANCE = new YardiSystemBatchesService();
     }
 
-    private void openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
+    private YardiSystemBatchesService() {
+    }
+
+    public static YardiSystemBatchesService getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException {
+        YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
+
+        long batchId = openReceiptBatch(client, yc, "prvista1");
+        // String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", YardiSystemBatchesService.class));
+
+        ResidentTransactions residentTransactions = new ResidentTransactions();
+        Property property = new Property();
+        residentTransactions.getProperty().add(property);
+        RTCustomer customer = new RTCustomer();
+        property.getRTCustomer().add(customer);
+        RTServiceTransactions st = new RTServiceTransactions();
+        customer.setRTServiceTransactions(st);
+        Transactions transactions = new Transactions();
+        st.getTransactions().add(transactions);
+        Payment payment = new Payment();
+        payment.setType("Other");
+        transactions.setPayment(payment);
+        Detail detail = new Detail();
+        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06));
+        detail.setCustomerID("t0005529");
+        detail.setPaidBy("Tenant");
+        detail.setAmount("2626.18");
+        detail.setComment("test pay2");
+        detail.setPropertyPrimaryID("prvista1");
+        payment.setDetail(detail);
+
+        String xml = MarshallUtil.marshall(residentTransactions);
+
+        addReceiptsToBatch(client, yc, batchId, xml);
+        postReceiptBatch(client, yc, batchId);
+    }
+
+    private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.OpenReceiptBatch);
 
@@ -63,8 +111,10 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         l.setYardiPropertyId(propertyId);
 
         OpenReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().openReceiptBatch(l);
+
         long result = response.getOpenReceiptBatchResult();
         log.info("OpenReceiptBatch: {}", result);
+        return result;
     }
 
     private void addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws AxisFault, RemoteException, XMLStreamException {

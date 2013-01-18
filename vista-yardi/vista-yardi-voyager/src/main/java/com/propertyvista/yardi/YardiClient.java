@@ -34,7 +34,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
-import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants.Action;
 
 public class YardiClient {
@@ -51,10 +50,6 @@ public class YardiClient {
     private int requestCount = 0;
 
     public Long transactionId = 0l;
-
-    public YardiClient(PmcYardiCredential credential) {
-        serviceURL = credential.serviceURL().getValue();
-    }
 
     public YardiClient(String serviceURL) {
         this.serviceURL = serviceURL;

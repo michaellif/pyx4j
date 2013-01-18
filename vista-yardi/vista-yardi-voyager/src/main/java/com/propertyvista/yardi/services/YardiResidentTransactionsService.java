@@ -70,7 +70,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
      */
     public void updateAll(PmcYardiCredential yc) throws YardiServiceException {
 
-        YardiClient client = new YardiClient(yc.serviceURL().getValue());
+        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
         log.info("Get properties information...");
         List<String> propertyCodes = getPropertyCodes(client, yc);
