@@ -207,7 +207,7 @@
         <gwtEnableAssertions>false</gwtEnableAssertions>
 
         <scm.revision></scm.revision>
-        <axis2Version>1.5.4</axis2Version>
+        <axis2Version>1.6.2</axis2Version>
         <wicket.version>1.5.0</wicket.version>
 
         <google.translate.apiKey>AIzaSyB4epMBre3NeR-_1fgKFz3-V6iA1qpfh-M</google.translate.apiKey>
