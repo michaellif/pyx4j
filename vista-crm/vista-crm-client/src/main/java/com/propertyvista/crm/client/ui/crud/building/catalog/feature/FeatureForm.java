@@ -48,7 +48,6 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
-        content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
 
         selectTab(addTab(content));

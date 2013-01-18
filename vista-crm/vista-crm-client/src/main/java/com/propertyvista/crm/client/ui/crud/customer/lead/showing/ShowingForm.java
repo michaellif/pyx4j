@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
@@ -147,8 +148,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
             }
         });
 
-        content.getColumnFormatter().setWidth(0, "50%");
-        content.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         Tab tab = addTab(content);
         selectTab(tab);

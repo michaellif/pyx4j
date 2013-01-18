@@ -32,15 +32,16 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 
 public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
@@ -156,8 +157,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-            panel.getColumnFormatter().setWidth(0, "50%");
-            panel.getColumnFormatter().setWidth(1, "50%");
+            panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
             return panel;
         }

@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
@@ -54,8 +55,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         get(proto().status()).setViewable(true);
         get(proto().closeReason()).setViewable(true);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

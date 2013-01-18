@@ -25,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -71,8 +72,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.getColumnFormatter().setWidth(0, "50%");
-        content.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return content;
     }

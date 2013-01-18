@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
@@ -45,20 +46,20 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 6).customLabel("Latitude Direction").build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 6).customLabel("Longitude Direction").build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         return main;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void addValidations() {
-        ((CTextFieldBase) get(proto().latitude())).setFormat(new GeoNumberFormat());
+        ((CTextFieldBase<Double, ?>) get(proto().latitude())).setFormat(new GeoNumberFormat());
 
         get(proto().latitude()).addValueValidator(new EditableValueValidator<Double>() {
             @Override
@@ -79,7 +80,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         });
         get(proto().latitudeType()).addValueChangeHandler(new RevalidationTrigger<LatitudeType>(get(proto().latitude())));
 
-        ((CTextFieldBase) get(proto().longitude())).setFormat(new GeoNumberFormat());
+        ((CTextFieldBase<Double, ?>) get(proto().longitude())).setFormat(new GeoNumberFormat());
 
         get(proto().longitude()).addValueValidator(new EditableValueValidator<Double>() {
             @Override

@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -63,8 +64,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRun())).build());
         content.setWidget(row, 1, new ViewLeasesLink(true));
 
-        content.getColumnFormatter().setWidth(0, "40%");
-        content.getColumnFormatter().setWidth(1, "60%");
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
     }

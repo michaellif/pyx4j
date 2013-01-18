@@ -40,6 +40,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -241,8 +242,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        panel.getColumnFormatter().setWidth(0, "50%");
-        panel.getColumnFormatter().setWidth(1, "50%");
+        panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         return panel;
     }

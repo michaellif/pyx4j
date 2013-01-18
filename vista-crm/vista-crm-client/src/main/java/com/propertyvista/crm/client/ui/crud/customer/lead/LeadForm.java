@@ -40,6 +40,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -163,8 +164,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         get(proto().status()).setViewable(true);
         get(proto().createDate()).setViewable(true);

@@ -33,6 +33,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
@@ -103,8 +104,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         main.setWidget(++row, 0, depositPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));

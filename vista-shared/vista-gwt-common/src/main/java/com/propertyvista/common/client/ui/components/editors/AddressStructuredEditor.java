@@ -15,8 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-
 import com.propertyvista.domain.contact.AddressStructured;
 
 public class AddressStructuredEditor extends AddressStructuredEditorImpl<AddressStructured> {
@@ -35,14 +33,6 @@ public class AddressStructuredEditor extends AddressStructuredEditorImpl<Address
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = internalCreateContent();
-
-        if (isTwoColumns()) {
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
-        }
-        main.setWidth("100%");
-
-        return main;
+        return internalCreateContent();
     }
 }

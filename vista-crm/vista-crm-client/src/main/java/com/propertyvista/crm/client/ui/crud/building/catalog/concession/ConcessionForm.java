@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Concession;
 
@@ -55,8 +56,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 9).build());
 
-        content.getColumnFormatter().setWidth(0, "50%");
-        content.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         // tweak:
         get(proto().updated()).setViewable(true);

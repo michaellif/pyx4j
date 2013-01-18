@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.dto.BoilerDTO;
@@ -49,8 +50,7 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
         main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

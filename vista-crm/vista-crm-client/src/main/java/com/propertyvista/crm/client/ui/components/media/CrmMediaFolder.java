@@ -37,6 +37,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
@@ -113,8 +114,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().visibility()), 7, 10).build());
             main.getFlexCellFormatter().setRowSpan(row, 1, 3);
 
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             SimplePanel thumbnailWrap = new SimplePanel();
             thumbnailWrap.setWidget(thumbnail = new Image());

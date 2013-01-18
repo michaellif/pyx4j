@@ -25,6 +25,15 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 
 public class VistaTheme extends Theme {
 
+    /**
+     * Supposed to be used in FormFlexPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+     * That setWidth(...) doens't support em values - thus all these complications!
+     * 
+     * It equals to 40em - maximum size of the label + control in our decorator construction.
+     * The label width is 15em by default, so maximum components width is 25 (two column layout).
+     */
+    public static final String columnWidth = "492px";
+
     public VistaTheme() {
 
     }

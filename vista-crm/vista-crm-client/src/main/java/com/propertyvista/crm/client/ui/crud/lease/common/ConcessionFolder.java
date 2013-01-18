@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -70,8 +71,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
             content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
             content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 9).build());
 
-            content.getColumnFormatter().setWidth(0, "50%");
-            content.getColumnFormatter().setWidth(1, "50%");
+            content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             return content;
         }

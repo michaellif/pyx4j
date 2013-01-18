@@ -67,12 +67,6 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerPhone()), 20).build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerEmail()), 20).build());
 
-        main.setWidth("100%");
-        if (isTwoColumns()) {
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
-        }
-
         return main;
     }
 

@@ -42,6 +42,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -143,11 +144,12 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);
+
         main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        main.getColumnFormatter().setWidth(0, "40%");
-        main.getColumnFormatter().setWidth(1, "60%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         return main;
     }

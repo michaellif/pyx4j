@@ -42,6 +42,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -211,8 +212,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 //        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }
@@ -276,8 +276,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }
@@ -297,6 +296,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
+
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

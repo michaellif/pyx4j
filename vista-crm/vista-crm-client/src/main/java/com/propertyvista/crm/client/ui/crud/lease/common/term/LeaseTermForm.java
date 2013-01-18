@@ -49,6 +49,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -172,7 +173,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }), 20).build());
+        }), 25).build());
         get(proto().building()).setMandatory(true);
 
         detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().lease().unit(), new CEntitySelectorHyperlink<AptUnit>() {
@@ -228,7 +229,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     }
                 };
             }
-        }), 20).build());
+        }), 25).build());
 
         detailsLeft.setBR(++detailsRow, 0, 1);
         detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Type")).build());
@@ -288,8 +289,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         detailsPanel.setWidget(0, 0, detailsLeft);
         detailsPanel.setWidget(0, 1, detailsRight);
 
-        detailsPanel.getColumnFormatter().setWidth(0, "50%");
-        detailsPanel.getColumnFormatter().setWidth(1, "50%");
+        detailsPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        detailsLeft.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         // Lease dates: ---------------------------------------------------------------------------------------------------------
         FormFlexPanel datesPanel = new FormFlexPanel();
@@ -303,8 +304,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
         get(proto().creationDate()).setViewable(true);
 
-        datesPanel.getColumnFormatter().setWidth(0, "50%");
-        datesPanel.getColumnFormatter().setWidth(1, "50%");
+        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         // combine all together:
         FormFlexPanel main = new FormFlexPanel(title);

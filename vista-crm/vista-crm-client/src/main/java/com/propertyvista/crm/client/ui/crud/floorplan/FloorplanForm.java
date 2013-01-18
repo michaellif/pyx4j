@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -93,8 +94,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().area()), 8).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().areaUnits()), 8).build());
 
-        main.getColumnFormatter().setWidth(0, "60%");
-        main.getColumnFormatter().setWidth(1, "40%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

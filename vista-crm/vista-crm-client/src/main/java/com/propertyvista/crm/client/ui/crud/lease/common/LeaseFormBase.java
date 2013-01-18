@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-20
  * @author Vlad
  * @version $Id$
  */
@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -126,8 +127,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         detailsPanel.setWidget(0, 0, detailsLeft);
         detailsPanel.setWidget(0, 1, detailsRight);
 
-        detailsPanel.getColumnFormatter().setWidth(0, "50%");
-        detailsPanel.getColumnFormatter().setWidth(1, "50%");
+        detailsPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        detailsLeft.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         FormFlexPanel main = new FormFlexPanel(title);
 
@@ -146,8 +147,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, "50%");
-        datesPanel.getColumnFormatter().setWidth(1, "50%");
+        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Move dates: ------------------------------------------------------------------------------------------------------------------------------
@@ -161,8 +161,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, "50%");
-        datesPanel.getColumnFormatter().setWidth(1, "50%");
+        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Other dates: -----------------------------------------------------------------------------------------------------------------------------
@@ -172,8 +171,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
         datesPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, "50%");
-        datesPanel.getColumnFormatter().setWidth(1, "50%");
+        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Products: --------------------------------------------------------------------------------------------------------------------------------

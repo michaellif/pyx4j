@@ -40,6 +40,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -121,8 +122,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                     }
                 });
 
-                content.getColumnFormatter().setWidth(0, "50%");
-                content.getColumnFormatter().setWidth(1, "50%");
+                content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
                 return content;
             }

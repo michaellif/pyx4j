@@ -40,6 +40,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -253,8 +254,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
 
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
             return main;
         }

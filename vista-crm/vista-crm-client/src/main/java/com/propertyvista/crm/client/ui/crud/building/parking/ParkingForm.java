@@ -20,6 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ParkingDTO;
 
@@ -53,8 +54,7 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().wideSpaces()), 3).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().narrowSpaces()), 3).build());
 
-        main.getColumnFormatter().setWidth(0, "55%");
-        main.getColumnFormatter().setWidth(1, "45%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

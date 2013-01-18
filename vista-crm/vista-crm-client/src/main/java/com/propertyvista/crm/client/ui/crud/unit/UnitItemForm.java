@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -31,8 +32,6 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Information"));
-
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -47,23 +46,23 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
-        row = 4;
+        row = -1;
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
 
-        content.getColumnFormatter().setWidth(0, "50%");
-        content.getColumnFormatter().setWidth(1, "50%");
-
-        validateInstallDates();
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+//        content.getWidget(3, 0).setWidth(VistaTheme.columnWidth);
 
         selectTab(addTab(content));
-
     }
 
-    private void validateInstallDates() {
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
         new PastDateValidation(get(proto().flooringInstallDate()));
         new PastDateValidation(get(proto().counterTopInstallDate()));
         new PastDateValidation(get(proto().cabinetsInstallDate()));

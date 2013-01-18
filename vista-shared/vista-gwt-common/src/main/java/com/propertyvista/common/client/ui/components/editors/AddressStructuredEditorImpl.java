@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -112,8 +113,12 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         main.setWidget(0, 0, left);
         if (twoColumns) {
             main.setWidget(0, 1, right);
+
             main.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
         } else {
             main.setWidget(1, 0, right);
         }

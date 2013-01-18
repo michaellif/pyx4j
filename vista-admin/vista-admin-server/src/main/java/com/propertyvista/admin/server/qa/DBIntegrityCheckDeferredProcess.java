@@ -83,8 +83,8 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
-            RDBUtils.initAllEntityTables();
-            commonNamespaceIntegrityCheck();
+//            RDBUtils.initAllEntityTables();
+//            commonNamespaceIntegrityCheck();
             VistaUpgrade.upgradePmcData(entity);
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);

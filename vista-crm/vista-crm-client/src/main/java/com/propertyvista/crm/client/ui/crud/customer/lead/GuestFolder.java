@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -90,9 +91,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
             main.setWidget(0, 1, right);
 
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
-            main.setWidth("100%");
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             return main;
         }
