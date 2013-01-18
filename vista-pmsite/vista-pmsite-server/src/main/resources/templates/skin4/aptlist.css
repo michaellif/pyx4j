@@ -29,15 +29,15 @@
 .vista-pmsite-aptListPage .secondaryNavig h3 {
 	width:100%;
 	font-size:14pt;
-	padding: 5px 0;
+	padding: 9px 0 5px;
 	font-family: monospace;
 	font-weight: normal;
-	height: 30px;
 }
 
 .advancedSearchNarrowWrap {
 	width: 280px;
-	border-top: 5px solid #000000;
+	height: 520px;
+	border-top: 6px solid #000000;
 	background: #999999;
 }
 .advancedSearchNarrowWrap input[type=submit] {
@@ -65,13 +65,14 @@
 
 .advancedSearchNarrowWrap .searchTypeSelBox {
 	height:40px;
-	margin-top: 20px; 
+	margin-top: 20px;
+	*margin-left: 30px;
 }
 .advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
 	width: 90px;
 	font-size: 14px;
-//	letter-spacing: 0px;
+/*	letter-spacing: 0px; */
 	background-color: #CCCCCC;
 	padding: 3px 0;
 	text-align: center;
@@ -98,14 +99,14 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover {
 	background-color:${object1_100};
-//	margin: 0 20px 5px 0;
+/*	margin: 0 20px 5px 0; */
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover label {
 	color:${object1_20};
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
 	background-color:${object1_100};
-//	margin: 0 0 5px 0px;
+/*	margin: 0 0 5px 0px; */
 	
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
@@ -181,7 +182,7 @@
 
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList {
 	display: block;
-	width: 100%;
+	width: 190px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
@@ -193,8 +194,10 @@
 }
 
 .vista-pmsite-aptListPage .vista-pmsite-main {
-//	position: relative;
+	position: relative;
 	display: inline-block;
+	zoom: 1;
+	*display: inline;
 	width: 620px;
 	vertical-align: top;
 	float: right;
@@ -204,8 +207,8 @@
 	background: #fff;
 	overflow: hidden;
 }
-
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
+	/*width: 620px;*/
 	padding-bottom:40px;
 	min-height:600px;
 	border-top: 5px solid #000000;
@@ -214,10 +217,11 @@
 #aptListModeSwitch {
 	background-image: url("images/aptListIcons.png");
 	background-repeat: no-repeat;
-	width:120px;
+	width:67px;
 	height:25px;
-	padding-top:5px;
+	padding-top:7px;
 	padding-left:30px;
+	margin-top:0px;
 	float:right;
 	color:${object2_30};
 	font-weight:bold;
@@ -241,7 +245,10 @@
 .apartmentListingWrap .listingEntry {
 	padding:20px 0;
 	border-top: 1px solid #000000;
-//	color: ${foreground_100};
+	*float: left;
+	zoom: 1;
+	*display: inline;
+/*	color: ${foreground_100}; */
 }
 .apartmentListingWrap .listingEntry:hover {
 	background-color:#CCCCCC;
@@ -254,6 +261,9 @@
 	width:80px;
 	min-height:75px;
 	text-align:center;
+	zoom: 1;
+	*display: inline;
+	*float:left;
 } 
 .apartmentListingWrap .listingEntry .pictureBox .picture {
 	width:100%;
@@ -262,13 +272,18 @@
 	display: inline-block;
 	vertical-align: top;
 	width:430px;
-//	padding:0 20px;
+	*width:auto;
+	zoom: 1;
+	*display: inline;
+	*float:left;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry {
 	padding:4px 0;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxCaption {
 	display: inline-block;
+	*display: inline;
+	*float:left;
 	vertical-align: top;
 	width:75px;
 	text-align:right;
@@ -277,8 +292,10 @@
 }
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText {
 	display: inline-block;
+	zoom: 1;
+	*display: inline;
 	vertical-align: top;
-	width:340px;
+	width:330px;
 	font-weight:bold;
 }
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText .typeInfo {
@@ -290,6 +307,9 @@
 .apartmentListingWrap .listingEntry .infoBox ul.infoBoxText {
 	margin:0;
 	padding:0;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
 }
 .apartmentListingWrap .listingEntry .infoBox .types li {
 	list-style:none;
@@ -302,15 +322,21 @@
 .apartmentListingWrap .listingEntry .infoBox .amenities li:first-child {
 	list-style: none;
 	margin-left: 0;
+	*margin-left: 0;
 }
 .apartmentListingWrap .listingEntry .controlBox {
+	position:relative;
 	display: inline-block;
 	vertical-align: top;
 	width:80px;
-	padding-left:20px;
+	/*padding-left:20px; */
 	float: right;
+	zoom: 1;
+	*display: inline;
+	*clear: both;
 } 
 .apartmentListingWrap .listingEntry .controlButton {
+	width: 80px;
 	float:right;
 	padding:6px 0;
 	border-bottom: 1px solid #999999;

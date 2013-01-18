@@ -403,6 +403,7 @@ ul.footer_locations li {
 
 .vista-pmsite-sidebarWrap {
 	background-color:${object2_10};
+	*background-color: #FFFFFF;
 }
 
 .vista-pmsite-main .content{
