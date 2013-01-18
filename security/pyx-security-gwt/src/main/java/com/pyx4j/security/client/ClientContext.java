@@ -224,6 +224,7 @@ public class ClientContext {
                 logoutURL = authenticationResponse.getLogoutURL();
             }
             if (authenticationResponse.getSessionCookieName() != null) {
+                log.debug("Session MaxInactiveInterval {} sec", authenticationResponse.getMaxInactiveInterval());
                 serverSession = new ServerSession(authenticationResponse.getSessionCookieName(), authenticationResponse.getMaxInactiveInterval());
             } else {
                 // Session ends.
