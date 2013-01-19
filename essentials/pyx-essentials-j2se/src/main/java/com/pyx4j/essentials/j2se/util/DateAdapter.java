@@ -32,9 +32,6 @@ public class DateAdapter {
     }
 
     public static String printDate(Date dt) {
-//        Calendar cal = new GregorianCalendar();
-//        cal.setTime(dt);
-        //return DatatypeConverter.printDate(cal);
         return new SimpleDateFormat("yyyy-MM-dd").format(dt);
     }
 
