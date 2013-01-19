@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.ref.Country;
@@ -77,8 +78,7 @@ public class VehicleDataEditor extends CEntityDecoratableForm<Vehicle> {
             }
         });
 
-        panel.getColumnFormatter().setWidth(0, "50%");
-        panel.getColumnFormatter().setWidth(1, "50%");
+        panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return panel;
     }

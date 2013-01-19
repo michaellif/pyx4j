@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
@@ -62,8 +63,7 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
             main.setWidget(2, 0, inject(proto().address(), new AddressStructuredEditor(twoColumns, true)));
             main.getFlexCellFormatter().setColSpan(2, 0, 2);
 
-            main.getColumnFormatter().setWidth(0, "50%");
-            main.getColumnFormatter().setWidth(1, "50%");
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         } else {
             main.setWidget(0, 0, left);
             main.setWidget(1, 0, right);

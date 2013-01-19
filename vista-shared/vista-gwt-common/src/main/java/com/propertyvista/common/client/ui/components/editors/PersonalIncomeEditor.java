@@ -32,11 +32,13 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.ProofOfEmploymentUploaderFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.domain.tenant.income.IEmploymentInfo;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
+import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoOther;
 import com.propertyvista.domain.tenant.income.IncomeInfoSeasonallyEmployed;
@@ -44,7 +46,6 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 
 public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeningIncome> {
 
@@ -172,9 +173,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeni
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
-                main.getColumnFormatter().setWidth(0, "50%");
-                main.getColumnFormatter().setWidth(1, "50%");
-                main.setWidth("100%");
+                main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
                 return main;
             }
 

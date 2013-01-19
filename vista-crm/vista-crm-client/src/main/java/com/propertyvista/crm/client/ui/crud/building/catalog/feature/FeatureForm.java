@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
 
@@ -48,7 +49,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
-        content.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
     }

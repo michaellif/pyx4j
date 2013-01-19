@@ -29,34 +29,36 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
     public UnitItemForm(IFormView<AptUnitItem> view) {
         super(AptUnitItem.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 40).build());
 
-        content.setH1(++row, 0, 2, i18n.tr("Details"));
+        FormFlexPanel details = new FormFlexPanel();
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
+        int detailsRow = -1;
+        details.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
+        details.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
+        details.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
+        details.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
+        details.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
-        row = 3;
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
+        detailsRow = -1;
+        details.setWidget(++detailsRow, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
+        details.setWidget(++detailsRow, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
+        details.setWidget(++detailsRow, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
+        details.setWidget(++detailsRow, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
+        details.setWidget(++detailsRow, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
 
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-//        content.getWidget(3, 0).setWidth(VistaTheme.columnWidth);
+        details.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
-        selectTab(addTab(content));
+        // add details to main:
+        main.setH1(++row, 0, 2, i18n.tr("Details"));
+        main.setWidget(++row, 0, details);
+
+        selectTab(addTab(main));
     }
 
     @Override

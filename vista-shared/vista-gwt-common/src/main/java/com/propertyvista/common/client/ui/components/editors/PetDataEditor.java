@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -51,8 +52,7 @@ public class PetDataEditor extends CEntityDecoratableForm<Pet> {
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weightUnit()), 4).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
-        panel.getColumnFormatter().setWidth(0, "50%");
-        panel.getColumnFormatter().setWidth(1, "50%");
+        panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return panel;
     }

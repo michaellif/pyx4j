@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
@@ -45,8 +46,7 @@ public class ContractEditor extends CEntityDecoratableForm<Contract> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().start()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().end()), 9).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

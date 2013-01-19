@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -45,8 +46,7 @@ public class MaintenanceEditor extends CEntityDecoratableForm<Maintenance> {
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().lastService()), 9).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextService()), 9).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         validateMaintenanceDates();
         return main;
