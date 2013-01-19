@@ -106,8 +106,16 @@
                             <schemaDirectory>src/main/resources</schemaDirectory>
                             <bindingDirectory>src/main/resources</bindingDirectory>
                             <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
                         </configuration>
                     </execution>
+                 <dependencies> 
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-namespace-prefix</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
                 </executions>
             </plugin>
 
