@@ -114,7 +114,7 @@ public class YardiChargeProcessor {
 
     private void setTransactionDetail(YardiTransactionDetail yt, ChargeDetail detail) {
         yt.description().setValue(detail.getDescription());
-        yt.transactionDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
+        yt.transactionDate().setValue(new LogicalDate(detail.getTransactionDate()));
         yt.transactionId().setValue(detail.getTransactionID());
         yt.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
         yt.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));

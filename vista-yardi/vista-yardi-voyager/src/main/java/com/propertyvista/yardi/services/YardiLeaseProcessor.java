@@ -87,13 +87,13 @@ public class YardiLeaseProcessor {
 
         lease.type().setValue(ServiceType.residentialUnit);
 
-        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate().getTimeInMillis()));
-        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate().getTimeInMillis()));
+        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
+        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
         if (yardiLease.getExpectedMoveInDate() != null) {
-            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate().getTimeInMillis()));
+            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
         }
         if (yardiLease.getActualMoveIn() != null) {
-            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn().getTimeInMillis()));
+            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
         }
 // add price
 

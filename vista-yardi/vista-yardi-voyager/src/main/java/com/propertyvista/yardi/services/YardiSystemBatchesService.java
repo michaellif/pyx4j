@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
@@ -64,11 +65,12 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException {
+    public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException,
+            DatatypeConfigurationException {
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
         long batchId = openReceiptBatch(client, yc, "prvista1");
-        // String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", YardiSystemBatchesService.class));
+        //String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", YardiSystemBatchesService.class));
 
         ResidentTransactions residentTransactions = new ResidentTransactions();
         Property property = new Property();
@@ -83,16 +85,17 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         payment.setType("Other");
         transactions.setPayment(payment);
         Detail detail = new Detail();
-        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06));
+
+        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06).getTime());
         detail.setCustomerID("t0005529");
         detail.setPaidBy("Tenant");
-        detail.setAmount("2626.18");
+        detail.setAmount("2626.17");
         detail.setComment("test pay2");
         detail.setPropertyPrimaryID("prvista1");
         payment.setDetail(detail);
 
         String xml = MarshallUtil.marshall(residentTransactions);
-
+        System.out.println(xml);
         addReceiptsToBatch(client, yc, batchId, xml);
         postReceiptBatch(client, yc, batchId);
     }
