@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-    <!-- @version $Revision$ ($Author$) $Date: 2011-05-12
-        14:25:23 -0400 (Thu, 12 May 2011) $ -->
+    <!-- @version $Revision$ ($Author$) $Date$ -->
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.propertyvista</groupId>
         <artifactId>vista-yardi</artifactId>
-        <version>1.0.6-SNAPSHOT</version><!--vista-version-->
+        <version>1.0.6-SNAPSHOT</version><!--vista-version -->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,6 +19,12 @@
         <dependency>
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2-adb</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
         </dependency>
 
     </dependencies>
@@ -35,7 +39,9 @@
                     <execution>
                         <id>removet-generated-sources</id>
                         <phase>generate-sources</phase>
-                        <goals><goal>clean</goal></goals>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
                         <configuration>
                             <filesets>
                                 <fileset>
@@ -110,16 +116,16 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies> 
+                <dependencies>
                     <dependency>
                         <groupId>org.jvnet.jaxb2_commons</groupId>
                         <artifactId>jaxb2-namespace-prefix</artifactId>
                         <version>1.1</version>
                     </dependency>
-                </dependencies>    
+                </dependencies>
             </plugin>
 
-           <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -137,7 +143,8 @@
 
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
+                    build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
