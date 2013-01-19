@@ -40,6 +40,7 @@ import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalO
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmParent;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmSTP2CParent;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildAC;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildB;
@@ -189,10 +190,11 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
     }
 
+    // TODO This is bad name
     public void testOneToOneOwnedPolymorphismInSigleTable() {
         String testId = uniqueString();
 
-        // setup 
+        // setup
         UnidirectionalOneToOnePlmParent parentA = EntityFactory.create(UnidirectionalOneToOnePlmParent.class);
         parentA.testId().setValue(testId);
         parentA.name().setValue("parentA");
@@ -215,6 +217,17 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         parentB.child().set(childB);
         srv.persist(parentB);
 
+    }
+
+    public void X_testOneToOneOwnedPolymorphismInSigleTableReffrenceFromParent() {
+        String testId = uniqueString();
+
+        // setup
+        UnidirectionalOneToOnePlmSTP2CParent parentA = EntityFactory.create(UnidirectionalOneToOnePlmSTP2CParent.class);
+        parentA.testId().setValue(testId);
+        parentA.name().setValue("parentA");
+
+        srv.persist(parentA);
     }
 
     public void testOwnedPolymorphismInSingleTable() {
@@ -265,7 +278,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         srv.persist(o2);
         {
-            // test retrieval of owned polymorphic children        
+            // test retrieval of owned polymorphic children
             BidirectionalOneToManyPlmSTParent papaFromDB = srv.retrieve(BidirectionalOneToManyPlmSTParent.class, o1.getPrimaryKey());
             assertNotNull("we must retrieve something", papaFromDB);
 
@@ -421,7 +434,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         srv.persist(o2);
 
         {
-            // test retrieval of owned polymorphic children        
+            // test retrieval of owned polymorphic children
             BidirectionalOneToMany2PlmSTParent papaFromDB = srv.retrieve(BidirectionalOneToMany2PlmSTParent.class, o1.getPrimaryKey());
             assertNotNull("we must retrieve something", papaFromDB);
 
