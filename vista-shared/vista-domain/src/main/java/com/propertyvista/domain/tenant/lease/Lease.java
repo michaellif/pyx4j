@@ -22,6 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -244,7 +245,9 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> moveOutSubmissionDate();
 
-    //@JoinColumn
+    @JoinColumn
+    @MemberColumn(notNull = true)
+    @ReadOnly
     @Owned(forceCreation = true, cascade = {})
     BillingAccount billingAccount();
 

@@ -17,7 +17,6 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -41,8 +40,6 @@ public interface BillingAccount extends IEntity {
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
-    // TODO vladS remove this!!!
-    @JoinColumn
     Lease lease();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented

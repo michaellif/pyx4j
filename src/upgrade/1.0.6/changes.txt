@@ -20,3 +20,11 @@ VISTA-2305
  preload new process in admin equifaxRetention  manualy using admin to run every day.
 
  PmcEquifaxInfo.reportType values changed to RecomendationReport (was shortReport), FullCreditReport (was longReport)
+
+
+
+ .billing_account  is now polymorthic
+  Add id_discriminator character varying(64) NOT NULL, set value during migration 'Internal'
+  The same in lease billing_account_discriminator character varying(50) NOT NULL,
+  And all other refferences to billing_account
+
