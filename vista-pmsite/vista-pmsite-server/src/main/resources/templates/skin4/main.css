@@ -106,10 +106,11 @@ select {
 }
 
 #siteTitle {
-	/*float:left;*/
-	margin:10px;
+	margin: 10px 180px;
 	position: absolute;
-	left: 45%;
+	overflow: hidden;
+	width: 600px;
+	text-align: center;
 }
 
 #siteTitle a:hover {
@@ -119,15 +120,16 @@ select {
 	height:70px;
 }
 #noLogo {
-	font-size:40px;
+	font-size:35px;
 	line-height:80px;
-	margin-right:20px;
+	white-space:nowrap;
 }
 
 #siteAuth {
 	float:right;
 	margin:10px;
 }
+
 #siteAuth .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
