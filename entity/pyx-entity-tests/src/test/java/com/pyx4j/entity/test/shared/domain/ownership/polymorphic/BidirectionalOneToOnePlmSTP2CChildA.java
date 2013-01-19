@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("a")
 @Table(prefix = "test")
-public interface UnidirectionalOneToOnePlmSTP2CChildA extends UnidirectionalOneToOnePlmSTP2CChild {
+public interface BidirectionalOneToOnePlmSTP2CChildA extends BidirectionalOneToOnePlmSTP2CChild {
 
     IPrimitive<String> propA();
 }

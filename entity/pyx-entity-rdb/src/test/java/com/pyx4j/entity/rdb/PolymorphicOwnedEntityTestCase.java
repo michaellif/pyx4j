@@ -32,6 +32,8 @@ import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOn
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTChildAC;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTChildB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTParent;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToOnePlmSTP2CChildA;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToOnePlmSTP2CParent;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentBase;
@@ -40,7 +42,6 @@ import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalO
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmParent;
-import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmSTP2CParent;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildAC;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.st2.BidirectionalOneToMany2PlmSTChildB;
@@ -219,13 +220,14 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
     }
 
-    public void X_testOneToOneOwnedPolymorphismInSigleTableReffrenceFromParent() {
+    public void testOneToOneOwnedPolymorphismInSigleTableReffrenceFromParent() {
         String testId = uniqueString();
 
         // setup
-        UnidirectionalOneToOnePlmSTP2CParent parentA = EntityFactory.create(UnidirectionalOneToOnePlmSTP2CParent.class);
+        BidirectionalOneToOnePlmSTP2CParent parentA = EntityFactory.create(BidirectionalOneToOnePlmSTP2CParent.class);
         parentA.testId().setValue(testId);
         parentA.name().setValue("parentA");
+        parentA.child().set(EntityFactory.create(BidirectionalOneToOnePlmSTP2CChildA.class));
 
         srv.persist(parentA);
     }

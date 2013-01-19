@@ -20,16 +20,18 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.polymorphic;
 
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Table(prefix = "test")
-public interface UnidirectionalOneToOnePlmSTP2CParent extends IEntity {
+public interface BidirectionalOneToOnePlmSTP2CParent extends IEntity {
 
     @Owned
-    UnidirectionalOneToOnePlmSTP2CChild child();
+    @JoinColumn
+    BidirectionalOneToOnePlmSTP2CChild child();
 
     IPrimitive<String> testId();
 

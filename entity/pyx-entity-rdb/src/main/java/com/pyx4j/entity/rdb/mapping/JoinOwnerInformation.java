@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.rdb.mapping;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -66,16 +69,19 @@ public class JoinOwnerInformation extends JoinInformation {
     private MemberMeta findOwnedMember(EntityMeta entityMeta, MemberMeta memberMeta, EntityMeta rootEntityMeta, Owner owner, EntityMeta ownerEntityMeta) {
         MemberMeta ownerMemberMeta = null;
 
-        Class<? extends IEntity> rootEntityClass = rootEntityMeta.getEntityClass();
+        Set<Class<? extends IEntity>> matchClases = new HashSet<Class<? extends IEntity>>();
+        matchClases.add(rootEntityMeta.getEntityClass());
         Table tableAnnotation = rootEntityMeta.getAnnotation(Table.class);
         if ((tableAnnotation != null) && (tableAnnotation.expands() != IEntity.class)) {
-            rootEntityClass = tableAnnotation.expands();
+            matchClases.add(tableAnnotation.expands());
         }
-
+        if (rootEntityMeta.getPersistableSuperClass() != null) {
+            matchClases.add(rootEntityMeta.getPersistableSuperClass());
+        }
         for (String jmemberName : ownerEntityMeta.getMemberNames()) {
             MemberMeta jmemberMeta = ownerEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient() && (jmemberMeta.getAnnotation(Owned.class) != null)) {
-                if ((jmemberMeta.getValueClass().equals(rootEntityMeta.getEntityClass())) || (jmemberMeta.getValueClass().equals(rootEntityClass))) {
+                if (matchClases.contains(jmemberMeta.getValueClass())) {
                     if (ownerMemberMeta != null) {
                         throw new AssertionError("Duplicate @Owned member in table '" + ownerEntityMeta.getEntityClass().getName() + "' for "
                                 + memberMeta.getFieldName() + " of type " + entityMeta.getEntityClass().getName());

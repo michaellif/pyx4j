@@ -28,10 +28,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
-public interface UnidirectionalOneToOnePlmSTP2CChild extends IEntity {
+public interface BidirectionalOneToOnePlmSTP2CChild extends IEntity {
 
     @Owner
-    UnidirectionalOneToOnePlmSTP2CParent parent();
+    BidirectionalOneToOnePlmSTP2CParent parent();
 
     IPrimitive<String> testId();
 
