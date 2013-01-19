@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARDateUtils;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
@@ -42,7 +42,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
     @Override
     public boolean postCharge(ChargeDTO chargeDTO, final String leaseId) {
-        BillingAccount billingAccount = getBillingAccount(leaseId);
+        InternalBillingAccount billingAccount = getBillingAccount(leaseId);
         if (billingAccount == null) {
             return false;
         }
@@ -65,7 +65,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
 
     @Override
     public boolean postPayment(PaymentDTO paymentDTO, final String leaseId) {
-        BillingAccount billingAccount = getBillingAccount(leaseId);
+        InternalBillingAccount billingAccount = getBillingAccount(leaseId);
         if (billingAccount == null) {
             return false;
         }
@@ -166,10 +166,10 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         return Persistence.service().query(criteria);
     }
 
-    private BillingAccount getBillingAccount(final String leaseId) {
+    private InternalBillingAccount getBillingAccount(final String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
         Lease lease = Persistence.service().retrieve(criteria);
-        return lease == null ? null : lease.billingAccount();
+        return lease == null ? null : lease.billingAccount().<InternalBillingAccount> cast();
     }
 }

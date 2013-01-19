@@ -100,7 +100,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
 
             // hide initial balance for existing leases:
-            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
+            get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         } else {
             featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
             if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
@@ -108,7 +108,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             }
 
             // show initial balance for existing leases only:
-            get(proto().lease().billingAccount().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
+            get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
@@ -290,7 +290,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         detailsPanel.setWidget(0, 1, detailsRight);
 
         detailsPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-        detailsLeft.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
+        detailsLeft.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width!
 
         // Lease dates: ---------------------------------------------------------------------------------------------------------
         FormFlexPanel datesPanel = new FormFlexPanel();
@@ -314,7 +314,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, datesPanel);
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().billingAccount().carryforwardBalance()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().carryforwardBalance()), 9).build());
 
         LeaseTermEditorView leaseTermEditorView = (isEditable() ? (LeaseTermEditorView) getParentView() : null);
 

@@ -39,7 +39,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @ToStringFormat("{0}, ${1}, {2}")
@@ -98,7 +98,7 @@ public interface Bill extends IEntity {
     @MemberColumn(notNull = true)
     @JoinColumn
     @Detached
-    BillingAccount billingAccount();
+    InternalBillingAccount billingAccount();
 
     @Detached
     Lease lease();

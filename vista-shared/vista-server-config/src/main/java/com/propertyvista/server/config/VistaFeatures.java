@@ -13,8 +13,11 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures.VistaFeaturesCustomization;
 
@@ -23,7 +26,13 @@ public class VistaFeatures {
     private static final ThreadLocal<PmcVistaFeatures> threadLocale = new ThreadLocal<PmcVistaFeatures>() {
         @Override
         protected PmcVistaFeatures initialValue() {
-            return VistaDeployment.getCurrentPmc().features();
+            //TODO This is wrong!  Move to UnitTests Mock
+            Pmc pmc = VistaDeployment.getCurrentPmc();
+            if (pmc != null) {
+                return pmc.features();
+            } else {
+                return EntityFactory.create(PmcVistaFeatures.class);
+            }
         }
     };
 

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -34,6 +34,7 @@ import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -60,27 +61,33 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     <Criteria extends EntityQueryCriteria<? extends Tenant>> Criteria delinquentTenantsCriteria(Criteria criteria, Vector<Building> buildingsFilter,
             String criteriaPreset) {
 
+//TODO Vlads $asInstanceOf  All this cast .<InternalBillingAccount>  will not work!
+
 //        criteria.isCurrent(criteria.proto().leaseTermV());
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease().billingAccount().arrearsSnapshots().$().toDate(), OccupancyFacade.MAX_DATE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$().toDate(),
+                OccupancyFacade.MAX_DATE));
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
 
         if (proto.outstandingTotal() == member | proto.delinquentTenants() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().arrearsAmount(),
-                    BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().arrearsAmount(), BigDecimal.ZERO));
         } else if (proto.outstandingThisMonth() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketThisMonth(),
-                    BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().bucketThisMonth(), BigDecimal.ZERO));
         } else if (proto.outstanding1to30Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket30(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().bucket30(), BigDecimal.ZERO));
         } else if (proto.outstanding31to60Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket60(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().bucket60(), BigDecimal.ZERO));
         } else if (proto.outstanding61to90Days() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket90(), BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().bucket90(), BigDecimal.ZERO));
         } else if (proto.outstanding91andMoreDays() == member) {
-            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketOver90(),
-                    BigDecimal.ZERO));
+            criteria.add(PropertyCriterion.gt(criteria.proto().lease().billingAccount().<InternalBillingAccount> cast().arrearsSnapshots().$()
+                    .totalAgingBuckets().bucketOver90(), BigDecimal.ZERO));
         }
         return criteria;
     }

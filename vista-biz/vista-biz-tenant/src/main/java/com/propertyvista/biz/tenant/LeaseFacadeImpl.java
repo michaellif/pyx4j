@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -54,6 +54,7 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -61,6 +62,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.yardi.YardiAccount;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -134,7 +136,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.currentTerm().lease().set(lease);
 
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
-        lease.billingAccount().billCounter().setValue(0);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            YardiAccount billingAccount = EntityFactory.create(YardiAccount.class);
+            lease.billingAccount().set(billingAccount);
+        } else {
+            InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+            billingAccount.billCounter().setValue(0);
+            lease.billingAccount().set(billingAccount);
+        }
 
         return lease;
     }
@@ -486,11 +495,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.status().getValue() != Lease.Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        // if renewed and not moving out:  
+        // if renewed and not moving out:
         if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
             throw new IllegalStateException("Lease has next term ready");
         }
-        // if still has time to go:  
+        // if still has time to go:
         if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(Persistence.service().getTransactionSystemTime()))) {
             throw new IllegalStateException("Lease is not ended yet");
         }
@@ -640,7 +649,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (!lease.status().getValue().isOperative()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
-        // if not moving out:  
+        // if not moving out:
         if (lease.completion().isNull()) {
             throw new IllegalStateException(SimpleMessageFormat.format("Lease " + leaseId.getPrimaryKey() + " has no completion event"));
         }
@@ -734,7 +743,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
         }
 
-        // some common checks/corrections: 
+        // some common checks/corrections:
         if (lease.expectedMoveIn().isNull()) {
             lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
         }
@@ -855,8 +864,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (!Lease.Status.draft().contains(lease.status().getValue())) {
                 throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
             }
-            Persistence.service().retrieve(lease.billingAccount().deposits());
-            lease.billingAccount().deposits().clear();
+            if (false) {
+                // TODO This code never worked propely because deposits() are @Owned(cascade = {})
+                Persistence.service().retrieve(lease.billingAccount().<InternalBillingAccount> cast().deposits());
+                lease.billingAccount().<InternalBillingAccount> cast().deposits().clear();
+            }
         }
 
         // Service by Service item:
@@ -1010,17 +1022,22 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void updateLeaseDeposits(Lease lease) {
         Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
 
-        List<Deposit> currentDeposits = new ArrayList<Deposit>();
-        currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
-        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-            currentDeposits.addAll(item.deposits());
-        }
+        if (lease.billingAccount().isAssignableFrom(InternalBillingAccount.class)) {
 
-        // wrap newly added deposits in DepositLifecycle:
-        for (Deposit deposit : currentDeposits) {
-            if (deposit.lifecycle().isNull()) {
-                Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
-                Persistence.service().merge(deposit);
+            List<Deposit> currentDeposits = new ArrayList<Deposit>();
+            currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
+            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
+                currentDeposits.addAll(item.deposits());
+            }
+
+            // wrap newly added deposits in DepositLifecycle:
+            for (Deposit deposit : currentDeposits) {
+                if (deposit.lifecycle().isNull()) {
+                    Persistence.service().persist(
+                            ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit,
+                                    lease.billingAccount().<InternalBillingAccount> cast()));
+                    Persistence.service().merge(deposit);
+                }
             }
         }
     }
@@ -1051,7 +1068,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (serviceItem != null) {
                 setService(leaseTerm, serviceItem);
                 succeeded = true;
-                break; // use first found service/item  
+                break; // use first found service/item
             }
         }
 
@@ -1093,7 +1110,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
-        // There are no own entities for now, 
+        // There are no own entities for now,
         Persistence.retrieveOwned(leaseParticipant);
         P copy = EntityGraph.businessDuplicate(leaseParticipant);
         copy.screening().set(null);

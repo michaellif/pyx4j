@@ -29,6 +29,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
@@ -75,7 +76,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         SysDateManager.setSysDate("18-May-2011");
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //
         ARPolicy policy = arPolicyDataModel.getPolicy();
@@ -83,21 +84,21 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
     }
 

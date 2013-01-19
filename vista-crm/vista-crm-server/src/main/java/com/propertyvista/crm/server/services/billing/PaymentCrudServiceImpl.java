@@ -35,7 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -109,9 +109,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId) {
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, parentId);
+        InternalBillingAccount billingAccount = Persistence.service().retrieve(InternalBillingAccount.class, parentId);
         if ((billingAccount == null) || (billingAccount.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + parentId + " NotFound");
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(InternalBillingAccount.class).getCaption() + "' " + parentId + " NotFound");
         }
 
         if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {

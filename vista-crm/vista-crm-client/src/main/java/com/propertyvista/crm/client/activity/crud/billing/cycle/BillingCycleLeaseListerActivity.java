@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -56,9 +56,11 @@ public class BillingCycleLeaseListerActivity extends ListerActivityBase<LeaseDTO
         addPreDefinedFilter(PropertyCriterion.eq(proto.billingAccount().billingType(), EntityFactory.createIdentityStub(BillingType.class, billingTypeId)));
         if (billingCycleId != null) {
             // add 'not run' criteria here:
-            addPreDefinedFilter(PropertyCriterion.eq(proto.billingAccount().bills().$().billingCycle(),
-                    EntityFactory.createIdentityStub(BillingType.class, billingCycleId)));
-            addPreDefinedFilter(PropertyCriterion.notExists(proto.billingAccount().bills()));
+//TODO Review VladL and VladS, commented out by VladS
+//            addPreDefinedFilter(PropertyCriterion.eq(proto.billingAccount().bills().$().billingCycle(),
+//                    EntityFactory.createIdentityStub(BillingType.class, billingCycleId)));
+//            addPreDefinedFilter(PropertyCriterion.notExists(proto.billingAccount().bills()));
+            throw new Error("Call ValdL and VladS");
         }
         super.populate();
     }

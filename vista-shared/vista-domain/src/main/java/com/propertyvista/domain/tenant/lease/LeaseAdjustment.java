@@ -42,7 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 
 @ToStringFormat("{0}, ${1}")
 public interface LeaseAdjustment extends IEntity {
@@ -90,7 +90,7 @@ public interface LeaseAdjustment extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    BillingAccount billingAccount();
+    InternalBillingAccount billingAccount();
 
     @NotNull
     IPrimitive<ExecutionType> executionType();

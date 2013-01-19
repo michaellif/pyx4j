@@ -41,7 +41,7 @@ import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.StatisticsRecord;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -333,7 +333,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         Persistence.service().commit();
     }
 
-    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, LeasePaymentMethod method) {
+    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, InternalBillingAccount billingAccount, LeasePaymentMethod method) {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
         paymentRecord.leaseTermParticipant().set(leaseParticipant);

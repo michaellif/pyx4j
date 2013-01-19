@@ -23,7 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -50,7 +50,7 @@ public class ProrationUtils {
         }
     }
 
-    static BigDecimal prorateMonthlyPeriod(LogicalDate from, LogicalDate to, LogicalDate cycleStartDate, BillingAccount.ProrationMethod method) {
+    static BigDecimal prorateMonthlyPeriod(LogicalDate from, LogicalDate to, LogicalDate cycleStartDate, InternalBillingAccount.ProrationMethod method) {
         assert from != null && to != null && cycleStartDate != null;
         Calendar calendarFrom = new GregorianCalendar();
         calendarFrom.setTime(cycleStartDate);

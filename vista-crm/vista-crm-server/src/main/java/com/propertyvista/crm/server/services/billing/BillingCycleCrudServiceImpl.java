@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
@@ -42,12 +42,12 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
 
         // calculate statistics on leases:
         // Total:
-        EntityQueryCriteria<BillingAccount> criteriaTotal = EntityQueryCriteria.create(BillingAccount.class);
+        EntityQueryCriteria<InternalBillingAccount> criteriaTotal = EntityQueryCriteria.create(InternalBillingAccount.class);
         criteriaTotal.add(PropertyCriterion.eq(criteriaTotal.proto().billingType(), entity.billingType()));
         dto.total().setValue((long) Persistence.service().query(criteriaTotal).size());
 
         // not Run:
-        EntityQueryCriteria<BillingAccount> criteriaNotRun = EntityQueryCriteria.create(BillingAccount.class);
+        EntityQueryCriteria<InternalBillingAccount> criteriaNotRun = EntityQueryCriteria.create(InternalBillingAccount.class);
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), entity.billingType()));
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), entity));
         criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));

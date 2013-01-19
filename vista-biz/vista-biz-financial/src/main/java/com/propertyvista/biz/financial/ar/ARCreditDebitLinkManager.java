@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -72,7 +72,7 @@ import com.propertyvista.portal.rpc.shared.BillingException;
  * @author michaellif
  * 
  */
-public class ARCreditDebitLinkManager {
+class ARCreditDebitLinkManager {
 
     private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 
@@ -129,7 +129,8 @@ public class ARCreditDebitLinkManager {
             throw new BillingException(i18n.tr("Provided amount exceeds Payment"));
         }
 
-        InvoicePayment payment = ARTransactionManager.getCorrespodingCreditByPayment(paymentRecord.billingAccount(), paymentRecord);
+        InvoicePayment payment = ARTransactionManager.getCorrespodingCreditByPayment(paymentRecord.billingAccount().<InternalBillingAccount> cast(),
+                paymentRecord);
 
         // check if amount covers all soft links paid by credit
         BigDecimal sum = BigDecimal.ZERO;
@@ -278,7 +279,7 @@ public class ARCreditDebitLinkManager {
         }
     }
 
-    private static List<InvoiceCredit> restoreBackwardPayments(BillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
+    private static List<InvoiceCredit> restoreBackwardPayments(InternalBillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
 
         Collection<DebitCreditLink> itemsToRemove = new ArrayList<DebitCreditLink>();
         List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -49,9 +49,9 @@ public class UpdateArrearsProcess implements PmcProcess {
     public void updateBillingAccountsArrears(PmcProcessContext context) {
         log.info("Arrears Update for billing accounts started");
 
-        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        EntityQueryCriteria<InternalBillingAccount> criteria = EntityQueryCriteria.create(InternalBillingAccount.class);
         criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
-        Iterator<BillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
         long currentBillingAccount = 0L;

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,7 +29,7 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -44,7 +44,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.shared.ARException;
 
-public class ARTransactionManager {
+class ARTransactionManager {
 
     static void processBackOutPayment(InvoicePaymentBackOut backOut) {
 
@@ -91,11 +91,11 @@ public class ARTransactionManager {
         }
     }
 
-    static TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
+    static TransactionHistoryDTO getTransactionHistory(InternalBillingAccount billingAccount) {
         return getTransactionHistory(billingAccount, null);
     }
 
-    static TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount, LogicalDate fromDate) {
+    static TransactionHistoryDTO getTransactionHistory(InternalBillingAccount billingAccount, LogicalDate fromDate) {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
@@ -119,7 +119,7 @@ public class ARTransactionManager {
         return th;
     }
 
-    static List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+    static List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(InternalBillingAccount billingAccount) {
         List<InvoiceDebit> lineItems;
         {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
@@ -144,7 +144,7 @@ public class ARTransactionManager {
         return lineItems;
     }
 
-    static List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
+    static List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(InternalBillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO));
@@ -154,7 +154,7 @@ public class ARTransactionManager {
         return lineItems;
     }
 
-    static BigDecimal getCurrentBallance(BillingAccount billingAccount) {
+    static BigDecimal getCurrentBallance(InternalBillingAccount billingAccount) {
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         if (bill == null) {
             return BigDecimal.ZERO;
@@ -169,7 +169,7 @@ public class ARTransactionManager {
         return currentBallanceAmount;
     }
 
-    static InvoicePayment getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
+    static InvoicePayment getCorrespodingCreditByPayment(InternalBillingAccount billingAccount, PaymentRecord paymentRecord) {
         InvoicePayment credit;
         {
             EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
@@ -180,7 +180,7 @@ public class ARTransactionManager {
         return credit;
     }
 
-    static List<InvoiceCredit> getSuccedingCreditInvoiceLineItems(BillingAccount billingAccount, InvoiceCredit credit) {
+    static List<InvoiceCredit> getSuccedingCreditInvoiceLineItems(InternalBillingAccount billingAccount, InvoiceCredit credit) {
         List<InvoiceCredit> lineItems;
         {
             EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);

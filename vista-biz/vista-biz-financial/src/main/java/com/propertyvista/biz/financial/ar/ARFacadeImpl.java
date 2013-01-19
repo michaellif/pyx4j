@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -78,17 +79,17 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
-        return ARTransactionManager.getTransactionHistory(billingAccount);
+        return ARTransactionManager.getTransactionHistory(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
+        return ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
-        return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);
+        return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
@@ -104,7 +105,7 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public void updateArrearsHistory(BillingAccount billingAccount) {
-        ARArrearsManager.updateArrearsHistory(billingAccount);
+        ARArrearsManager.updateArrearsHistory(billingAccount.<InternalBillingAccount> cast());
 
     }
 
@@ -115,12 +116,12 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
-        return ARTransactionManager.getCurrentBallance(billingAccount);
+        return ARTransactionManager.getCurrentBallance(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount) {
-        return BillingUtils.getUnclaimedLineItems(billingAccount);
+        return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
 }

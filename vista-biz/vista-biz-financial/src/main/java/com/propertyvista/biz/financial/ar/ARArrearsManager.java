@@ -38,7 +38,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -49,7 +49,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class ARArrearsManager {
 
-    private static LeaseArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
+    private static LeaseArrearsSnapshot createArrearsSnapshot(InternalBillingAccount billingAccount) {
         LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
         arrearsSnapshot.totalAgingBuckets().set(
@@ -62,18 +62,18 @@ public class ARArrearsManager {
         return arrearsSnapshot;
     }
 
-    private static BigDecimal unitRent(BillingAccount billingAccount) {
+    private static BigDecimal unitRent(InternalBillingAccount billingAccount) {
         return new BigDecimal("0.00"); // TODO how to fetch unit rent + taxes;
     }
 
-    private static BigDecimal lastMonthRentDeposit(BillingAccount billingAccount) {
+    private static BigDecimal lastMonthRentDeposit(InternalBillingAccount billingAccount) {
         return new BigDecimal("0.00");// TODO how to get last month rent deposit and taxes
     }
 
     private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
-        EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
+        EntityQueryCriteria<InternalBillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(InternalBillingAccount.class);
         billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
-        Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
+        Iterator<InternalBillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance         
         BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
@@ -97,7 +97,7 @@ public class ARArrearsManager {
         return arrearsSnapshotAcc;
     }
 
-    static void updateArrearsHistory(BillingAccount billingAccount) {
+    static void updateArrearsHistory(InternalBillingAccount billingAccount) {
         // 1. createArrearsSnapshot for current time
         LeaseArrearsSnapshot currentSnapshot = createArrearsSnapshot(billingAccount);
 
@@ -124,7 +124,7 @@ public class ARArrearsManager {
         saveIfChanged(currentSnapshot, previousSnapshot);
     }
 
-    static LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
+    static LeaseArrearsSnapshot getArrearsSnapshot(InternalBillingAccount billingAccount, LogicalDate date) {
         EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
@@ -187,7 +187,7 @@ public class ARArrearsManager {
 
     }
 
-    static Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
+    static Collection<AgingBuckets> getAgingBuckets(InternalBillingAccount billingAccount) {
 
         List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
 

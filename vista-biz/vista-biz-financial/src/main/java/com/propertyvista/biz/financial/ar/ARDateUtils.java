@@ -20,17 +20,17 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 
 public class ARDateUtils {
 
     private static final I18n i18n = I18n.get(ARDateUtils.class);
 
-    public static LogicalDate calculateDueDate(BillingAccount billingAccount) {
+    public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount) {
         return calculateDueDate(billingAccount, new LogicalDate(SysDateManager.getSysDate()));
     }
 
-    public static LogicalDate calculateDueDate(BillingAccount billingAccount, LogicalDate postDate) {
+    public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount, LogicalDate postDate) {
         LogicalDate dueDate = null;
 
         switch (billingAccount.billingType().paymentFrequency().getValue()) {

@@ -34,6 +34,7 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingManager;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -73,16 +74,18 @@ class ExternalBillProducer {
     }
 
     Bill produceBill() {
-        Persistence.service().retrieve(lease.billingAccount().adjustments());
+        InternalBillingAccount billingAccount = lease.billingAccount().<InternalBillingAccount> cast();
+
+        Persistence.service().retrieve(billingAccount.adjustments());
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
             bill.billingAccount().set(lease.billingAccount());
 
-            lease.billingAccount().billCounter().setValue(lease.billingAccount().billCounter().getValue() + 1);
+            billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
             Persistence.service().persist(lease.billingAccount());
 
-            bill.billSequenceNumber().setValue(lease.billingAccount().billCounter().getValue());
+            bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
             bill.latestBillInCycle().setValue(true);
 
             bill.billingCycle().set(billingCycle);
@@ -157,7 +160,7 @@ class ExternalBillProducer {
     private void calculateTotals() {
 
         // @formatter:off
-        
+
         currentBill.pastDueAmount().setValue(
                 currentBill.balanceForwardAmount().getValue().
                 add(currentBill.paymentReceivedAmount().getValue()).
@@ -180,11 +183,11 @@ class ExternalBillProducer {
         BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(currentBill.lineItems());
         if (taxCombinedAmount.subtract(currentBill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
             TaxUtils.pennyFix(taxCombinedAmount.subtract(currentBill.taxes().getValue()), currentBill.lineItems());
-            currentBill.taxes().setValue(taxCombinedAmount);            
+            currentBill.taxes().setValue(taxCombinedAmount);
         }
 
         currentBill.totalDueAmount().setValue(currentBill.pastDueAmount().getValue().add(currentBill.currentAmount().getValue().add(currentBill.taxes().getValue())));
-        
+
         // @formatter:on
     }
 

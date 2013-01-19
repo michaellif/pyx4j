@@ -21,7 +21,7 @@ import org.junit.experimental.categories.Category;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 @Category(FunctionalTests.class)
@@ -35,84 +35,84 @@ public class ProrationTest extends VistaDBTestBase {
                 "Prorate using Actual method",
                 new BigDecimal("0.241379"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"),
-                        FinancialTestsUtils.getDate("23-Feb-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-Feb-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.225806"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"),
-                        FinancialTestsUtils.getDate("30-Jan-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("30-Jan-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("1"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("01-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"),
-                        FinancialTestsUtils.getDate("01-Mar-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("01-Mar-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.290323"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"),
-                        FinancialTestsUtils.getDate("23-Mar-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-Mar-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.266667"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Apr-2012"), FinancialTestsUtils.getDate("30-Apr-2012"),
-                        FinancialTestsUtils.getDate("23-Apr-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-Apr-2012"), InternalBillingAccount.ProrationMethod.Actual));
 
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.193548"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-May-2012"), FinancialTestsUtils.getDate("28-May-2012"),
-                        FinancialTestsUtils.getDate("23-May-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-May-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.566667"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("08-Jun-2012"), FinancialTestsUtils.getDate("24-Jun-2012"),
-                        FinancialTestsUtils.getDate("08-Jun-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("08-Jun-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.870968"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Jul-2012"), FinancialTestsUtils.getDate("29-Jul-2012"),
-                        FinancialTestsUtils.getDate("03-Jul-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("03-Jul-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.516129"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("16-Aug-2012"), FinancialTestsUtils.getDate("31-Aug-2012"),
-                        FinancialTestsUtils.getDate("16-Aug-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("16-Aug-2012"), InternalBillingAccount.ProrationMethod.Actual));
 
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.533333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("02-Sep-2012"), FinancialTestsUtils.getDate("17-Sep-2012"),
-                        FinancialTestsUtils.getDate("02-Sep-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("02-Sep-2012"), InternalBillingAccount.ProrationMethod.Actual));
 
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.322581"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("11-Oct-2012"), FinancialTestsUtils.getDate("20-Oct-2012"),
-                        FinancialTestsUtils.getDate("11-Oct-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("11-Oct-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.033333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Nov-2012"), FinancialTestsUtils.getDate("23-Nov-2012"),
-                        FinancialTestsUtils.getDate("23-Nov-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-Nov-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.580645"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Dec-2012"), FinancialTestsUtils.getDate("20-Dec-2012"),
-                        FinancialTestsUtils.getDate("03-Dec-2012"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("03-Dec-2012"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.225806"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("07-Jan-2013"), FinancialTestsUtils.getDate("13-Jan-2013"),
-                        FinancialTestsUtils.getDate("07-Jan-2013"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("07-Jan-2013"), InternalBillingAccount.ProrationMethod.Actual));
         assertEquals(
                 "Prorate using Actual method",
                 new BigDecimal("0.107143"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2013"), FinancialTestsUtils.getDate("25-Feb-2013"),
-                        FinancialTestsUtils.getDate("23-Feb-2013"), BillingAccount.ProrationMethod.Actual));
+                        FinancialTestsUtils.getDate("23-Feb-2013"), InternalBillingAccount.ProrationMethod.Actual));
 
         try {
             ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("23-Mar-2012"),
-                    FinancialTestsUtils.getDate("23-Feb-2012"), BillingAccount.ProrationMethod.Actual);
+                    FinancialTestsUtils.getDate("23-Feb-2012"), InternalBillingAccount.ProrationMethod.Actual);
             assertTrue("Prorate period longer than month", false);
         } catch (BillingException e) {
         }
@@ -126,84 +126,84 @@ public class ProrationTest extends VistaDBTestBase {
                 "Prorate using Standard method",
                 new BigDecimal("0.241379"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"),
-                        FinancialTestsUtils.getDate("23-Feb-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Feb-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.300000"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"),
-                        FinancialTestsUtils.getDate("23-Mar-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Mar-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.266667"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Apr-2012"), FinancialTestsUtils.getDate("30-Apr-2012"),
-                        FinancialTestsUtils.getDate("23-Apr-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Apr-2012"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.214286"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("28-Feb-2011"),
-                        FinancialTestsUtils.getDate("23-Feb-2011"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Feb-2011"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.200000"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-May-2012"), FinancialTestsUtils.getDate("28-May-2012"),
-                        FinancialTestsUtils.getDate("23-May-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-May-2012"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.566667"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("08-Jun-2012"), FinancialTestsUtils.getDate("24-Jun-2012"),
-                        FinancialTestsUtils.getDate("08-Jun-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("08-Jun-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.900000"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Jul-2012"), FinancialTestsUtils.getDate("29-Jul-2012"),
-                        FinancialTestsUtils.getDate("03-Jul-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("03-Jul-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.533333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("16-Aug-2012"), FinancialTestsUtils.getDate("31-Aug-2012"),
-                        FinancialTestsUtils.getDate("16-Aug-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("16-Aug-2012"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.533333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("02-Sep-2012"), FinancialTestsUtils.getDate("17-Sep-2012"),
-                        FinancialTestsUtils.getDate("02-Sep-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("02-Sep-2012"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.333333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("11-Oct-2012"), FinancialTestsUtils.getDate("20-Oct-2012"),
-                        FinancialTestsUtils.getDate("11-Oct-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("11-Oct-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.033333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Nov-2012"), FinancialTestsUtils.getDate("23-Nov-2012"),
-                        FinancialTestsUtils.getDate("23-Nov-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Nov-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.600000"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Dec-2012"), FinancialTestsUtils.getDate("20-Dec-2012"),
-                        FinancialTestsUtils.getDate("03-Dec-2012"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("03-Dec-2012"), InternalBillingAccount.ProrationMethod.Standard));
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.233333"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("07-Jan-2013"), FinancialTestsUtils.getDate("13-Jan-2013"),
-                        FinancialTestsUtils.getDate("07-Jan-2013"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("07-Jan-2013"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.107143"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2013"), FinancialTestsUtils.getDate("25-Feb-2013"),
-                        FinancialTestsUtils.getDate("23-Feb-2013"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("23-Feb-2013"), InternalBillingAccount.ProrationMethod.Standard));
 
         assertEquals(
                 "Prorate using Standard method",
                 new BigDecimal("0.066667"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("24-Mar-2013"), FinancialTestsUtils.getDate("25-Mar-2013"),
-                        FinancialTestsUtils.getDate("24-Mar-2013"), BillingAccount.ProrationMethod.Standard));
+                        FinancialTestsUtils.getDate("24-Mar-2013"), InternalBillingAccount.ProrationMethod.Standard));
     }
 
     public void testMonthlyAnnualProration() throws ParseException {
@@ -213,78 +213,78 @@ public class ProrationTest extends VistaDBTestBase {
                 "Prorate using Annual method",
                 new BigDecimal("0.230137"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2012"), FinancialTestsUtils.getDate("29-Feb-2012"),
-                        FinancialTestsUtils.getDate("23-Feb-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-Feb-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.295890"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Mar-2012"), FinancialTestsUtils.getDate("31-Mar-2012"),
-                        FinancialTestsUtils.getDate("23-Mar-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-Mar-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.263014"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Apr-2012"), FinancialTestsUtils.getDate("30-Apr-2012"),
-                        FinancialTestsUtils.getDate("23-Apr-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-Apr-2012"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.197260"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-May-2012"), FinancialTestsUtils.getDate("28-May-2012"),
-                        FinancialTestsUtils.getDate("23-May-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-May-2012"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.558904"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("08-Jun-2012"), FinancialTestsUtils.getDate("24-Jun-2012"),
-                        FinancialTestsUtils.getDate("08-Jun-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("08-Jun-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.887671"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Jul-2012"), FinancialTestsUtils.getDate("29-Jul-2012"),
-                        FinancialTestsUtils.getDate("03-Jul-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("03-Jul-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.526027"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("16-Aug-2012"), FinancialTestsUtils.getDate("31-Aug-2012"),
-                        FinancialTestsUtils.getDate("16-Aug-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("16-Aug-2012"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.526027"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("02-Sep-2012"), FinancialTestsUtils.getDate("17-Sep-2012"),
-                        FinancialTestsUtils.getDate("02-Sep-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("02-Sep-2012"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.328767"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("11-Oct-2012"), FinancialTestsUtils.getDate("20-Oct-2012"),
-                        FinancialTestsUtils.getDate("11-Oct-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("11-Oct-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.032877"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Nov-2012"), FinancialTestsUtils.getDate("23-Nov-2012"),
-                        FinancialTestsUtils.getDate("23-Nov-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-Nov-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.591781"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("03-Dec-2012"), FinancialTestsUtils.getDate("20-Dec-2012"),
-                        FinancialTestsUtils.getDate("03-Dec-2012"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("03-Dec-2012"), InternalBillingAccount.ProrationMethod.Annual));
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.230137"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("07-Jan-2013"), FinancialTestsUtils.getDate("13-Jan-2013"),
-                        FinancialTestsUtils.getDate("07-Jan-2013"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("07-Jan-2013"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.098630"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("23-Feb-2013"), FinancialTestsUtils.getDate("25-Feb-2013"),
-                        FinancialTestsUtils.getDate("23-Feb-2013"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("23-Feb-2013"), InternalBillingAccount.ProrationMethod.Annual));
 
         assertEquals(
                 "Prorate using Annual method",
                 new BigDecimal("0.065753"),
                 ProrationUtils.prorateMonthlyPeriod(FinancialTestsUtils.getDate("24-Mar-2013"), FinancialTestsUtils.getDate("25-Mar-2013"),
-                        FinancialTestsUtils.getDate("24-Mar-2013"), BillingAccount.ProrationMethod.Annual));
+                        FinancialTestsUtils.getDate("24-Mar-2013"), InternalBillingAccount.ProrationMethod.Annual));
 
     }
 

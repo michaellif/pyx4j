@@ -36,6 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -70,7 +71,9 @@ class BillProducer {
 
     Bill produceBill() {
 
-        Persistence.service().retrieve(lease.billingAccount().adjustments());
+        InternalBillingAccount billingAccount = lease.billingAccount().<InternalBillingAccount> cast();
+
+        Persistence.service().retrieve(billingAccount.adjustments());
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
@@ -79,10 +82,10 @@ class BillProducer {
             if (preview) {
                 bill.billSequenceNumber().setValue(0);
             } else {
-                lease.billingAccount().billCounter().setValue(lease.billingAccount().billCounter().getValue() + 1);
+                billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
                 Persistence.service().persist(lease.billingAccount());
 
-                bill.billSequenceNumber().setValue(lease.billingAccount().billCounter().getValue());
+                bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
                 bill.latestBillInCycle().setValue(true);
             }
 
@@ -185,12 +188,12 @@ class BillProducer {
         case First:
             // @formatter:off
             return Arrays.asList(new AbstractBillingProcessor[] {
-                    
+
                     new BillingProductChargeProcessor(this),
                     new BillingDepositProcessor(this),
-                    new BillingLeaseAdjustmentProcessor(this), 
+                    new BillingLeaseAdjustmentProcessor(this),
                     new BillingPaymentProcessor(this)
-                    
+
             });
             // @formatter:on
 
@@ -203,28 +206,28 @@ class BillProducer {
                     new BillingDepositProcessor(this),
                     // create initial debit/credit so initial debit/credit + charges = initial balance
                     new BillingCarryforwardProcessor(this)
-                    
+
             });
             // @formatter:on
 
         case Regular:
             // @formatter:off
             return Arrays.asList(new AbstractBillingProcessor[] {
-                    
+
                     new BillingProductChargeProcessor(this),
                     new BillingDepositProcessor(this),
-                    new BillingLeaseAdjustmentProcessor(this), 
-                    new BillingPaymentProcessor(this), 
+                    new BillingLeaseAdjustmentProcessor(this),
+                    new BillingPaymentProcessor(this),
                     /** Should run last **/
-                    new BillingLatePaymentFeeProcessor(this) 
-                    
+                    new BillingLatePaymentFeeProcessor(this)
+
             });
             // @formatter:on
 
         case Final:
             // @formatter:off
-            return Arrays.asList(new AbstractBillingProcessor[] { 
-                    new BillingProductChargeProcessor(this), 
+            return Arrays.asList(new AbstractBillingProcessor[] {
+                    new BillingProductChargeProcessor(this),
                     new BillingDepositProcessor(this),
                     new BillingLeaseAdjustmentProcessor(this),
                     new BillingPaymentProcessor(this),
@@ -240,7 +243,7 @@ class BillProducer {
     private void calculateTotals() {
 
         // @formatter:off
-        
+
         nextPeriodBill.pastDueAmount().setValue(
                 nextPeriodBill.balanceForwardAmount().getValue().
                 add(nextPeriodBill.paymentReceivedAmount().getValue()).
@@ -263,11 +266,11 @@ class BillProducer {
         BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(nextPeriodBill.lineItems());
         if (taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
             TaxUtils.pennyFix(taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()), nextPeriodBill.lineItems());
-            nextPeriodBill.taxes().setValue(taxCombinedAmount);            
+            nextPeriodBill.taxes().setValue(taxCombinedAmount);
         }
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue())));
-        
+
         // @formatter:on
     }
 
@@ -289,7 +292,7 @@ class BillProducer {
             if (BillingManager.getLatestConfirmedBill(lease) != null) {
                 return Bill.BillType.Regular;
             } else {
-                if (lease.billingAccount().carryforwardBalance().isNull()) {
+                if (lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().isNull()) {
                     return Bill.BillType.First;
                 } else {
                     return Bill.BillType.ZeroCycle;

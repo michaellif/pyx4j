@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
@@ -155,8 +155,8 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
         return new LogicalDate(DateUtils.detectDateformat(date));
     }
 
-    private BillingAccount billingAccount() {
-        return Persistence.service().<Lease> retrieve(Lease.class, lease.getPrimaryKey()).billingAccount();
+    private InternalBillingAccount billingAccount() {
+        return Persistence.service().<Lease> retrieve(Lease.class, lease.getPrimaryKey()).billingAccount().<InternalBillingAccount> cast();
     }
 
 }

@@ -27,6 +27,7 @@ import org.junit.experimental.categories.Category;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 @Category(RegressionTests.class)
@@ -49,7 +50,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Mar-2011");
         approveApplication(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -80,7 +81,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
@@ -138,7 +139,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
     }
 

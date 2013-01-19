@@ -28,7 +28,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("LeaseArrearsSnapshot")
@@ -40,7 +40,7 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot {
     @MemberColumn(notNull = true)
     @Indexed
     @JoinColumn
-    BillingAccount billingAccount();
+    InternalBillingAccount billingAccount();
 
     /**
      * LMR - last months rent deposit

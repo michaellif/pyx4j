@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -40,9 +41,10 @@ public class TransactionHistoryTester extends Tester {
 
     public TransactionHistoryTester(BillingAccount billingAccount, boolean continueOnError) {
         super(continueOnError);
-        transactionHistory = ARTransactionManager.getTransactionHistory(billingAccount);
-        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
-        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);
+        InternalBillingAccount internalBillingAccount = billingAccount.<InternalBillingAccount> cast();
+        transactionHistory = ARTransactionManager.getTransactionHistory(internalBillingAccount);
+        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(internalBillingAccount);
+        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(internalBillingAccount);
     }
 
     public TransactionHistoryTester lineItemSize(int size) {

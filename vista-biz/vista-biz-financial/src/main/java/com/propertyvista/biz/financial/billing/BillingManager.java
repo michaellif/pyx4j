@@ -49,7 +49,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.StatisticsRecord;
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -264,7 +264,7 @@ public class BillingManager {
 
     public static BillingCycle getNextBillingCycle(Lease lease) {
         Bill previousBill = getLatestConfirmedBill(lease);
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, lease.billingAccount().getPrimaryKey());
+        InternalBillingAccount billingAccount = Persistence.service().retrieve(InternalBillingAccount.class, lease.billingAccount().getPrimaryKey());
         Persistence.service().retrieve(lease.unit());
 
         if (previousBill == null) {
@@ -313,7 +313,7 @@ public class BillingManager {
             @Override
             public BillingType call() {
 
-                //try to find existing billing cycle    
+                //try to find existing billing cycle
                 EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
                 criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
@@ -405,7 +405,7 @@ public class BillingManager {
                     billingCycle.executionTargetDate().setValue(
                             BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
 
-// Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB                    
+// Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB
 //                    billingCycle.stats().notConfirmed().setValue(0L);
 //                    billingCycle.stats().failed().setValue(0L);
 //                    billingCycle.stats().rejected().setValue(0L);
@@ -522,7 +522,7 @@ public class BillingManager {
 
     public static void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
         if (adjustment.overwriteDefaultTax().isBooleanTrue()) {
-            return; // do nothing - use stored tax value 
+            return; // do nothing - use stored tax value
         }
 
         Persistence.service().retrieve(adjustment.billingAccount());
@@ -531,7 +531,7 @@ public class BillingManager {
         LeaseAdjustmentPolicy result = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 adjustment.billingAccount().lease().unit().building(), LeaseAdjustmentPolicy.class);
 
-        // TODO: currently calculate current policed tax value,  
+        // TODO: currently calculate current policed tax value,
         // in the future (when versioned policy will be implemented) - calculate tax effective on adjustment.targetDate().
 
         BigDecimal taxRate = BigDecimal.ZERO;

@@ -47,6 +47,7 @@ import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -324,7 +325,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
-        lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
+        lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(carryforwardBalance);
 
         lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
@@ -543,7 +544,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         assert (billableItem != null);
 
         Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
-        DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount());
+        DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit,
+                lease.billingAccount().<InternalBillingAccount> cast());
 
         billableItem.deposits().add(deposit);
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
