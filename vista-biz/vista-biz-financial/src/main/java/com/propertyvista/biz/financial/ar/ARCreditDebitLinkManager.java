@@ -77,7 +77,7 @@ class ARCreditDebitLinkManager {
     private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 
     static InvoiceCredit consumeCredit(InvoiceCredit credit) {
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(credit.billingAccount());
+        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(credit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceDebit debit : debits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
@@ -167,7 +167,7 @@ class ARCreditDebitLinkManager {
             }
         }
 
-        List<InvoiceCredit> credits = restoreBackwardPayments(payment.billingAccount(), firstCredit, false);
+        List<InvoiceCredit> credits = restoreBackwardPayments(payment.billingAccount().<InternalBillingAccount> cast(), firstCredit, false);
 
         // pointer to updated credit
         InvoiceCredit hardLinkCredit = null;
@@ -226,7 +226,7 @@ class ARCreditDebitLinkManager {
     }
 
     static InvoiceDebit coverDebit(InvoiceDebit debit) {
-        List<InvoiceCredit> credits = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(debit.billingAccount());
+        List<InvoiceCredit> credits = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(debit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceCredit credit : credits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
@@ -264,12 +264,13 @@ class ARCreditDebitLinkManager {
     }
 
     static void declinePayment(InvoicePaymentBackOut backOut) {
-        InvoicePayment invoicePaymentToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
+        InvoicePayment invoicePaymentToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount().<InternalBillingAccount> cast(),
+                backOut.paymentRecord());
         if (invoicePaymentToReturn == null) {
             throw new BillingException(i18n.tr("Cannot find Payment Record"));
         }
 
-        List<InvoiceCredit> credits = restoreBackwardPayments(backOut.billingAccount(), invoicePaymentToReturn, true);
+        List<InvoiceCredit> credits = restoreBackwardPayments(backOut.billingAccount().<InternalBillingAccount> cast(), invoicePaymentToReturn, true);
 
         // Pay available debits by Succeeding credits. Skip the first one
         for (InvoiceCredit credit : credits) {

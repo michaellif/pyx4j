@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @AbstractEntity
@@ -41,6 +42,13 @@ public interface BillingAccount extends IEntity {
     @ReadOnly
     @Detached
     Lease lease();
+
+    /**
+     * Immediate InvoiceLineItems are kept here between billing runs. Approved billing cleans this set.
+     */
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<InvoiceLineItem> invoiceLineItems();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @ReadOnly(allowOverrideNull = true)

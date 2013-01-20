@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -44,19 +43,13 @@ public interface InternalBillingAccount extends BillingAccount {
         Actual, Standard, Annual
     }
 
+    @Override
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<Bill> bills();
-
-    /**
-     * Immediate InvoiceLineItems are kept here between billing runs. Approved billing cleans this set.
-     */
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
-    ISet<InvoiceLineItem> invoiceLineItems();
 
     /**
      * Counter for all (including failed) bills for given lease

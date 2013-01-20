@@ -34,7 +34,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
@@ -47,7 +47,7 @@ public interface InvoiceLineItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    InternalBillingAccount billingAccount();
+    BillingAccount billingAccount();
 
     IPrimitive<Boolean> claimed();
 
