@@ -79,7 +79,7 @@ public class EnglishGrammar {
                     currentWord = new StringBuilder();
                     wordStart = true;
                 }
-                // Ignore first _ in the name 
+                // Ignore first _ in the name
                 if (b.length() != 0) {
                     b.append(' ');
                 }
@@ -103,6 +103,13 @@ public class EnglishGrammar {
                 }
                 currentWord.append(c);
             } else {
+                if (wordStart && (!currentWordIsNumbers) && (currentWord.length() >= 3)) {
+                    // word starts from capital letters: ABCWord -> ABC Word
+                    b.append(currentWord.substring(0, currentWord.length() - 1));
+                    b.append(' ');
+                    currentWord = new StringBuilder(currentWord.substring(currentWord.length() - 1));
+
+                }
                 wordStart = false;
                 if (currentWord.length() == 0) {
                     c = Character.toUpperCase(c);

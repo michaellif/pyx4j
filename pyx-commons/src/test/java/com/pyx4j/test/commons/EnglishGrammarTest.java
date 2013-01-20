@@ -31,7 +31,9 @@ public class EnglishGrammarTest extends TestCase {
         assertEquals("Abc", EnglishGrammar.capitalize("abc"));
         assertEquals("ABC", EnglishGrammar.capitalize("ABC"));
         assertEquals("The ABC", EnglishGrammar.capitalize("theABC"));
-        assertEquals("The ABC Word", EnglishGrammar.capitalize("theABC_Word"));
+        assertEquals("The ABC Word", EnglishGrammar.capitalize("theABCWord"));
+        assertEquals("IAgree", EnglishGrammar.capitalize("IAgree"));
+        assertEquals("The IDs", EnglishGrammar.capitalize("TheIDs"));
         assertEquals("Abc Def", EnglishGrammar.capitalize("AbcDef"));
         assertEquals("Abc Def", EnglishGrammar.capitalize("Abc_def"));
         assertEquals("Abc DEF", EnglishGrammar.capitalize("AbcDEF"));
