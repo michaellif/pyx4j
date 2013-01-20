@@ -114,6 +114,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
+import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
@@ -348,6 +349,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
+        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectPortfolioListService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
