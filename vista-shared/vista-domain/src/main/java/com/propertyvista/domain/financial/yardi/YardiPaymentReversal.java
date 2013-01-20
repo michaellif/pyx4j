@@ -7,12 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 14, 2013
+ * Created on Jan 19, 2013
  * @author stanp
  * @version $Id$
  */
 package com.propertyvista.domain.financial.yardi;
 
-public interface YardiPaymentDetail extends YardiTransactionDetail {
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
+
+@DiscriminatorValue("YardiReversal")
+public interface YardiPaymentReversal extends InvoicePaymentBackOut {
 }

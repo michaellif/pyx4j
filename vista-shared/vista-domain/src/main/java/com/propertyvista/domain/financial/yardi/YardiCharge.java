@@ -13,13 +13,17 @@
  */
 package com.propertyvista.domain.financial.yardi;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface YardiChargeDetail extends YardiTransactionDetail {
-    YardiAccount account();
+import com.propertyvista.domain.financial.billing.InvoiceCharge;
+
+@DiscriminatorValue("YardiCharge")
+public interface YardiCharge extends InvoiceCharge {
 
     YardiService service();
 
     IPrimitive<String> chargeCode();
 
+    YardiTransactionDetail detail();
 }

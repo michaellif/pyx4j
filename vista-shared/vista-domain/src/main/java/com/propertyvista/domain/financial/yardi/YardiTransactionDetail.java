@@ -15,27 +15,18 @@ package com.propertyvista.domain.financial.yardi;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.TABLE_PER_CLASS)
+@EmbeddedEntity
 public interface YardiTransactionDetail extends IEntity {
-
-    IPrimitive<String> description();
-
-    IPrimitive<LogicalDate> transactionDate();
 
     IPrimitive<String> transactionId();
 
     IPrimitive<BigDecimal> amountPaid();
 
     IPrimitive<BigDecimal> balanceDue();
-
-    IPrimitive<BigDecimal> amount();
 
     IPrimitive<String> comment();
 }

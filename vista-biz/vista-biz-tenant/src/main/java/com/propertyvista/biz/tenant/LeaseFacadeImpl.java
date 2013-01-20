@@ -62,7 +62,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.financial.yardi.YardiAccount;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -137,7 +137,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
         if (VistaFeatures.instance().yardiIntegration()) {
-            YardiAccount billingAccount = EntityFactory.create(YardiAccount.class);
+            YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
             lease.billingAccount().set(billingAccount);
         } else {
             InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);

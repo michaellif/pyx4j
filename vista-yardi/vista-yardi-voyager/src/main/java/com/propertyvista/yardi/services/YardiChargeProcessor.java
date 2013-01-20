@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.yardi.YardiAccount;
-import com.propertyvista.domain.financial.yardi.YardiChargeDetail;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
+import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.financial.yardi.YardiTransactionDetail;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -42,18 +42,13 @@ public class YardiChargeProcessor {
 
     public void updateCharges(List<ResidentTransactions> allTransactions) {
         log.info("updateCharges: started...");
-        // check available leases
-        EntityQueryCriteria<Lease> availLeases = EntityQueryCriteria.create(Lease.class);
-        for (Lease lease : Persistence.service().query(availLeases)) {
-            log.info("===> Found Lease: " + lease.leaseId().getValue());
-        }
 
         for (ResidentTransactions rt : allTransactions) {
             for (Property prop : rt.getProperty()) {
                 for (RTCustomer cust : prop.getRTCustomer()) {
                     log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
-                    // 1. get customer's YardiAccount
-                    YardiAccount account = getYardiAccount(cust);
+                    // 1. get customer's YardiBillingAccount
+                    YardiBillingAccount account = getYardiBillingAccount(cust);
                     if (account == null) {
                         try {
                             Persistence.service().rollback();
@@ -62,12 +57,15 @@ public class YardiChargeProcessor {
                         continue;
                     }
                     // 2. remove previously added charges
-                    EntityQueryCriteria<YardiChargeDetail> oldCharges = EntityQueryCriteria.create(YardiChargeDetail.class);
-                    oldCharges.add(PropertyCriterion.eq(oldCharges.proto().account(), account));
+                    EntityQueryCriteria<YardiCharge> oldCharges = EntityQueryCriteria.create(YardiCharge.class);
+                    oldCharges.add(PropertyCriterion.eq(oldCharges.proto().billingAccount(), account));
                     Persistence.service().delete(oldCharges);
                     // 3. add new charges
                     // TODO - see if we can simply keep the unchanged charges instead of removing and adding them again
                     for (Transactions tr : cust.getRTServiceTransactions().getTransactions()) {
+                        if (tr == null || tr.getCharge() == null) {
+                            continue;
+                        }
                         Persistence.service().persist(createCharge(account, tr.getCharge().getDetail()));
                     }
                     Persistence.service().commit();
@@ -76,7 +74,7 @@ public class YardiChargeProcessor {
         }
     }
 
-    private YardiAccount getYardiAccount(RTCustomer customer) {
+    private YardiBillingAccount getYardiBillingAccount(RTCustomer customer) {
         EntityQueryCriteria<Lease> leaseCrit = EntityQueryCriteria.create(Lease.class);
         leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getCustomerID()));
         Lease lease = Persistence.service().retrieve(leaseCrit);
@@ -84,12 +82,12 @@ public class YardiChargeProcessor {
             // no lease found - quit
             return null;
         }
-        EntityQueryCriteria<YardiAccount> accntCrit = EntityQueryCriteria.create(YardiAccount.class);
+        EntityQueryCriteria<YardiBillingAccount> accntCrit = EntityQueryCriteria.create(YardiBillingAccount.class);
         accntCrit.add(PropertyCriterion.eq(accntCrit.proto().lease(), lease));
-        YardiAccount account = Persistence.service().retrieve(accntCrit);
+        YardiBillingAccount account = Persistence.service().retrieve(accntCrit);
         if (account == null) {
             // create new account
-            account = EntityFactory.create(YardiAccount.class);
+            account = EntityFactory.create(YardiBillingAccount.class);
             account.lease().set(lease);
             Persistence.service().persist(account);
         }
@@ -97,28 +95,30 @@ public class YardiChargeProcessor {
         return account;
     }
 
-    private YardiChargeDetail createCharge(YardiAccount account, ChargeDetail detail) {
-        YardiChargeDetail charge = EntityFactory.create(YardiChargeDetail.class);
-        charge.account().set(account);
-        try {
-            charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
-        } catch (Exception e) {
-            log.info("ERROR - unknown service type: " + e);
+    private YardiCharge createCharge(YardiBillingAccount account, ChargeDetail detail) {
+        YardiCharge charge = EntityFactory.create(YardiCharge.class);
+        charge.billingAccount().set(account);
+        if (detail.getService() != null) {
+            try {
+                charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
+            } catch (Exception e) {
+                log.info("ERROR - unknown service type: " + e);
+            }
         }
         charge.chargeCode().setValue(detail.getChargeCode());
+        charge.amount().setValue(new BigDecimal(detail.getAmount()));
+        charge.description().setValue(detail.getDescription());
+        charge.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
         // transaction detail
-        setTransactionDetail(charge, detail);
+        setTransactionDetail(charge.detail(), detail);
 
         return charge;
     }
 
     private void setTransactionDetail(YardiTransactionDetail yt, ChargeDetail detail) {
-        yt.description().setValue(detail.getDescription());
-        yt.transactionDate().setValue(new LogicalDate(detail.getTransactionDate()));
         yt.transactionId().setValue(detail.getTransactionID());
         yt.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
         yt.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
-        yt.amount().setValue(new BigDecimal(detail.getAmount()));
         yt.comment().setValue(detail.getComment());
     }
 }

@@ -14,20 +14,9 @@
 package com.propertyvista.domain.financial.yardi;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.BillingAccount;
 
-@DiscriminatorValue("External")
-public interface YardiAccount extends BillingAccount {
-
-    /**
-     * Charges that are currently due based on the latest Yardi report
-     */
-    IList<YardiChargeDetail> pendingCharges();
-
-    /**
-     * Payments that mare made since last Yardi update
-     */
-    IList<YardiPaymentDetail> externalPayments();
+@DiscriminatorValue("YardiAccount")
+public interface YardiBillingAccount extends BillingAccount {
 }
