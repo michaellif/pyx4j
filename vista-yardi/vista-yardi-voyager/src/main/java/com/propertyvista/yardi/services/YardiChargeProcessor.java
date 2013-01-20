@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiService;
-import com.propertyvista.domain.financial.yardi.YardiTransactionDetail;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiChargeProcessor {
@@ -109,16 +108,11 @@ public class YardiChargeProcessor {
         charge.amount().setValue(new BigDecimal(detail.getAmount()));
         charge.description().setValue(detail.getDescription());
         charge.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
-        // transaction detail
-        setTransactionDetail(charge.detail(), detail);
+        charge.transactionId().setValue(detail.getTransactionID());
+        charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
+        charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
+        charge.comment().setValue(detail.getComment());
 
         return charge;
-    }
-
-    private void setTransactionDetail(YardiTransactionDetail yt, ChargeDetail detail) {
-        yt.transactionId().setValue(detail.getTransactionID());
-        yt.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
-        yt.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
-        yt.comment().setValue(detail.getComment());
     }
 }

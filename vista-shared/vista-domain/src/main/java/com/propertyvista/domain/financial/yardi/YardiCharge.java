@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial.yardi;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -25,5 +27,11 @@ public interface YardiCharge extends InvoiceCharge {
 
     IPrimitive<String> chargeCode();
 
-    YardiTransactionDetail detail();
+    IPrimitive<String> transactionId();
+
+    IPrimitive<BigDecimal> amountPaid();
+
+    IPrimitive<BigDecimal> balanceDue();
+
+    IPrimitive<String> comment();
 }
