@@ -232,6 +232,45 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
         srv.persist(parentA);
     }
 
+    public void TODO_testQueryByValueInPolymorphicEntity() {
+        String testId = uniqueString();
+        String searchBy = uniqueString();
+
+        // setup
+        BidirectionalOneToOnePlmSTP2CParent parentA = EntityFactory.create(BidirectionalOneToOnePlmSTP2CParent.class);
+        parentA.testId().setValue(testId);
+        parentA.name().setValue("parentA");
+
+        BidirectionalOneToOnePlmSTP2CChildA childA = EntityFactory.create(BidirectionalOneToOnePlmSTP2CChildA.class);
+        childA.propA().setValue(searchBy);
+        parentA.child().set(childA);
+
+        srv.persist(parentA);
+
+        // idea using path
+        if (false) {
+            EntityQueryCriteria<BidirectionalOneToOnePlmSTP2CParent> criteria = EntityQueryCriteria.create(BidirectionalOneToOnePlmSTP2CParent.class);
+            criteria.eq(criteria.proto().testId(), testId);
+            //criteria.eq(criteria.proto().child().$asInstanceOf(BidirectionalOneToOnePlmSTP2CChildA.class).propA(), searchBy);
+            List<BidirectionalOneToOnePlmSTP2CParent> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
+
+        {
+            EntityQueryCriteria<BidirectionalOneToOnePlmSTP2CParent> criteria = EntityQueryCriteria.create(BidirectionalOneToOnePlmSTP2CParent.class);
+            criteria.eq(criteria.proto().testId(), testId);
+
+            {
+                EntityQueryCriteria<BidirectionalOneToOnePlmSTP2CChildA> subCriteria = EntityQueryCriteria.create(BidirectionalOneToOnePlmSTP2CChildA.class);
+                subCriteria.eq(subCriteria.proto().propA(), searchBy);
+                criteria.in(criteria.proto().child(), subCriteria);
+            }
+
+            List<BidirectionalOneToOnePlmSTP2CParent> found = srv.query(criteria);
+            Assert.assertEquals("retrieved size", 1, found.size());
+        }
+    }
+
     public void testOwnedPolymorphismInSingleTable() {
         String testId = uniqueString();
 
