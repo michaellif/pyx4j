@@ -43,8 +43,8 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class ARFacadeImplYardy implements ARFacade {
-    private static final I18n i18n = I18n.get(ARFacadeImplYardy.class);
+public class ARFacadeYardyImpl implements ARFacade {
+    private static final I18n i18n = I18n.get(ARFacadeYardyImpl.class);
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {

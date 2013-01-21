@@ -22,7 +22,7 @@ public class ARFacadeFactory implements FacadeFactory<ARFacade> {
     @Override
     public ARFacade create() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return new ARFacadeImplYardy();
+            return new ARFacadeYardyImpl();
         } else {
             return new ARFacadeImpl();
         }
