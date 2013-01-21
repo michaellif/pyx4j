@@ -32,26 +32,30 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     @Override
     protected FormFlexPanel createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+
+        FormFlexPanel info = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
+        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
+        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
+        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
-        main.getFlexCellFormatter().setRowSpan(row, 1, 3);
-        row += 2;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
+        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
+        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
+        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
+
+        info.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+
+        // form main panel:
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+
+        row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Information"));
+        main.setWidget(++row, 0, info);
 
         main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }
