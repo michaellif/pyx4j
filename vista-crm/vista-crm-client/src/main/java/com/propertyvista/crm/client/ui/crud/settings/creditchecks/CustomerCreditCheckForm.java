@@ -21,7 +21,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 

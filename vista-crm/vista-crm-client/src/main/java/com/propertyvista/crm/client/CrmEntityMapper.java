@@ -23,7 +23,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 
 public class CustomerCreditCheckViewerActivity extends CrmViewerActivity<CustomerCreditCheckDTO> {

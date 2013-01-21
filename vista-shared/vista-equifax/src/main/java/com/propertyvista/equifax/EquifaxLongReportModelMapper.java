@@ -17,7 +17,7 @@ import ca.equifax.uat.from.EfxTransmit;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class EquifaxLongReportModelMapper {

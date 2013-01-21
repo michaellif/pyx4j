@@ -32,7 +32,6 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
@@ -41,6 +40,7 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;

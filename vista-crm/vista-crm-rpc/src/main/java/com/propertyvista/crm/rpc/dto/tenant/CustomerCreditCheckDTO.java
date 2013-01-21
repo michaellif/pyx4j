@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto;
+package com.propertyvista.crm.rpc.dto.tenant;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;

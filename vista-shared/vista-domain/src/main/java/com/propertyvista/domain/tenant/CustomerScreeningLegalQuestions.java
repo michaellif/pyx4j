@@ -11,7 +11,7 @@
  * @author antonk
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;

@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.Customer;

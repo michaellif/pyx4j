@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.admin;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
 public interface CustomerCreditCheckCrudService extends AbstractCrudService<CustomerCreditCheckDTO> {
 

@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
-import com.propertyvista.domain.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
 public class CustomerCreditCheckLister extends ListerBase<CustomerCreditCheckDTO> {
 

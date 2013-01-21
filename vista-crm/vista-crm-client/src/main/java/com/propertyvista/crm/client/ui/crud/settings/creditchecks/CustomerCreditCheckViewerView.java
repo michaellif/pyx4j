@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
 public interface CustomerCreditCheckViewerView extends IViewerView<CustomerCreditCheckDTO> {
 

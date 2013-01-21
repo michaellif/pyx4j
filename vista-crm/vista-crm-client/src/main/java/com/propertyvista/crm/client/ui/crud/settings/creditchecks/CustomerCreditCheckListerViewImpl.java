@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.CustomerCreditCheckDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
 public class CustomerCreditCheckListerViewImpl extends CrmListerViewImplBase<CustomerCreditCheckDTO> implements CustomerCreditCheckListerView {
 
