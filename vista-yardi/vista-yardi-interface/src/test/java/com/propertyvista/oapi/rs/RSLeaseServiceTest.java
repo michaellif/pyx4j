@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +50,7 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
         TestLifecycle.beginRequest();
     }
 
-    @Before
+    @After
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
