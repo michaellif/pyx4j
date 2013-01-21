@@ -115,12 +115,14 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
+import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
+import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.ServiceVersionService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
@@ -165,6 +167,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -299,24 +302,26 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastGuarantorCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(CustomerScreening.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerScreeningCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerScreeningVersionService.class));
 
-        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
-
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTerm.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermVersionService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseTermListService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoteAttachmentUploadService.class));
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectCustomerListService.class));
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectBuildingListService.class));
-
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(LeaseTermCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseAdjustmentCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DepositLifecycleCrudService.class));
