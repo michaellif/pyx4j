@@ -7,24 +7,29 @@
 	overflow: hidden;
     background: ${object2_10};
 }
+
+.vista-pmsite-sidebarWrap {
+    padding: 0 20px;
+}
+
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	background-color:${object2_10};
-	margin: 0 20px;
+	margin-right: 20px;
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
 	float:left;
-	/*width: 318px;*/
 	vertical-align: top;
 	padding:20px;
+	width: 260px;
+	overflow: hidden;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	border-top: 1px #000000;
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
-	width: 590px;
-	padding-right: 20px;
+	width: 600px;
 	*width: 594px;
 	*padding-right: 16px;
 	vertical-align: top;
@@ -34,23 +39,20 @@
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
 	border-top: 1px solid black;
-	border-bottom: 4px solid black;
+	border-bottom: 5px solid black;
 }
 .vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
 	border-left:0px solid ${object2_20};
-	/*padding-left:8px; */
 	min-height: 550px;
 }
 .apartmentDetailsWrap .detailBox {
-	/*color:${foreground_100}; */
-	padding-bottom:20px;
+	border-bottom: 1px solid #000000;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
 	padding: 30px 20px;
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
-	/*color:${foreground_100}; */
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	width: 100%;
@@ -59,10 +61,11 @@
 	zoom: 1;
 	*display: inline;
 	padding: 10px 0;
-	border-bottom: 1px solid ${object2_20};
+	border-bottom: 1px solid #000000;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
-	border-top: 1px solid ${object_20};
+
+.apartmentDetailsWrap .detailBox .detailBoxEntry.amenities {
+	margin-bottom: 30px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
 	vertical-align:top;
@@ -72,7 +75,6 @@
 	font-weight:bold;
 	text-transform:uppercase;
 	text-align:right;
-	/*color:${foreground_80}; */
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;

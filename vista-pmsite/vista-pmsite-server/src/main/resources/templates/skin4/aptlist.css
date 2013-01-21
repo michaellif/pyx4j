@@ -29,7 +29,8 @@
 .vista-pmsite-aptListPage .secondaryNavig h3 {
 	width:100%;
 	font-size:14pt;
-	padding: 9px 0 5px;
+	padding: 5px 0;
+	height:30px;
 	font-family: monospace;
 	font-weight: normal;
 }
@@ -37,7 +38,7 @@
 .advancedSearchNarrowWrap {
 	width: 280px;
 	height: 520px;
-	border-top: 6px solid #000000;
+	border-top: 5px solid #000000;
 	background: #999999;
 }
 .advancedSearchNarrowWrap input[type=submit] {
@@ -209,10 +210,9 @@
 	overflow: hidden;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
-	/*width: 620px;*/
 	padding-bottom:40px;
 	min-height:600px;
-	border-top: 5px solid #000000;
+	border-top: 4px solid black;
 }
 
 #aptListModeSwitch {

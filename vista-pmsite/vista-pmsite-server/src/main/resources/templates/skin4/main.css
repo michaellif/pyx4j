@@ -106,10 +106,12 @@ select {
 }
 
 #siteTitle {
-	/*float:left;*/
-	margin:10px;
+	margin: 10px 180px;
 	position: absolute;
-	left: 45%;
+	width: 600px;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 #siteTitle a:hover {
@@ -119,9 +121,8 @@ select {
 	height:70px;
 }
 #noLogo {
-	font-size:40px;
+	font-size:35px;
 	line-height:80px;
-	margin-right:20px;
 }
 
 #siteAuth {
@@ -370,8 +371,6 @@ ul.footer_locations li {
 	font-family: monospace;
     font-size: 14pt;
     font-weight: normal;
-/*  line-height: 70px; */
-/*  color: ${object2_10}; */
 	color: black;
 }
 .caption2 {
@@ -384,13 +383,10 @@ ul.footer_locations li {
 	font-family: monospace;
     font-size: 14pt;
     font-weight: normal;
-	padding: 5px 0;
-	padding-left: 8px;
-	/* border-top: 1px solid #000000; */
 }
 .vista-pmsite-main .caption2 .rightControl {
 	height:25px;
-	margin:9px 30px 0 0;
+	margin:5px 0;
 	float:right;
 	color:${object2_30};
 	font-weight:bold;
@@ -402,8 +398,6 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-	/*background-color:${object2_10};
-	*background-color: #FFFFFF;*/
 	background-color: #fff;
 }
 
