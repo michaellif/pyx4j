@@ -123,9 +123,10 @@ public class CfcApiClient implements ICfcApiClient {
 
         SimpleClient simpleClient = new ObjectFactory().createSimpleClient();
         simpleClient.setSessionID(sessionId);
-        TenantSureTenantAdapter.fillClient(tenant, simpleClient);
         simpleClient.setCompanyName(tenantName);
-        simpleClient.setContactName(tenantPhone);
+        simpleClient.setContactName(tenantName);
+        simpleClient.setTelephoneNumber(tenantPhone);
+        TenantSureTenantAdapter.setClientsAddress(tenant, simpleClient);
 
         SimpleClientResponse createClientRssult = api.runCreateClient(simpleClient);
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {
