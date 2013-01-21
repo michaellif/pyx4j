@@ -112,6 +112,7 @@ public class YardiChargeProcessor {
         charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
         charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
         charge.comment().setValue(detail.getComment());
+        charge.taxTotal().setValue(BigDecimal.ZERO);
 
         return charge;
     }
