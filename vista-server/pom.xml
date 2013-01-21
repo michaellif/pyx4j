@@ -784,7 +784,8 @@
                                 <goals><goal>run</goal></goals>
                                 <configuration>
                                     <target>
-                                        <get src="${vista-app-ping-url}/o/db-reset?type=allWithMockup" dest="${project.build.directory}/db-reset.txt" maxtime="1600"/>
+                                        <!-- 45 min -->
+                                        <get src="${vista-app-ping-url}/o/db-reset?type=allWithMockup" dest="${project.build.directory}/db-reset.txt" maxtime="2700"/>
                                         <fail message="Found Error in DB preload on server, See server log for details">
                                             <condition>
                                                 <resourcecontains resource="${project.build.directory}/db-reset.txt" substring="DB reset error"/>
