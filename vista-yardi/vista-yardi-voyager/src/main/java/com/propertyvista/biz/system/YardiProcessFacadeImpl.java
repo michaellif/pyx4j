@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
@@ -30,12 +31,15 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
-
-        try {
-            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
-            Persistence.service().commit();
-        } catch (YardiServiceException e) {
-            log.error("Error", e);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            try {
+                YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
+                Persistence.service().commit();
+            } catch (YardiServiceException e) {
+                log.error("Error", e);
+            }
+        } else {
+            throw new Error("Yardi Integration disabled for this PMC");
         }
 
     }
