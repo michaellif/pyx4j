@@ -65,10 +65,9 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
         termDto.lease().set(termDto.newParentLease());
 
         switch (type) {
-        case New:
         case Current:
             termDto.carryforwardBalance().setValue(BigDecimal.ZERO);
-
+        case New:
             AppSite.getPlaceController().goTo(
                     new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
                             LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
@@ -80,6 +79,7 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
                             LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
             break;
         }
+
         return true;
     }
 
