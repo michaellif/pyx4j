@@ -21,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.jersey.api.client.ClientResponse;
@@ -39,6 +40,7 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
         super("com.propertyvista.oapi.rs");
     }
 
+    @Before
     @Override
     public void initDB() throws Exception {
         super.initDB();
@@ -47,6 +49,7 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
         TestLifecycle.beginRequest();
     }
 
+    @Before
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
