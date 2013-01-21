@@ -717,7 +717,8 @@
                                 <goals><goal>run</goal></goals>
                                 <configuration>
                                     <target>
-                                        <get src="${vista-app-ping-url}/o/db-reset?type=all" dest="${project.build.directory}/db-reset.txt" maxtime="600"/>
+                                        <!-- Maximum time in seconds; Also see ProxyTimeout on server config-master.conf  -->
+                                        <get src="${vista-app-ping-url}/o/db-reset?type=all" dest="${project.build.directory}/db-reset.txt" maxtime="900"/>
                                         <fail message="Found Error in DB preload on server, See server log for details">
                                             <condition>
                                                 <resourcecontains resource="${project.build.directory}/db-reset.txt" substring="DB reset error"/>
