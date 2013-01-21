@@ -25,7 +25,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -35,6 +36,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -136,7 +138,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             left.setBR(++row, 0, 1);
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CLabel<Key>()), 10).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CCreditCheckReportHyperlink()), 10).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -175,6 +177,38 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             get(proto().creditCheck().creditCheckResult()).setVisible(creditCheckResult != CreditCheckResult.Accept);
             get(proto().creditCheck().amountApproved()).setVisible(creditCheckResult == CreditCheckResult.Accept);
             get(proto().creditCheck().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
+        }
+
+        private class CCreditCheckReportHyperlink extends CHyperlink<Key> {
+
+            public CCreditCheckReportHyperlink() {
+                super("View Full Report");
+
+                setCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(
+                                new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this.getValue()
+                                        .leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
+                    }
+                });
+
+                setFormat(new IFormat<Key>() {
+                    @Override
+                    public String format(Key value) {
+                        if (value != null) {
+                            return "View";
+                        } else {
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    public Key parse(String string) {
+                        return null;
+                    }
+                });
+            }
         }
     }
 }

@@ -186,6 +186,11 @@ public class CrmSiteMap implements SiteMap {
         public static class PastGuarantor extends CrmCrudAppPlace {
         }
 
+        public static class CustomerCreditCheckLongReport extends CrmCrudAppPlace {
+            public CustomerCreditCheckLongReport() {
+                super(Type.viewer);
+            }
+        }
     }
 
     public static class Marketing extends AppPlace {
@@ -282,7 +287,6 @@ public class CrmSiteMap implements SiteMap {
 
         public static class CustomerCreditCheck extends CrmCrudAppPlace {
         }
-
     }
 
     @PlaceProperties(navigLabel = "Reports", caption = "Dashboard")

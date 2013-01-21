@@ -68,6 +68,7 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewer
 import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorAcitvity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorViewerActivity;
@@ -587,6 +588,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         default:
                             break;
                         }
+
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.CustomerCreditCheckLongReport) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new CustomerCreditCheckLongReportViewerActivity(crudPlace);
+                            break;
+                        default:
+                            if (ApplicationMode.isDevelopment()) {
+                                throw new Error("view is not defined");
+                            }
+                            break;
+                        }
+
 // - Financial-related:
 
                     } else if (crudPlace instanceof CrmSiteMap.Finance.BillingCycle) {

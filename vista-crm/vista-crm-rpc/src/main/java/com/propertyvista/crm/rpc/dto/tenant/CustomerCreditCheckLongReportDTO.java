@@ -13,10 +13,21 @@
  */
 package com.propertyvista.crm.rpc.dto.tenant;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
+
+    IPrimitive<BigDecimal> percentOfRentCovered();
+
+    IPrimitive<BigDecimal> grossMonthlyIncome();
+
+    IPrimitive<Integer> totalAccounts();
+
+    IPrimitive<BigDecimal> totalOutstandingBalance();
 
 }
