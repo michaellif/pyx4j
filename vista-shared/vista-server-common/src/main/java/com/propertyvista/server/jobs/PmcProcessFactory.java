@@ -58,6 +58,9 @@ public class PmcProcessFactory {
         case yardiImportProcess:
             return new YardiImportProcess();
 
+        case yardiBatchProcess:
+            return new YardiBatchProcess();
+
 // Misc:
         case cleanup:
             return new CleanupPmcProcess();

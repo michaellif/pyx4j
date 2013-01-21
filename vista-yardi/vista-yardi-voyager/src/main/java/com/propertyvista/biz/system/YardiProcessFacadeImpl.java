@@ -20,22 +20,19 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
-import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.server.jobs.YardiImportProcess;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
+import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
-    private static final Logger log = LoggerFactory.getLogger(YardiImportProcess.class);
+    private static final Logger log = LoggerFactory.getLogger(YardiProcessFacadeImpl.class);
 
     @Override
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
 
-        PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
-
         try {
-            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
             Persistence.service().commit();
         } catch (YardiServiceException e) {
             log.error("Error", e);
@@ -46,7 +43,11 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     @Override
     public void postAllPayments(StatisticsRecord dynamicStatisticsRecord) {
 
-        // YardiSystemBatchesService.getInstance().postAllPayments(yp);
+        try {
+            YardiSystemBatchesService.getInstance().postAllPayments(VistaDeployment.getPmcYardiCredential());
+        } catch (Exception e) {
+            log.error("Error", e);
+        }
 
     }
 

@@ -62,6 +62,8 @@ public enum PmcProcessType implements Serializable {
 
     yardiImportProcess,
 
+    yardiBatchProcess,
+
     // Used for scheduler testing
     test;
 
