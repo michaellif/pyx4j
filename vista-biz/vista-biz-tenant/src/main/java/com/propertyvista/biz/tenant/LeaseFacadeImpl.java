@@ -135,15 +135,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         lease.currentTerm().lease().set(lease);
 
-        lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
-        if (VistaFeatures.instance().yardiIntegration()) {
-            YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
-            lease.billingAccount().set(billingAccount);
-        } else {
-            InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
-            billingAccount.billCounter().setValue(0);
-            lease.billingAccount().set(billingAccount);
+        if (lease.billingAccount().isNull()) {
+            if (VistaFeatures.instance().yardiIntegration()) {
+                YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
+                lease.billingAccount().set(billingAccount);
+            } else {
+                InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+                billingAccount.billCounter().setValue(0);
+                lease.billingAccount().set(billingAccount);
+            }
         }
+        lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
 
         return lease;
     }
@@ -824,7 +826,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
             lease.unit().set(unit);
 
-            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease));
+            if (lease.billingAccount().isInstanceOf(InternalBillingAccount.class)) {
+                lease.billingAccount().billingType().set(ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease));
+            }
 
             updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
         } else {

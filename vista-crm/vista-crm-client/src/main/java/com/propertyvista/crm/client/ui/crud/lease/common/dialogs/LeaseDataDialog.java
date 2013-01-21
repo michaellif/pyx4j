@@ -23,12 +23,15 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
@@ -88,6 +91,15 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
 
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
+            newLease.billingAccount().set(billingAccount);
+        } else {
+            InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+            billingAccount.billCounter().setValue(0);
+            newLease.billingAccount().set(billingAccount);
+        }
 
         newLease.unit().set(selectedUnitId);
 
