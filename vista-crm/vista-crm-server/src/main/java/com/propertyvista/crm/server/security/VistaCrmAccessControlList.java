@@ -162,8 +162,11 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -424,8 +427,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), Roof.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseDatasetAccessRule(), Lease.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new Lease2DatasetAccessRule(), Lease.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new TenantDatasetAccessRule(), Customer.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new CustomerDatasetAccessRule(), Customer.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseParticipantDatasetAccessRule(), Guarantor.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseParticipantDatasetAccessRule(), Tenant.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseTermParticipantDatasetAccessRule(), LeaseTermGuarantor.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseTermParticipantDatasetAccessRule(), LeaseTermTenant.class);
 
         // Data Access for Gadgets
         grant(VistaDataAccessBehavior.BuildingsAssigned, new UnitAvailabilityStatusDatasetAccessRule(), UnitAvailabilityStatus.class);

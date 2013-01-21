@@ -82,7 +82,7 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().person().name().firstName(), setId));
-        new TenantDatasetAccessRule().applyRule(criteria);
+        new CustomerDatasetAccessRule().applyRule(criteria);
 
         List<Customer> r = Persistence.service().query(criteria);
         Assert.assertEquals("result set size", 1, r.size());
@@ -119,7 +119,7 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().person().name().firstName(), setId));
-        new TenantDatasetAccessRule().applyRule(criteria);
+        new CustomerDatasetAccessRule().applyRule(criteria);
 
         List<Customer> r = Persistence.service().query(criteria);
         Assert.assertEquals("should not find building", 0, r.size());

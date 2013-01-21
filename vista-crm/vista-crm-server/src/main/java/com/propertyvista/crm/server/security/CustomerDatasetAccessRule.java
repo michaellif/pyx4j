@@ -20,7 +20,7 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.Customer;
 
-public class TenantDatasetAccessRule implements DatasetAccessRule<Customer> {
+public class CustomerDatasetAccessRule implements DatasetAccessRule<Customer> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Customer> criteria) {
