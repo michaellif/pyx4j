@@ -15,7 +15,6 @@ package com.propertyvista.yardi.services;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -27,13 +26,7 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.resident.Detail;
-import com.yardi.entity.resident.Payment;
-import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.RTCustomer;
-import com.yardi.entity.resident.RTServiceTransactions;
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.entity.resident.Transactions;
 import com.yardi.ws.operations.AddReceiptsToBatch;
 import com.yardi.ws.operations.AddReceiptsToBatchResponse;
 import com.yardi.ws.operations.OpenReceiptBatch;
@@ -72,27 +65,28 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         long batchId = openReceiptBatch(client, yc, "prvista1");
         //String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", YardiSystemBatchesService.class));
 
-        ResidentTransactions residentTransactions = new ResidentTransactions();
-        Property property = new Property();
-        residentTransactions.getProperty().add(property);
-        RTCustomer customer = new RTCustomer();
-        property.getRTCustomer().add(customer);
-        RTServiceTransactions st = new RTServiceTransactions();
-        customer.setRTServiceTransactions(st);
-        Transactions transactions = new Transactions();
-        st.getTransactions().add(transactions);
-        Payment payment = new Payment();
-        payment.setType("Other");
-        transactions.setPayment(payment);
-        Detail detail = new Detail();
-
-        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06).getTime());
-        detail.setCustomerID("t0005529");
-        detail.setPaidBy("Tenant");
-        detail.setAmount("2626.17");
-        detail.setComment("test pay2");
-        detail.setPropertyPrimaryID("prvista1");
-        payment.setDetail(detail);
+        ResidentTransactions residentTransactions = new YardiPaymentProcessor().getAllPaymentTransactions();
+//                new ResidentTransactions();
+//        Property property = new Property();
+//        residentTransactions.getProperty().add(property);
+//        RTCustomer customer = new RTCustomer();
+//        property.getRTCustomer().add(customer);
+//        RTServiceTransactions st = new RTServiceTransactions();
+//        customer.setRTServiceTransactions(st);
+//        Transactions transactions = new Transactions();
+//        st.getTransactions().add(transactions);
+//        Payment payment = new Payment();
+//        payment.setType("Other");
+//        transactions.setPayment(payment);
+//        Detail detail = new Detail();
+//
+//        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06).getTime());
+//        detail.setCustomerID("t0005529");
+//        detail.setPaidBy("Tenant");
+//        detail.setAmount("2626.17");
+//        detail.setComment("test pay2");
+//        detail.setPropertyPrimaryID("prvista1");
+//        payment.setDetail(detail);
 
         String xml = MarshallUtil.marshall(residentTransactions);
         addReceiptsToBatch(client, yc, batchId, xml);

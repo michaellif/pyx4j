@@ -13,9 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.resident.Detail;
 import com.yardi.entity.resident.Payment;
@@ -49,13 +46,13 @@ public class YardiPaymentProcessor {
     }
 
     // TODO add payment reversals
-    public List<ResidentTransactions> getAllPaymentTransactions() {
+    public ResidentTransactions getAllPaymentTransactions() {
         EntityQueryCriteria<YardiPayment> allPayments = EntityQueryCriteria.create(YardiPayment.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
         allPayments.asc(allPayments.proto().billingAccount().lease().unit().building());
         allPayments.asc(allPayments.proto().billingAccount().lease());
 
-        ResidentTransactions rt = new ResidentTransactions();
+        ResidentTransactions paymentTransactions = new ResidentTransactions();
         Building building = null;
         Property property = null;
         RTCustomer customer = null;
@@ -64,7 +61,7 @@ public class YardiPaymentProcessor {
             if (!_bld.getPrimaryKey().equals(building.getPrimaryKey())) {
                 building = _bld;
                 property = getProperty(building);
-                rt.getProperty().add(property);
+                paymentTransactions.getProperty().add(property);
                 customer = null;
             }
             Lease lease = yp.billingAccount().lease();
@@ -80,8 +77,6 @@ public class YardiPaymentProcessor {
             yp.claimed().setValue(true);
             Persistence.service().persist(yp);
         }
-        List<ResidentTransactions> paymentTransactions = new ArrayList<ResidentTransactions>();
-        paymentTransactions.add(rt);
         return paymentTransactions;
     }
 
