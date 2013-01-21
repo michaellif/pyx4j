@@ -58,7 +58,7 @@ public class YardiPaymentProcessor {
         RTCustomer customer = null;
         for (YardiPayment yp : Persistence.service().query(allPayments)) {
             Building _bld = yp.billingAccount().lease().unit().building();
-            if (!_bld.getPrimaryKey().equals(building.getPrimaryKey())) {
+            if (building == null || !building.getPrimaryKey().equals(_bld.getPrimaryKey())) {
                 building = _bld;
                 property = getProperty(building);
                 paymentTransactions.getProperty().add(property);
