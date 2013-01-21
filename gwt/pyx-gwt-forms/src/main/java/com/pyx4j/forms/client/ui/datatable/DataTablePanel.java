@@ -129,7 +129,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setDelActionCommand(Command delActionCommand) {
         topActionsBar.getToolbar().insertItem(
-                delButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Delete Checked"), delActionCommand), 1);
+                delButton = new Button(new Image(EntityFolderImages.INSTANCE.delButton().hover()), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);
