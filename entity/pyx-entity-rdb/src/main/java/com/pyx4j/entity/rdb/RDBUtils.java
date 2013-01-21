@@ -204,7 +204,7 @@ public class RDBUtils implements Closeable {
                 throw new Error("Unsupported dialect");
             }
             ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-            log.info("Database '{}' recreated in {}", ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
+            log.info("Schema '{}' recreated in {}", schema, TimeUtils.secSince(start));
         } catch (SQLException e) {
             throw new Error(e);
         } finally {
