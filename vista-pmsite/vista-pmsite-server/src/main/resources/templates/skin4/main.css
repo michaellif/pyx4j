@@ -106,11 +106,10 @@ select {
 }
 
 #siteTitle {
-	margin: 10px 180px;
+	/*float:left;*/
+	margin:10px;
 	position: absolute;
-	overflow: hidden;
-	width: 600px;
-	text-align: center;
+	left: 45%;
 }
 
 #siteTitle a:hover {
@@ -120,16 +119,15 @@ select {
 	height:70px;
 }
 #noLogo {
-	font-size:35px;
+	font-size:40px;
 	line-height:80px;
-	white-space:nowrap;
+	margin-right:20px;
 }
 
 #siteAuth {
 	float:right;
 	margin:10px;
 }
-
 #siteAuth .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
@@ -404,8 +402,9 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-	background-color:${object2_10};
-	*background-color: #FFFFFF;
+	/*background-color:${object2_10};
+	*background-color: #FFFFFF;*/
+	background-color: #fff;
 }
 
 .vista-pmsite-main .content{

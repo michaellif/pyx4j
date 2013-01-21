@@ -54,7 +54,7 @@
 	background: ${object1_100};
 	color: ${object1_10};
 	cursor: pointer;
-	width: 76px;
+	width: auto;
 	height: 42px;
 	display:block;
 	float: right;
@@ -129,7 +129,7 @@
 .advancedSearchWideWrap .searchCommonBox {
 	_clear:both;
 	float:left;
-	padding: 0 80px;
+	padding: 0 0 0 80px;
 	*padding-bottom: 8px;
 	margin-top:30px;
 }

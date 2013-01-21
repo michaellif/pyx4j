@@ -4,15 +4,21 @@
 .vista-pmsite-unitDetailsPage .vista-pmsite-mainWrap {
 	width: 960px;
 	margin: 0 auto;
+	*padding-bottom: 20px;
 	overflow: hidden;
     background: #fff;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
 	display: inline-block;
-	width: 300px;
+	width: 260px;
+	min-height: 600px;
+	margin: 0 20px 20px 0;
+	background-color: #E8E8E8;
 	vertical-align: top;
 	float: left;
 	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	display: inline-block;
@@ -27,6 +33,7 @@
 .vista-pmsite-unitDetailsPage .apartmentDetailsWrap {
 	min-height: 550px;
 	border-top: 5px solid #000000;
+	background-color: #fff;
 }
 
 .vista-pmsite-sidebarWrap {

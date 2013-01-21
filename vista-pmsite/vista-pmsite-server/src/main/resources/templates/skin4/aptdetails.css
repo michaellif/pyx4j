@@ -8,13 +8,15 @@
     background: ${object2_10};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
+	background-color:${object2_10};
+	margin: 0 20px;
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
 	float:left;
-	width: 318px;
+	/*width: 318px;*/
 	vertical-align: top;
-	padding:20px 16px;
+	padding:20px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	border-top: 1px #000000;
