@@ -63,7 +63,6 @@ public interface AptUnit extends BuildingElement, PolicyNode {
 
     @Detached
     @NotNull
-    @JoinColumn
     @MemberColumn(modificationAdapters = { FloorplanCountersUpdateAdapter.class })
     @Indexed(group = { "b,11", "f" })
     Floorplan floorplan();

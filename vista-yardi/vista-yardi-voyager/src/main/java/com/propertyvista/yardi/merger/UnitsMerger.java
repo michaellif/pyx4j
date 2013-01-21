@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,11 +15,9 @@ package com.propertyvista.yardi.merger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -43,39 +41,46 @@ public class UnitsMerger {
     private final Map<Key, Building> buildingsById = new HashMap<Key, Building>();
 
     public List<AptUnit> merge(Building building, List<AptUnit> importedList, List<AptUnit> existingList) {
-        Set<AptUnit> merged = new HashSet<AptUnit>();
-        merged.addAll(existingList);
+        List<AptUnit> mergedList = new ArrayList<AptUnit>();
+        mergedList.addAll(existingList);
 
         Map<String, AptUnit> existingUnitsByNumber = unitsByNumber(existingList);
 
         for (AptUnit imported : importedList) {
+            boolean sucsess = false;
             try {
+                AptUnit merged;
+                // merge unit data
                 AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
-                if (existing == null) {
-                    imported.building().set(building);
+                if (existing != null) {
+                    merged = merge(imported, existing);
+                } else {
+                    merged = imported;
+                    merged.building().set(building);
                 }
-
-                Floorplan floorplan = getExistingFloorplan(building, imported.floorplan());
-                if (floorplan == null) {
+                // merge floorplan
+                Floorplan floorplanExisting = getExistingFloorplan(building, imported.floorplan());
+                if (floorplanExisting != null) {
+                    merged.floorplan().set(floorplanExisting);
+                } else {
+                    //set floorplan for new unit
                     imported.floorplan().building().set(building);
                     Persistence.service().persist(imported.floorplan());
 
                     building.floorplans().add(imported.floorplan());
-                    Persistence.service().persist(building);
-                }
 
-                //set existing floorplan for new unit
-                if (existing == null && floorplan != null) {
-                    imported.floorplan().set(floorplan);
+                    merged.floorplan().set(imported.floorplan());
                 }
-
-                merged.add(existing != null ? merge(imported, existing) : imported);
-            } catch (Exception e) {
-                log.error(String.format("Error during imported unit %s merging", imported.info().number().getValue()), e);
+                mergedList.add(merged);
+                sucsess = true;
+            } finally {
+                if (!sucsess) {
+                    log.error("Error during imported unit {} merging", imported.info().number().getValue());
+                }
             }
         }
 
-        return new ArrayList<AptUnit>(merged);
+        return mergedList;
     }
 
     private Floorplan getExistingFloorplan(Building building, Floorplan imported) {
@@ -101,9 +106,6 @@ public class UnitsMerger {
 
         //info
         merge(imported.info(), existing.info());
-
-        //floorplan
-        //merge(imported.floorplan(), existing.floorplan());
 
         // marketing
         Persistence.service().retrieve(existing.marketing());
