@@ -101,6 +101,7 @@ import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
+import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
@@ -350,6 +351,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectPortfolioListService.class));
+        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectCrmRoleListService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
