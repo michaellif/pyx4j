@@ -40,8 +40,8 @@ public class RSLeaseServiceTest extends RSOapiTestBase {
     }
 
     @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    public void initDB() throws Exception {
+        super.initDB();
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
