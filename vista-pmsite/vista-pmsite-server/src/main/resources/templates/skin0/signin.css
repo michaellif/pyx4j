@@ -32,13 +32,14 @@
 	padding:20px;
 	background-color:white;
 	min-height:300px;
-	padding-left:200px;
+	padding-left:260px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap input[type=submit] {
     background: url("images/btn.png") no-repeat;
+    background-size: 100% 64px;
     border: none;
-    width: 128px;
+    min-width: 128px;
     height: 32px;
     padding: 5px 0;
     color: #000000;
@@ -49,7 +50,11 @@
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput {
-	padding:20px 0 0 60px;
+	padding: 10px 0;
+}
+
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint {
+	padding-top: 40px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput:hover input[type=submit]{
@@ -69,6 +74,13 @@
 	margin-right:250px;
 	text-decoration:underline;
 }
+
+.vista-pmsite-signInPage .signInFormWrap .registration {
+	float:right;
+	margin-right:250px;
+	text-decoration:underline;
+} 
+
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint a {
 	color:#777;
 	font-weight:bold;
