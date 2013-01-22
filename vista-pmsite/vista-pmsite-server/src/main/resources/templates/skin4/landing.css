@@ -1,8 +1,8 @@
 .vista-pmsite-contentWrap {
 	margin: 0px auto 0px;
-	width: 960px;
+	width: 920px;
 	background: #fff;
-	/* padding: 0 20px 20px 20px; */
+	padding: 0 20px 20px 20px;
 }
 
 .vista-pmsite-content {
@@ -38,7 +38,6 @@
     background-size: 620px 375px;
     height: 375px;
     width: 920px;
-    margin-left: 20px;
     margin-bottom: 30px;
 }
 
@@ -120,7 +119,6 @@
 .vista-pmsite-sidebar {
 	float: left;
 	width:280px;
-	margin-left: 20px;
 	border-top: 1px solid #000000;
 }
 
@@ -130,7 +128,6 @@
 	position: relative;
 	background: ${bgC0lor_100};
 	display:inline-block;
-	margin-right: 20px;
 }
 
 .testimBox {
@@ -138,7 +135,6 @@
 	float: left;
 	overflow:hidden;
 	width: 100%;
-	padding-bottom: 20px;
 }
 
 .testimBox .infobox_header {
@@ -152,7 +148,7 @@
 
 .testimBox .infobox_decor {
 	float: right;
-	max-height: 250px;
+	max-height: 220px;
 }
 
 .testimBox .infobox_decor:first-child {
@@ -173,7 +169,7 @@
 
 .testimBox .infobox_content {
 	width: 255px;
-	height: 150px;
+/*	height: 150px;*/
 	padding: 20px;
 	background: #CCCCCC;
 	font-family: monospace;
@@ -199,7 +195,7 @@
 .newsBox .date {
 	color: #828282;
 	font-size: 12px;
-	margin: 15px 0 2px 0;
+	margin: 12px 0 4px 0;
 }
 
 .newsBox .headline {
@@ -210,6 +206,7 @@
     font-size: 12pt;
     margin-bottom: 5px;
     display: block;
+    line-height: 100%;
 }
 
 .newsBox .text {
@@ -279,7 +276,6 @@
 
 .address {
 	display: inline-block;
-	margin: 12px 0;
 	color: #000000;
 }
 

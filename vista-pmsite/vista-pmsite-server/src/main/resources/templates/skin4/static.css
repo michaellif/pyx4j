@@ -13,7 +13,7 @@
 	width: 920px;
 	margin: 0 auto;
 	overflow: hidden;
-	padding: 0 20px;
+	padding: 0 20px 20px 20px;
 	background: #fff;
 }
 
@@ -68,11 +68,10 @@
 
 
 .vista-pmsite-staticPage .vista-pmsite-main .content {
-	min-height: 400px;
 	color: black;
 	background: white;
 	overflow: hidden;
-	padding: 30px 0;
+	padding-top: 30px;
 	border-top: 5px solid #000000;
 	text-align: justify;
 }
@@ -90,13 +89,17 @@
 }
 
 .vista-pmsite-staticPage .content  h2 {
-	font-size: 18px;
-	line-height: 20px;
-	padding: 0 0 25px;
+    font-family: monospace;
+    font-size: 14pt;
+    font-weight: bold;	
+    line-height: 20px;
+	padding-bottom: 15px;
 }
 
 .vista-pmsite-staticPage .content  h3 {
-	font-size: 16px;
+	font-family: monospace;
+    font-size: 13pt;
+    font-weight: bold;
 	line-height: 20px;
 	padding: 0 0 25px;
 }
@@ -114,4 +117,35 @@
 .vista-pmsite-staticPage .content ul,.staticMain .content ol {
 	margin: 0;
 	padding: 0 0 25px 25px;
+}
+
+.vista-pmsite-staticPage .testimItem {
+    background-color: #CCCCCC;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+
+.vista-pmsite-staticPage .testimItem .name {
+	font-family: monospace;
+    font-size: 12pt;
+    text-align: right;
+}
+
+.vista-pmsite-staticPage .newsItem {
+    padding-bottom: 20px;
+}
+
+.vista-pmsite-staticPage .newsItem .date {
+    color: #999999;
+}
+
+.vista-pmsite-staticPage .newsItem .headline {
+    font-family: monospace;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.vista-pmsite-staticPage .newsItem .text {
+    padding: 5px 0;
 }

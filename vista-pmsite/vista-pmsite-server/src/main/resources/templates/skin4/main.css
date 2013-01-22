@@ -81,8 +81,6 @@ a:hover {
 }
 
 select {
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	color: #999999;
 	border: 1px solid #000000;
 }
@@ -399,8 +397,4 @@ ul.footer_locations li {
 
 .vista-pmsite-sidebarWrap {
 	background-color: #fff;
-}
-
-.vista-pmsite-main .content{
-	background-color:${object2_100};	
 }
