@@ -28,7 +28,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.admin.domain.scheduler.RunData;
+import com.propertyvista.admin.domain.scheduler.TriggerPmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.upgrade.VistaUpgrade;
@@ -94,8 +96,19 @@ public class PmcFacadeImpl implements PmcFacade {
             Persistence.service().delete(criteria);
         }
         {
+            EntityQueryCriteria<TriggerPmc> criteria = EntityQueryCriteria.create(TriggerPmc.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            Persistence.service().delete(criteria);
+        }
+        {
             EntityQueryCriteria<PmcAccountNumbers> criteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            Persistence.service().delete(criteria);
+        }
+
+        {
+            EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount().pmc(), pmc));
             Persistence.service().delete(criteria);
         }
 
