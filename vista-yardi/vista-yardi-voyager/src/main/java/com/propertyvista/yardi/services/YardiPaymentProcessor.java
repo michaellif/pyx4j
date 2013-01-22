@@ -61,7 +61,7 @@ public class YardiPaymentProcessor {
                             continue;
                         }
                         Payment payment = tr.getPayment();
-                        // if it's our payment returning back (the transactionID will match the primary key), remove the original
+                        // if it's our payment returning back (the DocumentNumber will match the primary key), remove the original
                         String keyStr = payment.getDetail().getDocumentNumber();
                         if (keyStr != null && keyStr.length() > 0) {
                             Key ypKey = new Key(keyStr);
