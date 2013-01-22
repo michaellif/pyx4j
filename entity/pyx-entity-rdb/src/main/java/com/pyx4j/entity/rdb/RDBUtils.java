@@ -170,6 +170,7 @@ public class RDBUtils implements Closeable {
                 throw new Error("Unsupported dialect");
             }
             ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetConnectionPool();
             log.info("Database '{}' recreated in {}", ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
         } catch (SQLException e) {
             throw new Error(e);
@@ -204,6 +205,7 @@ public class RDBUtils implements Closeable {
                 throw new Error("Unsupported dialect");
             }
             ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+            ((EntityPersistenceServiceRDB) Persistence.service()).resetConnectionPool();
             log.info("Schema '{}' recreated in {}", schema, TimeUtils.secSince(start));
         } catch (SQLException e) {
             throw new Error(e);

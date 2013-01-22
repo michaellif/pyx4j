@@ -30,5 +30,7 @@ public interface ConnectionPool {
 
     public DataSource getAministrationDataSource();
 
+    public void resetConnectionPool();
+
     public void close() throws Exception;
 }

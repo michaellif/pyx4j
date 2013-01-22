@@ -91,14 +91,15 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         }
 
         {
-            dataSourceAministration = DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(), configuration.dbAdministrationPassword());
+            dataSourceAministration = DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
+                    configuration.dbAdministrationPassword());
         }
         singleInstanceCreated = true;
     }
 
     private ComboPooledDataSource createDataSource(Configuration cfg) throws Exception {
         ComboPooledDataSource dataSource = new ComboPooledDataSource(false);
-        dataSource.setDriverClass(cfg.driverClass()); // load the jdbc driver            
+        dataSource.setDriverClass(cfg.driverClass()); // load the jdbc driver
         dataSource.setJdbcUrl(cfg.connectionUrl());
         dataSource.setUser(cfg.userName());
         dataSource.setPassword(cfg.password());
@@ -132,6 +133,12 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     @Override
     public DataSource getAministrationDataSource() {
         return dataSourceAministration;
+    }
+
+    @Override
+    public void resetConnectionPool() {
+        dataSource.resetPoolManager(false);
+        dataSourceBackgroundProcess.resetPoolManager(false);
     }
 
     @Override

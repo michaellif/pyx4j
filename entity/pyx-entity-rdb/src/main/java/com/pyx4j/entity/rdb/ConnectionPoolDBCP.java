@@ -102,6 +102,11 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     }
 
     @Override
+    public void resetConnectionPool() {
+        // TODO implement
+    }
+
+    @Override
     public void close() throws Exception {
         try {
             connectionPool.close();

@@ -176,6 +176,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
+    public void resetConnectionPool() {
+        connectionProvider.resetConnectionPool();
+    }
+
+    @Override
     public void dispose() {
         connectionProvider.dispose();
     }

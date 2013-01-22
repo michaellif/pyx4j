@@ -26,6 +26,8 @@ public interface IEntityPersistenceServiceExt {
 
     public void pingConnection();
 
+    public void resetConnectionPool();
+
     public void dispose();
 
     public void deregister();

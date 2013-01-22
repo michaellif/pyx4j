@@ -239,4 +239,8 @@ public class ConnectionProvider {
         }
     }
 
+    public void resetConnectionPool() {
+        connectionPool.resetConnectionPool();
+    }
+
 }
