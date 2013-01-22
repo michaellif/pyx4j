@@ -35,6 +35,7 @@ import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -92,6 +93,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         log.info(xml);
         addReceiptsToBatch(client, yc, batchId, xml);
         postReceiptBatch(client, yc, batchId);
+        Persistence.service().commit();
     }
 
     private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
