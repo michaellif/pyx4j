@@ -61,8 +61,8 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.v
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureFaqView;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureFaqViewImpl;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
@@ -131,8 +131,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantInsuranceByOtherProviderUpdateViewImpl());
             } else if (ProvideTenantInsuranceView.class.equals(type)) {
                 map.put(type, new ProvideTenantInsuranceViewImpl());
-            } else if (TenantSureFaqView.class.equals(type)) {
-                map.put(type, new TenantSureFaqViewImpl());
+            } else if (TermsView.class.equals(type)) {
+                map.put(type, new TermsViewImpl());
             } else if (TenantSureAboutView.class.equals(type)) {
                 map.put(type, new TenantSureAboutViewImpl());
             } else if (TenantInsuranceCoveredByOtherTenantView.class.equals(type)) {

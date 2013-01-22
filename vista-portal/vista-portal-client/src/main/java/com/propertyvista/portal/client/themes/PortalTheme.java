@@ -38,8 +38,8 @@ import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureFaqViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 
@@ -455,20 +455,20 @@ public class PortalTheme extends VistaTheme {
             addStyle(style);
         }
 
-        // TenantSure Faq View
+        // TenantSure Faq Styles
         {
-            Style style = new Style("." + TenantSureFaqViewImpl.Styles.TenantSureFaqQnA.name());
+            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqQnA.name());
             style.addProperty("margin-bottom", "20px");
             addStyle(style);
         }
         {
-            Style style = new Style("." + TenantSureFaqViewImpl.Styles.TenantSureFaqQ.name());
+            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqQ.name());
             style.addProperty("font-weight", "bold");
             addStyle(style);
         }
 
         {
-            Style style = new Style("." + TenantSureFaqViewImpl.Styles.TenantSureFaqA.name());
+            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqA.name());
             style.addProperty("text-align", "justify");
             addStyle(style);
         }

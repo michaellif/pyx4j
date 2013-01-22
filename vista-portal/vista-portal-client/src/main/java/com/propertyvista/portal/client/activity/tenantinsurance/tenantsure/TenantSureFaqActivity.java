@@ -20,7 +20,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureFaqView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 
@@ -28,22 +29,27 @@ public class TenantSureFaqActivity extends AbstractActivity {
 
     private final TenantSureManagementService service;
 
-    private final TenantSureFaqView view;
+    private final TermsView view;
 
     public TenantSureFaqActivity() {
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
-        view = PortalViewFactory.instance(TenantSureFaqView.class);
+        view = PortalViewFactory.instance(TermsView.class);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        service.getFaq(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                view.populate(result);
-                panel.setWidget(view);
-            }
-        });
+        if (false) {
+            // for now we keep faq in the resource
+            service.getFaq(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        }
+        view.populate(TenantSureResources.INSTANCE.faq().getText());
+        panel.setWidget(view);
     }
 
 }

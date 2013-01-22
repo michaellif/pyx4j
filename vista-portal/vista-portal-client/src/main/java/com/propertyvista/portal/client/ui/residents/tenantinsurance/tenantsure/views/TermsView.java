@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface TenantSureFaqView extends IsWidget {
+public interface TermsView extends IsWidget {
 
     void populate(String tenantSureFaqHtml);
 

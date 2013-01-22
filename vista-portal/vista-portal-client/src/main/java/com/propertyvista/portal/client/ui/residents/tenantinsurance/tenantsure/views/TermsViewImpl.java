@@ -18,24 +18,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.commons.css.IStyleName;
+public class TermsViewImpl extends Composite implements TermsView {
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
+    private final Label terms;
 
-public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqView {
+    public TermsViewImpl() {
+        terms = new Label();
+        terms.setSize("100%", "100%");
 
-    public enum Styles implements IStyleName {
-        TenantSureFaqQnA, TenantSureFaqQ, TenantSureFaqA
-    }
-
-    private final Label faq;
-
-    public TenantSureFaqViewImpl() {
-        faq = new Label();
-        faq.setSize("100%", "100%");
-        faq.getElement().setInnerHTML(TenantSureResources.INSTANCE.faq().getText());
-
-        ScrollPanel scrollPanel = new ScrollPanel(faq);
+        ScrollPanel scrollPanel = new ScrollPanel(terms);
         scrollPanel.getElement().getStyle().setPadding(20, Unit.PX);
 
         initWidget(scrollPanel);
@@ -43,7 +34,7 @@ public class TenantSureFaqViewImpl extends Composite implements TenantSureFaqVie
 
     @Override
     public void populate(String tenantSureFaqHtml) {
-        // not requried since right now FAQ is loaded from resource
+        terms.getElement().setInnerHTML(tenantSureFaqHtml);
     }
 
 }

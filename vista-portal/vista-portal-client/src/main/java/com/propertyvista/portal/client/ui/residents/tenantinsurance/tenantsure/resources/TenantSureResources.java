@@ -7,6 +7,8 @@ import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.resources.client.TextResource;
 
+import com.pyx4j.commons.css.IStyleName;
+
 public interface TenantSureResources extends ClientBundleWithLookup {
 
     public static TenantSureResources INSTANCE = GWT.create(TenantSureResources.class);
@@ -22,11 +24,20 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("pre-authorized-payment-disclaimer.html")
     TextResource preAuthorizedPaymentDisclaimer();
 
+    public enum FaqStyles implements IStyleName {
+        TenantSureFaqQnA, TenantSureFaqQ, TenantSureFaqA
+    }
+
     @Source("faq.html")
     TextResource faq();
 
+    public static final String PRIVACY_POLICY_ANCHOR_ID = "PrivacyPolicy";
+
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
+
+    @Source("privacy-policy.html")
+    TextResource privacyPolicy();
 
     @Source("tenant-sure-contact-info.html")
     TextResource contactInfo();
