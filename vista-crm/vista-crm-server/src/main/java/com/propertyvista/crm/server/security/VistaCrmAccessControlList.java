@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.domain.security.AuditRecord;
+import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
@@ -388,6 +389,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteDescriptorCrudService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceCrudService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceUploadService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(CityIntroPageCrudService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmRoleCrudService.class));
         grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(TaxCrudService.class));
