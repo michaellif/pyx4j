@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.ICollection;
@@ -37,34 +38,61 @@ public class EntityValidator {
 
     private static final I18n i18n = I18n.get(EntityValidator.class);
 
+    public static class DefaultValidationMesageFormater implements ValidationMesageFormater {
+
+        @Override
+        public String format(IEntity entity, IObject<?> member) {
+            return member.getMeta().getCaption();
+        }
+
+    };
+
+    public static class StringViewValidationMesageFormater implements ValidationMesageFormater {
+
+        @Override
+        public String format(IEntity entity, IObject<?> member) {
+            String str = entity.getStringView();
+            if (CommonsStringUtils.isStringSet(str)) {
+                return entity.getEntityMeta().getCaption() + "(" + str + ")." + member.getMeta().getCaption();
+            } else {
+                return entity.getEntityMeta().getCaption() + "." + member.getMeta().getCaption();
+            }
+        }
+
+    };
+
     public static void validate(IEntity entity) {
+        validate(entity, new DefaultValidationMesageFormater());
+    }
+
+    public static void validate(IEntity entity, ValidationMesageFormater formater) {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             IObject<?> member = entity.getMember(memberName);
             if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
-                throw new RuntimeException(i18n.tr("{0} is required", member.getMeta().getCaption()));
+                throw new RuntimeException(i18n.tr("{0} is required", formater.format(entity, member)));
             }
             if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
                 String value = (String) member.getValue();
                 if ((value != null) && (value.length() > memberMeta.getLength())) {
-                    throw new RuntimeException(i18n.tr("Length of member {0}  is greater then required", member.getMeta().getCaption()));
+                    throw new RuntimeException(i18n.tr("Length of member {0} is greater then required", formater.format(entity, member)));
                 }
             }
 
         }
     }
 
-    public static void validateRecursively(IEntity entity) {
-        validateRecursively(entity, new HashSet<IEntity>());
+    public static void validateRecursively(IEntity entity, ValidationMesageFormater formater) {
+        validateRecursively(entity, formater, new HashSet<IEntity>());
     }
 
-    private static void validateRecursively(IEntity entity, Set<IEntity> dejaVu) {
+    private static void validateRecursively(IEntity entity, ValidationMesageFormater formater, Set<IEntity> dejaVu) {
         if (dejaVu.contains(entity)) {
             return;
         }
         dejaVu.add(entity);
-        EntityValidator.validate(entity);
+        EntityValidator.validate(entity, formater);
         EntityMeta em = entity.getEntityMeta();
 
         for (String memberName : em.getMemberNames()) {
@@ -73,10 +101,10 @@ public class EntityValidator {
             case Entity:
                 if (member.isNull()) {
                     if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
-                        throw new RuntimeException(i18n.tr("{0} is required", member.getMeta().getCaption()));
+                        throw new RuntimeException(i18n.tr("{0} is required", formater.format(entity, member)));
                     }
                 } else {
-                    EntityValidator.validateRecursively(((IEntity) member).cast(), dejaVu);
+                    EntityValidator.validateRecursively(((IEntity) member).cast(), formater, dejaVu);
                 }
                 break;
             case EntityList:
@@ -85,7 +113,7 @@ public class EntityValidator {
                 Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
                 while (lit.hasNext()) {
                     IEntity ent = lit.next();
-                    EntityValidator.validateRecursively(ent.cast(), dejaVu);
+                    EntityValidator.validateRecursively(ent.cast(), formater, dejaVu);
                 }
                 break;
             default:
