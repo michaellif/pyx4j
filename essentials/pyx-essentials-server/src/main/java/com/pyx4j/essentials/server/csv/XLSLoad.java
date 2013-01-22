@@ -119,7 +119,7 @@ public class XLSLoad {
                 short cells = row.getLastCellNum();
                 for (int cellnum = 0; cellnum < cells; cellnum++) {
                     Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
-                    values.add(getCellStringValue(cell));
+                    values.add(getCellStringValue(cellnum, cell));
                 }
                 if (header) {
                     if (reciver.onHeader(values.toArray(new String[values.size()]))) {
@@ -138,7 +138,7 @@ public class XLSLoad {
         }
     }
 
-    protected String getCellStringValue(Cell cell) {
+    protected String getCellStringValue(int cellnum, Cell cell) {
         if (cell == null) {
             return "";
         }
@@ -149,7 +149,7 @@ public class XLSLoad {
             return cell.getStringCellValue();
         case Cell.CELL_TYPE_NUMERIC:
             if (DateUtil.isCellDateFormatted(cell)) {
-                return new SimpleDateFormat(DATE_FORMAT_PATTERN).format(cell.getDateCellValue());
+                return getDateCellStringValue(cellnum, cell);
             } else {
                 String format = cell.getCellStyle().getDataFormatString();
                 // MS Excel 2010 accounting
@@ -168,5 +168,9 @@ public class XLSLoad {
             return "";
         }
         return null;
+    }
+
+    protected String getDateCellStringValue(int cellnum, Cell cell) {
+        return new SimpleDateFormat(DATE_FORMAT_PATTERN).format(cell.getDateCellValue());
     }
 }
