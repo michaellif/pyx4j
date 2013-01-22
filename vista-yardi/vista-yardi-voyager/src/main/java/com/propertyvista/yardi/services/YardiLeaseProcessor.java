@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -83,10 +82,19 @@ public class YardiLeaseProcessor {
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
 
+        Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
+        lease.leaseId().setValue(rtCustomer.getCustomerID());
         lease.type().setValue(ServiceType.residentialUnit);
 
+        // set unit:
+        if (unit.getPrimaryKey() != null) {
+            leaseFacade.setUnit(lease, unit);
+            // TODO double into BigDecimal...might need to be handled differently
+            leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
+        }
+
+        // set dates: 
         lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
         lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
         if (yardiLease.getExpectedMoveInDate() != null) {
@@ -95,15 +103,17 @@ public class YardiLeaseProcessor {
         if (yardiLease.getActualMoveIn() != null) {
             lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
         }
-// add price
 
+// add price TODO ??
+
+        // add tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
             Customer customer = EntityFactory.create(Customer.class);
-            Person person = EntityFactory.create(Person.class);
-            person.name().firstName().setValue(yardiCustomer.getName().getFirstName());
-            person.name().lastName().setValue(yardiCustomer.getName().getLastName());
-            person.name().middleName().setValue(yardiCustomer.getName().getMiddleName());
-            customer.person().set(person);
+
+            customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
+            customer.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
+            customer.person().name().middleName().setValue(yardiCustomer.getName().getMiddleName());
+
             LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
             tenantInLease.leaseParticipant().customer().set(customer);
             if (rtCustomer.getCustomerID().equals(yardiCustomer.getCustomerID()) && yardiCustomer.getLease().isResponsibleForLease()) {
@@ -112,18 +122,17 @@ public class YardiLeaseProcessor {
                 tenantInLease.role().setValue(
                         yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.CoApplicant : LeaseTermParticipant.Role.Dependent);
             }
+
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
-        lease = leaseFacade.init(lease);
-        if (unit.getPrimaryKey() != null) {
-            leaseFacade.setUnit(lease, unit);
-            // TODO double into BigDecimal...might need to be handled differently
-            leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
-        }
-        lease.leaseId().setValue(rtCustomer.getCustomerID());
+        // almost done:
         lease = leaseFacade.persist(lease);
+
+        // activate:
+        leaseFacade.approve(lease, null, null);
         leaseFacade.activate(lease);
+
         log.info("Lease {} in building {} successfully updated", rtCustomer.getCustomerID(), propertyCode);
     }
 

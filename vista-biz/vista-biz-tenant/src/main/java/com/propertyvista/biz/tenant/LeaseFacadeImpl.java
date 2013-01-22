@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -282,14 +281,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
-        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
-        if (!validationFailures.isEmpty()) {
-            List<String> errorMessages = new ArrayList<String>();
-            for (ValidationFailure failure : validationFailures) {
-                errorMessages.add(failure.getMessage());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
+            if (!validationFailures.isEmpty()) {
+                List<String> errorMessages = new ArrayList<String>();
+                for (ValidationFailure failure : validationFailures) {
+                    errorMessages.add(failure.getMessage());
+                }
+                String errorsRoster = StringUtils.join(errorMessages, ",\n");
+                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
             }
-            String errorsRoster = StringUtils.join(errorMessages, ",\n");
-            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
 
         // memorize entry LeaseStatus:
@@ -312,14 +313,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // Billing-related stuff:
         BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
 
-        Bill bill = billingFacade.runBilling(lease);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            Bill bill = billingFacade.runBilling(lease);
 
-        if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
-            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
-        }
+            if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
+                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
+            }
 
-        if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-            billingFacade.confirmBill(bill);
+            if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
+                billingFacade.confirmBill(bill);
+            }
         }
 
         switch (leaseStatus) {
@@ -342,11 +345,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
             break;
 
         case ExistingLease:
-            // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
-            Date curDate = Persistence.service().getTransactionSystemTime();
-            LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
-            if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
-                billingFacade.runBilling(lease);
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
+                Bill bill = billingFacade.getLatestBill(lease);
+                LogicalDate curDate = new LogicalDate(Persistence.service().getTransactionSystemTime());
+                LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
+                if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
+                    billingFacade.runBilling(lease);
+                }
             }
 
             ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
