@@ -19,8 +19,11 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermParticipant<?>> extends CompositeEntityValidator<E> {
 
-    public LeaseParticipantInApprovedLeaseValidator(Class<E> entityClassLiteral) {
+    private final boolean yardiIntegrationMode;
+
+    public LeaseParticipantInApprovedLeaseValidator(Class<E> entityClassLiteral, boolean yardiIntegrationMode) {
         super(entityClassLiteral);
+        this.yardiIntegrationMode = yardiIntegrationMode;
     }
 
     @Override
@@ -29,7 +32,9 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermPartici
 
         bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
         bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
-        bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
+        if (!yardiIntegrationMode) {
+            bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
+        }
 
         // Screening is automatically finalized
         if (!ScreeningValidator.screeningIsAutomaticallyFinalized) {

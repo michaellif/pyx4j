@@ -281,16 +281,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
-            if (!validationFailures.isEmpty()) {
-                List<String> errorMessages = new ArrayList<String>();
-                for (ValidationFailure failure : validationFailures) {
-                    errorMessages.add(failure.getMessage());
-                }
-                String errorsRoster = StringUtils.join(errorMessages, ",\n");
-                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
+        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator(VistaFeatures.instance().yardiIntegration()).validate(lease);
+        if (!validationFailures.isEmpty()) {
+            List<String> errorMessages = new ArrayList<String>();
+            for (ValidationFailure failure : validationFailures) {
+                errorMessages.add(failure.getMessage());
             }
+            String errorsRoster = StringUtils.join(errorMessages, ",\n");
+            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
 
         // memorize entry LeaseStatus:
