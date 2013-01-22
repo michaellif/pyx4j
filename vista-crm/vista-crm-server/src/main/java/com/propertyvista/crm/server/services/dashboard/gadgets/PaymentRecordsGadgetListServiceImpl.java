@@ -25,15 +25,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordListService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentRecordListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements PaymentRecordListService {
+public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements PaymentRecordsGadgetListService {
 
-    public PaymentRecordListServiceImpl() {
+    public PaymentRecordsGadgetListServiceImpl() {
         super(PaymentRecord.class, PaymentRecordForReportDTO.class);
     }
 

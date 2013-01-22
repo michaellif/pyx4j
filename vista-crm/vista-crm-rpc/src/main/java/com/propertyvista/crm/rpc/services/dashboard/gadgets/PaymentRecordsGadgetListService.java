@@ -17,6 +17,6 @@ import com.pyx4j.entity.rpc.AbstractListService;
 
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 
-public interface PaymentRecordListService extends AbstractListService<PaymentRecordForReportDTO> {
+public interface PaymentRecordsGadgetListService extends AbstractListService<PaymentRecordForReportDTO> {
 
 }

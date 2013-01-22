@@ -48,7 +48,7 @@ import com.propertyvista.crm.client.ui.gadgets.forms.PaymentRecordsGadgetMetadat
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordListService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
@@ -127,7 +127,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
         lister = new BasicLister<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
         lister.setDataSource(new ListerDataSource<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class, GWT
-                .<PaymentRecordListService> create(PaymentRecordListService.class)));
+                .<PaymentRecordsGadgetListService> create(PaymentRecordsGadgetListService.class)));
         ListerUtils.bind(lister.getDataTablePanel())//@formatter:off
         .columnDescriptors(DEFAULT_COLUMN_DESCRIPTORS)
         .setupable(ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey()))

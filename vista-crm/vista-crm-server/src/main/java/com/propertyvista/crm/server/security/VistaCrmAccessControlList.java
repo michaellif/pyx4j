@@ -88,12 +88,13 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadge
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordListService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStatusListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
@@ -238,7 +239,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MaintenanceGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoticesGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentReportService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordsGadgetListService.class));
 
 // - Building-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Complex.class, EntityPermission.ALL));
@@ -341,6 +342,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(BillPreviewService.class));
 
         grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(AggregatedTransferCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(PaymentRecordListService.class));
 
 // - Service-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Service.class, EntityPermission.ALL));
