@@ -120,8 +120,16 @@ public class PmcCreatorDev {
                     }
                 }
 
-                for (int n = 0; n < 2; n++) {
-                    int lineN = 2 * ordinal + n;
+                // Add one or two (for vista) working accounts.
+                int nWorkingAccounts = 1;
+                if (ordinal == 0) {
+                    nWorkingAccounts = 2;
+                }
+                for (int n = 0; n < nWorkingAccounts; n++) {
+                    int lineN = ordinal + n;
+                    if (ordinal != 0) {
+                        lineN += 1;
+                    }
                     if (companyImport.size() > lineN) {
                         OnboardingMerchantAccountImport imp = companyImport.get(lineN);
                         OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
@@ -153,7 +161,7 @@ public class PmcCreatorDev {
                         merchantAccount.accountNumber().setValue("01234567");
                     }
 
-                    merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
+                    merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " er " + n);
                     merchantAccount.onboardingBankAccountId().setValue("onb_" + pmcName + "e" + n);
                     Persistence.service().persist(merchantAccount);
                 }
