@@ -176,7 +176,7 @@ public class YardiProcessorUtils {
 
         yp.billingAccount().set(account);
         Detail detail = payment.getDetail();
-        yp.amount().setValue(new BigDecimal(detail.getAmountPaid()).negate());
+        yp.amount().setValue(new BigDecimal(detail.getAmount()).negate());
         yp.description().setValue(detail.getDescription());
         yp.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
 
