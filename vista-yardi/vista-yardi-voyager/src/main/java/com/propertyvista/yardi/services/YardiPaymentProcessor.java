@@ -13,36 +13,69 @@
  */
 package com.propertyvista.yardi.services;
 
-import com.yardi.entity.mits.Identification;
-import com.yardi.entity.resident.Detail;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.resident.Payment;
 import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTServiceTransactions;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiPaymentProcessor {
+    private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
-    public enum YardiReversalType {
-        NSF, Chargeback, Adjustment, Other
-    }
-
-    public enum YardiPaymentType {
-        CreditCard, DebitCard, ACH, Check, Cash, MoneyOrder, Other
-    }
-
-    public enum YardiPaymentChannel {
-        Online, Phone, Onsite, Mail, Lockbox, BankBillPayment, Other
+    public void updatePayments(List<ResidentTransactions> allTransactions) {
+        for (ResidentTransactions rt : allTransactions) {
+            for (Property prop : rt.getProperty()) {
+                for (RTCustomer cust : prop.getRTCustomer()) {
+                    log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
+                    // 1. get customer's YardiBillingAccount
+                    YardiBillingAccount account = YardiProcessorUtils.getYardiBillingAccount(cust);
+                    if (account == null) {
+                        try {
+                            Persistence.service().rollback();
+                        } catch (Throwable ignore) {
+                        }
+                        continue;
+                    }
+                    // 2. remove previously received yardi payments
+                    EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
+                    oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));
+                    oldPayments.add(PropertyCriterion.isNull(oldPayments.proto().paymentRecord()));
+                    Persistence.service().delete(oldPayments);
+                    for (Transactions tr : cust.getRTServiceTransactions().getTransactions()) {
+                        if (tr == null || tr.getPayment() == null) {
+                            continue;
+                        }
+                        Payment payment = tr.getPayment();
+                        // if it's our payment returning back (the transactionID will match the primary key), remove the original
+                        Key ypKey = new Key(payment.getDetail().getTransactionID());
+                        EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
+                        origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
+                        origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
+                        origPayment.add(PropertyCriterion.eq(origPayment.proto().id(), ypKey));
+                        Persistence.service().delete(origPayment);
+                        // add new payment transaction
+                        Persistence.service().persist(YardiProcessorUtils.createPayment(account, payment));
+                    }
+                    Persistence.service().commit();
+                }
+            }
+        }
     }
 
     // TODO add payment reversals
@@ -60,76 +93,23 @@ public class YardiPaymentProcessor {
             Building _bld = yp.billingAccount().lease().unit().building();
             if (building == null || !building.getPrimaryKey().equals(_bld.getPrimaryKey())) {
                 building = _bld;
-                property = getProperty(building);
+                property = YardiProcessorUtils.getProperty(building);
                 paymentTransactions.getProperty().add(property);
                 customer = null;
             }
             Lease lease = yp.billingAccount().lease();
             if (customer == null || !customer.getCustomerID().equals(lease.leaseId().getValue())) {
-                customer = getRTCustomer(lease);
+                customer = YardiProcessorUtils.getRTCustomer(lease);
                 customer.setRTServiceTransactions(new RTServiceTransactions());
                 property.getRTCustomer().add(customer);
             }
             Transactions transactions = new Transactions();
-            transactions.setPayment(getPayment(yp));
+            transactions.setPayment(YardiProcessorUtils.getPayment(yp));
             customer.getRTServiceTransactions().getTransactions().add(transactions);
             // mark payment as read
             yp.claimed().setValue(true);
             Persistence.service().persist(yp);
         }
         return paymentTransactions;
-    }
-
-    private Property getProperty(Building building) {
-        Property property = new Property();
-        PropertyID propId = new PropertyID();
-        Identification id = new Identification();
-        id.setPrimaryID(building.propertyCode().getValue());
-        propId.setIdentification(id);
-        property.getPropertyID().add(propId);
-        return property;
-    }
-
-    private RTCustomer getRTCustomer(Lease lease) {
-        RTCustomer customer = new RTCustomer();
-        customer.setCustomerID(lease.leaseId().getValue());
-        return customer;
-    }
-
-    private Payment getPayment(YardiPayment yp) {
-        Payment payment = new Payment();
-        payment.setType(getPaymentType(yp));
-        payment.setChannel(YardiPaymentChannel.Online.name());
-        payment.setDetail(getPaymentDetail(yp));
-        return payment;
-    }
-
-    private Detail getPaymentDetail(YardiPayment yp) {
-        Detail detail = new Detail();
-        detail.setTransactionDate(yp.postDate().getValue());
-        detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
-        detail.setPaidBy(yp.paymentRecord().paymentMethod().customer().user().name().getValue());
-        detail.setAmount(yp.amount().getValue().toString());
-        detail.setDescription(yp.description().getValue());
-        detail.setPropertyPrimaryID(yp.billingAccount().lease().unit().building().propertyCode().getValue());
-        return detail;
-    }
-
-    private String getPaymentType(YardiPayment yp) {
-        switch (yp.paymentRecord().paymentMethod().type().getValue()) {
-        case Cash:
-            return YardiPaymentType.Cash.name();
-        case Check:
-            return YardiPaymentType.Check.name();
-        case Echeck:
-            return YardiPaymentType.Other.name();
-        case EFT:
-            return YardiPaymentType.ACH.name();
-        case CreditCard:
-            return YardiPaymentType.CreditCard.name();
-        case Interac:
-            return YardiPaymentType.DebitCard.name();
-        }
-        return null;
     }
 }

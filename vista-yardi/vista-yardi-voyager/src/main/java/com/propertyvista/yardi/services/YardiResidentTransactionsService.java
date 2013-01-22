@@ -84,6 +84,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         updateCharges(allTransactions);
 
+        updatePayments(allTransactions);
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
@@ -96,6 +97,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
         new YardiChargeProcessor().updateCharges(allTransactions);
+    }
+
+    private void updatePayments(List<ResidentTransactions> allTransactions) {
+        new YardiPaymentProcessor().updatePayments(allTransactions);
     }
 
     private List<String> getPropertyCodes(YardiClient client, PmcYardiCredential yc) throws YardiServiceException {
