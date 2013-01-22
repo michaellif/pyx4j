@@ -439,6 +439,8 @@ public class DBResetServlet extends HttpServlet {
             cfg.numPotentialTenants2CreditCheck = 0;
             cfg.numPotentialTenants = 0;
             cfg.numTenants = 0;
+            cfg.numLeads = 0;
+            cfg.numUnAssigendTenants = 0;
         }
         setPreloadConfigParameter(req, cfg);
         preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
