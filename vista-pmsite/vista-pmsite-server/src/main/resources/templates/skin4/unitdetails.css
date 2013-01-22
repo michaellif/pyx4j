@@ -1,5 +1,4 @@
 .vista-pmsite-unitDetailsPage {
-	font-size:14px;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-mainWrap {
 	width: 920px;
@@ -58,11 +57,17 @@
 	text-transform:uppercase;
 	text-align:right;
 	padding-right: 10px;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxText {
 	display:inline-block;
 	vertical-align:top;
 	width:460px;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText {
 	padding-left:10px;

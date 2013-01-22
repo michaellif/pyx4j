@@ -4,7 +4,6 @@
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
-/*  background-color:#fff; */
     border-top: 5px solid #000000;
     background: url("images/FreeCableTV.png") no-repeat right;
 }
@@ -63,13 +62,11 @@
 
 .advancedSearchWideWrap label {
 	display:block;
-/*	padding:6px 0; */
 	white-space:nowrap;
 }
 .advancedSearchWideWrap .searchTypeSelBox {
 	float:left;
-	/*clear:both; */
-	margin-top:25px;
+	margin-top:30px;
 	padding: 0 80px;
 }
 .advancedSearchWideWrap .searchTypeSelButton {

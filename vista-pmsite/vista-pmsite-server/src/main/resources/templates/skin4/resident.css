@@ -2,8 +2,6 @@
 }
 
 .vista-pmsite-residentPage .vista-pmsite-main {
-	background: #999999;
-	border-top: 1px solid #000;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-content {
@@ -14,11 +12,13 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
+	background: #fff;
 }
 
 .vista-pmsite-residentPage .caption {
-	height: 30px;
-	overflow: hidden;
+	width: 920px;
+	margin: 0 20px;
+	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
@@ -35,7 +35,6 @@
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
-	//color: ${object2_100};
 	font-size: 16px;
 	font-weight: normal;
 	height: 28px;
@@ -55,7 +54,9 @@
 
 .vista-pmsite-residentPage .vista-pmsite-main .content {
 	min-height: 500px;
-	background: white;
 	line-height: 20px;
-	overflow: hidden;
+	width: 920px;
+	margin: 0 20px;
+	border-top: 5px solid #000000;
+	padding-top: 30px;
 }

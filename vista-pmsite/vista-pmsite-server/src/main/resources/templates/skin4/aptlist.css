@@ -99,14 +99,12 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover {
 	background-color:${object1_100};
-/*	margin: 0 20px 5px 0; */
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActiveHover label {
 	color:${object1_20};
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
 	background-color:${object1_100};
-/*	margin: 0 0 5px 0px; */
 	
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
@@ -190,7 +188,6 @@
 	width: 70px;
 }
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
-	/*width: 165px;*/
 	white-space: nowrap;
 }
 
@@ -247,7 +244,6 @@
 	*float: left;
 	zoom: 1;
 	*display: inline;
-/*	color: ${foreground_100}; */
 }
 .apartmentListingWrap .listingEntry:hover {
 	background-color:#CCCCCC;
@@ -328,7 +324,6 @@
 	display: inline-block;
 	vertical-align: top;
 	width:80px;
-	/*padding-left:20px; */
 	float: right;
 	zoom: 1;
 	*display: inline;

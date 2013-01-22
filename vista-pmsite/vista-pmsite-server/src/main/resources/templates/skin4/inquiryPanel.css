@@ -6,10 +6,12 @@
 	color:red;
 	background:white;
 	display:inline-block;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel .inputEntry {
 	padding:10px 0;
-	margin:0 30px;
 }
 .inquiryPanel .inputEntry .inputLabel {
 	display:inline-block;
@@ -17,8 +19,19 @@
 	padding-right:20px;
 	text-align:right;
 	vertical-align:top;
-	color:${foreground_60};
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;
 }
+
+.inquiryPanel .inputEntry input {
+	border: 1px solid #000000;
+}
+
+.inquiryPanel .inputEntry input[type="radio"]  {
+	border: 0px solid #000000;
+}
+
 .inquiryPanel .inputEntry .inputLabel.altApmnt {
 	display:inline;
 	padding-right:5px;
@@ -26,17 +39,28 @@
 .inquiryPanel .inputBox {
 	display:inline-block;
 	width:370px;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel .inputEntry textarea {
 	width:360px;
+	border: 1px solid #000000;
 }
+
 .inquiryPanel .inputEntry .apmntBox {
 	width:120px;
 	display:inline-block;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel .inputEntry .captcha {
 	display:inline-block;
 	width:360px;
+/* if EI7 */	
+	*display: inline;
+    zoom: 1;	
 }
 .inquiryPanel input[type=submit] {
 	background: ${object1_100};
@@ -48,10 +72,9 @@
     font-size: 16px;
     text-transform: uppercase;
     cursor: pointer;
+    margin-left: 40px;
 }
-.inquiryPanel input[type=submit]:hover {
-	background-position: 0 -32px;
-}
+
 /*
  * Datepicker style
  */
