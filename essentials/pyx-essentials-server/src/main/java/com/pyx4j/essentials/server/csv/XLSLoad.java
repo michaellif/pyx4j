@@ -52,6 +52,8 @@ public class XLSLoad {
 
     private final DataFormatter formatter;
 
+    public static String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+
     public static void loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
@@ -147,7 +149,7 @@ public class XLSLoad {
             return cell.getStringCellValue();
         case Cell.CELL_TYPE_NUMERIC:
             if (DateUtil.isCellDateFormatted(cell)) {
-                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(cell.getDateCellValue());
+                return new SimpleDateFormat(DATE_FORMAT_PATTERN).format(cell.getDateCellValue());
             } else {
                 String format = cell.getCellStyle().getDataFormatString();
                 // MS Excel 2010 accounting
@@ -160,7 +162,7 @@ public class XLSLoad {
         case Cell.CELL_TYPE_BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
         case Cell.CELL_TYPE_FORMULA:
-            //TODO calculate 
+            //TODO calculate
             return "";
         case Cell.CELL_TYPE_ERROR:
             return "";
