@@ -24,6 +24,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.impl.ObjectHandler;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
@@ -169,9 +170,16 @@ public class BidirectionalRelationshipTest extends InitializerTestBase {
         assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
         assertTrue("parent value is the same", o.getValue() == c.parent().getValue());
 
-        c.clearValues();
+        if (ObjectHandler.PROPER_POINTERS) {
+            BidirectionalOneToManyChild cActual = o.children().get(0);
+            cActual.clearValues();
+            assertEquals("parent value is the same", o.getValue(), cActual.parent().getValue());
+            assertTrue("parent value is the same", o.getValue() == cActual.parent().getValue());
+        } else {
+            c.clearValues();
 
-        assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
-        assertTrue("parent value is the same", o.getValue() == c.parent().getValue());
+            assertEquals("parent value is the same", o.getValue(), c.parent().getValue());
+            assertTrue("parent value is the same", o.getValue() == c.parent().getValue());
+        }
     }
 }

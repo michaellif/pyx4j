@@ -106,11 +106,15 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         if (!this.getValueClass().equals(entity.getInstanceValueClass())) {
             value.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
         }
-        ((SharedEntityHandler) entity).attachToOwner(this, this.getFieldName());
+
+        if (PROPER_POINTERS) {
+        } else {
+            ((SharedEntityHandler) entity).attachToOwner(this, this.getFieldName());
+        }
 
         // ensure @Owner value is set properly.
         String ownerMemberName = entity.getEntityMeta().getOwnerMemberName();
-        if ((ownerMemberName != null) && (value != null) && (getMeta().isOwnedRelationships())) {
+        if ((ownerMemberName != null) && (getMeta().isOwnedRelationships())) {
             Map<String, Serializable> ownerValue = ((SharedEntityHandler) getOwner()).ensureValue();
             value.put(ownerMemberName, (Serializable) ownerValue);
             if (!entity.getMember(ownerMemberName).getObjectClass().equals(getOwner().getInstanceValueClass())) {
@@ -190,7 +194,7 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return a;
     }
 
-    //TODO move common function from  ISet or IList to this class 
+    //TODO move common function from  ISet or IList to this class
 
     private class StringConverter implements ToStringConverter<TYPE> {
 

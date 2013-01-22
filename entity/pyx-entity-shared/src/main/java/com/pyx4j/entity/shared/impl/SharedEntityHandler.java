@@ -411,9 +411,12 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                 // allow polymorphic Member
                 value.put(CONCRETE_TYPE_DATA_ATTR, EntityFactory.getEntityPrototype(entity.getInstanceValueClass()));
             }
-            if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
-                // attach incoming entity to new owner
-                ((SharedEntityHandler) entity).attachToOwner(this.getOwner(), this.getFieldName());
+            if (PROPER_POINTERS) {
+            } else {
+                if ((getOwner() != null) && getMeta().isOwnedRelationships() && (((SharedEntityHandler) entity).getOwner() != this.getOwner())) {
+                    // attach incoming entity to new owner
+                    ((SharedEntityHandler) entity).attachToOwner(this.getOwner(), this.getFieldName());
+                }
             }
             setValue(value);
 
