@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -35,7 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -98,7 +98,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
             }
 
-            // some corrections for particular method types: 
+            // some corrections for particular method types:
             if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
                 entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
             }
@@ -109,9 +109,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId) {
-        InternalBillingAccount billingAccount = Persistence.service().retrieve(InternalBillingAccount.class, parentId);
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, parentId);
         if ((billingAccount == null) || (billingAccount.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(InternalBillingAccount.class).getCaption() + "' " + parentId + " NotFound");
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + parentId + " NotFound");
         }
 
         if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
