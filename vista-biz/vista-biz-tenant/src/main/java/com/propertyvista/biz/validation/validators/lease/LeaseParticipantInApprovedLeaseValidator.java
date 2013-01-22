@@ -16,6 +16,7 @@ package com.propertyvista.biz.validation.validators.lease;
 import com.propertyvista.biz.validation.framework.validators.CompositeEntityValidator;
 import com.propertyvista.biz.validation.framework.validators.NotNullValidator;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermParticipant<?>> extends CompositeEntityValidator<E> {
 
@@ -32,7 +33,7 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermPartici
 
         bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
         bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
-        if (!yardiIntegrationMode) {
+        if (!VistaFeatures.instance().yardiIntegration()) {
             bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
         }
 
