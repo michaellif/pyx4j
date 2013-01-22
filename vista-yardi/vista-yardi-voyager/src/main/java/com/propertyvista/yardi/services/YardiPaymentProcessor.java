@@ -62,10 +62,9 @@ public class YardiPaymentProcessor {
                         }
                         Payment payment = tr.getPayment();
                         // if it's our payment returning back (the transactionID will match the primary key), remove the original
-                        log.info("===> Payment tID = {}, docNo = {}", payment.getDetail().getTransactionID(), payment.getDetail().getDocumentNumber());
                         String keyStr = payment.getDetail().getDocumentNumber();
                         if (keyStr != null && keyStr.length() > 0) {
-                            Key ypKey = new Key(payment.getDetail().getDocumentNumber());
+                            Key ypKey = new Key(keyStr);
                             EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
                             origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
                             origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
