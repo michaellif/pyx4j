@@ -455,6 +455,12 @@ public class PortalTheme extends VistaTheme {
             addStyle(style);
         }
 
+        {
+            Style style = new Style("." + TenantSureResources.PrivacyPolicyStyles.TenantSurePrivacyPolicySection.name());
+            style.addProperty("margin-bottom", "20px");
+            addStyle(style);
+        }
+
         // TenantSure Faq Styles
         {
             Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqQnA.name());

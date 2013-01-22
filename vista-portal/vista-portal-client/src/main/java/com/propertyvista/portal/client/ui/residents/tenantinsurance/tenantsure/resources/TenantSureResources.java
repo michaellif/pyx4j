@@ -36,6 +36,10 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
 
+    public enum PrivacyPolicyStyles implements IStyleName {
+        TenantSurePrivacyPolicySection
+    }
+
     @Source("privacy-policy.html")
     TextResource privacyPolicy();
 
