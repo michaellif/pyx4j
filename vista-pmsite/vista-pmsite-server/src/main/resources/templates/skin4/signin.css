@@ -16,7 +16,6 @@
 	border-top: 1px solid #000;
 	height: 30px;
 	overflow: hidden;
-	//padding: 0 0 0 30px;
 	padding: 5px 0px;
 }
 
@@ -53,7 +52,17 @@
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput {
-	margin: 20px 0;
+	margin: 12px 0;
+}
+
+.vista-pmsite-signInPage .signInFormWrap .registration {
+    color: #FFFFFF;
+    float: right;
+    text-decoration: underline;
+}
+
+.vista-pmsite-signInPage .signInFormWrap .signInFormInput.hint {
+    padding-top: 30px;
 }
 
 .vista-pmsite-signInPage .signInFormWrap .signInFormInput label {

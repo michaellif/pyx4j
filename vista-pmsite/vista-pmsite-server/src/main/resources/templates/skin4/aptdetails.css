@@ -30,8 +30,6 @@
 	zoom: 1;
 	*display: inline;
 	width: 600px;
-	*width: 594px;
-	*padding-right: 16px;
 	vertical-align: top;
 	min-height:400px;
     background: #fff;
@@ -41,18 +39,15 @@
 	border-top: 1px solid black;
 	border-bottom: 5px solid black;
 }
-.vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
-	border-left:0px solid ${object2_20};
-	min-height: 550px;
-}
+
 .apartmentDetailsWrap .detailBox {
-	border-bottom: 1px solid #000000;
+    padding-bottom: 20px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
-	padding: 30px 20px;
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
+	padding: 30px 0;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	width: 100%;
@@ -64,13 +59,17 @@
 	border-bottom: 1px solid #000000;
 }
 
+.apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
+    border-top: 1px solid #000000;
+}
+
 .apartmentDetailsWrap .detailBox .detailBoxEntry.amenities {
 	margin-bottom: 30px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
 	vertical-align:top;
 	width:80px;
-	padding: 0 20px 6px 20px;
+	padding: 0 20px 6px 0px;
 	font-size:12px;
 	font-weight:bold;
 	text-transform:uppercase;
@@ -88,11 +87,9 @@
 	margin:0;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry ul.detailBoxText li {
-	/*float:left; */
 	width:230px;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
-	/*background-color:${object1_100}; */
 	background-color:#999999;
 	color:#FFFFFF;
 }
@@ -101,7 +98,6 @@
 	width:80px;
 	min-height:75px;
 	text-align:center;
-	padding-left:10px;
 } 
 .apartmentDetailsWrap .unitDetails {
 	_float: left;
@@ -109,9 +105,8 @@
 	zoom: 1;
 	*display: inline;
 	vertical-align: top;
-	width:370px;
+	width:380px;
 	padding:0 10px;
-	/* color: ${foreground_80}; */
 }
 .apartmentDetailsWrap .unitDetails .details {
 	display: inline-block;
@@ -153,17 +148,15 @@
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry .controlBox {
 	display: inline-block;
-	_float:right;
 	vertical-align: top;
 	zoom: 1;
 	*display: inline;
 	width:100px;
-	padding:0;
 } 
 .apartmentDetailsWrap .controlBox .controlButton {
-	float:right;
-	padding:6px 0;
-	clear: both;
+    float: right;
+    padding: 6px 0;
+    width: 80px;
 }
 .listingCtlButton {
 	background-image: url("images/aptListIcons.png");
@@ -177,10 +170,8 @@
 	padding-left:30px;
 	font-weight:bold;
 	cursor:pointer;
-	/* color:${foreground_50}; */
 }
 a.listingCtlButton {
-	/* color:${foreground_80} !important; */
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {

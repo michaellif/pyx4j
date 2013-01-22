@@ -74,6 +74,7 @@
 	padding-top: 30px;
 	border-top: 5px solid #000000;
 	text-align: justify;
+	min-height: 350px;
 }
 
 .vista-pmsite-staticPagen .content  a {
