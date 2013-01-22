@@ -36,7 +36,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
                 YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
                 Persistence.service().commit();
             } catch (YardiServiceException e) {
-                log.error("Error", e);
+                throw new RuntimeException(e);
             }
         } else {
             throw new Error("Yardi Integration disabled for this PMC");
@@ -49,7 +49,7 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
             try {
                 YardiSystemBatchesService.getInstance().postAllPayments(VistaDeployment.getPmcYardiCredential());
             } catch (Exception e) {
-                log.error("Error", e);
+                throw new RuntimeException(e);
             }
         } else {
             throw new Error("Yardi Integration disabled for this PMC");
