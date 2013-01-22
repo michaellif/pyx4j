@@ -33,8 +33,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
@@ -64,12 +62,16 @@ public class YardiPaymentProcessor {
                         }
                         Payment payment = tr.getPayment();
                         // if it's our payment returning back (the transactionID will match the primary key), remove the original
-                        Key ypKey = new Key(payment.getDetail().getTransactionID());
-                        EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
-                        origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
-                        origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
-                        origPayment.add(PropertyCriterion.eq(origPayment.proto().id(), ypKey));
-                        Persistence.service().delete(origPayment);
+                        log.info("===> Payment tID = {}, docNo = {}", payment.getDetail().getTransactionID(), payment.getDetail().getDocumentNumber());
+                        String keyStr = payment.getDetail().getDocumentNumber();
+                        if (keyStr != null && keyStr.length() > 0) {
+                            Key ypKey = new Key(payment.getDetail().getDocumentNumber());
+                            EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
+                            origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
+                            origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
+                            origPayment.add(PropertyCriterion.eq(origPayment.proto().id(), ypKey));
+                            Persistence.service().delete(origPayment);
+                        }
                         // add new payment transaction
                         Persistence.service().persist(YardiProcessorUtils.createPayment(account, payment));
                     }
@@ -83,33 +85,29 @@ public class YardiPaymentProcessor {
     public ResidentTransactions getAllPaymentTransactions() {
         EntityQueryCriteria<YardiPayment> allPayments = EntityQueryCriteria.create(YardiPayment.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
-        allPayments.asc(allPayments.proto().billingAccount().lease().unit().building());
-        allPayments.asc(allPayments.proto().billingAccount().lease());
 
         ResidentTransactions paymentTransactions = new ResidentTransactions();
-        Building building = null;
-        Property property = null;
-        RTCustomer customer = null;
         for (YardiPayment yp : Persistence.service().query(allPayments)) {
             Persistence.ensureRetrieve(yp.billingAccount(), AttachLevel.Attached);
             Persistence.ensureRetrieve(yp.billingAccount().lease(), AttachLevel.Attached);
             Persistence.ensureRetrieve(yp.billingAccount().lease().unit().building(), AttachLevel.Attached);
-            Building _bld = yp.billingAccount().lease().unit().building();
-            if (building == null || !building.getPrimaryKey().equals(_bld.getPrimaryKey())) {
-                building = _bld;
-                property = YardiProcessorUtils.getProperty(building);
-                paymentTransactions.getProperty().add(property);
-                customer = null;
-            }
-            Lease lease = yp.billingAccount().lease();
-            if (customer == null || !customer.getCustomerID().equals(lease.leaseId().getValue())) {
-                customer = YardiProcessorUtils.getRTCustomer(lease);
-                customer.setRTServiceTransactions(new RTServiceTransactions());
-                property.getRTCustomer().add(customer);
-            }
+
+            // Create Payment transaction
             Transactions transactions = new Transactions();
             transactions.setPayment(YardiProcessorUtils.getPayment(yp));
+
+            // Add Payment to Customer
+            RTCustomer customer = new RTCustomer();
+            customer.setRTServiceTransactions(new RTServiceTransactions());
             customer.getRTServiceTransactions().getTransactions().add(transactions);
+
+            // Add Customer to Property
+            Property property = new Property();
+            property.getRTCustomer().add(customer);
+
+            // Add Property to batch
+            paymentTransactions.getProperty().add(property);
+
             // mark payment as read
             yp.claimed().setValue(true);
             Persistence.service().persist(yp);

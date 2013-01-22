@@ -89,6 +89,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 //        payment.setDetail(detail);
 
         String xml = MarshallUtil.marshall(residentTransactions);
+        log.info(xml);
         addReceiptsToBatch(client, yc, batchId, xml);
         postReceiptBatch(client, yc, batchId);
     }

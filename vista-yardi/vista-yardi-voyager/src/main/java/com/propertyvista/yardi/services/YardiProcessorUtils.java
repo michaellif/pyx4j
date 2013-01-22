@@ -22,7 +22,6 @@ import com.yardi.entity.mits.Identification;
 import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.Detail;
 import com.yardi.entity.resident.Payment;
-import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 
@@ -38,7 +37,6 @@ import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiService;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiProcessorUtils {
@@ -118,22 +116,6 @@ public class YardiProcessorUtils {
     /*
      * PaymentProcessor utils
      */
-    public static Property getProperty(Building building) {
-        Property property = new Property();
-        PropertyID propId = new PropertyID();
-        Identification id = new Identification();
-        id.setPrimaryID(building.propertyCode().getValue());
-        propId.setIdentification(id);
-        property.getPropertyID().add(propId);
-        return property;
-    }
-
-    public static RTCustomer getRTCustomer(Lease lease) {
-        RTCustomer customer = new RTCustomer();
-        customer.setCustomerID(lease.leaseId().getValue());
-        return customer;
-    }
-
     public static Payment getPayment(YardiPayment yp) {
         Payment payment = new Payment();
         payment.setType(getPaymentType(yp));
@@ -144,12 +126,12 @@ public class YardiProcessorUtils {
 
     public static Detail getPaymentDetail(YardiPayment yp) {
         Detail detail = new Detail();
-        detail.setTransactionID(yp.getPrimaryKey().toString());
+        detail.setDocumentNumber(yp.getPrimaryKey().toString());
         detail.setTransactionDate(yp.postDate().getValue());
         detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
         Persistence.ensureRetrieve(yp.paymentRecord().paymentMethod().customer(), AttachLevel.Attached);
         detail.setPaidBy(yp.paymentRecord().paymentMethod().customer().person().getStringView());
-        detail.setAmount(yp.amount().getValue().toString());
+        detail.setAmount(yp.amount().getValue().negate().toString());
         detail.setDescription(yp.description().getValue());
         detail.setPropertyPrimaryID(yp.billingAccount().lease().unit().building().propertyCode().getValue());
         return detail;
