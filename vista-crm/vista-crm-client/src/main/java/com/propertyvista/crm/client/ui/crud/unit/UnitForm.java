@@ -109,13 +109,12 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
 
-        if (VistaFeatures.instance().defaultProductCatalog()) {
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
-        }
-        if (VistaFeatures.instance().productCatalog()) {
+        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
             left.setBR(++row, 0, 1);
             left.setH1(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
             left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
+        } else {
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
         }
 
         row = -1;
