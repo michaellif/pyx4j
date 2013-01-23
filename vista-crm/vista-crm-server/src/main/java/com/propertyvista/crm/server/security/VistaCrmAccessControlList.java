@@ -122,6 +122,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectServiceItemTypeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
+import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
@@ -417,6 +418,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTaxListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));
 
