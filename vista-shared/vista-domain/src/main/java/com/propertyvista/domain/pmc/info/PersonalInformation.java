@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -46,5 +47,7 @@ public interface PersonalInformation extends IEntity {
 
     @Caption(name = "SIN / SSN")
     IPrimitive<String> sin();
+
+    IList<PmcPersonalInformationDocument> documents();
 
 }

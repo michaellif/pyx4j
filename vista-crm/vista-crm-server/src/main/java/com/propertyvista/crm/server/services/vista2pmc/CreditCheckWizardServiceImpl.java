@@ -33,6 +33,7 @@ import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 import com.propertyvista.domain.pmc.info.PmcAddressSimple;
+import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -43,6 +44,8 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
         Pmc pmc = VistaDeployment.getCurrentPmc();
         creditCheck.businessInformation().companyName().setValue(pmc.name().getValue());
+        creditCheck.businessInformation().documents().add(EntityFactory.create(PmcBusinessInfoDocument.class));
+        creditCheck.businessInformation().documents().add(EntityFactory.create(PmcBusinessInfoDocument.class));
         callback.onSuccess(creditCheck);
     }
 

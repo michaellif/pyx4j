@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import java.util.Collection;
+import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,16 +26,17 @@ import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.BusinessIdUploadService;
-import com.propertyvista.server.domain.BusinessIdBlob;
+import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
+import com.propertyvista.server.domain.PmcDocumentBlob;
+import com.propertyvista.server.jobs.TaskRunner;
 
-public class BusinessIdUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements BusinessIdUploadService {
+public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements PmcDocumentFileUploadService {
 
     private static final I18n i18n = I18n.get(I18n.class);
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(BusinessIdBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(PmcDocumentBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -48,16 +50,22 @@ public class BusinessIdUploadServiceImpl extends AbstractUploadServiceImpl<IEnti
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
-            UploadResponse<IEntity> response) {
-        BusinessIdBlob blob = EntityFactory.create(BusinessIdBlob.class);
-        blob.data().setValue(data.data);
-        blob.contentType().setValue(response.fileContentType);
+    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(final UploadData data,
+            UploadDeferredProcess<IEntity, IEntity> process, final UploadResponse<IEntity> response) {
+        return TaskRunner.runInAdminNamespace(new Callable<ProcessingStatus>() {
 
-        Persistence.service().persist(blob);
-        Persistence.service().commit();
-        response.uploadKey = blob.getPrimaryKey();
-        return ProcessingStatus.completed;
+            @Override
+            public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus call() throws Exception {
+                PmcDocumentBlob blob = EntityFactory.create(PmcDocumentBlob.class);
+                blob.data().setValue(data.data);
+                blob.contentType().setValue(response.fileContentType);
+                Persistence.service().persist(blob);
+                Persistence.service().commit();
+                response.uploadKey = blob.getPrimaryKey();
+                return ProcessingStatus.completed;
+            }
+        });
+
     }
 
 }

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-public interface BusinessIdUploadService extends UploadService<IEntity, IEntity> {
+public interface PmcDocumentFileUploadService extends UploadService<IEntity, IEntity> {
 
     public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);

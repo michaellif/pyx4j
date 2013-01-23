@@ -17,15 +17,19 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.VistaNamespace;
+
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 /** Blob of the documents PMCs upload via during Credit Check Setup Wizard */
-public interface BusinessIdBlob extends IEntity {
+@Table(namespace = VistaNamespace.adminNamespace)
+public interface PmcDocumentBlob extends IEntity {
 
     IPrimitive<String> contentType();
 

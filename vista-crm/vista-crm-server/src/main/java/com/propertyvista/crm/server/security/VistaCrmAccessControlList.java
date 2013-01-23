@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
@@ -417,6 +418,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - Other:
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTaxListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
