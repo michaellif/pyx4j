@@ -37,6 +37,7 @@ import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiServiceException;
+import com.propertyvista.yardi.bean.Messages;
 import com.propertyvista.yardi.bean.Properties;
 
 /**
@@ -123,9 +124,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         for (String propertyCode : propertyCodes) {
             try {
                 ResidentTransactions residentTransactions = getResidentTransactions(client, yc, propertyCode);
-                transactions.add(residentTransactions);
+                if (residentTransactions != null) {
+                    transactions.add(residentTransactions);
+                }
             } catch (Exception e) {
-                log.error(String.format("Errors during call getResidentTransactions operation for building %s", propertyCode), e);
+                log.error("Errors during call getResidentTransactions operation for building {}", propertyCode, e);
             }
         }
 
@@ -162,6 +165,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             log.debug("GetPropertyConfigurations Result: {}", xml);
         }
 
+        if (YardiServiceUtils.isMessageResponse(xml)) {
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            throw new IllegalStateException(YardiServiceUtils.toString(messages));
+        }
+
         Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
 
         if (log.isDebugEnabled()) {
@@ -194,8 +202,14 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 
         log.info("GetResidentTransactions: {}", xml);
+        if (YardiServiceUtils.isMessageResponse(xml)) {
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            log.error(YardiServiceUtils.toString(messages));
+            return null;
+        }
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
         return transactions;
     }
+
 }

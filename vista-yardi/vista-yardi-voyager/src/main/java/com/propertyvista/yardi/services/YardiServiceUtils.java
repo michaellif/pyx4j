@@ -13,11 +13,33 @@
  */
 package com.propertyvista.yardi.services;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.propertyvista.yardi.bean.Message;
+import com.propertyvista.yardi.bean.Messages;
 
 public class YardiServiceUtils {
 
     private final static Logger log = LoggerFactory.getLogger(YardiServiceUtils.class);
+
+    public static boolean isMessageResponse(String s) {
+        return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
+    }
+
+    public static String toString(Messages messages) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Unexpected response received: \n");
+
+        for (Message message : messages.getMessages()) {
+            if (StringUtils.isNotEmpty(message.getValue())) {
+                sb.append(String.format("Message type= %s, value= %s", message.getType(), message.getValue())).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
 
 }
