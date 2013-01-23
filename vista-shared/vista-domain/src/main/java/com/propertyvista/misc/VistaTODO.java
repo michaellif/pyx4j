@@ -13,7 +13,11 @@
  */
 package com.propertyvista.misc;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 public interface VistaTODO {
+
+    public static final boolean ENABLE_ONBOARDING_WIZARDS = ApplicationMode.isDevelopment();
 
     /*
      * This is changed by BuildMaster when creating Branch.
