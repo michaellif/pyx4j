@@ -13,6 +13,8 @@
 ***     ======================================================================================================================
 ***     
 ***             Low-hanging fruit - sequences
+***             First argument - old schema name (the one that needs changing)
+***             Second argument - new schema name (example)
 ***
 ***     ======================================================================================================================
 **/
@@ -54,8 +56,43 @@ $$
         FROM    _dba_.compare_schema_sequences($1,$2)
         WHERE   schema_version = $2 
         ORDER BY 1 ASC) 
-        
-        
+              
+$$
+LANGUAGE SQL VOLATILE;
+
+/**
+***     ========================================================================================================
+***
+***             Schema constraints changes - also not too complicated
+***             First argument - old schema name (the one that needs changing)
+***             Second argument - new schema name (example)
+***             Third argument - constraint type ('p','f' or 'c')
+***
+***     ========================================================================================================
+**/
+
+CREATE OR REPLACE FUNCTION _dba_.generate_sql_constraints(TEXT,TEXT,CHAR)
+RETURNS TABLE (sql_text TEXT)
+AS
+$$
+        WITH t1 AS (    SELECT * FROM _dba_.compare_schema_constraints($1,$2))
+        SELECT  '-- Constraints to drop'
+        UNION ALL
+        (SELECT 'ALTER TABLE '||table_name||' DROP CONSTRAINT '||constraint_name||';'
+        FROM    t1
+        WHERE   schema_version = $1
+        AND     constraint_type = $3)
+        UNION ALL
+        (SELECT '-- Constraint to create')
+        UNION ALL
+        (SELECT 'ALTER TABLE '||table_name||' ADD CONSTRAINT '||constraint_name||
+                CASE WHEN constraint_type = 'p' THEN ' PRIMARY KEY('||column_name||');'
+                WHEN constraint_type = 'f' THEN ' FOREIGN KEY('||column_name||') '||
+                'REFERENCES '||ref_table_name||'('||ref_column_name||');'
+                WHEN constraint_type = 'c' THEN ' CHECK '||constraint_text||';' END
+        FROM    t1
+        WHERE   schema_version = $2
+        AND     constraint_type = $3);                
 $$
 LANGUAGE SQL VOLATILE;
 
