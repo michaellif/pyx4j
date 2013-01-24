@@ -37,5 +37,7 @@ public interface DeploymentConsts {
 
     public static final String applicationDocumentServletMapping = "application_document/";
 
+    public static final String pmcDocumentServletMapping = "pmc_document/";
+
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
 }

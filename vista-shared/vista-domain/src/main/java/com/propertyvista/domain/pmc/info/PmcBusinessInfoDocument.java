@@ -15,7 +15,12 @@ package com.propertyvista.domain.pmc.info;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -46,4 +51,12 @@ public interface PmcBusinessInfoDocument extends PmcDocument {
     @MemberColumn(name = "business_info_doc_type")
     IPrimitive<Type> type();
 
+    @Owner
+    @Detached
+    @ReadOnly
+    @JoinColumn
+    BusinessInformation owner();
+
+    @OrderColumn
+    IPrimitive<Integer> ownersOrder();
 }

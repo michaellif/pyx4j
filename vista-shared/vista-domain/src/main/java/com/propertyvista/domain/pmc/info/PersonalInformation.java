@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -48,6 +49,7 @@ public interface PersonalInformation extends IEntity {
     @Caption(name = "SIN / SSN")
     IPrimitive<String> sin();
 
+    @Owned
     IList<PmcPersonalInformationDocument> documents();
 
 }

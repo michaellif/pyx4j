@@ -30,17 +30,19 @@ import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 
-public class PmcDocumentFileUploaderFolder extends VistaTableFolder<PmcDocumentFile> {
+public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
 
-    private static final I18n i18n = I18n.get(PmcDocumentFileUploaderFolder.class);
+    private static final I18n i18n = I18n.get(PmcDocumentFileFolder.class);
 
     public static final List<EntityFolderColumnDescriptor> COLUMNS;
     static {
@@ -55,9 +57,8 @@ public class PmcDocumentFileUploaderFolder extends VistaTableFolder<PmcDocumentF
             setCommand(new Command() {
                 @Override
                 public void execute() {
-                    // TODO actually file download                    
-                    // Window.open(MediaUtils.createApplicationDocumentUrl(getApplicationDocument()), "_blank", null);
-                    Window.alert("TODO implement file download");
+                    // TODO fix this
+                    Window.open(MediaUtils.createPmcDocumentUrl(((PmcDocumentFileForm) getParent()).getValue()), "_blank", null);
                 }
             });
 
@@ -101,7 +102,7 @@ public class PmcDocumentFileUploaderFolder extends VistaTableFolder<PmcDocumentF
 
     private final UploadService<IEntity, IEntity> uploadService;
 
-    public PmcDocumentFileUploaderFolder(UploadService<IEntity, IEntity> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public PmcDocumentFileFolder(UploadService<IEntity, IEntity> uploadService, Collection<DownloadFormat> supportedFormats) {
         super(PmcDocumentFile.class);
         setOrderable(false);
         this.uploadService = uploadService;
@@ -138,6 +139,13 @@ public class PmcDocumentFileUploaderFolder extends VistaTableFolder<PmcDocumentF
             return new PmcDocumentFileForm();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected IFolderDecorator<PmcDocumentFile> createFolderDecorator() {
+        VistaTableFolderDecorator<PmcDocumentFile> d = (VistaTableFolderDecorator<PmcDocumentFile>) super.createFolderDecorator();
+        d.setShowHeader(false);
+        return d;
     }
 
 }

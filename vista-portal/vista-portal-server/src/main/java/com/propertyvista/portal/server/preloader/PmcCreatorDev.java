@@ -34,10 +34,14 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
+import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
+import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
 import com.propertyvista.server.config.DevYardiCredentials;
+import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
@@ -70,6 +74,22 @@ public class PmcCreatorDev {
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
+
+        PmcBusinessInfoDocument doc = pmc.equifaxInfo().businessInformation().documents().$();
+        doc.type().setValue(Type.BusinessLicense);
+        PmcDocumentFile docPage = doc.documentPages().$();
+        PmcDocumentBlob docPageBlob = EntityFactory.create(PmcDocumentBlob.class);
+        docPageBlob.contentType().setValue("text/plain");
+        String licenseText = "This mockup business is licensed to operate in Property Vista development environment (Issued by Property Vista Dev Team)\n";
+        docPageBlob.data().setValue(licenseText.getBytes());
+        Persistence.service().persist(docPageBlob);
+        docPage.blobKey().setValue(docPageBlob.getPrimaryKey());
+        docPage.fileSize().setValue(licenseText.getBytes().length);
+        docPage.fileName().setValue("dev-business-license.txt");
+        docPage.contentMimeType().setValue(docPageBlob.contentType().getValue());
+        doc.documentPages().add(docPage);
+        pmc.equifaxInfo().businessInformation().documents().add(doc);
+
         pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
 
         ServerSideFactory.create(PmcFacade.class).create(pmc);

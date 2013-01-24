@@ -13,6 +13,11 @@
  */
 package com.propertyvista.domain.pmc.info;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -34,4 +39,13 @@ public interface PmcPersonalInformationDocument extends PmcDocument {
     }
 
     IPrimitive<Type> type();
+
+    @Owner
+    @Detached
+    @ReadOnly
+    @JoinColumn
+    PersonalInformation owner();
+
+    @OrderColumn
+    IPrimitive<Integer> ownersOrder();
 }

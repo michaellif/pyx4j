@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
@@ -27,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 
 public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusinessInfoDocument> {
@@ -44,8 +46,10 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).labelWidth(5).build());
-            content.setH4(++row, 0, 1, i18n.tr("Click 'Add' to upload document pages"));
-            content.setWidget(++row, 0, inject(proto().documentPages(), new PmcDocumentFileUploaderFolder(service, supportedFormats)));
+            if (isEditable()) {
+                content.setH4(++row, 0, 1, i18n.tr("Click 'Add' to upload document pages"));
+            }
+            content.setWidget(++row, 0, inject(proto().documentPages(), new PmcDocumentFileFolder(service, supportedFormats)));
             return content;
         }
 
@@ -58,6 +62,8 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
     public PmcBusinessInformationDocumentFolder(UploadService<IEntity, IEntity> service, Collection<DownloadFormat> supportedFormats) {
         super(PmcBusinessInfoDocument.class);
         setAddable(false);
+        setRemovable(false);
+        setOrderable(false);
         this.service = service;
         this.supportedFormats = supportedFormats;
     }
@@ -69,5 +75,12 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
         }
         return super.create(member);
     };
+
+    @Override
+    public IFolderItemDecorator<PmcBusinessInfoDocument> createItemDecorator() {
+        VistaBoxFolderItemDecorator<PmcBusinessInfoDocument> d = (VistaBoxFolderItemDecorator<PmcBusinessInfoDocument>) super.createItemDecorator();
+        d.setCollapsible(false);
+        return d;
+    }
 
 }

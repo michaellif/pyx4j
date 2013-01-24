@@ -82,7 +82,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
             onboardingMerchantAccountsLister.obtain(0);
         }
 
-        approvalLink.setVisible(!isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
+        approvalLink.setVisible(true || !isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
     }
 
     private FormFlexPanel createGeneralTab() {

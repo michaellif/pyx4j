@@ -20,6 +20,7 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.ThumbnailSize;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -31,9 +32,14 @@ public class MediaUtils {
             return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + "0/" + size.name() + "."
                     + ImageConsts.THUMBNAIL_TYPE);
         } else {
-            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name() + "."
-                    + ImageConsts.THUMBNAIL_TYPE);
+            return new Image(ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaId.toString() + "/" + size.name()
+                    + "." + ImageConsts.THUMBNAIL_TYPE);
         }
+    }
+
+    public static String createPmcDocumentUrl(PmcDocumentFile file) {
+        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/"
+                + file.fileName().getStringView();
     }
 
     public static String createApplicationDocumentUrl(File file) {

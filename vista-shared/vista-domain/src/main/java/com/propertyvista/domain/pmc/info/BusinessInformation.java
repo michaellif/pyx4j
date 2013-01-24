@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -61,6 +62,7 @@ public interface BusinessInformation extends IEntity {
 
     IPrimitive<LogicalDate> businessEstablishedDate();
 
+    @Owned
     IList<PmcBusinessInfoDocument> documents();
 
 }

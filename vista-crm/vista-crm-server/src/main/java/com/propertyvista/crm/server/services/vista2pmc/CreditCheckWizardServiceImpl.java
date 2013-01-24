@@ -34,6 +34,7 @@ import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 import com.propertyvista.domain.pmc.info.PmcAddressSimple;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
+import com.propertyvista.domain.pmc.info.PmcPersonalInformationDocument;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -60,7 +61,14 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
                 BusinessInformation businessInformation = EntityFactory.create(BusinessInformation.class);
                 PersonalInformation personalInformation = EntityFactory.create(PersonalInformation.class);
 
-                //solution to CRM country namespace editing in CRM and saving in admin
+                for (PmcBusinessInfoDocument document : dto.businessInformation().documents()) {
+                    businessInformation.documents().add(document);
+                }
+                for (PmcPersonalInformationDocument document : dto.personalInformation().documents()) {
+                    personalInformation.documents().add(document);
+                }
+
+                // solution to CRM country namespace editing in CRM and saving in admin
                 businessInformation.businessAddress().set(dto.businessInformation().dto_businessAddress().duplicate(PmcAddressSimple.class));
                 personalInformation.personalAddress().set(dto.personalInformation().dto_personalAddress().duplicate(PmcAddressSimple.class));
 

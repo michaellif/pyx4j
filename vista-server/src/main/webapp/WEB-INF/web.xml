@@ -368,6 +368,26 @@
         <servlet-name>ApplicationDocumentServlet</servlet-name>
         <url-pattern>/application_document/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+    	<servlet-name>PmcDocumentServlet</servlet-name>
+    	<servlet-class>com.propertyvista.portal.server.upload.PmcDocumentServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+    	<servlet-name>PmcDocumentServlet</servlet-name>
+    	<url-pattern>/pmc_document/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>PmcDocumentServlet</servlet-name>
+    	<url-pattern>/admin/pmc_document/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>PmcDocumentServlet</servlet-name>
+    	<url-pattern>/crm/pmc_document/*</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>SiteImageResourceServlet</servlet-name>

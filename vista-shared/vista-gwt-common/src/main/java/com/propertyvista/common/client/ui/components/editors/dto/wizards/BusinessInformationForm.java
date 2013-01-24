@@ -16,12 +16,14 @@ package com.propertyvista.common.client.ui.components.editors.dto.wizards;
 import java.util.Collection;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
@@ -33,6 +35,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
+// TODO add document requirements label and validator
 public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInformationDTO> {
 
     private static final I18n i18n = I18n.get(BusinessInformationForm.class);
@@ -55,7 +58,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
         contentPanel.getFlexCellFormatter().setWidth(0, 1, "50%");
         contentPanel.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
-        contentPanel.getFlexCellFormatter().getElement(0, 1).getStyle().setPadding(10, Unit.PX);
+        contentPanel.getFlexCellFormatter().getElement(0, 1).getStyle().setPaddingLeft(10, Unit.PX);
 
         FormFlexPanel mainPanel = new FormFlexPanel();
         int mrow = -1;
@@ -70,9 +73,23 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
         FormFlexPanel documentsPanel = new FormFlexPanel();
         int drow = -1;
-        Label equifaxReuirements = new Label();
-        equifaxReuirements.setText(i18n.tr("Equifax requires proof of two (2) of the following documents"));
-        documentsPanel.setWidget(++drow, 0, equifaxReuirements);
+        Label documentsLabel = new Label();
+        documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));
+        documentsLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        FlowPanel documentsDecorator = new FlowPanel();
+        documentsDecorator.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
+        if (!isEditable()) {
+            documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
+        }
+        documentsDecorator.add(documentsLabel);
+        documentsPanel.setWidget(++drow, 0, documentsDecorator);
+
+        if (isEditable()) {
+            Label equifaxReuirements = new Label();
+            equifaxReuirements.setText(i18n.tr("Equifax requires proof of two (2) of the following documents:"));
+            documentsPanel.setWidget(++drow, 0, equifaxReuirements);
+        }
+
         documentsPanel.setWidget(++drow, 0, inject(proto().documents(), new PmcBusinessInformationDocumentFolder(service, supportedFormats)));
         contentPanel.setWidget(0, 1, documentsPanel);
 
