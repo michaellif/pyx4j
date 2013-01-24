@@ -64,6 +64,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     public PaymentRecord persistPayment(PaymentRecord paymentRecord) {
         if (paymentRecord.paymentStatus().isNull()) {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         }
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());

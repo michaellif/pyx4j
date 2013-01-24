@@ -128,6 +128,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         super.onReset();
         ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentOptions(), true);
         (get(proto().type())).setNote(null);
+        setBillingAddressVisible(false);
     }
 
     @Override
@@ -167,6 +168,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         } else {
             get(proto().type()).setValue(type, false);
         }
+
+        setBillingAddressVisible(false);
 
         if (type != null && getValue() != null) {
             @SuppressWarnings("rawtypes")
@@ -286,7 +289,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(visible);
         }
-
     }
 
     public boolean isIsPreauthorizedVisible() {

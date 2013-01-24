@@ -132,7 +132,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             protected AbstractEntitySelectorDialog<LeaseTermParticipant<?>> getSelectorDialog() {
                 return new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
-
                     @Override
                     public boolean onClickOk() {
                         get(PaymentForm.this.proto().leaseTermParticipant()).setValue(getSelectedItems().get(0));
@@ -255,7 +254,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().selectPaymentMethod()).setVisible(false);
 
         boolean isNew = getValue().id().isNull();
+        // hide some non-relevant fields:
         get(proto().id()).setVisible(!isNew);
+        get(proto().receivedDate()).setVisible(!isEditable());
+        get(proto().finalizeDate()).setVisible(!isEditable());
+        get(proto().paymentStatus()).setVisible(!isNew);
+        get(proto().lastStatusChangeDate()).setVisible(!isNew);
+
         if (isNew) {
             // Allow edit all values
             get(proto().leaseTermParticipant()).setEditable(true);
