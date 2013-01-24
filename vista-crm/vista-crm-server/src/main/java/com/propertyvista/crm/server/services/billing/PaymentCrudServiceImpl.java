@@ -37,7 +37,6 @@ import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -132,7 +131,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
 
         // some default values:
-        dto.paymentStatus().setValue(PaymentStatus.Submitted);
         dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
