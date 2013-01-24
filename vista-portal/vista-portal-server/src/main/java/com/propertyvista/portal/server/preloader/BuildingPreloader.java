@@ -92,9 +92,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
         // create some complexes:
         List<Complex> complexes = new Vector<Complex>();
-        complexes.add(buildingGenerator.createComplex("Complex #1"));
-        complexes.add(buildingGenerator.createComplex("Complex #2"));
-        complexes.add(buildingGenerator.createComplex("Complex #3"));
+        for (int i = 0; i < config().numComplexes; ++i) {
+            complexes.add(buildingGenerator.createComplex("Complex #" + i));
+        }
 
         Persistence.service().persist(complexes);
         List<Complex> complexesWithBuildings = new Vector<Complex>();
@@ -289,6 +289,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
 
         StringBuilder sb = new StringBuilder();
+        sb.append("Created ").append(complexes.size()).append(" complexes\n");
         sb.append("Created ").append(buildings.size()).append(" buildings\n");
         sb.append("Created ").append(unitCount).append(" units");
         return sb.toString();
