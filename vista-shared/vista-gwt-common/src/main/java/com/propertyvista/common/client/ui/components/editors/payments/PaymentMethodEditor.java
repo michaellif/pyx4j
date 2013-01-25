@@ -263,14 +263,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return get(proto().billingAddress()).isVisible();
     }
 
-    public void setBillingAddressAsCurrentVisible(boolean visible) {
-        get(proto().sameAsCurrent()).setVisible(visible);
-    }
-
-    public boolean isBillingAddressAsCurrentVisible() {
-        return get(proto().sameAsCurrent()).isVisible();
-    }
-
     public void setBillingAddressAsCurrentEnabled(boolean visible) {
         get(proto().sameAsCurrent()).setEnabled(visible);
     }

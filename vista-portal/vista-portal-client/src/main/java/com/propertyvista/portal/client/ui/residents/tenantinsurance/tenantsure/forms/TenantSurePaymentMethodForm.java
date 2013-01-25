@@ -73,7 +73,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     @Override
     protected void onValueSet(boolean populate) {
         setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
-        setBillingAddressAsCurrentVisible(onSameAsCurrentAddressSelected != null);
         super.onValueSet(populate);
     }
 

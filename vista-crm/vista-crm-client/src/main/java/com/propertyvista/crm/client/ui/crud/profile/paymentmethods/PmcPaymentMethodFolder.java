@@ -48,7 +48,6 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
             setTypeSelectionVisible(false);
             setIsPreauthorizedVisible(true);
             setBillingAddressVisible(false);
-            setBillingAddressAsCurrentVisible(false);
         }
 
         @Override
