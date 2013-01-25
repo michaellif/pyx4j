@@ -49,10 +49,10 @@ public class YardiLeaseProcessor {
             Property property = transaction.getProperty().get(0);
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
                 String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-                YardiLease yardiLease = rtCustomer.getCustomers().getCustomer().get(0).getLease();
                 if (rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseToDate() == null) {
                     Date date = rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseFromDate();
                     // adds a year to start date to make end date, hack to make sure end date exists.
+                    // TODO remove the hack !!! Need to handle this on lease term level.
                     date.setTime(date.getTime() + new Long("31536000000"));
                     rtCustomer.getCustomers().getCustomer().get(0).getLease().setLeaseToDate(date);
                 }
