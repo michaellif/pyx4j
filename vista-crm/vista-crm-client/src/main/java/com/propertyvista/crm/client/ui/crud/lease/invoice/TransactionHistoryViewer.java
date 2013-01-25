@@ -57,6 +57,8 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         if (value != null) {
             content.setH1(++row, 0, 1, i18n.tr("Transactions History"));
             content.setWidget(++row, 0, createLineItems(value.lineItems(), value.balanceForwardAmount().getValue()));
+
+            content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, i18n.tr("Arrears"));
             content.setWidget(++row, 0, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
 
