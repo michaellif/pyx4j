@@ -82,11 +82,16 @@
 }
 
 .vista-pmsite-staticPage .content  p {
-	padding: 0 0 25px;
+	padding: 0 0 15px;
 }
 
 .vista-pmsite-staticPage .content h1 {
-	
+	font-family: monospace;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 20px;
+    padding-bottom: 15px;
+    line-height: 1.3;	
 }
 
 .vista-pmsite-staticPage .content  h2 {
