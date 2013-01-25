@@ -18,7 +18,7 @@
 	float: left;
 }
 
-.vista-pmsite-aptListPage #advancedSearchCriteriaForm1 {
+.vista-pmsite-aptListPage .advancedSearchCriteria {
 	height: 460px;
     padding: 20px 0;
 }
