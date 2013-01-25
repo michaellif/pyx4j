@@ -149,7 +149,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().sameAsCurrent()).setVisible(!isViewable());
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
 
         paymentDetailsHeader.setVisible(this.contains(proto().details()));
@@ -183,7 +182,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 if (details.getInstanceValueClass() != CashInfo.class) {
                     details.set(EntityFactory.create(CashInfo.class));
                 }
-                setBillingAddressVisible(false);
                 break;
             case Check:
                 editor = new CheckInfoEditor();
@@ -211,7 +209,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 if (details.getInstanceValueClass() != InteracInfo.class) {
                     details.set(EntityFactory.create(InteracInfo.class));
                 }
-                setBillingAddressVisible(false);
                 break;
             case EFT:
                 break;
