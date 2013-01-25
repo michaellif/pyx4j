@@ -27,7 +27,16 @@ public class PortalSiteMap implements SiteMap {
     public static class Login extends AppPlace implements PublicPlace {
     }
 
+    public static class LogOut extends AppPlace implements PublicPlace {
+    }
+
     public static class LoginWithToken extends AppPlace implements PublicPlace {
+    }
+
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
+    }
+
+    public static class PasswordReset extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Residents registration")
@@ -37,12 +46,6 @@ public class PortalSiteMap implements SiteMap {
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
-    }
-
-    public static class PasswordResetRequest extends AppPlace {
-    }
-
-    public static class PasswordReset extends AppPlace {
     }
 
     public static class PasswordChange extends AppPlace {

@@ -27,9 +27,7 @@ public class PortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
-        // Currently Login is external, we may need to change this.
-        //callback.onSuccess(new PortalSiteMap.Login());
-        callback.onSuccess(new PortalSiteMap.Registration());
+        callback.onSuccess(new PortalSiteMap.Login());
     }
 
     @Override

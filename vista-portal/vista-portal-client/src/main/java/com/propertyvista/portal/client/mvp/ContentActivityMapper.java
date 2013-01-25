@@ -26,8 +26,6 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
-import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
-import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
 import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
@@ -41,7 +39,6 @@ import com.propertyvista.portal.client.activity.residents.maintenance.NewMainten
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
-import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
@@ -118,16 +115,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new TenantInsuranceByOtherProvdierUpdateActivity(place);
 
                     // TODO not sure if these activities belong here
-                } else if (place instanceof PortalSiteMap.Login) {
-                    activity = new RedirectToLoginPageActivity(place);
                 } else if (place instanceof PortalSiteMap.LoginWithToken) {
                     activity = new LoginWithTokenActivity(place);
-                } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
-                    activity = new PasswordResetRequestActivity(place);
-                } else if (place instanceof PortalSiteMap.PasswordReset) {
-                    activity = new PasswordResetActivity(place);
-                } else if (place instanceof PortalSiteMap.PasswordChange) {
-                    // TODO portal password change activity
                 } else if (place instanceof PortalSiteMap.Residents.CommunicationCenter) {
                     activity = new CommunicationCenterActivity(place);
                 } else {

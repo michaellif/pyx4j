@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 31, 2012
+ * Created on 2013-01-25
  * @author ArtyomB
  * @version $Id$
  */
@@ -17,18 +17,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
-import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
+import com.propertyvista.portal.client.ui.residents.login.LandingView;
+import com.propertyvista.portal.client.ui.residents.login.LandingViewImpl;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 
-public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity {
+public class LandingActivity extends AbstractLoginActivty implements LandingView.Presenter {
 
-    public PasswordResetRequestActivity(Place place) {
-        super(place, PortalViewFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
-                new PortalSiteMap.Login());
+    public LandingActivity(Place place) {
+        super(place, new LandingViewImpl(), GWT.<AuthenticationService> create(PortalAuthenticationService.class), new PortalSiteMap.PasswordResetRequest());
+    }
+
+    @Override
+    public void signUp() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Registration());
     }
 
 }

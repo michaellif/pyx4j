@@ -13,8 +13,6 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
@@ -26,7 +24,6 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 
-@AuthorizeInstantiation(Roles.USER)
 public class ResidentsPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
