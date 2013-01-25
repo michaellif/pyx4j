@@ -33,6 +33,19 @@ public class DevYardiCredentials {
         return cr;
     }
 
+    public static PmcYardiCredential getTest2PmcYardiCredential() {
+        PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
+
+        cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20.asmx");
+        cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20_SysBatch.asmx");
+        cr.username().setValue("propertyvista");
+        cr.credential().setValue("52673");
+        cr.serverName().setValue("aspdb06\\sql2k5");
+        cr.database().setValue("afqoml_qa6008");
+        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
+
+        return cr;
+    }
     // https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx 
 
     /**

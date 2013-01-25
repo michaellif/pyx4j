@@ -59,7 +59,7 @@ public class BuildingsMapper {
                     buildings.add(building);
                 }
             } catch (Exception e) {
-                log.error(String.format("Error during imported building %s mapping", getPropertyId(currentPropertyID)), e);
+                log.error("Error during imported building '{}' mapping", getPropertyId(currentPropertyID), e);
             }
         }
 
@@ -76,8 +76,18 @@ public class BuildingsMapper {
         // address
         Address addressImported = propertyID.getAddress().get(0);
         String street = addressImported.getAddress1();
-        String streetNumber = street.substring(0, street.indexOf(' '));
-        String streetName = street.substring(streetNumber.length() + 1);
+        if (street == null) {
+            street = "";
+        }
+
+        String streetNumber = "";
+        String streetName = street;
+
+        String[] streetTokens = street.split("\\s+", 2);
+        if (streetTokens.length == 2) {
+            streetNumber = streetTokens[0];
+            streetName = streetTokens[1];
+        }
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
