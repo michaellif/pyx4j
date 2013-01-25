@@ -33,6 +33,7 @@ public class YardiBatchProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         ServerSideFactory.create(YardiProcessFacade.class).postAllPayments(context.getRunStats());
+        ServerSideFactory.create(YardiProcessFacade.class).postAllNSF(context.getRunStats());
     }
 
     @Override

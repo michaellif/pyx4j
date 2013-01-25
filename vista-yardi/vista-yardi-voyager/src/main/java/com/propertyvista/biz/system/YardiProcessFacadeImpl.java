@@ -55,4 +55,17 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
             throw new Error("Yardi Integration disabled for this PMC");
         }
     }
+
+    @Override
+    public void postAllNSF(StatisticsRecord dynamicStatisticsRecord) {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            try {
+                YardiResidentTransactionsService.getInstance().postAllNSF(VistaDeployment.getPmcYardiCredential());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            throw new Error("Yardi Integration disabled for this PMC");
+        }
+    }
 }

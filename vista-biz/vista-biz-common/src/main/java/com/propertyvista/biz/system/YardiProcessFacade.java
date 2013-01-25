@@ -21,4 +21,6 @@ public interface YardiProcessFacade {
 
     void postAllPayments(StatisticsRecord dynamicStatisticsRecord);
 
+    void postAllNSF(StatisticsRecord dynamicStatisticsRecord);
+
 }

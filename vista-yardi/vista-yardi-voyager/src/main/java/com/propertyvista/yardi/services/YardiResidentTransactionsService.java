@@ -135,6 +135,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return transactions;
     }
 
+    public void postAllNSF(PmcYardiCredential pmcYardiCredential) {
+        // TODO Auto-generated method stub
+
+    }
+
     /**
      * Allows export of the Property Configuration with the
      * Database. The Unique Interface Entity name is needed in order
