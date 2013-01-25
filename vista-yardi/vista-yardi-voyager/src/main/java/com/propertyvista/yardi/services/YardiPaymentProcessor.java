@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.Payment;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
@@ -26,6 +27,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -41,6 +43,13 @@ public class YardiPaymentProcessor {
         for (ResidentTransactions rt : allTransactions) {
             for (Property prop : rt.getProperty()) {
                 for (RTCustomer cust : prop.getRTCustomer()) {
+                    // skip payment if lease expired
+                    YardiLease yardiLease = cust.getCustomers().getCustomer().get(0).getLease();
+                    if (new LogicalDate(yardiLease.getLeaseToDate()).before(new LogicalDate())) {
+                        log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
+                        continue;
+                    }
+
                     log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
                     // 1. get customer's YardiBillingAccount
                     YardiBillingAccount account = YardiProcessorUtils.getYardiBillingAccount(cust);
