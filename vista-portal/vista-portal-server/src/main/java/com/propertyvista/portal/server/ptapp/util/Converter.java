@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -26,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
@@ -181,4 +182,28 @@ public class Converter {
         to.issueClassification().set(from.issueClassification());
         return to;
     }
+
+    public static CommunicationCenterDTO convert(CommunicationMessage from) {
+        if (from == null) {
+            return null;
+        }
+        CommunicationCenterDTO to = EntityFactory.create(CommunicationCenterDTO.class);
+        to.id().set(from.id());
+        to.parent().set(from.parent());
+
+        to.sender().set(from.sender());
+
+        to.destination().set(from.destination());
+
+        to.topic().set(from.topic());
+
+        to.content().set(from.content());
+
+        to.isHighImportance().set(from.isHighImportance());
+        to.isRead().set(from.isRead());
+        to.created().set(from.created());
+        to.updated().set(from.updated());
+        return to;
+    }
+
 }

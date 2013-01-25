@@ -17,25 +17,14 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.CommunicationCenterDTO;
 
-//TODO: change the MaintenanceRequestDTO into CommunicationModuleSomenthingDTO
 public interface CommunicationCenterView extends IsWidget {
 
     interface Presenter {
-
-        void createNewRequest();
-
-        void editRequest(MaintenanceRequestDTO requests);
-
-        void cancelRequest(MaintenanceRequestDTO request);
-
-        void rateRequest(MaintenanceRequestDTO request, Integer rate);
     }
 
     void setPresenter(Presenter presenter);
 
-    void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests);
-
-    void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests);
+    void populateMyMessages(Vector<CommunicationCenterDTO> myMessages);
 }

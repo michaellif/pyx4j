@@ -13,16 +13,27 @@
  */
 package com.propertyvista.portal.client.activity.residents.communicationcenter;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+import java.util.Vector;
 
-import com.propertyvista.dto.MaintenanceRequestDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
 
 public class CommunicationCenterActivity extends SecurityAwareActivity implements CommunicationCenterView.Presenter {
+
+    private final Logger log = LoggerFactory.getLogger(CommunicationCenterActivity.class);
 
     private final CommunicationCenterView view;
 
@@ -35,27 +46,20 @@ public class CommunicationCenterActivity extends SecurityAwareActivity implement
     }
 
     @Override
-    public void createNewRequest() {
-        // TODO Auto-generated method stub
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
 
+        srv.listMyMessages(new DefaultAsyncCallback<Vector<CommunicationCenterDTO>>() {
+            @Override
+            public void onSuccess(Vector<CommunicationCenterDTO> result) {
+                if (result == null) {
+                    log.info("Service sent null vector!");
+                } else {
+                    view.populateMyMessages(result);
+                    panel.setWidget(view);
+                }
+            }
+
+        });
     }
-
-    @Override
-    public void editRequest(MaintenanceRequestDTO requests) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void cancelRequest(MaintenanceRequestDTO request) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void rateRequest(MaintenanceRequestDTO request, Integer rate) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

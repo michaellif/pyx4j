@@ -7,22 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-15
+ * Created on 2013-01-23
  * @author matheszabi
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.dto;
 
-import java.util.Vector;
+import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.domain.communication.CommunicationMessage;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
-import com.propertyvista.dto.CommunicationCenterDTO;
-
-public interface CommunicationCenterService extends AbstractCrudService<CommunicationCenterDTO> {
-
-    void listMyMessages(AsyncCallback<Vector<CommunicationCenterDTO>> callback);
-
+@Transient
+@ExtendsDBO
+public interface CommunicationCenterDTO extends CommunicationMessage {
+//TODO add favorites
 }

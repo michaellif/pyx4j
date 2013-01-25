@@ -7,22 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-15
+ * Created on 2013-01-21
  * @author matheszabi
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.domain.communication;
 
-import java.util.Vector;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+public interface CommunicationFavoritedMessages extends IEntity {
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+    //TODO: how to create a compound unique index?!
 
-import com.propertyvista.dto.CommunicationCenterDTO;
+    @NotNull
+    CommunicationPerson person();
 
-public interface CommunicationCenterService extends AbstractCrudService<CommunicationCenterDTO> {
-
-    void listMyMessages(AsyncCallback<Vector<CommunicationCenterDTO>> callback);
+    @NotNull
+    CommunicationMessage message();
 
 }
