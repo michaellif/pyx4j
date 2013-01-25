@@ -20,20 +20,43 @@ import com.yardi.entity.mits.YardiCustomer;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantMerger {
 
-    boolean isNew = false;
-
     public boolean validateChanges(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
-        // TODO Auto-generated method stub
+        for (YardiCustomer customer : yardiCustomers) {
+            boolean isNew = true;
+            for (LeaseTermTenant tenant : tenants) {
+                if (compare(customer, tenant) && checkRole(customer, tenant)) {
+                    isNew = false;
+                }
+            }
+            if (isNew) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkRole(YardiCustomer customer, LeaseTermTenant tenant) {
+        if (customer.getLease().isResponsibleForLease().equals(tenant.role().getValue().equals(Role.Applicant))) {
+            return true;
+        }
         return false;
     }
 
     public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, IList<LeaseTermTenant> tenants) {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 
+    private boolean compare(YardiCustomer customer, LeaseTermTenant tenant) {
+        if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
+                && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
+            return true;
+        }
+        return false;
+    }
 }

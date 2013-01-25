@@ -18,13 +18,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -42,8 +40,7 @@ public class YardiChargeProcessor {
             for (Property prop : rt.getProperty()) {
                 for (RTCustomer cust : prop.getRTCustomer()) {
                     // skip customer if lease expired
-                    YardiLease yardiLease = cust.getCustomers().getCustomer().get(0).getLease();
-                    if (new LogicalDate(yardiLease.getLeaseToDate()).before(new LogicalDate())) {
+                    if (new YardiLeaseProcessor().isPastEntry(cust)) {
                         log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
                         continue;
                     }

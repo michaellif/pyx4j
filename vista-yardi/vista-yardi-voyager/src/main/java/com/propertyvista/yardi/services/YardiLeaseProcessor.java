@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -27,17 +28,15 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.yardi.mapper.TenantMapper;
 import com.propertyvista.yardi.merger.LeaseMerger;
 import com.propertyvista.yardi.merger.TenantMerger;
 
@@ -49,9 +48,15 @@ public class YardiLeaseProcessor {
         for (ResidentTransactions transaction : allTransactions) {
             Property property = transaction.getProperty().get(0);
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                YardiLease yardiLease = rtCustomer.getCustomers().getCustomer().get(0).getLease();
                 String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-                if (new LogicalDate(yardiLease.getLeaseToDate()).before(new LogicalDate())) {
+                YardiLease yardiLease = rtCustomer.getCustomers().getCustomer().get(0).getLease();
+                if (rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseToDate() == null) {
+                    Date date = rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseFromDate();
+                    // adds a year to start date to make end date, hack to make sure end date exists.
+                    date.setTime(date.getTime() + new Long("31536000000"));
+                    rtCustomer.getCustomers().getCustomer().get(0).getLease().setLeaseToDate(date);
+                }
+                if (isPastEntry(rtCustomer)) {
                     log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
                     continue;
                 }
@@ -61,6 +66,7 @@ public class YardiLeaseProcessor {
                     criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
                     if (!Persistence.service().query(criteria).isEmpty()) {
                         Lease lease = Persistence.service().query(criteria).get(0);
+                        Persistence.service().retrieve(lease.currentTerm().version().tenants());
                         updateLease(rtCustomer, lease);
                         continue;
                     }
@@ -120,10 +126,13 @@ public class YardiLeaseProcessor {
             // TODO double into BigDecimal...might need to be handled differently
             leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
-
         // set dates:
         lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
-        lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
+        if (yardiLease.getLeaseToDate() != null) {
+            lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
+        } else {
+            System.out.println("wat");
+        }
         if (yardiLease.getExpectedMoveInDate() != null) {
             lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
         }
@@ -133,20 +142,8 @@ public class YardiLeaseProcessor {
 
         // add tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
-            Customer customer = EntityFactory.create(Customer.class);
-
-            customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
-            customer.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
-            customer.person().name().middleName().setValue(yardiCustomer.getName().getMiddleName());
-
-            LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-            tenantInLease.leaseParticipant().customer().set(customer);
-            if (rtCustomer.getCustomerID().equals(yardiCustomer.getCustomerID()) && yardiCustomer.getLease().isResponsibleForLease()) {
-                tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
-            } else {
-                tenantInLease.role().setValue(
-                        yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.CoApplicant : LeaseTermParticipant.Role.Dependent);
-            }
+            TenantMapper mapper = new TenantMapper();
+            LeaseTermTenant tenantInLease = mapper.map(yardiCustomer);
 
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
@@ -159,5 +156,13 @@ public class YardiLeaseProcessor {
         leaseFacade.activate(lease);
 
         log.info("Lease {} in building {} successfully created", rtCustomer.getCustomerID(), propertyCode);
+    }
+
+    public boolean isPastEntry(RTCustomer rtCustomer) {
+        YardiLease yardiLease = rtCustomer.getCustomers().getCustomer().get(0).getLease();
+        if (yardiLease.getLeaseToDate() != null && new LogicalDate(yardiLease.getLeaseToDate()).before(new LogicalDate())) {
+            return true;
+        }
+        return false;
     }
 }
