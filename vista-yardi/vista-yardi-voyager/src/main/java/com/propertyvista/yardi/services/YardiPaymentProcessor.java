@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
+import com.propertyvista.domain.financial.yardi.YardiPaymentReversal;
 
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
@@ -74,7 +76,7 @@ public class YardiPaymentProcessor {
                             EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
                             origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
                             origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
-                            origPayment.add(PropertyCriterion.eq(origPayment.proto().id(), ypKey));
+                            origPayment.add(PropertyCriterion.eq(origPayment.proto().paymentRecord().id(), ypKey));
                             Persistence.service().delete(origPayment);
                         }
                         // add new payment transaction
@@ -86,7 +88,6 @@ public class YardiPaymentProcessor {
         }
     }
 
-    // TODO add payment reversals
     public ResidentTransactions getAllPaymentTransactions() {
         EntityQueryCriteria<YardiPayment> allPayments = EntityQueryCriteria.create(YardiPayment.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
@@ -119,4 +120,42 @@ public class YardiPaymentProcessor {
         }
         return paymentTransactions;
     }
+
+    public List<ResidentTransactions> getAllNSFReversals() {
+        List<ResidentTransactions> allNSF = new ArrayList<ResidentTransactions>();
+
+        EntityQueryCriteria<YardiPaymentReversal> nsfReversals = EntityQueryCriteria.create(YardiPaymentReversal.class);
+        nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().applyNSF(), true));
+        nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
+        for (YardiPaymentReversal nsf : Persistence.service().query(nsfReversals)) {
+            Persistence.ensureRetrieve(nsf.billingAccount(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(nsf.billingAccount().lease(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(nsf.billingAccount().lease().unit().building(), AttachLevel.Attached);
+
+            ResidentTransactions rt = new ResidentTransactions();
+
+            // Create Payment transaction
+            Transactions transactions = new Transactions();
+            transactions.setPayment(YardiProcessorUtils.getNSFReversal(nsf));
+
+            // Add Payment to Customer
+            RTCustomer customer = new RTCustomer();
+            customer.setRTServiceTransactions(new RTServiceTransactions());
+            customer.getRTServiceTransactions().getTransactions().add(transactions);
+
+            // Add Customer to Property
+            Property property = new Property();
+            property.getRTCustomer().add(customer);
+
+            // Add Property to batch
+            rt.getProperty().add(property);
+            allNSF.add(rt);
+
+            // mark payment as read
+            nsf.claimed().setValue(true);
+            Persistence.service().persist(nsf);
+        }
+        return allNSF;
+    }
+
 }

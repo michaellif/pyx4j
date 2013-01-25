@@ -70,6 +70,7 @@ public class ARFacadeYardyImpl implements ARFacade {
         reversal.claimed().setValue(false);
         reversal.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
         // TODO - use applyNSF...
+        reversal.applyNSF().setValue(applyNSF);
 
         Persistence.service().persist(reversal);
     }

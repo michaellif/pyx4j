@@ -14,9 +14,11 @@
 package com.propertyvista.domain.financial.yardi;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 @DiscriminatorValue("YardiReversal")
 public interface YardiPaymentReversal extends InvoicePaymentBackOut {
+    IPrimitive<Boolean> applyNSF();
 }

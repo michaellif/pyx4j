@@ -35,7 +35,8 @@ public class YardiResidentTransactionsServiceClient {
 
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
         try {
-            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+//            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+            YardiResidentTransactionsService.getInstance().postAllNSF(yardiCredential);
         } finally {
             Persistence.service().commit();
         }

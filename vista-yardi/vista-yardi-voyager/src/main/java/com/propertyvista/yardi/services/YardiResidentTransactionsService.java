@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +32,9 @@ import com.yardi.ws.operations.GetPropertyConfigurations;
 import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
 import com.yardi.ws.operations.GetResidentTransactions_LoginResponse;
+import com.yardi.ws.operations.ImportResidentTransactions_Login;
+import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
+import com.yardi.ws.operations.TransactionXml_type1;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -85,7 +91,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         updateCharges(allTransactions);
 
-        updatePayments(allTransactions);
+//        updatePayments(allTransactions);
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
@@ -135,9 +141,23 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return transactions;
     }
 
-    public void postAllNSF(PmcYardiCredential pmcYardiCredential) {
-        // TODO Auto-generated method stub
+    public void postAllNSF(PmcYardiCredential yc) {
+        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
+        for (ResidentTransactions nsf : getAllNSFReversals()) {
+            try {
+                // for NSF reversals Yardi recommends one by one import
+                String xml = MarshallUtil.marshall(nsf);
+                log.info(xml);
+                importResidentTransactions(client, yc, xml);
+            } catch (Exception e) {
+                log.error("NSF import failed", e);
+            }
+        }
+    }
+
+    private List<ResidentTransactions> getAllNSFReversals() {
+        return new YardiPaymentProcessor().getAllNSFReversals();
     }
 
     /**
@@ -215,6 +235,30 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
         return transactions;
+    }
+
+    private void importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws AxisFault, RemoteException, JAXBException,
+            XMLStreamException {
+        c.transactionId++;
+        c.setCurrentAction(Action.ImportResidentTransactions);
+
+        ImportResidentTransactions_Login l = new ImportResidentTransactions_Login();
+        l.setUserName(yc.username().getValue());
+        l.setPassword(yc.credential().getValue());
+        l.setServerName(yc.serverName().getValue());
+        l.setDatabase(yc.database().getValue());
+        l.setPlatform(yc.platform().getValue().name());
+        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+
+        TransactionXml_type1 transactionXml = new TransactionXml_type1();
+        OMElement element = AXIOMUtil.stringToOM(nsfXml);
+        transactionXml.setExtraElement(element);
+        l.setTransactionXml(transactionXml);
+
+        ImportResidentTransactions_LoginResponse response = c.getResidentTransactionsService().importResidentTransactions_Login(l);
+        String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
+
+        log.info("ImportResidentTransactions: {}", xml);
     }
 
 }

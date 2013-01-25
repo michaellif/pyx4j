@@ -22,6 +22,7 @@ import com.yardi.entity.mits.Identification;
 import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.Detail;
 import com.yardi.entity.resident.Payment;
+import com.yardi.entity.resident.PaymentDetailReversal;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 
@@ -33,9 +34,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
+import com.propertyvista.domain.financial.yardi.YardiPaymentReversal;
 import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -125,15 +128,41 @@ public class YardiProcessorUtils {
     }
 
     public static Detail getPaymentDetail(YardiPayment yp) {
+        PaymentRecord pr = yp.paymentRecord();
+        Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
+
         Detail detail = new Detail();
-        detail.setDocumentNumber(yp.getPrimaryKey().toString());
-        detail.setTransactionDate(yp.postDate().getValue());
+        detail.setDocumentNumber(pr.getPrimaryKey().toString());
+        detail.setTransactionDate(pr.createdDate().getValue());
         detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
-        Persistence.ensureRetrieve(yp.paymentRecord().paymentMethod().customer(), AttachLevel.Attached);
-        detail.setPaidBy(yp.paymentRecord().paymentMethod().customer().person().getStringView());
-        detail.setAmount(yp.amount().getValue().negate().toString());
-        detail.setDescription(yp.description().getValue());
+        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
+        detail.setAmount(pr.amount().getValue().toString());
         detail.setPropertyPrimaryID(yp.billingAccount().lease().unit().building().propertyCode().getValue());
+        detail.setDescription(yp.description().getValue());
+        return detail;
+    }
+
+    public static Payment getNSFReversal(YardiPaymentReversal nsf) {
+        Payment payment = new Payment();
+        payment.setType(YardiPaymentType.Other.name());
+        payment.setDetail(getNSFReversalDetail(nsf));
+        return payment;
+    }
+
+    public static Detail getNSFReversalDetail(YardiPaymentReversal nsf) {
+        PaymentRecord pr = nsf.paymentRecord();
+        Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
+
+        Detail detail = new Detail();
+        PaymentDetailReversal reversalType = new PaymentDetailReversal();
+        reversalType.setType("NSF");
+        detail.setReversal(reversalType);
+        detail.setDocumentNumber(pr.getPrimaryKey().toString());
+        detail.setTransactionDate(pr.createdDate().getValue());
+        detail.setCustomerID(nsf.billingAccount().lease().leaseId().getValue());
+        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
+        detail.setAmount(pr.amount().getValue().toString());
+        detail.setPropertyPrimaryID(nsf.billingAccount().lease().unit().building().propertyCode().getValue());
         return detail;
     }
 
