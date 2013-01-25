@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.widgets.test;
+package com.pyx4j.test.commons.css;
 
 import junit.framework.TestCase;
 
