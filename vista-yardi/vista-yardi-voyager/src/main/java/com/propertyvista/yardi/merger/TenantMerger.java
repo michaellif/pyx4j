@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.merger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.yardi.entity.mits.YardiCustomer;
@@ -20,8 +21,8 @@ import com.yardi.entity.mits.YardiCustomer;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.yardi.mapper.TenantMapper;
 
 public class TenantMerger {
 
@@ -29,7 +30,7 @@ public class TenantMerger {
         for (YardiCustomer customer : yardiCustomers) {
             boolean isNew = true;
             for (LeaseTermTenant tenant : tenants) {
-                if (compare(customer, tenant) && checkRole(customer, tenant)) {
+                if (compare(customer, tenant)) {
                     isNew = false;
                 }
             }
@@ -40,16 +41,47 @@ public class TenantMerger {
         return false;
     }
 
-    private boolean checkRole(YardiCustomer customer, LeaseTermTenant tenant) {
-        if (customer.getLease().isResponsibleForLease().equals(tenant.role().getValue().equals(Role.Applicant))) {
-            return true;
+    public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
+        IList<LeaseTermTenant> tenants = term.version().tenants();
+        List<String> existing = getNfromT(tenants);
+        List<String> imported = getNfromC(yardiCustomers);
+        List<String> removed = new ArrayList<String>(existing);
+        removed.removeAll(imported);
+        List<String> added = new ArrayList<String>(imported);
+        added.removeAll(existing);
+
+        for (String name : removed) {
+            LeaseTermTenant tenant = getT(tenants, name);
+            term.version().tenants().remove(tenant);
         }
-        return false;
+        for (String name : added) {
+            YardiCustomer customer = getC(yardiCustomers, name);
+            TenantMapper mapper = new TenantMapper();
+            LeaseTermTenant tenant = mapper.map(customer);
+            term.version().tenants().add(tenant);
+        }
+        return term;
     }
 
-    public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, IList<LeaseTermTenant> tenants) {
-        // TODO
-        return null;
+    private List<String> getNfromT(List<LeaseTermTenant> tenants) {
+        List<String> names = new ArrayList<String>();
+        for (LeaseTermTenant tenant : tenants) {
+            String name = new String();
+            name = tenant.leaseParticipant().customer().person().name().firstName().getValue() + "#"
+                    + tenant.leaseParticipant().customer().person().name().lastName().getValue();
+            names.add(name);
+        }
+        return names;
+    }
+
+    private List<String> getNfromC(List<YardiCustomer> customers) {
+        List<String> names = new ArrayList<String>();
+        for (YardiCustomer customer : customers) {
+            String name = new String();
+            name = customer.getName().getFirstName() + "#" + customer.getName().getLastName();
+            names.add(name);
+        }
+        return names;
     }
 
     private boolean compare(YardiCustomer customer, LeaseTermTenant tenant) {
@@ -58,5 +90,24 @@ public class TenantMerger {
             return true;
         }
         return false;
+    }
+
+    private YardiCustomer getC(List<YardiCustomer> customers, String name) {
+        for (YardiCustomer customer : customers) {
+            if (customer.getName().getFirstName().equals(name.split("#")[0]) && customer.getName().getLastName().equals(name.split("#")[1])) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    private LeaseTermTenant getT(List<LeaseTermTenant> tenants, String name) {
+        for (LeaseTermTenant tenant : tenants) {
+            if (tenant.leaseParticipant().customer().person().name().firstName().getValue().equals(name.split("#")[0])
+                    && tenant.leaseParticipant().customer().person().name().lastName().getValue().equals(name.split("#")[1])) {
+                return tenant;
+            }
+        }
+        return null;
     }
 }

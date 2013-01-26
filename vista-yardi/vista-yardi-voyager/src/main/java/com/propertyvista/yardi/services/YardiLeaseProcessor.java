@@ -94,7 +94,7 @@ public class YardiLeaseProcessor {
         if (new LeaseMerger().validateTermChanges(yardiLease, lease.currentTerm()) || new TenantMerger().validateChanges(yardiCustomers, tenants)) {
             LeaseTerm newTerm = Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
             newTerm = new LeaseMerger().updateTerm(yardiLease, newTerm);
-//            newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm.version().tenants());
+            newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm);
             lease.currentTerm().set(newTerm);
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
@@ -144,7 +144,6 @@ public class YardiLeaseProcessor {
         for (YardiCustomer yardiCustomer : yardiCustomers) {
             TenantMapper mapper = new TenantMapper();
             LeaseTermTenant tenantInLease = mapper.map(yardiCustomer);
-
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
