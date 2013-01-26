@@ -584,7 +584,13 @@ BEGIN
         INSERT INTO site_descriptor$banner (id,owner,value)
         (SELECT nextval('public.site_descriptor$banner_seq') AS id,a.id AS owner, b.id AS value 
         FROM    site_descriptor a,portal_image_set b );
+        
+        
+        /** Finishing touch - update _admin_.admin_pmc **/
 
+        UPDATE  _admin_.admin_pmc
+        SET     schema_version = '1.0.6'
+        WHERE   namespace = v_schema_name;
 END;      
 $$
 LANGUAGE plpgsql VOLATILE;
