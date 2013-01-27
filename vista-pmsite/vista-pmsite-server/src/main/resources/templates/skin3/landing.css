@@ -12,7 +12,6 @@
 .infobox_body {
 	padding: 20px 20px;
 	float:left;
-//	border-left: solid 1px ${object2_50};
 }
 
 .banner {
@@ -29,14 +28,14 @@
 	background: ${object2_90};
 }
 
-.quickSearchPanel {
+.quickSearch {
 	width: 300px;
 	background: ${object2_10};
 }
-.quickSearchPanel .infobox_body {
+.quickSearch .infobox_body {
       float:none;
 }
-.quickSearchPanel h3 {
+.quickSearch h3 {
 	color: #555555;
 	font-size: 16px;
 	padding: 20px 0;
@@ -44,20 +43,20 @@
 	text-transform: uppercase;
 }
 
-.quickSearchPanel label {
+.quickSearch label {
 	color: #555555;
 	display: block;
 	font-size: 13px;
 	padding: 0 0 3px;
 }
 
-.quickSearchPanel select {
+.quickSearch select {
 	color:${background_100};
 	width: 100%;
 	margin-bottom: 15px;
 }
 
-.quickSearchPanel input[type=submit] {
+.quickSearch input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
 	color: ${object1_10};
@@ -68,13 +67,18 @@
 	width: 128px;
 }
 
-.quickSearchPanel .submit {
+.quickSearch .submit {
 	background: ${object1_100};
 	height: 32px;
 	margin: 15px auto 0;
 	overflow: hidden;
 	width: 128px;
 	border: 2px splid ${object1_100};
+}
+
+.wideGadgetBox.quickSearch .selectField {
+	display:inline-block;
+	width:49%;
 }
 
 .vista-pmsite-mainWrap {
@@ -96,7 +100,8 @@
 	float: left;
 	display:inline-block;
 	min-width:300px;
-	min-height:380px;
+	min-height:960px;
+	background: ${object2_10};
 }
 
 .vista-pmsite-main {
@@ -156,14 +161,6 @@
 	color: ${foreground_100};
 	text-align: right;
 	padding: 10px 0 0 0;
-}
-
-#narrowSpacer {
-	float: left;
-	padding-top: 400px;
-	width: 300px;
-	display: inline-block;
-	background: ${object2_10};
 }
 
 .newsBox {

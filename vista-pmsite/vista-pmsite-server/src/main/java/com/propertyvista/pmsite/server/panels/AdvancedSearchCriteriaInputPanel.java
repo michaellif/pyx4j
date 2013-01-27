@@ -35,6 +35,7 @@ import org.apache.wicket.util.convert.IConverter;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
@@ -172,7 +173,8 @@ public class AdvancedSearchCriteriaInputPanel extends Panel {
         add(new FormErrorPanel("inputErrors", "minPrice", "maxPrice"));
 
         // amenities
-        boolean singleBuilding = singleProv && singleCity && (PropertyFinder.getPropertyList(null).size() == 1);
+        List<Building> buildings = PropertyFinder.getPropertyList(null);
+        boolean singleBuilding = singleProv && singleCity && buildings != null && buildings.size() == 1;
         CheckBoxMultipleChoice<BuildingAmenity.Type> checkBoxMultipleChoice = new CheckBoxMultipleChoice<BuildingAmenity.Type>("amenities", model.bind(criteria
                 .amenities()), Arrays.asList(PropertySearchCriteria.AmenityChoice));
         add(checkBoxMultipleChoice.setVisible(!singleBuilding));

@@ -25,7 +25,8 @@ public interface HomePageGadget extends IEntity {
     }
 
     public enum GadgetType {
-        news(NewsGadgetContent.class), testimonials(TestimonialsGadgetContent.class), promo(PromoGadgetContent.class), custom(CustomGadgetContent.class);
+        quickSearch(QuickSearchGadgetContent.class), news(NewsGadgetContent.class), testimonials(TestimonialsGadgetContent.class), promo(
+                PromoGadgetContent.class), custom(CustomGadgetContent.class);
 
         private final Class<? extends GadgetContent> contentClass;
 

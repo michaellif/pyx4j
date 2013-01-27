@@ -12,14 +12,36 @@
 	background-color: #FFFFFF;
 }
 
+.infobox_header {
+	background: #fff;
+	height: 30px;
+	padding: 5px 0;
+}
+
 .infobox_body {
 	border-top: 5px solid #000000;
 	overflow:hidden;
 }
 
 .infobox_body .selectField{
-    float: left;
     padding-bottom: 15px;
+}
+
+.wideGadgetBox {
+	overflow:hidden;
+	width: 100%;
+}
+
+.narrowGadgetBox {
+	display:inline-block;
+	width:300px;
+	background: ${object2_10};
+}
+.narrowGadgetBox .infobox_header {
+	background: ${object2_90};
+}
+.narrowGadgetBox .infobox_body {
+	border:0;
 }
 
 .banner {
@@ -31,11 +53,6 @@
 
 .banner_img {
 	border-top: 5px solid #000000;
-	background-image: url("images/landing.png"); 
-	background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: right top;
-    background-size: 620px 375px;
     height: 375px;
     width: 920px;
     margin-bottom: 30px;
@@ -47,13 +64,12 @@
 	padding: 5px 0;
 }
 
-.quickSearchPanel {
-	width: 280px;
+.quickSearch .infobox_header {
 	background: #fff;
-	height: 100%;
-	overflow: hidden;
+	height: 30px;
+	padding: 5px 0;
 }
-.quickSearchPanel .infobox_body {
+.quickSearch .infobox_body {
       float:none;
       margin-bottom: 12px;
       background: #999999;
@@ -61,7 +77,7 @@
       padding: 18px 20px;
 }
 
-.quickSearchPanel h3 {
+.quickSearch h3 {
 	color: #555555;
 	font-size: 16px;
 	padding: 20px 0;
@@ -69,14 +85,14 @@
 	text-transform: uppercase;
 }
 
-.quickSearchPanel label {
+.quickSearch label {
 	color: #fff;
 	display: block;
 	font-size: 12px;
 	white-space: nowrap;
 }
 
-.quickSearchPanel select {
+.quickSearch select {
 	color: #999999;
 	width: 240px;
 	margin-bottom: 15px;
@@ -84,7 +100,7 @@
 	margin: 0 0 6px 0;
 }
 
-.quickSearchPanel input[type=submit] {
+.quickSearch input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
 	color:#fff;
@@ -92,12 +108,16 @@
 	padding: 10px;
 }
 
-.quickSearchPanel .submit {
+.quickSearch .submit {
 	background: ${object1_100};
 	float: right;
 	overflow: hidden;
 	border: 2px solid ${object1_100};
 	
+}
+
+.wideGadgetBox.quickSearch .selectField {
+	display:inline-block;
 }
 
 .vista-pmsite-mainWrap {
@@ -295,24 +315,5 @@
 }
 .promoBox .citySelectionForm {
 	margin: 15px 0 10px 0;
-}
-
-.wideGadgetBox {
-	float:left;
-	overflow:hidden;
-	width: 100%;
-}
-
-.narrowGadgetBox {
-    float:left;
-	display:inline-block;
-	width:300px;
-	background: ${object2_10};
-}
-.narrowGadgetBox .infobox_header {
-	background: ${object2_90};
-}
-.narrowGadgetBox .infobox_body {
-	border:0;
 }
 

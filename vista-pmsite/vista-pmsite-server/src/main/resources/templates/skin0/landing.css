@@ -17,59 +17,6 @@
 	position: absolute; bottom:0;
 }
 
-.quickSearchPanel {
-	width: 200px;
-	padding-top:60px;
-	padding-right:30px;
-	float:right;
-}
-
-.quickSearchPanel h3 {
-	color: #FFFFFF;
-	font-size: 16px;
-	padding: 20px 0;
-	text-align: center;
-	text-transform: uppercase;
-}
-
-.quickSearchPanel label {
-	color: #CCCCCC;
-	display: block;
-	font-size: 13px;
-	padding: 0 0 3px;
-}
-
-.quickSearchPanel select {
-	width: 100%;
-	margin-bottom: 15px;
-}
-
-.quickSearchPanel input {
-	background: none repeat scroll 0 0 transparent;
-	border: medium none;
-	color: #000000;
-	cursor: pointer;
-	font-size: 16px;
-	padding: 5px 0;
-	text-shadow: 0 1px 0 #CCCCCC;
-	text-transform: uppercase;
-	width: 128px;
-}
-
-
-.quickSearchPanel .submit {
-	background: url("images/btn.png") no-repeat scroll 0 0
-		transparent;
-	height: 32px;
-	margin: 15px auto 0;
-	overflow: hidden;
-	width: 128px;
-}
-
-.quickSearchPanel .submit:hover {
-	background-position:0 -32px;
-}
-
 .vista-pmsite-mainWrap {
 }
 
@@ -84,11 +31,60 @@
 	vertical-align:top;
 	background: url("images/bg_sidebar.gif") repeat-x #34363C;
 	background-size:100% 100%;
-	float: left;
 }
+
+.quickSearch h3 {
+	color: #FFFFFF;
+	font-size: 16px;
+	padding: 20px 0;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.quickSearch label {
+	color: #CCCCCC;
+	display: block;
+	font-size: 13px;
+	padding: 0 0 3px;
+}
+
+.quickSearch select {
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+.quickSearch input {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	color: #000000;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 5px 0;
+	text-shadow: 0 1px 0 #CCCCCC;
+	text-transform: uppercase;
+	width: 128px;
+}
+
+.quickSearch .submit {
+	background: url("images/btn.png") no-repeat scroll 0 0
+		transparent;
+	height: 32px;
+	margin: 15px auto 0;
+	overflow: hidden;
+	width: 128px;
+}
+
+.quickSearch .submit:hover {
+	background-position:0 -32px;
+}
+
+.wideGadgetBox.quickSearch .selectField {
+	display:inline-block;
+	width:49%;
+}
+
 .newsBox {
 	padding: 20px 30px;
-	min-height: 380px;
 }
 
 .newsBox .date {
@@ -112,19 +108,6 @@
 	vertical-align: text-top;
 }
 
-.vista-pmsite-main {
-	width: 680px;
-	display:inline-block;
-	vertical-align:top;
-}
-.infobox_header_title {
-	font-size: 22px;
-	line-height: 60px;
-	white-space: nowrap;
-}
-.infobox_header_title:lang(fr) {
-	font-size: 18px;
-}
 .promoBox {
 	height:240px;
 	padding:20px 10px 0;
@@ -226,4 +209,18 @@
 }
 .narrowGadgetBox {
 	padding: 20px 30px;
+}
+
+.vista-pmsite-main {
+	width: 675px;
+	display:inline-block;
+	vertical-align:top;
+}
+.infobox_header_title {
+	font-size: 22px;
+	line-height: 60px;
+	white-space: nowrap;
+}
+.infobox_header_title:lang(fr) {
+	font-size: 18px;
 }

@@ -45,8 +45,8 @@ public class QuickSearchCriteriaPanel extends Panel {
 
     private static final I18n i18n = I18n.get(QuickSearchCriteriaPanel.class);
 
-    public QuickSearchCriteriaPanel() {
-        super("quickSearchCriteriaPanel");
+    public QuickSearchCriteriaPanel(String id) {
+        super(id);
 
         PropertySearchCriteria criteria = EntityFactory.create(PropertySearchCriteria.class);
 

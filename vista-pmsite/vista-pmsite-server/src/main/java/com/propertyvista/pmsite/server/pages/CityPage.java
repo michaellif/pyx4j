@@ -13,6 +13,8 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -125,15 +127,18 @@ public class CityPage extends BasePage {
         // link panel
         RepeatingView linkPanel = new RepeatingView("propertyEntry");
         add(linkPanel);
-        for (Building building : PropertyFinder.getPropertyList(searchCrit)) {
-            AddressStructured addr = building.info().address();
-            String title = addr.getStringView();
-            // No-Street-City-Province-Code
-            String ref = SimpleMessageFormat.format("{0} {1} {2} {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
-                    addr.city().getValue(), addr.province().name().getValue(), building.propertyCode().getValue()).replaceAll(" ", "-");
-            WebMarkupContainer propEntry = new WebMarkupContainer(linkPanel.newChildId());
-            propEntry.add(new PageLink("propertyLink", AptDetailsPage.class, new PageParameters().set(0, ref)).setText(title));
-            linkPanel.add(propEntry);
+        List<Building> searchResult = PropertyFinder.getPropertyList(searchCrit);
+        if (searchResult != null) {
+            for (Building building : PropertyFinder.getPropertyList(searchCrit)) {
+                AddressStructured addr = building.info().address();
+                String title = addr.getStringView();
+                // No-Street-City-Province-Code
+                String ref = SimpleMessageFormat.format("{0} {1} {2} {3} {4}", addr.streetNumber().getValue(), addr.streetName().getValue(),
+                        addr.city().getValue(), addr.province().name().getValue(), building.propertyCode().getValue()).replaceAll(" ", "-");
+                WebMarkupContainer propEntry = new WebMarkupContainer(linkPanel.newChildId());
+                propEntry.add(new PageLink("propertyLink", AptDetailsPage.class, new PageParameters().set(0, ref)).setText(title));
+                linkPanel.add(propEntry);
+            }
         }
     }
 

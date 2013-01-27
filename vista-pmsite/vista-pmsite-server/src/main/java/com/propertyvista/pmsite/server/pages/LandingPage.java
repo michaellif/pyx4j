@@ -35,7 +35,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.pmsite.server.panels.CustomGadgetPanel;
 import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
 import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
-import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
+import com.propertyvista.pmsite.server.panels.QuickSearchGadgetPanel;
 import com.propertyvista.pmsite.server.panels.TestimGadgetPanel;
 
 public class LandingPage extends BasePage {
@@ -61,7 +61,6 @@ public class LandingPage extends BasePage {
 
         // see if banner image is available
         WebMarkupContainer bannerImg = new WebMarkupContainer("bannerImg");
-        bannerImg.add(new QuickSearchCriteriaPanel());
         SiteImageResource banner = cm.getSiteBanner(locale);
         if (banner != null) {
             bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
@@ -78,6 +77,9 @@ public class LandingPage extends BasePage {
                 @SuppressWarnings("unchecked")
                 GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
                 switch (type) {
+                case quickSearch:
+                    item.add(new QuickSearchGadgetPanel("narrowBoxContent", gadget));
+                    break;
                 case news:
                     item.add(new NewsGadgetPanel("narrowBoxContent", gadget));
                     break;
@@ -99,6 +101,9 @@ public class LandingPage extends BasePage {
                 GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
                 if (type != null) {
                     switch (type) {
+                    case quickSearch:
+                        item.add(new QuickSearchGadgetPanel("wideBoxContent", gadget));
+                        break;
                     case promo:
                         item.add(new PromoGadgetPanel("wideBoxContent"));
                         break;
