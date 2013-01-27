@@ -56,6 +56,7 @@ import com.propertyvista.domain.site.Testimonial;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
 import com.propertyvista.domain.site.gadgets.PromoGadgetContent;
+import com.propertyvista.domain.site.gadgets.QuickSearchGadgetContent;
 import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
@@ -191,13 +192,9 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         // home page gadgets
         {
-            HomePageGadget gadget = EntityFactory.create(HomePageGadget.class);
-            gadget.status().setValue(HomePageGadget.GadgetStatus.published);
-            gadget.area().setValue(HomePageGadget.GadgetArea.wide);
-            gadget.name().setValue("Featured Apartments");
-            PromoGadgetContent promoContent = EntityFactory.create(PromoGadgetContent.class);
-            gadget.content().set(promoContent);
-            site.homePageGadgetsWide().add(gadget);
+            createQuickSearchGadget(site, siteLocale);
+
+            createPromoGadget(site, siteLocale);
 
             createTestimonialGadget(site, siteLocale);
 
@@ -328,12 +325,22 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         }
     }
 
+    protected void createQuickSearchGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        HomePageGadget gadget = createGadget("Quick Search", HomePageGadget.GadgetArea.narrow);
+        gadget.content().set(EntityFactory.create(QuickSearchGadgetContent.class));
+        site.homePageGadgetsNarrow().add(gadget);
+
+    }
+
+    protected void createPromoGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        HomePageGadget gadget = createGadget("Featured Apartments", HomePageGadget.GadgetArea.wide);
+        gadget.content().set(EntityFactory.create(PromoGadgetContent.class));
+        site.homePageGadgetsWide().add(gadget);
+    }
+
     @I18nComment("This is demo content")
     protected void createTestimonialGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
-        HomePageGadget gadget = EntityFactory.create(HomePageGadget.class);
-        gadget.status().setValue(HomePageGadget.GadgetStatus.published);
-        gadget.area().setValue(HomePageGadget.GadgetArea.wide);
-        gadget.name().setValue("Testimonials");
+        HomePageGadget gadget = createGadget("Testimonials", HomePageGadget.GadgetArea.wide);
         TestimonialsGadgetContent testimContent = EntityFactory.create(TestimonialsGadgetContent.class);
         for (LocaleInfo li : siteLocale) {
             final String content = "I just had the pleasure to dealing with your superintendent at my building. I just moved in three weeks ago and was greeted right away by Manolo the Building Representative. I am a very picky guy but any issue/concern I threw at Manolo, he was able to assist with right away. I had an issue with Bell and Manolo went as far as working with the cable technician directly to ensure that my apartment was functioning to my liking. You have a great staff member in Manolo and if my first month experience is a showcase of what Starlight has to offer I can only be thankful that I found this great place to call home.";
@@ -351,10 +358,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     @I18nComment("This is demo content")
     protected void createNewsGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
-        HomePageGadget gadget = EntityFactory.create(HomePageGadget.class);
-        gadget.status().setValue(HomePageGadget.GadgetStatus.published);
-        gadget.area().setValue(HomePageGadget.GadgetArea.narrow);
-        gadget.name().setValue("News");
+        HomePageGadget gadget = createGadget("News", HomePageGadget.GadgetArea.narrow);
         NewsGadgetContent newsContent = EntityFactory.create(NewsGadgetContent.class);
         for (LocaleInfo li : siteLocale) {
             final String caption = "Vancouver prices to keep rising";
@@ -468,6 +472,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         pageContent.content().setValue(contentText);
         page.content().add(pageContent);
+    }
+
+    protected HomePageGadget createGadget(String name, HomePageGadget.GadgetArea area) {
+        HomePageGadget gadget = EntityFactory.create(HomePageGadget.class);
+        gadget.status().setValue(HomePageGadget.GadgetStatus.published);
+        gadget.area().setValue(area);
+        gadget.name().setValue(name);
+        return gadget;
     }
 
     protected Testimonial createTestimonial(AvailableLocale locale, String content, String author) {
