@@ -20,9 +20,9 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Ignore
 public class YardiImportTest extends YardiTestBase {
 
-    @Ignore
     @Test
     public void testImport() throws Exception {
         preloadData();

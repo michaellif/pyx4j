@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBException;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,7 @@ import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.services.YardiBuildingProcessor;
 
+@Ignore
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
