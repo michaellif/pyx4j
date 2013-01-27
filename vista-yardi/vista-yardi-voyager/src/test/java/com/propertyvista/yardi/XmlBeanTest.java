@@ -14,6 +14,7 @@
 package com.propertyvista.yardi;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +24,13 @@ import javax.xml.bind.JAXBException;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -40,11 +41,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.bean.Property;
 import com.propertyvista.yardi.services.YardiBuildingProcessor;
 
-@Ignore
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
@@ -82,7 +84,23 @@ public class XmlBeanTest {
 
         log.info("Loaded transactions:\n{}", transactions);
 
-        YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor();
+        YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor() {
+            @Override
+            public List<Province> getProvinces() {
+                //mock countries and provinces
+                Country country = EntityFactory.create(Country.class);
+                country.name().setValue("United States");
+
+                Province province = EntityFactory.create(Province.class);
+                province.code().setValue("CA");
+                province.country().set(country);
+
+                List<Province> provinces = new ArrayList<Province>();
+                provinces.add(province);
+                return provinces;
+            }
+        };
+
         List<Building> buildings = buildingProcessor.getBuildings(Arrays.asList(transactions));
         Assert.assertTrue("Has buildings", !buildings.isEmpty());
 

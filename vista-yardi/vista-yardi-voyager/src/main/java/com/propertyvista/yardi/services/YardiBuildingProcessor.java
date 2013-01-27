@@ -144,7 +144,7 @@ public class YardiBuildingProcessor {
         return mapper.map(getProvinces(), getProperties(allTransactions));
     }
 
-    private List<Province> getProvinces() {
+    public List<Province> getProvinces() {
         EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
         criteria.asc(criteria.proto().name());
         return Persistence.service().query(criteria);
