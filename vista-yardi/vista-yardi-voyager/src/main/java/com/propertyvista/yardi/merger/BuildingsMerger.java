@@ -90,6 +90,7 @@ public class BuildingsMerger {
         existing.streetName().setValue(imported.streetName().getValue());
         existing.streetDirection().setValue(imported.streetDirection().getValue());
         existing.streetName().setValue(imported.streetName().getValue());
+        existing.streetType().setValue(imported.streetType().getValue());
         existing.city().setValue(imported.city().getValue());
         existing.province().set(imported.province());
         existing.country().set(imported.country());

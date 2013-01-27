@@ -37,6 +37,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
@@ -140,7 +141,13 @@ public class YardiBuildingProcessor {
 
     public List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(getProperties(allTransactions));
+        return mapper.map(getProvinces(), getProperties(allTransactions));
+    }
+
+    private List<Province> getProvinces() {
+        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
+        criteria.asc(criteria.proto().name());
+        return Persistence.service().query(criteria);
     }
 
     public Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {

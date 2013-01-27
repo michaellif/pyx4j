@@ -28,8 +28,9 @@ import com.yardi.entity.resident.PropertyID;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.yardi.YardiConstants;
+import com.propertyvista.domain.ref.Province;
 
 /**
  * Maps buildings information from YARDI System to domain entities.
@@ -44,18 +45,20 @@ public class BuildingsMapper {
     /**
      * Maps properties from YARDI System to building
      * 
+     * @param provinces
+     *            the existing provinces
      * @param properties
      *            the properties to map
      * @return the properties list
      */
-    public List<Building> map(List<Property> properties) {
+    public List<Building> map(List<Province> provinces, List<Property> properties) {
         List<Building> buildings = new ArrayList<Building>();
         for (Property property : properties) {
             PropertyID currentPropertyID = null;
             try {
                 for (PropertyID propertyID : property.getPropertyID()) {
                     currentPropertyID = propertyID;
-                    Building building = map(propertyID);
+                    Building building = map(provinces, propertyID);
                     buildings.add(building);
                 }
             } catch (Exception e) {
@@ -66,7 +69,7 @@ public class BuildingsMapper {
         return buildings;
     }
 
-    private Building map(PropertyID propertyID) {
+    private Building map(List<Province> provinces, PropertyID propertyID) {
         Building building = EntityFactory.create(Building.class);
 
         Identification identification = propertyID.getIdentification();
@@ -75,34 +78,63 @@ public class BuildingsMapper {
 
         // address
         Address addressImported = propertyID.getAddress().get(0);
-        String street = addressImported.getAddress1();
-        if (street == null) {
-            street = "";
-        }
+        String street = StringUtils.isNotEmpty(addressImported.getAddress1()) ? addressImported.getAddress1() : StringUtils.EMPTY;
 
-        String streetNumber = "";
         String streetName = street;
+        String streetNumber = StringUtils.EMPTY;
+        StreetType streetType = StreetType.other;
 
         String[] streetTokens = street.split("\\s+", 2);
         if (streetTokens.length == 2) {
             streetNumber = streetTokens[0];
             streetName = streetTokens[1];
+
+            //extract street type information
+            String[] tkns = streetName.split("\\s+");
+            if (tkns.length > 1) {
+                String type = tkns[tkns.length - 1];
+                streetType = getStreetType(type);
+                if (streetType != StreetType.other) {
+                    streetName = StringUtils.substringBeforeLast(streetName, type).trim();
+                }
+            }
         }
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
         address.streetNumber().setValue(streetNumber);
         address.streetName().setValue(streetName);
+        address.streetType().setValue(streetType);
         address.city().setValue(addressImported.getCity());
 
         address.province().code().setValue(addressImported.getState());
-        address.country().name()
-                .setValue(StringUtils.isEmpty(addressImported.getCountry()) ? YardiConstants.YARDI_DEFAULT_COUNTRY : addressImported.getCountry());
+
+        String importedCountry = addressImported.getCountry();
+        address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? getCountry(provinces, addressImported.getState()) : importedCountry);
+
         address.postalCode().setValue(addressImported.getPostalCode());
 
         building.info().address().set(address);
 
         return building;
+    }
+
+    private String getCountry(List<Province> provinces, String stateCode) {
+        for (Province province : provinces) {
+            if (StringUtils.equals(province.code().getValue(), stateCode)) {
+                return province.country().name().getValue();
+            }
+        }
+        throw new IllegalStateException("Can not map country for state code: " + stateCode);
+    }
+
+    private StreetType getStreetType(String typeName) {
+        for (StreetType type : StreetType.values()) {
+            if (type.toString().equalsIgnoreCase(typeName)) {
+                return type;
+            }
+        }
+        return StreetType.other;
     }
 
     private String getPropertyId(PropertyID propertyID) {
