@@ -56,8 +56,7 @@ public class TenantMerger {
         }
         for (String name : added) {
             YardiCustomer customer = getC(yardiCustomers, name);
-            TenantMapper mapper = new TenantMapper();
-            LeaseTermTenant tenant = mapper.map(customer);
+            LeaseTermTenant tenant = new TenantMapper().map(customer, term.version().tenants());
             term.version().tenants().add(tenant);
         }
         return term;
@@ -67,7 +66,7 @@ public class TenantMerger {
         List<String> names = new ArrayList<String>();
         for (LeaseTermTenant tenant : tenants) {
             String name = new String();
-            name = tenant.leaseParticipant().customer().person().name().firstName().getValue() + "#"
+            name = tenant.leaseParticipant().customer().person().name().firstName().getValue() + "!"
                     + tenant.leaseParticipant().customer().person().name().lastName().getValue();
             names.add(name);
         }
@@ -78,7 +77,7 @@ public class TenantMerger {
         List<String> names = new ArrayList<String>();
         for (YardiCustomer customer : customers) {
             String name = new String();
-            name = customer.getName().getFirstName() + "#" + customer.getName().getLastName();
+            name = customer.getName().getFirstName() + "!" + customer.getName().getLastName();
             names.add(name);
         }
         return names;
@@ -94,7 +93,7 @@ public class TenantMerger {
 
     private YardiCustomer getC(List<YardiCustomer> customers, String name) {
         for (YardiCustomer customer : customers) {
-            if (customer.getName().getFirstName().equals(name.split("#")[0]) && customer.getName().getLastName().equals(name.split("#")[1])) {
+            if (customer.getName().getFirstName().equals(name.split("!")[0]) && customer.getName().getLastName().equals(name.split("!")[1])) {
                 return customer;
             }
         }
@@ -103,8 +102,8 @@ public class TenantMerger {
 
     private LeaseTermTenant getT(List<LeaseTermTenant> tenants, String name) {
         for (LeaseTermTenant tenant : tenants) {
-            if (tenant.leaseParticipant().customer().person().name().firstName().getValue().equals(name.split("#")[0])
-                    && tenant.leaseParticipant().customer().person().name().lastName().getValue().equals(name.split("#")[1])) {
+            if (tenant.leaseParticipant().customer().person().name().firstName().getValue().equals(name.split("!")[0])
+                    && tenant.leaseParticipant().customer().person().name().lastName().getValue().equals(name.split("!")[1])) {
                 return tenant;
             }
         }

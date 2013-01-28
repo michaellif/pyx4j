@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mapper;
 
+import java.util.List;
+
 import com.yardi.entity.mits.YardiCustomer;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -23,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantMapper {
 
-    public LeaseTermTenant map(YardiCustomer yardiCustomer) {
+    public LeaseTermTenant map(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
         Customer customer = EntityFactory.create(Customer.class);
 
         customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
@@ -32,7 +34,7 @@ public class TenantMapper {
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
         tenantInLease.leaseParticipant().customer().set(customer);
-        if (yardiCustomer.getLease().isResponsibleForLease()) {
+        if (yardiCustomer.getLease().isResponsibleForLease() && !applicantExists(tenants)) {
             tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         } else {
             tenantInLease.role().setValue(
@@ -42,4 +44,12 @@ public class TenantMapper {
         return tenantInLease;
     }
 
+    private boolean applicantExists(List<LeaseTermTenant> tenants) {
+        for (LeaseTermTenant tenant : tenants) {
+            if (tenant.role().getValue().equals(LeaseTermParticipant.Role.Applicant)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

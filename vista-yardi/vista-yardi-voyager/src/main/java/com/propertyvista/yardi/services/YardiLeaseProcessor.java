@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -49,9 +48,6 @@ public class YardiLeaseProcessor {
             Property property = transaction.getProperty().get(0);
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
                 String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-                if (rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseToDate() == null) {
-                    Date date = rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseFromDate();
-                }
                 if (isPastEntry(rtCustomer)) {
                     log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
                     continue;
@@ -90,6 +86,7 @@ public class YardiLeaseProcessor {
         if (new LeaseMerger().validateTermChanges(yardiLease, lease.currentTerm()) || new TenantMerger().validateChanges(yardiCustomers, tenants)) {
             LeaseTerm newTerm = Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
             newTerm = new LeaseMerger().updateTerm(yardiLease, newTerm);
+            Persistence.service().retrieve(newTerm.version().tenants());
             newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm);
             lease.currentTerm().set(newTerm);
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
@@ -137,8 +134,7 @@ public class YardiLeaseProcessor {
 
         // add tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
-            TenantMapper mapper = new TenantMapper();
-            LeaseTermTenant tenantInLease = mapper.map(yardiCustomer);
+            LeaseTermTenant tenantInLease = new TenantMapper().map(yardiCustomer, lease.currentTerm().version().tenants());
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
