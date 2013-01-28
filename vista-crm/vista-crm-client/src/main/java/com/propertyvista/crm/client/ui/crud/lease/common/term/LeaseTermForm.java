@@ -61,7 +61,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -98,6 +100,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
+            get(proto().termTo()).setMandatory(getValue().type().getValue() != Type.Periodic);
 
             // hide initial balance for existing leases:
             get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
@@ -232,7 +235,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }), 25).build());
 
         detailsLeft.setBR(++detailsRow, 0, 1);
-        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Type")).build());
+        if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
+            detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type()), 15).customLabel(i18n.tr("Term Type")).build());
+        } else {
+            detailsLeft
+                    .setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Type")).build());
+        }
         detailsLeft
                 .setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).customLabel(i18n.tr("Term Status")).build());
 
@@ -298,8 +306,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         int datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termFrom()), 9).build());
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termTo()), 9).build());
-        // TODO: currently just one term type is supported - Fixed!
-        get(proto().termTo()).setMandatory(true);
 
         datesRow = -1; // second column:
         datesPanel.setBR(++datesRow, 1, 1);
@@ -376,6 +382,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     @Override
     public void addValidations() {
         super.addValidations();
+
+        if (VistaTODO.VISTA_2446_Periodic_Lease_Terms) {
+            get(proto().type()).addValueChangeHandler(new ValueChangeHandler<LeaseTerm.Type>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Type> event) {
+                    get(proto().termTo()).setMandatory(event.getValue() != Type.Periodic);
+                }
+            });
+        }
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 

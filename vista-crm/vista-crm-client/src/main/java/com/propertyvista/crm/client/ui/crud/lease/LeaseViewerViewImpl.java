@@ -331,7 +331,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         addHeaderToolbarItem(renewButton.asWidget());
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
-
             Button.ButtonMenuBar renewMenu = renewButton.createMenu();
             renewButton.setMenu(renewMenu);
 
@@ -370,7 +369,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             });
             renewMenu.addItem(viewOfferedTerms);
 
-        } else if (VistaTODO.VISTA_2245_Simple_Lease_Renewal) {
+        } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
 
             renewButton.addClickHandler(new ClickHandler() {
                 @Override
@@ -454,7 +453,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             renewButton.setVisible(status == Status.Active && completion == null && value.nextTerm().isNull());
-        } else if (VistaTODO.VISTA_2245_Simple_Lease_Renewal) {
+        } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
             renewButton.setVisible(status == Status.Active && completion == null);
         }
     }
