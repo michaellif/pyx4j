@@ -100,7 +100,7 @@ select {
 
 .header .main {
 	margin-top: 0 auto;
-	height: 130px;
+	height: 146px;
 }
 
 #siteTitle {
@@ -116,7 +116,6 @@ select {
 	text-decoration:none;
 }
 #siteLogo {
-	height:70px;
 }
 #noLogo {
 	font-size:35px;
