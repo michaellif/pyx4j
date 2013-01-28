@@ -88,56 +88,72 @@ class PolicyManager {
     }
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)
+    /**
+     * 
+     * @param node
+     * @return <code>null</code> for organizational policy node, otherwise parent node or if there's not a parent node organizational policy node
+     */
     public static PolicyNode parentOf(PolicyNode node) {
         Class<? extends PolicyNode> nodeClass = (Class<? extends PolicyNode>) node.getInstanceValueClass();
-        if (AptUnit.class.equals(nodeClass)) {
-            return Persistence.service().retrieve(Floorplan.class, ((AptUnit) node.cast()).floorplan().getPrimaryKey());
-
-        } else if (Floorplan.class.equals(nodeClass)) {
-
-            return Persistence.service().retrieve(Building.class, ((Floorplan) node.cast()).building().getPrimaryKey());
-
-        } else if (Building.class.equals(nodeClass)) {
-
-            Complex parentComplex = Persistence.service().retrieve(Complex.class, ((Building) node.cast()).complex().getPrimaryKey());
-            if (parentComplex != null) {
-                return parentComplex;
-            } else {
-                return Persistence.service().retrieve(Province.class, ((Building) node.cast()).info().address().province().getPrimaryKey());
-            }
-        } else if (Complex.class.equals(nodeClass)) {
-            EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().complex(), node.getPrimaryKey()));
-
-            List<Building> buildings = Persistence.service().query(criteria);
-            for (Building building : buildings) {
-                if (building.complexPrimary().isBooleanTrue()) {
-                    return building.info().address().province();
-                }
-            }
-            // if we haven't found a parent: return settings at organization (we assume that one node at must be preloaded)
-            return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
-
-        } else if (Province.class.equals(nodeClass)) {
-
-            return Persistence.service().retrieve(Country.class, ((Province) node.cast()).country().getPrimaryKey());
-
-        } else if (Country.class.equals(nodeClass)) {
-
-            // we assume that one organization policies node is preloaded and present in the system
-            return Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
-
-        } else if (OrganizationPoliciesNode.class.equals(nodeClass)) {
-
-            return null;
-
-        } else {
-
+        if (OrganizationPoliciesNode.class.equals(nodeClass)) {
             return null;
         }
+
+        PolicyNode policyNode = null;
+        do {
+
+            if (AptUnit.class.equals(nodeClass)) {
+                policyNode = Persistence.service().retrieve(Floorplan.class, ((AptUnit) node.cast()).floorplan().getPrimaryKey());
+                break;
+            }
+            if (Floorplan.class.equals(nodeClass)) {
+                policyNode = Persistence.service().retrieve(Building.class, ((Floorplan) node.cast()).building().getPrimaryKey());
+                break;
+            }
+            if (Building.class.equals(nodeClass)) {
+                Complex parentComplex = Persistence.service().retrieve(Complex.class, ((Building) node.cast()).complex().getPrimaryKey());
+                if (parentComplex != null) {
+                    policyNode = parentComplex;
+                } else {
+                    policyNode = Persistence.service().retrieve(Province.class, ((Building) node.cast()).info().address().province().getPrimaryKey());
+                }
+                break;
+            }
+            if (Complex.class.equals(nodeClass)) {
+                EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().complex(), node.getPrimaryKey()));
+
+                List<Building> buildings = Persistence.service().query(criteria);
+                for (Building building : buildings) {
+                    if (building.complexPrimary().isBooleanTrue()) {
+                        policyNode = building.info().address().province();
+                        break;
+                    }
+                }
+                break;
+            }
+            if (Province.class.equals(nodeClass)) {
+                policyNode = Persistence.service().retrieve(Country.class, ((Province) node.cast()).country().getPrimaryKey());
+                break;
+            }
+            if (Country.class.equals(nodeClass)) {
+                // we assume that one organization policies node is preloaded and present in the system
+                policyNode = Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
+                break;
+            }
+
+        } while (false);
+
+        // this is default: i.e. if any node has no parent we return organization policies node
+        if (policyNode == null) {
+            policyNode = Persistence.service().retrieve(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
+        }
+
+        return policyNode;
+
     }
 
-    // TODO move this method to another class (i.e. something that manages/defines heirarchy)
+    // TODO move this method to another class (i.e. something that manages/defines heirarchy)        
     public static List<? extends PolicyNode> childrenOf(PolicyNode node) {
         Class<? extends PolicyNode> nodeClass = node != null ? (Class<? extends PolicyNode>) node.getInstanceValueClass() : OrganizationPoliciesNode.class;
 
