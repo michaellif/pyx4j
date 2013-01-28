@@ -100,7 +100,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ToString(index = 0)
     IPrimitive<LogicalDate> termFrom();
 
-    @NotNull
     @ToString(index = 1)
     IPrimitive<LogicalDate> termTo();
 

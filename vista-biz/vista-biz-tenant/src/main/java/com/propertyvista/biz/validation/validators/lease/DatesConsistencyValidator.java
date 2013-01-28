@@ -36,7 +36,7 @@ public class DatesConsistencyValidator implements EntityValidator<Lease> {
                     .getMeta().getCaption())));
         }
         if (lease.currentTerm().type().getValue() != LeaseTerm.Type.Periodic && lease.currentTerm().termTo().isNull()) {
-            validationFailures.add(new SimpleValidationFailure(lease.currentTerm().termTo(), i18n.tr("\"{0}\" is mandatory", lease.currentTerm().termFrom()
+            validationFailures.add(new SimpleValidationFailure(lease.currentTerm().termTo(), i18n.tr("\"{0}\" is mandatory", lease.currentTerm().termTo()
                     .getMeta().getCaption())));
         }
         if (lease.currentTerm().type().getValue() != LeaseTerm.Type.Periodic//@formatter:off
