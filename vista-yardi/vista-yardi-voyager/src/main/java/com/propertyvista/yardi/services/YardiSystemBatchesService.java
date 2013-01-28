@@ -15,6 +15,7 @@ package com.propertyvista.yardi.services;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -61,10 +62,13 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 
     public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException,
             DatatypeConfigurationException {
+
+        List<String> propertyCodes = getPropertyCodes(new YardiClient(yc.residentTransactionsServiceURL().getValue()), yc);
+
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
         log.info("Get properties information...");
-        for (String propertyCode : getPropertyCodes(client, yc)) {
+        for (String propertyCode : propertyCodes) {
             long batchId = openReceiptBatch(client, yc, propertyCode);
             ResidentTransactions residentTransactions = new YardiPaymentProcessor().getAllPaymentTransactions(propertyCode);
             if (residentTransactions.getProperty().size() == 0) {
