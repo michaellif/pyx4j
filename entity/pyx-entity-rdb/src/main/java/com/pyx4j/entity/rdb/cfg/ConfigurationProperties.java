@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -36,9 +37,9 @@ public class ConfigurationProperties {
 
     public String password;
 
-    public String dbAdministrationUserName;
+    private String dbAdministrationUserName;
 
-    public String dbAdministrationPassword;
+    private String dbAdministrationPassword;
 
     public int initialPoolSize = 1;
 
@@ -106,5 +107,21 @@ public class ConfigurationProperties {
 
         this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
+    }
+
+    public String dbAdministrationUserName() {
+        if (CommonsStringUtils.isStringSet(dbAdministrationUserName)) {
+            return dbAdministrationUserName;
+        } else {
+            return user;
+        }
+    }
+
+    public String dbAdministrationPassword() {
+        if (CommonsStringUtils.isStringSet(dbAdministrationPassword)) {
+            return dbAdministrationPassword;
+        } else {
+            return password;
+        }
     }
 }

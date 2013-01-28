@@ -75,12 +75,12 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     @Override
     public String dbAdministrationUserName() {
-        return properties.dbAdministrationUserName;
+        return properties.dbAdministrationUserName();
     }
 
     @Override
     public String dbAdministrationPassword() {
-        return properties.dbAdministrationPassword;
+        return properties.dbAdministrationPassword();
     }
 
     @Override
