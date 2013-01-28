@@ -8,6 +8,8 @@
 ***     ===========================================================================================================
 **/                                                     
 
+SET client_min_messages = 'error';
+
 BEGIN TRANSACTION;
 
  SET search_path = 'public';
@@ -25,11 +27,13 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE admin_pmc$credit_check_transaction_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE admin_pmc_payment_method_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE admin_pmc_yardi_credential_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE business_id_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE business_information_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE caledon_co_signer_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE city_intro_page$content_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE city_intro_page_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE communication_favorited_messages_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE communication_message_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE communication_person_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE customer_credit_check_report_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE customer_credit_check_transaction_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE fee_default_equifax_fee_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -47,6 +51,12 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE payment_record_external_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE personal_information_id_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE personal_information_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_business_info_document$document_pages_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_business_info_document_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_personal_information_document$document_pages_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE pmc_personal_information_document_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE pmc_signature_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE portal_image_set$image_set_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE portal_image_set_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -56,22 +66,18 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE tenant_insurance_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE tenant_sure_merchant_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE vista_merchant_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE yardi_account$payments_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE yardi_account$pending_charges_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE yardi_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE yardi_charge_detail_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE yardi_payment_detail_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-
-  
+ 
  -- Change owner to vista
  ALTER SEQUENCE admin_pmc$credit_check_transaction_seq OWNER TO vista ;
  ALTER SEQUENCE admin_pmc_payment_method_seq OWNER TO vista ;
  ALTER SEQUENCE admin_pmc_yardi_credential_seq OWNER TO vista ;
- ALTER SEQUENCE business_id_blob_seq OWNER TO vista ;
  ALTER SEQUENCE business_information_seq OWNER TO vista ;
  ALTER SEQUENCE caledon_co_signer_seq OWNER TO vista ;
  ALTER SEQUENCE city_intro_page$content_seq OWNER TO vista ;
  ALTER SEQUENCE city_intro_page_seq OWNER TO vista ;
+ ALTER SEQUENCE communication_favorited_messages_seq OWNER TO vista ;
+ ALTER SEQUENCE communication_message_seq OWNER TO vista ;
+ ALTER SEQUENCE communication_person_seq OWNER TO vista ;
  ALTER SEQUENCE customer_credit_check_report_seq OWNER TO vista ;
  ALTER SEQUENCE customer_credit_check_transaction_seq OWNER TO vista ;
  ALTER SEQUENCE fee_default_equifax_fee_seq OWNER TO vista ;
@@ -89,6 +95,12 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE payment_record_external_seq OWNER TO vista ;
  ALTER SEQUENCE personal_information_id_blob_seq OWNER TO vista ;
  ALTER SEQUENCE personal_information_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_business_info_document$document_pages_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_business_info_document_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_document_blob_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_document_file_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_personal_information_document$document_pages_seq OWNER TO vista ;
+ ALTER SEQUENCE pmc_personal_information_document_seq OWNER TO vista ;
  ALTER SEQUENCE pmc_signature_seq OWNER TO vista ;
  ALTER SEQUENCE portal_image_set$image_set_seq OWNER TO vista ;
  ALTER SEQUENCE portal_image_set_seq OWNER TO vista ;
@@ -98,12 +110,9 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE tenant_insurance_policy_seq OWNER TO vista ;
  ALTER SEQUENCE tenant_sure_merchant_account_seq OWNER TO vista ;
  ALTER SEQUENCE vista_merchant_account_seq OWNER TO vista ;
- ALTER SEQUENCE yardi_account$payments_seq OWNER TO vista ;
- ALTER SEQUENCE yardi_account$pending_charges_seq OWNER TO vista ;
- ALTER SEQUENCE yardi_account_seq OWNER TO vista ;
- ALTER SEQUENCE yardi_charge_detail_seq OWNER TO vista ;
- ALTER SEQUENCE yardi_payment_detail_seq OWNER TO vista ;
 
 COMMIT;
+
+SET client_min_messages = 'notice';
 
 

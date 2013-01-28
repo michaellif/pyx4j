@@ -8,6 +8,8 @@
 ***     =====================================================================================================================
 **/
 
+SET client_min_messages = 'error';
+
 BEGIN TRANSACTION;
 
 SET search_path = '_admin_';
@@ -59,7 +61,8 @@ CREATE TABLE admin_pmc_yardi_credential
 (
         id                                      BIGINT                  NOT NULL,
         pmc                                     BIGINT                  NOT NULL,
-        service_url                             VARCHAR(500),
+        resident_transactions_service_url       VARCHAR(500),
+        sys_batch_service_url                   VARCHAR(500),
         username                                VARCHAR(500),
         credential                              VARCHAR(500),
         server_name                             VARCHAR(500),
@@ -275,6 +278,107 @@ CREATE INDEX personal_information_personal_address_province_name_idx ON personal
         
 ALTER TABLE personal_information OWNER TO vista;
 
+-- pmc_business_info_document
+
+CREATE TABLE pmc_business_info_document
+(
+        id                              BIGINT                  NOT NULL,
+        business_info_doc_type          VARCHAR(50),            
+        owner                           BIGINT,
+        owners_order                    INT,
+                CONSTRAINT      pmc_business_info_document_pk PRIMARY KEY(id),
+                CONSTRAINT      pmc_business_info_document_owner_fk FOREIGN KEY(owner) 
+                        REFERENCES business_information(id),
+                CONSTRAINT      pmc_business_info_document_business_info_doc_type_e_ck
+                        CHECK (business_info_doc_type IN ('ArticlesOfIncorporation','BusinessLicense'))
+);
+
+ALTER TABLE pmc_business_info_document OWNER TO vista;
+
+-- pmc_document_blob
+
+CREATE TABLE pmc_document_blob
+(
+        id                              BIGINT                  NOT NULL,
+        content_type                    VARCHAR(500),
+        data                            BYTEA,
+        created                         TIMESTAMP WITHOUT TIME ZONE,
+                CONSTRAINT      pmc_document_blob_pk PRIMARY KEY(id)
+);
+
+ALTER TABLE pmc_document_blob OWNER TO vista;
+
+-- pmc_document_file
+
+CREATE TABLE pmc_document_file
+(
+        id                              BIGINT                  NOT NULL,
+        file_size                       INT,
+        content_mime_type               VARCHAR(500),
+        updated_timestamp               BIGINT,
+        cache_version                   INT,
+        file_name                       VARCHAR(500),
+        blob_key                        BIGINT,
+                CONSTRAINT      pmc_document_file_pk PRIMARY KEY(id)
+);
+
+ALTER TABLE pmc_document_file OWNER TO vista;
+
+-- pmc_business_info_document$document_pages
+
+CREATE TABLE pmc_business_info_document$document_pages
+(
+        id                              BIGINT                  NOT NULL,
+        owner                           BIGINT,
+        value                           BIGINT,
+        seq                             INT,
+                CONSTRAINT      pmc_business_info_document$document_pages_pk PRIMARY KEY(id),
+                CONSTRAINT      pmc_business_info_document$document_pages_owner_fk FOREIGN KEY(owner)
+                        REFERENCES pmc_business_info_document(id),
+                CONSTRAINT      pmc_business_info_document$document_pages_value_fk FOREIGN KEY(value)
+                        REFERENCES pmc_document_file(id)
+);
+
+CREATE INDEX pmc_business_info_document$document_pages_owner_idx ON pmc_business_info_document$document_pages USING btree (owner);
+
+ALTER TABLE pmc_business_info_document$document_pages OWNER TO vista;
+
+-- pmc_personal_information_document
+
+CREATE TABLE pmc_personal_information_document
+(
+        id                              BIGINT                  NOT NULL,
+        type                            VARCHAR(50),
+        owner                           BIGINT,
+        owners_order                    INT,
+                CONSTRAINT      pmc_personal_information_document_pk PRIMARY KEY(id),
+                CONSTRAINT      pmc_personal_information_document_owner_fk FOREIGN KEY(owner)
+                        REFERENCES personal_information(id),
+                CONSTRAINT      pmc_personal_information_document_type_e_ck
+                        CHECK (type IN ('DriversLicense','Passport'))
+);
+
+ALTER TABLE pmc_personal_information_document OWNER TO vista;
+
+-- pmc_personal_information_document$document_pages
+
+CREATE TABLE pmc_personal_information_document$document_pages
+(
+        id                              BIGINT                  NOT NULL,
+        owner                           BIGINT,
+        value                           BIGINT,
+        seq                             INT,
+                CONSTRAINT      pmc_personal_information_document$document_pages_pk PRIMARY KEY(id),
+                CONSTRAINT      pmc_personal_information_document$document_pages_owner_fk FOREIGN KEY(owner)
+                        REFERENCES pmc_personal_information_document(id),
+                CONSTRAINT      pmc_personal_information_document$document_pages_value_fk FOREIGN KEY(value)
+                        REFERENCES pmc_document_file(id)
+);
+
+CREATE INDEX pmc_personal_information_document$document_pages_owner_idx ON pmc_personal_information_document$document_pages USING btree (owner);
+
+ALTER TABLE pmc_personal_information_document$document_pages OWNER TO vista;
+
 -- tenant_sure_merchant_account
 
 CREATE TABLE tenant_sure_merchant_account
@@ -324,9 +428,49 @@ ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck CHECK ((target) I
 
 ALTER TABLE admin_pmc_equifax_info DROP CONSTRAINT admin_pmc_equifax_info_report_type_e_ck;
 
+-- insert pmc that didn't make it to this table yet
+
+INSERT INTO admin_pmc_equifax_info (id,pmc,report_type) 
+(SELECT nextval('public.admin_pmc_equifax_info_seq') AS id, a.id AS pmc,
+        'RecomendationReport' AS report_type
+FROM    admin_pmc a 
+WHERE   a.status != 'Created'
+AND     id NOT IN (SELECT DISTINCT pmc FROM admin_pmc_equifax_info));
+
+-- update every row in the table 
+
 UPDATE  admin_pmc_equifax_info
 SET     report_type = 'RecomendationReport'
 WHERE   report_type = 'shortReport';
+
+UPDATE  admin_pmc_equifax_info
+SET     report_type = 'FullCreditReport'
+WHERE   report_type = 'longReport';
+
+UPDATE  admin_pmc_equifax_info
+SET     status = 'NotRequested';
+
+-- admin_pmc_vista_features
+
+UPDATE  admin_pmc_vista_features AS a
+SET     country_of_operation = 'Canada'
+FROM    admin_pmc b
+WHERE   a.id = b.features 
+AND     b.namespace NOT IN ('studentlivingcompany','waterfront');
+
+UPDATE  admin_pmc_vista_features AS a
+SET     country_of_operation = 'US'
+FROM    admin_pmc b
+WHERE   a.id = b.features 
+AND     b.namespace = 'waterfront';
+
+UPDATE  admin_pmc_vista_features AS a
+SET     country_of_operation = 'UK'
+FROM    admin_pmc b
+WHERE   a.id = b.features 
+AND     b.namespace = 'studentlivingcompany';
+
+
 
 /**     ==========================================================================================
 ***             Constraints changes not taken care of yet
@@ -346,12 +490,12 @@ ALTER TABLE admin_pmc ADD CONSTRAINT admin_pmc_status_e_ck CHECK ((status) IN ('
 ALTER TABLE admin_pmc_vista_features ADD CONSTRAINT admin_pmc_vista_features_country_of_operation_e_ck CHECK ((country_of_operation) IN ('Canada', 'UK', 'US'));
 ALTER TABLE legal_document ADD CONSTRAINT legal_document_locale_e_ck CHECK ((locale) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
 ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_population_type_e_ck CHECK ((population_type) IN ('allPmc', 'except', 'manual', 'none'));
-ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
-CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'test', 'updateArrears', 'updatePaymentsSummary', 'yardiImportProcess'));
-
+ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'test', 'updateArrears', 'updatePaymentsSummary', 'yardiBatchProcess', 'yardiImportProcess'));
 ALTER TABLE admin_pmc_equifax_info ADD CONSTRAINT admin_pmc_equifax_info_business_information_fk FOREIGN KEY(business_information) REFERENCES business_information(id);
 ALTER TABLE admin_pmc_equifax_info ADD CONSTRAINT admin_pmc_equifax_info_payment_method_fk FOREIGN KEY(payment_method) REFERENCES admin_pmc_payment_method(id);
 ALTER TABLE admin_pmc_equifax_info ADD CONSTRAINT admin_pmc_equifax_info_personal_information_fk FOREIGN KEY(personal_information) REFERENCES personal_information(id);
 
 
 COMMIT;
+
+SET client_min_messages = 'notice';

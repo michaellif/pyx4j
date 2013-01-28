@@ -2,8 +2,7 @@
 *** =================================================================================
 *** @version $Revision$ ($Author$) $Date$
 ***
-***     Migration of PMC schema's to version 1.0.6 for env77
-***
+***     Migration of PMC schema's to version 1.0.6 
 ***
 *** =================================================================================
 **/
@@ -17,6 +16,48 @@ BEGIN
         -- application_document_file
         
         ALTER TABLE application_document_file DROP COLUMN access_key;
+        
+        -- billing_account
+        
+        ALTER TABLE billing_account ADD COLUMN id_discriminator VARCHAR(64);
+        
+        UPDATE  billing_account
+        SET     id_discriminator = 'Internal';
+        
+        ALTER TABLE billing_account ALTER COLUMN id_discriminator SET NOT NULL;
+        
+        -- billing_arrears_snapshot
+        
+        ALTER TABLE billing_arrears_snapshot ADD COLUMN billing_account_discriminator VARCHAR(50);
+        
+        UPDATE  billing_arrears_snapshot
+        SET     billing_account_discriminator = 'Internal'
+        WHERE   id_discriminator = 'LeaseArrearsSnapshot';
+        
+        -- billing_bill
+        
+        ALTER TABLE billing_bill ADD COLUMN billing_account_discriminator VARCHAR(50);
+        
+        UPDATE  billing_bill
+        SET     billing_account_discriminator = 'Internal';
+        
+        ALTER TABLE billing_bill ALTER COLUMN billing_account_discriminator SET NOT NULL;
+        
+        -- billing_invoice_line_item
+        
+        ALTER TABLE billing_invoice_line_item   ADD COLUMN amount_paid NUMERIC(18,2),
+                                                ADD COLUMN apply_nsf BOOLEAN,
+                                                ADD COLUMN balance_due NUMERIC(18,2),
+                                                ADD COLUMN billing_account_discriminator VARCHAR(50),
+                                                ADD COLUMN charge_code VARCHAR(500),
+                                                ADD COLUMN comment VARCHAR(500),
+                                                ADD COLUMN service_type VARCHAR(50),
+                                                ADD COLUMN transaction_id VARCHAR(500); 
+        
+        UPDATE  billing_invoice_line_item
+        SET     billing_account_discriminator = 'Internal';
+        
+        ALTER TABLE billing_invoice_line_item ALTER COLUMN billing_account_discriminator SET NOT NULL;
         
         -- boiler
         
@@ -46,22 +87,6 @@ BEGIN
         CHECK (info_building_type IN ('agricultural','association','commercial','condo','industrial','military','mixedResidential','other','parkingStorage','residential',
         'seniorHousing','socialHousing'));
 
-        
-        
-        -- business_id_blob
-        
-        CREATE TABLE business_id_blob 
-        (
-                id                              BIGINT                  NOT NULL,
-                content_type                    VARCHAR(500),
-                data                            BYTEA,
-                created                         TIMESTAMP WITHOUT TIME  ZONE,
-                        CONSTRAINT      business_id_blob_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE business_id_blob OWNER TO vista;
-        
-        
         
         -- caledon_co_signer
         
@@ -106,18 +131,109 @@ BEGIN
         
         ALTER TABLE city_intro_page$content OWNER TO vista;
         
+        /**
+        ***     ============================================================================================
+        ***
+        ***             communication_* tables - may be removed from migration altogether
+        ***
+        ***     ============================================================================================
+        **/
+        
+        -- communication_person
+        
+        CREATE TABLE communication_person
+        (
+                id                              BIGINT                  NOT NULL,
+                type                            VARCHAR(50),
+                user_id                         BIGINT,
+                        CONSTRAINT      communication_person_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE communication_person OWNER TO vista;
+        
+        -- communication_message
+        
+        CREATE TABLE communication_message
+        (
+                id                              BIGINT                  NOT NULL,
+                parent                          BIGINT,
+                sender                          BIGINT,
+                destination                     BIGINT,
+                topic                           VARCHAR(500),
+                content                         VARCHAR(500),
+                is_high_importance              BOOLEAN,
+                is_read                         BOOLEAN,
+                created                         TIMESTAMP WITHOUT TIME ZONE,
+                updated                         TIMESTAMP WITHOUT TIME ZONE,
+                        CONSTRAINT      communication_message_pk PRIMARY KEY(id),
+                        CONSTRAINT      communication_message_destination_fk FOREIGN KEY(destination)
+                                REFERENCES communication_person(id),
+                        CONSTRAINT      communication_message_parent_fk FOREIGN KEY(parent)
+                                REFERENCES communication_message(id),
+                        CONSTRAINT      communication_message_sender_fk FOREIGN KEY(sender)
+                                REFERENCES communication_person(id)
+        );   
+        
+        ALTER TABLE communication_message OWNER TO vista;
+        
+        -- communication_favorited_messages
+        
+        CREATE TABLE communication_favorited_messages
+        (
+                id                              BIGINT                  NOT NULL,
+                person                          BIGINT,
+                message                         BIGINT,
+                        CONSTRAINT      communication_favorited_messages_pk PRIMARY KEY(id),
+                        CONSTRAINT      communication_favorited_messages_message_fk FOREIGN KEY(message)
+                                REFERENCES communication_message(id),
+                        CONSTRAINT      communication_favorited_messages_person_fk FOREIGN KEY(person)
+                                REFERENCES communication_person(id)
+        );
+        
+        ALTER TABLE communication_favorited_messages OWNER TO vista;
+        
+        /** END COMMUNICATION **/
+        
         -- company
         
         ALTER TABLE company DROP COLUMN logo_media_file_access_key;
+        
+        -- contact_email
+        
+        DROP TABLE contact_email;
+        
+        -- contact_internal
+        
+        DROP TABLE contact_internal;
+        
+        -- contact_phone
+        
+        DROP TABLE contact_phone;
+        
+        -- contact_postal
+        
+        DROP TABLE contact_postal;
+        
         
         -- contract
         
         ALTER TABLE contract DROP COLUMN document;
         
+        -- customer
+        
+        ALTER TABLE customer ADD COLUMN portal_registration_token VARCHAR(500);
+        
        
         -- customer_credit_check
         
         ALTER TABLE customer_credit_check ADD COLUMN transaction_id BIGINT;
+        
+        -- deposit_lifecycle
+        
+        ALTER TABLE deposit_lifecycle ADD COLUMN billing_account_discriminator VARCHAR(50);
+        
+        UPDATE  deposit_lifecycle
+        SET     billing_account_discriminator = 'Internal';
         
         -- elevator
         
@@ -291,6 +407,23 @@ BEGIN
         
          ALTER TABLE insurance_tenant_sure_transaction OWNER TO vista;
         
+        -- lease
+        
+        ALTER TABLE lease ADD COLUMN billing_account_discriminator VARCHAR(50);
+        
+        UPDATE  lease
+        SET     billing_account_discriminator = 'Internal';
+        
+        ALTER TABLE lease ALTER COLUMN billing_account SET NOT NULL;
+        ALTER TABLE lease ALTER COLUMN billing_account_discriminator SET NOT NULL;
+        
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment ADD COLUMN billing_account_discriminator VARCHAR(50);
+        
+        UPDATE  lease_adjustment
+        SET     billing_account_discriminator = 'Internal';
+        
         -- lease_participant
         
         ALTER TABLE lease_participant ADD COLUMN preauthorized_payment_discriminator VARCHAR(50);
@@ -341,18 +474,24 @@ BEGIN
         ALTER TABLE payment_method ADD COLUMN id_discriminator VARCHAR(64),
                                         ADD COLUMN tenant BIGINT,
                                         ADD COLUMN tenant_discriminator VARCHAR(50);
-                                        -- ADD COLUMN payment_method_discriminator VARCHAR(50);
-        
-        -- ALTER TABLE payment_method ALTER COLUMN customer SET NOT NULL;
+                                                
         ALTER TABLE payment_method ALTER COLUMN id_discriminator SET NOT NULL;
-        ALTER TABLE payment_method ALTER COLUMN customer DROP NOT NULL;
-        -- ALTER TABLE payment_method ALTER COLUMN payment_method_discriminator SET NOT NULL;
+        ALTER TABLE payment_method ALTER COLUMN customer DROP NOT NULL; 
         
-        -- ALTER TABLE payment_method ADD CONSTRAINT  
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
                      
         -- payment_record
         
-        ALTER TABLE payment_record ADD COLUMN payment_method_discriminator VARCHAR(50);
+        ALTER TABLE payment_record      ADD COLUMN payment_method_discriminator VARCHAR(50),
+                                        ADD COLUMN billing_account_discriminator VARCHAR(50);
+                                        
+        UPDATE  payment_record
+        SET     payment_method_discriminator = 'LeasePaymentMethod',
+                billing_account_discriminator = 'Internal';
+                
+        ALTER TABLE payment_record ALTER COLUMN billing_account_discriminator SET NOT NULL;
+                                        
+        
         
         -- payment_record_external
         
@@ -360,6 +499,7 @@ BEGIN
         (
                 id                              BIGINT                  NOT NULL,
                 billing_account                 BIGINT                  NOT NULL,
+                billing_account_discriminator   VARCHAR(50)             NOT NULL,
                 payment_record                  BIGINT,                 
                 external_transaction_id         VARCHAR(500),
                         CONSTRAINT      payment_record_external_pk PRIMARY KEY(id),
@@ -585,7 +725,130 @@ BEGIN
         (SELECT nextval('public.site_descriptor$banner_seq') AS id,a.id AS owner, b.id AS value 
         FROM    site_descriptor a,portal_image_set b );
         
+        -- crm_role$behaviors
         
+        INSERT INTO crm_role$behaviors (id,owner,value)
+        (SELECT nextval('public.crm_role$behaviors_seq') AS id, id, 'OrganizationFinancial'
+        FROM    crm_role
+        WHERE   name = 'All');
+        
+        INSERT INTO crm_role$behaviors (id,owner,value)
+        (SELECT nextval('public.crm_role$behaviors_seq') AS id, id, 'OrganizationPolicy'
+        FROM    crm_role
+        WHERE   name = 'All');
+        
+        
+        /**
+        ***     ================================================================================================
+        ***     
+        ***             Check constraints that were not taken care of yet
+        ***
+        ***     ================================================================================================
+        **/
+        
+        -- Constraints to drop
+        ALTER TABLE application_document_file DROP CONSTRAINT application_document_file_owner_discriminator_d_ck;
+        ALTER TABLE available_locale DROP CONSTRAINT available_locale_lang_e_ck;
+        ALTER TABLE billing_bill DROP CONSTRAINT billing_bill_bill_type_e_ck;
+        ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck;
+        ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck;
+        ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_id_discriminator_ck;
+        ALTER TABLE gadget_content DROP CONSTRAINT gadget_content_id_discriminator_ck;
+        ALTER TABLE home_page_gadget DROP CONSTRAINT home_page_gadget_content_discriminator_d_ck;
+        ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
+        ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
+        ALTER TABLE lead DROP CONSTRAINT lead_lease_type_e_ck;
+        ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
+        ALTER TABLE lease DROP CONSTRAINT lease_status_e_ck;
+        ALTER TABLE product DROP CONSTRAINT product_feature_type_e_ck;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_feature_type_e_ck;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_service_type_e_ck;
+        ALTER TABLE product DROP CONSTRAINT product_service_type_e_ck;
+        ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck;
+        ALTER TABLE site_descriptor DROP CONSTRAINT site_descriptor_skin_e_ck;
+        
+        -- Constraint to create
+        ALTER TABLE application_document_file ADD CONSTRAINT application_document_file_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('IdentificationDocument', 'InsuranceCertificateDocument', 'ProofOfEmploymentDocument'));
+        ALTER TABLE available_locale ADD CONSTRAINT available_locale_lang_e_ck 
+                CHECK ((lang) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
+        ALTER TABLE billing_account ADD CONSTRAINT billing_account_id_discriminator_ck CHECK ((id_discriminator) IN ('Internal', 'YardiAccount'));
+        ALTER TABLE billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_discriminator_ck 
+                CHECK ((id_discriminator = 'LeaseArrearsSnapshot' AND billing_account_discriminator IS NOT NULL) 
+                OR (id_discriminator != 'LeaseArrearsSnapshot' AND billing_account_discriminator IS NULL));
+        ALTER TABLE billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_discriminator_d_ck 
+                CHECK ((billing_account_discriminator)= 'Internal');
+        ALTER TABLE billing_bill ADD CONSTRAINT billing_bill_bill_type_e_ck CHECK ((bill_type) IN ('External', 'Final', 'First', 'Regular', 'ZeroCycle'));
+        ALTER TABLE billing_bill ADD CONSTRAINT billing_bill_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator)= 'Internal');
+        ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck 
+                CHECK ((credit_item_discriminator) IN ('AccountCredit', 'CarryforwardCredit', 'DepositRefund', 'Payment', 'ProductCredit', 'YardiPayment', 'YardiReceipt'));
+        ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck 
+                CHECK ((debit_item_discriminator) IN ('AccountCharge','CarryforwardCharge','Deposit','LatePaymentFee','NSF','PaymentBackOut',
+                'ProductCharge','Withdrawal','YardiCharge','YardiReversal'));
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_billing_account_discriminator_d_ck 
+                CHECK ((billing_account_discriminator) IN ('Internal', 'YardiAccount'));
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('AccountCharge', 'AccountCredit', 'CarryforwardCharge', 'CarryforwardCredit', 'Deposit', 'DepositRefund', 'LatePaymentFee',
+                'NSF', 'Payment', 'PaymentBackOut', 'ProductCharge', 'ProductCredit', 'Withdrawal', 'YardiCharge', 'YardiPayment', 'YardiReceipt', 'YardiReversal'));
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_service_type_e_ck 
+                CHECK ((service_type) IN ('AirCon', 'BroadbandInternet', 'Cable', 'Electric', 'Fees', 'Fitness', 'Gas', 'Heat', 'HotWater', 'Other', 'Parking', 'Rent',
+                'Sewer', 'Telephone', 'Trash', 'Water'));
+        ALTER TABLE communication_person ADD CONSTRAINT communication_person_type_e_ck CHECK ((type) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE deposit_lifecycle ADD CONSTRAINT deposit_lifecycle_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator)= 'Internal');
+        ALTER TABLE gadget_content ADD CONSTRAINT gadget_content_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('Custom', 'News', 'Promo', 'QuickSearch', 'Testimonials'));
+        ALTER TABLE home_page_gadget ADD CONSTRAINT home_page_gadget_content_discriminator_d_ck 
+                CHECK ((content_discriminator) IN ('Custom', 'News', 'Promo', 'QuickSearch', 'Testimonials'));
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceCertificate'));
+        ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_status_e_ck 
+                CHECK ((status) IN ('Authorized', 'Cleared', 'Draft', 'PaymentRejected', 'Rejected', 'Reversal'));
+        ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck CHECK ((lease_type) IN ('commercialUnit', 'residentialShortTermUnit', 'residentialUnit'));
+        ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator)= 'Internal');
+        ALTER TABLE lease ADD CONSTRAINT lease_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator) IN ('Internal', 'YardiAccount'));
+        ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck CHECK ((lease_type) IN ('commercialUnit', 'residentialShortTermUnit', 'residentialUnit'));
+        ALTER TABLE lease_participant ADD CONSTRAINT lease_participant_preauthorized_payment_discriminator_d_ck 
+                CHECK ((preauthorized_payment_discriminator)= 'LeasePaymentMethod');
+        ALTER TABLE lease ADD CONSTRAINT lease_status_e_ck 
+                CHECK (status IN ('Active', 'Application', 'Approved', 'Cancelled', 'Closed', 'Completed', 'ExistingLease', 'NewLease'));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_customer_ck 
+                CHECK ((id_discriminator = 'LeasePaymentMethod' AND customer IS NOT NULL) 
+                OR (id_discriminator != 'LeasePaymentMethod' AND customer IS NULL));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_id_discriminator_ck CHECK ((id_discriminator) IN ('InsurancePaymentMethod', 'LeasePaymentMethod'));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_tenant_ck 
+                CHECK ((id_discriminator = 'InsurancePaymentMethod' AND tenant IS NOT NULL) 
+                OR (id_discriminator != 'InsurancePaymentMethod' AND tenant IS NULL));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_tenant_discriminator_ck 
+                CHECK ((id_discriminator = 'InsurancePaymentMethod' AND tenant_discriminator IS NOT NULL) 
+                OR (id_discriminator != 'InsurancePaymentMethod' AND tenant_discriminator IS NULL));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_tenant_discriminator_d_ck CHECK ((tenant_discriminator)= 'Tenant');
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator) IN ('Internal', 'YardiAccount'));
+        ALTER TABLE payment_record_external ADD CONSTRAINT payment_record_external_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator)= 'Internal');
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_payment_method_discriminator_d_ck CHECK ((payment_method_discriminator)= 'LeasePaymentMethod');
+        ALTER TABLE product ADD CONSTRAINT product_feature_type_e_ck CHECK ((feature_type) IN ('addOn', 'booking', 'locker', 'oneTimeCharge', 'parking', 'pet', 'utility'));
+        ALTER TABLE product_item_type ADD CONSTRAINT product_item_type_feature_type_e_ck 
+                CHECK ((feature_type) IN ('addOn', 'booking', 'locker', 'oneTimeCharge', 'parking', 'pet', 'utility'));
+        ALTER TABLE product_item_type ADD CONSTRAINT product_item_type_service_type_e_ck 
+                CHECK ((service_type) IN ('commercialUnit', 'residentialShortTermUnit', 'residentialUnit'));
+        ALTER TABLE product ADD CONSTRAINT product_service_type_e_ck CHECK ((service_type) IN ('commercialUnit', 'residentialShortTermUnit', 'residentialUnit'));
+        ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceCertificate'));
+        ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck CHECK ((skin) IN ('crm', 'skin1', 'skin2', 'skin3', 'skin4', 'skin5'));
+
+        /**
+        ***     ========================================================================================================================================
+        ***
+        ***             Indexes overlooked
+        ***
+        ***     ========================================================================================================================================
+        **/
+        
+        CREATE INDEX insurance_tenant_sure_details$taxes_owner_idx ON insurance_tenant_sure_details$taxes USING btree (owner);
+        CREATE INDEX billing_arrears_snapshot_billing_account_discriminator_idx ON billing_arrears_snapshot USING btree (billing_account_discriminator);
+        CREATE INDEX payment_method_tenant_discriminator_idx ON payment_method USING btree (tenant_discriminator);
+        CREATE INDEX payment_method_tenant_idx ON payment_method USING btree (tenant);
+
+     
         /** Finishing touch - update _admin_.admin_pmc **/
 
         UPDATE  _admin_.admin_pmc

@@ -15,6 +15,7 @@
 \i migrate_admin_schema.sql;
 
 -- _expiring_ schema
+\i create_expiring_schema.sql
 
 -- create migration function
 \i create_migrate_functions.sql;
@@ -238,3 +239,6 @@ BEGIN TRANSACTION;
 COMMIT;
 
 SET client_min_messages = 'notice';
+
+DROP FUNCTION _dba_.migrate_pmc_106(text);
+
