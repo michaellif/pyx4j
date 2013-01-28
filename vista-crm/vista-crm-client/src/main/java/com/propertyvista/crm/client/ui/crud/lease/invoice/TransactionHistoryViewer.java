@@ -47,7 +47,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
     private final static I18n i18n = I18n.get(TransactionHistoryViewer.class);
 
-    private final static NumberFormat NUMBER_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0.00"));
+    public final static NumberFormat NUMBER_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0.00"));
 
     @Override
     public IsWidget createContent(TransactionHistoryDTO value) {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,6 +25,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -37,6 +39,10 @@ import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceIm
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
+import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -46,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
@@ -59,7 +66,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     protected void enhanceRetrieved(Lease in, LeaseDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
-        dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
+        if (!isManagedByYardi(dto)) {
+            dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
+        } else {
+            dto.yardiFinancialInfo().set(getYardiFinancialInfo(dto.billingAccount().duplicate(YardiBillingAccount.class)));
+        }
     }
 
     @Override
@@ -210,4 +221,26 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         callback.onSuccess(null);
     }
 
+    private boolean isManagedByYardi(LeaseDTO dto) {
+        return !dto.billingAccount().isNull() && (dto.billingAccount().isInstanceOf(YardiBillingAccount.class));
+    }
+
+    private LeaseYardiFinancialInfoDTO getYardiFinancialInfo(YardiBillingAccount billingAccount) {
+        EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        criteria.asc(criteria.proto().postDate());
+
+        List<InvoiceLineItem> items = Persistence.service().query(criteria);
+
+        LeaseYardiFinancialInfoDTO financialInfo = EntityFactory.create(LeaseYardiFinancialInfoDTO.class);
+        for (InvoiceLineItem item : items) {
+            if (item.isInstanceOf(YardiPayment.class)) {
+                financialInfo.payments().add(item.duplicate(YardiPayment.class));
+            } else if (item.isInstanceOf(YardiCharge.class)) {
+                financialInfo.charges().add(item.duplicate(YardiCharge.class));
+            }
+        }
+
+        return financialInfo;
+    }
 }
