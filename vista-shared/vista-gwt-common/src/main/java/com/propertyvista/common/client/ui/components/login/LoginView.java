@@ -22,8 +22,6 @@ public interface LoginView extends IsWidget {
 
     interface Presenter {
 
-        public String getUserId();
-
         void login(AuthenticationRequest value);
 
         void gotoResetPassword();
@@ -34,7 +32,7 @@ public interface LoginView extends IsWidget {
 
     void enableHumanVerification();
 
-    void reset();
+    void reset(String email, boolean rememberUser);
 
     void setWallMessage(SystemWallMessage systemWallMessage);
 

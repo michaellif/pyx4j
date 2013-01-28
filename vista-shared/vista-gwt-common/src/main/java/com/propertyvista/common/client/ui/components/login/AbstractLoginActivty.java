@@ -60,6 +60,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        loginView.setPresenter(this);
         if (HTML5Storage.isSupported()) {
             HTML5Storage.getSessionStorage().clear();
             String userIdFromStorage = HTML5Storage.getLocalStorage().getItem(AbstractLoginActivty.HTML5_KEY);
@@ -67,15 +68,10 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
                 userId = userIdFromStorage;
             }
         }
-        loginView.setPresenter(this);
-        panel.setWidget(loginView);
-
+        loginView.reset(userId, userId != null);
         loginView.setWallMessage(ClientContext.getSystemWallMessage());
-    }
 
-    @Override
-    public String getUserId() {
-        return userId;
+        panel.setWidget(loginView);
     }
 
     @Override

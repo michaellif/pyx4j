@@ -62,14 +62,6 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-        form.reset();
-        form.populateNew();
-        form.disableCaptcha();
-
-        if (presenter.getUserId() != null) {
-            form.get(form.proto().email()).setValue(presenter.getUserId());
-            form.get(form.proto().rememberID()).setValue(true);
-        }
     }
 
     @Override
@@ -78,8 +70,12 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     }
 
     @Override
-    public void reset() {
+    public void reset(String userId, boolean rememberUser) {
         form.reset();
+        form.populateNew();
+        form.get(form.proto().email()).setValue(userId);
+        form.get(form.proto().rememberID()).setValue(rememberUser);
+        form.disableCaptcha();
     }
 
     @Override

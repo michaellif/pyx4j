@@ -142,8 +142,6 @@ public class LandingViewImpl extends Composite implements LandingView {
     @Override
     public void setPresenter(com.propertyvista.common.client.ui.components.login.LoginView.Presenter presenter) {
         this.presenter = (Presenter) presenter;
-        // TODO actually this reset should be performed by presenter
-        this.reset();
     }
 
     @Override
@@ -152,8 +150,12 @@ public class LandingViewImpl extends Composite implements LandingView {
     }
 
     @Override
-    public void reset() {
+    public void reset(String userId, boolean rememberUserId) {
         loginForm.populateNew();
+        if (userId != null) {
+            loginForm.get(loginForm.proto().email()).setValue(userId);
+        }
+        loginForm.get(loginForm.proto().rememberID()).setValue(rememberUserId);
         loginForm.setEnableCaptcha(false);
     }
 
