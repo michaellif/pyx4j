@@ -13,6 +13,9 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -21,6 +24,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -33,7 +37,33 @@ import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.DemoData.UserType;
+import com.propertyvista.shared.config.VistaDemo;
+
 public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
+
+    public static class DevLoginCredentialsImpl implements LoginView.DevLoginCredentials {
+
+        private final int shortcut;
+
+        private final DemoData.UserType user;
+
+        public DevLoginCredentialsImpl(DemoData.UserType user, char shortcut) {
+            this.user = user;
+            this.shortcut = shortcut;
+        }
+
+        @Override
+        public int getHotKey() {
+            return shortcut;
+        }
+
+        @Override
+        public UserType getUserType() {
+            return user;
+        }
+    }
 
     private static final I18n i18n = I18n.get(AbstractLoginActivty.class);
 
@@ -69,6 +99,12 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
             }
         }
         loginView.reset(userId, userId != null);
+        if (isDevLoginRequired()) {
+            loginView.setDevLogin(getDevLoginCredentials(), getApplicationModeName());
+        } else {
+            loginView.setDevLogin(null, null);
+        }
+
         loginView.setWallMessage(ClientContext.getSystemWallMessage());
 
         panel.setWidget(loginView);
@@ -102,6 +138,18 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
 
         };
         ClientContext.authenticate(authService, request, callback);
+    }
+
+    protected boolean isDevLoginRequired() {
+        return ApplicationMode.isDevelopment() || VistaDemo.isDemo();
+    }
+
+    protected String getApplicationModeName() {
+        return DemoData.applicationModeName();
+    }
+
+    protected List<? extends LoginView.DevLoginCredentials> getDevLoginCredentials() {
+        return new LinkedList<LoginView.DevLoginCredentials>();
     }
 
     protected void enableHumanVerification() {

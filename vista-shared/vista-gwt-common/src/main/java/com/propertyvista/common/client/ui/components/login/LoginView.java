@@ -13,12 +13,24 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
 
+import com.propertyvista.domain.DemoData;
+
 public interface LoginView extends IsWidget {
+
+    interface DevLoginCredentials {
+
+        int getHotKey();
+
+        DemoData.UserType getUserType();
+
+    }
 
     interface Presenter {
 
@@ -35,5 +47,13 @@ public interface LoginView extends IsWidget {
     void reset(String email, boolean rememberUser);
 
     void setWallMessage(SystemWallMessage systemWallMessage);
+
+    /**
+     * @param devLoginData
+     *            pass <code>null</code> to disable DevLogin or some relevant dev login to enable dev login.
+     * @param appModeName
+     *            just a name of application mode, this value is ignored if devLoginData is null
+     */
+    void setDevLogin(List<? extends DevLoginCredentials> devLoginData, String appModeName);
 
 }

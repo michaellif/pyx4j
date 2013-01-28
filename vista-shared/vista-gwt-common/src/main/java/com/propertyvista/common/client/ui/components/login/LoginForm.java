@@ -51,6 +51,8 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.shared.config.VistaDemo;
 
+// TODO Dev Login needs refactoring (populate devLoginData, and mode from outside, see portal LandingViewImpl for how to)
+@Deprecated
 public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
     private static final I18n i18n = I18n.get(LoginForm.class);

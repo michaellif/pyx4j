@@ -42,4 +42,11 @@ public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
         );//@formatter:on
 
     }
+
+    @Override
+    public void setDevLogin(List<? extends DevLoginCredentials> devLoginData, String appModeName) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

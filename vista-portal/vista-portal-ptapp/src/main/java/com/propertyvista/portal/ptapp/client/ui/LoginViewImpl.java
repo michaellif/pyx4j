@@ -83,4 +83,10 @@ public class LoginViewImpl extends AbstractLoginViewImpl {
                 new DevLoginData(DemoData.UserType.PCOAPPLICANT, 'E')
         );//@formatter:on
     }
+
+    @Override
+    public void setDevLogin(List<? extends DevLoginCredentials> devLoginData, String appModeName) {
+        // TODO Auto-generated method stub
+
+    }
 }
