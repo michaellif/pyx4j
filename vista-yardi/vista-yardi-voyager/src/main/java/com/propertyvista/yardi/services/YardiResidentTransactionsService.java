@@ -91,7 +91,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         updateCharges(allTransactions);
 
-//        updatePayments(allTransactions);
+        updatePayments(allTransactions);
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
