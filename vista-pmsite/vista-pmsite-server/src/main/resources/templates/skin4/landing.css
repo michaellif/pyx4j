@@ -13,6 +13,7 @@
 }
 
 .infobox_header {
+	border-top: 1px solid #000000;
 	background: #fff;
 	height: 30px;
 	padding: 5px 0;
@@ -32,20 +33,7 @@
 	width: 100%;
 }
 
-.narrowGadgetBox {
-	display:inline-block;
-	width:300px;
-	background: ${object2_10};
-}
-.narrowGadgetBox .infobox_header {
-	background: ${object2_90};
-}
-.narrowGadgetBox .infobox_body {
-	border:0;
-}
-
 .banner {
-	/*position: relative;*/
 	vertical-align:top;
 	z-index: 100;
 	font-size:13px;
@@ -64,16 +52,10 @@
 	padding: 5px 0;
 }
 
-.quickSearch .infobox_header {
-	background: #fff;
-	height: 30px;
-	padding: 5px 0;
-}
 .quickSearch .infobox_body {
       float:none;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
       background: #999999;
-      border-top: 5px solid #000000;
       padding: 18px 20px;
 }
 
@@ -106,6 +88,7 @@
 	color:#fff;
 	cursor: pointer;
 	padding: 10px;
+	font-size: 13px;
 }
 
 .quickSearch .submit {
@@ -139,7 +122,6 @@
 .vista-pmsite-sidebar {
 	float: left;
 	width:280px;
-	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-main {
@@ -151,15 +133,10 @@
 }
 
 .testimBox {
-	border-top: 1px solid #000000;
 	float: left;
 	overflow:hidden;
 	width: 100%;
-}
-
-.testimBox .infobox_header {
-	height: 30px;
-	padding: 5px 0;
+	margin-bottom: 20px;
 }
 
 .testimBox .infobox_body {
@@ -202,16 +179,6 @@
 	padding: 10px 0 0 0;
 }
 
-.newsBox {
-}
-
-.newsBox .infobox_header {
-	background: #fff;
-	height: 30px;
-	padding: 5px 0;
-}
-
-
 .newsBox .date {
 	color: #828282;
 	font-size: 12px;
@@ -233,7 +200,6 @@
 	color: ${object2_100};
 	font-family: monospace;
 	font-size: 1em;
-    margin-bottom: 15px;
     font-family: Arial, Helvetica, sans-serif;
  	font-size: 9pt;
 	line-height: 11pt;
@@ -242,6 +208,7 @@
 
 .newsBox .infobox_content {
 	border-top: 5px solid #000000;
+	margin-bottom: 20px;
 }
 
 .infobox_content .read_more {
@@ -257,10 +224,6 @@
 	padding: 7px;
 }
 
-.infobox_header {
-	background: #fff;
-}
-
 .infobox_header_title {
 	font-family: monospace;
     font-weight: normal;
@@ -274,7 +237,6 @@
 }
 
 .promoBox {
-	border-top: 1px solid #000000;
 	float: left;
 	overflow:hidden;
 	width: 100%;
@@ -287,11 +249,6 @@
 	border-top: 5px solid #000000;
 	margin-right: 5px;
 	overflow: hidden;
-}
-
-.promoBox .infobox_header {
-	height: 30px;
-	padding: 5px 0;
 }
 
 .address {
