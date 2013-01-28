@@ -298,6 +298,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         int datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termFrom()), 9).build());
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termTo()), 9).build());
+        // TODO: currently just one term type is supported - Fixed!
+        get(proto().termTo()).setMandatory(true);
 
         datesRow = -1; // second column:
         datesPanel.setBR(++datesRow, 1, 1);
