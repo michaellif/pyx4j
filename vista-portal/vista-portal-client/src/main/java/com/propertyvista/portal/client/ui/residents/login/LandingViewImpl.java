@@ -36,7 +36,6 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.client.ui.residents.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecorator;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
@@ -58,17 +57,20 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         @Override
         public IsWidget createContent() {
-
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.add(center(new WatermarkDecorator((CTextField) inject(proto().email(), new CTextField()))));
-            contentPanel.add(center(new WatermarkDecorator((CPasswordTextField) inject(proto().password(), new CPasswordTextField()))));
-            captcha = (CCaptcha) inject(proto().captcha());
-            contentPanel.add(center(captcha.asWidget()));
 
+            contentPanel.add(center(new DecoratorBuilder(inject(proto().email(), new CTextField())).customLabel("").labelWidth(0).componentWidth(15)
+                    .useLabelSemicolon(false).build()));
+            ((CTextField) get(proto().email())).setWatermark(i18n.tr("Email"));
+
+            contentPanel.add(center(new DecoratorBuilder(inject(proto().password(), new CPasswordTextField())).customLabel("").labelWidth(0).componentWidth(15)
+                    .useLabelSemicolon(false).build()));
+            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Password"));
+
+            contentPanel.add(center((captcha = (CCaptcha) inject(proto().captcha())).asWidget()));
             setEnableCaptcha(false);
 
-            CCheckBox rememberMe = (CCheckBox) inject(proto().rememberID(), new CCheckBox());
-            contentPanel.add(center(new CheckBoxDecorator(rememberMe)));
+            contentPanel.add(center(new CheckBoxDecorator((CCheckBox) inject(proto().rememberID(), new CCheckBox()))));
 
             return contentPanel;
         }
