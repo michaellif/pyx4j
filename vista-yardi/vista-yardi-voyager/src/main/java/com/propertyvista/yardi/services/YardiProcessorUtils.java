@@ -38,7 +38,8 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
-import com.propertyvista.domain.financial.yardi.YardiPaymentReversal;
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -119,7 +120,7 @@ public class YardiProcessorUtils {
     /*
      * PaymentProcessor utils
      */
-    public static Payment getPayment(YardiPayment yp) {
+    public static Payment getPayment(YardiReceipt yp) {
         Payment payment = new Payment();
         payment.setType(getPaymentType(yp));
         payment.setChannel(YardiPaymentChannel.Online.name());
@@ -127,7 +128,7 @@ public class YardiProcessorUtils {
         return payment;
     }
 
-    public static Detail getPaymentDetail(YardiPayment yp) {
+    public static Detail getPaymentDetail(YardiReceipt yp) {
         PaymentRecord pr = yp.paymentRecord();
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
@@ -142,14 +143,14 @@ public class YardiProcessorUtils {
         return detail;
     }
 
-    public static Payment getNSFReversal(YardiPaymentReversal nsf) {
+    public static Payment getNSFReversal(YardiReceiptReversal nsf) {
         Payment payment = new Payment();
         payment.setType(YardiPaymentType.Other.name());
         payment.setDetail(getNSFReversalDetail(nsf));
         return payment;
     }
 
-    public static Detail getNSFReversalDetail(YardiPaymentReversal nsf) {
+    public static Detail getNSFReversalDetail(YardiReceiptReversal nsf) {
         PaymentRecord pr = nsf.paymentRecord();
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
@@ -166,7 +167,7 @@ public class YardiProcessorUtils {
         return detail;
     }
 
-    public static String getPaymentType(YardiPayment yp) {
+    public static String getPaymentType(YardiReceipt yp) {
         switch (yp.paymentRecord().paymentMethod().type().getValue()) {
         case Cash:
             return YardiPaymentType.Cash.name();

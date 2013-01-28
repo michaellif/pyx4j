@@ -36,8 +36,8 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
-import com.propertyvista.domain.financial.yardi.YardiPayment;
-import com.propertyvista.domain.financial.yardi.YardiPaymentReversal;
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -48,7 +48,7 @@ public class ARFacadeYardyImpl implements ARFacade {
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
-        YardiPayment payment = EntityFactory.create(YardiPayment.class);
+        YardiReceipt payment = EntityFactory.create(YardiReceipt.class);
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue().negate());
         payment.billingAccount().set(paymentRecord.billingAccount());
@@ -61,7 +61,7 @@ public class ARFacadeYardyImpl implements ARFacade {
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        YardiPaymentReversal reversal = EntityFactory.create(YardiPaymentReversal.class);
+        YardiReceiptReversal reversal = EntityFactory.create(YardiReceiptReversal.class);
         reversal.paymentRecord().set(paymentRecord);
         reversal.amount().setValue(paymentRecord.amount().getValue());
         reversal.billingAccount().set(paymentRecord.billingAccount());

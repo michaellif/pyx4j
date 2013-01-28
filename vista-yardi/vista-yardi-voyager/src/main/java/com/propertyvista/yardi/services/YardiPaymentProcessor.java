@@ -26,7 +26,6 @@ import com.yardi.entity.resident.RTServiceTransactions;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -34,7 +33,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
-import com.propertyvista.domain.financial.yardi.YardiPaymentReversal;
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
@@ -69,16 +69,6 @@ public class YardiPaymentProcessor {
                             continue;
                         }
                         Payment payment = tr.getPayment();
-                        // if it's our payment returning back (the DocumentNumber will match the primary key), remove the original
-                        String keyStr = payment.getDetail().getDocumentNumber();
-                        if (keyStr != null && keyStr.length() > 0) {
-                            Key ypKey = new Key(keyStr);
-                            EntityQueryCriteria<YardiPayment> origPayment = EntityQueryCriteria.create(YardiPayment.class);
-                            origPayment.add(PropertyCriterion.eq(origPayment.proto().billingAccount(), account));
-                            origPayment.add(PropertyCriterion.eq(origPayment.proto().claimed(), true));
-                            origPayment.add(PropertyCriterion.eq(origPayment.proto().paymentRecord().id(), ypKey));
-                            Persistence.service().delete(origPayment);
-                        }
                         // add new payment transaction
                         Persistence.service().persist(YardiProcessorUtils.createPayment(account, payment));
                     }
@@ -89,11 +79,11 @@ public class YardiPaymentProcessor {
     }
 
     public ResidentTransactions getAllPaymentTransactions() {
-        EntityQueryCriteria<YardiPayment> allPayments = EntityQueryCriteria.create(YardiPayment.class);
+        EntityQueryCriteria<YardiReceipt> allPayments = EntityQueryCriteria.create(YardiReceipt.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
 
         ResidentTransactions paymentTransactions = new ResidentTransactions();
-        for (YardiPayment yp : Persistence.service().query(allPayments)) {
+        for (YardiReceipt yp : Persistence.service().query(allPayments)) {
             Persistence.ensureRetrieve(yp.billingAccount(), AttachLevel.Attached);
             Persistence.ensureRetrieve(yp.billingAccount().lease(), AttachLevel.Attached);
             Persistence.ensureRetrieve(yp.billingAccount().lease().unit().building(), AttachLevel.Attached);
@@ -124,10 +114,10 @@ public class YardiPaymentProcessor {
     public List<ResidentTransactions> getAllNSFReversals() {
         List<ResidentTransactions> allNSF = new ArrayList<ResidentTransactions>();
 
-        EntityQueryCriteria<YardiPaymentReversal> nsfReversals = EntityQueryCriteria.create(YardiPaymentReversal.class);
+        EntityQueryCriteria<YardiReceiptReversal> nsfReversals = EntityQueryCriteria.create(YardiReceiptReversal.class);
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().applyNSF(), true));
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
-        for (YardiPaymentReversal nsf : Persistence.service().query(nsfReversals)) {
+        for (YardiReceiptReversal nsf : Persistence.service().query(nsfReversals)) {
             Persistence.ensureRetrieve(nsf.billingAccount(), AttachLevel.Attached);
             Persistence.ensureRetrieve(nsf.billingAccount().lease(), AttachLevel.Attached);
             Persistence.ensureRetrieve(nsf.billingAccount().lease().unit().building(), AttachLevel.Attached);
