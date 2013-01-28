@@ -44,10 +44,10 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
     public IsWidget createContent(LeaseYardiFinancialInfoDTO value) {
         FormFlexPanel contentPanel = new FormFlexPanel();
         int[] row = { -1 };
-        contentPanel.setH1(++row[0], 0, 0, i18n.tr("Outstanding Charges"));
+        contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
         createLineItems(row, contentPanel, value.charges());
 
-        contentPanel.setH1(++row[0], 0, 0, i18n.tr("Unapplied Payments"));
+        contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
         createLineItems(row, contentPanel, value.payments());
 
         return contentPanel;
