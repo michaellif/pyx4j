@@ -51,10 +51,6 @@ public class YardiLeaseProcessor {
                 String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
                 if (rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseToDate() == null) {
                     Date date = rtCustomer.getCustomers().getCustomer().get(0).getLease().getLeaseFromDate();
-                    // adds a year to start date to make end date, hack to make sure end date exists.
-                    // TODO remove the hack !!! Need to handle this on lease term level.
-                    date.setTime(date.getTime() + new Long("31536000000"));
-                    rtCustomer.getCustomers().getCustomer().get(0).getLease().setLeaseToDate(date);
                 }
                 if (isPastEntry(rtCustomer)) {
                     log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
@@ -123,7 +119,6 @@ public class YardiLeaseProcessor {
         // set unit:
         if (unit.getPrimaryKey() != null) {
             leaseFacade.setUnit(lease, unit);
-            // TODO double into BigDecimal...might need to be handled differently
             leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
         // set dates:
@@ -131,7 +126,7 @@ public class YardiLeaseProcessor {
         if (yardiLease.getLeaseToDate() != null) {
             lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
         } else {
-            System.out.println("wat");
+            lease.currentTerm().type().setValue(LeaseTerm.Type.Periodic);
         }
         if (yardiLease.getExpectedMoveInDate() != null) {
             lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));

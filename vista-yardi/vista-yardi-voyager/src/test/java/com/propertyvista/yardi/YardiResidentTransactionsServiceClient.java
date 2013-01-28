@@ -19,10 +19,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiResidentTransactionsServiceClient {
@@ -33,14 +33,13 @@ public class YardiResidentTransactionsServiceClient {
         Persistence.service().startBackgroundProcessTransaction();
         Lifecycle.startElevatedUserContext();
 
-        PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
+        PmcYardiCredential yardiCredential = DevYardiCredentials.getTestPmcYardiCredential();
+
         try {
 //            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
-            YardiResidentTransactionsService.getInstance().postAllNSF(yardiCredential);
+              YardiResidentTransactionsService.getInstance().postAllNSF(yardiCredential);
         } finally {
             Persistence.service().commit();
         }
-
     }
-
 }
