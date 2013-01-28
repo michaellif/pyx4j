@@ -90,6 +90,9 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         List<VistaCrmBehavior> allRoles = new ArrayList<VistaCrmBehavior>(Arrays.asList(VistaCrmBehavior.values()));
         allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
         allRoles.remove(VistaCrmBehavior.PropertyVistaAccountOwner);
+        if (!ApplicationMode.isDevelopment()) {
+            allRoles.remove(VistaCrmBehavior.OAPI);
+        }
 
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
