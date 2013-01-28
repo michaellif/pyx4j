@@ -78,8 +78,9 @@ public class YardiPaymentProcessor {
         }
     }
 
-    public ResidentTransactions getAllPaymentTransactions() {
+    public ResidentTransactions getAllPaymentTransactions(String propertyCode) {
         EntityQueryCriteria<YardiReceipt> allPayments = EntityQueryCriteria.create(YardiReceipt.class);
+        allPayments.add(PropertyCriterion.eq(allPayments.proto().billingAccount().lease().unit().building().propertyCode(), propertyCode));
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
 
         ResidentTransactions paymentTransactions = new ResidentTransactions();

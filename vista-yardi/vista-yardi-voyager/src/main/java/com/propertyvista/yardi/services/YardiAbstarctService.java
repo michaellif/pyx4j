@@ -14,16 +14,30 @@
 package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBException;
 
 import org.apache.axis2.AxisFault;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.ws.operations.GetPropertyConfigurations;
+import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.Ping;
 import com.yardi.ws.operations.PingResponse;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
+
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiClient;
+import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
+import com.propertyvista.yardi.YardiServiceException;
+import com.propertyvista.yardi.bean.Messages;
+import com.propertyvista.yardi.bean.Properties;
 
 public class YardiAbstarctService {
 
@@ -45,4 +59,65 @@ public class YardiAbstarctService {
         PingResponse pr = c.getResidentTransactionsService().ping(ping);
         log.info("Connection to Yardi works: {}", pr.getPingResult());
     }
+
+    protected List<String> getPropertyCodes(YardiClient client, PmcYardiCredential yc) throws YardiServiceException {
+        List<String> propertyCodes = new ArrayList<String>();
+        try {
+            Properties properties = getPropertyConfigurations(client, yc);
+            for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
+                if (StringUtils.isNotEmpty(property.getCode())) {
+                    propertyCodes.add(property.getCode());
+                }
+            }
+            return propertyCodes;
+        } catch (Exception e) {
+            throw new YardiServiceException("Fail to get properties information from YARDI System", e);
+        }
+    }
+
+    /**
+     * Allows export of the Property Configuration with the
+     * Database. The Unique Interface Entity name is needed in order
+     * to return the Property ID's the third-party has access to.
+     * 
+     * This is just a list of properties with not much information in it:
+     * Property has code, address, marketing name, accounts payable and accounts receivable
+     * 
+     * @throws RemoteException
+     * @throws AxisFault
+     * @throws JAXBException
+     */
+
+    protected Properties getPropertyConfigurations(YardiClient c, PmcYardiCredential yc) throws AxisFault, RemoteException, JAXBException {
+        c.transactionId++;
+        c.setCurrentAction(Action.GetPropertyConfigurations);
+
+        GetPropertyConfigurations l = new GetPropertyConfigurations();
+        l.setUserName(yc.username().getValue());
+        l.setPassword(yc.credential().getValue());
+        l.setServerName(yc.serverName().getValue());
+        l.setDatabase(yc.database().getValue());
+        l.setPlatform(yc.platform().getValue().name());
+        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
+        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+
+        if (log.isDebugEnabled()) {
+            log.debug("GetPropertyConfigurations Result: {}", xml);
+        }
+
+        if (YardiServiceUtils.isMessageResponse(xml)) {
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            throw new IllegalStateException(YardiServiceUtils.toString(messages));
+        }
+
+        Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
+
+        if (log.isDebugEnabled()) {
+            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
+        }
+
+        return properties;
+    }
+
 }

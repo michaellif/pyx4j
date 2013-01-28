@@ -63,37 +63,19 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             DatatypeConfigurationException {
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
-        long batchId = openReceiptBatch(client, yc, "prvista1");
-        //String xml = IOUtils.getTextResource(IOUtils.resourceFileName("Payment.xml", YardiSystemBatchesService.class));
-
-        ResidentTransactions residentTransactions = new YardiPaymentProcessor().getAllPaymentTransactions();
-//                new ResidentTransactions();
-//        Property property = new Property();
-//        residentTransactions.getProperty().add(property);
-//        RTCustomer customer = new RTCustomer();
-//        property.getRTCustomer().add(customer);
-//        RTServiceTransactions st = new RTServiceTransactions();
-//        customer.setRTServiceTransactions(st);
-//        Transactions transactions = new Transactions();
-//        st.getTransactions().add(transactions);
-//        Payment payment = new Payment();
-//        payment.setType("Other");
-//        transactions.setPayment(payment);
-//        Detail detail = new Detail();
-//
-//        detail.setTransactionDate(new GregorianCalendar(2011, 06, 06).getTime());
-//        detail.setCustomerID("t0005529");
-//        detail.setPaidBy("Tenant");
-//        detail.setAmount("2626.17");
-//        detail.setComment("test pay2");
-//        detail.setPropertyPrimaryID("prvista1");
-//        payment.setDetail(detail);
-
-        String xml = MarshallUtil.marshall(residentTransactions);
-        log.info(xml);
-        addReceiptsToBatch(client, yc, batchId, xml);
-        postReceiptBatch(client, yc, batchId);
-        Persistence.service().commit();
+        log.info("Get properties information...");
+        for (String propertyCode : getPropertyCodes(client, yc)) {
+            long batchId = openReceiptBatch(client, yc, propertyCode);
+            ResidentTransactions residentTransactions = new YardiPaymentProcessor().getAllPaymentTransactions(propertyCode);
+            if (residentTransactions.getProperty().size() == 0) {
+                continue;
+            }
+            String xml = MarshallUtil.marshall(residentTransactions);
+            log.info(xml);
+            addReceiptsToBatch(client, yc, batchId, xml);
+            postReceiptBatch(client, yc, batchId);
+            Persistence.service().commit();
+        }
     }
 
     private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {

@@ -23,13 +23,10 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.ws.operations.GetPropertyConfigurations;
-import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
 import com.yardi.ws.operations.GetResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.ImportResidentTransactions_Login;
@@ -44,7 +41,6 @@ import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.bean.Messages;
-import com.propertyvista.yardi.bean.Properties;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
@@ -110,21 +106,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         new YardiPaymentProcessor().updatePayments(allTransactions);
     }
 
-    private List<String> getPropertyCodes(YardiClient client, PmcYardiCredential yc) throws YardiServiceException {
-        List<String> propertyCodes = new ArrayList<String>();
-        try {
-            Properties properties = getPropertyConfigurations(client, yc);
-            for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
-                if (StringUtils.isNotEmpty(property.getCode())) {
-                    propertyCodes.add(property.getCode());
-                }
-            }
-            return propertyCodes;
-        } catch (Exception e) {
-            throw new YardiServiceException("Fail to get properties information from YARDI System", e);
-        }
-    }
-
     private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
@@ -158,50 +139,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private List<ResidentTransactions> getAllNSFReversals() {
         return new YardiPaymentProcessor().getAllNSFReversals();
-    }
-
-    /**
-     * Allows export of the Property Configuration with the
-     * Database. The Unique Interface Entity name is needed in order
-     * to return the Property ID's the third-party has access to.
-     * 
-     * This is just a list of properties with not much information in it:
-     * Property has code, address, marketing name, accounts payable and accounts receivable
-     * 
-     * @throws RemoteException
-     * @throws AxisFault
-     * @throws JAXBException
-     */
-    private Properties getPropertyConfigurations(YardiClient c, PmcYardiCredential yc) throws AxisFault, RemoteException, JAXBException {
-        c.transactionId++;
-        c.setCurrentAction(Action.GetPropertyConfigurations);
-
-        GetPropertyConfigurations l = new GetPropertyConfigurations();
-        l.setUserName(yc.username().getValue());
-        l.setPassword(yc.credential().getValue());
-        l.setServerName(yc.serverName().getValue());
-        l.setDatabase(yc.database().getValue());
-        l.setPlatform(yc.platform().getValue().name());
-        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
-        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
-
-        if (log.isDebugEnabled()) {
-            log.debug("GetPropertyConfigurations Result: {}", xml);
-        }
-
-        if (YardiServiceUtils.isMessageResponse(xml)) {
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            throw new IllegalStateException(YardiServiceUtils.toString(messages));
-        }
-
-        Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
-
-        if (log.isDebugEnabled()) {
-            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
-        }
-
-        return properties;
     }
 
     /**
