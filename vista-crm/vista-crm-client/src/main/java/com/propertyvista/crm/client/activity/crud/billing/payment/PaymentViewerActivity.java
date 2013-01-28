@@ -62,13 +62,13 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
     }
 
     @Override
-    public void rejectPayment() {
+    public void rejectPayment(boolean applyNSF) {
         ((PaymentCrudService) getService()).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
             }
-        }, getEntityId());
+        }, getEntityId(), applyNSF);
     }
 
     @Override

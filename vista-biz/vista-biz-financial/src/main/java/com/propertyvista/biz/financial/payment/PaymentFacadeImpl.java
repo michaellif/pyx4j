@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -201,7 +201,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord reject(PaymentRecord paymentId) {
+    public PaymentRecord reject(PaymentRecord paymentId, boolean applyNSF) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
@@ -213,6 +213,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         case Cash:
+            Validate.isTrue(!applyNSF, "Can't Apply NSF on Cash");
+            break;
         case Check:
             break;
         }
@@ -224,7 +226,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Check:
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
             break;
         case Cash:
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);

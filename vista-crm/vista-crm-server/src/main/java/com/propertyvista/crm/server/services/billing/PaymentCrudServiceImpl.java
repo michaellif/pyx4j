@@ -183,8 +183,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).reject(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+    public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId, boolean applyNSF) {
+        ServerSideFactory.create(PaymentFacade.class).reject(EntityFactory.createIdentityStub(PaymentRecord.class, entityId), applyNSF);
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }

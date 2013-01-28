@@ -27,7 +27,7 @@ public interface PaymentViewerView extends IViewerView<PaymentRecordDTO> {
 
         void clearPayment();
 
-        void rejectPayment();
+        void rejectPayment(boolean applyNSF);
 
         void cancelPayment();
     }

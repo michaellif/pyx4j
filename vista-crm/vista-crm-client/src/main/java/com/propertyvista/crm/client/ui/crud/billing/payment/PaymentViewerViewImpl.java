@@ -36,6 +36,8 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
     private final MenuItem rejectAction;
 
+    private final MenuItem rejectNSFAction;
+
     private final MenuItem cancelAction;
 
     public PaymentViewerViewImpl() {
@@ -50,10 +52,18 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         });
         addAction(cancelAction);
 
-        rejectAction = new MenuItem(i18n.tr("Reject"), new Command() {
+        rejectNSFAction = new MenuItem(i18n.tr("Reject with NSF"), new Command() {
             @Override
             public void execute() {
-                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment();
+                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment(true);
+            }
+        });
+        addAction(rejectNSFAction);
+
+        rejectAction = new MenuItem(i18n.tr("Reject Other"), new Command() {
+            @Override
+            public void execute() {
+                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment(false);
             }
         });
         addAction(rejectAction);
@@ -88,6 +98,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         setActionVisible(scheduleAction, false);
         setActionVisible(processAction, false);
         setActionVisible(clearAction, false);
+        setActionVisible(rejectNSFAction, false);
         setActionVisible(rejectAction, false);
         setActionVisible(cancelAction, false);
         super.reset();
@@ -114,6 +125,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         case Check:
             setActionVisible(clearAction, value.paymentStatus().getValue() == PaymentStatus.Received);
             setActionVisible(rejectAction, value.paymentStatus().getValue() == PaymentStatus.Received);
+            setActionVisible(rejectNSFAction, value.paymentStatus().getValue() == PaymentStatus.Received);
             break;
         default:
             // No other special handling for payment types
