@@ -43,6 +43,7 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
@@ -90,7 +91,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().leases().setValue(Boolean.TRUE);
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
                 pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
-                pmc.features().defaultProductCatalog().setValue(Boolean.FALSE);
+                pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 
