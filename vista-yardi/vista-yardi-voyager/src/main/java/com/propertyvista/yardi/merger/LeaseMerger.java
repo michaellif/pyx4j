@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.PaymentAccepted;
 
 public class LeaseMerger {
 
@@ -75,5 +76,26 @@ public class LeaseMerger {
         } else {
             return null;
         }
+    }
+
+    public boolean validatePaymentTypeChanger(String paymentAccepted, LeaseTerm currentTerm) {
+        if (!currentTerm.paymentAccepted().getValue().equals(getPaymentType(paymentAccepted))) {
+            return true;
+        }
+        return false;
+    }
+
+    public PaymentAccepted getPaymentType(String type) {
+        switch (type) {
+        case "0":
+            return PaymentAccepted.Any;
+        case "1":
+            return PaymentAccepted.DoNotAccept;
+        case "2":
+            return PaymentAccepted.CashEquivalent;
+        default:
+            return PaymentAccepted.Any;
+        }
+
     }
 }
