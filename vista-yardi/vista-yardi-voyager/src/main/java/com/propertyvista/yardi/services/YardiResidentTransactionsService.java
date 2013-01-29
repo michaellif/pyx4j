@@ -246,7 +246,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return transactions;
     }
 
-    private void importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws AxisFault, RemoteException, JAXBException,
+    private Messages importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws AxisFault, RemoteException, JAXBException,
             XMLStreamException {
         c.transactionId++;
         c.setCurrentAction(Action.ImportResidentTransactions);
@@ -268,6 +268,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
 
         log.info("ImportResidentTransactions: {}", xml);
+
+        Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+        log.info(YardiServiceUtils.toString(messages));
+        return messages;
     }
 
 }

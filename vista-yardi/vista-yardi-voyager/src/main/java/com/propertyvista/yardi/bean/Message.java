@@ -20,11 +20,15 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "Message")
 public class Message {
 
+    public static enum MessageType {
+        FYI, Error
+    }
+
     @XmlValue
     private String value;
 
     @XmlAttribute(name = "messageType")
-    private String type;
+    private MessageType type;
 
     @Override
     public String toString() {
@@ -39,12 +43,8 @@ public class Message {
         return value;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
-//
-//    public void setText(String text) {
-//        this.value = text;
-//    }
 
 }

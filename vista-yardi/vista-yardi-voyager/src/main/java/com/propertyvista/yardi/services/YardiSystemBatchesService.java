@@ -45,6 +45,7 @@ import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiServiceException;
+import com.propertyvista.yardi.bean.Messages;
 
 public class YardiSystemBatchesService extends YardiAbstarctService {
 
@@ -108,7 +109,8 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return result;
     }
 
-    private void addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws AxisFault, RemoteException, XMLStreamException {
+    private Messages addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws AxisFault, RemoteException,
+            XMLStreamException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.AddReceiptsToBatch);
 
@@ -129,9 +131,14 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         AddReceiptsToBatchResponse response = c.getResidentTransactionsSysBatchService().addReceiptsToBatch(l);
         String xml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
         log.info("AddReceiptsToBatch: {}", xml);
+
+        Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+        log.info(YardiServiceUtils.toString(messages));
+
+        return messages;
     }
 
-    private void postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws AxisFault, RemoteException {
+    private Messages postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws AxisFault, RemoteException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.PostReceiptBatch);
 
@@ -147,6 +154,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         PostReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().postReceiptBatch(l);
         String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
         log.info("PostReceiptBatch: {}", xml);
+
+        Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+        log.info(YardiServiceUtils.toString(messages));
+
+        return messages;
     }
 
 }

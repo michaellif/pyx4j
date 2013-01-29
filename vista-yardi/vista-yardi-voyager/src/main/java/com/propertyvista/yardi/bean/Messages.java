@@ -19,6 +19,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.propertyvista.yardi.bean.Message.MessageType;
+
 @XmlRootElement(name = "Messages")
 public class Messages {
 
@@ -44,4 +46,14 @@ public class Messages {
         this.messages = messages;
     }
 
+    public boolean isError() {
+        if (messages.size() != 1) {
+            throw new Error("Can't parse Message");
+        }
+        if (messages.get(0).getType() == MessageType.FYI) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

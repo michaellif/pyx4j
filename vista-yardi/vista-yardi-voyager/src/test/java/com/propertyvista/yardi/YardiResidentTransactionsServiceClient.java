@@ -36,8 +36,8 @@ public class YardiResidentTransactionsServiceClient {
         PmcYardiCredential yardiCredential = DevYardiCredentials.getTestPmcYardiCredential();
 
         try {
-//            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
-              YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(yardiCredential);
+            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+            //         YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(yardiCredential);
         } finally {
             Persistence.service().commit();
         }
