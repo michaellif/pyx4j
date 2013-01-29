@@ -56,6 +56,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
+import com.propertyvista.test.preloader.PmcDataModel;
+import com.propertyvista.test.preloader.PreloadConfig;
 
 public class AptUnitOccupancyManagerTestBase {
 
@@ -72,10 +74,13 @@ public class AptUnitOccupancyManagerTestBase {
     @Before
     public void setUp() {
         VistaTestDBSetup.init();
+
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
         Persistence.service().setTransactionSystemTime(asDate("1900-01-01"));
+        PmcDataModel pmcDataModel = new PmcDataModel(new PreloadConfig());
+        pmcDataModel.generate();
 
         generateIdAssignmentPolicy();
 
