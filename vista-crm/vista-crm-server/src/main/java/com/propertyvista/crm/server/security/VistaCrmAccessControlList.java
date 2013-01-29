@@ -447,7 +447,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));
 
-// - Old servies:
+// - Old services:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.class, "*"));
 
