@@ -34,6 +34,7 @@ public interface OccupancyFacade {
     /**
      * @return an occupancy segment of the unit that contains the provided date.
      */
+    // TODO refactor this function it's not good: should return only minimal information: i.e sometimes occupancy model is not available
     AptUnitOccupancySegment getOccupancySegment(AptUnit unit, LogicalDate date);
 
     void setupNewUnit(AptUnit unit);
