@@ -225,8 +225,8 @@ BEGIN
         
         ALTER TABLE deposit_lifecycle ADD COLUMN billing_account_discriminator VARCHAR(50);
         
-        UPDATE  deposit_lifecycle
-        SET     billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_lifecycle '
+                ||'SET     billing_account_discriminator = ''Internal''';
         
         -- elevator
         
@@ -240,6 +240,31 @@ BEGIN
         -- file
         
         ALTER TABLE file DROP COLUMN access_key;
+        
+        -- home_page_gadget and gadget_content
+        
+        ALTER TABLE gadget_content DROP CONSTRAINT gadget_content_id_discriminator_ck;
+        ALTER TABLE home_page_gadget DROP CONSTRAINT home_page_gadget_content_discriminator_d_ck;
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.gadget_content (id,id_discriminator) VALUES (nextval(''public.gadget_content_seq''),''QuickSearch'')';
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.home_page_gadget (id,area,status,name,content_discriminator,content) '
+                ||'(SELECT nextval(''public.home_page_gadget_seq'') AS id,''narrow'' AS area,''published'' AS status, '
+                ||'''Quick Search'' AS name,''QuickSearch'' AS content_discriminator, id AS content '
+                ||'FROM '||v_schema_name||'.gadget_content '
+                ||'WHERE id_discriminator = ''QuickSearch'') ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.site_descriptor$home_page_gadgets_narrow '
+                ||'SET  seq = seq + 1 ';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.site_descriptor$home_page_gadgets_narrow (id,owner,value,seq) '
+                ||'(SELECT nextval(''public.site_descriptor$home_page_gadgets_narrow_seq'') AS id, '
+                ||'a.id AS owner, b.id AS value, 0  AS seq '
+                ||'FROM '||v_schema_name||'.site_descriptor a, '
+                ||v_schema_name||'.home_page_gadget b '
+                ||'WHERE b.content_discriminator = ''QuickSearch'')';
+                
+                 
         
         -- insurance_certificate
        
@@ -422,6 +447,14 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_participant '
                 ||'SET  preauthorized_payment_discriminator = ''LeasePaymentMethod''';
         
+        
+        -- lease_term
+        
+        ALTER TABLE lease_term ADD COLUMN payment_accepted VARCHAR(50);
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_term '
+                ||'SET payment_accepted = ''Any'' ';
+        
         -- maintenance
         
         ALTER TABLE maintenance DROP COLUMN contract_document;
@@ -504,6 +537,7 @@ BEGIN
         );
         
         ALTER TABLE payment_record_external OWNER TO vista;
+        
         
         -- payments_summary
         
@@ -765,8 +799,6 @@ BEGIN
         ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck;
         ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck;
         ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_id_discriminator_ck;
-        ALTER TABLE gadget_content DROP CONSTRAINT gadget_content_id_discriminator_ck;
-        ALTER TABLE home_page_gadget DROP CONSTRAINT home_page_gadget_content_discriminator_d_ck;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
         ALTER TABLE lead DROP CONSTRAINT lead_lease_type_e_ck;
