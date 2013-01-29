@@ -419,6 +419,9 @@ BEGIN
         
         ALTER TABLE lease_participant ADD COLUMN preauthorized_payment_discriminator VARCHAR(50);
         
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_participant '
+                ||'SET  preauthorized_payment_discriminator = ''LeasePaymentMethod''';
+        
         -- maintenance
         
         ALTER TABLE maintenance DROP COLUMN contract_document;
