@@ -101,7 +101,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         Persistence.service().retrieve(lease.unit().building());
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
         try {
-            ResidentTransactions transactions = getResidentTransaction(client, yc, lease.leaseId().getValue(), lease.unit().building().propertyCode()
+            ResidentTransactions transactions = getResidentTransaction(client, yc, lease.unit().building().propertyCode().getValue(), lease.leaseId()
                     .getValue());
             if (transactions != null) {
                 new YardiLeaseProcessor().updateLeases(transactions);
