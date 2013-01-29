@@ -40,20 +40,20 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postAllPayments(StatisticsRecord dynamicStatisticsRecord) {
+    public void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiSystemBatchesService.getInstance().postAllPayments(VistaDeployment.getPmcYardiCredential());
+            YardiSystemBatchesService.getInstance().postReceiptBatch(VistaDeployment.getPmcYardiCredential());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void postAllNSF(StatisticsRecord dynamicStatisticsRecord) {
+    public void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiResidentTransactionsService.getInstance().postAllNSF(VistaDeployment.getPmcYardiCredential());
+            YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(VistaDeployment.getPmcYardiCredential());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

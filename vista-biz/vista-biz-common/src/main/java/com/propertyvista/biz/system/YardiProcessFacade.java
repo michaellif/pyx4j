@@ -22,10 +22,10 @@ public interface YardiProcessFacade {
     void doAllImport(StatisticsRecord dynamicStatisticsRecord);
 
     @Deprecated
-    void postAllPayments(StatisticsRecord dynamicStatisticsRecord);
+    void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord);
 
     @Deprecated
-    void postAllNSF(StatisticsRecord dynamicStatisticsRecord);
+    void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord);
 
     void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease);
 

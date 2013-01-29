@@ -119,11 +119,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     }
 
-    @Deprecated
-    public void postAllNSF(PmcYardiCredential yc) {
+    public void postReceiptReversalBatch(PmcYardiCredential yc) {
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
-        for (ResidentTransactions nsf : getAllNSFReversals()) {
+        for (ResidentTransactions nsf : getAllReceiptReversals()) {
             try {
                 // for NSF reversals Yardi recommends one by one import
                 String xml = MarshallUtil.marshall(nsf);
@@ -181,7 +180,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return transactions;
     }
 
-    private List<ResidentTransactions> getAllNSFReversals() {
+    private List<ResidentTransactions> getAllReceiptReversals() {
         return new YardiPaymentProcessor().getAllNSFReversals();
     }
 

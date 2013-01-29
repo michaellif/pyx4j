@@ -61,8 +61,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
-    @Deprecated
-    public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException,
+    public void postReceiptBatch(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException,
             DatatypeConfigurationException {
 
         List<String> propertyCodes = getPropertyCodes(new YardiClient(yc.residentTransactionsServiceURL().getValue()), yc);

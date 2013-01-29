@@ -59,6 +59,9 @@ public class ARFacadeYardyImpl implements ARFacade {
         payment.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
         Persistence.service().persist(payment);
+
+        //YardiProcessFacade.postReceipt
+
     }
 
     @Override
@@ -75,6 +78,9 @@ public class ARFacadeYardyImpl implements ARFacade {
         reversal.applyNSF().setValue(applyNSF);
 
         Persistence.service().persist(reversal);
+
+        //YardiProcessFacade.postReceiptReversal
+
     }
 
     @Override

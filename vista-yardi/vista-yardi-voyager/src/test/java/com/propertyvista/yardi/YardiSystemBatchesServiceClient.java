@@ -35,7 +35,7 @@ public class YardiSystemBatchesServiceClient {
 
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
         try {
-            YardiSystemBatchesService.getInstance().postAllPayments(yardiCredential);
+            YardiSystemBatchesService.getInstance().postReceiptBatch(yardiCredential);
         } finally {
             Persistence.service().commit();
         }

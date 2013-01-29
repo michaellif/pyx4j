@@ -37,7 +37,7 @@ public class YardiResidentTransactionsServiceClient {
 
         try {
 //            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
-              YardiResidentTransactionsService.getInstance().postAllNSF(yardiCredential);
+              YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(yardiCredential);
         } finally {
             Persistence.service().commit();
         }

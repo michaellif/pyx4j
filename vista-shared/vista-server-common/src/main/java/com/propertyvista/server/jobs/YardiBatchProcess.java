@@ -34,8 +34,8 @@ public class YardiBatchProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         if (VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(YardiProcessFacade.class).postAllPayments(context.getRunStats());
-            ServerSideFactory.create(YardiProcessFacade.class).postAllNSF(context.getRunStats());
+            ServerSideFactory.create(YardiProcessFacade.class).postReceiptBatch(context.getRunStats());
+            ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversalBatch(context.getRunStats());
         }
     }
 
