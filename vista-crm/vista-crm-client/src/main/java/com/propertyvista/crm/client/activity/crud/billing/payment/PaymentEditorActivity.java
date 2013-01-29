@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -49,23 +50,25 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
         }, getParentId());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant payer) {
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
         ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseTermParticipant) payer.createIdentityStub());
+        }, (LeaseTermParticipant<LeaseParticipant<?>>) payer.createIdentityStub());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant payer) {
+    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
         ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(Vector<LeasePaymentMethod> result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseTermParticipant) payer.createIdentityStub());
+        }, (LeaseTermParticipant<LeaseParticipant<?>>) payer.createIdentityStub());
     }
 }

@@ -40,6 +40,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -129,11 +130,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
+        dto.paymentAccepted().setValue(billingAccount.lease().currentTerm().paymentAccepted().getValue());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
@@ -145,12 +146,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant participant) {
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> participant) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, participant);
     }
 
     @Override
-    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant payer) {
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
         Persistence.service().retrieve(payer);
         if ((payer == null) || (payer.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + payer.getPrimaryKey()

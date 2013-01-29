@@ -22,6 +22,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -29,9 +30,9 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId);
 
-    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant payer);
+    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
 
-    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant payer);
+    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
 
     // Payment operations:
 
