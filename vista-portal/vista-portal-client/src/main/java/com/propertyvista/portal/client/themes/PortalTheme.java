@@ -170,8 +170,9 @@ public class PortalTheme extends VistaTheme {
         initSuggestBoxStyle();
 
         addTheme(new BillingTheme());
+        addTheme(new LandingPagesTheme());
 
-        initTenantInsuranceStyles();
+        initTenantInsuranceStyles(); // TODO move this to a theme class
     }
 
     protected void initSiteViewStyles() {

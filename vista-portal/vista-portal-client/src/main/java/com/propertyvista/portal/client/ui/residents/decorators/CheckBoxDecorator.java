@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.Label;
 
@@ -40,6 +41,7 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
         decoratorPanel.add(componentHolder);
 
         label = new Label();
+        label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         decoratorPanel.add(label);
 
@@ -67,7 +69,6 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
-
     }
 
 }

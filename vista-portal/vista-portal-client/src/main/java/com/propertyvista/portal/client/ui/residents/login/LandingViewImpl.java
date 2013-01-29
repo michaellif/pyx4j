@@ -16,20 +16,18 @@ package com.propertyvista.portal.client.ui.residents.login;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontStyle;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
@@ -38,7 +36,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -56,23 +53,24 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.residents.decorators.CheckBoxDecorator;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
     private static final I18n i18n = I18n.get(LandingViewImpl.class);
 
-    private LandingView.Presenter presenter;
+    public interface LandingHtmlTemplates extends SafeHtmlTemplates {
 
-    private LoginForm loginForm;
+        public static LandingHtmlTemplates TEMPLATES = GWT.create(LandingHtmlTemplates.class);
 
-    private Button loginButton;
+        @Template("<div class=\"{2}\"><span class=\"{4}\">{0}</span><span class=\"{3}\">&nbsp;{1}</span></div>")
+        SafeHtml landingCaption(String emph, String normal, String style, String textStlye, String emphTextStyle);
 
-    private DevLoginPanel devLoginPanel;
+        @Template("<div class=\"{0}\"><div style=\"width:0px; height:100%; border-width:1px; border-style:inset;\"/></div>")
+        SafeHtml orLineSeparator(String style);
 
-    private Button signUpButton;
-
-    private Label signUpGreeting;
+    }
 
     private class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
@@ -85,16 +83,26 @@ public class LandingViewImpl extends Composite implements LandingView {
         @Override
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
-
             contentPanel.add(center(new DecoratorBuilder(inject(proto().email(), new CTextField())).customLabel("").labelWidth(0).componentWidth(15)
-                    .useLabelSemicolon(false).build()));
+                    .useLabelSemicolon(false).mandatoryMarker(false).build()));
             ((CTextField) get(proto().email())).setWatermark(i18n.tr("Email"));
 
+            // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)
+            ((CTextField) get(proto().email())).setMandatory(false);
+            ((CTextField) get(proto().email())).setMandatoryValidationMessage(i18n.tr("Enter your email address"));
+            ((CTextField) get(proto().email())).setMandatory(true);
+
             contentPanel.add(center(new DecoratorBuilder(inject(proto().password(), new CPasswordTextField())).customLabel("").labelWidth(0).componentWidth(15)
-                    .useLabelSemicolon(false).build()));
+                    .useLabelSemicolon(false).mandatoryMarker(false).build()));
             ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Password"));
 
-            contentPanel.add(center((captcha = (CCaptcha) inject(proto().captcha())).asWidget()));
+            // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough) 
+            ((CPasswordTextField) get(proto().password())).setMandatory(false);
+            ((CPasswordTextField) get(proto().password())).setMandatoryValidationMessage(i18n.tr("Enter your password"));
+            ((CPasswordTextField) get(proto().password())).setMandatory(true);
+
+            captcha = (CCaptcha) inject(proto().captcha());
+            contentPanel.add(center((new DecoratorBuilder(captcha).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
             setEnableCaptcha(false);
 
             contentPanel.add(center(new CheckBoxDecorator((CCheckBox) inject(proto().rememberID(), new CCheckBox()))));
@@ -107,6 +115,7 @@ public class LandingViewImpl extends Composite implements LandingView {
             if (isEnabled) {
                 captcha.createNewChallenge();
             }
+
         }
 
         private Widget center(Widget w) {
@@ -131,8 +140,8 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         public DevLoginPanel() {
             FlowPanel devMessagePanel = new FlowPanel();
+            devMessagePanel.getElement().getStyle().setMargin(20, Unit.PX);
             devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
-            devMessagePanel.getElement().getStyle().setMarginTop(3, Unit.EM);
             devMessagePanel.addAttachHandler(new AttachEvent.Handler() {
                 private HandlerRegistration handlerRegistration;
 
@@ -209,48 +218,78 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
     }
 
+    private static class LandingSide extends FlowPanel {
+
+        public LandingSide(String style) {
+            setStyleName(style);
+        }
+
+    }
+
+    private LandingView.Presenter presenter;
+
+    private LoginForm loginForm;
+
+    private Button loginButton;
+
+    private DevLoginPanel devLoginPanel;
+
+    private Button signUpButton;
+
+    private Label signUpGreeting;
+
     public LandingViewImpl() {
-        LayoutPanel viewPanel = new LayoutPanel();
-//        viewPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-//        viewPanel.getElement().getStyle().setLeft(0, Unit.PCT);
-//        viewPanel.getElement().getStyle().setWidth(100, Unit.PCT);
-//        viewPanel.getElement().getStyle().setTop(150, Unit.PX);
-//        viewPanel.getElement().getStyle().setHeight(300, Unit.PX);
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.addStyleName(LandingPagesTheme.StyleName.LandingPage.name());
+        // attach handler to invoke login via ENTER key
+        viewPanel.addAttachHandler(new Handler() {
 
-//        viewPanel.getElement().getStyle().setMarginTop(-150, Unit.PX);
-//        viewPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-//        viewPanel.getElement().getStyle().setBorderWidth(2, Unit.PX);
-//        viewPanel.getElement().getStyle().setBorderColor("grey");
-//        viewPanel.getElement().getStyle().setProperty("borderRadius", "10px");
+            private HandlerRegistration handlerRegistration;
 
-        FlowPanel loginPanel = makeLoginPanel();
-        viewPanel.add(loginPanel);
-        viewPanel.setWidgetLeftRight(loginPanel, 0, Unit.PCT, 50, Unit.PCT);
-        viewPanel.setWidgetTopHeight(loginPanel, 0, Unit.PCT, 300, Unit.PX);
-
-        FlowPanel signUpPanel = makeSignUpPanel();
-        viewPanel.add(signUpPanel);
-        viewPanel.setWidgetLeftRight(signUpPanel, 50, Unit.PCT, 0, Unit.PCT);
-        viewPanel.setWidgetTopHeight(signUpPanel, 0, Unit.PCT, 300, Unit.PX);
-
-        final HTML orLine = makeOrLineDecoration();
-        viewPanel.add(orLine);
-        viewPanel.setWidgetLeftRight(orLine, 50, Unit.PCT, 50, Unit.PCT);
-        viewPanel.setWidgetTopHeight(orLine, 0, Unit.PCT, 300, Unit.PX);
-
-        // TODO find a better way to make "singup" and "login" buttons to be properly aligned
-        // TODO orLineAdjustmens
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
-            public void execute() {
-                int commonHeight = Math.max(loginForm.asWidget().getElement().getClientHeight(), signUpGreeting.getElement().getClientHeight());
-                loginForm.asWidget().getElement().getStyle().setHeight(commonHeight, Unit.PX);
-                signUpGreeting.asWidget().getElement().getStyle().setHeight(commonHeight, Unit.PX);
-
-                orLine.getElement().getParentElement().getStyle().setOverflow(Overflow.VISIBLE);
+            public void onAttachOrDetach(AttachEvent event) {
+                // TODO Auto-generated method stub
+                if (event.isAttached()) {
+                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+                        @Override
+                        public void onPreviewNativeEvent(NativePreviewEvent event) {
+                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                                onLogin();
+                            }
+                        }
+                    });
+                } else {
+                    handlerRegistration.removeHandler();
+                }
             }
+
         });
 
+        FlowPanel header = new FlowPanel();
+        FlowPanel leftHeader = new LandingSide(LandingPagesTheme.StyleName.LandingPageHeader.name());
+        FlowPanel rightHeader = new LandingSide(LandingPagesTheme.StyleName.LandingPageHeader.name());
+        header.add(leftHeader);
+        header.add(rightHeader);
+        viewPanel.add(header);
+
+        FlowPanel content = new FlowPanel();
+        FlowPanel leftContent = new LandingSide(LandingPagesTheme.StyleName.LandingPageContent.name());
+        FlowPanel rightContent = new LandingSide(LandingPagesTheme.StyleName.LandingPageContent.name());
+        content.add(leftContent);
+        content.add(rightContent);
+        viewPanel.add(content);
+
+        FlowPanel footer = new FlowPanel();
+        FlowPanel leftFooter = new LandingSide(LandingPagesTheme.StyleName.LandingPageFooter.name());
+        FlowPanel rightFooter = new LandingSide(LandingPagesTheme.StyleName.LandingPageFooter.name());
+        footer.add(leftFooter);
+        footer.add(rightFooter);
+        viewPanel.add(footer);
+
+        bindLoginWidgets(leftHeader, leftContent, leftFooter);
+        bindSingupWidgets(rightHeader, rightContent, rightFooter);
+
+        final HTML orLine = makeOrLineDecoration();
         initWidget(viewPanel);
     }
 
@@ -261,7 +300,7 @@ public class LandingViewImpl extends Composite implements LandingView {
 
     @Override
     public void enableHumanVerification() {
-        loginForm.setEditable(true);
+        loginForm.setEnableCaptcha(true);
     }
 
     @Override
@@ -296,39 +335,15 @@ public class LandingViewImpl extends Composite implements LandingView {
         presenter.gotoResetPassword();
     }
 
-    private FlowPanel makeLoginPanel() {
-        FlowPanel loginPanel = new FlowPanel();
-        loginPanel.getElement().getStyle().setProperty("marginLeft", "auto");
-        loginPanel.getElement().getStyle().setProperty("marginRight", "auto");
-        loginPanel.addAttachHandler(new Handler() {
-
-            private HandlerRegistration handlerRegistration;
-
-            @Override
-            public void onAttachOrDetach(AttachEvent event) {
-                // TODO Auto-generated method stub
-                if (event.isAttached()) {
-                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                        @Override
-                        public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                                onLogin();
-                            }
-                        }
-                    });
-                } else {
-                    handlerRegistration.removeHandler();
-                }
-            }
-        });
-
-        loginPanel.add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
+    private void bindLoginWidgets(FlowPanel leftHeader, FlowPanel leftContent, FlowPanel leftFooter) {
+        leftHeader.add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
 
         loginForm = new LoginForm();
         loginForm.initContent();
-        loginPanel.add(loginForm);
+        leftContent.add(loginForm);
 
         loginButton = new Button(i18n.tr("LOGIN"));
+        loginButton.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
         loginButton.setCommand(new Command() {
 
             @Override
@@ -337,13 +352,10 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
 
         });
-
         SimplePanel loginButtonHolder = new SimplePanel();
-        loginButtonHolder.setWidth("100%");
-        loginButtonHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        loginButtonHolder.getElement().getStyle().setMarginTop(20, Unit.PX);
+        loginButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         loginButtonHolder.setWidget(loginButton);
-        loginPanel.add(loginButtonHolder);
+        leftFooter.add(loginButtonHolder);
 
         SimplePanel resetPasswordAnchorHolder = new SimplePanel();
         resetPasswordAnchorHolder.setWidth("100%");
@@ -356,32 +368,29 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
         });
         resetPasswordAnchorHolder.add(resetPassword);
-        loginPanel.add(resetPasswordAnchorHolder);
+        leftFooter.add(resetPasswordAnchorHolder);
 
-        loginPanel.add(devLoginPanel = new DevLoginPanel() {
+        leftFooter.add(devLoginPanel = new DevLoginPanel() {
             @Override
             protected void onDevCredentialsSelected(String userId, String password) {
                 loginForm.get(loginForm.proto().email()).setValue(userId);
                 loginForm.get(loginForm.proto().password()).setValue(password);
             }
         });
-        return loginPanel;
     }
 
-    private FlowPanel makeSignUpPanel() {
-        FlowPanel signUpPanel = new FlowPanel();
-        signUpPanel.add(makeCaption(i18n.tr("First Time."), i18n.tr("Get Started")));
+    private void bindSingupWidgets(FlowPanel header, FlowPanel content, FlowPanel footer) {
+        header.add(makeCaption(i18n.tr("First Time."), i18n.tr("Get Started")));
 
         signUpGreeting = new Label();
-        // TODO set style via CSS
-        signUpGreeting.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
-        signUpGreeting.getElement().getStyle().setFontSize(18, Unit.PX);
-        signUpGreeting.getElement().getStyle().setMarginLeft(40, Unit.PX);
-        signUpGreeting.getElement().getStyle().setMarginRight(40, Unit.PX);
+        signUpGreeting.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
+        // TODO populate this text via activity/presenter
+        signUpGreeting.setHTML("TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD.");
 
-        signUpGreeting.setHTML(i18n.tr("If you are looking to find a place call home why not look at {0}'s properties. Sign&nbsp;up and just start looking.",
-                "Red Rige"));
-        signUpPanel.add(signUpGreeting);
+        SimplePanel signUpGreetingPanel = new SimplePanel();
+        signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreeting.name());
+        signUpGreetingPanel.setWidget(signUpGreeting);
+        content.add(signUpGreetingPanel);
 
         signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
             @Override
@@ -389,33 +398,27 @@ public class LandingViewImpl extends Composite implements LandingView {
                 LandingViewImpl.this.onSignUp();
             }
         });
-        SimplePanel signUpButtonHolder = new SimplePanel();
-        signUpButtonHolder.setWidth("100%");
-        signUpButtonHolder.getElement().getStyle().setMarginTop(20, Unit.PX);
-        signUpButtonHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        signUpButtonHolder.setWidget(signUpButton);
+        signUpButton.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
 
-        signUpPanel.add(signUpButtonHolder);
-        return signUpPanel;
+        SimplePanel signUpButtonHolder = new SimplePanel();
+        signUpButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
+        signUpButtonHolder.setWidget(signUpButton);
+        footer.add(signUpButtonHolder);
     }
 
     private HTML makeOrLineDecoration() {
-        HTML orLine = new HTML(
-                "<div style=\"position: relative;\"><div style=\"position: absolute; top: 0px; height: 300px; left: 50%; right: 50%; border-width:1px; border-style: solid; border-color: grey;\"/>"
-                        + "<div style=\"position: absolute; top: 50%; height: 20px; left: 50%; width: 30px; margin-left:-15px; margin-top:-15px; text-align: center; background-color: white; cursor: default;\"/>"
-                        + i18n.tr("or") + "</div></div>");
-        orLine.getElement().getStyle().setHeight(300, Unit.PX);
-        orLine.getElement().getStyle().setWidth(10, Unit.PX);
-        orLine.getElement().getStyle().setProperty("display", "table-cell");
-        orLine.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-
+        HTML orLine = new HTML(LandingHtmlTemplates.TEMPLATES.orLineSeparator(LandingPagesTheme.StyleName.LandingOrLineSeparator.name()));
         return orLine;
     }
 
     private HTML makeCaption(String emph, String normal) {
-        // TODO fix this using SafeHtmlTemplates and CSS
-        return new HTML("<div style=\"text-align: center; font-size: 20px; width: 100%; margin-top: 25px; margin-bottom:25px\"><b>" + emph + "</b>" + "&nbsp;"
-                + normal);
+        return new HTML(LandingHtmlTemplates.TEMPLATES.landingCaption(//@formatter:off
+                emph,
+                normal,
+                LandingPagesTheme.StyleName.LandingCaption.name(),
+                LandingPagesTheme.StyleName.LandingCaptionText.name(),
+                LandingPagesTheme.StyleName.LandingCaptionTextEmph.name())
+        );//@formatter:on
     }
 
     @Override
