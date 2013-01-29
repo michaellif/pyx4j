@@ -453,19 +453,25 @@ SET     status = 'NotRequested';
 -- admin_pmc_vista_features
 
 UPDATE  admin_pmc_vista_features AS a
-SET     country_of_operation = 'Canada'
+SET     country_of_operation = 'Canada',
+        default_product_catalog = FALSE,
+        yardi_integration = FALSE
 FROM    admin_pmc b
 WHERE   a.id = b.features 
 AND     b.namespace NOT IN ('studentlivingcompany','waterfront');
 
 UPDATE  admin_pmc_vista_features AS a
-SET     country_of_operation = 'US'
+SET     country_of_operation = 'US',
+        default_product_catalog = FALSE,
+        yardi_integration = FALSE
 FROM    admin_pmc b
 WHERE   a.id = b.features 
 AND     b.namespace = 'waterfront';
 
 UPDATE  admin_pmc_vista_features AS a
-SET     country_of_operation = 'UK'
+SET     country_of_operation = 'UK',
+        default_product_catalog = FALSE,
+        yardi_integration = FALSE
 FROM    admin_pmc b
 WHERE   a.id = b.features 
 AND     b.namespace = 'studentlivingcompany';
