@@ -93,6 +93,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         updatePayments(allTransactions);
 
         Persistence.service().commit();
+
+        log.info("Update completed.");
     }
 
     public void updateLease(PmcYardiCredential yc, Lease lease) {
@@ -140,21 +142,27 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions) {
+        log.info("Updating leases...");
         for (ResidentTransactions transaction : allTransactions) {
             new YardiLeaseProcessor().updateLeases(transaction);
         }
+        log.info("All leases updated.");
     }
 
     private void updateCharges(List<ResidentTransactions> allTransactions) {
+        log.info("updateCharges: started...");
         for (ResidentTransactions transaction : allTransactions) {
             new YardiChargeProcessor().updateCharges(transaction);
         }
+        log.info("All charges updated.");
     }
 
     private void updatePayments(List<ResidentTransactions> allTransactions) {
+        log.info("updatePayments: started...");
         for (ResidentTransactions transaction : allTransactions) {
             new YardiPaymentProcessor().updatePayments(transaction);
         }
+        log.info("All payments updated.");
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {

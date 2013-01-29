@@ -32,13 +32,12 @@ public class YardiChargeProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiChargeProcessor.class);
 
     public void updateCharges(ResidentTransactions rt) {
-        log.info("updateCharges: started...");
 
         for (Property prop : rt.getProperty()) {
             for (RTCustomer cust : prop.getRTCustomer()) {
                 // skip customer if lease expired
-                if (new YardiLeaseProcessor().isPastEntry(cust)) {
-                    log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
+                if (new YardiLeaseProcessor().isSkipped(cust)) {
+                    log.info("Transaction for: {} skipped, lease does not meet criteria.", cust.getCustomerID());
                     continue;
                 }
 

@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.Property;
@@ -43,12 +44,11 @@ public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
     public void updateLeases(ResidentTransactions transaction) {
-        log.info("Updating leases...");
         Property property = transaction.getProperty().get(0);
         for (RTCustomer rtCustomer : property.getRTCustomer()) {
             String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-            if (isPastEntry(rtCustomer)) {
-                log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
+            if (isSkipped(rtCustomer)) {
+                log.info("Lease {} skipped, did not meet criteria.", rtCustomer.getCustomerID());
                 continue;
             }
 
@@ -74,8 +74,6 @@ public class YardiLeaseProcessor {
             }
             Persistence.service().commit();
         }
-
-        log.info("All leases updated.");
     }
 
     private void updateLease(RTCustomer rtCustomer, Lease lease) {
@@ -147,9 +145,9 @@ public class YardiLeaseProcessor {
         log.info("Lease {} in building {} successfully created", rtCustomer.getCustomerID(), propertyCode);
     }
 
-    public boolean isPastEntry(RTCustomer rtCustomer) {
-        YardiLease yardiLease = rtCustomer.getCustomers().getCustomer().get(0).getLease();
-        if (yardiLease.getLeaseToDate() != null && new LogicalDate(yardiLease.getLeaseToDate()).before(new LogicalDate())) {
+    public boolean isSkipped(RTCustomer rtCustomer) {
+        Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
+        if (!info.equals(Customerinfo.CURRENT_RESIDENT)) {
             return true;
         }
         return false;

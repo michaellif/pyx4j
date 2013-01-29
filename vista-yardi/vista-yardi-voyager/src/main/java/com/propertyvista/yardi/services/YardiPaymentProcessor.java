@@ -43,8 +43,8 @@ public class YardiPaymentProcessor {
         for (Property prop : rt.getProperty()) {
             for (RTCustomer cust : prop.getRTCustomer()) {
                 // skip payment if lease expired
-                if (new YardiLeaseProcessor().isPastEntry(cust)) {
-                    log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
+                if (new YardiLeaseProcessor().isSkipped(cust)) {
+                    log.info("Transaction for: {} skipped, lease does not meet criteria.", cust.getCustomerID());
                     continue;
                 }
 
