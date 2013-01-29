@@ -124,8 +124,8 @@ public class CreditCheckReportTypeSelector extends Composite implements IFocusWi
 
         public void setFees(BigDecimal setupFee, BigDecimal perApplicantFee) {
             perApplicantFeeLabel.setText(i18n.tr("${0,number,#,##0.##} per applicant", perApplicantFee));
-            setupFeeLabel.setText(setupFee == null || setupFee.equals(BigDecimal.ZERO) || setupFee.equals(new BigDecimal("0.00")) ? i18n.tr("No Set Up Fee!")
-                    : i18n.tr("${0,number,#,##0.##} one-time Set Up fee", setupFee));
+            setupFeeLabel.setText(setupFee == null || setupFee.compareTo(BigDecimal.ZERO) == 0 ? i18n.tr("No Set Up Fee!") : i18n.tr(
+                    "${0,number,#,##0.##} one-time Set Up fee", setupFee));
         }
 
     }

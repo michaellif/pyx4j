@@ -30,7 +30,7 @@ public class MoneyComboBox extends FormattableCombo<BigDecimal> {
 
             @Override
             public String format(BigDecimal value) {
-                if (value == null || value.equals(BigDecimal.ZERO)) {
+                if (value == null || value.compareTo(BigDecimal.ZERO) != 0) {
                     return i18n.tr("None");
                 } else {
                     return NumberFormat.getFormat(i18n.tr("$#,##0")).format(value);

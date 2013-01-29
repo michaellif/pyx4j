@@ -47,7 +47,7 @@ public class Utils {
 
     public static String formatMoney(BigDecimal money) {
         assert money.compareTo(BigDecimal.ZERO) >= 0;
-        if (money.equals(BigDecimal.ZERO)) {
+        if (money.compareTo(BigDecimal.ZERO) == 0) {
             return "No";
         } else {
             String[] stringValue = money.toPlainString().split("\\.");

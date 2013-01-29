@@ -100,7 +100,7 @@ public class TenantSureCoverageRequestAdapter {
         StringBuilder optionCode = new StringBuilder();
         optionCode.append("TSP");
         optionCode.append(firstDigit(liablityCoverage));
-        if (contentsCoverage != null && !contentsCoverage.equals(BigDecimal.ZERO)) {
+        if (contentsCoverage != null && contentsCoverage.compareTo(BigDecimal.ZERO) != 0) {
             optionCode.append(firstDigit(contentsCoverage));
         }
         optionCode.append("0");

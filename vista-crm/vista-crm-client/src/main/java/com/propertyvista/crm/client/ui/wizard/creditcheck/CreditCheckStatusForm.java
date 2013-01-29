@@ -71,7 +71,6 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         get(proto().setupFee())
                 .setVisible(
                         ((getValue().status().getValue() == PmcEquifaxStatus.PendingEquifaxApproval) | (getValue().status().getValue() == PmcEquifaxStatus.PendingVistaApproval))
-                                & !(setupFee == null || setupFee.equals(new BigDecimal("0.00")) || setupFee.equals(BigDecimal.ZERO)));
+                                & !(setupFee == null || setupFee.compareTo(BigDecimal.ZERO) == 0));
     }
-
 }

@@ -105,7 +105,7 @@ public class CreditCheckWizardForm extends WizardForm<CreditCheckSetupDTO> {
             }
 
             costPerApplicantLabel.setText(i18n.tr("Cost per applicant is: ${0,number,#,##0.00}", costPerApplicant));
-            if (new BigDecimal("0.00").equals(setupFee) | BigDecimal.ZERO.equals(setupFee)) {
+            if (setupFee.compareTo(BigDecimal.ZERO) == 0) {
                 setupFeeLabel.setText(i18n.tr("No Set Up Fee!"));
             } else {
                 setupFeeLabel.setText(i18n.tr("Setup Fee of ${0,number,#,##0.00} will be charged", setupFee));

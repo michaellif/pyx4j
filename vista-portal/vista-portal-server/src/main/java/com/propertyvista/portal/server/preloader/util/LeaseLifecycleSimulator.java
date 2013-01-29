@@ -379,7 +379,7 @@ public class LeaseLifecycleSimulator {
 
             Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
-            if (bill != null && !bill.totalDueAmount().getValue().equals(BigDecimal.ZERO)) {
+            if (bill != null && bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal amount = tenantAgent.pay(bill);
                 if (debug) {
                     System.out.println("" + now() + " payed " + amount);
