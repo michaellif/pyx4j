@@ -72,7 +72,7 @@ BEGIN
         ALTER TABLE building ALTER COLUMN property_code SET NOT NULL;
         
         EXECUTE 'UPDATE  '||v_schema_name||'.building ' 
-                ||'SET     property_code_s = _dba_.convert_id_to_string(property_code)';
+                ||'SET     property_code_s = COALESCE(_dba_.convert_id_to_string(property_code),property_code)';
         
         ALTER TABLE building DROP CONSTRAINT building_info_building_type_e_ck;
         

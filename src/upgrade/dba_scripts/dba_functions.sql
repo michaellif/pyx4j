@@ -939,10 +939,28 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+/*
 CREATE OR REPLACE FUNCTION _dba_.convert_id_to_string(TEXT) RETURNS TEXT AS
 $$
     SELECT  CASE WHEN $1 ~ '^[0-9]+$' THEN LPAD($1,7,'0')
         ELSE regexp_replace($1,'([0-9]+)',LPAD('\1',7,'0'),'g') END;
+$$
+LANGUAGE SQL IMMUTABLE;
+*/
+
+CREATE OR REPLACE FUNCTION _dba_.convert_id_to_string(TEXT) RETURNS TEXT AS
+$$
+        WITH t AS       (SELECT  $1 AS orig,array_to_string(regexp_matches($1,'([0-9]+)','g'),'') AS matched_part,
+                        LPAD(array_to_string(regexp_matches($1,'([0-9]+)','g'),''),7,'0') AS lpad_match),
+        t1 AS           (SELECT  t.orig,t.matched_part,t.lpad_match,
+                        row_number() OVER (PARTITION BY t.orig ORDER BY position(t.matched_part IN t.orig))
+                        FROM t)
+        SELECT  COALESCE(regexp_replace(regexp_replace($1,COALESCE(a.matched_part,''),
+                COALESCE(a.lpad_match,'')),COALESCE(b.matched_part,''),COALESCE(b.lpad_match,'')),$1)
+        FROM    
+                (SELECT * FROM t1 WHERE row_number = 1) a
+                LEFT JOIN 
+                (SELECT * FROM t1 WHERE row_number = 2) b ON (a.orig = b.orig);
 $$
 LANGUAGE SQL IMMUTABLE;
 
