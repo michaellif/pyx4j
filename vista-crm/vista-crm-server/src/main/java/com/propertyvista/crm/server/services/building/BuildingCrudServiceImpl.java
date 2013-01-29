@@ -22,8 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
-import com.propertyvista.biz.policy.IdAssignmentFacade;
-import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.admin.MerchantAccountCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
@@ -36,7 +35,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
-import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
@@ -117,14 +115,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void create(Building entity, BuildingDTO dto) {
-        super.create(entity, dto);
-
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(entity);
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(entity);
-    }
-
-    @Override
     protected void persist(Building dbo, BuildingDTO in) {
         // Geotagging:
         if (!in.geoLocation().isNull()) {
@@ -147,10 +137,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
-        if (dbo.id().isNull()) {
-            ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
-        }
-
         {
             Persistence.service().retrieveMember(dbo.merchantAccounts());
             dbo.merchantAccounts().clear();
@@ -161,7 +147,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
-        Persistence.service().merge(dbo);
-        PublicDataUpdater.updateIndexData(dbo);
+        ServerSideFactory.create(BuildingFacade.class).persist(dbo);
     }
 }

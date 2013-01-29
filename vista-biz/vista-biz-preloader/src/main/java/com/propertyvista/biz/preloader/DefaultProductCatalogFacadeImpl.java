@@ -68,7 +68,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
-        // TODO: review this! 
+        // TODO: review this!
 
         // remove all default catalog items:
         Iterator<Service> serviceIterator = building.productCatalog().services().iterator();
@@ -95,7 +95,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     public void persistFor(Building building) {
         assert (!building.productCatalog().isValueDetached());
 
-        // Save services and features: 
+        // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
             if (feature.isDefaultCatalogItem().isBooleanTrue()) {
                 Persistence.service().persist(feature);
@@ -110,7 +110,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     @Override
-    public void addUnit(Building building, AptUnit unit, boolean persist) {
+    public void addUnit(Building building, AptUnit unit) {
         Persistence.ensureRetrieve(building, AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
@@ -121,10 +121,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
                 case commercialUnit:
                 case residentialUnit:
                 case residentialShortTermUnit:
-                    service.version().items().add(createUnitItem(unit, service));
-                    if (persist) {
-                        Persistence.service().persist(service);
-                    }
+                    ProductItem item = createUnitItem(unit, service);
+                    Persistence.service().persist(item);
                     break;
                 default:
                     break;
@@ -254,6 +252,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     private ProductItem createUnitItem(AptUnit unit, Service service) {
         ProductItem item = EntityFactory.create(ProductItem.class);
+        item.product().set(service.version());
 
         EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
         criteria.eq(criteria.proto().serviceType(), service.serviceType());

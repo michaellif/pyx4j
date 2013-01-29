@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -61,12 +62,11 @@ public class PropertyService {
     }
 
     public static void updateBuilding(BuildingIO buildingIO) throws Exception {
-        Building buildingDTO = BuildingMarshaller.getInstance().unmarshal(buildingIO);
+        Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
 
-        new BuildingPersister().persist(buildingDTO);
+        new BuildingPersister().persist(building);
 
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(buildingDTO);
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(buildingDTO);
+        ServerSideFactory.create(BuildingFacade.class).persist(building);
 
         Persistence.service().commit();
     }
@@ -108,7 +108,7 @@ public class PropertyService {
 
         new UnitPersister().persist(unitDTO);
 
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO, true);
+        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unitDTO.building(), unitDTO);
 
         Persistence.service().commit();
     }

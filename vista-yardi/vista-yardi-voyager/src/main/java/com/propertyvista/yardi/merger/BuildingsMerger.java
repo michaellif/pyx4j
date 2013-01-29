@@ -29,6 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
 public class BuildingsMerger {
+
     private final static Logger log = LoggerFactory.getLogger(BuildingsMerger.class);
 
     /**

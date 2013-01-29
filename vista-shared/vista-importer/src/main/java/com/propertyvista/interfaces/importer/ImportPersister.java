@@ -20,12 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
@@ -54,7 +56,6 @@ import com.propertyvista.interfaces.importer.model.ParkingIO;
 import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
 import com.propertyvista.interfaces.importer.model.UtilityIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 class ImportPersister {
@@ -158,8 +159,7 @@ class ImportPersister {
             }
         }
 
-        Persistence.service().persist(building);
-        PublicDataUpdater.updateIndexData(building);
+        ServerSideFactory.create(BuildingFacade.class).persist(building);
 
         //BuildingAmenity
         {

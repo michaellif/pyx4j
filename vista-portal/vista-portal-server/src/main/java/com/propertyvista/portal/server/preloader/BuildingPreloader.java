@@ -28,17 +28,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.property.PropertyManager;
@@ -211,13 +210,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
-            // Units:
-            List<AptUnit> units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
-            unitCount += units.size();
-            for (AptUnit unit : units) {
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit, false);
-                productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
-            }
+            Persistence.service().persist(building);
 
             // fill Service Catalog with building elements:
 // VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
@@ -256,24 +249,28 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
                 }
             }
 
-            Persistence.service().persist(building);
-
-            // Save Versioned Items, 
+            // Save Versioned Items,
             // Preload data in a past all for product catalog assignments in LaseSimulator
             Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
             try {
-                for (Concession concession : building.productCatalog().concessions()) {
-                    Persistence.service().persist(concession);
-                }
-                for (Feature feature : building.productCatalog().features()) {
-                    Persistence.service().persist(feature);
-                }
-                for (Service service : building.productCatalog().services()) {
-                    Persistence.service().persist(service);
+                ServerSideFactory.create(ProductCatalogFacade.class).persist(building.productCatalog(), true);
+            } finally {
+                Persistence.service().setTransactionSystemTime(null);
+            }
+
+            // Units:
+            List<AptUnit> units = buildingGenerator.createUnits(building, floorplans, config().numFloors, config().numUnitsPerFloor);
+            try {
+                unitCount += units.size();
+                for (AptUnit unit : units) {
+                    Persistence.service().setTransactionSystemTime(RandomUtil.randomLogicalDate(2010, 2012));
+                    ServerSideFactory.create(BuildingFacade.class).persist(unit);
+                    productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
                 }
             } finally {
                 Persistence.service().setTransactionSystemTime(null);
             }
+            ServerSideFactory.create(ProductCatalogFacade.class).persist(building.productCatalog(), true);
 
             ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(building);
 

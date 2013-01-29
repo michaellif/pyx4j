@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -64,7 +64,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         AptUnitOccupancySegment vacant = EntityFactory.create(AptUnitOccupancySegment.class);
         vacant.unit().set(unit);
         vacant.status().setValue(Status.pending);
-        vacant.dateFrom().setValue(new LogicalDate());
+        vacant.dateFrom().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         vacant.dateTo().setValue(OccupancyFacade.MAX_DATE);
         Persistence.service().persist(vacant);
     }
@@ -312,7 +312,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate leaseFrom = lease.currentTerm().termFrom().getValue();
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        // FIXME 
+        // FIXME
         if (VistaTODO.checkLeaseDatesOnUnitReservation & leaseFrom.before(now)) {
             throw new IllegalStateException(i18n.tr("Operation 'reserve unit' is not permitted, the lease from date ({0}) is before the present date ({1})",
                     leaseFrom, now));
@@ -459,7 +459,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             nextSegment.unit().setPrimaryKey(unitPk);
             nextSegment.status().setValue(Status.pending);
         }
-        // update the occupied segment (we don't want to persist the changes right now because we wan't to roll back  
+        // update the occupied segment (we don't want to persist the changes right now because we wan't to roll back
         occupiedSegment.dateTo().setValue(moveOutDate);
 
         cal.setTime(moveOutDate);
@@ -522,7 +522,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         // persist occupied segment
         Persistence.service().merge(occupiedSegment);
 
-        // if the move out date of the occupied segment was moved forward, and the occupied segment has overlapped the next one, we need to delete next segment  
+        // if the move out date of the occupied segment was moved forward, and the occupied segment has overlapped the next one, we need to delete next segment
         if (nextSegment.dateTo().getValue().compareTo(occupiedSegment.dateTo().getValue()) <= 0) {
             Persistence.service().delete(nextSegment);
         }
@@ -590,7 +590,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isScopeAvailableAvailable(Key unitPk) {
         LogicalDate start = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        // Check if the unit has entry in the Product Catalog: 
+        // Check if the unit has entry in the Product Catalog:
         EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), unitPk));
 

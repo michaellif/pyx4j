@@ -33,8 +33,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
@@ -93,43 +92,29 @@ public class YardiBuildingProcessor {
     }
 
     private void update(Building building) {
+        boolean ok = false;
         try {
-            boolean isNewBuilding = building.updated().isNull();
-
-            Persistence.service().persist(building);
-
-            if (isNewBuilding) {
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(building);
-            } else {
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).updateFor(building);
-            }
+            ServerSideFactory.create(BuildingFacade.class).persist(building);
 
             log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
-        } catch (Exception e) {
-            log.error("Errors during updating building " + building.propertyCode().getValue(), e);
+            ok = true;
+        } finally {
+            if (!ok) {
+                log.error("Errors during updating building {}", building.propertyCode().getValue());
+            }
         }
     }
 
     private void update(AptUnit unit) {
+        boolean ok = false;
         try {
-            boolean isNewUnit = unit.updated().isNull();
-
-            Persistence.service().retrieve(unit.building());
-            Persistence.service().persist(unit);
-
-            if (isNewUnit) {
-                ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) unit.createIdentityStub());
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unit.building(), unit, true);
-            } else {
-                ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(unit.building(), unit);
-            }
-
+            ServerSideFactory.create(BuildingFacade.class).persist(unit);
             log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
-        } catch (Exception e) {
-            log.error(
-                    String.format("Errors during updating unit %s for building %s", unit.info().number().getValue(), unit.building().propertyCode().getValue()),
-                    e);
+            ok = true;
+        } finally {
+            if (!ok) {
+                log.error("Errors during updating unit {} for building {}", unit.info().number().getValue(), unit.building().propertyCode().getValue());
+            }
         }
     }
 

@@ -93,7 +93,7 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitItem> details();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnitOccupancySegment> unitOccupancySegments();
 

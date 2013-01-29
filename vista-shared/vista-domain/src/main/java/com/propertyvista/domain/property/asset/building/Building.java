@@ -110,7 +110,7 @@ public interface Building extends PolicyNode {
     IList<Media> media();
 
     @Detached
-    @Owned(forceCreation = true)
+    @Owned(forceCreation = true, cascade = {})
     ProductCatalog productCatalog();
 
     @RpcTransient
@@ -145,7 +145,7 @@ public interface Building extends PolicyNode {
     @Detached(level = AttachLevel.IdOnly)
     ISet<Floorplan> floorplans();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<AptUnit> units();
 

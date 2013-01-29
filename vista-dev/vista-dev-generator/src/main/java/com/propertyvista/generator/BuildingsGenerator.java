@@ -24,7 +24,6 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
@@ -48,7 +47,6 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.CompanyVendor;
 import com.propertyvista.generator.util.RandomUtil;
@@ -466,7 +464,7 @@ public class BuildingsGenerator {
 
     private AptUnit createUnit(Building building, String suiteNumber, int floor, double area, Floorplan floorplan) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
-        building.units().add(unit);
+        unit.building().set(building);
 
         unit.info().economicStatus().setValue(RandomUtil.random(AptUnitInfo.EconomicStatus.values()));
         unit.info().economicStatusDescription().setValue(RandomUtil.randomLetters(35).toLowerCase());
@@ -505,21 +503,6 @@ public class BuildingsGenerator {
         for (AptUnitItem detail : unit.details()) {
             detail.aptUnit().set(unit);
         }
-
-        AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
-        occupancySegment.unit().set(unit);
-        occupancySegment.dateFrom().setValue(RandomUtil.randomLogicalDate(2010, 2012));
-        occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        if (building.propertyCode().getValue().equals("B0")) {
-            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
-            unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
-        } else {
-            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.pending);
-            unit._availableForRent().setValue(null);
-        }
-
-        occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
-        unit.unitOccupancySegments().add(occupancySegment);
 
         unit.floorplan().set(floorplan);
 

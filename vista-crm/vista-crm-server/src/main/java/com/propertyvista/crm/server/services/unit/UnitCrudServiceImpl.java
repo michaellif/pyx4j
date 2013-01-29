@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -96,7 +96,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         //Persistence.service().retrieve(dto.floorplan().name());
         //Persistence.service().retrieve(dto.floorplan().marketingName());
 
-        // just clear unnecessary data before serialization: 
+        // just clear unnecessary data before serialization:
         if (!dto.marketing().isValueDetached()) {
             dto.marketing().description().setValue(null);
         }
@@ -104,18 +104,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void create(AptUnit entity, AptUnitDTO dto) {
-        super.create(entity, dto);
-
-        ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) entity.createIdentityStub());
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(entity.building(), entity, true);
-    }
-
-    @Override
-    protected void save(AptUnit dbo, AptUnitDTO in) {
-        super.save(dbo, in);
-
-        ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(dbo.building(), dbo);
+    protected void persist(AptUnit entity, AptUnitDTO dto) {
+        ServerSideFactory.create(BuildingFacade.class).persist(entity);
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {

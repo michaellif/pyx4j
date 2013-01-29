@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -451,7 +451,7 @@ public class LeaseLifecycleSimulator {
                 if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
-                    // the following code is copies the calculations inside the billing facade privates 
+                    // the following code is copies the calculations inside the billing facade privates
                     Persistence.service().retrieve(lease.billingAccount());
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
                     if (lastBill.billingPeriodStartDate().isNull()) {
@@ -652,8 +652,8 @@ public class LeaseLifecycleSimulator {
             }
             if (RND.nextDouble() < 0.66) {
                 if (RND.nextDouble() < 0.5) {
-                    // pay just a part of the bill                    
-                    BigDecimal part = new BigDecimal(RND.nextDouble());
+                    // pay just a part of the bill
+                    BigDecimal part = new BigDecimal(0.1d + RND.nextDouble());
                     return bill.totalDueAmount().getValue().multiply(part);
                 } else {
                     // don't pay at all
