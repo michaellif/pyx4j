@@ -44,6 +44,7 @@ public class LeaseMapper {
         lease.expectedMoveOut().setValue(yardiLease.getExpectedMoveOutDate() != null ? new LogicalDate(yardiLease.getExpectedMoveOutDate()) : null);
         term.termFrom().setValue(yardiLease.getLeaseFromDate() != null ? new LogicalDate(yardiLease.getLeaseFromDate()) : null);
         term.termTo().setValue(yardiLease.getLeaseToDate() != null ? new LogicalDate(yardiLease.getLeaseToDate()) : null);
+        term.paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
         lease.currentTerm().set(term);
 
         return lease;

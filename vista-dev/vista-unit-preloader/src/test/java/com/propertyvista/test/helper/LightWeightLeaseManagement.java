@@ -46,6 +46,7 @@ public class LightWeightLeaseManagement {
         lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
         lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+        lease.currentTerm().paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
 
         return lease;
     }

@@ -131,6 +131,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+            lease.currentTerm().paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
         }
         lease.currentTerm().lease().set(lease);
 
@@ -222,6 +223,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
             break;
         default:
             break;
+        }
+
+        // ensure non-null member(s):
+        if (leaseTerm.paymentAccepted().isNull()) {
+            leaseTerm.paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
         }
 
         Persistence.secureSave(leaseTerm);
@@ -359,7 +365,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
-    
+
         Set<ValidationFailure> validationFailures = new LeaseApprovalValidator(VistaFeatures.instance().yardiIntegration()).validate(lease);
         if (!validationFailures.isEmpty()) {
             List<String> errorMessages = new ArrayList<String>();
@@ -369,39 +375,39 @@ public class LeaseFacadeImpl implements LeaseFacade {
             String errorsRoster = StringUtils.join(errorMessages, ",\n");
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
-    
+
         // memorize entry LeaseStatus:
         Status leaseStatus = lease.status().getValue();
-    
+
         lease.status().setValue(Lease.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-    
+
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
             lease.leaseApplication().decidedBy().set(decidedBy);
             lease.leaseApplication().decisionReason().setValue(decisionReason);
             lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-    
+
             recordApplicationData(lease.currentTerm());
         }
-    
+
         finalize(lease);
-    
+
         // Billing-related stuff:
         BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
-    
+
         if (!VistaFeatures.instance().yardiIntegration()) {
             Bill bill = billingFacade.runBilling(lease);
-    
+
             if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
                 throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
             }
-    
+
             if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
                 billingFacade.confirmBill(bill);
             }
         }
-    
+
         switch (leaseStatus) {
         case Application:
             if (!lease.leaseApplication().onlineApplication().isNull()) {
@@ -413,14 +419,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     }
                 }
             }
-    
+
             ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
             break;
-    
+
         case NewLease:
             ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
             break;
-    
+
         case ExistingLease:
             if (!VistaFeatures.instance().yardiIntegration()) {
                 // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
@@ -431,12 +437,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     billingFacade.runBilling(lease);
                 }
             }
-    
+
             ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
             break;
-    
+
         }
-    
+
         updateUnitRentPrice(lease);
     }
 
@@ -530,6 +536,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         LeaseTerm term = EntityFactory.create(LeaseTerm.class);
         term.status().setValue(LeaseTerm.Status.Offer);
+        term.paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
 
         term.type().setValue(type);
         term.lease().set(lease);
