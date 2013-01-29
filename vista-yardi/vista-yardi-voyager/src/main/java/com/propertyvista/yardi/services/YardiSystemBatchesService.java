@@ -39,6 +39,7 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
@@ -60,6 +61,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
+    @Deprecated
     public void postAllPayments(PmcYardiCredential yc) throws YardiServiceException, XMLStreamException, IOException, JAXBException,
             DatatypeConfigurationException {
 
@@ -80,6 +82,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             postReceiptBatch(client, yc, batchId);
             Persistence.service().commit();
         }
+    }
+
+    public void postReceipt(PmcYardiCredential pmcYardiCredential, YardiReceipt receipt) {
+        // TODO Auto-generated method stub
+
     }
 
     private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
@@ -142,4 +149,5 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
         log.info("PostReceiptBatch: {}", xml);
     }
+
 }

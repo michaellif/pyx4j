@@ -38,6 +38,7 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiClient;
@@ -111,6 +112,29 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
+    public void postReceiptReversal(PmcYardiCredential pmcYardiCredential, YardiReceipt receipt, boolean isNSF) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Deprecated
+    public void postAllNSF(PmcYardiCredential yc) {
+        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
+
+        for (ResidentTransactions nsf : getAllNSFReversals()) {
+            try {
+                // for NSF reversals Yardi recommends one by one import
+                String xml = MarshallUtil.marshall(nsf);
+                log.info(xml);
+                importResidentTransactions(client, yc, xml);
+            } catch (Exception e) {
+                log.error("NSF import failed", e);
+            }
+        }
+        //TODO getAllNSFReversals shouldn't claim payment
+        Persistence.service().commit();
+    }
+
     private void updateBuildings(List<ResidentTransactions> allTransactions) {
         new YardiBuildingProcessor().updateBuildings(allTransactions);
     }
@@ -147,23 +171,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
 
         return transactions;
-    }
-
-    public void postAllNSF(PmcYardiCredential yc) {
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
-
-        for (ResidentTransactions nsf : getAllNSFReversals()) {
-            try {
-                // for NSF reversals Yardi recommends one by one import
-                String xml = MarshallUtil.marshall(nsf);
-                log.info(xml);
-                importResidentTransactions(client, yc, xml);
-            } catch (Exception e) {
-                log.error("NSF import failed", e);
-            }
-        }
-        //TODO getAllNSFReversals shouldn't claim payment
-        Persistence.service().commit();
     }
 
     private List<ResidentTransactions> getAllNSFReversals() {

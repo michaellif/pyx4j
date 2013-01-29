@@ -66,13 +66,11 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
     public void postReceipt(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt) {
-        // TODO Auto-generated method stub
-
+        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
     }
 
     @Override
     public void postReceiptReversal(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt, boolean isNSF) {
-        // TODO Auto-generated method stub
-
+        YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), receipt, isNSF);
     }
 }
