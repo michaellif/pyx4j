@@ -128,6 +128,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem maintenanceAction;
 
+    private final MenuItem yardiImportAction;
+
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
 
@@ -262,6 +264,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
         addAction(cancelTerminateAction);
+
+        yardiImportAction = new MenuItem(i18n.tr("Import From Yardi"), new Command() {
+            @Override
+            public void execute() {
+                // TODO action
+            }
+        });
+        addAction(yardiImportAction);
 
         activateAction = new MenuItem(i18n.tr("Activate"), new Command() {
             @Override

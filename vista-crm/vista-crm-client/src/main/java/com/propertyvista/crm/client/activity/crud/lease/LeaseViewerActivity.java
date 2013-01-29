@@ -256,4 +256,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     public void onInsuredTenantClicked(Tenant tenantId) {
         AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Tenant.class, tenantId.getPrimaryKey()));
     }
+
+    @Override
+    public void requestYardiUpdate() {
+    }
 }

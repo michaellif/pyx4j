@@ -46,6 +46,8 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback);
 
+        void requestYardiUpdate();
+
         void cancelCompletionEvent(String decisionReason);
 
         void moveOut();
