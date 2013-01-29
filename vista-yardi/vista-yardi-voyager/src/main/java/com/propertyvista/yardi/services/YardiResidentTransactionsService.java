@@ -33,6 +33,7 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -135,6 +136,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 log.error("NSF import failed", e);
             }
         }
+        //TODO getAllNSFReversals shouldn't claim payment
+        Persistence.service().commit();
     }
 
     private List<ResidentTransactions> getAllNSFReversals() {
