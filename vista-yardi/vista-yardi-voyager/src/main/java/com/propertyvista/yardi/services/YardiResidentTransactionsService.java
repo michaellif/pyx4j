@@ -38,7 +38,7 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.YardiClient;
@@ -114,9 +114,20 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
-    public void postReceiptReversal(PmcYardiCredential pmcYardiCredential, YardiReceipt receipt, boolean isNSF) {
-        // TODO Auto-generated method stub
+    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal, boolean isNSF) {
+        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
+
+        try {
+            // for NSF reversals Yardi recommends one by one import
+            String xml = MarshallUtil.marshall(reversalTransactions);
+            log.info(xml);
+            importResidentTransactions(client, yc, xml);
+        } catch (Exception e) {
+            log.error("NSF import failed", e);
+        }
     }
 
     public void postReceiptReversalBatch(PmcYardiCredential yc) {
@@ -181,7 +192,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     private List<ResidentTransactions> getAllReceiptReversals() {
-        return new YardiPaymentProcessor().getAllNSFReversals();
+        return new YardiPaymentProcessor().getAllReceiptReversals();
     }
 
     /**
@@ -189,8 +200,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
      * 
      * @throws JAXBException
      */
-    private ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException,
-            JAXBException {
+    private ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws RemoteException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.GetResidentTransactions);
 
@@ -246,8 +256,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return transactions;
     }
 
-    private Messages importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws AxisFault, RemoteException, JAXBException,
-            XMLStreamException {
+    private Messages importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws RemoteException, JAXBException, XMLStreamException {
         c.transactionId++;
         c.setCurrentAction(Action.ImportResidentTransactions);
 

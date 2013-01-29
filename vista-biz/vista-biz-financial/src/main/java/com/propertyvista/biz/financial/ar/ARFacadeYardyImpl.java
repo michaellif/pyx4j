@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -50,17 +52,17 @@ public class ARFacadeYardyImpl implements ARFacade {
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
-        YardiReceipt payment = EntityFactory.create(YardiReceipt.class);
-        payment.paymentRecord().set(paymentRecord);
-        payment.amount().setValue(paymentRecord.amount().getValue().negate());
-        payment.billingAccount().set(paymentRecord.billingAccount());
-        payment.description().setValue(i18n.tr("Payment Received - Thank You"));
-        payment.claimed().setValue(false);
-        payment.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        YardiReceipt receipt = EntityFactory.create(YardiReceipt.class);
+        receipt.paymentRecord().set(paymentRecord);
+        receipt.amount().setValue(paymentRecord.amount().getValue().negate());
+        receipt.billingAccount().set(paymentRecord.billingAccount());
+        receipt.description().setValue(i18n.tr("Payment Received - Thank You"));
+        receipt.claimed().setValue(false);
+        receipt.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-        Persistence.service().persist(payment);
+        Persistence.service().persist(receipt);
 
-        //YardiProcessFacade.postReceipt
+        ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
 
     }
 
@@ -79,7 +81,7 @@ public class ARFacadeYardyImpl implements ARFacade {
 
         Persistence.service().persist(reversal);
 
-        //YardiProcessFacade.postReceiptReversal
+        ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal, applyNSF);
 
     }
 

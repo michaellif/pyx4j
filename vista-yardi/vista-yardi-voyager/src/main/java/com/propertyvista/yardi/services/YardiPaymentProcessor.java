@@ -77,32 +77,18 @@ public class YardiPaymentProcessor {
 
     }
 
-    public ResidentTransactions getAllPaymentTransactions(String propertyCode) {
+    public ResidentTransactions getPaymentTransactionsForProperty(String propertyCode) {
         EntityQueryCriteria<YardiReceipt> allPayments = EntityQueryCriteria.create(YardiReceipt.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().billingAccount().lease().unit().building().propertyCode(), propertyCode));
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
 
         ResidentTransactions paymentTransactions = new ResidentTransactions();
         for (YardiReceipt yp : Persistence.service().query(allPayments)) {
-            Persistence.ensureRetrieve(yp.billingAccount(), AttachLevel.Attached);
-            Persistence.ensureRetrieve(yp.billingAccount().lease(), AttachLevel.Attached);
-            Persistence.ensureRetrieve(yp.billingAccount().lease().unit().building(), AttachLevel.Attached);
-
             // Create Payment transaction
-            Transactions transactions = new Transactions();
-            transactions.setPayment(YardiProcessorUtils.getPayment(yp));
-
-            // Add Payment to Customer
-            RTCustomer customer = new RTCustomer();
-            customer.setRTServiceTransactions(new RTServiceTransactions());
-            customer.getRTServiceTransactions().getTransactions().add(transactions);
-
-            // Add Customer to Property
-            Property property = new Property();
-            property.getRTCustomer().add(customer);
+            Transactions transactions = createTransactionForPayment(yp);
 
             // Add Property to batch
-            paymentTransactions.getProperty().add(property);
+            addTransactionToBatch(transactions, paymentTransactions);
 
             // mark payment as read
             yp.claimed().setValue(true);
@@ -111,35 +97,59 @@ public class YardiPaymentProcessor {
         return paymentTransactions;
     }
 
-    public List<ResidentTransactions> getAllNSFReversals() {
+    public Transactions createTransactionForPayment(YardiReceipt yp) {
+        Persistence.ensureRetrieve(yp.billingAccount(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(yp.billingAccount().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(yp.billingAccount().lease().unit().building(), AttachLevel.Attached);
+
+        // Create Payment transaction
+        Transactions transactions = new Transactions();
+        transactions.setPayment(YardiProcessorUtils.getPayment(yp));
+        return transactions;
+    }
+
+    public Transactions createTransactionForReversal(YardiReceiptReversal yr) {
+        Persistence.ensureRetrieve(yr.billingAccount(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(yr.billingAccount().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(yr.billingAccount().lease().unit().building(), AttachLevel.Attached);
+
+        // Create Payment transaction
+        Transactions transactions = new Transactions();
+        transactions.setPayment(YardiProcessorUtils.getNSFReversal(yr));
+        return transactions;
+    }
+
+    public ResidentTransactions addTransactionToBatch(Transactions transaction, ResidentTransactions batch) {
+        if (batch == null) {
+            batch = new ResidentTransactions();
+        }
+        // Add Payment to Customer
+        RTCustomer customer = new RTCustomer();
+        customer.setRTServiceTransactions(new RTServiceTransactions());
+        customer.getRTServiceTransactions().getTransactions().add(transaction);
+
+        // Add Customer to Property
+        Property property = new Property();
+        property.getRTCustomer().add(customer);
+
+        // Add Property to batch
+        batch.getProperty().add(property);
+
+        return batch;
+    }
+
+    public List<ResidentTransactions> getAllReceiptReversals() {
         List<ResidentTransactions> allNSF = new ArrayList<ResidentTransactions>();
 
         EntityQueryCriteria<YardiReceiptReversal> nsfReversals = EntityQueryCriteria.create(YardiReceiptReversal.class);
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().applyNSF(), true));
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
         for (YardiReceiptReversal nsf : Persistence.service().query(nsfReversals)) {
-            Persistence.ensureRetrieve(nsf.billingAccount(), AttachLevel.Attached);
-            Persistence.ensureRetrieve(nsf.billingAccount().lease(), AttachLevel.Attached);
-            Persistence.ensureRetrieve(nsf.billingAccount().lease().unit().building(), AttachLevel.Attached);
+            // Create Reversal transaction
+            Transactions transactions = createTransactionForReversal(nsf);
 
-            ResidentTransactions rt = new ResidentTransactions();
-
-            // Create Payment transaction
-            Transactions transactions = new Transactions();
-            transactions.setPayment(YardiProcessorUtils.getNSFReversal(nsf));
-
-            // Add Payment to Customer
-            RTCustomer customer = new RTCustomer();
-            customer.setRTServiceTransactions(new RTServiceTransactions());
-            customer.getRTServiceTransactions().getTransactions().add(transactions);
-
-            // Add Customer to Property
-            Property property = new Property();
-            property.getRTCustomer().add(customer);
-
-            // Add Property to batch
-            rt.getProperty().add(property);
-            allNSF.add(rt);
+            // Add Transaction to batch
+            allNSF.add(addTransactionToBatch(transactions, null));
 
             // mark payment as read
             nsf.claimed().setValue(true);

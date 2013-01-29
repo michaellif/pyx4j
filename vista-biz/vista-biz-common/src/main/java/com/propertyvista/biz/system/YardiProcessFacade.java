@@ -15,22 +15,21 @@ package com.propertyvista.biz.system;
 
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiProcessFacade {
 
     void doAllImport(StatisticsRecord dynamicStatisticsRecord);
 
-    @Deprecated
     void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord);
 
-    @Deprecated
     void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord);
 
     void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease);
 
-    void postReceipt(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt);
+    void postReceipt(YardiReceipt receipt);
 
-    void postReceiptReversal(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt, boolean isNSF);
+    void postReceiptReversal(YardiReceiptReversal reversal, boolean isNSF);
 
 }

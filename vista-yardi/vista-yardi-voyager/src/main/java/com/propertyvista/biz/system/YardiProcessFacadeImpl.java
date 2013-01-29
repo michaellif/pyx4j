@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.YardiServiceException;
@@ -65,12 +66,22 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceipt(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt) {
-        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
+    public void postReceipt(YardiReceipt receipt) {
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void postReceiptReversal(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt, boolean isNSF) {
-        YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), receipt, isNSF);
+    public void postReceiptReversal(YardiReceiptReversal reversal, boolean isNSF) {
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal, isNSF);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

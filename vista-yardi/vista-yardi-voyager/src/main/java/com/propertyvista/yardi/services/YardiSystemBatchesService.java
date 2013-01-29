@@ -23,7 +23,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
-import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         log.info("Get properties information...");
         for (String propertyCode : propertyCodes) {
             long batchId = openReceiptBatch(client, yc, propertyCode);
-            ResidentTransactions residentTransactions = new YardiPaymentProcessor().getAllPaymentTransactions(propertyCode);
+            ResidentTransactions residentTransactions = new YardiPaymentProcessor().getPaymentTransactionsForProperty(propertyCode);
             if (residentTransactions.getProperty().size() == 0) {
                 continue;
             }
@@ -84,12 +83,24 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         }
     }
 
-    public void postReceipt(PmcYardiCredential pmcYardiCredential, YardiReceipt receipt) {
-        // TODO Auto-generated method stub
+    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws RemoteException, JAXBException, XMLStreamException {
+        YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
+
+        String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
+        long batchId = openReceiptBatch(client, yc, propertyCode);
+        if (residentTransactions.getProperty().size() > 0) {
+            String xml = MarshallUtil.marshall(residentTransactions);
+            log.info(xml);
+            addReceiptsToBatch(client, yc, batchId, xml);
+            postReceiptBatch(client, yc, batchId);
+            Persistence.service().commit();
+        }
     }
 
-    private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws AxisFault, RemoteException {
+    private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws RemoteException {
         c.transactionId++;
         c.setCurrentAction(Action.OpenReceiptBatch);
 
@@ -109,8 +120,8 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return result;
     }
 
-    private Messages addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws AxisFault, RemoteException,
-            XMLStreamException, JAXBException {
+    private Messages addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, String batchXml) throws RemoteException, XMLStreamException,
+            JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.AddReceiptsToBatch);
 
@@ -138,7 +149,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return messages;
     }
 
-    private Messages postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws AxisFault, RemoteException, JAXBException {
+    private Messages postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws RemoteException, JAXBException {
         c.transactionId++;
         c.setCurrentAction(Action.PostReceiptBatch);
 
