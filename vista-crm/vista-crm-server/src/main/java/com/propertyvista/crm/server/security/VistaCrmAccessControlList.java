@@ -119,7 +119,9 @@ import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
+import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
+import com.propertyvista.crm.rpc.services.selections.SelectFeatureItemTypeListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
@@ -253,6 +255,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Building.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BuildingCrudService.class));
 
+        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectBuildingListService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Elevator.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ElevatorCrudService.class));
 
@@ -275,6 +279,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Floorplan.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FloorplanCrudService.class));
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFloorplanListService.class));
+
         grant(VistaCrmBehavior.PropertyManagement, new IServiceExecutePermission(UpdateUploadService.class));
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(UpdateUploadService.class));
 
@@ -288,7 +294,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitOccupancyManagerService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectUnitListService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFloorplanListService.class));
 
 // - Tenant-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lead.class, EntityPermission.ALL));
@@ -306,12 +311,16 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveTenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastTenantCrudService.class));
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(GuarantorCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveGuarantorCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastGuarantorCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCustomerListService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(CustomerScreening.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerScreeningCrudService.class));
@@ -324,13 +333,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTerm.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermVersionService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseTermListService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoteAttachmentUploadService.class));
-
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectCustomerListService.class));
-        grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(SelectBuildingListService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseAdjustmentCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DepositLifecycleCrudService.class));
@@ -355,15 +362,17 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceVersionService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFeatureListService.class));
-
         grant(VistaBasicBehavior.CRM, new EntityPermission(Feature.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureVersionService.class));
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFeatureListService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionVersionService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectConcessionListService.class));
 
 // - Organization:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
@@ -373,6 +382,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
+
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectPortfolioListService.class));
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectCrmRoleListService.class));
 
@@ -390,11 +400,12 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadService.class));
 
 // - Administration:
-        grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceItemTypeCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeatureItemTypeCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UtilityCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ServiceItemTypeCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
 
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteDescriptorCrudService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceCrudService.class));
@@ -403,15 +414,20 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(HomePageGadgetCrudService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmRoleCrudService.class));
+
         grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(TaxCrudService.class));
 
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(LeaseAdjustmentReasonCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(GlCodeCategoryCrudService.class));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(BackgroundCheckPolicyCrudService.class.getPackage().getName() + ".*"));
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(EmailTemplateManagerService.class));
+
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectServiceItemTypeListService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectFeatureItemTypeListService.class));
+        grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectTaxListService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
@@ -425,13 +441,11 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - Other:
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NotesAndAttachmentsCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcDocumentFileUploadService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTaxListService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
+
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(VendorCrudService.class));
-
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NotesAndAttachmentsCrudService.class));
 
 // - Old servies:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
