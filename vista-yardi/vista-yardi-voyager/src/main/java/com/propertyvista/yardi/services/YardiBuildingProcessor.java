@@ -109,6 +109,7 @@ public class YardiBuildingProcessor {
         boolean ok = false;
         try {
             ServerSideFactory.create(BuildingFacade.class).persist(unit);
+            Persistence.service().retrieve(unit.building());
             log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
             ok = true;
         } finally {
