@@ -46,8 +46,6 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback);
 
-        void requestYardiUpdate();
-
         void cancelCompletionEvent(String decisionReason);
 
         void moveOut();
@@ -60,8 +58,13 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void createOffer(LeaseTerm.Type type);
 
-        /**
-         * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
+        /*
+         * Yardi integration stuff:
+         */
+        void updateFromYardi();
+
+        /*
+         * TODO: This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
          */
         void simpleLeaseRenew(LogicalDate leaseEndDate);
 

@@ -81,6 +81,7 @@ import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
@@ -265,13 +266,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addAction(cancelTerminateAction);
 
-        yardiImportAction = new MenuItem(i18n.tr("Import From Yardi"), new Command() {
+        yardiImportAction = new MenuItem(i18n.tr("Update From Yardi"), new Command() {
             @Override
             public void execute() {
-                // TODO action
+                ((LeaseViewerView.Presenter) getPresenter()).updateFromYardi();
             }
         });
-        addAction(yardiImportAction);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            addAction(yardiImportAction);
+        }
 
         activateAction = new MenuItem(i18n.tr("Activate"), new Command() {
             @Override

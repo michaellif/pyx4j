@@ -258,6 +258,12 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void requestYardiUpdate() {
+    public void updateFromYardi() {
+        ((LeaseViewerCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, getEntityId());
     }
 }

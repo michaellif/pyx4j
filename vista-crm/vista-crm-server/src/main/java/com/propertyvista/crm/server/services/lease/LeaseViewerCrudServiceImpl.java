@@ -32,6 +32,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
@@ -206,6 +207,16 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         new LeaseTermCrudServiceImpl().update(term, termDto);
 
         callback.onSuccess(termDto);
+    }
+
+    @Override
+    public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(null, lease);
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     /**
