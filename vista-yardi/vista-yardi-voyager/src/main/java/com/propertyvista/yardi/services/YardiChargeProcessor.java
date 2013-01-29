@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,43 +31,42 @@ import com.propertyvista.domain.financial.yardi.YardiCharge;
 public class YardiChargeProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiChargeProcessor.class);
 
-    public void updateCharges(List<ResidentTransactions> allTransactions) {
+    public void updateCharges(ResidentTransactions rt) {
         log.info("updateCharges: started...");
 
-        for (ResidentTransactions rt : allTransactions) {
-            for (Property prop : rt.getProperty()) {
-                for (RTCustomer cust : prop.getRTCustomer()) {
-                    // skip customer if lease expired
-                    if (new YardiLeaseProcessor().isPastEntry(cust)) {
-                        log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
-                        continue;
-                    }
-
-                    log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
-                    // 1. get customer's YardiBillingAccount
-                    YardiBillingAccount account = YardiProcessorUtils.getYardiBillingAccount(cust);
-                    if (account == null) {
-                        try {
-                            Persistence.service().rollback();
-                        } catch (Throwable ignore) {
-                        }
-                        continue;
-                    }
-                    // 2. remove previously added charges
-                    EntityQueryCriteria<YardiCharge> oldCharges = EntityQueryCriteria.create(YardiCharge.class);
-                    oldCharges.add(PropertyCriterion.eq(oldCharges.proto().billingAccount(), account));
-                    Persistence.service().delete(oldCharges);
-                    // 3. add new charges
-                    // TODO - see if we can simply keep the unchanged charges instead of removing and adding them again
-                    for (Transactions tr : cust.getRTServiceTransactions().getTransactions()) {
-                        if (tr == null || tr.getCharge() == null) {
-                            continue;
-                        }
-                        Persistence.service().persist(YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail()));
-                    }
-                    Persistence.service().commit();
+        for (Property prop : rt.getProperty()) {
+            for (RTCustomer cust : prop.getRTCustomer()) {
+                // skip customer if lease expired
+                if (new YardiLeaseProcessor().isPastEntry(cust)) {
+                    log.info("Transaction for: {} skipped, lease expired.", cust.getCustomerID());
+                    continue;
                 }
+
+                log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
+                // 1. get customer's YardiBillingAccount
+                YardiBillingAccount account = YardiProcessorUtils.getYardiBillingAccount(cust);
+                if (account == null) {
+                    try {
+                        Persistence.service().rollback();
+                    } catch (Throwable ignore) {
+                    }
+                    continue;
+                }
+                // 2. remove previously added charges
+                EntityQueryCriteria<YardiCharge> oldCharges = EntityQueryCriteria.create(YardiCharge.class);
+                oldCharges.add(PropertyCriterion.eq(oldCharges.proto().billingAccount(), account));
+                Persistence.service().delete(oldCharges);
+                // 3. add new charges
+                // TODO - see if we can simply keep the unchanged charges instead of removing and adding them again
+                for (Transactions tr : cust.getRTServiceTransactions().getTransactions()) {
+                    if (tr == null || tr.getCharge() == null) {
+                        continue;
+                    }
+                    Persistence.service().persist(YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail()));
+                }
+                Persistence.service().commit();
             }
         }
     }
+
 }

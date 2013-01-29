@@ -14,13 +14,23 @@
 package com.propertyvista.biz.system;
 
 import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiProcessFacade {
 
     void doAllImport(StatisticsRecord dynamicStatisticsRecord);
 
+    @Deprecated
     void postAllPayments(StatisticsRecord dynamicStatisticsRecord);
 
+    @Deprecated
     void postAllNSF(StatisticsRecord dynamicStatisticsRecord);
+
+    void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease);
+
+    void postReceipt(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt);
+
+    void postReceiptReversal(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt, boolean isNSF);
 
 }

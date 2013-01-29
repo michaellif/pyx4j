@@ -42,40 +42,39 @@ import com.propertyvista.yardi.merger.TenantMerger;
 public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
-    public void updateLeases(List<ResidentTransactions> allTransactions) {
+    public void updateLeases(ResidentTransactions transaction) {
         log.info("Updating leases...");
-        for (ResidentTransactions transaction : allTransactions) {
-            Property property = transaction.getProperty().get(0);
-            for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-                if (isPastEntry(rtCustomer)) {
-                    log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
+        Property property = transaction.getProperty().get(0);
+        for (RTCustomer rtCustomer : property.getRTCustomer()) {
+            String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
+            if (isPastEntry(rtCustomer)) {
+                log.info("Lease {} skipped, expired.", rtCustomer.getCustomerID());
+                continue;
+            }
+
+            {
+                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
+                if (!Persistence.service().query(criteria).isEmpty()) {
+                    Lease lease = Persistence.service().query(criteria).get(0);
+                    Persistence.service().retrieve(lease.currentTerm().version().tenants());
+                    updateLease(rtCustomer, lease);
                     continue;
                 }
-
-                {
-                    EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-                    criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
-                    if (!Persistence.service().query(criteria).isEmpty()) {
-                        Lease lease = Persistence.service().query(criteria).get(0);
-                        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-                        updateLease(rtCustomer, lease);
-                        continue;
-                    }
-                }
-                EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-                criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
-                AptUnit unit = Persistence.service().query(criteria).get(0);
-
-                try {
-                    createLease(rtCustomer, unit, propertyCode);
-                } catch (Throwable t) {
-                    log.info("ERROR - lease not created: ", t);
-                }
-                Persistence.service().commit();
             }
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+            criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
+            AptUnit unit = Persistence.service().query(criteria).get(0);
+
+            try {
+                createLease(rtCustomer, unit, propertyCode);
+            } catch (Throwable t) {
+                log.info("ERROR - lease not created: ", t);
+            }
+            Persistence.service().commit();
         }
+
         log.info("All leases updated.");
     }
 

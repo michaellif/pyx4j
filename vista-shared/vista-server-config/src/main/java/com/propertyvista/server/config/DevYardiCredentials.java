@@ -19,7 +19,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class DevYardiCredentials {
 
-    public static PmcYardiCredential getTestPmcYardiCredential() {
+    public static PmcYardiCredential get2TestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
 
         cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
@@ -33,7 +33,7 @@ public class DevYardiCredentials {
         return cr;
     }
 
-    public static PmcYardiCredential getTest2PmcYardiCredential() {
+    public static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
 
         cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20.asmx");

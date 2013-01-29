@@ -16,10 +16,10 @@ package com.propertyvista.biz.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.domain.financial.yardi.YardiReceipt;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
@@ -31,41 +31,48 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            try {
-                YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
-                Persistence.service().commit();
-            } catch (YardiServiceException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            throw new Error("Yardi Integration disabled for this PMC");
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential());
+        } catch (YardiServiceException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void postAllPayments(StatisticsRecord dynamicStatisticsRecord) {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            try {
-                YardiSystemBatchesService.getInstance().postAllPayments(VistaDeployment.getPmcYardiCredential());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            throw new Error("Yardi Integration disabled for this PMC");
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiSystemBatchesService.getInstance().postAllPayments(VistaDeployment.getPmcYardiCredential());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void postAllNSF(StatisticsRecord dynamicStatisticsRecord) {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            try {
-                YardiResidentTransactionsService.getInstance().postAllNSF(VistaDeployment.getPmcYardiCredential());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            throw new Error("Yardi Integration disabled for this PMC");
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiResidentTransactionsService.getInstance().postAllNSF(VistaDeployment.getPmcYardiCredential());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease) {
+        YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(), lease);
+    }
+
+    @Override
+    public void postReceipt(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void postReceiptReversal(StatisticsRecord dynamicStatisticsRecord, YardiReceipt receipt, boolean isNSF) {
+        // TODO Auto-generated method stub
+
     }
 }

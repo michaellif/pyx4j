@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
 
@@ -32,7 +33,9 @@ public class YardiImportProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(YardiProcessFacade.class).doAllImport(context.getRunStats());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            ServerSideFactory.create(YardiProcessFacade.class).doAllImport(context.getRunStats());
+        }
     }
 
     @Override
