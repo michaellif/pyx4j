@@ -312,11 +312,13 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
         loginForm.get(loginForm.proto().rememberID()).setValue(rememberUserId);
         loginForm.setEnableCaptcha(false);
+        signUpGreeting.setHTML("");
     }
 
     @Override
     public void setWallMessage(SystemWallMessage systemWallMessage) {
-        // TODO Auto-generated method stub        
+        // implement SetWallMessage
+        // VladS tells that it the message that says our system is on maintenance, so probably it means the login and singup should be disabled hidden        
     }
 
     private void onLogin() {
@@ -384,8 +386,6 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         signUpGreeting = new Label();
         signUpGreeting.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
-        // TODO populate this text via activity/presenter
-        signUpGreeting.setHTML("TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD TBD.");
 
         SimplePanel signUpGreetingPanel = new SimplePanel();
         signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreeting.name());
@@ -431,6 +431,11 @@ public class LandingViewImpl extends Composite implements LandingView {
             devLoginPanel.setApplicationModeName(appModeName);
             devLoginPanel.setDevCredentials(devCredientials);
         }
+    }
+
+    @Override
+    public void setSignupGreetingHtml(String html) {
+        signUpGreeting.setHTML(html);
     }
 
 }

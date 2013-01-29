@@ -23,4 +23,13 @@ public interface LandingView extends LoginView {
 
     }
 
+    /**
+     * Resets the view and populates email and rememberMe fields, and disables captcha. Also it clears the signup greeting of the page, so if necessary it
+     * should be populated via setSignupGreetingHtml()
+     */
+    @Override
+    void reset(String email, boolean rememberUser);
+
+    void setSignupGreetingHtml(String html);
+
 }
