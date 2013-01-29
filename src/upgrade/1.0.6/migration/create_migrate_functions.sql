@@ -21,28 +21,26 @@ BEGIN
         
         ALTER TABLE billing_account ADD COLUMN id_discriminator VARCHAR(64);
         
-        UPDATE  billing_account
-        SET     id_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.billing_account '
+                ||'SET     id_discriminator = ''Internal''';
         
-        ALTER TABLE billing_account ALTER COLUMN id_discriminator SET NOT NULL;
-        
+                
         -- billing_arrears_snapshot
         
         ALTER TABLE billing_arrears_snapshot ADD COLUMN billing_account_discriminator VARCHAR(50);
         
-        UPDATE  billing_arrears_snapshot
-        SET     billing_account_discriminator = 'Internal'
-        WHERE   id_discriminator = 'LeaseArrearsSnapshot';
+        EXECUTE 'UPDATE  '||v_schema_name||'.billing_arrears_snapshot '
+                ||'SET     billing_account_discriminator = ''Internal'' '
+                ||'WHERE   id_discriminator = ''LeaseArrearsSnapshot''';
         
         -- billing_bill
         
         ALTER TABLE billing_bill ADD COLUMN billing_account_discriminator VARCHAR(50);
         
-        UPDATE  billing_bill
-        SET     billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.billing_bill '
+                ||'SET     billing_account_discriminator = ''Internal''';
         
-        ALTER TABLE billing_bill ALTER COLUMN billing_account_discriminator SET NOT NULL;
-        
+                
         -- billing_invoice_line_item
         
         ALTER TABLE billing_invoice_line_item   ADD COLUMN amount_paid NUMERIC(18,2),
@@ -54,11 +52,10 @@ BEGIN
                                                 ADD COLUMN service_type VARCHAR(50),
                                                 ADD COLUMN transaction_id VARCHAR(500); 
         
-        UPDATE  billing_invoice_line_item
-        SET     billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.billing_invoice_line_item '
+                ||'SET     billing_account_discriminator = ''Internal''';
         
-        ALTER TABLE billing_invoice_line_item ALTER COLUMN billing_account_discriminator SET NOT NULL;
-        
+                
         -- boiler
         
         ALTER TABLE boiler DROP COLUMN maintenance_contract_document,
@@ -74,20 +71,16 @@ BEGIN
         
         ALTER TABLE building ALTER COLUMN property_code SET NOT NULL;
         
-        UPDATE  building 
-        SET     property_code_s = _dba_.convert_id_to_string(property_code);
+        EXECUTE 'UPDATE  '||v_schema_name||'.building ' 
+                ||'SET     property_code_s = _dba_.convert_id_to_string(property_code)';
         
         ALTER TABLE building DROP CONSTRAINT building_info_building_type_e_ck;
         
-        UPDATE  building 
-        SET     info_building_type = 'mixedResidential'
-        WHERE   info_building_type = 'mixed_residential';
+        EXECUTE 'UPDATE  '||v_schema_name||'.building '
+                ||'SET     info_building_type = ''mixedResidential'' '
+                ||'WHERE   info_building_type = ''mixed_residential''';
         
-        ALTER TABLE building ADD CONSTRAINT building_info_building_type_e_ck
-        CHECK (info_building_type IN ('agricultural','association','commercial','condo','industrial','military','mixedResidential','other','parkingStorage','residential',
-        'seniorHousing','socialHousing'));
-
-        
+                
         -- caledon_co_signer
         
         CREATE TABLE caledon_co_signer
@@ -250,7 +243,7 @@ BEGIN
         
         -- insurance_certificate
        
-       DROP TABLE insurance_certificate;
+        DROP TABLE insurance_certificate;
         
         CREATE TABLE insurance_certificate
         (
@@ -405,24 +398,22 @@ BEGIN
                                 CHECK (status IN ('Authorized','Cleared','Draft','Processing','Rejected'))
         );
         
-         ALTER TABLE insurance_tenant_sure_transaction OWNER TO vista;
+        ALTER TABLE insurance_tenant_sure_transaction OWNER TO vista;
         
         -- lease
         
         ALTER TABLE lease ADD COLUMN billing_account_discriminator VARCHAR(50);
         
-        UPDATE  lease
-        SET     billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.lease '
+                ||'SET     billing_account_discriminator = ''Internal''';
         
-        ALTER TABLE lease ALTER COLUMN billing_account SET NOT NULL;
-        ALTER TABLE lease ALTER COLUMN billing_account_discriminator SET NOT NULL;
-        
+       
         -- lease_adjustment
         
         ALTER TABLE lease_adjustment ADD COLUMN billing_account_discriminator VARCHAR(50);
         
-        UPDATE  lease_adjustment
-        SET     billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.lease_adjustment '
+                ||'SET     billing_account_discriminator = ''Internal''';
         
         -- lease_participant
         
@@ -465,9 +456,9 @@ BEGIN
         
         ALTER TABLE page_meta_tags OWNER TO vista;
         
-        INSERT INTO page_meta_tags (id,locale)
-        (SELECT nextval('public.page_meta_tags_seq'),id AS locale
-        FROM    available_locale);
+        EXECUTE 'INSERT INTO '||v_schema_name||'.page_meta_tags (id,locale) '
+        ||'(SELECT nextval(''public.page_meta_tags_seq''),id AS locale '
+        ||'FROM    '||v_schema_name||'.available_locale)';
         
         -- payment_method
         
@@ -475,22 +466,22 @@ BEGIN
                                         ADD COLUMN tenant BIGINT,
                                         ADD COLUMN tenant_discriminator VARCHAR(50);
                                                 
-        ALTER TABLE payment_method ALTER COLUMN id_discriminator SET NOT NULL;
-        ALTER TABLE payment_method ALTER COLUMN customer DROP NOT NULL; 
         
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method '
+                ||'SET  id_discriminator = ''LeasePaymentMethod''';
                      
         -- payment_record
         
         ALTER TABLE payment_record      ADD COLUMN payment_method_discriminator VARCHAR(50),
                                         ADD COLUMN billing_account_discriminator VARCHAR(50);
                                         
-        UPDATE  payment_record
-        SET     payment_method_discriminator = 'LeasePaymentMethod',
-                billing_account_discriminator = 'Internal';
+        EXECUTE 'UPDATE  '||v_schema_name||'.payment_record '
+                ||'SET     payment_method_discriminator = ''LeasePaymentMethod'','
+                ||'billing_account_discriminator = ''Internal''';
                 
-        ALTER TABLE payment_record ALTER COLUMN billing_account_discriminator SET NOT NULL;
-                                        
+                                                
         
         
         -- payment_record_external
@@ -580,7 +571,7 @@ BEGIN
         
         ALTER TABLE product ADD COLUMN is_default_catalog_item BOOLEAN;
         
-        UPDATE product SET is_default_catalog_item = FALSE;
+        EXECUTE 'UPDATE '||v_schema_name||'.product SET is_default_catalog_item = FALSE';
         
         -- product_v
         
@@ -659,10 +650,10 @@ BEGIN
         
         ALTER TABLE site_descriptor$meta_tags OWNER TO vista;
         
-        INSERT INTO site_descriptor$meta_tags (id,owner,value)
-        (SELECT         nextval('public.site_descriptor$meta_tags_seq') AS id,
-                        a.id AS owner, b.id AS value
-        FROM            site_descriptor a,page_meta_tags b);
+        EXECUTE 'INSERT INTO '||v_schema_name||'.site_descriptor$meta_tags (id,owner,value) '
+                ||'(SELECT      nextval(''public.site_descriptor$meta_tags_seq'') AS id,'
+                ||'             a.id AS owner, b.id AS value '
+                ||'FROM         '||v_schema_name||'.site_descriptor a,'||v_schema_name||'.page_meta_tags b)';
         
         -- site_image_resource
         
@@ -703,17 +694,17 @@ BEGIN
         
         -- Portal data migration part
         
-        UPDATE  site_descriptor 
-        SET     crm_logo = b.id
-        FROM    (SELECT MAX(id) AS id FROM site_image_resource WHERE file_name = 'logo.png') AS b;
+        EXECUTE 'UPDATE  '||v_schema_name||'.site_descriptor '
+                ||'SET     crm_logo = b.id '
+                ||'FROM    (SELECT MAX(id) AS id FROM '||v_schema_name||'.site_image_resource WHERE file_name = ''logo.png'') AS b';
         
-        INSERT INTO portal_image_set (id,locale)
-        (SELECT nextval('public.portal_image_set_seq'), id
-        FROM    available_locale);
+        EXECUTE 'INSERT INTO '||v_schema_name||'.portal_image_set (id,locale) '
+                ||'(SELECT nextval(''public.portal_image_set_seq''), id '
+                ||'FROM    '||v_schema_name||'.available_locale)';
         
         -- For site_descriptor$banner a full blown cartesian product is needed (purpose of which still escapes me)
                
-        DELETE FROM site_descriptor$banner;
+        EXECUTE 'DELETE FROM '||v_schema_name||'.site_descriptor$banner';
         
         ALTER TABLE site_descriptor$banner DROP CONSTRAINT  site_descriptor$banner_value_fk;
         ALTER TABLE site_descriptor$banner ADD CONSTRAINT  site_descriptor$banner_value_fk FOREIGN KEY(value)
@@ -721,22 +712,40 @@ BEGIN
         
         
         
-        INSERT INTO site_descriptor$banner (id,owner,value)
-        (SELECT nextval('public.site_descriptor$banner_seq') AS id,a.id AS owner, b.id AS value 
-        FROM    site_descriptor a,portal_image_set b );
+        EXECUTE 'INSERT INTO '||v_schema_name||'.site_descriptor$banner (id,owner,value) '
+                ||'(SELECT nextval(''public.site_descriptor$banner_seq'') AS id,a.id AS owner, b.id AS value '
+                ||'FROM    '||v_schema_name||'.site_descriptor a,portal_image_set b )';
         
         -- crm_role$behaviors
         
-        INSERT INTO crm_role$behaviors (id,owner,value)
-        (SELECT nextval('public.crm_role$behaviors_seq') AS id, id, 'OrganizationFinancial'
-        FROM    crm_role
-        WHERE   name = 'All');
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors (id,owner,value) '
+                ||'(SELECT nextval(''public.crm_role$behaviors_seq'') AS id, id, ''OrganizationFinancial'' '
+                ||'FROM    '||v_schema_name||'.crm_role '
+                ||'WHERE   name = ''All'')';
+                
+        EXECUTE 'INSERT INTO '||v_schema_name||'.crm_role$behaviors (id,owner,value) '
+                ||'(SELECT nextval(''public.crm_role$behaviors_seq'') AS id, id, ''OrganizationPolicy'' '
+                ||'FROM    '||v_schema_name||'.crm_role '
+                ||'WHERE   name = ''All'')';
         
-        INSERT INTO crm_role$behaviors (id,owner,value)
-        (SELECT nextval('public.crm_role$behaviors_seq') AS id, id, 'OrganizationPolicy'
-        FROM    crm_role
-        WHERE   name = 'All');
         
+        /**
+        ***     ================================================================================================
+        ***     
+        ***             Not null constraints 
+        ***
+        ***     ================================================================================================
+        **/
+        
+        ALTER TABLE billing_account ALTER COLUMN id_discriminator SET NOT NULL;
+        ALTER TABLE billing_bill ALTER COLUMN billing_account_discriminator SET NOT NULL;
+        ALTER TABLE billing_invoice_line_item ALTER COLUMN billing_account_discriminator SET NOT NULL;
+        ALTER TABLE lease ALTER COLUMN billing_account SET NOT NULL;
+        ALTER TABLE lease ALTER COLUMN billing_account_discriminator SET NOT NULL;
+        ALTER TABLE payment_method ALTER COLUMN id_discriminator SET NOT NULL;
+        ALTER TABLE payment_method ALTER COLUMN customer DROP NOT NULL; 
+        ALTER TABLE payment_record ALTER COLUMN billing_account_discriminator SET NOT NULL;
+                
         
         /**
         ***     ================================================================================================
@@ -793,6 +802,9 @@ BEGIN
         ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_service_type_e_ck 
                 CHECK ((service_type) IN ('AirCon', 'BroadbandInternet', 'Cable', 'Electric', 'Fees', 'Fitness', 'Gas', 'Heat', 'HotWater', 'Other', 'Parking', 'Rent',
                 'Sewer', 'Telephone', 'Trash', 'Water'));
+        ALTER TABLE building ADD CONSTRAINT building_info_building_type_e_ck
+                CHECK (info_building_type IN ('agricultural','association','commercial','condo','industrial','military','mixedResidential','other','parkingStorage',
+                'residential','seniorHousing','socialHousing'));
         ALTER TABLE communication_person ADD CONSTRAINT communication_person_type_e_ck CHECK ((type) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE deposit_lifecycle ADD CONSTRAINT deposit_lifecycle_billing_account_discriminator_d_ck CHECK ((billing_account_discriminator)= 'Internal');
         ALTER TABLE gadget_content ADD CONSTRAINT gadget_content_id_discriminator_ck 
