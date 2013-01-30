@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -40,5 +42,6 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
     @NotNull
     @RpcTransient
     @Transient
+    @Editor(type = EditorType.password)
     IPrimitive<String> passwordConfirm();
 }
