@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -42,6 +42,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class EmailTemplateRootObjectLoader {
@@ -53,7 +54,7 @@ public class EmailTemplateRootObjectLoader {
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
             t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
-            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL);
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH);
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
@@ -179,8 +180,8 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getPortalAccessUrl(String token) {
-        return VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?'
-                + AuthenticationService.AUTH_TOKEN_ARG + '=' + token;
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH,
+                PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     private static OnlineApplication getApplication(LeaseTermParticipant tenantInLease) {

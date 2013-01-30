@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.mvp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -25,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
-import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
 import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
@@ -51,8 +47,6 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 
 public class ContentActivityMapper implements AppActivityMapper {
-
-    private static Logger log = LoggerFactory.getLogger(ContentActivityMapper.class);
 
     public ContentActivityMapper() {
     }
@@ -115,12 +109,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new TenantInsuranceByOtherProvdierUpdateActivity(place);
 
                     // TODO not sure if these activities belong here
-                } else if (place instanceof PortalSiteMap.LoginWithToken) {
-                    activity = new LoginWithTokenActivity(place);
                 } else if (place instanceof PortalSiteMap.Residents.CommunicationCenter) {
                     activity = new CommunicationCenterActivity(place);
-                } else {
-                    log.debug("Couldn't find the place class, which is :{} please add to mapping!", place.getClass().getName());
                 }
                 callback.onSuccess(activity);
             }

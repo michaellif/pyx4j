@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -63,12 +63,13 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -135,7 +136,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         createPmc();
 
         portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false);
-        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL;
+        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
@@ -169,14 +170,16 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalTenant, mainAplt.leaseParticipant().customer().user(),
+                token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
-        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(), token);
+        email = MessageTemplates.createCustomerPasswordResetEmail(EmailTemplateType.PasswordRetrievalProspect, mainAplt.leaseParticipant().customer().user(),
+                token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
         log.info(type.toString() + " content: " + received);
@@ -248,7 +251,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 "{5}<br/>";
             break;
         case ApplicationApproved:
-            templateFmt = "<h3>Welcome {0} to your new home!</h3><br/><br/>" +                        
+            templateFmt = "<h3>Welcome {0} to your new home!</h3><br/><br/>" +
                 "Your Application To Lease has been approved!<br/><br/>" +
                 "As per your application, your lease start date is on {1}, {2}<br/></br>" +
                 "We are excited to have you live with us. Please maintain your username and password that you have used for the application process. " +
@@ -262,7 +265,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 "{6}<br/>";
             break;
         case ApplicationDeclined:
-            templateFmt = "Dear {0},<br/><br/>" +                        
+            templateFmt = "Dear {0},<br/><br/>" +
                 "Unfortunately, based on the information provided your application has been DECLINED.<br/><br/>" +
                 "We do encourage you to add more information to your application that could assist us in re-assessing this application.<br/>" +
                 "Typically, additional Proof of Income or Guarantor(s)can change the application decision and allow us to re-evaluate the entire application.<br/>" +
@@ -276,7 +279,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 "{4}<br/>";
             break;
         case TenantInvitation:
-            templateFmt = "Welcome {0}!<br/><br/>" +                        
+            templateFmt = "Welcome {0}!<br/><br/>" +
             "We are excited to have you join the Online Tenant Portal of {1} that we created just for you! " +
             "To access the site and create new password for your account please follow the link below:<br/>\n" +
             "{2}<br/>" +
@@ -317,8 +320,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     crmUser.name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, 
-                    token)
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class,
+                            AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {
@@ -334,8 +337,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
-                    + token
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.LoginWithToken.class,
+                            AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {
@@ -473,8 +476,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
                     company,
-                    VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL + '?' + AuthenticationService.AUTH_TOKEN_ARG + '='
-                    + token,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.LoginWithToken.class,
+                            AuthenticationService.AUTH_TOKEN_ARG, token),
                     portalHomeUrl,
                     tenantHomeUrl,
                     building.marketing().name().getValue(),
@@ -505,10 +508,10 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     private Object[] getHeaderFooterArgs(boolean asString) {
         if (asString) {
             //@formatter:off
-            String[] args = { 
-                portalHomeUrl, 
+            String[] args = {
+                portalHomeUrl,
                 portalHomeUrl + "/logo.png/vista.siteimgrc",
-                company, 
+                company,
                 copyright };
             //@formatter:on
             return args;
@@ -516,10 +519,10 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             // PortalLinksT are present on all template
             PortalLinksT portalT = EmailTemplateManager.getProto(EmailTemplateType.PasswordRetrievalCrm, PortalLinksT.class);
             //@formatter:off
-            String[] args = { 
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()), 
+            String[] args = {
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.CompanyLogo()),
-                EmailTemplateManager.getVarname(portalT.CompanyName()), 
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(portalT.CopyrightNotice()) };
             //@formatter:on
             return args;

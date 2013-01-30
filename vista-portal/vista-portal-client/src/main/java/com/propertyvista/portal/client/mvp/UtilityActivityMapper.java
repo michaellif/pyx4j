@@ -22,6 +22,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.propertyvista.portal.client.activity.TenantRegistrationActivity;
 import com.propertyvista.portal.client.activity.login.LandingActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
+import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.LogoutActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
@@ -38,6 +39,8 @@ public class UtilityActivityMapper implements AppActivityMapper {
             activity = new LogoutActivity();
         } else if (place instanceof PortalSiteMap.PasswordReset) {
             activity = new PasswordResetActivity(place);
+        } else if (place instanceof PortalSiteMap.LoginWithToken) {
+            activity = new LoginWithTokenActivity(place);
         } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
             activity = new PasswordResetRequestActivity(place);
         } else if (place instanceof PortalSiteMap.PasswordChange) {
