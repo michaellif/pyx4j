@@ -58,8 +58,8 @@ public class UpgradeProcedure106 implements UpgradeProcedure {
                 Building building = cursor.next();
                 try {
                     ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
-                    addUnitsToDefaultCatalog(building);
                     ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(building);
+                    addUnitsToDefaultCatalog(building);
                 } catch (Throwable e) {
                     log.error("Error migrating building {}", building, e);
                     throw new UserRuntimeException("Error in building " + NamespaceManager.getNamespace() + "." + building.getPrimaryKey() + "; "
