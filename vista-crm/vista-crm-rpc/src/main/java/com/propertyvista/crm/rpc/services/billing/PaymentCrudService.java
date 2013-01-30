@@ -30,9 +30,9 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId);
 
-    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
+    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 
-    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
+    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 
     // Payment operations:
 

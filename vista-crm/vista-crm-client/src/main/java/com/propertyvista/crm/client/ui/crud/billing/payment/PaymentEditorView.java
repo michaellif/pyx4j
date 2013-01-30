@@ -29,8 +29,8 @@ public interface PaymentEditorView extends IEditorView<PaymentRecordDTO> {
 
     interface Presenter extends IEditorView.Presenter {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 
-        void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer);
+        void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
     }
 }

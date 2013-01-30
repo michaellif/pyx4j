@@ -52,23 +52,23 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
 
     @SuppressWarnings("unchecked")
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
         ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseTermParticipant<LeaseParticipant<?>>) payer.createIdentityStub());
+        }, (LeaseTermParticipant<? extends LeaseParticipant<?>>) payer.createIdentityStub());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
+    public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
         ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(Vector<LeasePaymentMethod> result) {
                 callback.onSuccess(result);
             }
-        }, (LeaseTermParticipant<LeaseParticipant<?>>) payer.createIdentityStub());
+        }, (LeaseTermParticipant<? extends LeaseParticipant<?>>) payer.createIdentityStub());
     }
 }

@@ -150,12 +150,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<LeaseParticipant<?>> participant) {
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> participant) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, participant);
     }
 
     @Override
-    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<LeaseParticipant<?>> payer) {
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
         Persistence.service().retrieve(payer);
         if ((payer == null) || (payer.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
@@ -203,8 +203,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     // internals:
     @SuppressWarnings("incomplete-switch")
-    private List<LeaseTermParticipant<?>> retrievePayableUsers(Lease lease) {
-        List<LeaseTermParticipant<?>> users = new LinkedList<LeaseTermParticipant<?>>();
+    private List<LeaseTermParticipant<? extends LeaseParticipant<?>>> retrievePayableUsers(Lease lease) {
+        List<LeaseTermParticipant<? extends LeaseParticipant<?>>> users = new LinkedList<LeaseTermParticipant<? extends LeaseParticipant<?>>>();
 
         // add payable tenants:
         Persistence.service().retrieve(lease.currentTerm().version().tenants());

@@ -25,6 +25,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
@@ -52,7 +53,7 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Status> leaseStatus();
 
-    IList<LeaseTermParticipant<?>> participants();
+    IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
 

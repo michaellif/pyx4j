@@ -50,6 +50,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -108,6 +109,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         selectTab(addTab(content));
     }
 
+    @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
@@ -120,29 +122,35 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntitySelectorHyperlink<LeaseTermParticipant<?>>() {
-            @Override
-            protected AppPlace getTargetPlace() {
-                if (getValue().isInstanceOf(LeaseTermTenant.class)) {
-                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
-                } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
-                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().getPrimaryKey());
-                } else {
-                    throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
-                }
-            }
+        left.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().leaseTermParticipant(),
+                        new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
+                            @Override
+                            protected AppPlace getTargetPlace() {
+                                if (getValue().isInstanceOf(LeaseTermTenant.class)) {
+                                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+                                } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
+                                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().getPrimaryKey());
+                                } else {
+                                    throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
+                                }
+                            }
 
-            @Override
-            protected AbstractEntitySelectorDialog<LeaseTermParticipant<?>> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseTermParticipant<?>>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
-                    @Override
-                    public boolean onClickOk() {
-                        get(PaymentForm.this.proto().leaseTermParticipant()).setValue(getSelectedItems().get(0));
-                        return true;
-                    }
-                };
-            }
-        }), 25).build());
+                            @Override
+                            protected AbstractEntitySelectorDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>> getSelectorDialog() {
+                                return new EntitySelectorListDialog<LeaseTermParticipant<? extends LeaseParticipant<?>>>(i18n.tr("Select Tenant To Pay"),
+                                        false, PaymentForm.this.getValue().participants()) {
+                                    @Override
+                                    public boolean onClickOk() {
+                                        CComponent<?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                                        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
+                                        return true;
+                                    }
+                                };
+                            }
+                        }), 25).build());
 
         left.setWidget(
                 ++row,
@@ -182,12 +190,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
 
-        get(proto().leaseTermParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LeaseTermParticipant> event) {
-                chageLeaseParticipant();
-            }
-        });
+        CComponent<?, ?> comp = get(proto().leaseTermParticipant());
+        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp)
+                .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {
+                        chageLeaseParticipant();
+                    }
+                });
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
