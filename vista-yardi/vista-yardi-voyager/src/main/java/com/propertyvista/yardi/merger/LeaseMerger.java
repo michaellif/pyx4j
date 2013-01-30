@@ -20,9 +20,9 @@ import com.yardi.entity.mits.YardiLease;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.PaymentAccepted;
 
 public class LeaseMerger {
 
@@ -78,22 +78,22 @@ public class LeaseMerger {
         }
     }
 
-    public boolean validatePaymentTypeChanger(String paymentAccepted, LeaseTerm currentTerm) {
-        if (!currentTerm.paymentAccepted().getValue().equals(getPaymentType(paymentAccepted))) {
+    public boolean validatePaymentTypeChanger(String paymentAccepted, Lease lease) {
+        if (!lease.billingAccount().paymentAccepted().getValue().equals(getPaymentType(paymentAccepted))) {
             return true;
         }
         return false;
     }
 
-    public PaymentAccepted getPaymentType(String type) {
+    public BillingAccount.PaymentAccepted getPaymentType(String type) {
         if (type.equals("0")) {
-            return PaymentAccepted.Any;
+            return BillingAccount.PaymentAccepted.Any;
         } else if (type.equals("1")) {
-            return PaymentAccepted.DoNotAccept;
+            return BillingAccount.PaymentAccepted.DoNotAccept;
         } else if (type.equals("2")) {
-            return PaymentAccepted.CashEquivalent;
+            return BillingAccount.PaymentAccepted.CashEquivalent;
         } else {
-            return PaymentAccepted.Any;
+            return BillingAccount.PaymentAccepted.Any;
         }
 
     }

@@ -81,14 +81,14 @@ public class YardiLeaseProcessor {
         List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
         if (new LeaseMerger().validateTermChanges(yardiLease, lease.currentTerm()) || new TenantMerger().validateChanges(yardiCustomers, tenants)
-                || new LeaseMerger().validatePaymentTypeChanger(rtCustomer.getPaymentAccepted(), lease.currentTerm())) {
+                || new LeaseMerger().validatePaymentTypeChanger(rtCustomer.getPaymentAccepted(), lease)) {
             LeaseTerm newTerm = Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
             newTerm = new LeaseMerger().updateTerm(yardiLease, newTerm);
             Persistence.service().retrieve(newTerm.version().tenants());
             newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm);
-            newTerm.paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
             lease.currentTerm().set(newTerm);
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
+            lease.billingAccount().paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             log.info("Lease {} successfully updated (term)", rtCustomer.getCustomerID());
         } else if (new LeaseMerger().validateLeaseChanges(yardiLease, lease)) {
@@ -130,7 +130,7 @@ public class YardiLeaseProcessor {
         if (yardiLease.getActualMoveIn() != null) {
             lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
         }
-        lease.currentTerm().paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
+        lease.billingAccount().paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
 
         // add tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {

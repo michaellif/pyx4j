@@ -47,9 +47,9 @@ import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -84,7 +84,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class) {
             @Override
             public boolean canCreateNewItem() {
-                return (currentValue.currentTerm().paymentAccepted().getValue() != LeaseTerm.PaymentAccepted.DoNotAccept);
+                return (currentValue.billingAccount().paymentAccepted().getValue() != BillingAccount.PaymentAccepted.DoNotAccept);
             }
         };
 

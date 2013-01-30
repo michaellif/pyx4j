@@ -130,7 +130,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
-        dto.paymentAccepted().setValue(billingAccount.lease().currentTerm().paymentAccepted().getValue());
+        dto.paymentAccepted().setValue(billingAccount.lease().billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
 
         // some default values:

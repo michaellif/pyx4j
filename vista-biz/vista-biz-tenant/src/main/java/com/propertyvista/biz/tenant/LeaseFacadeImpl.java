@@ -53,6 +53,7 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -131,7 +132,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
-            lease.currentTerm().paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
         }
         lease.currentTerm().lease().set(lease);
 
@@ -146,6 +146,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             }
         }
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
+        lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.Any);
 
         return lease;
     }
@@ -223,11 +224,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             break;
         default:
             break;
-        }
-
-        // ensure non-null member(s):
-        if (leaseTerm.paymentAccepted().isNull()) {
-            leaseTerm.paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
         }
 
         Persistence.secureSave(leaseTerm);
@@ -536,7 +532,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         LeaseTerm term = EntityFactory.create(LeaseTerm.class);
         term.status().setValue(LeaseTerm.Status.Offer);
-        term.paymentAccepted().setValue(LeaseTerm.PaymentAccepted.Any);
 
         term.type().setValue(type);
         term.lease().set(lease);
@@ -950,6 +945,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         updateLeaseDates(lease);
+
+        // ensure non-null member(s):
+        if (lease.billingAccount().paymentAccepted().isNull()) {
+            lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.Any);
+        }
 
         Persistence.secureSave(lease);
 

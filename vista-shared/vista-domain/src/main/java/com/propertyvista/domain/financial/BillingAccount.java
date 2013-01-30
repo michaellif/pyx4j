@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
@@ -27,6 +29,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -35,6 +39,21 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface BillingAccount extends IEntity {
+
+    @I18n(context = "Payment Accepted")
+    @XmlType(name = "PaymentAccepted")
+    public enum PaymentAccepted {
+        Any,
+
+        DoNotAccept,
+
+        CashEquivalent;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @Owner
     @NotNull
@@ -62,4 +81,5 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<PaymentRecord> payments();
 
+    IPrimitive<BillingAccount.PaymentAccepted> paymentAccepted();
 }

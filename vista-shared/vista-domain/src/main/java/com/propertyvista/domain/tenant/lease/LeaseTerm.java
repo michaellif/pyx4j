@@ -83,17 +83,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         }
     }
 
-    @I18n(context = "Payment Accepted")
-    @XmlType(name = "PaymentAccepted")
-    public enum PaymentAccepted {
-        Any, DoNotAccept, CashEquivalent;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     // ------------------------------------------------------------
 
     @NotNull
@@ -106,8 +95,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ToString(index = 3)
     @MemberColumn(name = "leaseTermStatus")
     IPrimitive<Status> status();
-
-    IPrimitive<PaymentAccepted> paymentAccepted();
 
     @NotNull
     @ToString(index = 0)
