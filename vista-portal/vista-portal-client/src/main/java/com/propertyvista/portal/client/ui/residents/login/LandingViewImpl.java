@@ -39,11 +39,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
@@ -54,7 +59,10 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
+import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel;
+import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel.Side;
 import com.propertyvista.portal.client.ui.residents.decorators.CheckBoxDecorator;
+import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecoratorBuilder;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
@@ -74,7 +82,7 @@ public class LandingViewImpl extends Composite implements LandingView {
 
     private class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
-        private CCaptcha captcha;
+        private CCaptcha captchaField;
 
         public LoginForm() {
             super(AuthenticationRequest.class);
@@ -83,26 +91,18 @@ public class LandingViewImpl extends Composite implements LandingView {
         @Override
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.add(center(new DecoratorBuilder(inject(proto().email(), new CTextField())).customLabel("").labelWidth(0).componentWidth(15)
-                    .useLabelSemicolon(false).mandatoryMarker(false).build()));
-            ((CTextField) get(proto().email())).setWatermark(i18n.tr("Email"));
 
-            // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)
-            ((CTextField) get(proto().email())).setMandatory(false);
-            ((CTextField) get(proto().email())).setMandatoryValidationMessage(i18n.tr("Enter your email address"));
-            ((CTextField) get(proto().email())).setMandatory(true);
+            CTextField emailField = (CTextField) inject(proto().email(), new CTextField());
+            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextField>(emailField).watermark(i18n.tr("Email")).build()));
+            setMandatoryValidationMessage(emailField, i18n.tr("Enter your email address"));
 
-            contentPanel.add(center(new DecoratorBuilder(inject(proto().password(), new CPasswordTextField())).customLabel("").labelWidth(0).componentWidth(15)
-                    .useLabelSemicolon(false).mandatoryMarker(false).build()));
-            ((CPasswordTextField) get(proto().password())).setWatermark(i18n.tr("Password"));
+            CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField());
+            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>(passwordField).watermark(i18n.tr("Password")).build()));
+            setMandatoryValidationMessage(passwordField, i18n.tr("Enter your password"));
 
-            // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough) 
-            ((CPasswordTextField) get(proto().password())).setMandatory(false);
-            ((CPasswordTextField) get(proto().password())).setMandatoryValidationMessage(i18n.tr("Enter your password"));
-            ((CPasswordTextField) get(proto().password())).setMandatory(true);
-
-            captcha = (CCaptcha) inject(proto().captcha());
-            contentPanel.add(center((new DecoratorBuilder(captcha).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
+            captchaField = (CCaptcha) inject(proto().captcha());
+            contentPanel
+                    .add(center((new DecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
             setEnableCaptcha(false);
 
             contentPanel.add(center(new CheckBoxDecorator((CCheckBox) inject(proto().rememberID(), new CCheckBox()))));
@@ -111,18 +111,32 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
 
         public final void setEnableCaptcha(boolean isEnabled) {
-            captcha.setVisible(isEnabled);
+            captchaField.setVisible(isEnabled);
             if (isEnabled) {
-                captcha.createNewChallenge();
+                captchaField.createNewChallenge();
             }
 
         }
 
         private Widget center(Widget w) {
-            w.getElement().getStyle().setProperty("width", "200px");
-            w.getElement().getStyle().setProperty("marginLeft", "auto");
-            w.getElement().getStyle().setProperty("marginRight", "auto");
+            w.addStyleName(LandingPagesTheme.StyleName.LandingInputField.name());
             return w;
+        }
+
+        @Deprecated
+        // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)        
+        private <C extends CTextFieldBase<?, ?>> void setMandatoryValidationMessage(C c, final String message) {
+            c.setMandatory(false);
+            c.addValueValidator(new EditableValueValidator<Object>() {
+                @Override
+                public ValidationError isValid(CComponent<Object, ?> component, Object value) {
+                    if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {
+                        return new ValidationError(component, message);
+                    } else {
+                        return null;
+                    }
+                }
+            });
         }
     }
 
@@ -218,14 +232,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
     }
 
-    private static class LandingSide extends FlowPanel {
-
-        public LandingSide(String style) {
-            setStyleName(style);
-        }
-
-    }
-
     private LandingView.Presenter presenter;
 
     private LoginForm loginForm;
@@ -239,8 +245,7 @@ public class LandingViewImpl extends Composite implements LandingView {
     private Label signUpGreeting;
 
     public LandingViewImpl() {
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.addStyleName(LandingPagesTheme.StyleName.LandingPage.name());
+        LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
         // attach handler to invoke login via ENTER key
         viewPanel.addAttachHandler(new Handler() {
 
@@ -248,7 +253,6 @@ public class LandingViewImpl extends Composite implements LandingView {
 
             @Override
             public void onAttachOrDetach(AttachEvent event) {
-                // TODO Auto-generated method stub
                 if (event.isAttached()) {
                     handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
                         @Override
@@ -265,29 +269,8 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         });
 
-        FlowPanel header = new FlowPanel();
-        FlowPanel leftHeader = new LandingSide(LandingPagesTheme.StyleName.LandingPageHeader.name());
-        FlowPanel rightHeader = new LandingSide(LandingPagesTheme.StyleName.LandingPageHeader.name());
-        header.add(leftHeader);
-        header.add(rightHeader);
-        viewPanel.add(header);
-
-        FlowPanel content = new FlowPanel();
-        FlowPanel leftContent = new LandingSide(LandingPagesTheme.StyleName.LandingPageContent.name());
-        FlowPanel rightContent = new LandingSide(LandingPagesTheme.StyleName.LandingPageContent.name());
-        content.add(leftContent);
-        content.add(rightContent);
-        viewPanel.add(content);
-
-        FlowPanel footer = new FlowPanel();
-        FlowPanel leftFooter = new LandingSide(LandingPagesTheme.StyleName.LandingPageFooter.name());
-        FlowPanel rightFooter = new LandingSide(LandingPagesTheme.StyleName.LandingPageFooter.name());
-        footer.add(leftFooter);
-        footer.add(rightFooter);
-        viewPanel.add(footer);
-
-        bindLoginWidgets(leftHeader, leftContent, leftFooter);
-        bindSingupWidgets(rightHeader, rightContent, rightFooter);
+        bindLoginWidgets(viewPanel.getLeft());
+        bindSingupWidgets(viewPanel.getRight());
 
         final HTML orLine = makeOrLineDecoration();
         initWidget(viewPanel);
@@ -337,12 +320,12 @@ public class LandingViewImpl extends Composite implements LandingView {
         presenter.gotoResetPassword();
     }
 
-    private void bindLoginWidgets(FlowPanel leftHeader, FlowPanel leftContent, FlowPanel leftFooter) {
-        leftHeader.add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
+    private void bindLoginWidgets(Side sideLayout) {
+        sideLayout.getHeader().add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
 
         loginForm = new LoginForm();
         loginForm.initContent();
-        leftContent.add(loginForm);
+        sideLayout.getContent().add(loginForm);
 
         loginButton = new Button(i18n.tr("LOGIN"));
         loginButton.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
@@ -357,7 +340,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         SimplePanel loginButtonHolder = new SimplePanel();
         loginButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         loginButtonHolder.setWidget(loginButton);
-        leftFooter.add(loginButtonHolder);
+        sideLayout.getFooter().add(loginButtonHolder);
 
         SimplePanel resetPasswordAnchorHolder = new SimplePanel();
         resetPasswordAnchorHolder.setWidth("100%");
@@ -370,9 +353,9 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
         });
         resetPasswordAnchorHolder.add(resetPassword);
-        leftFooter.add(resetPasswordAnchorHolder);
+        sideLayout.getFooter().add(resetPasswordAnchorHolder);
 
-        leftFooter.add(devLoginPanel = new DevLoginPanel() {
+        sideLayout.getFooter().add(devLoginPanel = new DevLoginPanel() {
             @Override
             protected void onDevCredentialsSelected(String userId, String password) {
                 loginForm.get(loginForm.proto().email()).setValue(userId);
@@ -381,16 +364,16 @@ public class LandingViewImpl extends Composite implements LandingView {
         });
     }
 
-    private void bindSingupWidgets(FlowPanel header, FlowPanel content, FlowPanel footer) {
-        header.add(makeCaption(i18n.tr("First Time."), i18n.tr("Get Started")));
+    private void bindSingupWidgets(Side sideLayout) {
+        sideLayout.getHeader().add(makeCaption(i18n.tr("First Time."), i18n.tr("Get Started")));
 
         signUpGreeting = new Label();
         signUpGreeting.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
 
         SimplePanel signUpGreetingPanel = new SimplePanel();
-        signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreeting.name());
+        signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
         signUpGreetingPanel.setWidget(signUpGreeting);
-        content.add(signUpGreetingPanel);
+        sideLayout.getContent().add(signUpGreetingPanel);
 
         signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
             @Override
@@ -403,7 +386,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         SimplePanel signUpButtonHolder = new SimplePanel();
         signUpButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         signUpButtonHolder.setWidget(signUpButton);
-        footer.add(signUpButtonHolder);
+        sideLayout.getFooter().add(signUpButtonHolder);
     }
 
     private HTML makeOrLineDecoration() {

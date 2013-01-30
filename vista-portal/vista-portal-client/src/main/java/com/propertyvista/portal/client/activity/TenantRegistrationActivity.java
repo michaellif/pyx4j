@@ -20,7 +20,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -32,6 +34,8 @@ import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 
 public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
+
+    private static final I18n i18n = I18n.get(I18n.class);
 
     private final TenantRegistrationView view;
 
@@ -55,6 +59,10 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
                     public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
                         view.setPresenter(TenantRegistrationActivity.this);
                         view.populate(result.getData());
+                        if (ApplicationMode.isDevelopment()) {
+                            view.setGreeting(i18n.tr("Why Choose Us?"), i18n.tr("Our service is unprecedented in the industry."
+                                    + " Our team of individuals will respond quickly to any of your needs and make your RedRidge Experience better"));
+                        }
                         panel.setWidget(view);
                     }
                 });

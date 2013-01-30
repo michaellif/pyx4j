@@ -15,54 +15,88 @@ package com.propertyvista.portal.client.ui.registration;
 
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.EntityDataSource;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.portal.client.themes.LandingPagesTheme;
+import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 
 public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrationDTO> {
 
-    private CEntityComboBox<SelfRegistrationBuildingDTO> buildingOptions;
+    private static final I18n i18n = I18n.get(TenantRegistrationForm.class);
+
+    private CSimpleEntityComboBox<SelfRegistrationBuildingDTO> buildingComboBox;
 
     public TenantRegistrationForm() {
         super(SelfRegistrationDTO.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
-        int row = -1;
+        FlowPanel contentPanel = new FlowPanel();
 
-        buildingOptions = new CEntityComboBox<SelfRegistrationBuildingDTO>(SelfRegistrationBuildingDTO.class);
-        buildingOptions.setOptionsDataSource(new EntityDataSource<SelfRegistrationBuildingDTO>() {
+        buildingComboBox = ((CSimpleEntityComboBox<SelfRegistrationBuildingDTO>) inject(proto().building(),
+                new CSimpleEntityComboBox<SelfRegistrationBuildingDTO>()));
+
+        FlowPanel selectBuildingPanel = new FlowPanel();
+
+        Label buildingFieldLabel = new Label();
+        buildingFieldLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        buildingFieldLabel.setText(i18n.tr("Select your building:"));
+        selectBuildingPanel.add(buildingFieldLabel);
+        selectBuildingPanel.add(new DecoratorBuilder(buildingComboBox).componentWidth(20).labelWidth(0).customLabel("").useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
+
+        contentPanel.add(center(selectBuildingPanel));
+
+        FlowPanel userDataPanel = new FlowPanel();
+        userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().firstName())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().lastName())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().secuirtyCode())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().email())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).build()));
+
+        contentPanel.add(center(userDataPanel));
+
+        get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public void obtain(EntityQueryCriteria<SelfRegistrationBuildingDTO> criteria,
-                    AsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>> handlingCallback) {
-                // TODO Auto-generated method stub
-
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
+                if (!get(proto().password()).getValue().equals(value)) {
+                    new ValidationError(component, i18n.tr(""));
+                }
+                return null;
             }
         });
-
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), buildingOptions)).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().secuirtyCode())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password(), new CPasswordTextField())).build());
+        get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().password())));
 
         return contentPanel;
     }
 
     public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
-        buildingOptions.setOptions(buildings);
+        buildingComboBox.setOptions(buildings);
     }
+
+    private Widget center(IsWidget w) {
+        w.asWidget().addStyleName(LandingPagesTheme.StyleName.LandingInputField.name());
+        return w.asWidget();
+    }
+
 }

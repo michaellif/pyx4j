@@ -24,6 +24,7 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_ENTITY_ID = "entity-id";
 
+    @PlaceProperties(caption = "Resident Login")
     public static class Login extends AppPlace implements PublicPlace {
     }
 
@@ -39,7 +40,7 @@ public class PortalSiteMap implements SiteMap {
     public static class PasswordReset extends AppPlace implements PublicPlace {
     }
 
-    @PlaceProperties(caption = "Residents registration")
+    @PlaceProperties(caption = "Resident Registration")
     public static class Registration extends AppPlace implements PublicPlace {
 
     }

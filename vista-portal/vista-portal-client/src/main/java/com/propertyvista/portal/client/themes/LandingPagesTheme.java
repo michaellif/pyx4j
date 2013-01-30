@@ -24,7 +24,7 @@ public class LandingPagesTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        LandingPage, LandingPageContent, PortalLandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreeting, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingPageHeader, LandingPageFooter
+        LandingViewPanel, LandingViewSectionContent, PortalLandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField
 
     }
 
@@ -41,7 +41,6 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("border-style", "outset");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "10px");
-        style.addProperty("border-shadow", "2px 2px 2px #0099FF");
         style.addProperty("color", "white");
         style.addProperty("font-size", "15px");
         style.addProperty("font-weight", "bold");
@@ -55,12 +54,6 @@ public class LandingPagesTheme extends Theme {
         style = new Style(".", StyleName.PortalLandingButton, ":hover");
         style.addProperty("background-color", "#B8DBFF");
         style.addProperty("color", "#003366");
-        addStyle(style);
-
-        style = new Style(".", StyleName.LandingPage, " .TextBox");
-        style.addProperty("border-radius", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("box-shadow", "1px 1px 3px grey inset");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingCaption);
@@ -85,9 +78,11 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("height", "300px");
         addStyle(style);
 
-        style = new Style(".", StyleName.LandingGreeting.name());
+        style = new Style(".", StyleName.LandingGreetingPanel.name());
         style.addProperty("height", "100%");
-        style.addProperty("width", "100%");
+        style.addProperty("width", "300px");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
         style.addProperty("display", "block");
         style.addProperty("text-align", "center");
         addStyle(style);
@@ -103,30 +98,38 @@ public class LandingPagesTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.LandingButtonHolder.name());
-        style.addProperty("width", "100%");
+        style.addProperty("width", "20em"); // TODO should be same as width of component set by WatermarkDecoratorBuilder
         style.addProperty("text-align", "center");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
         style.addProperty("margin-top", "20px");
         addStyle(style);
 
-        style = new Style(".", StyleName.LandingPageHeader.name());
+        style = new Style(".", StyleName.LandingViewSectionHeader.name());
         style.addProperty("width", "50%");
         style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "bottom");
         addStyle(style);
 
-        style = new Style(".", StyleName.LandingPageContent.name());
+        style = new Style(".", StyleName.LandingViewSectionContent.name());
         style.addProperty("width", "50%");
         style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style(".", StyleName.LandingPageFooter.name());
+        style = new Style(".", StyleName.LandingViewSectionFooter.name());
         style.addProperty("width", "50%");
         style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LandingInputField.name()); // TODO should be same as width of component set by WatermarkDecoratorBuilder
+        style.addProperty("width", "20em");
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
         addStyle(style);
 
     }
@@ -134,9 +137,22 @@ public class LandingPagesTheme extends Theme {
     private void overrideCommonStyles() {
         Style style;
 
-        style = new Style(".", StyleName.LandingPage, " .WidgetDecoratorLabelHolder");
+        style = new Style(".", StyleName.LandingViewPanel, " .WidgetDecoratorLabelHolder");
         style.addProperty("padding", "0px");
         style.addProperty("margin", "0px");
         addStyle(style);
+
+        style = new Style(".", StyleName.LandingViewPanel, " .TextBox");
+        style.addProperty("border-radius", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("box-shadow", "1px 1px 3px grey inset");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LandingViewPanel, " .ListBox");
+        style.addProperty("border-radius", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("box-shadow", "1px 1px 3px grey inset");
+        addStyle(style);
+
     }
 }
