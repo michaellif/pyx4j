@@ -34,17 +34,21 @@ public class PortalSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace implements PublicPlace {
     }
 
+    /** This is the place when user must enter credentials and pass the humand verification to send the password request */
     @PlaceProperties(caption = "Reset Password")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
+    /** This is the place wher user gets redirected to change lost/forgotten password via email (from LoginWithToken) */
     @PlaceProperties(caption = "Reset Password")
     public static class PasswordReset extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Resident Registration")
     public static class Registration extends AppPlace implements PublicPlace {
+    }
 
+    public static class TermsAndConditions extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
@@ -55,11 +59,7 @@ public class PortalSiteMap implements SiteMap {
     public static class PasswordChange extends AppPlace {
     }
 
-    public static class Landing extends AppPlace {
-    }
-
     public static class PotentialTenants extends AppPlace {
-
     }
 
     @PlaceProperties(navigLabel = "Dashboard", caption = "Dashboard")
