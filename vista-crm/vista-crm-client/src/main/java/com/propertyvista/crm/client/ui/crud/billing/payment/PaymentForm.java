@@ -286,13 +286,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             // TODO : this is the HACK - check CComponent.setVisible implementation!!!
             paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
-
         }
 
-        paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
-        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
-
         if (isEditable()) {
+            paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
+            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+
             get(proto().transactionAuthorizationNumber()).setVisible(false);
             get(proto().transactionErrorMessage()).setVisible(false);
         } else {
