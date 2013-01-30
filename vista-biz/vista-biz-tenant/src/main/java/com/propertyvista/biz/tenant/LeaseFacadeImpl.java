@@ -1145,7 +1145,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
 
         for (Lease concurrent : Persistence.service().query(criteria)) {
-            if (concurrent.completion().isNull()) {
+            if (concurrent.completion().isNull() && !VistaFeatures.instance().yardiIntegration()) {
                 throw new IllegalStateException("Lease has no completion mark");
             }
             concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), 1));
