@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,6 +35,7 @@ import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@ToStringFormat("{0,choice,null#|!null#{0}-}{1} {2} {3} {4} {5}, {6}, {7} {8}, {9}")
 public interface AddressStructured extends IEntity {
 
     @I18n
@@ -75,25 +77,25 @@ public interface AddressStructured extends IEntity {
         }
     }
 
-    @ToString(index = 5)
+    @ToString(index = 0)
     IPrimitive<String> suiteNumber();
 
     @NotNull
-    @ToString(index = 0)
+    @ToString(index = 1)
     IPrimitive<String> streetNumber();
 
-    @ToString(index = 1)
+    @ToString(index = 2)
     IPrimitive<String> streetNumberSuffix();
 
     @NotNull
-    @ToString(index = 2)
+    @ToString(index = 3)
     IPrimitive<String> streetName();
 
     @NotNull
-    @ToString(index = 3)
+    @ToString(index = 4)
     IPrimitive<StreetType> streetType();
 
-    @ToString(index = 4)
+    @ToString(index = 5)
     IPrimitive<StreetDirection> streetDirection();
 
     @NotNull
@@ -110,14 +112,14 @@ public interface AddressStructured extends IEntity {
     Province province();
 
     @NotNull
-    @ToString(index = 8)
+    @ToString(index = 9)
     @Caption(name = "Country")
     @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
-    @ToString(index = 9)
+    @ToString(index = 8)
     @Caption(name = "Postal Code")
     IPrimitive<String> postalCode();
 
