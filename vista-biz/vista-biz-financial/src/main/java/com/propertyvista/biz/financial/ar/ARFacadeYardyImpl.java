@@ -64,6 +64,9 @@ public class ARFacadeYardyImpl implements ARFacade {
 
         ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
 
+        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+
     }
 
     @Override
@@ -82,6 +85,9 @@ public class ARFacadeYardyImpl implements ARFacade {
         Persistence.service().persist(reversal);
 
         ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
+
+        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
 
     }
 

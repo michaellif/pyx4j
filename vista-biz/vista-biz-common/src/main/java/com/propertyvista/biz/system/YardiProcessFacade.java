@@ -26,7 +26,7 @@ public interface YardiProcessFacade {
 
     void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord);
 
-    void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease);
+    void updateLease(Lease lease);
 
     void postReceipt(YardiReceipt receipt);
 

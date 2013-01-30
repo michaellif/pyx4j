@@ -213,7 +213,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
 
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(null, lease);
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(lease);
 
         Persistence.service().commit();
         callback.onSuccess(null);
