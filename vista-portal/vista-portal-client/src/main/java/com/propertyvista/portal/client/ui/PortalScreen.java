@@ -16,17 +16,21 @@ package com.propertyvista.portal.client.ui;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.mvp.CaptionActivityMapper;
 import com.propertyvista.portal.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.client.mvp.NavigActivityMapper;
+import com.propertyvista.portal.client.mvp.TopRightActivityMapper;
 import com.propertyvista.portal.client.mvp.UtilityActivityMapper;
 
 public class PortalScreen extends SimplePanel {
@@ -84,6 +88,20 @@ public class PortalScreen extends SimplePanel {
         utilityDisplay.setStyleName("content");
         main.add(utilityDisplay);
 
+        //============= Container for login/logout links on external HTML page ===========
+        DisplayPanel topRightDisplay = new DisplayPanel();
+
+        RootPanel topRightRoot = RootPanel.get(PortalSite.TOP_RIGHT_INSERTION_ID);
+
+        if (topRightRoot != null) {
+            topRightRoot.getElement().setInnerHTML("");
+            topRightRoot.clear();
+            topRightRoot.add(topRightDisplay);
+        } else {
+            throw new UserRuntimeException("Custome HTML page is missing <div>" + PortalSite.TOP_RIGHT_INSERTION_ID);
+        }
+
+        bind(new TopRightActivityMapper(), topRightDisplay, eventBus);
         bind(new UtilityActivityMapper(), utilityDisplay, eventBus);
         bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new CaptionActivityMapper(), captionDisplayPanel, eventBus);

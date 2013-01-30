@@ -31,6 +31,8 @@ import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
+import com.propertyvista.portal.client.ui.TopRightActionsView;
+import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.registration.TenantRegistrationView;
 import com.propertyvista.portal.client.ui.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
@@ -61,12 +63,12 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.v
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
@@ -109,6 +111,8 @@ public class PortalViewFactory extends ViewFactoryBase {
 
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
+            } else if (TopRightActionsView.class.equals(type)) {
+                map.put(type, new TopRightActionsViewImpl());
             } else if (CaptionView.class.equals(type)) {
                 map.put(type, new CaptionViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {

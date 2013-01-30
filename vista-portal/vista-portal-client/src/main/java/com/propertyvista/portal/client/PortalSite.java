@@ -48,6 +48,8 @@ public class PortalSite extends VistaSite {
 
     public static final String RESIDENT_INSERTION_ID = "vista.resident";
 
+    public static final String TOP_RIGHT_INSERTION_ID = "siteAuth";
+
     public PortalSite() {
         super("vista-portal", PortalSiteMap.class, new PortalSiteDispatcher());
     }
