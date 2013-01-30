@@ -71,7 +71,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
 
         if (skinComp instanceof CComboBox) {
-            ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5));
+            ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
         }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());

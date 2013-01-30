@@ -1,0 +1,29 @@
+.vista-pmsite-inquiryFormPage {
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-mainWrap {
+	width: 920px;
+	padding: 0 20px 20px 20px;
+	margin: 0 auto;
+	overflow: hidden;
+    background: #fff;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
+	display: inline-block;
+	width: 260px;
+	vertical-align: top;
+	padding: 0 20px 20px 20px;
+	margin-right: 20px;
+	float: left;
+	background-color:${object2_10};
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-main {
+	display: inline-block;
+	width: 600px;
+	vertical-align: top;
+}
+.vista-pmsite-inquiryFormPage .vista-pmsite-main .caption2 {
+}
+.vista-pmsite-inquiryFormPage .inquiryFormWrap {
+	min-height: 550px;
+	border-top: 5px solid #000000;
+}
