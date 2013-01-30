@@ -13,7 +13,11 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.rmi.RemoteException;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
@@ -110,7 +114,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             log.info("OpenReceiptBatch: {}", result);
             return result;
 
-        } catch (Exception e) {
+        } catch (RemoteException e) {
             throw new Error(e);
         }
     }
@@ -148,7 +152,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             }
-        } catch (Exception e) {
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
+            throw new Error(e);
+        } catch (XMLStreamException e) {
             throw new Error(e);
         }
     }
@@ -176,7 +184,9 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             }
-        } catch (Exception e) {
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
             throw new Error(e);
         }
     }

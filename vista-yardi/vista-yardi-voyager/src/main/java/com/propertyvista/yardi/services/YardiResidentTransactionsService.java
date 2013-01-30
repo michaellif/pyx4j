@@ -13,13 +13,16 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
+import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -171,6 +174,9 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     /**
      * Allows export of resident/transactional data for a given property/property list.
      * 
+     * @throws RemoteException
+     * @throws AxisFault
+     * 
      * @throws JAXBException
      */
     private ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws YardiServiceException {
@@ -203,9 +209,12 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
             return transactions;
 
-        } catch (Exception e) {
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
             throw new Error(e);
         }
+
     }
 
     private ResidentTransactions getResidentTransaction(YardiClient c, PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
@@ -238,7 +247,9 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
             return transactions;
 
-        } catch (Exception e) {
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
             throw new Error(e);
         }
     }
@@ -273,7 +284,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             }
-        } catch (Exception e) {
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
+            throw new Error(e);
+        } catch (XMLStreamException e) {
             throw new Error(e);
         }
     }
