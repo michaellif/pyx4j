@@ -19,10 +19,12 @@ BEGIN
 
         -- billing_account
 
-        ALTER TABLE billing_account ADD COLUMN id_discriminator VARCHAR(64);
+        ALTER TABLE billing_account     ADD COLUMN id_discriminator VARCHAR(64),
+                                        ADD COLUMN payment_accepted VARCHAR(50);
 
         EXECUTE 'UPDATE  '||v_schema_name||'.billing_account '
-                ||'SET     id_discriminator = ''Internal''';
+                ||'SET          id_discriminator = ''Internal'', '
+                ||'             payment_accepted = ''Any''';
 
 
         -- billing_arrears_snapshot
@@ -447,13 +449,7 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease_participant '
                 ||'SET  preauthorized_payment_discriminator = ''LeasePaymentMethod''';
 
-
-        -- lease_term
-
-        ALTER TABLE lease_term ADD COLUMN payment_accepted VARCHAR(50);
-
-        EXECUTE 'UPDATE '||v_schema_name||'.lease_term '
-                ||'SET payment_accepted = ''Any'' ';
+        
 
         -- maintenance
 
@@ -817,6 +813,7 @@ BEGIN
         ALTER TABLE available_locale ADD CONSTRAINT available_locale_lang_e_ck
                 CHECK ((lang) IN ('en', 'en_CA', 'en_GB', 'en_US', 'es', 'fr', 'fr_CA', 'ru', 'zh_CN', 'zh_TW'));
         ALTER TABLE billing_account ADD CONSTRAINT billing_account_id_discriminator_ck CHECK ((id_discriminator) IN ('Internal', 'YardiAccount'));
+        ALTER TABLE billing_account ADD CONSTRAINT billing_account_payment_accepted_e_ck CHECK ((payment_accepted) IN ('Any', 'CashEquivalent', 'DoNotAccept'));
         ALTER TABLE billing_arrears_snapshot ADD CONSTRAINT billing_arrears_snapshot_billing_account_discriminator_ck
                 CHECK ((id_discriminator = 'LeaseArrearsSnapshot' AND billing_account_discriminator IS NOT NULL)
                 OR (id_discriminator != 'LeaseArrearsSnapshot' AND billing_account_discriminator IS NULL));
@@ -858,7 +855,6 @@ BEGIN
                 CHECK ((preauthorized_payment_discriminator)= 'LeasePaymentMethod');
         ALTER TABLE lease ADD CONSTRAINT lease_status_e_ck
                 CHECK (status IN ('Active', 'Application', 'Approved', 'Cancelled', 'Closed', 'Completed', 'ExistingLease', 'NewLease'));
-        ALTER TABLE lease_term ADD CONSTRAINT lease_term_payment_accepted_e_ck CHECK ((payment_accepted) IN ('Any', 'CashEquivalent', 'DoNotAccept'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_customer_ck
                 CHECK ((id_discriminator = 'LeasePaymentMethod' AND customer IS NOT NULL)
                 OR (id_discriminator != 'LeasePaymentMethod' AND customer IS NULL));
