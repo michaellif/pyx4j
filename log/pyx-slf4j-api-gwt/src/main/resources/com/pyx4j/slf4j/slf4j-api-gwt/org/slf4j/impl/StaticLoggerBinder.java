@@ -1,7 +1,7 @@
-/* 
- * Copyright (c) 2004-2007 QOS.ch
+/**
+ * Copyright (c) 2004-2011 QOS.ch
  * All rights reserved.
- * 
+ *
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -9,10 +9,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -20,8 +20,8 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
-
 package org.slf4j.impl;
 
 import org.slf4j.ILoggerFactory;
@@ -57,17 +57,17 @@ public class StaticLoggerBinder {
    * The value of this field is usually modified with each release. 
    */
   // to avoid constant folding by the compiler, this field must *not* be final
-  public static String REQUESTED_API_VERSION = "1.6";  // !final
+  public static String REQUESTED_API_VERSION = "1.6.99";  // !final
   
   private StaticLoggerBinder() {
-    throw new UnsupportedOperationException("This code should have never made it into the jar");
+    throw new UnsupportedOperationException("This code should have never made it into slf4j-api.jar");
   }
 
   public ILoggerFactory getLoggerFactory() {
-    throw new UnsupportedOperationException("This code should never make it into the jar");
+    throw new UnsupportedOperationException("This code should never make it into slf4j-api.jar");
   }
 
   public String getLoggerFactoryClassStr() {
-    throw new UnsupportedOperationException("This code should never make it into the jar");
+    throw new UnsupportedOperationException("This code should never make it into slf4j-api.jar");
   }
 }

@@ -58,8 +58,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     /**
-     * Get all attached appenders as an Enumeration. If there are no attached appenders
-     * <code>null</code> is returned.
+     * Get all attached appenders as an Enumeration. If there are no attached appenders <code>null</code> is returned.
      * 
      * @return Enumeration An enumeration of attached appenders.
      */
@@ -209,7 +208,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     @Override
-    public void trace(String format, Object[] argArray) {
+    public void trace(String format, Object... argArray) {
         if (traceOn) {
             log(new LogEvent(Level.TRACE, format, null, argArray));
         }
@@ -244,7 +243,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     @Override
-    public void debug(String format, Object[] argArray) {
+    public void debug(String format, Object... argArray) {
         if (debugOn) {
             log(new LogEvent(Level.DEBUG, format, null, argArray));
         }
@@ -273,7 +272,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     @Override
-    public void info(String format, Object[] argArray) {
+    public void info(String format, Object... argArray) {
         log(new LogEvent(Level.INFO, format, null, argArray));
     }
 
@@ -298,7 +297,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     @Override
-    public void warn(String format, Object[] argArray) {
+    public void warn(String format, Object... argArray) {
         log(new LogEvent(Level.WARN, format, null, argArray));
     }
 
@@ -323,7 +322,7 @@ public class ClientLogger extends MarkerIgnoringBase {
     }
 
     @Override
-    public void error(String format, Object[] argArray) {
+    public void error(String format, Object... argArray) {
         log(new LogEvent(Level.ERROR, format, null, argArray));
     }
 
