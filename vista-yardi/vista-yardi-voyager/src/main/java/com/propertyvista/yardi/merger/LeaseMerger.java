@@ -86,14 +86,13 @@ public class LeaseMerger {
     }
 
     public PaymentAccepted getPaymentType(String type) {
-        switch (type) {
-        case "0":
+        if (type.equals("0")) {
             return PaymentAccepted.Any;
-        case "1":
+        } else if (type.equals("1")) {
             return PaymentAccepted.DoNotAccept;
-        case "2":
+        } else if (type.equals("2")) {
             return PaymentAccepted.CashEquivalent;
-        default:
+        } else {
             return PaymentAccepted.Any;
         }
 
