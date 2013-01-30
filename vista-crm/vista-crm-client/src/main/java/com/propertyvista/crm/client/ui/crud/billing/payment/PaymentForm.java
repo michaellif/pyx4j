@@ -67,6 +67,11 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
+        public Collection<PaymentType> defaultPaymentTypes() {
+            return PaymentType.avalableInCrm();
+        }
+
+        @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(

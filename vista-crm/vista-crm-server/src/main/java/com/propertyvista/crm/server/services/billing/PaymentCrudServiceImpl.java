@@ -64,8 +64,10 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         super.enhanceRetrieved(entity, dto, retrieveTraget);
         enhanceListRetrieved(entity, dto);
 
-        dto.participants().addAll(retrievePayableUsers(dto.billingAccount().lease()));
+        dto.paymentAccepted().setValue(dto.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
+
+        dto.participants().addAll(retrievePayableUsers(dto.billingAccount().lease()));
     }
 
     @Override
@@ -125,13 +127,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
         dto.billingAccount().set(billingAccount);
+        dto.paymentAccepted().setValue(billingAccount.paymentAccepted().getValue());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
+
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());
         dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
+
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
-        dto.paymentAccepted().setValue(billingAccount.lease().billingAccount().paymentAccepted().getValue());
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));

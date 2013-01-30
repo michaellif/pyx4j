@@ -14,6 +14,8 @@
 package com.propertyvista.portal.client.ui.residents.payment;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -55,8 +57,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public List<PaymentType> getPaymentTypes() {
-            return new ArrayList<PaymentType>(PaymentType.avalableInPortal());
+        public Collection<PaymentType> defaultPaymentTypes() {
+            return PaymentType.avalableInPortal();
         }
 
         @Override
@@ -201,6 +203,11 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseTermParticipant().isNull());
 
+        if (isEditable()) {
+            paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
+            paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+        }
+
 //        if (isEditable()) {
 //            get(proto().transactionAuthorizationNumber()).setVisible(false);
 //            get(proto().transactionErrorMessage()).setVisible(false);
@@ -273,6 +280,28 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 break;
             }
         }
+    }
+
+    private Collection<PaymentType> getAllowedPaymentTypes() {
+        // set allowed for the lease payments types selection: 
+        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>(PaymentType.avalableInPortal());
+        switch (PaymentForm.this.getValue().paymentAccepted().getValue()) {
+        case Any:
+            break;
+
+        case CashEquivalent:
+            allowedTypes.retainAll(PaymentType.cashEquivalentPayments());
+            break;
+
+        case DoNotAccept:
+            allowedTypes = new ArrayList<PaymentType>(EnumSet.noneOf(PaymentType.class));
+            break;
+
+        default:
+            break;
+        }
+
+        return allowedTypes;
     }
 
     protected void onIAgree(boolean set) {

@@ -33,7 +33,6 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -66,6 +65,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(entity, dto, retrieveTraget);
         enhanceListRetrieved(entity, dto);
+
+        dto.paymentAccepted().setValue(dto.billingAccount().paymentAccepted().getValue());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
     }
 
     @Override
@@ -84,7 +86,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.addThisPaymentMethodToProfile().setValue(!entity.paymentMethod().isOneTimePayment().getValue());
 
         Persistence.service().retrieve(dto.paymentMethod());
-
         Persistence.service().retrieve(dto.paymentMethod().customer());
         Persistence.service().retrieve(dto.leaseTermParticipant());
     }
@@ -128,15 +129,17 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
-        dto.leaseTermParticipant().set(tenant);
         dto.billingAccount().set(lease.billingAccount());
+        dto.paymentAccepted().setValue(lease.billingAccount().paymentAccepted().getValue());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
+
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
+        dto.leaseTermParticipant().set(tenant);
 
         // some default values:
-        dto.paymentStatus().setValue(PaymentStatus.Submitted);
         dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
         // calculate current balance:

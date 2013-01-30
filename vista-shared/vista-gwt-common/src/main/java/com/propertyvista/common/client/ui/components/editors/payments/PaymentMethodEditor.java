@@ -13,10 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -76,8 +74,11 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(
-                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL)), 25).build());
+        main.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
+                        RadioGroup.Layout.HORISONTAL)), 25).build());
 
         main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -122,7 +123,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     @Override
     public void onReset() {
         super.onReset();
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentTypes(), true);
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(EnumSet.allOf(PaymentType.class), true);
         (get(proto().type())).setNote(null);
         setBillingAddressVisible(false);
     }
@@ -291,8 +292,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     /**
      * Override in derived classes to supply alternative set of options.
      */
-    public List<PaymentType> getPaymentTypes() {
-        return new ArrayList<PaymentType>(EnumSet.allOf(PaymentType.class));
+    public Collection<PaymentType> defaultPaymentTypes() {
+        return EnumSet.allOf(PaymentType.class);
     }
 
     @SuppressWarnings("unchecked")

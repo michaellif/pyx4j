@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import java.util.List;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -70,7 +68,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         Image paymentTypeImage;
         FlowPanel holder;
 
-        for (PaymentType type : getPaymentTypes()) {
+        for (PaymentType type : defaultPaymentTypes()) {
             switch (type) {
             case Echeck:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
@@ -93,12 +91,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         }
 
         container.setWidget(++row, 0, paymentTypeImagesPanel);
-        container.setWidget(row, 1, inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.VERTICAL) {
-            @Override
-            public List<PaymentType> getOptions() {
-                return getPaymentTypes();
-            }
-        }));
+        container.setWidget(row, 1, inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());

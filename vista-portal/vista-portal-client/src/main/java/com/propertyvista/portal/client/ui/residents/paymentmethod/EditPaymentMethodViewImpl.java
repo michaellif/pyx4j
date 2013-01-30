@@ -13,8 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -32,8 +31,8 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
             @Override
-            public List<PaymentType> getPaymentTypes() {
-                return new ArrayList<PaymentType>(PaymentType.avalableInProfile());
+            public Collection<PaymentType> defaultPaymentTypes() {
+                return PaymentType.avalableInProfile();
             }
 
             @Override
