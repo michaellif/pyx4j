@@ -42,6 +42,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
@@ -133,10 +134,12 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
         }
 
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
-            rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
-            get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        if (VistaTODO.VISTA_2467_SHOW_TENANTSURE) {
+            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+                rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
+                rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
+                get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+            }
         }
         return container;
     }
