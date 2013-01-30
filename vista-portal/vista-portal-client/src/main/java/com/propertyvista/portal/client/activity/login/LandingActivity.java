@@ -18,9 +18,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
@@ -39,6 +41,11 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
     @Override
     public void signUp() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Registration());
+    }
+
+    @Override
+    public void showVistaTerms() {
+        Window.open(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), PortalSiteMap.PortalTermsAndConditions.class), null, null);
     }
 
     @Override

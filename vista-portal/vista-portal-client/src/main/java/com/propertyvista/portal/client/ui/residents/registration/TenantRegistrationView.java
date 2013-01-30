@@ -26,6 +26,8 @@ public interface TenantRegistrationView extends IsWidget {
 
         void onRegister();
 
+        void onShowVistaTerms();
+
     }
 
     void setPresenter(Presenter presenter);

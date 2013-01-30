@@ -48,7 +48,7 @@ public class PortalSiteMap implements SiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
-    public static class TermsAndConditions extends AppPlace implements PublicPlace {
+    public static class PortalTermsAndConditions extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")

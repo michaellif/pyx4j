@@ -21,6 +21,8 @@ public interface LandingView extends LoginView {
 
         void signUp();
 
+        void showVistaTerms();
+
     }
 
     /**

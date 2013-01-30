@@ -14,9 +14,10 @@
 package com.propertyvista.portal.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.shared.GWT;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -26,9 +27,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
@@ -86,5 +89,10 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
                 }
             }
         });
+    }
+
+    @Override
+    public void onShowVistaTerms() {
+        Window.open(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), PortalSiteMap.PortalTermsAndConditions.class), null, null);
     }
 }

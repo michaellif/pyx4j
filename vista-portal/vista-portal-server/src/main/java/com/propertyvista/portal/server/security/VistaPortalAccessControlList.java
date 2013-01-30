@@ -50,6 +50,7 @@ import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
+import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
@@ -98,6 +99,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         }
 
         grant(new IServiceExecutePermission(PortalAuthenticationService.class));
+        grant(new IServiceExecutePermission(PortalVistaTermsService.class));
         grant(new IServiceExecutePermission(SelfRegistrationBuildingsSourceService.class));
         grant(new EntityPermission(SelfRegistrationBuildingDTO.class, EntityPermission.READ));
 

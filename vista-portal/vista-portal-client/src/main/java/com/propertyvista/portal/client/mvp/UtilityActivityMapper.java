@@ -25,6 +25,7 @@ import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActiv
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.LogoutActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
+import com.propertyvista.portal.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -48,9 +49,10 @@ public class UtilityActivityMapper implements AppActivityMapper {
             activity = new PasswordChangeActivity();
         } else if (place instanceof PortalSiteMap.Registration) {
             activity = new TenantRegistrationActivity(place);
-
         } else if (place instanceof PortalSiteMap.LeaseContextSelection) {
             activity = new LeaseContextSelectionActivity();
+        } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
+            activity = new VistaTermsActivity();
         }
         callback.onSuccess(activity);
     }

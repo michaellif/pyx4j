@@ -35,6 +35,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -325,6 +326,16 @@ public class LandingViewImpl extends Composite implements LandingView {
         loginForm = new LoginForm();
         loginForm.initContent();
         sideLayout.getContent().add(loginForm);
+
+        HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
+        Anchor termsAndConditions = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
+            @Override
+            public void execute() {
+                presenter.showVistaTerms();
+            }
+        });
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditions, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        sideLayout.getContent().add(loginTermsLinkPanel);
 
         loginButton = new Button(i18n.tr("LOGIN"));
         loginButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());

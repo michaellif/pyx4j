@@ -24,7 +24,7 @@ public class LandingPagesTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        LandingViewPanel, LandingViewSectionContent, LandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField
+        LandingViewPanel, LandingViewSectionContent, LandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField, LandingTermsAndConditionsBox
 
     }
 
@@ -107,6 +107,10 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("width", "20em");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LandingTermsAndConditionsBox.name()); // TODO should be same as width of component set by WatermarkDecoratorBuilder        
+        style.addProperty("margin-top", "20px");
         addStyle(style);
 
     }
