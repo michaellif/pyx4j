@@ -96,7 +96,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
                 onRegister();
             }
         });
-        register.setStyleName(LandingPagesTheme.StyleName.LandingButton.name());
+        register.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         buttonHolder.setWidget(register);
 
         layout.getFooter().add(buttonHolder);
