@@ -121,6 +121,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel()), 15).build());
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
         detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().currentTerm().paymentAccepted(), new CEnumLabel()), 15).build());
 
         FormFlexPanel detailsPanel = new FormFlexPanel();
 
