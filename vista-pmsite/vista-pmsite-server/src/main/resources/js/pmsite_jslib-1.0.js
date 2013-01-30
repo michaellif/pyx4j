@@ -12,9 +12,9 @@ var Cookie = {
 			if (start != -1) {
 				start += search.length;
 				// set index of beginning of value
-				end = document.cookie.indexOf(";", start); 
+				end = document.cookie.indexOf(";", start);
 				// set index of end of cookie value
-				if (end == -1) 
+				if (end == -1)
 					end = document.cookie.length;
 				var value = document.cookie.substring(start, end);
 				// enclosing double quotes must e stripped
@@ -23,7 +23,7 @@ var Cookie = {
 				}
 				// return decoded value
 				return decodeURIComponent(value);
-			} 
+			}
 		}
 	}
 }
@@ -194,19 +194,3 @@ function submitGeolocationV2(form) {
 	gc.getLocations(address, callback);
 }
 
-function dev_selectAndSetNext(el1, el2, values) {
-	var nextVal;
-	if (el1.value == "") {
-		nextVal = values[0];
-	} else {
-		var p = values.indexOf(el1.value);
-		if ((p == -1)  || (p == values.length -1)) {
-			p = 0;
-		} else {
-			p++;
-		}
-		nextVal = values[p];
-	}
-	el1.value = nextVal; 
-	el2.value = nextVal; 
-}

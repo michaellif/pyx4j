@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -27,9 +28,7 @@ import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
-import com.propertyvista.pmsite.server.pages.RegistrationPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
-import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
@@ -83,8 +82,6 @@ public class MainNavigationPanel extends Panel {
                 } else if (ResidentsPage.class.equals(navItem.getDestination())
 
                 && ((MainNavigationPanel.this.getPage() instanceof ResidentsPage)
-
-                || (MainNavigationPanel.this.getPage() instanceof RegistrationPage)
 
                 || (MainNavigationPanel.this.getPage() instanceof SignInPage))) {
 

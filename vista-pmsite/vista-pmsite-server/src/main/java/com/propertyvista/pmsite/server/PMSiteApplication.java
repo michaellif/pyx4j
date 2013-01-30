@@ -31,9 +31,9 @@ import org.apache.wicket.Session;
 import org.apache.wicket.SystemMapper;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.IRequestHandler;
@@ -73,15 +73,8 @@ import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
-import com.propertyvista.pmsite.server.pages.PwdChangePage;
-import com.propertyvista.pmsite.server.pages.PwdResetPage;
-import com.propertyvista.pmsite.server.pages.RegistrationPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
-import com.propertyvista.pmsite.server.pages.SignInPage;
-import com.propertyvista.pmsite.server.pages.SignInWithTermsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
-import com.propertyvista.pmsite.server.pages.TermsAcceptancePage;
-import com.propertyvista.pmsite.server.pages.TermsDeclinedPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -108,18 +101,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     static {
         MountMap.put("", LandingPage.class);
         MountMap.put("city/#{" + ParamNameCityProv + "}", CityPage.class);
-        MountMap.put("signin", SignInPage.class);
-        MountMap.put("signterms", SignInWithTermsPage.class);
         MountMap.put("findapt", FindAptPage.class);
         MountMap.put("aptlist", AptListPage.class);
         MountMap.put("aptinfo", AptDetailsPage.class);
         MountMap.put("unitinfo", UnitDetailsPage.class);
         MountMap.put("residents", ResidentsPage.class);
-        MountMap.put("pwdreset", PwdResetPage.class);
-        MountMap.put("residents/registration", RegistrationPage.class);
-        MountMap.put("pwdchange", PwdChangePage.class);
-        MountMap.put("termsaccept", TermsAcceptancePage.class);
-        MountMap.put("termsdecline", TermsDeclinedPage.class);
         MountMap.put("inquiry", InquiryPage.class);
         MountMap.put("inquiryok", InquirySuccessPage.class);
         MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
@@ -309,7 +295,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     @Override
     public Session newSession(Request request, Response response) {
-        return new PMSiteSession(request);
+        return new WebSession(request);
     }
 
     @Override
@@ -365,16 +351,12 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-        return PMSiteSession.class;
+        return null;
     }
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-        return SignInPage.class;
-    }
-
-    protected Class<? extends WebPage> getPwdChangePage() {
-        return PwdChangePage.class;
+        return ResidentsPage.class;
     }
 
     protected String getReturnToTargetUrl() {
@@ -413,25 +395,6 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         PageParameters pp = new PageParameters();
         pp.add(ParamNameTarget, getReturnToTargetUrl());
         throw new RestartResponseException(getSignInPageClass(), pp);
-    }
-
-    @Override
-    protected void onUnauthorizedPage(final Page page) {
-        if (hasAnyRole(new Roles(PMSiteSession.PasswordChangeRequiredRole))) {
-            // redirect to Change Password page
-            PageParameters pp = new PageParameters();
-            pp.add(ParamNameTarget, getReturnToTargetUrl());
-            throw new RestartResponseException(getPwdChangePage(), pp);
-        } else if (hasAnyRole(new Roles(PMSiteSession.VistaTermsAcceptanceRequiredRole))) {
-            // redirect to LegalAcceptancePage
-            PageParameters pp = new PageParameters();
-            pp.add(ParamNameTarget, getReturnToTargetUrl());
-//            throw new RestartResponseException(TermsAcceptancePage.class, pp);
-            throw new RestartResponseException(SignInWithTermsPage.class, pp);
-        } else {
-            // redirect to home page
-            throw new RestartResponseException(getHomePage());
-        }
     }
 
     public static void onSecurePage(Request request) {
