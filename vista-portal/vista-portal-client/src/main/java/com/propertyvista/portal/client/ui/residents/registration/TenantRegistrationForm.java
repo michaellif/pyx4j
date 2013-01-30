@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.registration;
+package com.propertyvista.portal.client.ui.residents.registration;
 
 import java.util.List;
 

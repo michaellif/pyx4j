@@ -33,8 +33,6 @@ import com.propertyvista.portal.client.ui.PotentialTenantView;
 import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
-import com.propertyvista.portal.client.ui.registration.TenantRegistrationView;
-import com.propertyvista.portal.client.ui.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
@@ -57,6 +55,8 @@ import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethods
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoViewImpl;
+import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
+import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutView;

@@ -27,7 +27,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 
-import com.propertyvista.portal.client.ui.registration.TenantRegistrationView;
+import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
