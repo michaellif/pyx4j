@@ -16,6 +16,7 @@ package com.propertyvista.biz.tenant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -80,7 +81,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 credential.enabled().setValue(Boolean.TRUE);
                 Persistence.service().persist(credential);
             }
-        } else {
+            customer.portalRegistrationToken().setValue(null);
+        } else if (customer.portalRegistrationToken().isNull()) {
             customer.portalRegistrationToken().setValue(AccessKey.createPortalSecureToken());
         }
 
@@ -196,7 +198,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
         criteria.eq(criteria.proto().customer().person().name().firstName(), selfRegistration.firstName());
         criteria.eq(criteria.proto().customer().person().name().lastName(), selfRegistration.lastName());
-        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode());
+        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
 
         Tenant tenant = Persistence.service().retrieve(criteria);
         if (tenant == null) {
