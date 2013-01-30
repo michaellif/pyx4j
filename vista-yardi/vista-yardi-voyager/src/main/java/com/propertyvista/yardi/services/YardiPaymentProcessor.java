@@ -76,20 +76,11 @@ public class YardiPaymentProcessor {
 
     }
 
-    public ResidentTransactions getPaymentTransactionsForProperty(String propertyCode) {
+    public List<YardiReceipt> getPaymentReceiptsForProperty(String propertyCode) {
         EntityQueryCriteria<YardiReceipt> allPayments = EntityQueryCriteria.create(YardiReceipt.class);
         allPayments.add(PropertyCriterion.eq(allPayments.proto().billingAccount().lease().unit().building().propertyCode(), propertyCode));
         allPayments.add(PropertyCriterion.eq(allPayments.proto().claimed(), false));
-
-        ResidentTransactions paymentTransactions = new ResidentTransactions();
-        for (YardiReceipt yp : Persistence.service().query(allPayments)) {
-            // Create Payment transaction
-            Transactions transactions = createTransactionForPayment(yp);
-
-            // Add Property to batch
-            addTransactionToBatch(transactions, paymentTransactions);
-        }
-        return paymentTransactions;
+        return Persistence.service().query(allPayments);
     }
 
     public Transactions createTransactionForPayment(YardiReceipt yp) {

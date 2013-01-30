@@ -16,7 +16,10 @@ package com.propertyvista.yardi;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
@@ -27,6 +30,10 @@ public class YardiImportTest extends YardiTestBase {
     public void testImport() throws Exception {
         preloadData();
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
-        YardiResidentTransactionsService.getInstance().updateAll(yardiCredential);
+        StatisticsRecord dynamicStatisticsRecord = EntityFactory.create(StatisticsRecord.class);
+        dynamicStatisticsRecord.total().setValue(0L);
+        dynamicStatisticsRecord.failed().setValue(0L);
+        dynamicStatisticsRecord.processed().setValue(0L);
+        YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, dynamicStatisticsRecord);
     }
 }

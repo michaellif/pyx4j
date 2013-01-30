@@ -33,9 +33,9 @@ import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiClient;
@@ -59,7 +59,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void postReceiptBatch(PmcYardiCredential yc) throws YardiServiceException {
+    public void postReceiptBatch(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
 
         List<String> propertyCodes = getPropertyCodes(new YardiClient(yc.residentTransactionsServiceURL().getValue()), yc);
 
@@ -68,28 +68,39 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         log.info("Get properties information...");
         for (String propertyCode : propertyCodes) {
             long batchId = openReceiptBatch(client, yc, propertyCode);
-            ResidentTransactions residentTransactions = new YardiPaymentProcessor().getPaymentTransactionsForProperty(propertyCode);
-            if (residentTransactions.getProperty().size() == 0) {
-                continue;
+            int total = 0;
+            for (YardiReceipt receipt : new YardiPaymentProcessor().getPaymentReceiptsForProperty(propertyCode)) {
+                try {
+                    postReceiptForBatch(yc, client, batchId, receipt);
+                    dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                    total++;
+                } catch (YardiServiceException e) {
+                    dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                }
+                dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
             }
-            addReceiptsToBatch(client, yc, batchId, residentTransactions);
-            postReceiptBatch(client, yc, batchId);
-            Persistence.service().commit();
+            if (total > 0) {
+                postReceiptBatch(client, yc, batchId);
+            }
         }
     }
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException {
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
-        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
         long batchId = openReceiptBatch(client, yc, propertyCode);
+        postReceiptForBatch(yc, client, batchId, receipt);
+        new YardiPaymentProcessor().onPostReceiptSuccess(receipt);
+        postReceiptBatch(client, yc, batchId);
+    }
+
+    private void postReceiptForBatch(PmcYardiCredential yc, YardiClient client, long batchId, YardiReceipt receipt) throws YardiServiceException {
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
         if (residentTransactions.getProperty().size() > 0) {
             addReceiptsToBatch(client, yc, batchId, residentTransactions);
-            postReceiptBatch(client, yc, batchId);
-            Persistence.service().commit();
+            paymentProcessor.onPostReceiptSuccess(receipt);
         }
     }
 
