@@ -47,7 +47,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     @Override
-    public List<PaymentType> getPaymentOptions() {
+    public List<PaymentType> getPaymentTypes() {
         return Arrays.asList(PaymentType.CreditCard);
     }
 

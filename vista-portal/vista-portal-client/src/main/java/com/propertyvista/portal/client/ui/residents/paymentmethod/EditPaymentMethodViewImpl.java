@@ -32,7 +32,7 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
             @Override
-            public List<PaymentType> getPaymentOptions() {
+            public List<PaymentType> getPaymentTypes() {
                 return new ArrayList<PaymentType>(PaymentType.avalableInProfile());
             }
 

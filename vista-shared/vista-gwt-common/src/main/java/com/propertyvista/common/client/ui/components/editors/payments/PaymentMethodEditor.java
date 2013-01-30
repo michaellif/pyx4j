@@ -79,7 +79,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
             @Override
             public List<PaymentType> getOptions() {
-                return getPaymentOptions();
+                return getPaymentTypes();
             }
         }), 25).build());
 
@@ -126,7 +126,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     @Override
     public void onReset() {
         super.onReset();
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentOptions(), true);
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(getPaymentTypes(), true);
         (get(proto().type())).setNote(null);
         setBillingAddressVisible(false);
     }
@@ -237,19 +237,19 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     // some UI tuning mechanics for client:
 
-    public void setTypeSelectionVisible(boolean visible) {
+    public void setPaymentTypeSelectionVisible(boolean visible) {
         get(proto().type()).setVisible(visible);
     }
 
-    public boolean isTypeSelectionVisible() {
+    public boolean isPaymentTypeSelectionVisible() {
         return get(proto().type()).isVisible();
     }
 
-    public void setTypeSelectionEnabled(boolean visible) {
+    public void setPaymentTypeSelectionEnabled(boolean visible) {
         get(proto().type()).setEnabled(visible);
     }
 
-    public boolean isTypeSelectionEnabled() {
+    public boolean isPaymentTypeSelectionEnabled() {
         return get(proto().type()).isEnabled();
     }
 
@@ -290,20 +290,27 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         }
     }
 
-    public List<PaymentType> getPaymentOptions() {
+    // Payment Type options manipulation:
+
+    public List<PaymentType> getPaymentTypes() {
         return new ArrayList<PaymentType>(EnumSet.allOf(PaymentType.class));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setPaymentTypes(Collection<PaymentType> types) {
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptions(types);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setPaymentTypesEnabled(Collection<PaymentType> opt, boolean enabled) {
+        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
     }
 
     public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {
         if (electronicPaymentsEnabled != Boolean.TRUE) {
-            this.setPaymentOptionsEnabled(PaymentType.electronicPayments(), false);
+            this.setPaymentTypesEnabled(PaymentType.electronicPayments(), false);
             (get(proto().type())).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"));
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void setPaymentOptionsEnabled(Collection<PaymentType> opt, boolean enabled) {
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
     }
 
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {

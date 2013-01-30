@@ -38,14 +38,14 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        public List<PaymentType> getPaymentOptions() {
+        public List<PaymentType> getPaymentTypes() {
             return Arrays.asList(PaymentType.CreditCard);
         }
 
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            setTypeSelectionVisible(false);
+            setPaymentTypeSelectionVisible(false);
             setIsPreauthorizedVisible(true);
             setBillingAddressVisible(false);
         }

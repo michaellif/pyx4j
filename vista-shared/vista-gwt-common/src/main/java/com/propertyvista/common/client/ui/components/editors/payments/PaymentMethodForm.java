@@ -70,7 +70,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         Image paymentTypeImage;
         FlowPanel holder;
 
-        for (PaymentType type : getPaymentOptions()) {
+        for (PaymentType type : getPaymentTypes()) {
             switch (type) {
             case Echeck:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
@@ -96,7 +96,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         container.setWidget(row, 1, inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.VERTICAL) {
             @Override
             public List<PaymentType> getOptions() {
-                return getPaymentOptions();
+                return getPaymentTypes();
             }
         }));
 

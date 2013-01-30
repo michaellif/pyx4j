@@ -77,7 +77,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
             IsWidget w = super.createContent();
 
             // tune-up:
-            setTypeSelectionVisible(false);
+            setPaymentTypeSelectionVisible(false);
             setBillingAddressVisible(false);
             setIsPreauthorizedVisible(showPreauthorized);
 

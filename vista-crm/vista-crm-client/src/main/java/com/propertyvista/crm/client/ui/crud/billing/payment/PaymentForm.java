@@ -14,6 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -64,7 +67,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public List<PaymentType> getPaymentOptions() {
+        public List<PaymentType> getPaymentTypes() {
             return new ArrayList<PaymentType>(PaymentType.avalableInCrm());
         }
 
@@ -281,7 +284,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             paymentMethodEditor.setVisible(true);
             // Allow to Edit one time payment method
             paymentMethodEditor.setViewable(!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
-            paymentMethodEditor.setTypeSelectionEnabled(false);
+            paymentMethodEditor.setPaymentTypeSelectionEnabled(false);
             paymentMethodEditorSeparator.setVisible(true);
 
             // TODO : this is the HACK - check CComponent.setVisible implementation!!!
@@ -289,6 +292,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         }
 
+        paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         if (isEditable()) {
@@ -315,7 +319,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         paymentMethodEditor.reset();
         paymentMethodEditor.setVisible(false);
         paymentMethodEditor.setViewable(true);
-        paymentMethodEditor.setTypeSelectionEnabled(true);
+        paymentMethodEditor.setPaymentTypeSelectionEnabled(true);
         paymentMethodEditorSeparator.setVisible(false);
 
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
@@ -327,6 +331,29 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
                     @Override
                     public void onSuccess(List<LeasePaymentMethod> result) {
+                        switch (PaymentForm.this.getValue().paymentAccepted().getValue()) {
+                        case Any:
+                            break;
+
+                        case CashEquivalent:
+                            ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>(PaymentType.avalableInCrm());
+                            allowedTypes.retainAll(PaymentType.cashEquivalentPayments());
+
+                            Iterator<LeasePaymentMethod> it = result.iterator();
+                            while (it.hasNext()) {
+                                if (allowedTypes.contains(it.next().type().getValue())) {
+                                    it.remove();
+                                }
+                            }
+
+                        case DoNotAccept:
+                            result.clear();
+                            break;
+
+                        default:
+                            break;
+                        }
+
                         profiledPaymentMethodsCombo.setOptions(result);
                         if (callback != null) {
                             callback.onSuccess(null);
@@ -338,6 +365,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     private void chageLeaseParticipant() {
         paymentMethodEditor.reset();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
+        paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
             @Override
@@ -376,4 +404,25 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
+    private Collection<PaymentType> getAllowedPaymentTypes() {
+        // set allowed for the lease payments types selection: 
+        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>(PaymentType.avalableInCrm());
+        switch (PaymentForm.this.getValue().paymentAccepted().getValue()) {
+        case Any:
+            break;
+
+        case CashEquivalent:
+            allowedTypes.retainAll(PaymentType.cashEquivalentPayments());
+            break;
+
+        case DoNotAccept:
+            allowedTypes = new ArrayList<PaymentType>(EnumSet.noneOf(PaymentType.class));
+            break;
+
+        default:
+            break;
+        }
+
+        return allowedTypes;
+    }
 }

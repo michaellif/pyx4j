@@ -55,7 +55,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public List<PaymentType> getPaymentOptions() {
+        public List<PaymentType> getPaymentTypes() {
             return new ArrayList<PaymentType>(PaymentType.avalableInPortal());
         }
 
