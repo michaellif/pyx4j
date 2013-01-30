@@ -67,11 +67,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public List<PaymentType> getPaymentTypes() {
-            return new ArrayList<PaymentType>(PaymentType.avalableInCrm());
-        }
-
-        @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
@@ -199,10 +194,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
-                        if (getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+                        if (getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE) && getAllowedPaymentTypes().contains(PaymentType.Echeck)) {
                             paymentMethodEditor.initNew(PaymentType.Echeck);
-                        } else {
+                        } else if (getAllowedPaymentTypes().contains(PaymentType.Cash)) {
                             paymentMethodEditor.initNew(PaymentType.Cash);
+                        } else {
+                            paymentMethodEditor.initNew(null);
                         }
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());

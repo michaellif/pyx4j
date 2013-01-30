@@ -76,12 +76,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
-            @Override
-            public List<PaymentType> getOptions() {
-                return getPaymentTypes();
-            }
-        }), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(
+                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL)), 25).build());
 
         main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -292,6 +288,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     // Payment Type options manipulation:
 
+    /**
+     * Override in derived classes to supply alternative set of options.
+     */
     public List<PaymentType> getPaymentTypes() {
         return new ArrayList<PaymentType>(EnumSet.allOf(PaymentType.class));
     }
