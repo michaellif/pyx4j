@@ -27,8 +27,10 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.server.upgrade.UpgradeProcedure;
 import com.propertyvista.admin.server.upgrade.u_1_0_5.UpgradeProcedure105;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
 
 public class UpgradeProcedure106 implements UpgradeProcedure {
 
@@ -36,7 +38,7 @@ public class UpgradeProcedure106 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -44,6 +46,9 @@ public class UpgradeProcedure106 implements UpgradeProcedure {
         switch (upgradeStep) {
         case 1:
             runDefaultProductCatalogGeneration();
+            break;
+        case 2:
+            runTenantInsurancePolicyGeneration();
             break;
         default:
             throw new IllegalArgumentException();
@@ -78,5 +83,17 @@ public class UpgradeProcedure106 implements UpgradeProcedure {
         for (AptUnit unit : Persistence.service().query(criteria)) {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit);
         }
+    }
+
+    private void runTenantInsurancePolicyGeneration() {
+        log.info("Creating TenantInsurancePolicy and setting its scope to 'Organization'");
+        TenantInsurancePolicyPreloader policyPreloader = new TenantInsurancePolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Finished policy creation: " + policyCreationLog);
     }
 }
