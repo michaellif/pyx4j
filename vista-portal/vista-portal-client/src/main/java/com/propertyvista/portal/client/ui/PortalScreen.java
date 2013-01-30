@@ -98,7 +98,7 @@ public class PortalScreen extends SimplePanel {
             topRightRoot.clear();
             topRightRoot.add(topRightDisplay);
         } else {
-            throw new UserRuntimeException("Custome HTML page is missing <div>" + PortalSite.TOP_RIGHT_INSERTION_ID);
+            throw new UserRuntimeException("Custom HTML page is missing <div>" + PortalSite.TOP_RIGHT_INSERTION_ID);
         }
 
         bind(new TopRightActivityMapper(), topRightDisplay, eventBus);
