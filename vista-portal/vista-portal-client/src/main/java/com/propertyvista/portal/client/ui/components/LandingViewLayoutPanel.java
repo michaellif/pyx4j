@@ -15,8 +15,10 @@ package com.propertyvista.portal.client.ui.components;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
+import com.propertyvista.portal.client.ui.residents.login.LandingViewImpl.LandingHtmlTemplates;
 
 public class LandingViewLayoutPanel extends Composite {
 
@@ -74,6 +76,9 @@ public class LandingViewLayoutPanel extends Composite {
         footer.add(rightFooter);
         viewPanel.add(footer);
 
+        HTML orLine = makeOrLineDecoration();
+        viewPanel.add(orLine);
+
         initWidget(viewPanel);
     }
 
@@ -116,6 +121,11 @@ public class LandingViewLayoutPanel extends Composite {
             }
 
         };
+    }
+
+    private HTML makeOrLineDecoration() {
+        HTML orLine = new HTML(LandingHtmlTemplates.TEMPLATES.orLineSeparator(LandingPagesTheme.StyleName.LandingOrLineSeparator.name()));
+        return orLine;
     }
 
 }

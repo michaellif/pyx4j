@@ -87,7 +87,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         layout.getContent().add(signupform);
 
         SimplePanel buttonHolder = new SimplePanel();
-        buttonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
+        buttonHolder.addStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         buttonHolder.getElement().getStyle().setTextAlign(TextAlign.RIGHT); // TODO should it be in the THEME? add style dependant?
 
         Button register = new Button(i18n.tr("Register"), new Command() {
@@ -96,7 +96,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
                 onRegister();
             }
         });
-        register.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
+        register.setStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         buttonHolder.setWidget(register);
 
         layout.getFooter().add(buttonHolder);

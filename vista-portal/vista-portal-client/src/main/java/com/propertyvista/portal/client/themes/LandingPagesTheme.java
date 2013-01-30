@@ -24,7 +24,7 @@ public class LandingPagesTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        LandingViewPanel, LandingViewSectionContent, PortalLandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField
+        LandingViewPanel, LandingViewSectionContent, LandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField
 
     }
 
@@ -32,50 +32,30 @@ public class LandingPagesTheme extends Theme {
         overrideCommonStyles();
 
         Style style;
-
-        style = new Style(".", StyleName.PortalLandingButton);
-        style.addProperty("display", "inline-block");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("background-color", "#0099FF");
-        style.addProperty("border-color", "#003399");
-        style.addProperty("border-style", "outset");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-radius", "10px");
-        style.addProperty("color", "white");
-        style.addProperty("font-size", "15px");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("font-family", "Arial");
-        style.addProperty("text-align", "center");
-        style.addProperty("text-shadow", "1px 0 1px #003366");
-        style.addProperty("width", "150px");
-        style.addProperty("padding", "7px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.PortalLandingButton, ":hover");
-        style.addProperty("background-color", "#B8DBFF");
-        style.addProperty("color", "#003366");
+        style = new Style(".", StyleName.LandingViewPanel);
+        style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingCaption);
         style.addProperty("margin-top", "25px");
         style.addProperty("margin-bottom", "25px");
-        style.addProperty("text-align", "center");
-        style.addProperty("text-shadow", "1px 0 1px gray");
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingCaptionText);
-        style.addProperty("font-size", "20px");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingCaptionTextEmph);
-        style.addProperty("font-size", "20px");
-        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingOrLineSeparator);
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "0%");
+        style.addProperty("bottom", "0%");
+        style.addProperty("left", "50%");
+        style.addProperty("right", "50%");
         style.addProperty("border-color", "gray");
-        style.addProperty("height", "300px");
+
         addStyle(style);
 
         style = new Style(".", StyleName.LandingGreetingPanel.name());
@@ -92,9 +72,6 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
-        style.addProperty("font-size", "16px");
-        style.addProperty("font-style", "italic");
-        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingButtonHolder.name());
@@ -140,18 +117,6 @@ public class LandingPagesTheme extends Theme {
         style = new Style(".", StyleName.LandingViewPanel, " .WidgetDecoratorLabelHolder");
         style.addProperty("padding", "0px");
         style.addProperty("margin", "0px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.LandingViewPanel, " .TextBox");
-        style.addProperty("border-radius", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("box-shadow", "1px 1px 3px grey inset");
-        addStyle(style);
-
-        style = new Style(".", StyleName.LandingViewPanel, " .ListBox");
-        style.addProperty("border-radius", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("box-shadow", "1px 1px 3px grey inset");
         addStyle(style);
 
     }

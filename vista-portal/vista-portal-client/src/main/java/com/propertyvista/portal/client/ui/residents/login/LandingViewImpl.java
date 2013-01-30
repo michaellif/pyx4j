@@ -272,7 +272,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         bindLoginWidgets(viewPanel.getLeft());
         bindSingupWidgets(viewPanel.getRight());
 
-        final HTML orLine = makeOrLineDecoration();
         initWidget(viewPanel);
     }
 
@@ -328,7 +327,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         sideLayout.getContent().add(loginForm);
 
         loginButton = new Button(i18n.tr("LOGIN"));
-        loginButton.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
+        loginButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         loginButton.setCommand(new Command() {
 
             @Override
@@ -381,17 +380,12 @@ public class LandingViewImpl extends Composite implements LandingView {
                 LandingViewImpl.this.onSignUp();
             }
         });
-        signUpButton.setStyleName(LandingPagesTheme.StyleName.PortalLandingButton.name());
+        signUpButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
 
         SimplePanel signUpButtonHolder = new SimplePanel();
         signUpButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         signUpButtonHolder.setWidget(signUpButton);
         sideLayout.getFooter().add(signUpButtonHolder);
-    }
-
-    private HTML makeOrLineDecoration() {
-        HTML orLine = new HTML(LandingHtmlTemplates.TEMPLATES.orLineSeparator(LandingPagesTheme.StyleName.LandingOrLineSeparator.name()));
-        return orLine;
     }
 
     private HTML makeCaption(String emph, String normal) {
