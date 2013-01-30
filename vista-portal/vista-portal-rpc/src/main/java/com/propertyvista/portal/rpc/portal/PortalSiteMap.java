@@ -34,9 +34,11 @@ public class PortalSiteMap implements SiteMap {
     public static class LoginWithToken extends AppPlace implements PublicPlace {
     }
 
+    @PlaceProperties(caption = "Reset Password")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
+    @PlaceProperties(caption = "Reset Password")
     public static class PasswordReset extends AppPlace implements PublicPlace {
     }
 
@@ -49,6 +51,7 @@ public class PortalSiteMap implements SiteMap {
     public static class LeaseContextSelection extends AppPlace {
     }
 
+    @PlaceProperties(caption = "Change Password")
     public static class PasswordChange extends AppPlace {
     }
 

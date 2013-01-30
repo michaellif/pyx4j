@@ -52,7 +52,7 @@ public class PortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected AppPlace specialForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.TenantPortalPasswordChangeRequired)) {
-            return new PortalSiteMap.PasswordChange();
+            return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaCustomerBehavior.LeaseSelectionRequired)) {
             return new PortalSiteMap.LeaseContextSelection();
         } else {

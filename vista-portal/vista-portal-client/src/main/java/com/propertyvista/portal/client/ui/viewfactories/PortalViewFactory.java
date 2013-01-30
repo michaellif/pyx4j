@@ -119,6 +119,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new PasswordResetRequestViewImpl());
             } else if (PasswordResetView.class.equals(type)) {
                 map.put(type, new PasswordResetViewImpl());
+            } else if (PasswordChangeView.class.equals(type)) {
+                map.put(type, new PasswordChangeViewImpl());
             } else if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
             } else if (PasswordChangeView.class.equals(type)) {
