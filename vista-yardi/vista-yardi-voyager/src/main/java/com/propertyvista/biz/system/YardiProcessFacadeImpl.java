@@ -62,7 +62,12 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
     public void updateLease(StatisticsRecord dynamicStatisticsRecord, Lease lease) {
-        YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(), lease);
+        assert VistaFeatures.instance().yardiIntegration();
+        try {
+            YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(), lease);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

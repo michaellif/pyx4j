@@ -91,8 +91,8 @@ public class YardiPaymentProcessor {
             addTransactionToBatch(transactions, paymentTransactions);
 
             // mark payment as read
-            yp.claimed().setValue(true);
-            Persistence.service().persist(yp);
+//            yp.claimed().setValue(true);
+//            Persistence.service().persist(yp);
         }
         return paymentTransactions;
     }
@@ -152,8 +152,8 @@ public class YardiPaymentProcessor {
             allNSF.add(addTransactionToBatch(transactions, null));
 
             // mark payment as read
-            nsf.claimed().setValue(true);
-            Persistence.service().persist(nsf);
+//            nsf.claimed().setValue(true);
+//            Persistence.service().persist(nsf);
         }
         return allNSF;
     }
