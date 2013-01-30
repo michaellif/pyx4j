@@ -221,11 +221,12 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 
             log.info("GetResidentTransactions: {}", xml);
-            if (YardiServiceUtils.isMessageResponse(xml)) {
+            if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                log.error(YardiServiceUtils.toString(messages));
                 if (messages.isError()) {
                     throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
                 }
             }
 
@@ -259,14 +260,14 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
 
             log.info("GetResidentTransaction: {}", xml);
-            if (YardiServiceUtils.isMessageResponse(xml)) {
+            if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                log.error(YardiServiceUtils.toString(messages));
                 if (messages.isError()) {
                     throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
                 }
             }
-
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
             return transactions;
 
@@ -303,9 +304,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             log.info("ImportResidentTransactions: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            log.info(YardiServiceUtils.toString(messages));
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
+            } else {
+                log.info(messages.toString());
             }
         } catch (JAXBException e) {
             throw new Error(e);

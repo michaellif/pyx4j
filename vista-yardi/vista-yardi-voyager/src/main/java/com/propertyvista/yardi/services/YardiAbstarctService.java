@@ -62,17 +62,13 @@ public class YardiAbstarctService {
 
     protected List<String> getPropertyCodes(YardiClient client, PmcYardiCredential yc) throws YardiServiceException {
         List<String> propertyCodes = new ArrayList<String>();
-        try {
-            Properties properties = getPropertyConfigurations(client, yc);
-            for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
-                if (StringUtils.isNotEmpty(property.getCode())) {
-                    propertyCodes.add(property.getCode());
-                }
+        Properties properties = getPropertyConfigurations(client, yc);
+        for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
+            if (StringUtils.isNotEmpty(property.getCode())) {
+                propertyCodes.add(property.getCode());
             }
-            return propertyCodes;
-        } catch (Exception e) {
-            throw new YardiServiceException("Fail to get properties information from YARDI System", e);
         }
+        return propertyCodes;
     }
 
     /**
@@ -88,36 +84,48 @@ public class YardiAbstarctService {
      * @throws JAXBException
      */
 
-    protected Properties getPropertyConfigurations(YardiClient c, PmcYardiCredential yc) throws AxisFault, RemoteException, JAXBException {
-        c.transactionId++;
-        c.setCurrentAction(Action.GetPropertyConfigurations);
+    protected Properties getPropertyConfigurations(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
 
-        GetPropertyConfigurations l = new GetPropertyConfigurations();
-        l.setUserName(yc.username().getValue());
-        l.setPassword(yc.credential().getValue());
-        l.setServerName(yc.serverName().getValue());
-        l.setDatabase(yc.database().getValue());
-        l.setPlatform(yc.platform().getValue().name());
-        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
-        String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+        try {
+            c.transactionId++;
+            c.setCurrentAction(Action.GetPropertyConfigurations);
 
-        if (log.isDebugEnabled()) {
-            log.debug("GetPropertyConfigurations Result: {}", xml);
+            GetPropertyConfigurations l = new GetPropertyConfigurations();
+            l.setUserName(yc.username().getValue());
+            l.setPassword(yc.credential().getValue());
+            l.setServerName(yc.serverName().getValue());
+            l.setDatabase(yc.database().getValue());
+            l.setPlatform(yc.platform().getValue().name());
+            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
+            String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
+
+            if (log.isDebugEnabled()) {
+                log.debug("GetPropertyConfigurations Result: {}", xml);
+            }
+
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
+            }
+
+            Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
+
+            if (log.isDebugEnabled()) {
+                log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
+            }
+
+            return properties;
+
+        } catch (JAXBException e) {
+            throw new Error(e);
+        } catch (RemoteException e) {
+            throw new Error(e);
         }
-
-        if (YardiServiceUtils.isMessageResponse(xml)) {
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            throw new IllegalStateException(YardiServiceUtils.toString(messages));
-        }
-
-        Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
-
-        if (log.isDebugEnabled()) {
-            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
-        }
-
-        return properties;
     }
 
 }

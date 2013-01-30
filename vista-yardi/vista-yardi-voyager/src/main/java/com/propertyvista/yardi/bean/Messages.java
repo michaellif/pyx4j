@@ -19,6 +19,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.propertyvista.yardi.bean.Message.MessageType;
 
 @XmlRootElement(name = "Messages")
@@ -26,12 +28,18 @@ public class Messages {
 
     private List<Message> messages = new ArrayList<Message>();
 
+    public static boolean isMessageResponse(String s) {
+        return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (Message property : messages) {
-            sb.append("\n").append(property);
+        for (Message message : messages) {
+            if (StringUtils.isNotEmpty(message.getValue())) {
+                sb.append(String.format("Message type= %s, value= %s", message.getType(), message.getValue())).append("\n");
+            }
         }
 
         return sb.toString();

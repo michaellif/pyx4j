@@ -21,31 +21,26 @@ public class DevYardiCredentials {
 
     public static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-
-        cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
-        cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx");
-        cr.username().setValue("propertyvistaws");
-        cr.credential().setValue("52673");
-        cr.serverName().setValue("aspdb04");
-        cr.database().setValue("afqoml_live");
+        if (false) {
+            cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
+            cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx");
+            cr.username().setValue("propertyvistaws");
+            cr.credential().setValue("52673");
+            cr.serverName().setValue("aspdb04");
+            cr.database().setValue("afqoml_live");
+        } else {
+            cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20.asmx");
+            cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20_SysBatch.asmx");
+            cr.username().setValue("propertyvista");
+            cr.credential().setValue("52673");
+            cr.serverName().setValue("aspdb06\\sql2k5");
+            cr.database().setValue("afqoml_qa6008");
+        }
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
 
         return cr;
     }
 
-    public static PmcYardiCredential get2TestPmcYardiCredential() {
-        PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-
-        cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20.asmx");
-        cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20_SysBatch.asmx");
-        cr.username().setValue("propertyvista");
-        cr.credential().setValue("52673");
-        cr.serverName().setValue("aspdb06\\sql2k5");
-        cr.database().setValue("afqoml_qa6008");
-        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
-
-        return cr;
-    }
     // https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx 
 
     /**

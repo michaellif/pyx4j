@@ -164,10 +164,10 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             log.info("AddReceiptsToBatch: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            log.info(YardiServiceUtils.toString(messages));
-
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
+            } else {
+                log.info(messages.toString());
             }
         } catch (JAXBException e) {
             throw new Error(e);
@@ -197,9 +197,10 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             log.info("PostReceiptBatch: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            log.info(YardiServiceUtils.toString(messages));
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
+            } else {
+                log.info(messages.toString());
             }
         } catch (JAXBException e) {
             throw new Error(e);

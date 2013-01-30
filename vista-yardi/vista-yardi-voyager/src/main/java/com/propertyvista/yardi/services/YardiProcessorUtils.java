@@ -159,9 +159,7 @@ public class YardiProcessorUtils {
         if (reversal.applyNSF().isBooleanTrue()) {
             reversalType.setType("NSF");
         } else {
-            //reversalType.setType("Reversal");
-            //TODO find way to reverse receipt without nsf
-            reversalType.setType("NSF");
+            reversalType.setType("Reverse");
         }
         detail.setReversal(reversalType);
         detail.setDocumentNumber(pr.getPrimaryKey().toString());
