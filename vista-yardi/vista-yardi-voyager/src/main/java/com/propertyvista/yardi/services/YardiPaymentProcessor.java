@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -89,10 +88,6 @@ public class YardiPaymentProcessor {
 
             // Add Property to batch
             addTransactionToBatch(transactions, paymentTransactions);
-
-            // mark payment as read
-//            yp.claimed().setValue(true);
-//            Persistence.service().persist(yp);
         }
         return paymentTransactions;
     }
@@ -138,24 +133,22 @@ public class YardiPaymentProcessor {
         return batch;
     }
 
-    public List<ResidentTransactions> getAllReceiptReversals() {
-        List<ResidentTransactions> allNSF = new ArrayList<ResidentTransactions>();
-
+    public List<YardiReceiptReversal> getAllReceiptReversals() {
         EntityQueryCriteria<YardiReceiptReversal> nsfReversals = EntityQueryCriteria.create(YardiReceiptReversal.class);
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().applyNSF(), true));
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
-        for (YardiReceiptReversal nsf : Persistence.service().query(nsfReversals)) {
-            // Create Reversal transaction
-            Transactions transactions = createTransactionForReversal(nsf);
-
-            // Add Transaction to batch
-            allNSF.add(addTransactionToBatch(transactions, null));
-
-            // mark payment as read
-//            nsf.claimed().setValue(true);
-//            Persistence.service().persist(nsf);
-        }
-        return allNSF;
+        return Persistence.service().query(nsfReversals);
     }
 
+    public void onPostReceiptSuccess(YardiReceipt receipt) {
+        // mark reversal as posted
+        receipt.claimed().setValue(true);
+        Persistence.service().persist(receipt);
+    }
+
+    public void onPostReceiptReversalSuccess(YardiReceiptReversal reversal) {
+        // mark reversal as posted
+        reversal.claimed().setValue(true);
+        Persistence.service().persist(reversal);
+    }
 }

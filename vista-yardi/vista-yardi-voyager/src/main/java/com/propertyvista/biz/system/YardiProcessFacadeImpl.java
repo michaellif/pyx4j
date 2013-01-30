@@ -81,10 +81,10 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceiptReversal(YardiReceiptReversal reversal, boolean isNSF) {
+    public void postReceiptReversal(YardiReceiptReversal reversal) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal, isNSF);
+            YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

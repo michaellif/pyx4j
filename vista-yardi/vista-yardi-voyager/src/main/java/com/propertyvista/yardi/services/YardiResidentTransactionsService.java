@@ -107,37 +107,21 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     }
 
-    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal, boolean isNSF) {
+    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
 
-        try {
-            // for NSF reversals Yardi recommends one by one import
-            String xml = MarshallUtil.marshall(reversalTransactions);
-            log.info(xml);
-            importResidentTransactions(client, yc, xml);
-        } catch (Exception e) {
-            log.error("NSF import failed", e);
-        }
+        importResidentTransactions(client, yc, reversalTransactions);
+
+        paymentProcessor.onPostReceiptReversalSuccess(reversal);
     }
 
-    public void postReceiptReversalBatch(PmcYardiCredential yc) {
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
-
-        for (ResidentTransactions nsf : getAllReceiptReversals()) {
-            try {
-                // for NSF reversals Yardi recommends one by one import
-                String xml = MarshallUtil.marshall(nsf);
-                log.info(xml);
-                importResidentTransactions(client, yc, xml);
-            } catch (Exception e) {
-                log.error("NSF import failed", e);
-            }
+    public void postReceiptReversalBatch(PmcYardiCredential yc) throws YardiServiceException {
+        for (YardiReceiptReversal nsf : new YardiPaymentProcessor().getAllReceiptReversals()) {
+            postReceiptReversal(yc, nsf);
         }
-        //TODO getAllNSFReversals shouldn't claim payment
-        Persistence.service().commit();
     }
 
     private void updateBuildings(List<ResidentTransactions> allTransactions) {
@@ -182,10 +166,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
 
         return transactions;
-    }
-
-    private List<ResidentTransactions> getAllReceiptReversals() {
-        return new YardiPaymentProcessor().getAllReceiptReversals();
     }
 
     /**
@@ -263,7 +243,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
-    private void importResidentTransactions(YardiClient c, PmcYardiCredential yc, String nsfXml) throws YardiServiceException {
+    private void importResidentTransactions(YardiClient c, PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException {
         try {
             c.transactionId++;
             c.setCurrentAction(Action.ImportResidentTransactions);
@@ -276,8 +256,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             l.setPlatform(yc.platform().getValue().name());
             l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
 
+            String trXml = MarshallUtil.marshall(reversalTransactions);
+            log.info(trXml);
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
-            OMElement element = AXIOMUtil.stringToOM(nsfXml);
+            OMElement element = AXIOMUtil.stringToOM(trXml);
             transactionXml.setExtraElement(element);
             l.setTransactionXml(transactionXml);
 

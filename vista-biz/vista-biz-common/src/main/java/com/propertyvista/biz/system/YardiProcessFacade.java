@@ -30,6 +30,6 @@ public interface YardiProcessFacade {
 
     void postReceipt(YardiReceipt receipt);
 
-    void postReceiptReversal(YardiReceiptReversal reversal, boolean isNSF);
+    void postReceiptReversal(YardiReceiptReversal reversal);
 
 }

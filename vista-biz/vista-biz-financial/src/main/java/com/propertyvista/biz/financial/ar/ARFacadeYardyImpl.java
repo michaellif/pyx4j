@@ -81,7 +81,7 @@ public class ARFacadeYardyImpl implements ARFacade {
 
         Persistence.service().persist(reversal);
 
-        ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal, applyNSF);
+        ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
 
     }
 
