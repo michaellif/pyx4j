@@ -143,27 +143,33 @@ public class YardiProcessorUtils {
         return detail;
     }
 
-    public static Payment getNSFReversal(YardiReceiptReversal nsf) {
+    public static Payment getReceiptReversal(YardiReceiptReversal reversal) {
         Payment payment = new Payment();
         payment.setType(YardiPaymentType.Other.name());
-        payment.setDetail(getNSFReversalDetail(nsf));
+        payment.setDetail(getReceiptReversalDetail(reversal));
         return payment;
     }
 
-    public static Detail getNSFReversalDetail(YardiReceiptReversal nsf) {
-        PaymentRecord pr = nsf.paymentRecord();
+    public static Detail getReceiptReversalDetail(YardiReceiptReversal reversal) {
+        PaymentRecord pr = reversal.paymentRecord();
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
         Detail detail = new Detail();
         PaymentDetailReversal reversalType = new PaymentDetailReversal();
-        reversalType.setType("NSF");
+        if (reversal.applyNSF().isBooleanTrue()) {
+            reversalType.setType("NSF");
+        } else {
+            //reversalType.setType("Reversal");
+            //TODO find way to reverse receipt without nsf
+            reversalType.setType("NSF");
+        }
         detail.setReversal(reversalType);
         detail.setDocumentNumber(pr.getPrimaryKey().toString());
         detail.setTransactionDate(pr.createdDate().getValue());
-        detail.setCustomerID(nsf.billingAccount().lease().leaseId().getValue());
+        detail.setCustomerID(reversal.billingAccount().lease().leaseId().getValue());
         detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
         detail.setAmount(pr.amount().getValue().toString());
-        detail.setPropertyPrimaryID(nsf.billingAccount().lease().unit().building().propertyCode().getValue());
+        detail.setPropertyPrimaryID(reversal.billingAccount().lease().unit().building().propertyCode().getValue());
         return detail;
     }
 

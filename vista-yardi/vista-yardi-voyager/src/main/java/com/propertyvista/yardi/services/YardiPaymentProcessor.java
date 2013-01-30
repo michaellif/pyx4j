@@ -101,7 +101,7 @@ public class YardiPaymentProcessor {
 
         // Create Payment transaction
         Transactions transactions = new Transactions();
-        transactions.setPayment(YardiProcessorUtils.getNSFReversal(yr));
+        transactions.setPayment(YardiProcessorUtils.getReceiptReversal(yr));
         return transactions;
     }
 
@@ -126,7 +126,6 @@ public class YardiPaymentProcessor {
 
     public List<YardiReceiptReversal> getAllReceiptReversals() {
         EntityQueryCriteria<YardiReceiptReversal> nsfReversals = EntityQueryCriteria.create(YardiReceiptReversal.class);
-        nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().applyNSF(), true));
         nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
         return Persistence.service().query(nsfReversals);
     }

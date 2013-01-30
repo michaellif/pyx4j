@@ -42,6 +42,7 @@ import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -122,16 +123,14 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         paymentProcessor.onPostReceiptReversalSuccess(reversal);
     }
 
-    public void postReceiptReversalBatch(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
-        for (YardiReceiptReversal nsf : new YardiPaymentProcessor().getAllReceiptReversals()) {
+    public void postReceiptReversalBatch(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) {
+        for (YardiReceiptReversal reversals : new YardiPaymentProcessor().getAllReceiptReversals()) {
             try {
-                postReceiptReversal(yc, nsf);
-                dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                postReceiptReversal(yc, reversals);
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (YardiServiceException e) {
-                dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
             }
-            dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
-
         }
     }
 
@@ -144,11 +143,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         for (ResidentTransactions transaction : allTransactions) {
             try {
                 new YardiLeaseProcessor().updateLeases(transaction);
-                dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
             }
-            dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
         }
         log.info("All leases updated.");
     }
@@ -158,11 +156,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         for (ResidentTransactions transaction : allTransactions) {
             try {
                 new YardiChargeProcessor().updateCharges(transaction);
-                dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
             }
-            dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
         }
         log.info("All charges updated.");
     }

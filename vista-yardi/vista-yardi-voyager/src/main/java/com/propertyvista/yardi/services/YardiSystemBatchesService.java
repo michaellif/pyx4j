@@ -33,6 +33,7 @@ import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.domain.StatisticsRecord;
@@ -87,6 +88,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException {
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
+
+        Persistence.service().retrieve(receipt.billingAccount());
+        Persistence.service().retrieve(receipt.billingAccount().lease());
+        Persistence.service().retrieve(receipt.billingAccount().lease().unit());
+        Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
         long batchId = openReceiptBatch(client, yc, propertyCode);
