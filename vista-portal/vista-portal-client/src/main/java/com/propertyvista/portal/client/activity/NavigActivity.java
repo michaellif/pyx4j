@@ -69,7 +69,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());
         }
-        items.add(new PortalSiteMap.LogOut());
 
         view.setNavig(items);
 
