@@ -79,22 +79,9 @@ public class LeaseMerger {
     }
 
     public boolean validatePaymentTypeChanger(String paymentAccepted, Lease lease) {
-        if (!lease.billingAccount().paymentAccepted().getValue().equals(getPaymentType(paymentAccepted))) {
+        if (!lease.billingAccount().paymentAccepted().getValue().equals(BillingAccount.PaymentAccepted.getPaymentType(paymentAccepted))) {
             return true;
         }
         return false;
-    }
-
-    public BillingAccount.PaymentAccepted getPaymentType(String type) {
-        if (type.equals("0")) {
-            return BillingAccount.PaymentAccepted.Any;
-        } else if (type.equals("1")) {
-            return BillingAccount.PaymentAccepted.DoNotAccept;
-        } else if (type.equals("2")) {
-            return BillingAccount.PaymentAccepted.CashEquivalent;
-        } else {
-            return BillingAccount.PaymentAccepted.Any;
-        }
-
     }
 }

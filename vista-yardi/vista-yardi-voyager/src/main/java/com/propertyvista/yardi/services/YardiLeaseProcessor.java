@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -88,7 +89,7 @@ public class YardiLeaseProcessor {
             newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm);
             lease.currentTerm().set(newTerm);
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
-            lease.billingAccount().paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
+            lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             log.info("Lease {} successfully updated (term)", rtCustomer.getCustomerID());
         } else if (new LeaseMerger().validateLeaseChanges(yardiLease, lease)) {
@@ -130,7 +131,7 @@ public class YardiLeaseProcessor {
         if (yardiLease.getActualMoveIn() != null) {
             lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
         }
-        lease.billingAccount().paymentAccepted().setValue(new LeaseMerger().getPaymentType(rtCustomer.getPaymentAccepted()));
+        lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
 
         // add tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {

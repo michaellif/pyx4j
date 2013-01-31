@@ -15,6 +15,9 @@ package com.propertyvista.domain.financial;
 
 import javax.xml.bind.annotation.XmlType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
@@ -40,18 +43,49 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface BillingAccount extends IEntity {
 
+    final static Logger log = LoggerFactory.getLogger(BillingAccount.class);
+
     @I18n(context = "Payment Accepted")
     @XmlType(name = "PaymentAccepted")
     public enum PaymentAccepted {
-        Any,
+        Any(0),
 
-        DoNotAccept,
+        DoNotAccept(1),
 
-        CashEquivalent;
+        CashEquivalent(2);
+
+        private final int paymentCode;
+
+        PaymentAccepted(int paymentCode) {
+            this.paymentCode = paymentCode;
+        }
+
+        private int value() {
+            return paymentCode;
+        }
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public static PaymentAccepted getPaymentType(int paymentCode) {
+            for (PaymentAccepted code : PaymentAccepted.values()) {
+                if (code.value() == paymentCode) {
+                    return code;
+                }
+            }
+            return PaymentAccepted.Any;
+        }
+
+        public static PaymentAccepted getPaymentType(String paymentCode) {
+            int code = Integer.parseInt(paymentCode);
+            try {
+                return getPaymentType(code);
+            } catch (Exception e) {
+                log.error("Error parsing string to int for PaymentAccepted", e);
+                throw new Error("Error parsing string to int for PaymentAccepted", e);
+            }
         }
     }
 
