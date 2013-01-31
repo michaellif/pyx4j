@@ -877,7 +877,7 @@ BEGIN
         ALTER TABLE product ADD CONSTRAINT product_service_type_e_ck CHECK ((service_type) IN ('commercialUnit', 'residentialShortTermUnit', 'residentialUnit'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceCertificate'));
-        ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck CHECK ((skin) IN ('crm', 'skin1', 'skin2', 'skin3', 'skin4', 'skin5'));
+        ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_skin_e_ck CHECK ((skin) IN ('crm', 'skin1', 'skin2', 'skin3', 'skin4', 'skin5','skin6'));
 
         /**
         ***     ========================================================================================================================================
