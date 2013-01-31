@@ -245,9 +245,9 @@ public interface Lease extends IEntity {
 
     IPrimitive<LogicalDate> moveOutSubmissionDate();
 
+    @ReadOnly
     @JoinColumn
     @MemberColumn(notNull = true)
-    @ReadOnly
     @Owned(forceCreation = true, cascade = {})
     BillingAccount billingAccount();
 

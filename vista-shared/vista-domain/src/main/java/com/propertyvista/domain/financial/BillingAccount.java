@@ -81,5 +81,5 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<PaymentRecord> payments();
 
-    IPrimitive<BillingAccount.PaymentAccepted> paymentAccepted();
+    IPrimitive<PaymentAccepted> paymentAccepted();
 }
