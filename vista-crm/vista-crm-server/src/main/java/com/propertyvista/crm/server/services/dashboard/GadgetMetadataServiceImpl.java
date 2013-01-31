@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.dashboard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,14 +33,28 @@ import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 
 public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
     private static final I18n i18n = I18n.get(GadgetMetadataServiceImpl.class);
+
+    @Deprecated
+    /** VistaTODO #VISTA_2428_FORBID_ARREARS_GADGETS */
+    public static final List<Class<?>> ARREARS_RELATED_GAGDETS = Arrays.<Class<?>>asList(//@formatter:off
+            ArrearsStatusGadgetMetadata.class,
+            ArrearsSummaryGadgetMetadata.class,
+            ArrearsYOYAnalysisChartGadgetMetadata.class,
+            CollectionsGadgetMetadata.class            
+    );//@formatter:on 
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
@@ -96,6 +111,11 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
     }
 
     private static boolean isAcceptedBy(DashboardType boardType, Class<? extends GadgetMetadata> gadgetMetadataClass) {
+        if (VistaTODO.VISTA_2428_FORBID_ARREARS_GADGETS) {
+            if (ARREARS_RELATED_GAGDETS.contains(gadgetMetadataClass)) {
+                return false;
+            }
+        }
         return (boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(gadgetMetadataClass))
                 | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(gadgetMetadataClass));
     }

@@ -22,6 +22,8 @@ public interface VistaTODO {
 
     public static final boolean VISTA_2467_SHOW_TENANTSURE = false;
 
+    public static final boolean VISTA_2428_FORBID_ARREARS_GADGETS = true;
+
     /*
      * This is changed by BuildMaster when creating Branch.
      * Used by configurations to enable dual development environments.
