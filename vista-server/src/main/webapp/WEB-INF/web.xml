@@ -76,7 +76,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/robots.txt,/favicon.ico,/residents/*,/media/*,/o/*,*.siteimgrc</param-value>
+            <param-value>/robots.txt,/favicon.ico,/residents/\w*,/media/*,/o/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
@@ -111,7 +111,7 @@
         <servlet-name>OpenIdServlet</servlet-name>
         <url-pattern>/ob/o/openid</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>OpenIdServlet</servlet-name>
         <url-pattern>/portal/o/openid</url-pattern>
@@ -368,22 +368,22 @@
         <servlet-name>ApplicationDocumentServlet</servlet-name>
         <url-pattern>/application_document/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
     	<servlet-name>PmcDocumentServlet</servlet-name>
     	<servlet-class>com.propertyvista.portal.server.upload.PmcDocumentServlet</servlet-class>
     </servlet>
-    
+
     <servlet-mapping>
     	<servlet-name>PmcDocumentServlet</servlet-name>
     	<url-pattern>/pmc_document/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
     	<servlet-name>PmcDocumentServlet</servlet-name>
     	<url-pattern>/admin/pmc_document/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
     	<servlet-name>PmcDocumentServlet</servlet-name>
     	<url-pattern>/crm/pmc_document/*</url-pattern>
