@@ -15,6 +15,7 @@ package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -87,8 +88,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             List<String> propertyCodes = getPropertyCodes(client, yc);
             allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
         } else {
-            allTransactions = new ArrayList<ResidentTransactions>();
-            allTransactions.add(getResidentTransactions(client, yc, yc.propertyCode().getValue()));
+            List<String> propertyCodes = Arrays.asList(new String[] { yc.propertyCode().getValue() });
+            allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
         }
 
         updateBuildings(allTransactions, dynamicStatisticsRecord);
@@ -174,11 +175,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         for (ResidentTransactions transaction : allTransactions) {
             try {
                 new YardiPaymentProcessor().updatePayments(transaction);
-                dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
             }
-            dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
         }
         log.info("All payments updated.");
     }
