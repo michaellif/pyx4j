@@ -74,15 +74,23 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<LogicalDate> identityBirthDate();
 
-    AddressSimple identityAddressCurrent();
+    IPrimitive<LogicalDate> identityDeathDate();
 
-    AddressSimple identityAddressFormer();
+    IPrimitive<String> identitySIN();
 
-    // ??? identityEmploymentCurrent();
+    IPrimitive<String> identityMarritialStatus();
 
-    // ??? identityEmploymentFormer();
+    AddressSimple identityCurrentAddress();
 
-    // #29 in table?
+    AddressSimple identityFormerAddress();
+
+    IPrimitive<String> identityCurrentEmployer();
+
+    IPrimitive<String> identityCurrentOccupation();
+
+    IPrimitive<String> identityFormerEmployer();
+
+    IPrimitive<String> identityFormerOccupation();
 
     // Accounts
 
@@ -180,7 +188,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<LogicalDate> rentTo();
 
-    IPrimitive<LogicalDate> rentDuration(); // logical date? why have duration if we have start/end?
+    IPrimitive<LogicalDate> rentDuration();
 
     AddressSimple rentAddress();
 
@@ -211,5 +219,4 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IPrimitive<String> inquiriesCustomer();
 
     IPrimitive<String> inquiriesPhone();
-
 }
