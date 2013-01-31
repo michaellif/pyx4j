@@ -80,7 +80,8 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
                             }
                         }
                         if (!isForbidden) {
-                            retrieved.gadgetMetadataList().clear(); // We don't need to serailize all of these
+                            Persistence.service().retrieve(retrieved.ownerUser());
+                            retrieved.gadgetMetadataList().clear(); // We don't need to serialize all of these
                             filtered.add(retrieved);
                         }
                     }
