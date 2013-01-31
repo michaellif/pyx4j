@@ -71,8 +71,10 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().lastName())).build()));
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().secuirtyCode())).build()));
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().email())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("password")
+                .build()));
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).watermark(
+                "password").build()));
 
         contentPanel.add(center(userDataPanel));
 
@@ -80,12 +82,12 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String value) {
                 if (!get(proto().password()).getValue().equals(value)) {
-                    new ValidationError(component, i18n.tr(""));
+                    return new ValidationError(component, i18n.tr("Passwords don't match"));
                 }
                 return null;
             }
         });
-        get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().password())));
+        get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
         return contentPanel;
     }
