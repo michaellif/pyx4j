@@ -55,13 +55,15 @@ public class Messages {
     }
 
     public boolean isError() {
-        if (messages.size() != 1) {
+        if (messages.size() == 0) {
             throw new Error("Can't parse Message");
         }
-        if (messages.get(0).getType() == MessageType.FYI) {
-            return false;
-        } else {
-            return true;
+
+        for (Message message : messages) {
+            if (message.getType() == MessageType.Error) {
+                return true;
+            }
         }
+        return false;
     }
 }
