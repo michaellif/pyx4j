@@ -53,7 +53,7 @@
 }
 
 .vista-pmsite-residentPage .content {
-	min-height: 396px;
+	min-height: 200px;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
 	background-color: ${background_10};
@@ -93,6 +93,6 @@
     bottom: -7px;;
 }
 
-#gwt-debug-login {
+#gwt-debug-login, #gwt-debug-account {
 	white-space: nowrap;
 }

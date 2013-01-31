@@ -77,18 +77,14 @@
     font-size: 14pt;
 }
 
-.vista-pmsite-residentPage a, #gwt-debug-account {
+.vista-pmsite-residentPage a {
 	color: #999999;
 	white-space: nowrap;
 	padding: 10px 0;
 	font-size: 14px;
 }
 
-.vista-pmsite-residentPage .Anchor {
-	margin: 1em;
-}
-
-#gwt-debug-login {
+#gwt-debug-login, #gwt-debug-account {
 	white-space: nowrap;
 }
 
@@ -148,7 +144,7 @@
 	margin-right: 60px;
 }
 
-.vista-pmsite-residentPage .WidgetDecorator-readOnly .WidgetDecoratorLabel, .vista-pmsite-residentPage .BillingLineItem  {
+.vista-pmsite-residentPage .WidgetDecorator-readOnly .WidgetDecoratorLabel, .vista-pmsite-residentPage .BillingLineItem, .vista-pmsite-residentPage  .WidgetDecoratorLabel {
     color: #000000;
 }
 
