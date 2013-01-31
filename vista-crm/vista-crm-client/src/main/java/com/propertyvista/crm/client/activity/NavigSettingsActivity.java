@@ -73,9 +73,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
                 folder.addNavigItem(new Settings.CreditCheck.Setup());
                 folder.addNavigItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
             }
+            list.add(folder);
         }
-
-        list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Security"));
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
