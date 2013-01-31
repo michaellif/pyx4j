@@ -25,7 +25,6 @@ import com.pyx4j.essentials.server.report.ReportTableXLSXFormater;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -83,7 +82,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         maximum = tenants.size();
         progress = 0;
         for (Tenant tenant : tenants) {
-            formatter.cell(formatStreetAddress(tenant.lease().unit().building().info().address()));
+            formatter.cell(tenant.lease().unit().building().info().address().getStringView());
             formatter.cell(tenant.lease().unit().info().number().getValue());
             formatter.cell(tenant.customer().person().name().getStringView());
             formatter.cell(tenant.customer().portalRegistrationToken().getValue());
@@ -111,28 +110,5 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             return r;
         }
 
-    }
-
-    private String formatStreetAddress(AddressStructured address) {
-        StringBuilder addressBuilder = new StringBuilder();
-        addressBuilder.append(address.streetNumber().getValue());
-        addressBuilder.append(" ");
-        addressBuilder.append(address.streetName().getValue());
-        if (!address.streetType().isNull()) {
-            addressBuilder.append(" ").append(address.streetType().getValue().toString());
-        }
-        if (!address.streetDirection().isNull()) {
-            addressBuilder.append(" ").append(address.streetDirection().getValue().toString());
-        }
-        addressBuilder.append(", ");
-        addressBuilder.append(address.city().getValue());
-        addressBuilder.append(" ");
-        addressBuilder.append(address.province().code().getValue());
-        addressBuilder.append(" ");
-        addressBuilder.append(address.postalCode().getValue());
-        addressBuilder.append(", ");
-        addressBuilder.append(address.country().name().getValue());
-
-        return addressBuilder.toString();
     }
 }
