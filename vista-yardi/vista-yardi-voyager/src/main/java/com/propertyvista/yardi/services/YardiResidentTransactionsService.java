@@ -82,9 +82,14 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
-        List<String> propertyCodes = getPropertyCodes(client, yc);
-
-        List<ResidentTransactions> allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
+        List<ResidentTransactions> allTransactions;
+        if (yc.propertyCode().isNull()) {
+            List<String> propertyCodes = getPropertyCodes(client, yc);
+            allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
+        } else {
+            allTransactions = new ArrayList<ResidentTransactions>();
+            allTransactions.add(getResidentTransactions(client, yc, yc.propertyCode().getValue()));
+        }
 
         updateBuildings(allTransactions, dynamicStatisticsRecord);
 

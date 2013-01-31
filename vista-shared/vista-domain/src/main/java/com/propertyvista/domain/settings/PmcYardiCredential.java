@@ -63,4 +63,6 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<Platform> platform();
 
+    IPrimitive<String> propertyCode();
+
 }
