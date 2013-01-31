@@ -17,6 +17,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -48,7 +52,10 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeYardyImpl implements ARFacade {
+
     private static final I18n i18n = I18n.get(ARFacadeYardyImpl.class);
+
+    private static final Logger log = LoggerFactory.getLogger(ARFacadeYardyImpl.class);
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
@@ -62,10 +69,21 @@ public class ARFacadeYardyImpl implements ARFacade {
 
         Persistence.service().persist(receipt);
 
-        ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
+        try {
+            ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
+        } catch (Throwable e) {
+            log.debug("handling Yardi.postReceipt error", e);
+            Validate.isTrue(!receipt.claimed().getValue(), "postReceipt is schedule to nightly process");
+        }
 
-        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+        Persistence.service().commit();
+
+        try {
+            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+        } catch (Throwable ignoreDataRetrivalFromYardy) {
+            log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+        }
 
     }
 
@@ -79,15 +97,25 @@ public class ARFacadeYardyImpl implements ARFacade {
         reversal.taxTotal().setValue(BigDecimal.ZERO);
         reversal.claimed().setValue(false);
         reversal.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-        // TODO - use applyNSF...
         reversal.applyNSF().setValue(applyNSF);
 
         Persistence.service().persist(reversal);
 
-        ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
+        try {
+            ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
+        } catch (Throwable e) {
+            log.debug("handling Yardi.postReceipt error", e);
+            Validate.isTrue(!reversal.claimed().getValue(), "postReceipt is schedule to nightly process");
+        }
 
-        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+        Persistence.service().commit();
+
+        try {
+            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+        } catch (Throwable ignoreDataRetrivalFromYardy) {
+            log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
+        }
 
     }
 

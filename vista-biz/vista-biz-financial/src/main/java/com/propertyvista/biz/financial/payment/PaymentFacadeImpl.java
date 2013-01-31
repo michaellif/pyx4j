@@ -130,7 +130,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
             break;
         case CreditCard:
             // The credit card processing is done in new transaction and committed regardless of results
-            Persistence.service().commit();
             CreditCardProcessor.realTimeSale(paymentRecord);
             break;
         case Echeck:
