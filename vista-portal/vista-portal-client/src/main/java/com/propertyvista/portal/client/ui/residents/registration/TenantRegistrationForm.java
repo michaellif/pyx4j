@@ -15,11 +15,15 @@ package com.propertyvista.portal.client.ui.residents.registration;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -67,21 +71,51 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
 
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
+
+        FlowPanel userDataLabelHolder = new FlowPanel();
+        SimplePanel tooltipImageHolder = new SimplePanel();
+        tooltipImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        tooltipImageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        Image tooltipImage = new Image(ImageFactory.getImages().formTooltipInfo());
+        tooltipImage
+                .setTitle(i18n
+                        .tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you. You should have received this code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly"));
+
+        tooltipImageHolder.add(tooltipImage);
+
+        Label userDataLabel = new Label();
+        userDataLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        userDataLabel.getElement().getStyle().setDisplay(Display.INLINE);
+        userDataLabel.setText(i18n.tr("Please fill in your name, email address, and the security code:"));
+
+        userDataLabelHolder.add(userDataLabel);
+        userDataLabelHolder.add(tooltipImageHolder);
+
+        userDataPanel.add(center(userDataLabelHolder));
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().firstName())).build()));
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().lastName())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().secuirtyCode())).build()));
         userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().email())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("password")
-                .build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).watermark(
-                "password").build()));
-
+        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().secuirtyCode())).build()));
         contentPanel.add(center(userDataPanel));
+
+        FlowPanel definePasswordPanel = new FlowPanel();
+        definePasswordPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
+        Label definePasswordLabel = new Label();
+        definePasswordLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        definePasswordLabel.setText(i18n.tr("Set up your password:"));
+        definePasswordPanel.add(definePasswordLabel);
+        definePasswordPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("")
+                .build()));
+        definePasswordPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).watermark(
+                "").build()));
+
+        contentPanel.add(center(definePasswordPanel));
 
         get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
-                if (!get(proto().password()).getValue().equals(value)) {
+            public ValidationError isValid(CComponent<String, ?> component, String confirmPassword) {
+                String password = (get(proto().password())).getValue();
+                if ((password == null & confirmPassword != null) | (password != null & confirmPassword == null) || (!password.equals(confirmPassword))) {
                     return new ValidationError(component, i18n.tr("Passwords don't match"));
                 }
                 return null;
