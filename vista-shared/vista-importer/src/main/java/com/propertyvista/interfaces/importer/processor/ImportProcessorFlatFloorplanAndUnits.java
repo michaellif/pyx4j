@@ -16,13 +16,13 @@ package com.propertyvista.interfaces.importer.processor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.zip.CRC32;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,6 +33,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.domain.media.Media;
@@ -182,7 +183,6 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
                 //Units
                 {
-                    List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO aptUnitIO : floorplanIO.units()) {
                         aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
                         {
@@ -195,7 +195,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                                 Floorplan oldFloorplan = unit.floorplan();
                                 floorplan = mergeMedia(oldFloorplan, floorplan, mediaInfor);
                                 unit.floorplan().set(floorplan);
-                                Persistence.service().persist(unit);
+                                ServerSideFactory.create(BuildingFacade.class).persist(unit);
                                 continue;
                             }
                         }
@@ -206,13 +206,10 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                         i.info()._bathrooms().set(floorplan.bathrooms());
                         i.info()._bedrooms().set(floorplan.bedrooms());
                         i.info().floor().set(aptUnitIO.floor());
-                        items.add(i);
+                        ServerSideFactory.create(BuildingFacade.class).persist(i);
+                        counters.units++;
 
                     }
-
-                    Persistence.service().merge(items);
-                    counters.units += items.size();
-
                 }
             }
         }
