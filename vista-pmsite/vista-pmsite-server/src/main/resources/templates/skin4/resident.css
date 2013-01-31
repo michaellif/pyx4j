@@ -1,9 +1,6 @@
 .vista-pmsite-residentPage {
 }
 
-.vista-pmsite-residentPage .vista-pmsite-main {
-}
-
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 500px;
 }
@@ -15,23 +12,32 @@
 	background: #fff;
 }
 
-.vista-pmsite-residentPage .caption {
+.vista-pmsite-residentPage .PortalView .vista-pmsite-mainWrap {
 	width: 920px;
-	margin: 0 20px;
+	padding: 0 20px 20px 20px;
+}
+
+.vista-pmsite-residentPage .caption {
 	border-top: 1px solid #000000;
+	border-bottom: 5px solid #000000;
+	overflow: hidden;
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
-	padding: 35px 0;
+	border-top: 1px solid #000000;
+	padding: 20px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
+	margin-right: 20px;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul {
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
+	font-size: 16px;
+    font-weight: normal;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
@@ -39,24 +45,89 @@
 	font-weight: normal;
 	height: 28px;
 	overflow: hidden;
-	padding: 0 10px 0 35px;
+	padding: 0 10px 0 20px;
 }
 
-
-.vista-pmsite-residentPage .secondaryNavig ul li:hover div {
-	color: red;
+.vista-pmsite-residentPage .secondaryNavig ul li.active {
+    background: url("images/menu_active.png") no-repeat scroll 0 50% transparent;
 }
 
-.vista-pmsite-residentPage .secondaryNavig ul li.active div {
-	color: red;
-	font-weight: bold;
+.vista-pmsite-residentPage .secondaryNavig ul li:hover {
+	color: #CCCCCC;
+    outline: medium none;
+    text-decoration: none;
+    text-decoration: underline;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-main .content {
-	min-height: 500px;
+	min-height: 200px;
 	line-height: 20px;
-	width: 920px;
-	margin: 0 20px;
-	border-top: 5px solid #000000;
 	padding-top: 30px;
+    overflow: hidden;
+}
+
+
+.vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaption  {
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: bold;
+    text-shadow: none;
+    letter-spacing: 1px;
+}
+
+.vista-pmsite-residentPage a, #gwt-debug-account {
+	color: #999999;
+	white-space: nowrap;
+	padding: 10px 0;
+	font-size: 14px;
+}
+
+.vista-pmsite-residentPage .Anchor {
+	margin: 1em;
+}
+
+.vista-pmsite-residentPage .TenantDashboardSection {
+	padding-top: 20px;
+}
+
+.vista-pmsite-residentPage .FormFlexPanelH3Label {
+    color: black;
+    font-family: monospace;
+    font-size: 13pt;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.vista-pmsite-residentPage .Button {
+    background: none repeat scroll 0 0 #000000;
+    border: none;
+    color: #E6E6E6;
+    cursor: pointer;
+    float: right;
+    font-size: 16px;
+    padding: 10px;
+    width: auto;
+    min-width: 70px;
+    text-align: center;
+}
+
+.vista-pmsite-residentPage .EntityFolderAddButton {
+	color: #000000;
+	font-weight: bold;
+}
+
+.vista-pmsite-residentPage .WidgetDecoratorLabel {
+	color: #000000;
+}
+
+.vista-pmsite-residentPage .EntityFolderTableHeaderLabel  {
+	color: #000000;
+}
+
+.vista-pmsite-residentPage .TextBox {
+	border: 1px solid #000000;
+}
+
+.vista-pmsite-residentPage .ListBox {
+	border: 1px solid #000000;
 }
