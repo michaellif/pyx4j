@@ -88,9 +88,8 @@
 	margin: 1em;
 }
 
-.vista-pmsite-residentPage .Anchor .gwt-debug-login {
+#gwt-debug-login {
 	white-space: nowrap;
-	width: auto;
 }
 
 .vista-pmsite-residentPage .TenantDashboardSection {
@@ -156,5 +155,4 @@
 .vista-pmsite-residentPage .WidgetDecorator-readOnly, .vista-pmsite-residentPage  .BillingBillTotal .WidgetDecoratorComponent {
 	color: #000000;
 	font-weight: normal;
-
 }
