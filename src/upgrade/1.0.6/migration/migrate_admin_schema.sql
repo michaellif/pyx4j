@@ -68,6 +68,7 @@ CREATE TABLE admin_pmc_yardi_credential
         server_name                             VARCHAR(500),
         db                                      VARCHAR(500),
         platform                                VARCHAR(50),
+        property_code                           VARCHAR(500),
                 CONSTRAINT      admin_pmc_yardi_credential_pk PRIMARY KEY(id),
                 CONSTRAINT      admin_pmc_yardi_credential_pmc_fk FOREIGN KEY(pmc)
                         REFERENCES admin_pmc(id),
