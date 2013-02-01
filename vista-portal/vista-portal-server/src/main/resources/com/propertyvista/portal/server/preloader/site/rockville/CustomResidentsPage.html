@@ -18,13 +18,1646 @@
 <meta name="description" content="Toronto Apartments for rent from Greenwin .  Apartment rentals also available in Hamilton, Ottawa, London, Mississauga, Cambridge, Scarborough, Halifax and Montreal." /> <link href="http://www.greenwin.ca/css/lws/lws-reset-1.0.0.css" type="text/css" rel="stylesheet" media="screen, projection" charset="utf-8" /><link href="http://www.greenwin.ca/css/lws/lws-helpers-1.0.0.css" type="text/css" rel="stylesheet" media="screen, projection" charset="utf-8" /><link href="http://www.greenwin.ca/css/greenwin/greenwin-1.0.0.css" type="text/css" rel="stylesheet" media="screen, projection" charset="utf-8" /><link href="http://www.greenwin.ca/css/greenwin/greenwin-2.0.0.css" type="text/css" rel="stylesheet" media="screen, projection" charset="utf-8" /><link href="http://www.greenwin.ca/css/boxslider/jquery.bxslider2.0.1.css" type="text/css" rel="stylesheet" media="screen, projection" charset="utf-8" /><script src="http://www.greenwin.ca/js/modernizr.custom.js" type="text/javascript" charset="utf-8"></script><script src="http://www.greenwin.ca/js/jquery/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script><script src="http://www.greenwin.ca/swf/AC_RunActiveContent.js" type="text/javascript" charset="utf-8"></script><script src="http://www.greenwin.ca/swf/swfobject.js" type="text/javascript" charset="utf-8"></script><script src="http://www.greenwin.ca/js/boxslider/jquery.bxslider2.0.1.min.js" type="text/javascript" charset="utf-8"></script>	<meta name="google-site-verification" content="n_EtxYQ2-ZQXdVxg09colKp6sKFTSHxqI9d5YVBx1fU" />
 
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold&subset=latin' rel='stylesheet' type='text/css'>
+<style>
+.HorizontalAlignCenter {
+  margin-left: auto;
+  margin-right: auto;
+}
+.TextBox {
+  font: 12px Arial, Helvetica, sans-serif;
+  color: #666666;
+  background-color: #ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c2c2c2;
+  padding: 2px 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.TextBox td {
+  padding: 0px;
+}
+.TextBox-watermark {
+  color: #d1d1d1;
+}
+.ListBox {
+  color: #666666;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c2c2c2;
+}
+.Button {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c2c2c2;
+  padding: 0 3px;
+  display: inline-block;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e0e0e0');
+background:-moz-linear-gradient(top,  #ffffff,  #e0e0e0);
+background:-webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e0e0e0));
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.ButtonContent {
+}
+.ButtonText {
+  vertical-align: middle;
+  whiteSpace: nowrap;
+  position: relative;
+  text-indent: 0;
+  height: 100%;
+}
+.Button-hover {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#ffffff');
+background:-moz-linear-gradient(top,  #e0e0e0,  #ffffff);
+background:-webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#ffffff));
+}
+.Button-disabled {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0', endColorstr='#f0f0f0');
+background:-moz-linear-gradient(top,  #f0f0f0,  #f0f0f0);
+background:-webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  cursor: default;
+  opacity: 0.4;
+}
+.Toolbar {
+  white-space: nowrap;
+}
+.ToolbarItem {
+  display: inline-block;
+  padding-left: 4px;
+  vertical-align: middle;
+}
+.ToolbarSeparator {
+  border-left: 1px solid;
+  border-left-color: #b3b3b3;
+  margin-left: 8px;
+  height: 20px;
+  display: inline-block;
+}
+.Toolbar .Anchor {
+  color: #b3a57d;
+  font-size: 1.1em;
+  font-weight: bolder;
+  padding: 3px 6px;
+}
+.RateItBar {
+  cursor: pointer;
+}
+.ImageGallery {
+  margin: 0;
+  padding: 3px 5px;
+  border: 1px solid #ccc;
+  background: white;
+}
+.ImageGallery-ImageFrame {
+  border: 2px solid #eee;
+}
+.ImageGallery-ImageFrame:hover {
+  border: 2px solid #ccc;
+}
+.RadioGroup {
+}
+.RadioGroupItem {
+}
+.RadioGroupItem-pushed {
+}
+.RadioGroupItem-disabled {
+  color: #d1d1d1;
+}
+.WidgetDecorator {
+  border-spacing: 0;
+  padding: 0.2em 0;
+}
+.WidgetDecorator-readOnly {
+  font-weight: bold;
+  color: #666666;
+}
+.WidgetDecoratorLabelHolder {
+  padding-right: 1em;
+}
+.WidgetDecoratorLabel {
+  color: #666666;
+  font-weight: bold;
+  display: inline;
+}
+.WidgetDecorator-readOnly .WidgetDecoratorLabel {
+  color: #b3b3b3;
+}
+.WidgetDecoratorInfoImage {
+  padding-left: 5px;
+  line-height: 0;
+  vertical-align: middle;
+}
+.WidgetDecoratorMandatoryImage {
+  display: inline-block;
+  width: 5px;
+  padding-right: 3px;
+}
+.WidgetDecorator-noMandatoryStar .WidgetDecoratorMandatoryImage img {
+  display: none;
+}
+.WidgetDecoratorContentPanel {
+}
+.WidgetDecoratorComponentHolder {
+  overflow: hidden;
+}
+.WidgetDecoratorComponent {
+}
+.WidgetDecoratorComponent-invalid .TextBox {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f79494;
+  background-color: #f8d8d8;
+}
+.WidgetDecoratorComponent-invalid .ListBox {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f79494;
+  background-color: #f8d8d8;
+}
+.EntityContainerDecoratorCollapsedCaption {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.EntityContainerDecorator {
+  margin: 6px 0px;
+  border: dotted 1px;
+  border-color: #666666;
+}
+.EntityContainerDecorator:hover {
+  border: solid 1px;
+  border-color: #666666;
+}
+.WidgetDecorator {
+  margin: 6px 0;
+}
+.FormFlexPanel {
+  width: 100%;
+  border-spacing: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 6px;
+}
+.FormFlexPanel .FormFlexPanel {
+  padding: 0px;
+}
+.FormFlexPanel td {
+  padding: 0;
+}
+.FormFlexPanelHR {
+  background-color: #c2c2c2;
+  height: 2px;
+  margin: 6px 0 4px 0;
+}
+.FormFlexPanelH1 {
+  background-color: #f0f0f0;
+  margin: 6px 0 4px 0;
+  width: 100%;
+}
+.FormFlexPanelH1Label {
+  text-shadow: 1px 2px 0 #ffffff;
+  color: #858585;
+  padding: 4px;
+  font-size: 1.3em;
+}
+.FormFlexPanelH2 {
+  border-bottom: solid 2px;
+  border-bottom-color: #666666;
+  margin: 6px 0 4px 0;
+  width: 100%;
+}
+.FormFlexPanelH2Label {
+  color: #666666;
+  padding: 3px;
+  font-size: 1.2em;
+}
+.FormFlexPanelH3 {
+  border-bottom: solid 1px;
+  border-bottom-color: #a3a3a3;
+  margin: 6px 0 4px 0;
+  width: 100%;
+}
+.FormFlexPanelH3Label {
+  color: #473232;
+  padding: 2px;
+  font-size: 1.1em;
+  font-style: italic;
+}
+.FormFlexPanelH4 {
+  background-color: #ffffff;
+  margin: 6px 0 4px 0;
+  width: 100%;
+}
+.FormFlexPanelH4Label {
+  color: #858585;
+  padding: 1px;
+  font-size: 1.0em;
+  font-style: italic;
+}
+.FormFlexPanelActionWidget {
+  float: right;
+  margin-right: 20px;
+}
+.FormFlexPanelH1 {
+  margin: 0;
+}
+.FormFlexPanelH1Label {
+  color: #3d2525;
+  padding: 20px;
+  font-size: 1.3em;
+}
+.FormFlexPanelActionWidget {
+  margin-top: 20px;
+}
+.FormFlexPanelActionWidget a {
+  color: #3d2525;
+  font-style: italic;
+}
+.FormFlexPanelH1 {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#e0e0e0');
+background:-moz-linear-gradient(top,  #e0e0e0,  #e0e0e0);
+background:-webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#e0e0e0));
+}
+.gwt-DatePicker {
+  margin: 2px 4px;
+  border: 1px solid;
+  border-color: #a19265;
+  color: #666666;
+  width: 250px;
+}
+.DatePickerMonthSelector {
+  background-color: #b3a57d;
+  color: #f7f5f0;
+  line-height: 12px;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 25px;
+}
+.DatePickerMonthLabel {
+  width: 110px;
+}
+.DatePickerMonthSelector table {
+  border-collapse: collapse;
+}
+.DatePickerMonthSelector td:focus {
+  outline-style: none;
+  outline-width: medium;
+}
+.DatePickerMonthSelector .gwt-Label {
+  font-weight: bold;
+  font-size: 13px;
+}
+.DatePickerMonthSelector .multiple {
+  line-height: 24px;
+}
+.DatePickerMonthSelector  img {
+  width: 10px;
+}
+.DatePickerMonthSelector  img.top {
+  position: relative;
+  top: 4px;
+}
+.DatePickerMonthSelector  img.middle {
+  position: relative;
+  top: 2px;
+}
+.DatePickerMonthSelector  img.bottom {
+  position: relative;
+  top: -2px;
+}
+.DatePickerYearLabel {
+  width: 70px;
+}
+.DatePickerMonthYearLabel {
+  width: 200px;
+}
+ .monthSelectorNavigation {
+  width: 15%;
+}
+.DatePickerDay .DatePickerWeekdayLabel .DatePickerWeekendLabel {
+  font-size: 75%;
+  outline-color: #666666;
+  outline-style: none;
+  outline-width: medium;
+  padding: 4px;
+  text-align: center;
+}
+ .DatePickerWeekdayLabel .DatePickerWeekendLabel {
+  background-color: #b3a57d;
+  cursor: default;
+  padding: 0 4px 2px;
+}
+.DatePickerDay {
+  cursor: pointer;
+  padding: 4px;
+}
+.DatePickerWeekendDayLabel {
+  color: #b3a57d;
+  font-weight: bold;
+}
+td.DatePickerMonth {
+  color: blue;
+  font-size: 70%;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+}
+.DatePickerPreviousButton .DatePickerNextButton {
+  color: blue;
+  cursor: pointer;
+  font-size: 120%;
+  line-height: 1em;
+  padding: 0 4px;
+}
+ .gwt-DatePicker td {
+  text-align: center;
+  padding: 0;
+  font-size: 11px;
+  cursor: pointer;
+}
+.DatePickerGrid {
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px;
+}
+ .DatePickerGrid .gwt-Label {
+  border: 1px solid;
+  border-color: #f0f0f0;
+}
+ .DatePickerGrid .gwt-Label-disabled {
+  color: #c2c2c2;
+  background-color: #e0e0e0;
+  cursor: default;
+}
+ .DatePickerGrid .gwt-Label-outofmonth {
+  color: #b3b3b3;
+}
+ .DatePickerGrid .gwt-Label-empty {
+  color: #f0f0f0;
+  cursor: default;
+}
+ .DatePickerGrid .gwt-Label-heighlighted {
+  background-color: #f0ece1;
+}
+ .DatePickerGrid .gwt-Label-selected {
+  border: 1px solid;
+  border-color: #b3a57d;
+  background-color: #f0ece1;
+}
+ .DatePickerGrid .gwt-Label-todayday {
+  color: #ffffff;
+  background-color: #cabf9f;
+}
+ .DatePickerGrid tr.DatePickerGridDaysRow {
+  height: 20px;
+}
+ .DatePickerGrid .DatePickerGridDaysRow td {
+  border-bottom: 1px solid;
+  border-color: #331a1a;
+  margin-bottom: 5px;
+}
+.HeaderToolbar .Button {
+  border: 1px solid;
+  border-color: #f7f7f7;
+  color: #ffffff;
+  padding: 2px 12px;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
+background:-moz-linear-gradient(top,  #666666,  #000000);
+background:-webkit-gradient(linear, left top, left bottom, from(#666666), to(#000000));
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+.HeaderToolbar .Button-hover {
+  border-color: #d1d1d1;
+}
+.HeaderToolbar .Button-disabled {
+  color: #ffffff;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c2c2c2', endColorstr='#c2c2c2');
+background:-moz-linear-gradient(top,  #c2c2c2,  #c2c2c2);
+background:-webkit-gradient(linear, left top, left bottom, from(#c2c2c2), to(#c2c2c2));
+}
+.FooterToolbar .Button {
+  border: 1px solid;
+  border-color: #f7f7f7;
+  color: #ffffff;
+  padding: 2px 12px;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
+background:-moz-linear-gradient(top,  #666666,  #000000);
+background:-webkit-gradient(linear, left top, left bottom, from(#666666), to(#000000));
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+.FooterToolbar .Button-hover {
+  border-color: #d1d1d1;
+}
+.FooterToolbar .Button-disabled {
+  color: #ffffff;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c2c2c2', endColorstr='#c2c2c2');
+background:-moz-linear-gradient(top,  #c2c2c2,  #c2c2c2);
+background:-webkit-gradient(linear, left top, left bottom, from(#c2c2c2), to(#c2c2c2));
+}
+.HeaderToolbar .HighlightedButton {
+  border: 1px solid;
+  border-color: #f7f7f7;
+  color: #ffffff;
+  padding: 2px 12px;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#b3a57d', endColorstr='#483a14');
+background:-moz-linear-gradient(top,  #b3a57d,  #483a14);
+background:-webkit-gradient(linear, left top, left bottom, from(#b3a57d), to(#483a14));
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+.HeaderToolbar .HighlightedButton-hover {
+  border-color: #d1d1d1;
+}
+.HeaderToolbar .HighlightedButton-disabled {
+  color: #ffffff;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c2c2c2', endColorstr='#c2c2c2');
+background:-moz-linear-gradient(top,  #c2c2c2,  #c2c2c2);
+background:-webkit-gradient(linear, left top, left bottom, from(#c2c2c2), to(#c2c2c2));
+}
+.gwt-MenuBar-vertical .HighlightedAction {
+  color: #ffffff;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f5f0', endColorstr='#d9d1b8');
+background:-moz-linear-gradient(top,  #f7f5f0,  #d9d1b8);
+background:-webkit-gradient(linear, left top, left bottom, from(#f7f5f0), to(#d9d1b8));
+  font-weight: bold;
+}
+.HeaderContainer {
+  background-color: #e8e3d3;
+  padding-top: 6px;
+  width: 100%;
+  height: 100%;
+}
+.HeaderToolbar {
+  height: 100%;
+  font-weight: bold;
+  padding-right: 6px;
+}
+.HeaderContainer .HeaderToolbar {
+  background-color: #e8e3d3;
+  float: right;
+}
+.HeaderBreadcrumbs {
+  overflow: hidden;
+}
+.FooterToolbar {
+  padding: 2px 0px;
+  border-top: 4px solid;
+  border-color: #d1d1d1;
+}
+.Header {
+  background-color: #b3a57d;
+  color: #ffffff;
+  width: 100%;
+  padding: 0 1em;
+  white-space: nowrap;
+  font-size: 1.3em;
+  line-height: 35px;
+  font-weight: bold;
+}
+.FooterToolbar .Toolbar {
+  padding: 2px;
+  float: right;
+}
+.BreadcrumbsBar {
+  height: 29px;
+}
+.BreadcrumbAnchor {
+  cursor: pointer;
+  height: 100%;
+  white-space: nowrap;
+}
+.BreadcrumbAnchor:hover {
+  text-decoration: underline;
+}
+.Visor {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f4f1e9');
+background:-moz-linear-gradient(top,  #ffffff,  #f4f1e9);
+background:-webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f4f1e9));
+  border: 2px solid;
+  border-color: #d1c8ab;
+  padding: 2px;
+}
+.VisorHeader {
+  border-bottom: 1px solid;
+  border-color: #d1c8ab;
+}
+.VisorBackButton {
+  height: 17px;
+  float: left;
+  margin: 4px;
+}
+.VisorCaption {
+  font-size: 21px;
+  font-weight: bold;
+  margin-left: 40%;
+  line-height: 1.5em;
+}
+.Lister {
+  width: 100%;
+  padding: 6px;
+}
+.ListerFiltersPanel {
+  background-color: #f7f7f7;
+  padding-top: 0.5em;
+}
+.ListerListPanel {
+}
+.ListerListPanel .DataTable {
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-left-color: #c2c2c2;
+  border-right-color: #c2c2c2;
+}
+.DataTable {
+}
+.DataTableHeader {
+  background-color: #c2c2c2;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+}
+.DataTableColumnSelector {
+  background-color: #a3a3a3;
+  color: #f0f0f0;
+  font-weight: bold;
+}
+.DataTableColumnSelector a:link, .DataTableColumnSelector a:visited, .DataTableColumnSelector a:active {
+  color: #f0f0f0;
+}
+.DataTableColumnSelector:hover {
+  background-color: #858585;
+  color: #f0f0f0;
+}
+.DataTableColumnMenu {
+  background-color: #f0f0f0;
+  color: #757575;
+  border: 1px solid;
+  border-color: #757575;
+  padding: 5px 7px;
+}
+.DataTableRow {
+  cursor: pointer;
+}
+.DataTableRow-even {
+  background-color: #f7f7f7;
+}
+.DataTableRow-odd {
+  background-color: white;
+}
+.DataTableRow-nodetails {
+  cursor: default;
+}
+.DataTableRow-selected {
+  background-color: #c2b693;
+  color: #ffffff;
+}
+.DataTableActionsBar {
+  border: 1px solid;
+  border-color: #d1d1d1;
+  padding-top: 6px;
+  background-color: #f7f7f7;
+}
+.DataTableActionsBar .Button {
+  vertical-align: middle;
+  border-color: #c2c2c2;
+  color: #757575;
+  height: 20px;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e0e0e0');
+background:-moz-linear-gradient(top,  #ffffff,  #e0e0e0);
+background:-webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e0e0e0));
+}
+.DataTableActionsBar .ButtonText {
+  line-height: 22px;
+}
+.DataTableActionsBar .Button-hover {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#ffffff');
+background:-moz-linear-gradient(top,  #e0e0e0,  #ffffff);
+background:-webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#ffffff));
+}
+.DataTableActionsBar .Button-disabled {
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#e0e0e0');
+background:-moz-linear-gradient(top,  #e0e0e0,  #e0e0e0);
+background:-webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#e0e0e0));
+}
+.DataTableActionsBarContent {
+  display: inline-block;
+  width: 100%;
+}
+.DataTableToolBar {
+  float: left;
+}
+.DataTablePageNavigBar {
+  float: right;
+}
+.DataTablePageNavigBar .Anchor {
+  color: #757575;
+}
+.DataTablePageNavigBar .Anchor-disabled {
+  color: #b3b3b3;
+  cursor: default;
+}
+.DataTableFilter {
+  background-color: #f0ece1;
+  width: 100%;
+}
+.DataTableFilterHeader,  .DataTableFilterFooter {
+  background-color: #e1dac5;
+  width: 100%;
+}
+ .DataTableFilterFooter {
+  padding: 6px 0;
+}
+.DataTableFilterMain {
+  padding: 6px;
+}
+.DataTableFilterItem td {
+  padding: 2px 0px 2px 6px;
+}
+.TextBox-disabled {
+  background-color: #f0f0f0;
+  color: #a3a3a3;
+}
+.TextBox-readonly {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f0f0f0;
+  background-color: #ffffff;
+}
+.ListBox-readonly {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #f0f0f0;
+  background-color: #ffffff;
+}
+.ListBox-disabled {
+  background-color: #d1d1d1;
+}
+.TriggerPannel .Button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: 19px;
+}
+.ValidationLabel {
+  color: red;
+}
+.NoteLabel {
+  font-weight: normal;
+  font-style: italic;
+}
+.NoteLabel-info {
+  color: #949494;
+}
+.NoteLabel-warning {
+  color: #b3a57d;
+}
+.PaymentEditor {
+}
+.PaymentEditorButtons {
+  width: 100px;
+}
+.PaymentEditorButtons .RadioGroupItem {
+  width: 100%;
+  padding-top: 3px;
+  height: 30px;
+  white-space: nowrap;
+}
+.PaymentEditorButtons.RadioGroupItem-pushed {
+  width: 100px;
+}
+.PaymentEditorForm {
+  border-radius: 5px;
+  border: solid 1px #666;
+  margin: 1em;
+  height: 180px;
+  width: 550px;
+}
+.PaymentEditorImages {
+  width: 70px;
+}
+.PaymentEditorImages div {
+  height: 30px;
+}
+.PaymentEditorImages div.selected {
+}
+.PaymentEditorImages div img {
+  padding-left: 10px;
+  height: 30px;
+}
+.PaymentEditorLegalTerms {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #bbb;
+  font-weight: normal;
+  background-color: white;
+  color: black;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  height: 20em;
+}
+.EntityFolder {
+  width: 100%;
+}
+.EntityFolder-readOnly {
+  font-weight: bold;
+  color: #666666;
+}
+.EntityFolder img {
+  display: block;
+}
+.EntityFolderBoxItem .EntityFolder {
+  width: 100%;
+}
+.EntityFolderBoxDecorator {
+}
+.EntityFolderTableDecorator {
+  margin-top: 2px;
+}
+.EntityFolderBoxItem {
+  padding: 6px;
+}
+.EntityFolderRowItemDecorator {
+  margin: 6px;
+}
+.EntityFolderActionsBar {
+  opacity: 0.2;
+}
+.EntityFolderActionsBar-hover {
+  opacity: 1;
+}
+.EntityFolderAddButton {
+  display: inline-block;
+  margin: 6px;
+  color: #c2b693;
+  font-weight: normal;
+  font-style: italic;
+  cursor: pointer;
+}
+.EntityFolderUpButton {
+  float: left;
+}
+.EntityFolderDownButton {
+  float: right;
+}
+.EntityFolderRemoveButton {
+  float: right;
+}
+.EntityFolderRowItemDecorator .EntityFolderRemoveButton {
+  float: left;
+}
+.EntityFolderCustomButton {
+  float: left;
+}
+.EntityFolderRowItemDecorator .EntityFolderCustomButton {
+  float: left;
+}
+.EntityFolderTableHeader {
+  border-bottom: 1px dotted;
+  border-bottom-color: #666666;
+}
+.EntityFolderTableHeaderLabel {
+  color: #666666;
+  font-weight: bold;
+  margin-left: 3px;
+  margin-right: 3px;
+  float: left;
+}
+.EntityFolder-readOnly .EntityFolderTableHeaderLabel {
+  color: #b3b3b3;
+}
+.EntityFolderTableHeader {
+  width: 100%;
+  background-color: #f0f0f0;
+  line-height: 35px;
+  color: #949494;
+  border: none;
+}
+.EntityFolderRowItemDecorator {
+  height: 35px;
+  border-bottom: dotted 1px;
+  border-bottom-color: #949494;
+}
+.TenantDashboard {
+  width: 100%;
+  height: 100%;
+}
+.TenantDashboardLeft {
+  height: 100%;
+  margin-bottom: 30px;
+}
+.TenantDashboardLeft > div {
+  min-height: 500px;
+  border-right: solid 1px;
+  border-right-color: #c2c2c2;
+  height: 100%;
+}
+.TenantDashboardRight {
+  margin-bottom: 30px;
+  height: 100%;
+}
+.TenantDashboardTableHeader {
+  background-color: #f0f0f0;
+  line-height: 35px;
+  color: #949494;
+}
+.TenantDashboardTableRow {
+  height: 45px;
+  border-bottom: dotted 1px;
+  border-bottom-color: #949494;
+}
+.TenantDashboardTableRow:last-child {
+  border-bottom: none;
+}
+.TenantDashboardSection {
+  height: 15em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.Dialog {
+  background-color: #b3a57d;
+}
+.DialogCaption {
+  background: #c2b693;
+  filter: alpha(opacity=95);
+  opacity: 0.95;
+  color: #f0ece1;
+  font-weight: bold;
+}
+.DialogResizer {
+  background: #c2b693;
+  filter: alpha(opacity=95);
+  opacity: 0.95;
+}
+.DialogContent {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+.cellListEvenItem {
+  background-color: #f7f7f7;
+  color: #757575;
+}
+.cellListOddItem {
+  background-color: white;
+  color: #757575;
+}
+.cellListSelectedItem {
+  background-color: #c2b693;
+  color: #ffffff;
+}
+.EntityFolderRowItemDecorator .pyx4j_CheckBox {
+  margin-left: 45%;
+}
+.pyx4j_GroupBox {
+  padding: 5px;
+  margin: 3px;
+}
+.pyx4j_GroupBox-expanded {
+  border: 1px solid;
+  border-color: #d9d1b8;
+}
+.pyx4j_GroupBox-collapsed {
+  border: none;
+  border-top: 1px solid;
+  border-color: #d9d1b8;
+}
+.pyx4j_GroupBox_Caption {
+  padding: 5px 2px 2px 2px;
+  verticalAlign: top;
+  color: #d9d1b8;
+}
+.PortalView {
+  width: 95%;
+  min-width: 960px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.PortalViewDisplay {
+}
+.PropertyCard {
+}
+.PropertyCardCardImage {
+  border-color: #cccccc!important;
+  border: solid 1px;
+}
+.PropertyCardCardImage img {
+  max-width: 100%!important;
+  width: 100%!important;
+  height: 100%!important;
+  -moz-background-size: 100% 100%!important;
+  -webkit-background-size: 100% 100%!important;
+  -khtml-background-size: 100% 100%!important;
+  background-size: 100% 100%!important;
+}
+.PropertyCardCardContent {
+  font-size: 12px;
+}
+.PropertyCardCardContentItem {
+  border-bottom: 1px solid;
+  border-color: #e1dac5;
+  margin-bottom: 5px;
+}
+.PropertyCardCardLeft {
+  font-size: 12px;
+}
+.PropertyCardCardLeftItem {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.PropertyCardCardMenuItem {
+  text-decoration: none;
+  color: #b7a982;
+}
+.PropertyCardCardMenuItem:hover {
+  text-decoration: underline;
+  color: #b7a982;
+}
+.gwt-SuggestBoxPopup {
+  background-color: white;
+  padding: 2px;
+  border-color: #a3a3a3;
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  cursor: hand;
+}
+.gwt-SuggestBoxPopup .item {
+}
+.gwt-SuggestBoxPopup .item-selected {
+  background-color: #d1d1d1;
+}
+.BillingLineItem {
+  color: #B3B3B3;
+  font-weight: bold;
+}
+.BillingLineItemTitle {
+}
+.BillingLineItemAmount {
+  color: #666666;
+  font-style: normal;
+  text-align: right;
+}
+.BillingDetailItem {
+  color: #B3B3B3;
+  font-style: italic;
+  text-align: left;
+}
+.BillingDetailItemDate {
+  padding-right: 1em;
+  text-align: center;
+}
+.BillingDetailItemTitle {
+}
+.BillingDetailItemAmount {
+  color: #666666;
+  text-align: right;
+}
+.BillingDetailTotal {
+  color: #B3B3B3;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+}
+.BillingDetailTotalTitle {
+}
+.BillingDetailTotalAmount {
+  color: #666666;
+  border-top: 1px solid black;
+  padding-top: 4px;
+  font-style: normal;
+  text-align: right;
+}
+.BillingBillTotal .WidgetDecoratorLabel {
+  color: #666;
+  font-size: 13px;
+}
+.BillingBillTotal .WidgetDecoratorComponent {
+  color: #666;
+  font-size: 13px;
+  border-top: 2px solid #bbb;
+  padding-top: 4px;
+}
+.LandingViewPanel .WidgetDecoratorLabelHolder {
+  padding: 0px;
+  margin: 0px;
+}
+.LandingViewPanel {
+  position: relative;
+}
+.LandingCaption {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.LandingCaptionText {
+}
+.LandingCaptionTextEmph {
+}
+.LandingOrLineSeparator {
+  position: absolute;
+  top: 0%;
+  bottom: 0%;
+  left: 50%;
+  right: 50%;
+  border-color: gray;
+}
+.LandingGreetingPanel {
+  height: 100%;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}
+.LandingGreetingText {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+}
+.LandingButtonHolder {
+  width: 20em;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+.LandingViewSectionHeader {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.LandingViewSectionContent {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.LandingViewSectionFooter {
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+}
+.LandingInputField {
+  width: 20em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.LandingTermsAndConditionsBox {
+  margin-top: 20px;
+}
+.TenantInsuranceWarningText {
+  color: #AA0000;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+  padding-top: 0.5em;
+}
+.TenantInsuranceAnchor {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+  padding-top: 0.5em;
+}
+.-vista-TenantSureStatusViewerTenantSureLogo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.ProvideTIRequirements {
+  width: 53em;
+  text-align: justify;
+  font-weight: normal;
+  font-style: normal;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
+.ProvideTITenantSureLogo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+  padding-top: 0.5em;
+  padding-bottom: 2em;
+}
+.ProvideTIBGetTenantSure {
+  margin-left: 20px;
+  width: 20em;
+  padding: 0.40em;
+  font-size: 18px;
+  text-align: center;
+  font-style: bold;
+}
+.ProvideTIUpdateExisitingInsurance {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+  padding-top: 0.5em;
+}
+.TSPurchaseViewSection {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.TSPucrhaseViewMessageText {
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+.TSPurchaseViewSection {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.TSPurchaseViewNextStepButton {
+  float: right;
+  margin-right: 20px;
+}
+.TSPurchaseViewCancelButton {
+  float: right;
+}
+.TenantSurePrivacyPolicySection {
+  margin-bottom: 20px;
+}
+.TenantSureFaqQnA {
+  margin-bottom: 20px;
+}
+.TenantSureFaqQ {
+  font-weight: bold;
+}
+.TenantSureFaqA {
+  text-align: justify;
+}
+.TenantSureAboutContactInfo {
+  marign-left: auto;
+  marign-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+#vista.siteAuth {
+	float:right;
+	margin:10px;
+}
+#vista.siteAuth .greeting {
+	color:  ${object1_20};
+	font-weight: bold;
+	padding-right:10px;
+}
+#vista.siteAuth a {
+	color: #000000;
+}
+
+#vista.siteAuth a:hover {
+	color: ${object1_20};
+}
+
+.navigation {
+	height: 60px;
+	position: absolute;
+	top: 68%;
+	width: 100%;
+    /*background: ${object1_100}*/
+}
+
+.navigation ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.navigation ul li {
+	 display: inline-block;
+	 zoom: 1;
+	*display: inline;
+     margin: 0 4px;
+}
+
+.navigation ul li span {
+	font-size: 12px;
+	border-top: 1px solid #000;
+    border-collapse: collapse;
+    color: #000;
+    display: block;
+    padding: 10px 20px;
+    text-align: left;
+    text-decoration: none;
+    width: 120px;
+    white-space:nowrap;
+}
+
+.navigation ul li span:hover {
+	border-top: 4px solid #000;
+    padding-top: 7px;
+    cursor: pointer;
+}
+
+.navigation .active span {
+	border-top: 4px solid #000;
+	padding-top: 7px;
+}
+
+.navigation span:lang(fr) {
+}
+
+.navigation a {
+	color: ${object1_10};
+	text-decoration: none;
+	float: left;
+}
+
+.navigation a:hover {
+	color: ${contrast1_100};
+}
+
+/*
+ * Footer
+ */
+
+#footer {
+	position: relative;
+	z-index: 10;
+}
+
+#footer .main {
+	height:100%;
+	border-top: 1px solid #000000;
+}
+.footer_wrap {
+	padding: 0px 20px;
+	*padding-top: 10px;
+}
+
+ul.footer_locations {
+	width: 100%;
+    display: inline-block;
+    zoom: 1;
+	*display: inline;
+	*margin-left: 0;
+    list-style-type: none;
+    padding: 0;
+    vertical-align: top;
+}
+
+ul.footer_locations label {
+	display: block;
+	text-transform: uppercase;
+	padding-bottom: 10px;
+	color:#000000;
+	width: 300px;
+}
+
+ul.footer_locations li {
+	float: left;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+    width: 192px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.footer_locations a {
+	color:  #000000;
+}
+
+.footer_locations a:hover {
+	color: ${object1_20};
+}
+
+.footer_links {
+	text-align: center;
+	padding-top: 20px;
+}
+
+.footer_link:first-child {
+	border-left: 0;
+}
+
+.footer_link {
+	padding: 0 10px;
+	border-left: 1px solid #000000;
+	_position: relative;
+	display: inline-block;
+	_top: 200px;
+}
+
+.footer_link a {
+	color:  #000000;
+}
+
+.footer_link a:hover {
+	color: ${object1_20};
+}
+
+.locale {
+	margin-top:40px;
+	text-align:center;
+	white-space: nowrap;
+}
+
+.langItem {
+	margin-left: 20px;
+	padding: 0 3px;
+}
+
+.langItem:first-child {
+	margin-left: 0;
+}
+
+.langItem a {
+	color: #000000;
+}
+
+.footer_copyright {
+	text-align: center;
+	line-height: 60px;
+	color: #000000;
+}
+.footer_social {
+	display:inline-block;
+	width:140px;
+	vertical-align:middle;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+.footer_social span {
+	padding:0; margin:0;
+}
+.footer_social label {
+	display: block;
+	text-transform: uppercase;
+	padding-bottom: 10px;
+	color: #000000;
+}
+.iconSocial {
+	display:inline-block;
+	width:32px; height:32px;
+	background:url("images/social4.png") no-repeat;
+}
+.iconSocial.Twitter {
+	background-position: 0 0;
+}
+.iconSocial.Facebook {
+	background-position: -32px 0;
+}
+.iconSocial.Youtube {
+	background-position: -64px 0;
+}
+.iconSocial.Flickr {
+	background-position: -96px 0;
+}
+
+.legal_poweredby {
+	text-align: center;
+	line-height: 20px;
+	color: #000000;
+}
+.powered_product {
+}
+.powered_by {
+
+}
+.powered_logo {
+	background: url("images/vista.png") no-repeat;
+	display:inline-block;
+	width: 100px; height: 20px;
+}
+
+/*
+ * Content
+ */
+.vista-pmsite-main .caption {
+//	background-size: 100% 100%;
+	background: white;
+	height: 30px;
+	overflow: hidden;
+	padding: 5px 0 5px 0;
+	display: block;
+}
+
+.vista-pmsite-main .caption h1 {
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: normal;
+	color: black;
+}
+.caption2 {
+	border-top: 1px solid black;
+	height: 30px;
+	padding: 5px 0;
+}
+.vista-pmsite-main .caption2 h1 {
+	float: left;
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: normal;
+}
+.vista-pmsite-main .caption2 .rightControl {
+	height:25px;
+	margin:5px 0;
+	float:right;
+	color:${object2_30};
+	font-weight:bold;
+	text-transform:uppercase;
+	cursor:pointer;
+}
+.vista-pmsite-main .caption2 .rightControl:hover {
+	color:${object2_10};
+}
+
+.vista-pmsite-sidebarWrap {
+	background-color: #fff;
+}
+
+.vista-pmsite-content {
+	min-height: 500px;
+}
+
+.vista-pmsite-mainWrap {
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+	background: #fff;
+}
+
+.PortalView .vista-pmsite-mainWrap {
+	width: 920px;
+	padding: 0 20px 20px 20px;
+}
+
+.caption {
+	border-top: 1px solid #000000;
+	border-bottom: 5px solid #000000;
+	overflow: hidden;
+}
+
+.secondaryNavig {
+	border-top: 1px solid #000000;
+	padding: 20px 0;
+	width: 211px;
+	float: left;
+	min-height: 400px;
+	margin-right: 20px;
+}
+
+.secondaryNavig ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+    font-weight: normal;
+}
+
+.secondaryNavig ul li {
+	font-size: 16px;
+	font-weight: normal;
+	height: 28px;
+	overflow: hidden;
+	padding: 0 10px 0 20px;
+}
+
+.secondaryNavig ul li.active {
+    background: url("images/menu_active.png") no-repeat scroll 0 50% transparent;
+}
+
+.secondaryNavig ul li:hover {
+	color: #CCCCCC;
+    outline: medium none;
+    text-decoration: none;
+    text-decoration: underline;
+}
+
+.vista-pmsite-main .content {
+	min-height: 200px;
+	line-height: 20px;
+	padding-top: 30px;
+    overflow: hidden;
+}
 
 
+.TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaptionTextEmph  {
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.LandingViewSectionHeader {
+	text-align: center;
+	font-family: monospace;
+    font-size: 14pt;
+}
+
+a {
+	color: #999999;
+	white-space: nowrap;
+	padding: 10px 0;
+	font-size: 14px;
+}
+
+#gwt-debug-login, #gwt-debug-account {
+	white-space: nowrap;
+}
+
+.TenantDashboardSection {
+	padding-top: 20px;
+}
 
 
+.LandingButtonHolder {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+    width: 20em;
+}
+
+.FormFlexPanelH3Label {
+    color: black;
+    font-family: monospace;
+    font-size: 13pt;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.Button {
+    background: none repeat scroll 0 0 #000000;
+    border: none;
+    color: #E6E6E6;
+    cursor: pointer;
+    float: right;
+    font-size: 16px;
+    padding: 10px;
+    width: auto;
+    min-width: 70px;
+    text-align: center;
+    opacity: 100;
+}
+
+.LandingButtonHolder .Button{
+	float: none;
+	width: 130px;
+}
+
+.EntityFolderAddButton, .EntityFolderTableHeaderLabel  {
+	color: #000000;
+	font-weight: bold;
+}
 
 
+.TextBox, .ListBox {
+	border: 1px solid #000000;
+}
 
+
+.LandingTermsAndConditionsBox {
+	margin-left: 60px;
+	margin-right: 60px;
+}
+
+.WidgetDecorator-readOnly .WidgetDecoratorLabel, .BillingLineItem,  .WidgetDecoratorLabel {
+    color: #000000;
+}
+
+.WidgetDecorator-readOnly,  .BillingBillTotal .WidgetDecoratorComponent {
+	color: #000000;
+	font-weight: normal;
+}
+</style>
 	</head>
 
 	<body>

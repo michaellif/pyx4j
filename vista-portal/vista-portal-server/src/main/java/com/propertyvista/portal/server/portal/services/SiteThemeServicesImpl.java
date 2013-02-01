@@ -90,6 +90,8 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
             def.logoAvalable().setValue(Boolean.TRUE);
         }
 
+        def.useCustomHtml().setValue(descriptor.residentPortalSettings().useCustomHtml().getValue());
+
         for (SiteTitles t : descriptor.siteTitles()) {
             if (locale == t.locale().lang().getValue()) {
                 def.siteTitles().setValue(t.getValue());

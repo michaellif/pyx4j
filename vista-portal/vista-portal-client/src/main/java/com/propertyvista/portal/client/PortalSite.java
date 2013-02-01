@@ -80,7 +80,9 @@ public class PortalSite extends VistaSite {
                         siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
                             @Override
                             public void onSuccess(SiteDefinitionsDTO descriptor) {
-                                StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                                if (!descriptor.useCustomHtml().isBooleanTrue()) {
+                                    StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                                }
                                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                                 getHistoryHandler().handleCurrentHistory();
                             }
