@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -126,7 +125,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue().multiply(BigDecimal.valueOf(2)));
+        transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue());
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
@@ -138,7 +137,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 transaction = TenantSurePayments.preAuthorization(transaction);
             } catch (Throwable e) {
                 log.error("Error", e);
-                transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Rejected);
+                transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizationRejected);
                 Persistence.service().persist(transaction);
                 insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
                 Persistence.service().persist(insuranceTenantSure);
@@ -160,7 +159,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
 
                 TenantSurePayments.preAuthorizationReversal(transaction);
-                transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Reversal);
+                transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizationReversal);
                 Persistence.service().persist(transaction);
 
                 Persistence.service().persist(insuranceTenantSure);
@@ -194,7 +193,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             TenantSurePayments.compleateTransaction(transaction);
         } catch (Throwable e) {
             log.error("Error", e);
-            transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected);
+            transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizedPaymentRejectedRetry);
             Persistence.service().persist(transaction);
             insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Pending);
             Persistence.service().persist(insuranceTenantSure);

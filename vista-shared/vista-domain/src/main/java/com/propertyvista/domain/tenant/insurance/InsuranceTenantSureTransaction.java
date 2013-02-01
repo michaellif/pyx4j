@@ -30,17 +30,40 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 
 public interface InsuranceTenantSureTransaction extends IEntity {
 
+    /**
+     * Status flow:
+     * 
+     * New policy
+     * Draft -> AuthorizationRejected
+     * Draft -> Authorized -> AuthorizationReversal; cfcApiClient.bindQuote failed
+     * Draft -> Authorized -> AuthorizedPaymentRejectedRetry
+     * Draft -> Authorized -> Cleared
+     * 
+     * 
+     * Monthly process:
+     * Draft -> Cleared
+     * Draft -> PaymentError; Caledon connection error -> create a new InsuranceTenantSureTransaction next day until GracePeriodEnds; on GracePeriodEnds make
+     * insurance "Cancelled" and send Email
+     * Draft -> PaymentRejected; make insurance "PendingCancellation" and send Email
+     * 
+     * 
+     * 
+     */
     enum TransactionStatus {
 
         Draft,
 
         Authorized,
 
-        Rejected,
+        AuthorizationRejected,
 
-        Reversal,
+        AuthorizationReversal,
 
-        PaymentRejected,
+        AuthorizedPaymentRejectedRetry, // If next retry will fail  move status to "PaymentRejected" and  make insurance "PendingCancellation"
+
+        PaymentError, // Caledon connection error ->  create a new  InsuranceTenantSureTransaction
+
+        PaymentRejected, // make insurance "PendingCancellation"
 
         Cleared,
     }
