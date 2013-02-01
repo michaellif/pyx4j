@@ -42,7 +42,7 @@ html,body {
 
 body {
 	font: 13px Arial, Helvetica, sans-serif;
-	
+
 	background: no-repeat  -moz-linear-gradient(top, ${object1_60} 0, #ffffff 400px); /* FF3.6+ */
 	background: no-repeat  -webkit-gradient(linear, left top, left bottom, color-stop(0,${object1_60}), color-stop(400px,#ffffff))); /* Chrome,Safari4+ */
 	background: no-repeat  -webkit-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* Chrome10+,Safari5.1+ */
@@ -117,20 +117,20 @@ select {
 	color: ${foreground_10};
 }
 
-#siteAuth {
+#vista.siteAuth {
 	float:right;
 	margin:10px;
 }
-#siteAuth .greeting {
+#vista.siteAuth .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
 	padding-right:10px;
 }
-#siteAuth a {
+#vista.siteAuth a {
 	color:  ${object1_20};
 }
 
-#siteAuth a:hover {
+#vista.siteAuth a:hover {
 	color: ${object1_20};
 }
 
@@ -191,7 +191,7 @@ select {
 /*
  * Footer
  */
- 
+
 #footer {
 	position: relative;
 }
@@ -323,7 +323,7 @@ ul.footer_locations li {
 	color: ${object1_20};
 }
 .powered_by {
-	
+
 }
 .powered_logo {
 	background: url("images/vista.png") no-repeat;
@@ -373,9 +373,9 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-		background-color:${object2_10};	
+		background-color:${object2_10};
 }
 
 .vista-pmsite-main .content{
-		background-color:white;	
+		background-color:white;
 }

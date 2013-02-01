@@ -105,21 +105,21 @@ select {
 	line-height:80px;
 	margin-right:20px;
 }
-#siteAuth {
+#vista.siteAuth {
 	float:right;
 	margin:10px;
 }
-#siteAuth .greeting {
+#vista.siteAuth .greeting {
 	color: ${foreground_100};
 	font-weight: bold;
 	padding-right:10px;
 }
 
-#siteAuth a {
+#vista.siteAuth a {
 	color: ${foreground_100};
 }
 
-#siteAuth a:hover {
+#vista.siteAuth a:hover {
 	color: ${contrast2_100};
 }
 
@@ -181,13 +181,13 @@ select {
 /*
  * Footer
  */
- 
+
  #footer {
 	background: none repeat scroll 0 0 ${object2_100};
 	border-top: 1px solid ${foreground_20};
 	position: relative;
 }
- 
+
 .footer_wrap {
 }
 
@@ -309,10 +309,10 @@ ul.footer_locations li {
 	line-height: 20px;
 }
 .powered_product {
-	
+
 }
 .powered_by {
-	
+
 }
 .powered_logo {
 	background: url("images/vista.png") no-repeat;

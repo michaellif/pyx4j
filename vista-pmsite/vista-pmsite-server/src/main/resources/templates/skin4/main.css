@@ -53,7 +53,7 @@ body {
 	/*background: no-repeat  -ms-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* IE10+ */
 	/*background: no-repeat  linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* W3C */
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='${object1_60}', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-	
+
 }
 
 input,select,textarea {
@@ -122,20 +122,20 @@ select {
 	line-height:80px;
 }
 
-#siteAuth {
+#vista.siteAuth {
 	float:right;
 	margin:10px;
 }
-#siteAuth .greeting {
+#vista.siteAuth .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
 	padding-right:10px;
 }
-#siteAuth a {
+#vista.siteAuth a {
 	color: #000000;
 }
 
-#siteAuth a:hover {
+#vista.siteAuth a:hover {
 	color: ${object1_20};
 }
 
@@ -201,7 +201,7 @@ select {
 /*
  * Footer
  */
- 
+
 #footer {
 	position: relative;
 	z-index: 10;
@@ -344,7 +344,7 @@ ul.footer_locations li {
 .powered_product {
 }
 .powered_by {
-	
+
 }
 .powered_logo {
 	background: url("images/vista.png") no-repeat;
