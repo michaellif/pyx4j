@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,21 +13,15 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 
 import templates.TemplateResources;
-
-import com.pyx4j.gwt.server.ServletUtils;
 
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -44,7 +38,6 @@ import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
 import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchGadgetPanel;
 import com.propertyvista.pmsite.server.panels.TestimGadgetPanel;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class LandingPage extends BasePage {
 
@@ -56,12 +49,7 @@ public class LandingPage extends BasePage {
         setVersioned(false);
 
         if (getCM().isCustomResidentsContentEnabled()) {
-            Panel gwtInclude = new GwtInclude("gwtInclude");
-            Component js = gwtInclude.get("gwtResidentsJs");
-            HttpServletRequest httpReq = (HttpServletRequest) getRequest().getContainerRequest();
-            js.add(AttributeModifier.replace("src", ServletUtils.getRequestBaseURL(httpReq) + "/" + DeploymentConsts.PORTAL_URL
-                    + "residents/residents.nocache.js"));
-            add(gwtInclude);
+            add(new GwtInclude("gwtInclude"));
         } else {
             // set aptlist view mode preference to Map
             PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
