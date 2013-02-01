@@ -171,6 +171,7 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new BillingTheme());
         addTheme(new LandingPagesTheme());
+        addTheme(new TenantInsuranceTheme());
 
         initTenantInsuranceStyles(); // TODO move this to a theme class
     }
@@ -329,10 +330,6 @@ public class PortalTheme extends VistaTheme {
 
         {
             Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIBGetTenantSure.name());
-            // put the button in the center
-//            style.addProperty("position", "relative");
-//            style.addProperty("left", "50%");
-//            style.addProperty("margin-left", "-10em");
             style.addProperty("margin-left", "20px");
             style.addProperty("width", "20em");
             style.addProperty("padding", "0.40em");

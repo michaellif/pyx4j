@@ -25,7 +25,9 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     TextResource preAuthorizedPaymentDisclaimer();
 
     public enum FaqStyles implements IStyleName {
+
         TenantSureFaqQnA, TenantSureFaqQ, TenantSureFaqA
+
     }
 
     @Source("faq.html")
@@ -43,7 +45,10 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("privacy-policy.html")
     TextResource privacyPolicy();
 
-    @Source("tenant-sure-contact-info.html")
+    @Source("contact-info.html")
     TextResource contactInfo();
+
+    @Source("management-panel-greeting.html")
+    TextResource managementPanelGreeting();
 
 }

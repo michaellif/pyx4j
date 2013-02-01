@@ -19,27 +19,30 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
+import com.propertyvista.portal.client.themes.TenantInsuranceTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSureLogo extends Composite {
 
     public TenantSureLogo() {
         FlowPanel logoPanel = new FlowPanel();
+        logoPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureLogo.name());
+
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.getElement().getStyle().setProperty("display", "block");
         tenantSureLogo.getElement().getStyle().setProperty("marginLeft", "auto");
         tenantSureLogo.getElement().getStyle().setProperty("marginRight", "auto");
-
         logoPanel.add(tenantSureLogo);
+
         Image highCourtLogo = new Image(TenantSureResources.INSTANCE.logoHighcourt());
         highCourtLogo.getElement().getStyle().setProperty("display", "block");
         highCourtLogo.getElement().getStyle().setProperty("marginLeft", "auto");
         highCourtLogo.getElement().getStyle().setProperty("marginRight", "auto");
-
         logoPanel.add(highCourtLogo);
-        logoPanel.add(new Label(TenantSureConstants.TENANTSURE_PHONE_NUMBER));
-        logoPanel.getElement().getStyle().setProperty("width", "100%");
-        logoPanel.getElement().getStyle().setProperty("textAlign", "center");
+
+        Label tenantSurePhone = new Label(TenantSureConstants.TENANTSURE_PHONE_NUMBER);
+        tenantSurePhone.addStyleName(TenantInsuranceTheme.StyleName.TenantSureLogoPhone.name());
+        logoPanel.add(tenantSurePhone);
         initWidget(logoPanel);
     }
 
