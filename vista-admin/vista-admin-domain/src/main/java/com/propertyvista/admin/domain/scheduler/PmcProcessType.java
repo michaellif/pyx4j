@@ -64,9 +64,11 @@ public enum PmcProcessType implements Serializable {
 
     yardiBatchProcess,
 
-    tenantSureCancellation,
+    tenantSureHQUpdate, //
 
-    tenantSurePayments,
+    tenantSureCancellation, // Vlad & Artyom
+
+    tenantSureReports,
 
     // Used for scheduler testing
     test;

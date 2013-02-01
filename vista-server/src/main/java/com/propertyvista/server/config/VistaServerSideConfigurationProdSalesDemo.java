@@ -65,7 +65,7 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
-    public int paymentSSHDPort() {
+    public int interfaceSSHDPort() {
         return 0;
     }
 }

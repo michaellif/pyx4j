@@ -27,7 +27,7 @@ public class VistaServerSideConfiguration55 extends VistaServerSideConfiguration
     }
 
     @Override
-    public int paymentSSHDPort() {
+    public int interfaceSSHDPort() {
         return 8825;
     }
 

@@ -41,7 +41,7 @@ public class PaymentSSHDServer {
 
     public static synchronized void init() {
         AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
-        int port = config.paymentSSHDPort();
+        int port = config.interfaceSSHDPort();
         if (port == 0) {
             return;
         }
