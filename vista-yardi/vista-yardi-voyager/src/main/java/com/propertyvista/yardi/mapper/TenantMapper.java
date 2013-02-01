@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.yardi.entity.mits.YardiCustomer;
@@ -36,6 +37,7 @@ public class TenantMapper {
         tenantInLease.leaseParticipant().customer().set(customer);
         if (yardiCustomer.getLease().isResponsibleForLease() && !applicantExists(tenants)) {
             tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
+            tenantInLease.percentage().setValue(new BigDecimal(100));
         } else {
             tenantInLease.role().setValue(
                     yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.CoApplicant : LeaseTermParticipant.Role.Dependent);
