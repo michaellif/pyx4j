@@ -85,7 +85,6 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IPrimitive<Integer> rating9();
 
     // Identity
-
     Name identityName();
 
     IPrimitive<LogicalDate> identityBirthDate();
@@ -109,130 +108,158 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IPrimitive<String> identityFormerOccupation();
 
     // Accounts
+    interface Account extends IEntity {
 
-    IPrimitive<String> accountsName();
+        IPrimitive<String> name();
 
-    IPrimitive<String> accountsNumber();
+        IPrimitive<String> number();
 
-    IPrimitive<BigDecimal> accountsCreditAmount();
+        IPrimitive<BigDecimal> creditAmount();
 
-    IPrimitive<BigDecimal> accountsBalanceAmount();
+        IPrimitive<BigDecimal> balanceAmount();
 
-    IPrimitive<Date> accountsLastPaymentDate();
+        IPrimitive<Date> lastPaymentDate();
 
-    IPrimitive<Integer> accountsCNTRadeCode();
+        IPrimitive<Integer> radeCode();
 
-    IPrimitive<String> accountsCNTRadeType();
+        IPrimitive<String> radeType();
 
-    IPrimitive<String> accountsPaymentRate();
+        IPrimitive<String> paymentRate();
 
-    IPrimitive<String> accountsPaymentType();
+        IPrimitive<String> paymentType();
+    }
+
+    IList<Account> accounts();
 
     // Court Judgments
+    interface Judgement extends IEntity {
 
-    IPrimitive<String> judgmentCaseNumber();
+        IPrimitive<String> caseNumber();
 
-    IPrimitive<String> judgmentCustomerNumber();
+        IPrimitive<String> customerNumber();
 
-    Name judgmentPersonName();
+        Name personName();
 
-    IPrimitive<String> judgmentStatus();
+        IPrimitive<String> status();
 
-    IPrimitive<Date> judgmentDateFiled();
+        IPrimitive<Date> dateFiled();
 
-    IPrimitive<Date> judgmentDateSatisfied();
+        IPrimitive<Date> dateSatisfied();
 
-    Name judgmentPlaintiff();
+        Name plaintiff();
 
-    IList<Name> judgmentDefendants();
+        IList<Name> defendants();
+    }
+
+    IList<Judgement> judgements();
 
     // Proposals and Bankruptcies
+    interface Proposal extends IEntity {
 
-    IPrimitive<String> proposalCaseNumber();
+        IPrimitive<String> caseNumber();
 
-    IPrimitive<String> proposalCustomerNumber();
+        IPrimitive<String> customerNumber();
 
-    Name proposalPersonName();
+        Name personName();
 
-    IPrimitive<Date> proposalDispositionDate();
+        IPrimitive<Date> dispositionDate();
 
-    IPrimitive<BigDecimal> proposalLiabilityAmount();
+        IPrimitive<BigDecimal> liabilityAmount();
 
-    IPrimitive<BigDecimal> proposalAssetAmount();
+        IPrimitive<BigDecimal> assetAmount();
 
-    IPrimitive<String> proposalCaseNumberAndTrustee();
+        IPrimitive<String> caseNumberAndTrustee();
 
-    IPrimitive<String> proposalIntentOrDisposition();
+        IPrimitive<String> intentOrDisposition();
+    }
+
+    IList<Proposal> proposals();
 
     // Evictions
+    interface Eviction extends IEntity {
 
-    IPrimitive<String> evictionCaseNumber();
+        IPrimitive<String> caseNumber();
 
-    IPrimitive<String> evictionCustomerNumber();
+        IPrimitive<String> customerNumber();
 
-    Name evictionPersonName();
+        Name personName();
 
-    IPrimitive<Date> evictionDateFiled();
+        IPrimitive<Date> dateFiled();
 
-    IPrimitive<Date> evictionJudgementDate();
+        IPrimitive<Date> judgementDate();
 
-    IPrimitive<String> evictionJudgment();
+        IPrimitive<String> judgment();
 
-    Name evictionPlaintiff();
+        Name plaintiff();
 
-    IList<Name> evictionDefendants();
+        IList<Name> defendants();
 
-    AddressSimple evictionAddress();
+        AddressSimple address();
+    }
+
+    IList<Eviction> evictions();
 
     // Rent History
+    interface Rent extends IEntity {
 
-    Name rentLandlord();
+        Name landlord();
 
-    IPrimitive<BigDecimal> rent();
+        IPrimitive<BigDecimal> rent();
 
-    IPrimitive<String> rentWriteOffs();
+        IPrimitive<String> writeOffs();
 
-    IPrimitive<Boolean> rentNoticeGiven();
+        IPrimitive<Boolean> noticeGiven();
 
-    IPrimitive<BigDecimal> rentLatePayments();
+        IPrimitive<BigDecimal> latePayments();
 
-    IPrimitive<BigDecimal> rentNSFChecks();
+        IPrimitive<BigDecimal> NSFChecks();
 
-    IPrimitive<Date> rentLastUpdated();
+        IPrimitive<Date> lastUpdated();
 
-    IPrimitive<LogicalDate> rentFrom();
+        IPrimitive<LogicalDate> from();
 
-    IPrimitive<LogicalDate> rentTo();
+        IPrimitive<LogicalDate> to();
 
-    IPrimitive<LogicalDate> rentDuration();
+        IPrimitive<LogicalDate> duration();
 
-    AddressSimple rentAddress();
+        AddressSimple address();
 
-    IPrimitive<String> rentHistoryTable(); // ??? what is this
+        IPrimitive<String> historyTable(); // ??? what is this
+    }
+
+    IList<Rent> rents();
 
     // Collections
+    interface Collection extends IEntity {
 
-    IPrimitive<String> collectionsOnBehalf();
+        IPrimitive<String> onBehalf();
 
-    IPrimitive<LogicalDate> collectionsDate();
+        IPrimitive<LogicalDate> date();
 
-    IPrimitive<LogicalDate> collectionsLastActive();
+        IPrimitive<LogicalDate> lastActive();
 
-    IPrimitive<BigDecimal> collectionsOriginalAmount();
+        IPrimitive<BigDecimal> originalAmount();
 
-    IPrimitive<BigDecimal> collectionsBalance();
+        IPrimitive<BigDecimal> balance();
 
-    IPrimitive<String> collectionsStatus();
+        IPrimitive<String> status();
 
-    AddressSimple collectionsAdress();
+        AddressSimple adress();
+    }
+
+    IList<Collection> collections();
 
     // Inquiries
+    interface Inquiry extends IEntity {
 
-    Name inquiriesOnBehalf();
+        Name onBehalf();
 
-    IPrimitive<LogicalDate> inquiriesDate();
+        IPrimitive<LogicalDate> date();
 
-    IPrimitive<String> inquiriesCustomer();
+        IPrimitive<String> customerNumber();
 
-    IPrimitive<String> inquiriesPhone();
+        IPrimitive<String> phone();
+    }
+
+    IList<Inquiry> Inquiries();
 }
