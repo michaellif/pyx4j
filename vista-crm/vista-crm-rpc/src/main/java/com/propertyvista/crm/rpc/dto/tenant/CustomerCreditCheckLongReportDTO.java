@@ -66,7 +66,23 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<Double> equifaxRiskLevel();
 
-    IPrimitive<Integer> rating();
+    IPrimitive<Integer> rating1();
+
+    IPrimitive<Integer> rating2();
+
+    IPrimitive<Integer> rating3();
+
+    IPrimitive<Integer> rating4();
+
+    IPrimitive<Integer> rating5();
+
+    IPrimitive<Integer> rating6();
+
+    IPrimitive<Integer> rating7();
+
+    IPrimitive<Integer> rating8();
+
+    IPrimitive<Integer> rating9();
 
     // Identity
 
