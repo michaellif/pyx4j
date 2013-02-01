@@ -13,7 +13,9 @@
 package com.propertyvista.crm.server.openapi.model.util;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
@@ -120,13 +122,32 @@ public class Converter {
         return to;
     }
 
+    private static Map<BuildingInfo.Type, BuildingInfoRS.BuildingType> buildingTypeMap = initBuildingTypeMap();
+
+    private static Map<BuildingInfo.Type, BuildingInfoRS.BuildingType> initBuildingTypeMap() {
+        Map<BuildingInfo.Type, BuildingInfoRS.BuildingType> buildingTypeMap = new HashMap<BuildingInfo.Type, BuildingInfoRS.BuildingType>();
+        buildingTypeMap.put(BuildingInfo.Type.agricultural, BuildingInfoRS.BuildingType.agricultural);
+        buildingTypeMap.put(BuildingInfo.Type.commercial, BuildingInfoRS.BuildingType.commercial);
+        buildingTypeMap.put(BuildingInfo.Type.mixedResidential, BuildingInfoRS.BuildingType.mixed_residential);
+        buildingTypeMap.put(BuildingInfo.Type.residential, BuildingInfoRS.BuildingType.residential);
+        buildingTypeMap.put(BuildingInfo.Type.industrial, BuildingInfoRS.BuildingType.industrial);
+        buildingTypeMap.put(BuildingInfo.Type.socialHousing, BuildingInfoRS.BuildingType.other);
+        buildingTypeMap.put(BuildingInfo.Type.seniorHousing, BuildingInfoRS.BuildingType.other);
+        buildingTypeMap.put(BuildingInfo.Type.condo, BuildingInfoRS.BuildingType.other);
+        buildingTypeMap.put(BuildingInfo.Type.association, BuildingInfoRS.BuildingType.other);
+        buildingTypeMap.put(BuildingInfo.Type.military, BuildingInfoRS.BuildingType.military);
+        buildingTypeMap.put(BuildingInfo.Type.parkingStorage, BuildingInfoRS.BuildingType.parking_storage);
+        buildingTypeMap.put(BuildingInfo.Type.other, BuildingInfoRS.BuildingType.other);
+        return buildingTypeMap;
+    }
+
     public static BuildingInfoRS convertBuildingInfo(BuildingInfo from) {
         BuildingInfoRS to = new BuildingInfoRS();
 
         to.name = from.name().getStringView();
         to.address = convertAddress(from.address());
         if (!from.type().isNull()) {
-            to.buildingType = BuildingInfoRS.BuildingType.valueOf(from.type().getValue().name());
+            to.buildingType = buildingTypeMap.get(from.type().getValue());
         }
         if (!from.shape().isNull()) {
             to.shape = from.shape().getValue().name();
