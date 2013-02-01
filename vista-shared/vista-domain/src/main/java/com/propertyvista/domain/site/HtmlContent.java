@@ -24,6 +24,6 @@ public interface HtmlContent extends IEntity {
     AvailableLocale locale();
 
     @Editor(type = Editor.EditorType.richtextarea)
-    @Length(4000)
+    @Length(40000)
     IPrimitive<String> html();
 }

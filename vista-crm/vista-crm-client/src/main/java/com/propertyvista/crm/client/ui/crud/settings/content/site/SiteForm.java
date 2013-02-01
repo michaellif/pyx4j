@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageFolder;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.PortalImageResourceFolder.SiteImageThumbnail;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
@@ -59,9 +60,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
     public SiteForm(IFormView<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Look And Feel"));
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
+        content.setH1(row++, 0, 2, i18n.tr("Website"));
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled()), 10).build());
         CComponent<?, ?> skinComp;
         content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
@@ -75,6 +77,12 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
+
+        content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().enabled()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml()), 10).build());
+        content.setH3(row++, 0, 2, i18n.tr("Resident Portal Content"));
+        content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), new RichTextContentFolder(isEditable())));
         selectTab(addTab(content));
 
         content = new FormFlexPanel(proto().locales().getMeta().getCaption());
@@ -164,6 +172,18 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         super.onValueSet(populate);
 
         thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
+    }
+
+    // TODO - this is a hack to fix problems with ResidentPortalSettings when full page html is rendered
+    // inside Label viewer. We should either use IFrame instead or redesign this part of the UI
+    @Override
+    protected void onValuePropagation(SiteDescriptorDTO value, boolean fireEvent, boolean populate) {
+        if (!isEditable()) {
+            for (HtmlContent cont : value.residentPortalSettings().customHtml()) {
+                cont.html().setValue("OK");
+            }
+        }
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
     class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> {

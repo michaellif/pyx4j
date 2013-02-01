@@ -127,6 +127,9 @@ public interface SiteDescriptor extends Descriptor {
     IList<CityIntroPage> cityIntroPages();
 
     @Owned
+    ResidentPortalSettings residentPortalSettings();
+
+    @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     @MemberColumn(name = "updateFlag")
     SiteDescriptorChanges _updateFlag();

@@ -22,6 +22,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -37,6 +38,8 @@ import templates.TemplateResources;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
@@ -65,6 +68,10 @@ public abstract class BasePage extends WebPage {
         }
     }
 
+    private final PMSiteContentManager cm;
+
+    private final AvailableLocale locale;
+
     public BasePage() {
         this(null);
     }
@@ -72,9 +79,22 @@ public abstract class BasePage extends WebPage {
     public BasePage(PageParameters parameters) {
         super(parameters);
 
-        add(new LocalizedHtmlTag("localizedHtml"));
-        add(new HeaderPanel());
-        add(new FooterPanel());
+        cm = ((PMSiteWebRequest) getRequest()).getContentManager();
+        locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
+
+        if (!cm.isCustomResidentsContentEnabled()) {
+            add(new LocalizedHtmlTag("localizedHtml"));
+            add(new HeaderPanel());
+            add(new FooterPanel());
+        }
+    }
+
+    public PMSiteContentManager getCM() {
+        return cm;
+    }
+
+    public AvailableLocale getAvailableLocale() {
+        return locale;
     }
 
     public String getLocalizedPageTitle() {
@@ -83,18 +103,20 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-        String fileCSS = skin + "/" + "main.css";
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-        response.renderCSSReference(refCSS);
-        response.renderCSSReference(new CssResourceReference(TemplateResources.class, "jquery-ui-1.8.16.custom.css"));
-        response.renderCSSReference(new CssResourceReference(TemplateResources.class, "pmsite_jslib-1.0.css"));
-        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
-        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-ui-1.8.16.custom.min.js"));
-        response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
-        response.renderString("<meta name=\"gwt:property\" content=\"locale=" + ((PMSiteWebRequest) getRequest()).getSiteLocale().lang().getValue().name()
-                + "\" />");
+        if (!cm.isCustomResidentsContentEnabled()) {
+            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+            String fileCSS = skin + "/" + "main.css";
+            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+            response.renderCSSReference(refCSS);
+            response.renderCSSReference(new CssResourceReference(TemplateResources.class, "jquery-ui-1.8.16.custom.css"));
+            response.renderCSSReference(new CssResourceReference(TemplateResources.class, "pmsite_jslib-1.0.css"));
+            response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-1.6.3.min.js"));
+            response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "jquery-ui-1.8.16.custom.min.js"));
+            response.renderJavaScriptReference(new JavaScriptResourceReference(JSResources.class, "pmsite_jslib-1.0.js"));
+            response.renderString("<meta name=\"gwt:property\" content=\"locale=" + ((PMSiteWebRequest) getRequest()).getSiteLocale().lang().getValue().name()
+                    + "\" />");
+        }
     }
 
     @Override
@@ -107,24 +129,25 @@ public abstract class BasePage extends WebPage {
 
         super.onBeforeRender();
 
-        // add page title if not already done
-        if (get(META_TITLE) == null) {
-            String title = getLocalizedPageTitle();
-            if (title != null && title.trim().length() > 0) {
-                title = " - " + title;
-            } else {
-                title = "";
+        if (!cm.isCustomResidentsContentEnabled()) {
+            // add page title if not already done
+            if (get(META_TITLE) == null) {
+                String title = getLocalizedPageTitle();
+                if (title != null && title.trim().length() > 0) {
+                    title = " - " + title;
+                } else {
+                    title = "";
+                }
+                PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
+                add(new Label(META_TITLE, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
             }
-            PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
-            add(new Label(META_TITLE, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
+            if (get(META_DESCRIPTION) == null) {
+                add(new Label(META_DESCRIPTION));
+            }
+            if (get(META_KEYWORDS) == null) {
+                add(new Label(META_KEYWORDS));
+            }
         }
-        if (get(META_DESCRIPTION) == null) {
-            add(new Label(META_DESCRIPTION));
-        }
-        if (get(META_KEYWORDS) == null) {
-            add(new Label(META_KEYWORDS));
-        }
-
         if (ApplicationMode.isDevelopment()) {
             checkIfPageStateless(this);
         }
@@ -177,4 +200,12 @@ public abstract class BasePage extends WebPage {
         }
     }
 
+    @Override
+    public Markup getAssociatedMarkup() {
+        if (cm != null && cm.isCustomResidentsContentEnabled()) {
+            return Markup.of(cm.getCustomResidentsContent(locale));
+        } else {
+            return super.getAssociatedMarkup();
+        }
+    }
 }

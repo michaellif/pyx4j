@@ -46,6 +46,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
+import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -224,6 +225,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             site.childPages().add(page);
         }
 
+        createCustomResidentPage(site, siteLocale);
+
         createStaticPages(site, siteLocale);
 
         createLogo(site, siteLocale);
@@ -232,6 +235,29 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         Persistence.service().persist(site);
         return null;
+    }
+
+    protected void createCustomResidentPage(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        ResidentPortalSettings settings = EntityFactory.create(ResidentPortalSettings.class);
+        settings.enabled().setValue(true);
+        settings.useCustomHtml().setValue(true);
+        for (LocaleInfo li : siteLocale) {
+            String contentText;
+            try {
+                contentText = getUTF8TextResource("CustomResidentsPage.html", li.aLocale);
+                if (contentText == null) {
+                    continue;
+                }
+                HtmlContent content = EntityFactory.create(HtmlContent.class);
+                content.locale().set(li.aLocale);
+                content.html().setValue(contentText);
+                settings.customHtml().add(content);
+            } catch (IOException ignore) {
+            }
+        }
+        if (settings.customHtml().size() > 0) {
+            site.residentPortalSettings().set(settings);
+        }
     }
 
     protected void createStaticPages(SiteDescriptor site, List<LocaleInfo> siteLocale) {

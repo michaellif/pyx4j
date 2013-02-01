@@ -536,4 +536,23 @@ public class PMSiteContentManager implements Serializable {
     public String poveredByUrl() {
         return "http://www.propertyvista.com";
     }
+
+    public boolean isCustomResidentsContentEnabled() {
+        return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && siteDescriptor.residentPortalSettings().useCustomHtml().isBooleanTrue();
+    }
+
+    public String getCustomResidentsContent(AvailableLocale locale) {
+        String html = null;
+        String lang = locale.lang().getValue().name();
+        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().customHtml();
+        for (HtmlContent contentRc : contents) {
+            if (contentRc.locale().lang().getValue().name().equals(lang)) {
+                html = contentRc.html().getValue();
+            }
+        }
+        if (html == null && contents.size() > 0) {
+            html = contents.get(0).html().getValue();
+        }
+        return html;
+    }
 }
