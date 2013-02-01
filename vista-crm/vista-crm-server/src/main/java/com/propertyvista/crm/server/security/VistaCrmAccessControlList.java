@@ -207,6 +207,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
         }
 
+        grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));
+
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DeferredProcessService.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
