@@ -14,7 +14,12 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -25,7 +30,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
+import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -47,41 +54,46 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     private static I18n i18n = I18n.get(TenantSurePurchaseServiceImpl.class);
 
+    private static List<BigDecimal> CONTENTS_COVERAGE_OPTIONS;
+
+    private static List<BigDecimal> GENERAL_LIABILITY_OPTIONS;
+
+    static {
+        Set<BigDecimal> contentsCoverageOptionsSet = new HashSet<BigDecimal>();
+        Set<BigDecimal> generalLiabilitySet = new HashSet<BigDecimal>();
+        for (TenantSureOptionCode optionCode : TenantSureOptionCode.values()) {
+            contentsCoverageOptionsSet.add(optionCode.contentsCoverage());
+            generalLiabilitySet.add(optionCode.generalLiability());
+
+        }
+
+        List<BigDecimal> contentsCoverageOptions = new ArrayList<BigDecimal>(contentsCoverageOptionsSet);
+        Collections.sort(contentsCoverageOptions);
+        CONTENTS_COVERAGE_OPTIONS = Collections.unmodifiableList(contentsCoverageOptions);
+
+        List<BigDecimal> generalLiabilityOptions = new ArrayList<BigDecimal>(generalLiabilitySet);
+        Collections.sort(generalLiabilityOptions);
+        GENERAL_LIABILITY_OPTIONS = Collections.unmodifiableList(generalLiabilityOptions);
+    }
+
     @Override
     public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
         TenantSureQuotationRequestParamsDTO params = EntityFactory.create(TenantSureQuotationRequestParamsDTO.class);
 
         Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
         params.tenantName().setValue(tenant.customer().person().name().getStringView());
-        params.tenantPhone().setValue(getPhone(tenant.customer().person()));
+        params.tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
 
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
 
-        // these values are taken from the TenantSure API document: Appendix I        
-        for (BigDecimal libilityCoverage : Arrays.asList(new BigDecimal("1000000"), new BigDecimal("2000000"), new BigDecimal("5000000"))) {
-            if (!tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue()
-                    | (tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() && libilityCoverage.compareTo(tenantInsurancePolicy
-                            .minimumRequiredLiability().getValue()) >= 0)) {
-                params.generalLiabilityCoverageOptions().add(libilityCoverage);
-            }
-        }
+        BigDecimal minRequiredLiabiliy = tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() ? tenantInsurancePolicy.minimumRequiredLiability()
+                .getValue() : BigDecimal.ZERO;
+        params.generalLiabilityCoverageOptions().addAll(filterGeneralLiabilityOptions(minRequiredLiabiliy));
+        params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
 
-        params.contentsCoverageOptions().addAll(Arrays.asList(//@formatter:off
-                BigDecimal.ZERO,
-                new BigDecimal("10000"),
-                new BigDecimal("20000"),
-                new BigDecimal("30000"),
-                new BigDecimal("40000"),
-                new BigDecimal("50000")
-        ));//@formatter:on
-
-        params.deductibleOptions().addAll(Arrays.asList(//@formatter:off
-                        new BigDecimal("500"),
-                        new BigDecimal("1000"),
-                        new BigDecimal("2500")
-        ));//@formatter:on
+        params.deductibleOptions().addAll(getDeductibleOptions());
 
         LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
         personalDisclaimerTerms.content().localizedCaption().setValue(i18n.tr("Personal Disclaimer"));
@@ -89,6 +101,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
             // TODO right now this is filled on client from resources
             personalDisclaimerTerms.content().content().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPersonalDisclaimerText());
         }
+
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
         agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
         personalDisclaimerTerms.agrees().add(agreeHolder.duplicate(IAgree.class));
@@ -108,7 +121,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     @Override
     public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod) {
+
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
+
+        // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
@@ -123,7 +139,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
     }
 
-    private String getPhone(Person person) {
+    private String getDefaultPhone(Person person) {
         if (!person.homePhone().isNull()) {
             return person.homePhone().getValue();
         } else if (person.mobilePhone().isNull()) {
@@ -131,5 +147,19 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         } else {
             return "";
         }
+    }
+
+    private List<BigDecimal> getDeductibleOptions() {
+        return Arrays.asList(TenantSureDeductibleOption.amountValues());
+    }
+
+    private List<BigDecimal> filterGeneralLiabilityOptions(BigDecimal minValue) {
+        List<BigDecimal> filteredValues = new ArrayList<BigDecimal>();
+        for (BigDecimal option : GENERAL_LIABILITY_OPTIONS) {
+            if (option.compareTo(minValue) >= 0) {
+                filteredValues.add(option);
+            }
+        }
+        return filteredValues;
     }
 }

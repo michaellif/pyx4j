@@ -23,91 +23,126 @@ import com.cfcprograms.api.InsuredActivity;
 import com.cfcprograms.api.ObjectFactory;
 import com.cfcprograms.api.OptionQuote;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
+import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 
+/**
+ * For more information see
+ * <a href="http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/10027124/Tenantsure+API+Integration+Guide+20120910-1.pdf">Tenant Sure API
+ * Integration Guide - 2012-09-10</a>.
+ */
 public class TenantSureCoverageRequestAdapter {
 
-    public static void fillOptionQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest, OptionQuote optionQuote) {
-        ObjectFactory objectFactory = new ObjectFactory();
-        optionQuote.setOptionCode(makeOptionCode(coverageRequest.personalLiabilityCoverage().getValue(), coverageRequest.contentsCoverage().getValue()));
+    private static final I18n i18n = I18n.get(TenantSureCoverageRequestAdapter.class);
 
-        InsuredActivity activity = objectFactory.createInsuredActivity();
-        activity.setCode("TS001");
-        activity.setPercentage(new BigDecimal("100"));
-        optionQuote.setActivityCode(activity);
-        optionQuote.setClientID(client.clientReferenceNumber().getValue());
+    /**
+     * Defined in the CFC API Documentation as follows: <br/>
+     * 'The activity code that most closely represents the prospective
+     * insured's activities (only one code is permitted for option quotes).
+     * This is a complex date type consisting of a "Code" and a
+     * "Percentage". The "Percentage" must equal 100 for option quotes.' <br/>
+     */
+    public static final InsuredActivity TENANT_SURE_INSURED_ACTIVITY_CODE;
 
-        GregorianCalendar today = new GregorianCalendar();
+    static {
+        TENANT_SURE_INSURED_ACTIVITY_CODE = new ObjectFactory().createInsuredActivity();
+        TENANT_SURE_INSURED_ACTIVITY_CODE.setCode("TS001");
+        TENANT_SURE_INSURED_ACTIVITY_CODE.setPercentage(new BigDecimal(100));
+    }
+
+    public static void fillOptionQuote(InsuranceTenantSureClient tenantSureClient, TenantSureCoverageDTO coverageRequest, OptionQuote optionQuote) {
         DatatypeFactory dataTypeFactory;
         try {
             dataTypeFactory = DatatypeFactory.newInstance();
         } catch (DatatypeConfigurationException e) {
-            throw new Error(e);
+            throw new RuntimeException(e);
         }
-        optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(today));
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, client.tenant().getPrimaryKey());
-        Persistence.service().retrieveMember(tenant.lease());
-        BigDecimal monthlyRentalAmount = tenant.lease().unit().financial()._unitRent().getValue();
-        optionQuote.setRevenue(monthlyRentalAmount);
+        Persistence.service().retrieveMember(tenantSureClient.tenant().lease());
+        Persistence.service().retrieveMember(tenantSureClient.tenant().lease().unit().building());
 
-        EntityQueryCriteria<LeaseTermTenant> numOfTenantsCriteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        numOfTenantsCriteria.add(PropertyCriterion.eq(numOfTenantsCriteria.proto().leaseTermV(), tenant.lease().currentTerm().version()));
-        int numOfTenants = Persistence.service().count(numOfTenantsCriteria);
-        optionQuote.setEmployeeCount(new BigDecimal(numOfTenants));
+        // code that represents the pre-agreed insurance package for which the quote is required
+        optionQuote.setOptionCode(matchOptionCode(coverageRequest.personalLiabilityCoverage().getValue(), coverageRequest.contentsCoverage().getValue()));
+        optionQuote.setActivityCode(TENANT_SURE_INSURED_ACTIVITY_CODE);
+        optionQuote.setClientID(tenantSureClient.clientReferenceNumber().getValue());
+        optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
+        optionQuote.setRevenue(tenantSureClient.tenant().lease().unit().financial()._unitRent().getValue());
+        optionQuote.setEmployeeCount(countNumberOfTenants(tenantSureClient.tenant().lease().currentTerm()));
         optionQuote.setUsExposure(BigDecimal.ZERO);
-        optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(today));
-        // expirining policy number?
+        optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
         optionQuote.setPolicyPeriod("1M");
+        optionQuote.setOptionalExtras(getOptionalExtras(coverageRequest, tenantSureClient.tenant().lease().unit().building()));
 
-        String optionalExtras = "";
+        // quote from the CFC-API doc:
+        // Pass a blank string.
+        // This field is reserved for a future date where we may offer the ability for clients to supply discount codes or similar.
+        optionQuote.setReferralCode("");
+
+    }
+
+    static String getOptionalExtras(TenantSureCoverageDTO coverageRequest, Building building) {
+        StringBuilder optionalExtras = new StringBuilder();
+
         if (coverageRequest.smoker().isBooleanTrue()) {
-            optionalExtras += "Smoker=true;";
+            optionalExtras.append("Smoker=true;");
         }
+
         if (coverageRequest.numberOfPreviousClaims().getValue().numericValue() > 0) {
-            optionalExtras += "Claims=" + coverageRequest.numberOfPreviousClaims().getValue().numericValue() + ";";
-        }
-        if (coverageRequest.deductible().getValue().compareTo(new BigDecimal("500")) > 0) {
-            optionalExtras += "Deductible:" + coverageRequest.deductible().getValue().toString() + ";";
+            optionalExtras.append("Claims=").append(coverageRequest.numberOfPreviousClaims().getValue().numericValue()).append(";");
         }
 
-        Persistence.service().retrieveMember(tenant.lease().unit().building());
-        if (tenant.lease().unit().building().info().hasFireAlarm().isBooleanTrue()) {
-            optionalExtras += "Alarm=true;";
-        }
-        if (tenant.lease().unit().building().info().hasSprinklers().isBooleanTrue()) {
-            optionalExtras += "Sprinklers=true;";
-        }
-        if (tenant.lease().unit().building().info().hasEarthquakes().isBooleanTrue()) {
-            optionalExtras += "BCEQ=true;";
-        }
-        if (!optionalExtras.equals("")) {
-            optionQuote.setOptionalExtras(optionalExtras);
+        optionalExtras.append(asDeductibleOptionalExtra(coverageRequest.deductible().getValue()));
+
+        if (building.info().hasFireAlarm().isBooleanTrue()) {
+            optionalExtras.append("Alarm=true;");
         }
 
-        optionQuote.setReferralCode(""); // from the CFC-API doc: Pass a blank string. This field is reserved for a future date where we may offer the ability for clients to supply discount codes or 
+        if (building.info().hasSprinklers().isBooleanTrue()) {
+            optionalExtras.append("Sprinklers=true;");
+        }
 
+        if (building.info().hasEarthquakes().isBooleanTrue()) {
+            optionalExtras.append("BCEQ=true;");
+        }
+
+        return optionalExtras.toString();
     }
 
-    public static String makeOptionCode(BigDecimal liablityCoverage, BigDecimal contentsCoverage) {
-        StringBuilder optionCode = new StringBuilder();
-        optionCode.append("TSP");
-        optionCode.append(firstDigit(liablityCoverage));
-        if (contentsCoverage != null && contentsCoverage.compareTo(BigDecimal.ZERO) != 0) {
-            optionCode.append(firstDigit(contentsCoverage));
-        }
-        optionCode.append("0");
-        return optionCode.toString();
+    static BigDecimal countNumberOfTenants(com.propertyvista.domain.tenant.lease.LeaseTerm term) {
+        EntityQueryCriteria<LeaseTermTenant> numOfTenantsCriteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        numOfTenantsCriteria.add(PropertyCriterion.eq(numOfTenantsCriteria.proto().leaseTermV(), term));
+        int numOfTenants = Persistence.service().count(numOfTenantsCriteria);
+        return new BigDecimal(numOfTenants);
     }
 
-    public static String firstDigit(BigDecimal number) {
-        return number.toString().substring(0, 1);
+    private static String matchOptionCode(BigDecimal generalLiablilty, BigDecimal contentsCoverage) {
+        String optionCode = null;
+        try {
+            optionCode = TenantSureOptionCode.codeOf(generalLiablilty, contentsCoverage).name();
+        } catch (IllegalArgumentException ex) {
+            throw new UserRuntimeException(i18n.tr("There a pre-defined quote that matches the requrested coverage amounts was not found."));
+        }
+        return optionCode;
     }
+
+    private static String asDeductibleOptionalExtra(BigDecimal value) {
+        TenantSureDeductibleOption option;
+        try {
+            option = TenantSureDeductibleOption.deductibleOf(value);
+        } catch (IllegalArgumentException ex) {
+            throw new UserRuntimeException(i18n.tr("The deductible option \"{0}\" is not defined", value));
+        }
+        return !option.isDefault() ? "Deductible:" + option.amount().toString() : "";
+    }
+
 }

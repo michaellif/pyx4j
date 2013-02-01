@@ -20,7 +20,7 @@ public interface VistaTODO {
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
     public static final boolean ENABLE_ONBOARDING_WIZARDS = ApplicationMode.isDevelopment();
 
-    public static final boolean VISTA_2467_SHOW_TENANTSURE = false;
+    public static final boolean VISTA_2467_SHOW_TENANTSURE = true;
 
     public static final boolean VISTA_2428_FORBID_ARREARS_GADGETS = true;
 
