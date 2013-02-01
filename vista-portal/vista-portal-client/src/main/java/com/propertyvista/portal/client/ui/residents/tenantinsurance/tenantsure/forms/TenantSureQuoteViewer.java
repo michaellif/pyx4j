@@ -13,14 +13,18 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -29,18 +33,33 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
 
+    private static final I18n i18n = I18n.get(TenantSureQuoteViewer.class);
+
+    private final NumberFormat currencyFormat;
+
+    public TenantSureQuoteViewer(NumberFormat currencyFormat) {
+        this.currencyFormat = currencyFormat;
+    }
+
+    public TenantSureQuoteViewer() {
+        this(NumberFormat.getFormat(i18n.tr("$#,##0")));
+    }
+
     @Override
     public IsWidget createContent(TenantSureQuoteDTO quote) {
         FormFlexPanel contentPanel = new FormFlexPanel();
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                addDetailRecord(contentPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getStringView());
-                addDetailRecord(contentPanel, ++row, quote.underwriterFee().getMeta().getCaption(), quote.underwriterFee().getStringView());
+
+                addDetailRecord(contentPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
+                addDetailRecord(contentPanel, ++row, quote.underwriterFee().getMeta().getCaption(), quote.underwriterFee().getValue());
+
                 for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
-                    addDetailRecord(contentPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getStringView());
+                    addDetailRecord(contentPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
                 }
-                addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getStringView());
+
+                addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getValue());
             } else {
                 Label specialQuoteText = new Label();
                 specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -55,9 +74,9 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         return contentPanel;
     }
 
-    private void addDetailRecord(FlexTable table, int row, String description, String amount) {
+    private void addDetailRecord(FlexTable table, int row, String description, BigDecimal amount) {
         table.setHTML(row, 1, description);
-        table.setHTML(row, 2, amount);
+        table.setHTML(row, 2, currencyFormat.format(amount));
         // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
         table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
@@ -65,9 +84,9 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
     }
 
-    private void addTotalRecord(FlexTable table, int row, String description, String amount) {
+    private void addTotalRecord(FlexTable table, int row, String description, BigDecimal amount) {
         table.setHTML(row, 1, description);
-        table.setHTML(row, 2, amount);
+        table.setHTML(row, 2, currencyFormat.format(amount));
         // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
         table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
