@@ -24,6 +24,8 @@ public class VistaFeatures {
 
     public static interface VistaFeaturesCustomization {
 
+        boolean tenantSure();
+
         boolean occupancyModel();
 
         boolean productCatalog();

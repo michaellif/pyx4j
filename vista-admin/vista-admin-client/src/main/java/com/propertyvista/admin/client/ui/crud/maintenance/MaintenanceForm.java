@@ -55,5 +55,11 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
         ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
         selectTab(addTab(content));
+
+        FormFlexPanel tenantSureMaintenanceTab = new FormFlexPanel(i18n.tr("TenantSure"));
+        row = -1;
+        tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
+        addTab(tenantSureMaintenanceTab);
+
     }
 }

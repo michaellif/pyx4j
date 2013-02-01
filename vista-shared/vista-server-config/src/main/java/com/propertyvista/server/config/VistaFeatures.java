@@ -82,6 +82,11 @@ public class VistaFeatures {
             return threadLocale.get().countryOfOperation().getValue();
         }
 
+        @Override
+        public boolean tenantSure() {
+            return threadLocale.get().tenantSureIntegration().getValue();
+        }
+
     }
 
     public static void removeThreadLocale() {

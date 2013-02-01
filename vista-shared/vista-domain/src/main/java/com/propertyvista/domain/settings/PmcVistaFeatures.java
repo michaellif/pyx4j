@@ -49,4 +49,7 @@ public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
     IPrimitive<Boolean> yardiIntegration();
+
+    @NotNull
+    IPrimitive<Boolean> tenantSureIntegration();
 }

@@ -67,6 +67,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
         return features.countryOfOperation().getValue();
     }
 
+    @Override
+    public boolean tenantSure() {
+        return features.tenantSureIntegration().getValue(Boolean.FALSE);
+    }
+
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }
