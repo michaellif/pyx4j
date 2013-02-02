@@ -23,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -32,17 +31,11 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 
 public class UnitsMerger {
+
     private final static Logger log = LoggerFactory.getLogger(UnitsMerger.class);
-
-    // loaded from the database, use this for look up by info.propertyCode.getValue
-    private final Map<String, Building> buildingsByCode = new HashMap<String, Building>();
-
-    // loaded from the database, look up by building.id
-    private final Map<Key, Building> buildingsById = new HashMap<Key, Building>();
 
     public List<AptUnit> merge(Building building, List<AptUnit> importedList, List<AptUnit> existingList) {
         List<AptUnit> mergedList = new ArrayList<AptUnit>();
-        mergedList.addAll(existingList);
 
         Map<String, AptUnit> existingUnitsByNumber = unitsByNumber(existingList);
 
@@ -116,12 +109,6 @@ public class UnitsMerger {
         existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
 
         return existing;
-    }
-
-    private void merge(Floorplan imported, Floorplan existing) {
-        existing.name().setValue(imported.name().getValue());
-        existing.bedrooms().setValue(imported.bedrooms().getValue());
-        existing.bathrooms().setValue(imported.bathrooms().getValue());
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {

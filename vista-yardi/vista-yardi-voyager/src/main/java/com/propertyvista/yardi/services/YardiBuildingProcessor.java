@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -37,42 +36,41 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
 import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
+
     private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);
 
-    public void updateBuildings(List<ResidentTransactions> allTransactions) {
+    public void updateBuildings(ResidentTransactions transaction) throws YardiServiceException {
 
-        List<Building> importedBuildings = getBuildings(allTransactions);
-        Map<String, List<AptUnit>> importedUnits = getUnits(allTransactions);
+        Building importedBuilding = getBuilding(transaction);
+        String propertyCode = importedBuilding.propertyCode().getValue();
 
-        log.info("Updating buildings...");
-        merge(importedBuildings, getBuildings());
+        merge(importedBuilding, getBuilding(propertyCode));
 
-        log.info("Updating units...");
-        updateUnitsForBuildings(importedUnits, getBuildings());
+        List<AptUnit> importedUnit = getUnits(transaction);
+        updateUnitsForBuilding(importedUnit, getBuilding(propertyCode));
     }
 
-    private void merge(List<Building> imported, List<Building> existing) {
-        List<Building> merged = new BuildingsMerger().merge(imported, existing);
-        for (Building building : merged) {
-            update(building);
-            Persistence.service().commit();
-        }
+    private void merge(Building imported, Building existing) {
+        Building merged = new BuildingsMerger().merge(imported, existing);
+        update(merged);
+        Persistence.service().commit();
     }
 
-    private void updateUnitsForBuildings(Map<String, List<AptUnit>> importedUnits, List<Building> buildings) {
-        for (Building building : buildings) {
-            String propertyCode = building.propertyCode().getValue();
-            if (importedUnits.containsKey(propertyCode)) {
-                mergeUnits(building, importedUnits.get(propertyCode), getUnits(propertyCode));
-                Persistence.service().commit();
-            }
+    private void updateUnitsForBuilding(List<AptUnit> importedUnits, Building building) throws YardiServiceException {
+        if (building == null) {
+            throw new YardiServiceException("Unable to update units for building: null");
         }
+
+        String propertyCode = building.propertyCode().getValue();
+        mergeUnits(building, importedUnits, getUnits(propertyCode));
+        Persistence.service().commit();
     }
 
     private List<AptUnit> getUnits(String propertyCode) {
@@ -119,15 +117,16 @@ public class YardiBuildingProcessor {
         }
     }
 
-    private List<Building> getBuildings() {
+    private Building getBuilding(String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.asc(criteria.proto().propertyCode());
-        return Persistence.service().query(criteria);
+        criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), propertyCode));
+        List<Building> buildings = Persistence.service().query(criteria);
+        return !buildings.isEmpty() ? buildings.get(0) : null;
     }
 
-    public List<Building> getBuildings(List<ResidentTransactions> allTransactions) {
+    public Building getBuilding(ResidentTransactions transaction) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(getProvinces(), getProperties(allTransactions));
+        return mapper.map(getProvinces(), getProperty(transaction));
     }
 
     public List<Province> getProvinces() {
@@ -136,64 +135,28 @@ public class YardiBuildingProcessor {
         return Persistence.service().query(criteria);
     }
 
-    public Map<String, List<AptUnit>> getUnits(List<ResidentTransactions> allTransactions) {
-        UnitsMapper mapper = new UnitsMapper();
-        Map<String, List<AptUnit>> units = new HashMap<String, List<AptUnit>>();
-        Map<String, List<RTUnit>> imported = getYardiUnits(allTransactions);
-        for (Map.Entry<String, List<RTUnit>> entry : imported.entrySet()) {
-            List<AptUnit> mapped = mapper.map(entry.getValue());
-            if (!mapped.isEmpty()) {
-                units.put(entry.getKey(), mapped);
-            }
-        }
-        return units;
+    public List<AptUnit> getUnits(ResidentTransactions transaction) {
+        List<RTUnit> imported = getYardiUnits(transaction);
+        return new UnitsMapper().map(imported);
     }
 
-    private List<Property> getProperties(List<ResidentTransactions> allTransactions) {
-        Map<String, Property> properties = new HashMap<String, Property>();
-        for (ResidentTransactions transaction : allTransactions) {
-
-            for (Property property : transaction.getProperty()) {
-
-                for (PropertyID propertyID : property.getPropertyID()) {
-                    String propertyId = YardiProcessorUtils.getPropertyId(propertyID);
-                    if (StringUtils.isNotEmpty(propertyId) && !properties.containsKey(propertyId)) {
-                        properties.put(propertyId, property);
-                    }
-                }
-            }
-        }
-
-        return new ArrayList<Property>(properties.values());
+    private Property getProperty(ResidentTransactions transaction) {
+        return transaction.getProperty().get(0);
     }
 
-    private Map<String, List<RTUnit>> getYardiUnits(List<ResidentTransactions> allTransactions) {
-        Map<String, List<RTUnit>> unitsMap = new HashMap<String, List<RTUnit>>();
-        for (ResidentTransactions transaction : allTransactions) {
+    private List<RTUnit> getYardiUnits(ResidentTransactions transaction) {
+        Property property = transaction.getProperty().get(0);
 
-            for (Property property : transaction.getProperty()) {
+        Map<String, RTUnit> map = new HashMap<String, RTUnit>();
 
-                for (PropertyID propertyID : property.getPropertyID()) {
-
-                    String propertyId = YardiProcessorUtils.getPropertyId(propertyID);
-                    if (unitsMap.containsKey(propertyId)) {
-                        continue;
-                    }
-
-                    Map<String, RTUnit> map = new HashMap<String, RTUnit>();
-                    for (RTCustomer customer : property.getRTCustomer()) {
-                        String unitId = YardiProcessorUtils.getUnitId(customer);
-                        if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
-                            map.put(unitId, customer.getRTUnit());
-                        }
-                    }
-
-                    unitsMap.put(propertyId, new ArrayList<RTUnit>(map.values()));
-                }
+        for (RTCustomer customer : property.getRTCustomer()) {
+            String unitId = YardiProcessorUtils.getUnitId(customer);
+            if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
+                map.put(unitId, customer.getRTUnit());
             }
         }
 
-        return unitsMap;
+        return new ArrayList<RTUnit>(map.values());
     }
 
 }

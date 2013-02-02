@@ -15,9 +15,7 @@ package com.propertyvista.yardi;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -101,51 +99,47 @@ public class XmlBeanTest {
             }
         };
 
-        List<Building> buildings = buildingProcessor.getBuildings(Arrays.asList(transactions));
-        Assert.assertTrue("Has buildings", !buildings.isEmpty());
+        Building building = buildingProcessor.getBuilding(transactions);
+        Assert.assertNotNull("Has buildings", building);
 
-        for (Building building : buildings) {
-            Assert.assertFalse(building.propertyCode().isNull());
-            Assert.assertFalse(building.marketing().isNull());
-            Assert.assertFalse(building.marketing().name().isNull());
+        Assert.assertFalse(building.propertyCode().isNull());
+        Assert.assertFalse(building.marketing().isNull());
+        Assert.assertFalse(building.marketing().name().isNull());
 
-            Assert.assertFalse(building.info().address().isNull());
-            Assert.assertFalse(building.info().address().streetName().isNull());
-            Assert.assertFalse(building.info().address().streetNumber().isNull());
-            Assert.assertFalse(building.info().address().city().isNull());
-            Assert.assertFalse(building.info().address().postalCode().isNull());
+        Assert.assertFalse(building.info().address().isNull());
+        Assert.assertFalse(building.info().address().streetName().isNull());
+        Assert.assertFalse(building.info().address().streetNumber().isNull());
+        Assert.assertFalse(building.info().address().city().isNull());
+        Assert.assertFalse(building.info().address().postalCode().isNull());
+
+        List<AptUnit> units = buildingProcessor.getUnits(transactions);
+        Assert.assertTrue("Has units", !units.isEmpty());
+
+        for (AptUnit aptUnit : units) {
+            log.debug("Unit {}", aptUnit);
+
+            // info
+            AptUnitInfo info = aptUnit.info();
+            Assert.assertFalse(info.number().isNull());
+
+            Assert.assertFalse(aptUnit.floorplan().isNull());
+            Assert.assertFalse(info._bedrooms().isNull());
+            Assert.assertFalse(info._bathrooms().isNull());
+
+            Assert.assertFalse(info.area().isNull());
+            Assert.assertFalse(info.areaUnits().isNull());
+            Assert.assertFalse(info.economicStatus().isNull());
+
+            // marketing
+            Marketing marketing = aptUnit.marketing();
+            Assert.assertFalse(marketing.name().isNull());
+
+            // financial
+            AptUnitFinancial financial = aptUnit.financial();
+            Assert.assertFalse(financial._unitRent().isNull());
+            Assert.assertFalse(financial._marketRent().isNull());
         }
 
-        Map<String, List<AptUnit>> units = buildingProcessor.getUnits(Arrays.asList(transactions));
-        for (Map.Entry<String, List<AptUnit>> entry : units.entrySet()) {
-            List<AptUnit> entryUnits = entry.getValue();
-            Assert.assertTrue("Has units", !entryUnits.isEmpty());
-
-            for (AptUnit aptUnit : entryUnits) {
-                log.debug("Unit {}", aptUnit);
-
-                // info
-                AptUnitInfo info = aptUnit.info();
-                Assert.assertFalse(info.number().isNull());
-
-                Assert.assertFalse(aptUnit.floorplan().isNull());
-                Assert.assertFalse(info._bedrooms().isNull());
-                Assert.assertFalse(info._bathrooms().isNull());
-
-                Assert.assertFalse(info.area().isNull());
-                Assert.assertFalse(info.areaUnits().isNull());
-                Assert.assertFalse(info.economicStatus().isNull());
-
-                // marketing
-                Marketing marketing = aptUnit.marketing();
-                Assert.assertFalse(marketing.name().isNull());
-
-                // financial
-                AptUnitFinancial financial = aptUnit.financial();
-                Assert.assertFalse(financial._unitRent().isNull());
-                Assert.assertFalse(financial._marketRent().isNull());
-            }
-        }
     }
 
     @BeforeClass

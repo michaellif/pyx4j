@@ -141,7 +141,16 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     private void updateBuildings(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {
-        new YardiBuildingProcessor().updateBuildings(allTransactions);
+        log.info("Updating buildings and units...");
+        for (ResidentTransactions transaction : allTransactions) {
+            try {
+                new YardiBuildingProcessor().updateBuildings(transaction);
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+            } catch (Exception e) {
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+            }
+        }
+        log.info("All buildings, units updated.");
     }
 
     private void updateLeases(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {

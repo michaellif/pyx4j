@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -43,33 +42,16 @@ public class BuildingsMapper {
     private final static Logger log = LoggerFactory.getLogger(BuildingsMapper.class);
 
     /**
-     * Maps properties from YARDI System to building
+     * Maps property from YARDI System to building
      * 
      * @param provinces
      *            the existing provinces
-     * @param properties
-     *            the properties to map
-     * @return the properties list
+     * @param property
+     *            the property to map
+     * @return the building
      */
-    public List<Building> map(List<Province> provinces, List<Property> properties) {
-        List<Building> buildings = new ArrayList<Building>();
-        for (Property property : properties) {
-            PropertyID currentPropertyID = null;
-            try {
-                for (PropertyID propertyID : property.getPropertyID()) {
-                    currentPropertyID = propertyID;
-                    Building building = map(provinces, propertyID);
-                    buildings.add(building);
-                }
-            } catch (Exception e) {
-                log.error("Error during imported building '{}' mapping", getPropertyId(currentPropertyID), e);
-            }
-        }
-
-        return buildings;
-    }
-
-    private Building map(List<Province> provinces, PropertyID propertyID) {
+    public Building map(List<Province> provinces, Property property) {
+        PropertyID propertyID = property.getPropertyID().get(0);
         Building building = EntityFactory.create(Building.class);
 
         Identification identification = propertyID.getIdentification();
@@ -135,10 +117,6 @@ public class BuildingsMapper {
             }
         }
         return StreetType.other;
-    }
-
-    private String getPropertyId(PropertyID propertyID) {
-        return propertyID.getIdentification().getPrimaryID();
     }
 
 }

@@ -13,13 +13,6 @@
  */
 package com.propertyvista.yardi.merger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,50 +25,11 @@ public class BuildingsMerger {
 
     private final static Logger log = LoggerFactory.getLogger(BuildingsMerger.class);
 
-    /**
-     * Merge two lists, one is what comes to us form an external system - imported
-     * The other - existing, is what we have in our database
-     * 
-     * We will go through the list of imported items, trying to find a corresponding existing entry.
-     * If this entry does not exist, we will include imported item into the merge list as is
-     * If existing entry exists, we will apply imported data onto existing item and return modified existing item in the merge list
-     * 
-     * @param importedList
-     *            Imported from an external system
-     * @param existingList
-     *            Existing in our database
-     * @return Merged list
-     */
-    public List<Building> merge(List<Building> importedList, List<Building> existingList) {
-        Set<Building> merged = new HashSet<Building>();
-        merged.addAll(existingList);
-
-        Map<String, Building> existingBuildingsByCode = buildingsByCode(existingList);
-
-        for (Building imported : importedList) {
-            try {
-                Building existing = existingBuildingsByCode.get(imported.propertyCode().getValue());
-                merged.add(existing != null ? merge(imported, existing) : imported);
-            } catch (Exception e) {
-                log.error(String.format("Error during imported building %s merging", imported.propertyCode().getValue()), e);
-            }
-        }
-
-        return new ArrayList<Building>(merged);
+    public Building merge(Building imported, Building existing) {
+        return existing == null ? imported : mergeBuilding(imported, existing);
     }
 
-    private Map<String, Building> buildingsByCode(List<Building> existingList) {
-        Map<String, Building> buildingsByCode = new HashMap<String, Building>();
-        for (Building building : existingList) {
-            buildingsByCode.put(building.propertyCode().getValue(), building);
-        }
-        return buildingsByCode;
-    }
-
-    /**
-     * We could make this method generic, by iterating over meta data
-     */
-    private Building merge(Building imported, Building existing) {
+    private Building mergeBuilding(Building imported, Building existing) {
 
         merge(imported.info(), existing.info());
         merge(imported.marketing(), existing.marketing());

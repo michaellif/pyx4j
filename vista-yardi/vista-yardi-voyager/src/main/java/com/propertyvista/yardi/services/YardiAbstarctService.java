@@ -98,6 +98,10 @@ public class YardiAbstarctService {
             l.setPlatform(yc.platform().getValue().name());
             l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
             GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
+            if (response.getGetPropertyConfigurationsResult() == null) {
+                throw new Error("Received response is null");
+            }
+
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
             if (log.isDebugEnabled()) {
