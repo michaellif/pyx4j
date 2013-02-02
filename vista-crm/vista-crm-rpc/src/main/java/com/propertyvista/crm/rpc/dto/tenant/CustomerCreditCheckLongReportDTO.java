@@ -108,7 +108,8 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IPrimitive<String> identityFormerOccupation();
 
     // Accounts
-    interface Account extends IEntity {
+    @Transient
+    interface AccountDTO extends IEntity {
 
         IPrimitive<String> name();
 
@@ -129,10 +130,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IPrimitive<String> paymentType();
     }
 
-    IList<Account> accounts();
+    IList<AccountDTO> accounts();
 
     // Court Judgments
-    interface Judgement extends IEntity {
+    @Transient
+    interface JudgementDTO extends IEntity {
 
         IPrimitive<String> caseNumber();
 
@@ -151,10 +153,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IList<Name> defendants();
     }
 
-    IList<Judgement> judgements();
+    IList<JudgementDTO> judgements();
 
     // Proposals and Bankruptcies
-    interface Proposal extends IEntity {
+    @Transient
+    interface ProposalDTO extends IEntity {
 
         IPrimitive<String> caseNumber();
 
@@ -173,10 +176,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IPrimitive<String> intentOrDisposition();
     }
 
-    IList<Proposal> proposals();
+    IList<ProposalDTO> proposals();
 
     // Evictions
-    interface Eviction extends IEntity {
+    @Transient
+    interface EvictionDTO extends IEntity {
 
         IPrimitive<String> caseNumber();
 
@@ -197,10 +201,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         AddressSimple address();
     }
 
-    IList<Eviction> evictions();
+    IList<EvictionDTO> evictions();
 
     // Rent History
-    interface Rent extends IEntity {
+    @Transient
+    interface RentDTO extends IEntity {
 
         Name landlord();
 
@@ -227,10 +232,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IPrimitive<String> historyTable(); // ??? what is this
     }
 
-    IList<Rent> rents();
+    IList<RentDTO> rents();
 
     // Collections
-    interface Collection extends IEntity {
+    @Transient
+    interface CollectionDTO extends IEntity {
 
         IPrimitive<String> onBehalf();
 
@@ -247,10 +253,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         AddressSimple adress();
     }
 
-    IList<Collection> collections();
+    IList<CollectionDTO> collections();
 
     // Inquiries
-    interface Inquiry extends IEntity {
+    @Transient
+    interface InquiryDTO extends IEntity {
 
         Name onBehalf();
 
@@ -261,5 +268,5 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IPrimitive<String> phone();
     }
 
-    IList<Inquiry> Inquiries();
+    IList<InquiryDTO> Inquiries();
 }
