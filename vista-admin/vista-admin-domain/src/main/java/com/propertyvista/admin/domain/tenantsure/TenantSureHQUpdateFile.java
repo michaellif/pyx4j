@@ -21,8 +21,8 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -35,7 +35,7 @@ public interface TenantSureHQUpdateFile extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    IList<TenantSureHQUpdateRecord> batches();
+    ISet<TenantSureHQUpdateRecord> batches();
 
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> received();
