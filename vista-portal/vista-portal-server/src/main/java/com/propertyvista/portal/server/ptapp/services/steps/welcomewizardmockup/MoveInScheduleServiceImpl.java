@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
+package com.propertyvista.portal.server.ptapp.services.steps.welcomewizardmockup;
 
 import java.sql.Time;
 import java.util.ArrayList;

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
+package com.propertyvista.portal.server.ptapp.services.steps.welcomewizardmockup;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
