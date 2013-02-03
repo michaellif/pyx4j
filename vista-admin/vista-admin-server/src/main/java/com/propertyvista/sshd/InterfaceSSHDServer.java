@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.sshd;
+package com.propertyvista.sshd;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -31,11 +31,11 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.payment.sshd.fs.SimpleFileSystemFactory;
+import com.propertyvista.sshd.fs.SimpleFileSystemFactory;
 
-public class PaymentSSHDServer {
+public class InterfaceSSHDServer {
 
-    private static final Logger log = LoggerFactory.getLogger(PaymentSSHDServer.class);
+    private static final Logger log = LoggerFactory.getLogger(InterfaceSSHDServer.class);
 
     private static SshServer sshd;
 
@@ -63,7 +63,7 @@ public class PaymentSSHDServer {
 
             sshd.start();
 
-            PaymentSSHDServer.sshd = sshd;
+            InterfaceSSHDServer.sshd = sshd;
 
             log.info("SSHD listening on port {}", port);
 

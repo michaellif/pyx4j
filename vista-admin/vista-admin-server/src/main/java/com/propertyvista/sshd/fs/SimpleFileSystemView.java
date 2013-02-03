@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.sshd.fs;
+package com.propertyvista.sshd.fs;
 
 import java.io.File;
 

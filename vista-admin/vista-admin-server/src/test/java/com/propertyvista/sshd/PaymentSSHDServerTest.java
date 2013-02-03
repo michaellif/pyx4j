@@ -11,18 +11,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.sshd;
+package com.propertyvista.sshd;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
+import com.propertyvista.sshd.InterfaceSSHDServer;
 
 public class PaymentSSHDServerTest {
 
     public static void main(String[] args) {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
-        PaymentSSHDServer.init();
+        InterfaceSSHDServer.init();
     }
 
 }

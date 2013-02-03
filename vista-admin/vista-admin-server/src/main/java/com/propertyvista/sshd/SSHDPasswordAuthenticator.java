@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.sshd;
+package com.propertyvista.sshd;
 
 import java.io.File;
 
@@ -26,16 +26,16 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 class SSHDPasswordAuthenticator implements PasswordAuthenticator {
 
-    private final Credentials credentials;
+    private final Credentials tenantSureCredentials;
 
     SSHDPasswordAuthenticator() {
-        credentials = CredentialsFileStorage.getCredentials(new File(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
-                .getConfigDirectory(), "sftp-payment-credentials.properties"));
+        tenantSureCredentials = CredentialsFileStorage.getCredentials(new File(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
+                .getConfigDirectory(), "sftp-tenantsure-credentials.properties"));
     }
 
     @Override
     public boolean authenticate(String username, String password, ServerSession session) {
-        return credentials.userName.equals(username) && credentials.password.equals(password);
+        return tenantSureCredentials.userName.equals(username) && tenantSureCredentials.password.equals(password);
     }
 
 }

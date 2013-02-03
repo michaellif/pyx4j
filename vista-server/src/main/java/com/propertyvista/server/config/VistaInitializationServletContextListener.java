@@ -20,7 +20,7 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.payment.sshd.PaymentSSHDServer;
+import com.propertyvista.sshd.InterfaceSSHDServer;
 
 public class VistaInitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
 
@@ -30,7 +30,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
             super.contextInitialized(sce);
             Persistence.service();
             SchedulerHelper.init();
-            PaymentSSHDServer.init();
+            InterfaceSSHDServer.init();
         } finally {
             Lifecycle.endContext();
         }
@@ -39,7 +39,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         try {
-            PaymentSSHDServer.shutdown();
+            InterfaceSSHDServer.shutdown();
             SchedulerHelper.shutdown();
             DevSession.cleanup();
         } finally {
