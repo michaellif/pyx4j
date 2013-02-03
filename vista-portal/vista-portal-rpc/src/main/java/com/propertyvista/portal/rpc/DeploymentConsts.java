@@ -40,4 +40,9 @@ public interface DeploymentConsts {
     public static final String pmcDocumentServletMapping = "pmc_document/";
 
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
+
+    public static final String RESIDENT_CONTENT_ID = "RESIDENT_CONTENT";
+
+    public static final String RESIDENT_LOGIN_ID = "RESIDENT_LOGIN";
+
 }

@@ -14,7 +14,6 @@
 package com.propertyvista.pmsite.server.pages;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -49,7 +48,8 @@ public class LandingPage extends BasePage {
         setVersioned(false);
 
         if (getCM().isCustomResidentsContentEnabled()) {
-            add(new GwtInclude("gwtInclude"));
+            add(new GwtInclude(BasePage.CONTENT_PANEL).add(AttributeModifier.replace("id", "vista.resident")));
+            add(new Label(BasePage.LOGIN_PANEL).add(AttributeModifier.replace("id", "vista.siteAuth")));
         } else {
             // set aptlist view mode preference to Map
             PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
@@ -135,10 +135,5 @@ public class LandingPage extends BasePage {
             response.renderCSSReference(refCSS);
         }
         super.renderHead(response);
-    }
-
-    @Override
-    public Markup getAssociatedMarkup() {
-        return super.getAssociatedMarkup();
     }
 }

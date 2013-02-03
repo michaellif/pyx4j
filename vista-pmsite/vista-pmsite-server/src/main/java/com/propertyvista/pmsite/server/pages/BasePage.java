@@ -44,6 +44,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
 public abstract class BasePage extends WebPage {
@@ -57,6 +58,10 @@ public abstract class BasePage extends WebPage {
     public static final String META_DESCRIPTION = "pageDescription";
 
     public static final String META_KEYWORDS = "pageKeywords";
+
+    public static final String CONTENT_PANEL = "contentPanel";
+
+    public static final String LOGIN_PANEL = "loginPanel";
 
     public static class LocalizedHtmlTag extends TransparentWebMarkupContainer {
         private static final long serialVersionUID = 1L;
@@ -203,7 +208,10 @@ public abstract class BasePage extends WebPage {
     @Override
     public Markup getAssociatedMarkup() {
         if (cm != null && cm.isCustomResidentsContentEnabled()) {
-            return Markup.of(cm.getCustomResidentsContent(locale));
+            String content = cm.getCustomResidentsContent(locale);
+            content = content.replaceFirst(DeploymentConsts.RESIDENT_CONTENT_ID, "wicket:id=\"" + CONTENT_PANEL + "\"");
+            content = content.replaceFirst(DeploymentConsts.RESIDENT_LOGIN_ID, "wicket:id=\"" + LOGIN_PANEL + "\"");
+            return Markup.of(content);
         } else {
             return super.getAssociatedMarkup();
         }
