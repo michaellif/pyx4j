@@ -68,8 +68,8 @@ public class TenantSureCoverageRequestAdapter {
             throw new RuntimeException(e);
         }
 
-        Persistence.service().retrieveMember(tenantSureClient.tenant().lease());
-        Persistence.service().retrieveMember(tenantSureClient.tenant().lease().unit().building());
+        Persistence.service().retrieve(tenantSureClient.tenant().lease());
+        Persistence.service().retrieve(tenantSureClient.tenant().lease().unit().building());
 
         // code that represents the pre-agreed insurance package for which the quote is required
         optionQuote.setOptionCode(matchOptionCode(coverageRequest.personalLiabilityCoverage().getValue(), coverageRequest.contentsCoverage().getValue()));
