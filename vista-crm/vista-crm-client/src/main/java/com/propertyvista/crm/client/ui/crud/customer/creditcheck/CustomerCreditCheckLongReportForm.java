@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -85,6 +86,13 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         selectTab(addTab(main));
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().identityDeathDate()).setVisible(!getValue().identityDeathDate().isNull());
+    }
+
     private Widget createQuickSummary() {
         FormFlexPanel summary = new FormFlexPanel();
 
@@ -123,15 +131,15 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         FormFlexPanel raitings = new FormFlexPanel();
         col = -1;
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 10).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 10).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 5).labelWidth(5).layout(Layout.vertical).build());
 
         // put all together:
         FormFlexPanel main = new FormFlexPanel();
@@ -148,18 +156,23 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         FormFlexPanel name = new FormFlexPanel();
 
         int row = -1;
-        name.setWidget(++row, 0, inject(proto().identityName(), new NameEditor()));
+        name.setWidget(++row, 0, inject(proto().identityName(), new NameEditor(i18n.tr("Name"))));
         name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identitySIN()), 20).build());
-        name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identityMarritialStatus()), 20).build());
+        name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identityMarritialStatus()), 10).build());
         row = -1;
-        name.setWidget(++row, 1, new DecoratorBuilder(inject(proto().identityBirthDate()), 20).build());
-        name.setWidget(++row, 1, new DecoratorBuilder(inject(proto().identityDeathDate()), 20).build());
+        name.setWidget(++row, 1, new DecoratorBuilder(inject(proto().identityBirthDate()), 10).build());
+        name.setWidget(++row, 1, new DecoratorBuilder(inject(proto().identityDeathDate()), 10).build());
 
         name.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         FormFlexPanel address = new FormFlexPanel();
-        address.setWidget(0, 0, inject(proto().identityCurrentAddress(), new AddressSimpleEditor()));
-        address.setWidget(0, 1, inject(proto().identityFormerAddress(), new AddressSimpleEditor()));
+        address.setWidget(0, 0, new HTML(i18n.tr("Current Address")));
+        address.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        address.setWidget(1, 0, inject(proto().identityCurrentAddress(), new AddressSimpleEditor()));
+
+        address.setWidget(0, 1, new HTML(i18n.tr("Former Address")));
+        address.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
+        address.setWidget(1, 1, inject(proto().identityFormerAddress(), new AddressSimpleEditor()));
 
         address.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 

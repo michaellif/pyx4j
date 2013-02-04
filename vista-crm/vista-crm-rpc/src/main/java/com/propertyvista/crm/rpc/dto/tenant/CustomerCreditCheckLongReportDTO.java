@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -24,8 +25,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.Customer;
 
 @Transient
+@ExtendsDBO(Customer.class)
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<BigDecimal> percentOfRentCovered();
