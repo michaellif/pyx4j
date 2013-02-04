@@ -118,7 +118,7 @@ public class I18nResourceBundleGenerator extends Generator {
         }
 
         if (po == null) {
-            logger.log(TreeLogger.ERROR, "Couldn't find locale resources");
+            logger.log(TreeLogger.ERROR, "Couldn't find locale '" + locale + "' resources");
             throw new UnableToCompleteException();
         }
 
