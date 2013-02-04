@@ -23,6 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
@@ -30,6 +31,7 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.v
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 
 public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity implements TenantSureCreditCardUpdateView.Presenter {
 
@@ -73,7 +75,15 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
 
     @Override
     public void onTenantAddressRequested() {
-        // TODO add tenant address fetching routine
+        // TODO there should be some generic service to do this in Portal APP
+        GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class).getCurrentTenantAddress(new DefaultAsyncCallback<AddressStructured>() {
+
+            @Override
+            public void onSuccess(AddressStructured result) {
+                view.setTenantAddress(result);
+            }
+
+        });
     }
 
     @Override

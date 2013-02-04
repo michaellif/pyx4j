@@ -13,8 +13,12 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -26,12 +30,25 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
     private static final I18n i18n = I18n.get(TenantSureCreditCardUpdateViewImpl.class);
 
     public TenantSureCreditCardUpdateViewImpl() {
-        setForm(new TenantSurePaymentMethodForm());
+        setForm(new TenantSurePaymentMethodForm(new Command() {
+            @Override
+            public void execute() {
+                ((TenantSureCreditCardUpdateView.Presenter) presenter).onTenantAddressRequested();
+            }
+        }));
     }
 
     @Override
     public void reportCCUpdateSuccess() {
-        MessageDialog.info(i18n.tr("Credit card was updated sucessfully"));
+        MessageDialog.show("", i18n.tr("Credit card was updated sucessfully"), Type.Info, new OkOption() {
+
+            @Override
+            public boolean onClickOk() {
+                ((TenantSureCreditCardUpdateView.Presenter) presenter).onCCUpdateSuccessAcknowledged();
+                return true;
+            }
+
+        });
     }
 
     @Override
