@@ -51,6 +51,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
 public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
 
@@ -191,7 +192,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         }
 
-        layout();
+        layout(builder.layout);
     }
 
     public Label getLabel() {
@@ -202,11 +203,22 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         return component;
     }
 
-    protected void layout() {
-        setWidget(0, 0, labelHolder);
-        setWidget(0, 1, contentPanel);
-        setWidget(1, 1, validationLabel);
-        setWidget(2, 1, noteLabel);
+    protected void layout(Layout layout) {
+        switch (layout) {
+        case horisontal:
+            setWidget(0, 0, labelHolder);
+            setWidget(0, 1, contentPanel);
+            setWidget(1, 1, validationLabel);
+            setWidget(2, 1, noteLabel);
+            break;
+
+        case vertical:
+            setWidget(0, 0, labelHolder);
+            setWidget(1, 0, contentPanel);
+            setWidget(2, 0, validationLabel);
+            setWidget(3, 0, noteLabel);
+            break;
+        }
     }
 
     protected void renderMandatoryStar() {
@@ -275,6 +287,10 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             left, right
         }
 
+        public enum Layout {
+            horisontal, vertical
+        }
+
         private final CComponent<?, ?> component;
 
         private double labelWidth = 15;
@@ -294,6 +310,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         private Alignment labelAlignment = Alignment.right;
 
         private Alignment componentAlignment = Alignment.left;
+
+        private Layout layout = Layout.horisontal;
 
         public Builder(final CComponent<?, ?> component) {
             this.component = component;
@@ -324,6 +342,11 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         public Builder componentAlignment(Alignment componentAlignment) {
             this.componentAlignment = componentAlignment;
+            return this;
+        }
+
+        public Builder layout(Layout layout) {
+            this.layout = layout;
             return this;
         }
 
