@@ -19,14 +19,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportCrudService;
 
 public class CustomerCreditCheckLongReportViewerActivity extends CrmViewerActivity<CustomerCreditCheckLongReportDTO> {
 
     public CustomerCreditCheckLongReportViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(CustomerCreditCheckLongReportViewerView.class), GWT
+        super(place, CustomerViewFactory.instance(CustomerCreditCheckLongReportViewerView.class), GWT
                 .<CustomerCreditCheckLongReportCrudService> create(CustomerCreditCheckLongReportCrudService.class));
     }
 }

@@ -13,24 +13,52 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.rpc.shared.ServiceExecution;
+
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportCrudService;
-import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.Customer;
 
-public class CustomerCreditCheckLongReportCrudServiceImpl extends AbstractCrudServiceDtoImpl<CustomerCreditCheck, CustomerCreditCheckLongReportDTO> implements
-        CustomerCreditCheckLongReportCrudService {
+public class CustomerCreditCheckLongReportCrudServiceImpl implements CustomerCreditCheckLongReportCrudService {
 
     public CustomerCreditCheckLongReportCrudServiceImpl() {
-        super(CustomerCreditCheck.class, CustomerCreditCheckLongReportDTO.class);
     }
 
     @Override
-    protected void bind() {
+    public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        if (retrieveTraget == RetrieveTraget.View) {
+            callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
+        } else {
+            throw new Error("Not intended for Edit!");
+        }
     }
 
     @Override
-    protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckLongReportDTO dto, RetrieveTraget retrieveTraget) {
+    public void create(AsyncCallback<Key> callback, CustomerCreditCheckLongReportDTO editableEntity) {
+        throw new Error("Not intended for use!");
+    }
+
+    @Override
+    @ServiceExecution(waitCaption = "Saving...")
+    public void save(AsyncCallback<Key> callback, CustomerCreditCheckLongReportDTO editableEntity) {
+        throw new Error("Not intended for use!");
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<CustomerCreditCheckLongReportDTO>> callback, EntityListCriteria<CustomerCreditCheckLongReportDTO> criteria) {
+        throw new Error("Not intended for use!");
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        throw new Error("Not intended for use!");
     }
 }

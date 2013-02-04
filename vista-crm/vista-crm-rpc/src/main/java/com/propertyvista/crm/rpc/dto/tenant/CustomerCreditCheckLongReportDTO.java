@@ -58,7 +58,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<Integer> latePayments31_60days();
 
-    IPrimitive<Integer> latePayments61_90();
+    IPrimitive<Integer> latePayments61_90days();
 
     IPrimitive<Double> equifaxCheckScore();
 
