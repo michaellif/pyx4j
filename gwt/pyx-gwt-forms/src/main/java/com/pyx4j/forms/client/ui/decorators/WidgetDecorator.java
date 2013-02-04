@@ -105,7 +105,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         if (caption == null) {
             caption = "";
         } else {
-            caption += builder.useLabelSemicolon ? ":" : "";
+            caption += builder.useLabelSemicolon && builder.layout != Layout.vertical ? ":" : "";
         }
 
         label = new Label(caption);
