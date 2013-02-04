@@ -25,6 +25,7 @@ import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.server.jobs.StatisticsUtils;
 
 public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
@@ -67,6 +68,9 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
                 formater.newRow();
 
+                //TODO add Monthly Payable here as well
+                StatisticsUtils.addProcessed(runStats, 1, 0.0);
+
             }
         } finally {
             iterator.completeRetrieval();
@@ -75,14 +79,11 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     @Override
     public TenantSureHQUpdateFile reciveHQUpdatesFile() {
-        // TODO Auto-generated method stub
-        return null;
+        return HQUpdate.reciveHQUpdatesFile();
     }
 
     @Override
     public void processHQUpdate(RunStats runStats, TenantSureHQUpdateFile fileId) {
-        // TODO Auto-generated method stub
-
+        HQUpdate.processHQUpdate(runStats, fileId);
     }
-
 }

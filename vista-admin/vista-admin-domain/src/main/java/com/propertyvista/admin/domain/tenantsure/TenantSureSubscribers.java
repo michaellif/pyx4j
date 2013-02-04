@@ -7,44 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-01
+ * Created on 2013-02-04
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.admin.domain.tenantsure;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 
+/**
+ * Index table to find PMC subscriber belongs to.
+ * 
+ */
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface TenantSureHQUpdateRecord extends IEntity {
+public interface TenantSureSubscribers extends IEntity {
 
+    @Detached
     @Owner
     @JoinColumn
+    Pmc pmc();
+
     @Indexed
-    @MemberColumn(notNull = true)
-    TenantSureHQUpdateFile file();
-
-    public enum RequestType {
-
-        Cancell,
-
-    };
-
-    @NotNull
     IPrimitive<String> certificateNumber();
-
-    IPrimitive<RequestType> status();
-
-    IPrimitive<Boolean> consumed();
 }
