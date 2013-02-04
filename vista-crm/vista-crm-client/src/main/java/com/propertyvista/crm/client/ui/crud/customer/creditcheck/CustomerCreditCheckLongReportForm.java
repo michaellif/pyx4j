@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -119,6 +120,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         int col = -1;
         accounts.setWidget(0, ++col, new HTML(i18n.tr("Accounts paid late")));
         accounts.getWidget(0, col).setWidth("15em");
+        accounts.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments1_30days()), 20).layout(Layout.vertical).build());
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments31_60days()), 20).layout(Layout.vertical).build());
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments61_90days()), 20).layout(Layout.vertical).build());
@@ -127,6 +129,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         col = -1;
         equiifax.setWidget(0, ++col, new HTML(i18n.tr("Equifax")));
         equiifax.getWidget(0, col).setWidth("15em");
+        equiifax.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
         equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 20).layout(Layout.vertical).build());
         equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 20).layout(Layout.vertical).build());
         equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRiskLevel()), 20).layout(Layout.vertical).build());
