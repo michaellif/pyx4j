@@ -268,5 +268,5 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         IPrimitive<String> phone();
     }
 
-    IList<InquiryDTO> Inquiries();
+    IList<InquiryDTO> inquiries();
 }

@@ -14,18 +14,24 @@
 package com.propertyvista.crm.client.ui.crud.customer.creditcheck;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.AccountDTO;
 
 public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCreditCheckLongReportDTO> {
 
@@ -44,7 +50,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, createIdentity());
 
         main.setH1(++row, 0, 1, i18n.tr("ACCOUNTS"));
-        main.setWidget(++row, 0, createAccounts());
+        main.setWidget(++row, 0, inject(proto().accounts(), new AccountsFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("COURT JUDGEMENTS"));
         main.setWidget(++row, 0, createCourtJudgements());
@@ -164,11 +170,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         return main;
     }
 
-    private Widget createAccounts() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     private Widget createCourtJudgements() {
         // TODO Auto-generated method stub
         return null;
@@ -197,5 +198,51 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     private Widget createInquiries() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private class AccountsFolder extends VistaBoxFolder<AccountDTO> {
+
+        public AccountsFolder() {
+            super(AccountDTO.class, false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof AccountDTO) {
+                return new AccountViewer();
+            }
+            return super.create(member);
+        }
+
+        private class AccountViewer extends CEntityDecoratableForm<AccountDTO> {
+
+            public AccountViewer() {
+                super(AccountDTO.class);
+                setEditable(false);
+                setViewable(true);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int col = -1;
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().name()), 20).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().number()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().creditAmount()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balanceAmount()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastPaymentDate()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().radeCode()), 5).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().radeType()), 5).layout(Layout.vertical).build());
+
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().paymentRate()), 25).build());
+                main.getFlexCellFormatter().setColSpan(1, 0, col);
+
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().paymentType()), 25).build());
+                main.getFlexCellFormatter().setColSpan(2, 0, col);
+
+                return main;
+            }
+        }
     }
 }
