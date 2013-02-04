@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -87,28 +88,33 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<Integer> rating9();
 
-    // Identity
-    Name identityName();
+    @Transient
+    interface IdentityDTO extends IEntity {
+        Name name();
 
-    IPrimitive<LogicalDate> identityBirthDate();
+        IPrimitive<LogicalDate> birthDate();
 
-    IPrimitive<LogicalDate> identityDeathDate();
+        IPrimitive<LogicalDate> deathDate();
 
-    IPrimitive<String> identitySIN();
+        IPrimitive<String> SIN();
 
-    IPrimitive<String> identityMarritialStatus();
+        IPrimitive<String> marritialStatus();
 
-    AddressSimple identityCurrentAddress();
+        AddressSimple currentAddress();
 
-    AddressSimple identityFormerAddress();
+        AddressSimple formerAddress();
 
-    IPrimitive<String> identityCurrentEmployer();
+        IPrimitive<String> currentEmployer();
 
-    IPrimitive<String> identityCurrentOccupation();
+        IPrimitive<String> currentOccupation();
 
-    IPrimitive<String> identityFormerEmployer();
+        IPrimitive<String> formerEmployer();
 
-    IPrimitive<String> identityFormerOccupation();
+        IPrimitive<String> formerOccupation();
+    }
+
+    @EmbeddedEntity
+    IdentityDTO identity();
 
     // Accounts
     @Transient
