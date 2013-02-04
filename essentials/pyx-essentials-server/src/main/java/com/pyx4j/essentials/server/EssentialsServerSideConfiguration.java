@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceContextLifecycleListener;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
 import com.pyx4j.server.contexts.Context;
@@ -79,6 +80,10 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
     @Override
     public boolean datastoreReadOnly() {
         return SystemMaintenance.getState() != SystemState.Online;
+    }
+
+    public Class<? extends SystemMaintenanceState> getSystemMaintenanceStateClass() {
+        return SystemMaintenanceState.class;
     }
 
     @Override

@@ -31,10 +31,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.xml.XMLEntityConverter;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
+import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4j.LoggerConfig;
@@ -55,7 +57,8 @@ public class SystemMaintenance {
 
     private static long maintenanceScheduledEnd;
 
-    private static SystemMaintenanceState systemMaintenanceState = EntityFactory.create(SystemMaintenanceState.class);
+    private static SystemMaintenanceState systemMaintenanceState = EntityFactory
+            .create(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass());
 
     static {
         loadState();
@@ -203,7 +206,8 @@ public class SystemMaintenance {
         try {
             File file = getStorageFile();
             if (file.canRead()) {
-                SystemMaintenanceState sm = XMLEntityConverter.readFile(SystemMaintenanceState.class, file);
+                SystemMaintenanceState sm = XMLEntityConverter.readFile(
+                        ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass(), file);
                 if (sm != null) {
                     setSystemMaintenanceInfo(sm);
                 }
