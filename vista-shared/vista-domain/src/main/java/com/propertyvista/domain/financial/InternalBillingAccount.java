@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
-import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -83,9 +82,10 @@ public interface InternalBillingAccount extends BillingAccount {
     @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
 
-    @Override
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
-    ISet<LeaseArrearsSnapshot> arrearsSnapshots();
+//    TODO VladS Fix Me
+//    @Override
+//    @Owned(cascade = {})
+//    @Detached(level = AttachLevel.Detached)
+//    ISet<LeaseArrearsSnapshot> arrearsSnapshots();
 
 }
