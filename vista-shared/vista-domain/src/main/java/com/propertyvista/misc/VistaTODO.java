@@ -22,7 +22,7 @@ public interface VistaTODO {
 
     public static final boolean VISTA_2467_SHOW_TENANTSURE = true;
 
-    public static final boolean VISTA_2428_FORBID_ARREARS_GADGETS = true;
+    public static final boolean VISTA_2428_FORBID_ARREARS_GADGETS = false;
 
     /*
      * This is changed by BuildMaster when creating Branch.

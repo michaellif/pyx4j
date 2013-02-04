@@ -92,6 +92,8 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
 
                 }
             }, dtoCriteria);
+        } else {
+            super.list(callback, dtoCriteria);
         }
     }
 
