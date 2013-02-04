@@ -37,7 +37,7 @@ public interface TenantSureHQUpdateRecord extends IEntity {
 
     public enum RequestType {
 
-        Cancell,
+        Cancel,
 
     };
 
