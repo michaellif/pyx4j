@@ -24,12 +24,12 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
-import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportCrudService;
+import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
 import com.propertyvista.domain.tenant.Customer;
 
-public class CustomerCreditCheckLongReportCrudServiceImpl implements CustomerCreditCheckLongReportCrudService {
+public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditCheckLongReportService {
 
-    public CustomerCreditCheckLongReportCrudServiceImpl() {
+    public CustomerCreditCheckLongReportServiceImpl() {
     }
 
     @Override

@@ -17,6 +17,6 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 
-public interface CustomerCreditCheckLongReportCrudService extends AbstractCrudService<CustomerCreditCheckLongReportDTO> {
+public interface CustomerCreditCheckLongReportService extends AbstractCrudService<CustomerCreditCheckLongReportDTO> {
 
 }

@@ -65,22 +65,22 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, inject(proto().accounts(), new AccountFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("COURT JUDGEMENTS"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new JudgementFolder()));
+        main.setWidget(++row, 0, inject(proto().judgements(), new JudgementFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("PROPOSALS AND BANKRUPTCIES"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new ProposalFolder()));
+        main.setWidget(++row, 0, inject(proto().proposals(), new ProposalFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("EVICTIONS"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new EvictionFolder()));
+        main.setWidget(++row, 0, inject(proto().evictions(), new EvictionFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("RENT HISTORY"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new RentFolder()));
+        main.setWidget(++row, 0, inject(proto().rents(), new RentFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("COLLECTIONS"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new CollectionFolder()));
+        main.setWidget(++row, 0, inject(proto().collections(), new CollectionFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("INQUIRIES"));
-        main.setWidget(++row, 0, inject(proto().accounts(), new InquiryFolder()));
+        main.setWidget(++row, 0, inject(proto().inquiries(), new InquiryFolder()));
 
         selectTab(addTab(main));
     }
@@ -148,7 +148,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         FormFlexPanel name = new FormFlexPanel();
 
         int row = -1;
-        name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identityName(), new NameEditor()), 20).build());
+        name.setWidget(++row, 0, inject(proto().identityName(), new NameEditor()));
         name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identitySIN()), 20).build());
         name.setWidget(++row, 0, new DecoratorBuilder(inject(proto().identityMarritialStatus()), 20).build());
         row = -1;
@@ -158,8 +158,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         name.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         FormFlexPanel address = new FormFlexPanel();
-        address.setWidget(0, 0, new DecoratorBuilder(inject(proto().identityBirthDate(), new AddressSimpleEditor()), 20).layout(Layout.vertical).build());
-        address.setWidget(0, 1, new DecoratorBuilder(inject(proto().identityDeathDate(), new AddressSimpleEditor()), 20).layout(Layout.vertical).build());
+        address.setWidget(0, 0, inject(proto().identityCurrentAddress(), new AddressSimpleEditor()));
+        address.setWidget(0, 1, inject(proto().identityFormerAddress(), new AddressSimpleEditor()));
 
         address.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 

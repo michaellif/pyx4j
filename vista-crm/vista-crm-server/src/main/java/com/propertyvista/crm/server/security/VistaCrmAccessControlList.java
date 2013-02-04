@@ -67,6 +67,7 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
@@ -434,6 +435,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));
+
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckStatusCrudService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCheckWizardService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
