@@ -84,8 +84,10 @@
 	font-size: 14px;
 }
 
-#gwt-debug-login, #gwt-debug-account {
+#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
+	color: #999999;
 	white-space: nowrap;
+	float: right;
 }
 
 .vista-pmsite-residentPage .TenantDashboardSection {
@@ -152,3 +154,4 @@
 	color: #000000;
 	font-weight: normal;
 }
+

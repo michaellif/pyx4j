@@ -95,7 +95,8 @@
     bottom: -7px;;
 }
 
-#gwt-debug-login, #gwt-debug-account {
+#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
 	white-space: nowrap;
+	float: right;
 }
 
