@@ -195,6 +195,7 @@
         <module>vista-yardi</module>
         <module>vista-admin</module>
         <module>vista-onboarding</module>
+        <module>vista-field</module>
         <module>vista-crm</module>
         <module>vista-paypad</module>
         <module>vista-pmsite</module>
