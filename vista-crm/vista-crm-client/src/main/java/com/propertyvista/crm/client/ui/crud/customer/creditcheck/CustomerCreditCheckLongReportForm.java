@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.creditcheck;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,6 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
@@ -29,12 +33,16 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.AccountDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.CollectionDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.EvictionDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.InquiryDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.JudgementDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.ProposalDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RentDTO;
 import com.propertyvista.domain.person.Name;
 
 public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCreditCheckLongReportDTO> {
@@ -66,13 +74,13 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, inject(proto().accounts(), new EvictionFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("RENT HISTORY"));
-        main.setWidget(++row, 0, createRentHistory());
+        main.setWidget(++row, 0, inject(proto().accounts(), new RentFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("COLLECTIONS"));
-        main.setWidget(++row, 0, createCollections());
+        main.setWidget(++row, 0, inject(proto().accounts(), new CollectionFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("INQUIRIES"));
-        main.setWidget(++row, 0, createInquiries());
+        main.setWidget(++row, 0, inject(proto().accounts(), new InquiryFolder()));
 
         selectTab(addTab(main));
     }
@@ -172,21 +180,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(2, 0, employement);
 
         return main;
-    }
-
-    private Widget createRentHistory() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private Widget createCollections() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private Widget createInquiries() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     private class AccountFolder extends VistaBoxFolder<AccountDTO> {
@@ -378,6 +371,119 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
                 return main;
             }
+        }
+    }
+
+    private class RentFolder extends VistaBoxFolder<RentDTO> {
+
+        public RentFolder() {
+            super(RentDTO.class, false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof RentDTO) {
+                return new RentViewer();
+            }
+            return super.create(member);
+        }
+
+        private class RentViewer extends CEntityDecoratableForm<RentDTO> {
+
+            public RentViewer() {
+                super(RentDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int col = -1;
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().landlord(), new NameEditor()), 20).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rent()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().writeOffs()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().noticeGiven()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().NSFChecks()), 10).layout(Layout.vertical).build());
+
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().lastUpdated()), 25).build());
+                main.getFlexCellFormatter().setColSpan(1, 0, col);
+
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().from()), 10).build());
+                main.setWidget(2, 1, new DecoratorBuilder(inject(proto().to()), 10).build());
+                main.getFlexCellFormatter().setColSpan(2, 0, col / 2);
+                main.getFlexCellFormatter().setColSpan(2, 1, col / 2);
+
+                main.setWidget(3, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.getFlexCellFormatter().setColSpan(3, 0, col);
+
+                return main;
+            }
+        }
+    }
+
+    private class CollectionFolder extends VistaBoxFolder<CollectionDTO> {
+
+        public CollectionFolder() {
+            super(CollectionDTO.class, false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof CollectionDTO) {
+                return new CollectionViewer();
+            }
+            return super.create(member);
+        }
+
+        private class CollectionViewer extends CEntityDecoratableForm<CollectionDTO> {
+
+            public CollectionViewer() {
+                super(CollectionDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int col = -1;
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().onBehalf()), 20).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().date()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastActive()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().originalAmount()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balance()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().status()), 15).layout(Layout.vertical).build());
+
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.getFlexCellFormatter().setColSpan(1, 0, col);
+
+                return main;
+            }
+        }
+    }
+
+    private class InquiryFolder extends VistaTableFolder<InquiryDTO> {
+
+        public InquiryFolder() {
+            super(InquiryDTO.class, false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().onBehalf(), "25em"),
+                    new EntityFolderColumnDescriptor(proto().date(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().customerNumber(), "15em"),
+                    new EntityFolderColumnDescriptor(proto().phone(), "10em"));
+              //@formatter:on        
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Name) {
+                return new NameEditor();
+            }
+            return super.create(member);
         }
     }
 }

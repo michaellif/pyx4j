@@ -250,7 +250,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> status();
 
-        AddressSimple adress();
+        AddressSimple address();
     }
 
     IList<CollectionDTO> collections();
