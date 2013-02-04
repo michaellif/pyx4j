@@ -100,11 +100,11 @@ select {
 
 .header .main {
 	margin-top: 0 auto;
-	height: 146px;
+	height: 150px;
 }
 
 #siteTitle {
-	margin: 10px 180px;
+	margin: 5px 180px;
 	position: absolute;
 	width: 600px;
 	text-align: center;
