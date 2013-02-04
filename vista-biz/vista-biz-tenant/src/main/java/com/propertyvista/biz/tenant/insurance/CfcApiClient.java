@@ -15,7 +15,6 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -47,6 +46,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
+import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCoverageRequestAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -158,8 +158,8 @@ public class CfcApiClient implements ICfcApiClient {
             tenantSureQuote.quoteId().setValue(quoteResponse.getQuoteData().getQuoteId());
         }
 
-        tenantSureQuote.grossPremium().setValue(new BigDecimal(quoteResponse.getGrossPremium()));
-        tenantSureQuote.underwriterFee().setValue(new BigDecimal(quoteResponse.getFee()));
+        tenantSureQuote.grossPremium().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()));
+        tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
 
         for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
             InsuranceTenantSureTax tenantSureTax = EntityFactory.create(InsuranceTenantSureTax.class);
@@ -168,7 +168,7 @@ public class CfcApiClient implements ICfcApiClient {
             tenantSureTax.buinessLine().setValue(tax.getBusinessLine());
             tenantSureQuote.taxBreakdown().add(tenantSureTax);
         }
-        tenantSureQuote.totalMonthlyPayable().setValue(new BigDecimal(quoteResponse.getTotalPayable()));
+        tenantSureQuote.totalMonthlyPayable().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getTotalPayable()));
 
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         return tenantSureQuote;
