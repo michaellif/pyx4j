@@ -42,7 +42,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
     }
 
     public TenantSureQuoteViewer() {
-        this(NumberFormat.getFormat(i18n.tr("$#,##0")));
+        this(NumberFormat.getFormat(i18n.tr("$#,##0.00")));
     }
 
     @Override
