@@ -29,6 +29,7 @@ import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.log4j.LoggerConfig;
@@ -37,6 +38,7 @@ import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
@@ -254,6 +256,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public boolean isProductionBackend() {
         return VistaDeployment.isVistaProduction();
+    }
+
+    @Override
+    public Class<? extends SystemMaintenanceState> getSystemMaintenanceStateClass() {
+        return VistaSystemMaintenanceState.class;
     }
 
     @Override

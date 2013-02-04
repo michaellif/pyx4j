@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,11 +20,11 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
 
 public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements MaintenanceCrudService {
@@ -46,25 +46,25 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     // Crud service interface implementation:
 
     @Override
-    public void create(AsyncCallback<Key> callback, SystemMaintenanceState editableEntity) {
+    public void create(AsyncCallback<Key> callback, VistaSystemMaintenanceState editableEntity) {
         throw new Error();
     }
 
     @Override
-    public void retrieve(AsyncCallback<SystemMaintenanceState> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        SystemMaintenanceState state = SystemMaintenance.getSystemMaintenanceInfo();
+    public void retrieve(AsyncCallback<VistaSystemMaintenanceState> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        VistaSystemMaintenanceState state = (VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo();
         state.setPrimaryKey(entityId);
         callback.onSuccess(state);
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, SystemMaintenanceState state) {
+    public void save(AsyncCallback<Key> callback, VistaSystemMaintenanceState state) {
         SystemMaintenance.setSystemMaintenanceInfo(state);
         callback.onSuccess(state.getPrimaryKey());
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<SystemMaintenanceState>> callback, EntityListCriteria<SystemMaintenanceState> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<VistaSystemMaintenanceState>> callback, EntityListCriteria<VistaSystemMaintenanceState> criteria) {
         throw new Error();
     }
 

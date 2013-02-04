@@ -15,15 +15,15 @@ package com.propertyvista.admin.client.ui.crud.maintenance;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewerActivity;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 
-public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<SystemMaintenanceState> implements MaintenanceViewerView {
+public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<VistaSystemMaintenanceState> implements MaintenanceViewerView {
 
     private final static I18n i18n = I18n.get(MaintenanceViewerViewImpl.class);
 
