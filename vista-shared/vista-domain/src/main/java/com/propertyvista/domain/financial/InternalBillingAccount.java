@@ -83,6 +83,7 @@ public interface InternalBillingAccount extends BillingAccount {
     @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
 
+    @Override
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<LeaseArrearsSnapshot> arrearsSnapshots();

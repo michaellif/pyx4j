@@ -37,6 +37,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @AbstractEntity
@@ -106,6 +107,11 @@ public interface BillingAccount extends IEntity {
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
+
+    // TODO move to InternalBillingAccount when $asInstanceOf  implemented
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<LeaseArrearsSnapshot> arrearsSnapshots();
 
     @Length(14)
     @Indexed(uniqueConstraint = true)
