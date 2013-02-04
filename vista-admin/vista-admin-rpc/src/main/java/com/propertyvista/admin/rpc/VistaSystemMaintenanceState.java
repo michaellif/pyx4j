@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.rpc;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
@@ -21,6 +22,7 @@ import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
 
     @Override
+    @Caption(description = "When checked disables TenantSure on tenant portal")
     IPrimitive<Boolean> enableTenantSureMaintenance();
 
 }
