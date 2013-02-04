@@ -63,7 +63,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, inject(proto().accounts(), new ProposalFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("EVICTIONS"));
-        main.setWidget(++row, 0, createEvictions());
+        main.setWidget(++row, 0, inject(proto().accounts(), new EvictionFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("RENT HISTORY"));
         main.setWidget(++row, 0, createRentHistory());
@@ -172,16 +172,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(2, 0, employement);
 
         return main;
-    }
-
-    private Widget createProposals() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private Widget createEvictions() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     private Widget createRentHistory() {
