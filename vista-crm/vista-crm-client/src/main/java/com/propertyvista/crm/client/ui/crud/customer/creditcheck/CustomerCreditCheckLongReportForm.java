@@ -32,7 +32,9 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.AccountDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.EvictionDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.JudgementDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.ProposalDTO;
 import com.propertyvista.domain.person.Name;
 
 public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCreditCheckLongReportDTO> {
@@ -58,7 +60,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, inject(proto().accounts(), new JudgementFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("PROPOSALS AND BANKRUPTCIES"));
-        main.setWidget(++row, 0, createProposals());
+        main.setWidget(++row, 0, inject(proto().accounts(), new ProposalFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("EVICTIONS"));
         main.setWidget(++row, 0, createEvictions());
@@ -172,11 +174,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         return main;
     }
 
-    private Widget createCourtJudgements() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     private Widget createProposals() {
         // TODO Auto-generated method stub
         return null;
@@ -220,8 +217,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             public AccountViewer() {
                 super(AccountDTO.class);
-                setEditable(false);
-                setViewable(true);
             }
 
             @Override
@@ -266,8 +261,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             public JudgementViewer() {
                 super(JudgementDTO.class);
-                setEditable(false);
-                setViewable(true);
             }
 
             @Override
@@ -295,6 +288,103 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                     }
                 }), 25).build());
                 main.getFlexCellFormatter().setColSpan(2, 0, col);
+
+                return main;
+            }
+        }
+    }
+
+    private class ProposalFolder extends VistaBoxFolder<ProposalDTO> {
+
+        public ProposalFolder() {
+            super(ProposalDTO.class, false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof ProposalDTO) {
+                return new ProposalViewer();
+            }
+            return super.create(member);
+        }
+
+        private class ProposalViewer extends CEntityDecoratableForm<ProposalDTO> {
+
+            public ProposalViewer() {
+                super(ProposalDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int col = -1;
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dispositionDate()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().liabilityAmount()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().assetAmount()), 10).layout(Layout.vertical).build());
+
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().caseNumberAndTrustee()), 25).build());
+                main.getFlexCellFormatter().setColSpan(1, 0, col);
+
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().intentOrDisposition()), 25).build());
+                main.getFlexCellFormatter().setColSpan(2, 0, col);
+
+                return main;
+            }
+        }
+    }
+
+    private class EvictionFolder extends VistaBoxFolder<EvictionDTO> {
+
+        public EvictionFolder() {
+            super(EvictionDTO.class, false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof EvictionDTO) {
+                return new EvictionViewer();
+            }
+            return super.create(member);
+        }
+
+        private class EvictionViewer extends CEntityDecoratableForm<EvictionDTO> {
+
+            public EvictionViewer() {
+                super(EvictionDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel main = new FormFlexPanel();
+
+                int col = -1;
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateFiled()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgementDate()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgment()), 10).layout(Layout.vertical).build());
+
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff(), new NameEditor()), 25).build());
+                main.getFlexCellFormatter().setColSpan(1, 0, col);
+
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants(), new VistaBoxFolder<Name>(Name.class, false) {
+                    @Override
+                    public CComponent<?, ?> create(IObject<?> member) {
+                        if (member instanceof Name) {
+                            return new NameEditor();
+                        }
+                        return super.create(member);
+                    }
+                }), 25).build());
+                main.getFlexCellFormatter().setColSpan(2, 0, col);
+
+                main.setWidget(3, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.getFlexCellFormatter().setColSpan(3, 0, col);
 
                 return main;
             }
