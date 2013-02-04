@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
@@ -58,7 +59,57 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
             public void onSuccess(VoidSerializable result) {
                 TenantSureManagementActivity.this.populateStatus();
             }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.reportCancelFailure(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
         });
+    }
+
+    @Override
+    public void sendDocumentation(String email) {
+        service.sendDocumentation(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                view.reportSendDocumentatioinSuccess();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+
+        }, email);
+    }
+
+    @Override
+    public void reinstate() {
+        service.reinstate(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populateStatus();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -71,36 +122,20 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.About());
     }
 
-    @Override
-    public void sendDocumentation(String email) {
-        service.sendDocumentation(new DefaultAsyncCallback<VoidSerializable>() {
-
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                view.reportSendDocumentatioinSuccess();
-            }
-
-        }, email);
-    }
-
-    @Override
-    public void reinstate() {
-        service.reinstate(new DefaultAsyncCallback<VoidSerializable>() {
-
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populateStatus();
-            }
-
-        });
-
-    }
-
     private void populateStatus() {
         service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
             @Override
             public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
                 view.populate(status);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
             }
         });
     }

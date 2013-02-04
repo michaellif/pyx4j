@@ -57,7 +57,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         private CEntityForm<EmailHolder> form;
 
         public EmailInputDialog(String defaultEmail) {
-            super(i18n.tr("Enter you email:"));
+            super(i18n.tr("Enter your email:"));
 
             form = new CEntityDecoratableForm<EmailHolder>(EmailHolder.class) {
                 @Override
@@ -140,6 +140,11 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     @Override
     public void reportCancelFailure(String errorMessage) {
+        MessageDialog.error(i18n.tr("Error"), errorMessage);
+    }
+
+    @Override
+    public void reportError(String errorMessage) {
         MessageDialog.error(i18n.tr("Error"), errorMessage);
     }
 

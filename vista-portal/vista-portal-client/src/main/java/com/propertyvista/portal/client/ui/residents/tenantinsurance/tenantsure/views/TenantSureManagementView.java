@@ -43,6 +43,8 @@ public interface TenantSureManagementView extends IsWidget {
 
     void reportCancelFailure(String errorMessage);
 
+    void reportError(String message);
+
     void reportSendDocumentatioinSuccess();
 
 }
