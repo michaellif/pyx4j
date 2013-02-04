@@ -21,7 +21,6 @@ import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 @Transient
 public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
 
-    @Override
     @Caption(description = "When checked disables TenantSure on tenant portal")
     IPrimitive<Boolean> enableTenantSureMaintenance();
 
