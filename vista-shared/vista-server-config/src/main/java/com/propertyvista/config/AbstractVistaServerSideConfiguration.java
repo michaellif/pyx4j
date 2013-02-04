@@ -87,15 +87,11 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String getCaledonCompanyId();
 
+    public abstract File getCaledonInterfaceWorkDirectory();
+
     public abstract int interfaceSSHDPort();
 
-    public File getTenantSureHQUpdateDirectory() {
-        return null;
-    }
-
-    public File getTenantSureReportsDirectory() {
-        return null;
-    }
+    public abstract File getTenantSureInterfaceSftpDirectory();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;

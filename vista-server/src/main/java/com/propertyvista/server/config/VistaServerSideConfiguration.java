@@ -329,4 +329,33 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         }
     }
 
+    protected File vistaWorkDir() {
+        String dirName = getConfigProperties().getValue("vista-work.dir");
+        if (CommonsStringUtils.isStringSet(dirName)) {
+            return new File(dirName);
+        } else {
+            return new File(new File("vista-work"), LoggerConfig.getContextName());
+        }
+    }
+
+    @Override
+    public File getCaledonInterfaceWorkDirectory() {
+        String dirName = getConfigProperties().getValue("vista-work.caledon.dir");
+        if (CommonsStringUtils.isStringSet(dirName)) {
+            return new File(dirName);
+        } else {
+            return new File(vistaWorkDir(), "caledon");
+        }
+    }
+
+    @Override
+    public File getTenantSureInterfaceSftpDirectory() {
+        String dirName = getConfigProperties().getValue("vista-work.tenant-sure.dir");
+        if (CommonsStringUtils.isStringSet(dirName)) {
+            return new File(dirName);
+        } else {
+            return new File(vistaWorkDir(), "tenant-sure");
+        }
+    }
+
 }

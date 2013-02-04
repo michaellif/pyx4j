@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
@@ -54,7 +53,7 @@ public class PadCaledon {
     private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
 
     private File getPadBaseDir() {
-        File padWorkdir = new File(new File("vista-work"), LoggerConfig.getContextName());
+        File padWorkdir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonInterfaceWorkDirectory();
         if (!padWorkdir.exists()) {
             if (!padWorkdir.mkdirs()) {
                 log.error("Unable to create directory {}", padWorkdir.getAbsolutePath());

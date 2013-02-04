@@ -13,31 +13,74 @@
  */
 package com.propertyvista.server.jobs.insurance;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 
 public class TenantSureReportsProcess implements PmcProcess {
+
+    private static final Logger log = LoggerFactory.getLogger(TenantSureReportsProcess.class);
+
+    protected ReportTableFormater formater;
 
     public TenantSureReportsProcess() {
     }
 
     @Override
     public boolean start(PmcProcessContext context) {
+        formater = new ReportTableCSVFormater();
+        formater.header("First Name");
+        formater.header("Last Name");
+        formater.header("Insurance Certificate Number");
+        formater.header("Monthly Payable");
+        formater.header("Status");
         return true;
     }
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processReports(context.getRunStats(), new LogicalDate(context.getForDate()));
+        ServerSideFactory.create(TenantSureProcessFacade.class).processReports(context.getRunStats(), new LogicalDate(context.getForDate()), formater);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        //TODO create file actualy
+        // create the file actually
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
+        String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(context.getForDate()) + ".csv";
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(new File(sftpDir, reportName));
+            out.write(formater.getBinaryData());
+        } catch (Throwable e) {
+            System.err.println(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
     }
 
 }

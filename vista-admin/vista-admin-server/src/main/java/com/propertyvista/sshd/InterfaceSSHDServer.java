@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.sshd.fs.SimpleFileSystemFactory;
@@ -53,7 +52,7 @@ public class InterfaceSSHDServer {
 
             sshd.setPasswordAuthenticator(new SSHDPasswordAuthenticator());
 
-            sshd.setFileSystemFactory(new SimpleFileSystemFactory(getRootDir()));
+            sshd.setFileSystemFactory(new SimpleFileSystemFactory(getRootDir(config)));
 
             sshd.setCommandFactory(new ScpCommandFactory());
 
@@ -85,14 +84,31 @@ public class InterfaceSSHDServer {
         }
     }
 
-    private static File getRootDir() {
-        File dir = new File(new File(new File("vista-work"), LoggerConfig.getContextName()), "sshd");
+    private static File getRootDir(AbstractVistaServerSideConfiguration config) {
+        //TODO make directory configuration per user
+        File dir = config.getTenantSureInterfaceSftpDirectory();
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 log.error("Unable to create directory {}", dir.getAbsolutePath());
                 throw new Error(MessageFormat.format("Unable to create directory {0}", dir.getAbsolutePath()));
             }
         }
+
+        File dirHqUpdate = new File(dir, "hq-update");
+        if (!dirHqUpdate.exists()) {
+            if (!dirHqUpdate.mkdirs()) {
+                log.error("Unable to create directory {}", dirHqUpdate.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirHqUpdate.getAbsolutePath()));
+            }
+        }
+        File dirReports = new File(dir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
         return dir;
     }
 }

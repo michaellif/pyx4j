@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,7 @@
  */
 package com.propertyvista.config.tests;
 
+import java.io.File;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -179,6 +180,16 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public Set<DemoPmc> dbResetPreloadPmc() {
+        return null;
+    }
+
+    @Override
+    public File getCaledonInterfaceWorkDirectory() {
+        return null;
+    }
+
+    @Override
+    public File getTenantSureInterfaceSftpDirectory() {
         return null;
     }
 

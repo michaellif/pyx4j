@@ -215,7 +215,7 @@ public class CaledonPadSftpClient {
                         // Only one file  
                         break;
                     } else {
-                        log.debug("SFTP file {} alredy received", dst.getAbsolutePath());
+                        log.debug("SFTP file {} already received", dst.getAbsolutePath());
                     }
                 } else {
                     log.debug("SFTP file {} does not match companyId {} pattern", rFile.getFilename(), companyId);
