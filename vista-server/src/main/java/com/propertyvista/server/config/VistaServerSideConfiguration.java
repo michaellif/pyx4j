@@ -174,7 +174,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaOnboarding() {
-        return getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace() + DeploymentConsts.ONBOARDING_URL;
+        String base = getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace();
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.ONBOARDING_URL;
+        }
     }
 
     @Override

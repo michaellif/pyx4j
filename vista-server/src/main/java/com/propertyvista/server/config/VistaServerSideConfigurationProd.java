@@ -106,7 +106,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://start.propertyvista.com/";
         case staging:
-            return "https://start-staging02.propertyvista.com/";
+            return "https://start-staging03.propertyvista.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
