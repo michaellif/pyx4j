@@ -16,14 +16,17 @@ package com.propertyvista.portal.server.portal.services.resident;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantSureManagementServiceImpl implements TenantSureManagementService {
@@ -43,6 +46,10 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
 
     @Override
     public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+
         ServerSideFactory.create(TenantSureFacade.class).cancelByTenant(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
@@ -50,6 +57,10 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
 
     @Override
     public void reinstate(AsyncCallback<VoidSerializable> callback) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+
         ServerSideFactory.create(TenantSureFacade.class).reinstate(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
@@ -62,6 +73,10 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
 
     @Override
     public void sendDocumentation(AsyncCallback<VoidSerializable> callback, String email) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+
         ServerSideFactory.create(TenantSureFacade.class).sendDocumentation(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
         callback.onSuccess(null);

@@ -29,6 +29,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantInsuranceActivity extends AbstractActivity {
 
@@ -45,7 +46,11 @@ public class TenantInsuranceActivity extends AbstractActivity {
             @Override
             public void onSuccess(TenantInsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
+                    if (VistaFeatures.instance().tenantSure()) { // if the PMC has TenantSure enabled
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
+                    } else {
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
+                    }
                 } else {
                     if (status.isOwner().isBooleanTrue()) {
                         if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
@@ -61,7 +66,6 @@ public class TenantInsuranceActivity extends AbstractActivity {
                         panel.setWidget(view);
                     }
                 }
-
             }
 
         });

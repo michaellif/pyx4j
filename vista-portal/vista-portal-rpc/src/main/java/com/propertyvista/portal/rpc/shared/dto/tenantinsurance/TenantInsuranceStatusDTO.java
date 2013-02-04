@@ -31,4 +31,5 @@ public interface TenantInsuranceStatusDTO extends IEntity {
 
     /** <code>true</code> when the tenant in the context is the owner of the insurance policy */
     IPrimitive<Boolean> isOwner();
+
 }

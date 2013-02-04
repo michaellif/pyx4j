@@ -17,6 +17,8 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
+
 public class TenantInsuranceTheme extends Theme {
 
     public enum StyleName implements IStyleName {
@@ -24,6 +26,13 @@ public class TenantInsuranceTheme extends Theme {
     }
 
     public TenantInsuranceTheme() {
+        initTenantSureCommon();
+        initTenantSurePurchaseView();
+        initTenantSureManagementView();
+    }
+
+    private void initTenantSureCommon() {
+
         Style style;
 
         style = new Style(".", StyleName.TenantSureLogo.name());
@@ -34,6 +43,11 @@ public class TenantInsuranceTheme extends Theme {
         style.addProperty("display", "block");
         style.addProperty("text-align", "center");
         addStyle(style);
+
+    }
+
+    private void initTenantSureManagementView() {
+        Style style;
 
         style = new Style(".", StyleName.TenantSureManagementGreetingPanel.name());
         addStyle(style);
@@ -66,6 +80,15 @@ public class TenantInsuranceTheme extends Theme {
         style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
+    }
+
+    private void initTenantSurePurchaseView() {
+        // TODO move the rest of thenant sure purchase related stuff here from the Global theme file
+        Style style;
+
+        style = new Style(".", TenantSurePurchaseViewImpl.Styles.TSUnavailableMessage.name());
+        style.addProperty("text-align", "center");
+        addStyle(style);
     }
 
 }

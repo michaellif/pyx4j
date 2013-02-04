@@ -58,7 +58,7 @@ public class MaintenanceForm extends AdminEntityForm<VistaSystemMaintenanceState
 
         FormFlexPanel tenantSureMaintenanceTab = new FormFlexPanel(i18n.tr("TenantSure"));
         row = -1;
-        // tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
         addTab(tenantSureMaintenanceTab);
 
     }

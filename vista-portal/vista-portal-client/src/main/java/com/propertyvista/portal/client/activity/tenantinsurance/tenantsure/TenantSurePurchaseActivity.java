@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
@@ -37,6 +38,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseS
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 
 public class TenantSurePurchaseActivity extends AbstractActivity implements TenantSurePurchaseView.Presenter {
 
@@ -54,7 +56,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(TenantSurePurchaseActivity.this);
-        service.getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
+        service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
                 InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
@@ -72,7 +74,14 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
             @Override
             public void onFailure(Throwable caught) {
-                view.reportError(i18n.tr("Failed to get TenantSure options due to {0}", caught.getMessage()));
+                if (caught instanceof TenantSureOnMaintenanceException) {
+                    view.setTenantSureOnMaintenance(((TenantSureOnMaintenanceException) caught).getMessage());
+                    panel.setWidget(view);
+                } else if (caught instanceof UserRuntimeException) {
+                    view.reportError(caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
             }
         });
 
@@ -81,7 +90,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     @Override
     public void onCoverageRequestChanged() {
         view.waitForQuote();
-        service.getQuote(new AsyncCallback<TenantSureQuoteDTO>() {
+        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
             @Override
             public void onSuccess(TenantSureQuoteDTO quote) {
                 view.setQuote(quote);
@@ -89,7 +98,11 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
             @Override
             public void onFailure(Throwable caught) {
-                view.reportError(i18n.tr("Failed to retrieve TenantSure quote due to {0}", caught.getMessage()));
+                if (caught instanceof UserRuntimeException) {
+                    view.reportError(caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
             }
         }, view.getCoverageRequest());
     }
@@ -117,7 +130,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
     @Override
     public void onBillingAddressSameAsCurrentSelected() {
-        service.getCurrentTenantAddress(new AsyncCallback<AddressStructured>() {
+        service.getCurrentTenantAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured tenantsAddress) {
                 view.setBillingAddress(tenantsAddress);

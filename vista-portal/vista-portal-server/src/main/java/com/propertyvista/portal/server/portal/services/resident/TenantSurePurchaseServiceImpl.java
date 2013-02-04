@@ -26,9 +26,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
@@ -47,6 +49,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseS
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -78,6 +81,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     @Override
     public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+
         TenantSureQuotationRequestParamsDTO params = EntityFactory.create(TenantSureQuotationRequestParamsDTO.class);
 
         Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
@@ -113,6 +120,9 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
         TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
         callback.onSuccess(quote);
@@ -121,6 +131,9 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     @Override
     public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
 
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
 

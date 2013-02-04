@@ -54,7 +54,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSurePurchaseViewImpl extends Composite implements TenantSurePurchaseView {
 
     public static enum Styles implements IStyleName {
-        TSPurchaseViewSection, TSPurchaseViewNextStepButton, TSPurchaseViewCancelButton, TSPucrhaseViewMessageText, TSPurchaseViewError;
+        TSPurchaseViewSection, TSPurchaseViewNextStepButton, TSPurchaseViewCancelButton, TSPucrhaseViewMessageText, TSPurchaseViewError, TSUnavailableMessage;
     }
 
     private interface Step extends IsWidget {
@@ -182,6 +182,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     protected AsyncCallback<VoidSerializable> paymentSucceededCallback;
 
+    private final Label tenantSureServiceUnavailable;
+
     public TenantSurePurchaseViewImpl() {
         FormFlexPanel viewPanel = new FormFlexPanel();
         int row = -1;
@@ -200,12 +202,19 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 makePaymentSucceededStep()
         )));//@formatter:on
 
+        tenantSureServiceUnavailable = new Label();
+        tenantSureServiceUnavailable.setStyleName(Styles.TSUnavailableMessage.name());
+        tenantSureServiceUnavailable.setVisible(false);
+        viewPanel.setWidget(++row, 0, tenantSureServiceUnavailable);
+
         initWidget(viewPanel);
     }
 
     @Override
     public void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
             InsurancePaymentMethod paymentMethod) {
+        tenantSureServiceUnavailable.setVisible(false);
+        stepDriver.setVisible(true);
         stepDriver.reset();
 
         personalDisclaimerForm.populate(disclaimerHolder);
@@ -218,6 +227,18 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         // reset quote
         setQuote(null);
+    }
+
+    @Override
+    public void reportError(String message) {
+        MessageDialog.info(message);
+    }
+
+    @Override
+    public void setTenantSureOnMaintenance(String message) {
+        stepDriver.setVisible(false);
+        tenantSureServiceUnavailable.setVisible(true);
+        tenantSureServiceUnavailable.setText(message);
     }
 
     @Override
@@ -559,11 +580,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 // NOT APPLICABLE
             }
         };
-    }
-
-    @Override
-    public void reportError(String message) {
-        MessageDialog.info(message);
     }
 
 }

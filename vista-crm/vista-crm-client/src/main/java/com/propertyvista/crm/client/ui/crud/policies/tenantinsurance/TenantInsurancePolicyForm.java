@@ -29,6 +29,7 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<TenantInsurancePolicyDTO> {
 
@@ -80,7 +81,9 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Portal Configuration"));
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
+        if (VistaFeatures.instance().tenantSure()) {
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
+        }
         return panel;
     }
 

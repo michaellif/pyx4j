@@ -40,6 +40,8 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     @Override
     public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+
+        // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate 
         InsuranceCertificate insuranceCertificate = null;
         EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
         ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().tenant(), tenantId);
@@ -54,6 +56,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
         }
 
+        TenantInsuranceStatusDTO insuranceStatus = null;
         if (insuranceCertificate == null) {
             NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus = EntityFactory.create(NoInsuranceTenantInsuranceStatusDTO.class);
 
@@ -62,10 +65,10 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             noInsuranceStatus.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
             noInsuranceStatus.noInsuranceStatusMessage().setValue(tenantInsurancePolicy.noInsuranceStatusMessage().getValue());
             noInsuranceStatus.tenantInsuranceInvitation().setValue(tenantInsurancePolicy.tenantInsuranceInvitation().getValue());
-            return noInsuranceStatus;
+            insuranceStatus = noInsuranceStatus;
         } else {
-            TenantInsuranceStatusDTO insuranceStatus = null;
             if (TenantSureConstants.TENANTSURE_LEGAL_NAME.equals(insuranceCertificate.insuranceProvider().getValue())) {
+
                 TenantSureTenantInsuranceStatusDetailedDTO tsStatusDetailed = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
 
                 TenantSureTenantInsuranceStatusShortDTO tsStatusShort = EntityFactory.create(TenantSureTenantInsuranceStatusShortDTO.class);
@@ -75,6 +78,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
                 insuranceStatus = tsStatusShort;
             } else {
+
                 OtherProviderTenantInsuranceStatusDTO otherProviderStatus = EntityFactory.create(OtherProviderTenantInsuranceStatusDTO.class);
                 insuranceStatus = otherProviderStatus;
             }
@@ -84,8 +88,9 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             insuranceStatus.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
             insuranceStatus.expirationDate().setValue(insuranceCertificate.expiryDate().getValue());
 
-            return insuranceStatus;
         }
+
+        return insuranceStatus;
 
     }
 

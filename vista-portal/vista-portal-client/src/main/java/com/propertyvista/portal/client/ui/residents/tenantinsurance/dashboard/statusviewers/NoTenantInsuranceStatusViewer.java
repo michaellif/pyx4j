@@ -26,6 +26,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTenantInsuranceStatusDTO> {
 
@@ -50,7 +51,9 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
         Anchor goToInsuranceScreenAnchor = new Anchor(i18n.tr("Provide proof of insurance"), new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
+                AppSite.getPlaceController().goTo(
+                        VistaFeatures.instance().tenantSure() ? new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance()
+                                : new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
             }
         });
         goToInsuranceScreenAnchor.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());

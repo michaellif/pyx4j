@@ -14,9 +14,13 @@
 package com.propertyvista.admin.rpc;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 
 @Transient
 public interface VistaSystemMaintenanceState extends SystemMaintenanceState {
+
+    @Override
+    IPrimitive<Boolean> enableTenantSureMaintenance();
 
 }
