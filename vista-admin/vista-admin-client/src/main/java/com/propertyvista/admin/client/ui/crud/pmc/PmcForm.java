@@ -28,7 +28,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.admin.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
@@ -53,12 +52,9 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         super(PmcDTO.class, view);
 
         selectTab(addTab(createGeneralTab()));
-        Tab tab = addTab(createOnboardingMerchantAccountsTab());
-        setTabEnabled(tab, !isEditable());
-
-        selectTab(addTab(createEquifaxlTab()));
-
-        selectTab(addTab(createYardiTab()));
+        setTabEnabled(addTab(createOnboardingMerchantAccountsTab()), !isEditable());
+        addTab(createEquifaxlTab());
+        addTab(createYardiTab());
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource) {
