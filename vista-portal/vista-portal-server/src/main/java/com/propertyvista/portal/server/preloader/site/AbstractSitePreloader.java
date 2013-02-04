@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -62,6 +62,7 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -240,7 +241,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     protected void createCustomResidentPage(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         ResidentPortalSettings settings = EntityFactory.create(ResidentPortalSettings.class);
         settings.enabled().setValue(true);
-        settings.useCustomHtml().setValue(true);
+        settings.useCustomHtml().setValue(false);
         for (LocaleInfo li : siteLocale) {
             String contentText;
             try {
@@ -255,9 +256,10 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             } catch (IOException ignore) {
             }
         }
-        if (settings.customHtml().size() > 0) {
-            site.residentPortalSettings().set(settings);
+        if ((settings.customHtml().size() > 0) && (!VistaDemo.isDemo())) {
+            settings.useCustomHtml().setValue(true);
         }
+        site.residentPortalSettings().set(settings);
     }
 
     protected void createStaticPages(SiteDescriptor site, List<LocaleInfo> siteLocale) {
