@@ -16,27 +16,27 @@ package com.propertyvista.crm.server.services.customer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
+import com.propertyvista.domain.tenant.Customer;
 
 public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditCheckLongReportService {
-
-    public CustomerCreditCheckLongReportServiceImpl() {
-    }
 
     @Override
     public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         if (retrieveTraget == RetrieveTraget.View) {
-//            callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
-            CustomerCreditCheckLongReportDTO report = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
-            report.setPrimaryKey(entityId);
-
-            callback.onSuccess(report);
+            callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
+//            CustomerCreditCheckLongReportDTO report = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
+//            report.setPrimaryKey(entityId);
+//
+//            callback.onSuccess(report);
         } else {
             throw new Error("Not intended for Edit!");
         }

@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -26,12 +26,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Customer;
 
 @Transient
-@ExtendsDBO(Customer.class)
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
+    @Caption(name = "% Rent Covered")
     IPrimitive<BigDecimal> percentOfRentCovered();
 
     IPrimitive<BigDecimal> grossMonthlyIncome();
@@ -40,8 +39,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<BigDecimal> totalOutstandingBalance();
 
+    @Caption(name = "Bankruptcies/Proposals")
     IPrimitive<Integer> numberOfBancruptciesOrActs();
 
+    @Caption(name = "Landlord/Tenant Court")
     IPrimitive<Integer> numberOfLegalItems();
 
     IPrimitive<BigDecimal> outstandingCollectionsBalance();
@@ -58,38 +59,54 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<Integer> landlordCollectionsFiled();
 
+    @Caption(name = "1-30 days")
     IPrimitive<Integer> latePayments1_30days();
 
+    @Caption(name = "31-60 days")
     IPrimitive<Integer> latePayments31_60days();
 
+    @Caption(name = "61-90 days")
     IPrimitive<Integer> latePayments61_90days();
 
+    @Caption(name = "Check Score")
     IPrimitive<Double> equifaxCheckScore();
 
+    @Caption(name = "Rating Level")
     IPrimitive<Double> equifaxRatingLevel();
 
+    @Caption(name = "Risk Level")
     IPrimitive<Double> equifaxRiskLevel();
 
+    @Caption(name = "R1")
     IPrimitive<Integer> rating1();
 
+    @Caption(name = "R2")
     IPrimitive<Integer> rating2();
 
+    @Caption(name = "R3")
     IPrimitive<Integer> rating3();
 
+    @Caption(name = "R4")
     IPrimitive<Integer> rating4();
 
+    @Caption(name = "R5")
     IPrimitive<Integer> rating5();
 
+    @Caption(name = "R6")
     IPrimitive<Integer> rating6();
 
+    @Caption(name = "R7")
     IPrimitive<Integer> rating7();
 
+    @Caption(name = "R9")
     IPrimitive<Integer> rating8();
 
+    @Caption(name = "R9")
     IPrimitive<Integer> rating9();
 
     @Transient
     interface IdentityDTO extends IEntity {
+
         Name name();
 
         IPrimitive<LogicalDate> birthDate();

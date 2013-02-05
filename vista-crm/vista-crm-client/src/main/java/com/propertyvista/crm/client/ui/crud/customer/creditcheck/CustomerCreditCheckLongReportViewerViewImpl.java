@@ -24,4 +24,9 @@ public class CustomerCreditCheckLongReportViewerViewImpl extends CrmViewerViewIm
         super(CrmSiteMap.Tenants.CustomerCreditCheckLongReport.class, true);
         setForm(new CustomerCreditCheckLongReportForm(this));
     }
+
+    @Override
+    protected void populateBreadcrumbs(CustomerCreditCheckLongReportDTO value) {
+        // DO NOTHING
+    }
 }
