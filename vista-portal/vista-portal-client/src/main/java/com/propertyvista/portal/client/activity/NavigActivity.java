@@ -27,7 +27,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -63,14 +62,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         }
         items.add(new Residents.PersonalInformation());
 
-        if (VistaTODO.VISTA_2467_SHOW_TENANTSURE) {
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                items.add(new Residents.TenantInsurance());
-            }
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            items.add(new Residents.TenantInsurance());
+        }
 
-            if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-                items.add(new PortalSiteMap.LeaseContextSelection());
-            }
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
+            items.add(new PortalSiteMap.LeaseContextSelection());
         }
 
         view.setNavig(items);

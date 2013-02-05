@@ -25,7 +25,6 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -53,13 +52,11 @@ public class DashboardServiceImpl implements DashboardService {
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
 
-        if (VistaTODO.VISTA_2467_SHOW_TENANTSURE) {
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                dashboard.tenantInsuranceStatus().set(
-                        ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            dashboard.tenantInsuranceStatus().set(
+                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
-            }
         }
         callback.onSuccess(dashboard);
     }

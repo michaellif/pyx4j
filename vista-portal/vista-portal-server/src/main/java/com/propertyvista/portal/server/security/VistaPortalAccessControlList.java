@@ -187,15 +187,13 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ViewBillService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CommunicationCenterService.class));
 
-        // Tenant Insurance and TenantSure
-        if (VistaTODO.VISTA_2467_SHOW_TENANTSURE) {
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceService.class));
+        // Tenant Insurance and TenantSure       
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceService.class));
 
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceByOtherProviderManagementService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceByOtherProviderManagementService.class));
 
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSurePurchaseService.class));
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureManagementService.class));
-        }
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSurePurchaseService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureManagementService.class));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(Bill.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
