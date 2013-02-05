@@ -7,21 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-27
- * @author ArtyomB
+ * Created on 2013-02-05
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public class TenantSureConstants {
+public interface InsuranceTenantSureReport extends IEntity {
 
-    public static final String TENANTSURE_LEGAL_NAME = "Highcourt Partners Limited";
+    public enum ReportedStatus {
 
-    public static final String TENANTSURE_ADDRESS = "Suite 1200-372 Bay Street, Toronto ON CANADA M5H 2W9";
+        New,
 
-    public static final String TENANTSURE_PHONE_NUMBER = "+1-647-931-2886";
+        Active,
 
-    public static final String TENANTSURE_EMAIL = "info@highcourtpartners.com";
+        Cancelled;
 
+    }
+
+    @Owner
+    @JoinColumn
+    @MemberColumn(notNull = true)
+    InsuranceTenantSure insurance();
+
+    IPrimitive<ReportedStatus> reportedStatus();
 }

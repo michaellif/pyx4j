@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -88,6 +89,9 @@ public interface InsuranceTenantSure extends IEntity {
      */
     @NotNull
     IPrimitive<LogicalDate> inceptionDate();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<Integer> paymentDay();
 
     IPrimitive<LogicalDate> expiryDate();
 

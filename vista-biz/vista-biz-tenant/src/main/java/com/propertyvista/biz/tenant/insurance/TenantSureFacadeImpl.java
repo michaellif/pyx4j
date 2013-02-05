@@ -178,6 +178,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             }
 
             insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+            insuranceTenantSure.paymentDay().setValue(TenantSurePayments.calulatePaymentDay(insuranceTenantSure.inceptionDate().getValue()));
             Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
 
@@ -267,13 +268,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         status.expiryDate().setValue(insuranceTenantSure.insuranceCertificate().expiryDate().getValue());
 
-        if (insuranceTenantSure.status().getValue() != Status.PendingCancellation) {
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-            cal.add(Calendar.MONTH, 1);
-            status.nextPaymentDate().setValue(new LogicalDate(cal.getTime()));
-        }
-
         if (insuranceTenantSure.status().getValue() == Status.PendingCancellation) {
             TenantSureMessageDTO message = status.messages().$();
             if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
@@ -287,6 +281,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                         i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
             }
             status.messages().add(message);
+        } else if (insuranceTenantSure.status().getValue() != Status.Cancelled) {
+            status.nextPaymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         }
 
         return status;
