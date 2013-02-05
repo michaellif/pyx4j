@@ -26,6 +26,13 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 public class PortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
+    public AppPlace getUserMessagePlace() {
+        AppPlace userMessagePlace = new PortalSiteMap.UserMessagePlace();
+        userMessagePlace.setStable(false);
+        return userMessagePlace;
+    }
+
+    @Override
     protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
         callback.onSuccess(new PortalSiteMap.Login());
     }

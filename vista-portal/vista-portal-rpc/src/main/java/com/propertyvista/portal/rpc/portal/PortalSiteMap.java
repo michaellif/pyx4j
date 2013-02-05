@@ -62,6 +62,11 @@ public class PortalSiteMap implements SiteMap {
     public static class PotentialTenants extends AppPlace {
     }
 
+    @PlaceProperties(navigLabel = "", caption = "")
+    public static class UserMessagePlace extends AppPlace implements PublicPlace {
+
+    }
+
     @PlaceProperties(navigLabel = "Dashboard", caption = "Dashboard")
     public static class Residents extends AppPlace {
 

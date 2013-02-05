@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.client.activity.TenantRegistrationActivity;
+import com.propertyvista.portal.client.activity.UserMessageActivity;
 import com.propertyvista.portal.client.activity.login.LandingActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
@@ -53,6 +54,8 @@ public class UtilityActivityMapper implements AppActivityMapper {
             activity = new LeaseContextSelectionActivity();
         } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
             activity = new VistaTermsActivity();
+        } else if (place instanceof PortalSiteMap.UserMessagePlace) {
+            activity = new UserMessageActivity(place);
         }
         callback.onSuccess(activity);
     }

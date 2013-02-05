@@ -18,15 +18,22 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
@@ -57,6 +64,7 @@ public class PortalSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+        AppSite.getEventBus().addHandler(UserMessageEvent.getType(), new PortalUserMessageHandlerByPlace());
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler(DemoData.vistaDemo));
 
@@ -115,4 +123,48 @@ public class PortalSite extends VistaSite {
     public static PortalSiteServices getPortalSiteServices() {
         return portalSiteServices;
     }
+
+    private static class PortalUserMessageHandlerByDialog implements UserMessageHandler {
+
+        @Override
+        public void onUserMessage(UserMessageEvent event) {
+            Dialog.Type dialogType = null;
+            switch (event.getMessageType()) {
+            case ERROR:
+                dialogType = Type.Error;
+                break;
+            case FAILURE:
+                dialogType = Type.Error;
+                break;
+            case INFO:
+                dialogType = Type.Info;
+                break;
+            case WARN:
+                dialogType = Type.Warning;
+                break;
+            default:
+                dialogType = Type.Warning;
+                break;
+            }
+            new MessageDialog("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getDebugMessage() : ""), dialogType,
+                    new OkOption() {
+                        @Override
+                        public boolean onClickOk() {
+                            return true;
+                        }
+                    });
+
+        }
+    }
+
+    private class PortalUserMessageHandlerByPlace implements UserMessageHandler {
+
+        @Override
+        public void onUserMessage(UserMessageEvent event) {
+            setUserMessage(event.getUserMessage());
+            PortalSite.getPlaceController().goToUserMessagePlace();
+        }
+
+    }
+
 }

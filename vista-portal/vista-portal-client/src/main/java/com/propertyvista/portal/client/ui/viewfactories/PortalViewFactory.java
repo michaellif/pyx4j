@@ -73,6 +73,8 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.Provid
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantViewImpl;
+import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageView;
+import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
@@ -143,7 +145,11 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantSureAboutViewImpl());
             } else if (TenantInsuranceCoveredByOtherTenantView.class.equals(type)) {
                 map.put(type, new TenantInsuranceCoveredByOtherTenantViewImpl());
+
+            } else if (UserMessageView.class.equals(type)) {
+                map.put(type, new UserMessageViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")
