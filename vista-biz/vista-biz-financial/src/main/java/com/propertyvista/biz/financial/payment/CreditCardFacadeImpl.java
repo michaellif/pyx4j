@@ -25,18 +25,18 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.authorization(amount, merchantTerminalId, referenceNumber, cc);
+    public String authorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.authorization(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override
-    public void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
-        CreditCardProcessor.authorizationReversal(merchantTerminalId, referenceNumber, cc);
+    public void authorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        CreditCardProcessor.authorizationReversal(merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override
-    public String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.completion(amount, merchantTerminalId, referenceNumber, cc);
+    public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.completion(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
 }

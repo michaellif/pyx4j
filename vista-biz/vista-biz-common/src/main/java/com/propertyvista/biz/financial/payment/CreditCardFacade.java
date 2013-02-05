@@ -19,15 +19,37 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 
 public interface CreditCardFacade {
 
+    /**
+     * the reference number MUST be unique for each type of transaction we make from vista.
+     */
+    public enum ReferenceNumberPrefix {
+
+        TenantSure("TS"),
+
+        EquifaxScreening("EFX"),
+
+        RentPayments("R");
+
+        private final String value;
+
+        private ReferenceNumberPrefix(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
     /**
      * @return authorizationNumber
      */
-    public String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
+    public String authorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
-    public void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
+    public void authorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
-    public String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc);
+    public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
 }

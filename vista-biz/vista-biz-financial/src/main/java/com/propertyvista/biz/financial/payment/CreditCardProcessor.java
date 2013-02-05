@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -192,8 +193,7 @@ class CreditCardProcessor {
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
 
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
-        //TODO identify what should be there
-        request.referenceNumber().setValue(paymentRecord.id().getStringView());
+        request.referenceNumber().setValue(ReferenceNumberPrefix.RentPayments.getValue() + paymentRecord.id().getStringView());
         request.amount().setValue(paymentRecord.amount().getValue());
         CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
 
@@ -223,7 +223,7 @@ class CreditCardProcessor {
         }
     }
 
-    public static String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -245,7 +245,7 @@ class CreditCardProcessor {
         }
     }
 
-    public static void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -265,7 +265,7 @@ class CreditCardProcessor {
         }
     }
 
-    public static String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 

@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
@@ -86,7 +87,8 @@ class ScreeningPayments {
         // Do authorization
         try {
             String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(transaction.amount().getValue(), merchantTerminalId(),
-                    transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
+                    ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
+                    (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Authorized);
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
@@ -126,8 +128,8 @@ class ScreeningPayments {
         });
 
         try {
-            ServerSideFactory.create(CreditCardFacade.class).authorizationReversal(merchantTerminalId(), transaction.getPrimaryKey().toString(),
-                    (CreditCardInfo) transaction.paymentMethod().details().cast());
+            ServerSideFactory.create(CreditCardFacade.class).authorizationReversal(merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening,
+                    transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Reversal);
 
@@ -157,7 +159,8 @@ class ScreeningPayments {
 
         try {
             String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(transaction.amount().getValue(), merchantTerminalId(),
-                    transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
+                    ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
+                    (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
             transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Cleared);
