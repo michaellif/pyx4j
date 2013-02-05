@@ -61,7 +61,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             Lease lease = generator.createLeaseWithTenants(unit);
             Persistence.service().commit();
             LeaseGenerator.attachDocumentData(lease);
-            LeaseGenerator.assigneLeaseProducts(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);

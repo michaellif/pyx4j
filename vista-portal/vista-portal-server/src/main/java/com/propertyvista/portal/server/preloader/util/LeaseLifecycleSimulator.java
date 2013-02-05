@@ -163,7 +163,7 @@ public class LeaseLifecycleSimulator {
 
         clearEvents();
 
-        queueEvent(reservedOn, new Create(lease));
+        queueEvent(reservedOn, new Begin(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new MoveOut(lease));
         queueEvent(DateUtils.daysAdd(leaseTo, 1), new Complete(lease));
@@ -248,9 +248,9 @@ public class LeaseLifecycleSimulator {
         }
     }
 
-    private class Create extends AbstractLeaseEvent {
+    private class Begin extends AbstractLeaseEvent {
 
-        public Create(Lease lease) {
+        public Begin(Lease lease) {
             super(-1, lease);
         }
 
@@ -258,8 +258,6 @@ public class LeaseLifecycleSimulator {
         public void exec() {
             lease.status().setValue(Status.Application);
             lease.currentTerm().type().setValue((RND.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
-            lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
-            lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
             Persistence.service().retrieveMember(lease.leaseParticipants());
 
@@ -273,7 +271,7 @@ public class LeaseLifecycleSimulator {
             }
 
             if (debug) {
-                log.info("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                log.info("" + now() + " begined lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
                         + lease.currentTerm().termTo().getValue());
                 log.debug(lease.toString());
                 log.info("***");

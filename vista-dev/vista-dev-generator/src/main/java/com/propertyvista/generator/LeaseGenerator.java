@@ -19,22 +19,15 @@ import java.util.EnumSet;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -87,6 +80,8 @@ public class LeaseGenerator extends DataGenerator {
         lease.expectedMoveIn().setValue(expectedMoveIn);
 
         ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
+
+        ensureProductPrices(lease);
 
         lease.creationDate().setValue(createdDate);
         return lease;
@@ -160,80 +155,43 @@ public class LeaseGenerator extends DataGenerator {
         }
     }
 
-    public static void assigneLeaseProducts(Lease lease) {
-        EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
-        ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
-        if (serviceItem != null) {
-            lease.currentTerm().version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, lease.currentTerm().termFrom().getValue()));
+    public static void ensureProductPrices(Lease lease) {
+        ensureAgreedPrice(lease.currentTerm().version().leaseProducts().serviceItem());
 
-            Persistence.service().retrieve(serviceItem.product());
-            Service selectedService = ((Service.ServiceV) serviceItem.product().cast()).holder();
-
-            Building building = lease.unit().building();
-            Persistence.service().retrieve(building);
-            Persistence.service().retrieve(building.productCatalog());
-
-            // pre-populate mandatory features for the new service:
-            Persistence.service().retrieve(selectedService.version().features());
-            for (Feature feature : selectedService.version().features()) {
-                if (feature.version().mandatory().isBooleanTrue()) {
-                    Persistence.service().retrieve(feature.version().items());
-                    for (ProductItem item : feature.version().items()) {
-                        if (item.isDefault().isBooleanTrue()) {
-                            lease.currentTerm().version().leaseProducts().featureItems()
-                                    .add(createBillableItem(item, lease.currentTerm().termFrom().getValue()));
-                        }
-                    }
-                }
-            }
-
-            // pre-populate concessions for the new service:
-            Persistence.service().retrieve(selectedService.version().concessions());
-            if (!selectedService.version().concessions().isEmpty()) {
-                lease.currentTerm().version().leaseProducts().concessions().add(RandomUtil.random(selectedService.version().concessions()));
-            }
+        for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
+            ensureAgreedPrice(billableItem);
         }
     }
 
-    private static BillableItem createBillableItem(ProductItem serviceItem, LogicalDate effectiveDate) {
-        BillableItem newItem = EntityFactory.create(BillableItem.class);
-        newItem.item().set(serviceItem);
-
-        if (newItem.item().price().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (serviceItem.type().isInstanceOf(ServiceItemType.class)) {
-                newItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-            } else if (serviceItem.type().isInstanceOf(FeatureItemType.class)) {
-                switch (((FeatureItemType) serviceItem.type()).featureType().getValue()) {
+    private static void ensureAgreedPrice(BillableItem billableItem) {
+        if (billableItem.item().price().getValue().compareTo(BigDecimal.ZERO) == 0) {
+            if (billableItem.item().type().isInstanceOf(ServiceItemType.class)) {
+                billableItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
+            } else if (billableItem.item().type().isInstanceOf(FeatureItemType.class)) {
+                switch (((FeatureItemType) billableItem.item().type()).featureType().getValue()) {
                 case parking:
-                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
                     break;
                 case locker:
-                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
                     break;
                 case pet:
-                    newItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
                     break;
                 case booking:
-                    newItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(5)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(5)));
                     break;
                 case addOn:
-                    newItem.agreedPrice().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
                     break;
                 case oneTimeCharge:
-                    newItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
                     break;
                 case utility:
-                    newItem.agreedPrice().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
+                    billableItem.agreedPrice().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
                     break;
                 }
             }
-        } else {
-            newItem.agreedPrice().setValue(serviceItem.price().getValue());
         }
-
-        newItem.effectiveDate().setValue(effectiveDate != null ? effectiveDate : new LogicalDate());
-        return newItem;
     }
 }
