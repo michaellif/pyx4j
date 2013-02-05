@@ -57,11 +57,14 @@ public class SystemMaintenance {
 
     private static long maintenanceScheduledEnd;
 
-    private static SystemMaintenanceState systemMaintenanceState = EntityFactory
-            .create(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass());
+    private static SystemMaintenanceState systemMaintenanceState = EntityFactory.create(getSystemMaintenanceStateClass());
 
     static {
         loadState();
+    }
+
+    private static Class<? extends SystemMaintenanceState> getSystemMaintenanceStateClass() {
+        return ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass();
     }
 
     public static boolean isSystemMaintenance() {
@@ -148,7 +151,11 @@ public class SystemMaintenance {
     @SuppressWarnings("deprecation")
     public static void setSystemMaintenanceInfo(SystemMaintenanceState state) {
         stopSystemMaintenance();
-        systemMaintenanceState = state;
+        if (!state.getValueClass().equals(getSystemMaintenanceStateClass())) {
+            systemMaintenanceState = state.duplicate(getSystemMaintenanceStateClass());
+        } else {
+            systemMaintenanceState = state.duplicate();
+        }
         if (!state.startTime().isNull() || !state.startDate().isNull()) {
             Calendar startTime = new GregorianCalendar();
             if (state.startDate().isNull()) {
@@ -206,8 +213,7 @@ public class SystemMaintenance {
         try {
             File file = getStorageFile();
             if (file.canRead()) {
-                SystemMaintenanceState sm = XMLEntityConverter.readFile(
-                        ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getSystemMaintenanceStateClass(), file);
+                SystemMaintenanceState sm = XMLEntityConverter.readFile(getSystemMaintenanceStateClass(), file);
                 if (sm != null) {
                     setSystemMaintenanceInfo(sm);
                 }
