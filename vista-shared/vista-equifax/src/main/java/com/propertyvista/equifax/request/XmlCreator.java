@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -70,7 +70,7 @@ public class XmlCreator {
 //         MDAD  = Advanced Decisionning
         scoringProduct.setProductType("MODL");
 
-        //10301 for iDecision Power Consumer 
+        //10301 for iDecision Power Consumer
         scoringProduct.setScoringNumber(EquifaxConsts.scoringProductId_iDecisionPower);
         scoringProduct.setReportAttribute("N");
 
@@ -149,7 +149,9 @@ public class XmlCreator {
         }
     }
 
-    public static String toStorageXMl(EfxTransmit efxResponse) {
+    // TODO VladS, why doesn't this work?
+
+    public static String toStorageXMl1(EfxTransmit efxResponse) {
         try {
             QName qname = new QName("http://www.equifax.ca/XMLSchemas/EfxToCust", "CNEfxTransmitToCust");
             JAXBElement<EfxTransmit> element = new JAXBElement<EfxTransmit>(qname, EfxTransmit.class, efxResponse);
@@ -160,6 +162,14 @@ public class XmlCreator {
             StringWriter xml = new StringWriter();
             m.marshal(element, xml);
             return xml.toString();
+        } catch (JAXBException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static String toStorageXMl(EfxTransmit efxResponse) {
+        try {
+            return MarshallUtil.marshall(efxResponse);
         } catch (JAXBException e) {
             throw new Error(e);
         }
