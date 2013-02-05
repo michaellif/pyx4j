@@ -33,7 +33,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -74,8 +73,6 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
-
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
@@ -113,14 +110,13 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             creditCheckResultPanel = createCreditCheckResultPanel();
 
             // assemble main panel:
+            FormFlexPanel main = new FormFlexPanel();
+
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, creditCheckResultPanel);
 
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-            main.getColumnFormatter().setWidth(0, "30%");
-            main.getColumnFormatter().setWidth(1, "70%");
 
             return main;
         }
@@ -132,8 +128,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 15).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 10).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
 
             left.setBR(++row, 0, 1);
 
@@ -158,9 +154,6 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-            panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
             return panel;
         }
