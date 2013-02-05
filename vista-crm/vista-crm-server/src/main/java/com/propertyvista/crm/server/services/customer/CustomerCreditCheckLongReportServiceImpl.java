@@ -33,10 +33,6 @@ public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditC
     public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
         if (retrieveTraget == RetrieveTraget.View) {
             callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
-//            CustomerCreditCheckLongReportDTO report = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
-//            report.setPrimaryKey(entityId);
-//
-//            callback.onSuccess(report);
         } else {
             throw new Error("Not intended for Edit!");
         }
