@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -51,15 +52,25 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-
                 addDetailRecord(contentPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
-                addDetailRecord(contentPanel, ++row, quote.underwriterFee().getMeta().getCaption(), quote.underwriterFee().getValue());
 
                 for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
                     addDetailRecord(contentPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
                 }
 
                 addTotalRecord(contentPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getValue());
+
+                if (!quote.underwriterFee().isNull()) {
+                    Label underwriterFeeLabel = new Label();
+                    underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
+                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee of ${0,number,#,##0.00} will be charged on enrollment.", quote
+                            .underwriterFee().getValue()));
+
+                    contentPanel.setWidget(++row, 0, underwriterFeeLabel);
+                    contentPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
+                    contentPanel.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
+                }
+
             } else {
                 Label specialQuoteText = new Label();
                 specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -71,6 +82,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
                 contentPanel.getCellFormatter().getElement(0, 0).getStyle().setProperty("height", "10em");
             }
         }
+
         return contentPanel;
     }
 
