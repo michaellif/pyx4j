@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -31,10 +32,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
+import com.propertyvista.admin.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
@@ -49,6 +54,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
@@ -188,6 +194,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         createInsuranceCertificate(tenantId, tenantSureCertificateNumber, insuranceTenantSure);
+        createTenantSureSubscriberRecord(tenantSureCertificateNumber);
 
         try {
             TenantSurePayments.compleateTransaction(transaction);
@@ -224,6 +231,21 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         ts.insuranceCertificate().set(ic);
         Persistence.service().persist(ts);
+
+    }
+
+    private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
+        TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
+            @Override
+            public VoidSerializable call() throws Exception {
+                TenantSureSubscribers tenantSureSubscriber = EntityFactory.create(TenantSureSubscribers.class);
+                tenantSureSubscriber.pmc().set(pmc);
+                tenantSureSubscriber.certificateNumber().setValue(insuranceCertificateNumber);
+                Persistence.service().persist(tenantSureSubscriber);
+                return null;
+            }
+        });
     }
 
     @Override
