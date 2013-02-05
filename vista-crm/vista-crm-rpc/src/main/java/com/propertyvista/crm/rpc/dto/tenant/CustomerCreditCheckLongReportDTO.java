@@ -206,6 +206,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IList<ProposalDTO> proposals();
 
     // Evictions
+    // Not present in current version of Equifax
     @Transient
     interface EvictionDTO extends IEntity {
 
@@ -231,6 +232,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IList<EvictionDTO> evictions();
 
     // Rent History
+    // Not present in current version of Equifax
     @Transient
     interface RentDTO extends IEntity {
 
@@ -256,7 +258,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         AddressSimple address();
 
-        IPrimitive<String> historyTable(); // ??? what is this
+        IPrimitive<String> historyTable();
     }
 
     IList<RentDTO> rents();
