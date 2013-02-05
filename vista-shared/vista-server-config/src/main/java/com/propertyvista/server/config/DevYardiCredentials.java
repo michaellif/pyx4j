@@ -41,7 +41,18 @@ public class DevYardiCredentials {
         return cr;
     }
 
-    // https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx 
+    public static PmcYardiCredential getTest2PmcYardiCredential() {
+        PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
+        cr.residentTransactionsServiceURL().setValue("https:///yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
+        cr.sysBatchServiceURL().setValue("https:///yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
+        cr.username().setValue("pvuser");
+        cr.credential().setValue("access@123");
+        cr.serverName().setValue("Yardi_Server");
+        cr.database().setValue("Property Vista TEST");
+        return cr;
+    }
+
+    // https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx
 
     /**
      * test system
