@@ -45,6 +45,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
@@ -233,6 +234,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         ts.insuranceCertificate().set(ic);
         Persistence.service().persist(ts);
 
+        InsuranceTenantSureReport tsReportStatusHolder = EntityFactory.create(InsuranceTenantSureReport.class);
+        tsReportStatusHolder.insurance().set(ts);
+        Persistence.service().persist(tsReportStatusHolder);
     }
 
     private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
@@ -252,6 +256,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        if (insuranceTenantSure == null) {
+            throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
+        }
 
         TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
         status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue());
@@ -292,6 +299,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public void cancelByTenant(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        if (insuranceTenantSure == null) {
+            throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
+        }
         validateIsCancellable(insuranceTenantSure);
 
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());

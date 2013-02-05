@@ -16,15 +16,20 @@ package com.propertyvista.biz.tenant.insurance;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
 import com.propertyvista.server.jobs.StatisticsUtils;
 
 public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
@@ -52,29 +57,39 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     @Override
     public void processReports(RunStats runStats, LogicalDate dueDate, ReportTableFormater formater) {
-        EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        criteria.in(criteria.proto().status(), EnumSet.of(InsuranceTenantSure.Status.Active, InsuranceTenantSure.Status.Cancelled));
-        ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        formater.newRow(); // this is for the header
+
+        EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
+        criteria.or(//@formatter:off
+                // active:
+                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSure.Status.Active, InsuranceTenantSure.Status.PendingCancellation)),
+
+                // cancelled but not reported insurance certificates:
+                new AndCriterion(
+                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSure.Status.Cancelled),
+                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSure.Status.Cancelled)
+                )
+         );//@formatter:off
+
+        ICursorIterator<InsuranceTenantSureReport> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
-                InsuranceTenantSure ts = iterator.next();
+                InsuranceTenantSureReport reportedStatusHolder = iterator.next();
 
-                formater.cell(ts.client().tenant().customer().person().name().firstName().getValue());
-                formater.cell(ts.client().tenant().customer().person().name().lastName().getValue());
-
-                formater.cell("TODO Insurance Certificate Number");
-                formater.cell("TODO Monthly Payable");
-                formater.cell("TODO Status");
+                formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
+                formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
+                formater.cell(reportedStatusHolder.insurance().insuranceCertificate().insuranceCertificateNumber().getStringView());
+                formater.cell(reportedStatusHolder.insurance().monthlyPayable().getValue().toString());
+                formater.cell(updateReportStatus(reportedStatusHolder));
 
                 formater.newRow();
 
-                //TODO add Monthly Payable here as well
                 StatisticsUtils.addProcessed(runStats, 1, 0.0);
-
             }
         } finally {
             iterator.completeRetrieval();
         }
+
     }
 
     @Override
@@ -85,5 +100,44 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     @Override
     public void processHQUpdate(RunStats runStats, TenantSureHQUpdateFile fileId) {
         HQUpdate.processHQUpdate(runStats, fileId);
+    }
+
+    /** 
+     * @param reportedStatusHolder
+     * @return updated reported status
+     * @throws IllegalArgumentException if previously reported status and current insurance status cannot be updated
+     */
+    private InsuranceTenantSureReport.ReportedStatus updateReportStatus(InsuranceTenantSureReport reportedStatusHolder) {        
+        ReportedStatus reportClientStatus = null;
+
+        switch (reportedStatusHolder.insurance().status().getValue()) {
+        case Cancelled: 
+            if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled ) {
+                reportClientStatus = ReportedStatus.Cancelled;            
+            }
+            break;
+            
+        case Active:
+        case PendingCancellation:
+            if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Active) {
+                reportClientStatus = ReportedStatus.New;
+                
+            } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active) | (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
+                reportClientStatus = ReportedStatus.Active;
+            }
+            break;
+            
+        default:
+            reportClientStatus = null;
+        }
+        
+        if (reportClientStatus == null) {
+            throw new IllegalArgumentException(SimpleMessageFormat.format("wrong insurance status for report: {0} id = {1},  status = {2}",
+                    InsuranceTenantSure.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance().status().getValue()));
+        }
+        
+        Persistence.service().persist(reportedStatusHolder);
+        
+        return reportedStatusHolder.reportedStatus().getValue();
     }
 }

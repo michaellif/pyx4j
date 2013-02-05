@@ -16,6 +16,7 @@ package com.propertyvista.server.jobs;
 import com.propertyvista.admin.domain.scheduler.PmcProcessType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
+import com.propertyvista.server.jobs.insurance.TenantSureReportsProcess;
 
 public class PmcProcessFactory {
 
@@ -61,6 +62,10 @@ public class PmcProcessFactory {
 
         case yardiBatchProcess:
             return new YardiBatchProcess();
+
+// TenantSure:
+        case tenantSureReports:
+            return new TenantSureReportsProcess();
 
 // Misc:
         case cleanup:
