@@ -25,7 +25,6 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -73,30 +72,29 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel;
     }
 
-    public Tab addStep(final FormFlexPanel panel) {
-        final Tab tab = addStep(panel, panel.getTitle());
+    public WizardStep addStep(final FormFlexPanel panel) {
+        final WizardStep step = addStep(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     ValidationResults validationResults = panel.getValidationResults();
                     if (validationResults.isValid()) {
-                        tab.setTabWarning(null);
+                        step.setTabWarning(null);
                     } else {
-                        tab.setTabWarning(validationResults.getValidationShortMessage());
+                        step.setTabWarning(validationResults.getValidationShortMessage());
                     }
                 }
             }
         });
-        return tab;
+        return step;
     }
 
-    public Tab addStep(Widget content, String tabTitle) {
-        Tab tab = null;
-        ScrollPanel scroll = new ScrollPanel(content);
-        tab = new Tab(scroll, tabTitle, null, false);
-        wizardPanel.addTab(tab);
-        return tab;
+    public WizardStep addStep(Widget content, String tabTitle) {
+        WizardStep step = null;
+        step = new WizardStep(content, tabTitle);
+        wizardPanel.addTab(step);
+        return step;
     }
 
     @Override
@@ -121,10 +119,17 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     public void next() {
-        int index = wizardPanel.getSelectedIndex();
-        if (index < wizardPanel.size() - 1) {
-            wizardPanel.setTabEnabled(index + 1, true);
-            wizardPanel.selectTab(index + 1);
+        WizardStep step = (WizardStep) wizardPanel.getSelectedTab();
+        step.showErrors();
+        ValidationResults validationResults = step.getValidationResults();
+        if (validationResults.isValid()) {
+            int index = wizardPanel.getSelectedIndex();
+            if (index < wizardPanel.size() - 1) {
+                wizardPanel.setTabEnabled(index + 1, true);
+                wizardPanel.selectTab(index + 1);
+            }
+        } else {
+            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true));
         }
 
     }
