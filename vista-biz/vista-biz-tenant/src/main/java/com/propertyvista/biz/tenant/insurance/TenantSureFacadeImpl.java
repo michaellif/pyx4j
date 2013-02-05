@@ -397,7 +397,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
         if (tenantSureClient == null) {
             tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
-            tenantSureClient.tenant().set(tenantId);
+            tenantSureClient.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
             String clientReferenceNumber = cfcApiClient.createClient(tenantId, name, phone);
             tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
             Persistence.service().persist(tenantSureClient);
