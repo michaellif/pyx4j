@@ -87,6 +87,17 @@
     text-transform: uppercase;
     width: 128px;
     text-align: center;
+    white-space: nowrap;
+}
+
+.vista-pmsite-residentPage .Button.ProvideTIBGetTenantSure {
+	width: auto;
+	margin-left: 30px;
+}
+
+.vista-pmsite-residentPage .Button.TSPurchaseViewNextStepButton.Button-disabled {
+	float: right;
+	margin: 0 20px 20px 20px;
 }
 
 .vista-pmsite-residentPage .ButtonText  {
