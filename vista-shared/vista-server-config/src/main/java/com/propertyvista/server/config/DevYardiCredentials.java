@@ -43,12 +43,13 @@ public class DevYardiCredentials {
 
     public static PmcYardiCredential getTest2PmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-        cr.residentTransactionsServiceURL().setValue("https:///yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
-        cr.sysBatchServiceURL().setValue("https:///yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
+        cr.residentTransactionsServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
+        cr.sysBatchServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
         cr.username().setValue("pvuser");
         cr.credential().setValue("access@123");
         cr.serverName().setValue("Yardi_Server");
         cr.database().setValue("Property Vista TEST");
+        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
         return cr;
     }
 
