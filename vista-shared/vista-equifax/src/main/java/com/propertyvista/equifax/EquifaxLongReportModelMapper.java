@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,18 +13,337 @@
  */
 package com.propertyvista.equifax;
 
-import ca.equifax.uat.from.EfxTransmit;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ca.equifax.uat.from.CNAddressType;
+import ca.equifax.uat.from.CNBankruptcyOrActType;
+import ca.equifax.uat.from.CNCollectionType;
+import ca.equifax.uat.from.CNConsumerCreditReportType;
+import ca.equifax.uat.from.CNEmploymentType;
+import ca.equifax.uat.from.CNLegalItemType;
+import ca.equifax.uat.from.CNLocalInquiryType;
+import ca.equifax.uat.from.CNScoreType;
+import ca.equifax.uat.from.CNTradeType;
+import ca.equifax.uat.from.EfxTransmit;
+import ca.equifax.uat.from.ParsedTelephone;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class EquifaxLongReportModelMapper {
 
+    private final static Logger log = LoggerFactory.getLogger(EquifaxLongReportModelMapper.class);
+
     public static CustomerCreditCheckLongReportDTO createLongReport(EfxTransmit efxResponse, CustomerCreditCheck ccc) {
         CustomerCreditCheckLongReportDTO dto = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
-        // TODO Add all business mapping here
+        CNConsumerCreditReportType report = efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().get(0);
+
+        CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
+        dto.percentOfRentCovered().setValue(
+                getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode(), score.getRejectCodes().getRejectCode().get(0).getDescription()));
+        dto.totalAccounts().setValue(report.getCNTrades().getCNTrade().size());
+        dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(report.getCNTrades().getCNTrade()));
+        dto.numberOfBancruptciesOrActs().setValue(
+                report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : null);
+        dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : null);
+        dto.outstandingCollectionsBalance().setValue(
+                getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
+//        dto.outstandingRevolvingDebt().setValue();
+        dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
+        // TODO mapping says SCBC, error?
+        dto.equifaxCheckScore().setValue(
+                getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? new Double(getCNScore(report.getCNScores().getCNScore(), "SCBS").getResult()
+                        .getValue()) : null);
+
+        // Identity
+        CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
+        Name identityName = EntityFactory.create(Name.class);
+        identityName.firstName().setValue(report.getCNHeader().getSubject().getSubjectName().getFirstName());
+        identityName.lastName().setValue(report.getCNHeader().getSubject().getSubjectName().getLastName());
+        identity.name().set(identityName);
+
+        identity.birthDate().setValue(getLogicalDateFromString(report.getCNHeader().getSubject().getSubjectId().getDateOfBirth().getValue()));
+        identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
+        identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
+        identity.currentEmployer().setValue(
+                getEmployer(getEmployment(report.getCNEmployments() != null ? report.getCNEmployments().getCNEmployment() : null, "ES")));
+        identity.currentOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "ES")));
+        identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+        identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+        dto.identity().set(identity);
+
+        // Accounts
+        List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+        for (CNTradeType cnTrade : cnTrades) {
+            CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
+            account.name().setValue(cnTrade.getCreditorId().getName());
+            account.number().setValue(cnTrade.getAccountNumber().getValue());
+            account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+            account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+            account.lastPaymentDate().setValue(
+                    cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar().getTime())
+                            : null);
+            account.portfolioTypeCode().setValue(cnTrade.getPortfolioType().getCode());
+            account.paymentRateCode().setValue(cnTrade.getPaymentRate().getCode());
+            account.portfolioTypeDescription().setValue(cnTrade.getPortfolioType().getDescription());
+            account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
+            // TODO do we need all descriptions here or just first one?
+            account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
+
+            dto.accounts().add(account);
+        }
+
+        // Court Judgements
+
+        if (report.getCNLegalItems() != null) {
+            List<CNLegalItemType> cnLegals = report.getCNLegalItems().getCNLegalItem();
+            for (CNLegalItemType cnLegal : cnLegals) {
+                CustomerCreditCheckLongReportDTO.JudgementDTO judgement = EntityFactory.create(CustomerCreditCheckLongReportDTO.JudgementDTO.class);
+                judgement.caseNumber().setValue(cnLegal.getCaseNumber());
+                judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
+                judgement.personName().setValue(cnLegal.getCourtId().getName());
+                judgement.status().setValue(cnLegal.getStatus().getDescription());
+                judgement.dateFiled().setValue(cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
+                judgement.dateSatisfied().setValue(
+                        cnLegal.getDateSatisfied() != null ? new LogicalDate(cnLegal.getDateSatisfied().toGregorianCalendar().getTime()) : null);
+                judgement.plaintiff().setValue(cnLegal.getPlaintiff().getValue());
+                judgement.defendants().setValue(cnLegal.getDefendant());
+
+                dto.judgements().add(judgement);
+            }
+        }
+
+        // Proposals and Bankrupcies
+
+        if (report.getCNBankruptciesOrActs() != null) {
+            List<CNBankruptcyOrActType> cnActs = report.getCNBankruptciesOrActs().getCNBankruptcyOrAct();
+            for (CNBankruptcyOrActType cnAct : cnActs) {
+                CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
+                // TODO is Case Number a real thing? we have Case Number And Trustee below.
+                // proposal.caseNumber().setValue();
+                proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
+                proposal.personName().setValue(cnAct.getCourtId().getName());
+                proposal.dispositionDate().setValue(
+                        cnAct.getIntentOrDisposition() != null ? new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime())
+                                : null);
+                proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount().getValue());
+                proposal.assetAmount().setValue(cnAct.getAssetAmount().getValue());
+                proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
+                proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
+                dto.proposals().add(proposal);
+            }
+        }
+
+        // Evictions not present in this equifax report version
+
+        // Rent History not present in this equifax report version
+
+        // Collections
+
+        if (report.getCNCollections() != null) {
+            List<CNCollectionType> cnCollections = report.getCNCollections().getCNCollection();
+            for (CNCollectionType cnCollection : cnCollections) {
+                CustomerCreditCheckLongReportDTO.CollectionDTO collection = EntityFactory.create(CustomerCreditCheckLongReportDTO.CollectionDTO.class);
+                collection.onBehalf().setValue(cnCollection.getCollectionCreditor().getAccountNumberAndOrName());
+                collection.date().setValue(
+                        cnCollection.getAssignedDate() != null ? new LogicalDate(cnCollection.getAssignedDate().toGregorianCalendar().getTime()) : null);
+                collection.lastActive().setValue(
+                        cnCollection.getDateOfLastPayment() != null ? new LogicalDate(cnCollection.getDateOfLastPayment().toGregorianCalendar().getTime())
+                                : null);
+                collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
+                collection.balance().setValue(cnCollection.getBalanceAmount().getValue());
+                collection.status().setValue(cnCollection.getDescription());
+                // TODO where do we get address? It's not in cnCollection. Do we just reuse current address?
+                dto.collections().add(collection);
+            }
+        }
+
+        // Inquiries
+
+        if (report.getCNLocalInquiries() != null) {
+            List<CNLocalInquiryType> cnInquiries = report.getCNLocalInquiries().getCNLocalInquiry();
+            for (CNLocalInquiryType cnInquiry : cnInquiries) {
+                CustomerCreditCheckLongReportDTO.InquiryDTO inquiry = EntityFactory.create(CustomerCreditCheckLongReportDTO.InquiryDTO.class);
+                inquiry.onBehalf().setValue(cnInquiry.getCustomerId().getName());
+                inquiry.date().setValue(cnInquiry.getDate() != null ? new LogicalDate(cnInquiry.getDate().toGregorianCalendar().getTime()) : null);
+                inquiry.customerNumber().setValue(cnInquiry.getCustomerId() != null ? cnInquiry.getCustomerId().getCustomerNumber() : null);
+                if (cnInquiry.getCustomerId().getTelephone() != null) {
+                    ParsedTelephone cnPhone = cnInquiry.getCustomerId().getTelephone().getParsedTelephone();
+                    String phone = cnPhone.getAreaCode().toString() + "-" + cnPhone.getNumber();
+                    if (cnPhone.getExtension() != null) {
+                        phone = phone + " ex. " + cnPhone.getExtension().toString();
+                    }
+                    inquiry.phone().setValue(phone);
+                }
+                dto.inquiries().add(inquiry);
+            }
+        }
+
+        // TODO Add rest of business mapping here
         return dto;
+    }
+
+    private static String getEmployer(CNEmploymentType employment) {
+        if (employment != null) {
+            return employment.getEmployer();
+        }
+        return null;
+    }
+
+    private static String getOccupation(CNEmploymentType employment) {
+        if (employment != null) {
+            return employment.getOccupation();
+        }
+        return null;
+    }
+
+    private static LogicalDate getLogicalDateFromString(String string) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        if (string == null) {
+            return null;
+        }
+        try {
+            Date date = formatter.parse(string);
+            return new LogicalDate(date);
+        } catch (ParseException e) {
+            log.error("Error parsing LogicalDate from string", e);
+            return null;
+        }
+    }
+
+    private static CNEmploymentType getEmployment(List<CNEmploymentType> employments, String type) {
+        if (employments == null) {
+            return null;
+        }
+        for (CNEmploymentType employment : employments) {
+            if (employment.getCode().equals(type)) {
+                return employment;
+            }
+        }
+        return null;
+    }
+
+    private static AddressSimple createAddress(CNAddressType cnAddress) {
+        if (cnAddress == null) {
+            return null;
+        }
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
+        address.postalCode().setValue(cnAddress.getPostalCode());
+        address.street1().setValue(cnAddress.getStreetName());
+        if (cnAddress.getProvince() != null) {
+            address.province().code().setValue(cnAddress.getProvince().getCode());
+            address.country().name().setValue(getCountry(getProvinces(), cnAddress.getProvince().getCode()));
+        }
+        return null;
+    }
+
+    private static CNScoreType getCNScore(List<CNScoreType> scores, String type) {
+        if (scores == null) {
+            return null;
+        }
+        for (CNScoreType score : scores) {
+            if (score.getProductType().equals(type)) {
+                return score;
+            }
+        }
+        return null;
+    }
+
+    private static List<Province> getProvinces() {
+        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
+        criteria.asc(criteria.proto().name());
+        return Persistence.service().query(criteria);
+    }
+
+    private static String getCountry(List<Province> provinces, String stateCode) {
+        for (Province province : provinces) {
+            if (StringUtils.equals(province.code().getValue(), stateCode)) {
+                return province.country().name().getValue();
+            }
+        }
+        return null;
+    }
+
+    private static CNAddressType getCNAddress(List<CNAddressType> addresses, String type) {
+        if (addresses == null) {
+            return null;
+        }
+        for (CNAddressType address : addresses) {
+            if (address.getCode().equals(type)) {
+                return address;
+            }
+        }
+        return null;
+        // TODO error handling
+    }
+
+    private static BigDecimal getTotalCNCollectionsBalance(List<CNCollectionType> collections) {
+        if (collections == null) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal total = BigDecimal.ZERO;
+        for (CNCollectionType collection : collections) {
+            if (collection.getCode().equals("RA") || collection.getCode().equals("RE")) {
+                total.add(collection.getBalanceAmount().getValue());
+            }
+        }
+        return total;
+    }
+
+    private static BigDecimal getTotalCNTradesBalance(List<CNTradeType> trades) {
+        BigDecimal total = BigDecimal.ZERO;
+        if (trades != null) {
+            for (CNTradeType trade : trades) {
+                total.add(trade.getBalanceAmount().getValue());
+            }
+        }
+        return total;
+    }
+
+    private static BigDecimal getRejectCode(String codeString, String description) {
+        if (codeString.equals("01")) {
+            return new BigDecimal(100);
+        }
+        Pattern p = Pattern.compile("\\d+%");
+        Matcher m = p.matcher(codeString);
+        List<BigDecimal> codeList = new ArrayList<BigDecimal>();
+        while (m.find()) {
+            try {
+                String code = m.group();
+                code = code.substring(0, code.length() - 1);
+                codeList.add(new BigDecimal(code));
+            } catch (Exception e) {
+                log.error("Problem converting String to BigDecimal in efxResponse, cannot convert " + m.group() + " to BigDecimal", e);
+                // TODO error handling
+                throw new Error(e);
+            }
+        }
+        if (codeList.size() == 1) {
+            return codeList.get(0);
+        } else {
+            log.error("Multiple numbers found in efxResponse RejectCode. Cannot convert to rent percent.");
+            // TODO error handling
+            throw new Error("Multiple numbers found in efxResponse RejectCode. Cannot convert to rent percent.");
+        }
     }
 }

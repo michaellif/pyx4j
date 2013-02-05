@@ -230,8 +230,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().creditAmount()), 10).layout(Layout.vertical).build());
                 main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balanceAmount()), 10).layout(Layout.vertical).build());
                 main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastPaymentDate()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().radeCode()), 5).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().radeType()), 5).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().portfolioTypeCode()), 5).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().portfolioTypeDescription()), 5).layout(Layout.vertical).build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().paymentRate()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);

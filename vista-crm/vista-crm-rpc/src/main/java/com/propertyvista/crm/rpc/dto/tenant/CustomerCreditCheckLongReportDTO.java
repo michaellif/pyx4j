@@ -14,7 +14,6 @@
 package com.propertyvista.crm.rpc.dto.tenant;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -145,11 +144,13 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<BigDecimal> balanceAmount();
 
-        IPrimitive<Date> lastPaymentDate();
+        IPrimitive<LogicalDate> lastPaymentDate();
 
-        IPrimitive<Integer> radeCode();
+        IPrimitive<String> portfolioTypeCode();
 
-        IPrimitive<String> radeType();
+        IPrimitive<String> paymentRateCode();
+
+        IPrimitive<String> portfolioTypeDescription();
 
         IPrimitive<String> paymentRate();
 
@@ -166,17 +167,17 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> customerNumber();
 
-        Name personName();
+        IPrimitive<String> personName();
 
         IPrimitive<String> status();
 
-        IPrimitive<Date> dateFiled();
+        IPrimitive<LogicalDate> dateFiled();
 
-        IPrimitive<Date> dateSatisfied();
+        IPrimitive<LogicalDate> dateSatisfied();
 
-        Name plaintiff();
+        IPrimitive<String> plaintiff();
 
-        IList<Name> defendants();
+        IPrimitive<String> defendants();
     }
 
     IList<JudgementDTO> judgements();
@@ -189,9 +190,9 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> customerNumber();
 
-        Name personName();
+        IPrimitive<String> personName();
 
-        IPrimitive<Date> dispositionDate();
+        IPrimitive<LogicalDate> dispositionDate();
 
         IPrimitive<BigDecimal> liabilityAmount();
 
@@ -214,9 +215,9 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         Name personName();
 
-        IPrimitive<Date> dateFiled();
+        IPrimitive<LogicalDate> dateFiled();
 
-        IPrimitive<Date> judgementDate();
+        IPrimitive<LogicalDate> judgementDate();
 
         IPrimitive<String> judgment();
 
@@ -245,7 +246,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<BigDecimal> NSFChecks();
 
-        IPrimitive<Date> lastUpdated();
+        IPrimitive<LogicalDate> lastUpdated();
 
         IPrimitive<LogicalDate> from();
 
@@ -285,7 +286,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface InquiryDTO extends IEntity {
 
-        Name onBehalf();
+        IPrimitive<String> onBehalf();
 
         IPrimitive<LogicalDate> date();
 
