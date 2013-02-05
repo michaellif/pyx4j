@@ -84,7 +84,7 @@ public class VistaFeatures {
 
         @Override
         public boolean tenantSure() {
-            return threadLocale.get().tenantSureIntegration().getValue();
+            return threadLocale.get().tenantSureIntegration().getValue(Boolean.FALSE);
         }
 
     }

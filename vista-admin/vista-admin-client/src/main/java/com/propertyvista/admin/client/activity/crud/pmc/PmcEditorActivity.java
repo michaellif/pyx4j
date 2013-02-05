@@ -55,6 +55,7 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
         entity.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
+        entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
 
         callback.onSuccess(entity);
 

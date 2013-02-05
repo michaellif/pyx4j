@@ -92,6 +92,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
                 pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
                 pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+                pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 

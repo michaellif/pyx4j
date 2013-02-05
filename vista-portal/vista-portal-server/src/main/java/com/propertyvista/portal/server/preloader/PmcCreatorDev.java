@@ -62,6 +62,7 @@ public class PmcCreatorDev {
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
         pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
+        pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 
         if (pmcName.equals(DemoPmc.gondor.name())) {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.UK);
