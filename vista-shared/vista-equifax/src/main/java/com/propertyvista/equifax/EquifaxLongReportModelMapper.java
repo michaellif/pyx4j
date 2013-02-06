@@ -78,6 +78,8 @@ public class EquifaxLongReportModelMapper {
             dto.rating7().setValue(countAccounts(cnTrades, "R7"));
             dto.rating8().setValue(countAccounts(cnTrades, "R8"));
             dto.rating9().setValue(countAccounts(cnTrades, "R9"));
+
+            dto.outstandingRevolvingDebt().setValue(getTotalRevolvingDebt(cnTrades));
         }
 
         dto.numberOfBancruptciesOrActs().setValue(
@@ -86,10 +88,9 @@ public class EquifaxLongReportModelMapper {
         dto.outstandingCollectionsBalance().setValue(
                 getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
 
-//        dto.outstandingRevolvingDebt().setValue();
         dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
 
-        // TODO mapping says SCBC, error?
+        // TODO mapping says SCBC, error in mapping?
         dto.equifaxCheckScore().setValue(
                 getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? getScoreResult(getCNScore(report.getCNScores().getCNScore(), "SCBS")) : null);
 
@@ -193,7 +194,6 @@ public class EquifaxLongReportModelMapper {
                 collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
                 collection.balance().setValue(cnCollection.getBalanceAmount().getValue());
                 collection.status().setValue(cnCollection.getDescription());
-                // TODO where do we get address? It's not in cnCollection. Do we just reuse current address?
                 dto.collections().add(collection);
             }
         }
@@ -221,6 +221,18 @@ public class EquifaxLongReportModelMapper {
 
         // TODO Add rest of business mapping here
         return dto;
+    }
+
+    private static BigDecimal getTotalRevolvingDebt(List<CNTradeType> trades) {
+        BigDecimal total = BigDecimal.ZERO;
+        if (trades != null) {
+            for (CNTradeType trade : trades) {
+                if (trade.getPortfolioType() != null && trade.getPortfolioType().getCode() != null && trade.getPortfolioType().getCode().equals("R")) {
+                    total = total.add(trade.getBalanceAmount().getValue());
+                }
+            }
+        }
+        return total;
     }
 
     private static Double getScoreResult(CNScoreType cnScore) {
@@ -293,39 +305,37 @@ public class EquifaxLongReportModelMapper {
     }
 
     private static CNEmploymentType getEmployment(List<CNEmploymentType> employments, String type) {
-        if (employments == null) {
-            return null;
-        }
-        for (CNEmploymentType employment : employments) {
-            if (employment.getCode().equals(type)) {
-                return employment;
+        if (employments != null) {
+            for (CNEmploymentType employment : employments) {
+                if (employment.getCode().equals(type)) {
+                    return employment;
+                }
             }
         }
         return null;
     }
 
     private static AddressSimple createAddress(CNAddressType cnAddress) {
-        if (cnAddress == null) {
-            return null;
-        }
-        AddressSimple address = EntityFactory.create(AddressSimple.class);
-        address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
-        address.postalCode().setValue(cnAddress.getPostalCode());
-        address.street1().setValue(cnAddress.getStreetName());
-        if (cnAddress.getProvince() != null) {
-            address.province().code().setValue(cnAddress.getProvince().getCode());
-            address.country().name().setValue(getCountry(getProvinces(), cnAddress.getProvince().getCode()));
+        if (cnAddress != null) {
+            AddressSimple address = EntityFactory.create(AddressSimple.class);
+            address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
+            address.postalCode().setValue(cnAddress.getPostalCode());
+            address.street1().setValue(cnAddress.getStreetName());
+            if (cnAddress.getProvince() != null) {
+                address.province().code().setValue(cnAddress.getProvince().getCode());
+                address.country().name().setValue(getCountry(getProvinces(), cnAddress.getProvince().getCode()));
+            }
+            return address;
         }
         return null;
     }
 
     private static CNScoreType getCNScore(List<CNScoreType> scores, String type) {
-        if (scores == null) {
-            return null;
-        }
-        for (CNScoreType score : scores) {
-            if (score.getProductType().equals(type)) {
-                return score;
+        if (scores != null) {
+            for (CNScoreType score : scores) {
+                if (score.getProductType().equals(type)) {
+                    return score;
+                }
             }
         }
         return null;
@@ -347,16 +357,14 @@ public class EquifaxLongReportModelMapper {
     }
 
     private static CNAddressType getCNAddress(List<CNAddressType> addresses, String type) {
-        if (addresses == null) {
-            return null;
-        }
-        for (CNAddressType address : addresses) {
-            if (address.getCode().equals(type)) {
-                return address;
+        if (addresses != null) {
+            for (CNAddressType address : addresses) {
+                if (address.getCode().equals(type)) {
+                    return address;
+                }
             }
         }
         return null;
-        // TODO error handling
     }
 
     private static BigDecimal getTotalCNCollectionsBalance(List<CNCollectionType> collections) {
@@ -366,7 +374,7 @@ public class EquifaxLongReportModelMapper {
         BigDecimal total = BigDecimal.ZERO;
         for (CNCollectionType collection : collections) {
             if (collection.getCode().equals("RA") || collection.getCode().equals("RE")) {
-                total.add(collection.getBalanceAmount().getValue());
+                total = total.add(collection.getBalanceAmount().getValue());
             }
         }
         return total;
@@ -376,7 +384,7 @@ public class EquifaxLongReportModelMapper {
         BigDecimal total = BigDecimal.ZERO;
         if (trades != null) {
             for (CNTradeType trade : trades) {
-                total.add(trade.getBalanceAmount().getValue());
+                total = total.add(trade.getBalanceAmount().getValue());
             }
         }
         return total;
@@ -396,16 +404,14 @@ public class EquifaxLongReportModelMapper {
                 codeList.add(new BigDecimal(code));
             } catch (Exception e) {
                 log.error("Problem converting String to BigDecimal in efxResponse, cannot convert " + m.group() + " to BigDecimal", e);
-                // TODO error handling
                 throw new Error(e);
             }
         }
         if (codeList.size() == 1) {
             return codeList.get(0);
         } else {
-            log.error("Multiple numbers found in efxResponse RejectCode. Cannot convert to rent percent.");
-            // TODO error handling
-            throw new Error("Multiple numbers found in efxResponse RejectCode. Cannot convert to rent percent.");
+            log.debug("No numbers found in reject code. Code: " + description + ". Returning 0%");
+            return BigDecimal.ZERO;
         }
     }
 }

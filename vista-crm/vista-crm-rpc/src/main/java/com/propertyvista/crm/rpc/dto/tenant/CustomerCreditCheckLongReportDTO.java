@@ -301,6 +301,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> status();
 
+        // Not present
         AddressSimple address();
     }
 
