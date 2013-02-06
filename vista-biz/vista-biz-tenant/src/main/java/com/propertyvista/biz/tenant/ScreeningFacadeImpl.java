@@ -172,7 +172,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         boolean success = false;
         try {
             pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
-                    .getValue());
+                    .getValue(), leaseParticipant.leaseTermV().holder().lease());
 
             // This is the business, we charge only when riskCode is returned
             success = !pcc.riskCode().isNull();

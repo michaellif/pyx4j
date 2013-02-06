@@ -49,6 +49,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
@@ -107,7 +108,7 @@ public class EquifaxCreditCheck {
         riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
     }
 
-    public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
+    public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber, Lease lease) {
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
 
         if (ApplicationMode.isDevelopment()) {
@@ -116,7 +117,7 @@ public class EquifaxCreditCheck {
 
         EfxTransmit efxResponse;
         if (VistaSystemsSimulationConfig.getConfiguration().useEquifaxSimulator().getValue(Boolean.FALSE)) {
-            efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber);
+            efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber, lease);
         } else {
             try {
                 efxResponse = EquifaxHttpClient.execute(requestMessage);
