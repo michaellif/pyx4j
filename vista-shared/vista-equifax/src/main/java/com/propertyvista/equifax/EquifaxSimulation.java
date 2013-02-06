@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,8 @@
  */
 package com.propertyvista.equifax;
 
+import java.util.concurrent.Callable;
+
 import ca.equifax.uat.from.CNConsumerCreditReportType;
 import ca.equifax.uat.from.CNScoreType;
 import ca.equifax.uat.from.CodeType;
@@ -21,14 +23,31 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.from.ObjectFactory;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.equifax.request.XmlCreator;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class EquifaxSimulation {
 
     public static EfxTransmit simulateResponce(CNConsAndCommRequestType requestMessage, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
         ObjectFactory factory = new ObjectFactory();
-        EfxTransmit response = factory.createEfxTransmit();
+
+        EquifaxSimulatorConfig equifaxSimulatorConfig = TaskRunner.runInAdminNamespace(new Callable<EquifaxSimulatorConfig>() {
+            @Override
+            public EquifaxSimulatorConfig call() {
+                return Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class));
+            }
+        });
+
+        EfxTransmit response;
+
+        // = factory.createEfxTransmit();
+        response = XmlCreator.fromStorageXMl(equifaxSimulatorConfig.approveXml().getValue());
 
         EfxReportType efxReportType = factory.createEfxReportType();
         response.getEfxReport().add(efxReportType);

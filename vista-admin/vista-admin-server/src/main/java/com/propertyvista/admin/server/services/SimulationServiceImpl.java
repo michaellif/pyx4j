@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -20,12 +20,15 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityCacheService;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.admin.rpc.SimulationDTO;
 import com.propertyvista.admin.rpc.services.SimulationService;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
@@ -48,6 +51,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         result.systems().set(VistaSystemsSimulationConfig.getConfiguration());
         result.systems().usePadSimulator().setValue(CaledonPadSftpClient.usePadSimulator());
 
+        result.equifax().set(Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class)));
+
         callback.onSuccess(result);
     }
 
@@ -63,6 +68,9 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         CaledonPadSftpClient.setUsePadSimulator(entity.systems().usePadSimulator().getValue());
         VistaSystemsSimulationConfig.setConfiguration(entity.systems());
+
+        Persistence.service().persist(entity.equifax());
+        Persistence.service().commit();
 
         callback.onSuccess(entity.getPrimaryKey());
     }

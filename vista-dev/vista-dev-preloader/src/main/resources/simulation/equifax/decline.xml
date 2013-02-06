@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EfxTransmit xmlns="http://www.equifax.ca/XMLSchemas/EfxToCust">
+    <EfxReport requestNumber="1" reportId="CNCONSUMERCREDITFILE">
+        <CNConsumerCreditReports>
+            <CNConsumerCreditReport subjectType="SUBJECT" multipleNumber="1">
+                <CNHeader>
+                    <Request>
+                        <Protocol>COND</Protocol>
+                        <CustomerNumber>999RZ00012</CustomerNumber>
+                        <LanguageIndicator>E</LanguageIndicator>
+                        <InquiryType>I</InquiryType>
+                        <OutputFormatCode>X</OutputFormatCode>
+                    </Request>
+                    <CreditFile>
+                        <UniqueNumber>35410349</UniqueNumber>
+                        <FileSinceDate>2008-09-18</FileSinceDate>
+                        <DateOfLastActivity>2013-01-09</DateOfLastActivity>
+                        <DateOfRequest>2013-02-05</DateOfRequest>
+                        <FileOwner>
+                            <BureauCode>180</BureauCode>
+                            <BureauContactInformation>Equifax  inc.</BureauContactInformation>
+                        </FileOwner>
+                        <HitCode code="1" description="HIT"/>
+                        <HitStrengthIndicator code="11" description="Regular hit"/>
+                    </CreditFile>
+                    <Subject>
+                        <SubjectName>
+                            <LastName>TESTDATA</LastName>
+                            <FirstName>SOLO</FirstName>
+                        </SubjectName>
+                        <SubjectId>
+                            <DateOfBirth type="DATE">1950-01-01</DateOfBirth>
+                        </SubjectId>
+                    </Subject>
+                </CNHeader>
+                <CNAddresses>
+                    <CNAddress code="CA" description="Current Address">
+                        <DateReported>2013-02</DateReported>
+                        <CivicNumber>5099</CivicNumber>
+                        <StreetName>CREEKBANK</StreetName>
+                        <City code="WHIT">WHITBY</City>
+                        <Province code="ON" description="ONTARIO"/>
+                        <PostalCode>L1P1T6</PostalCode>
+                        <UpdateSource code="C" description="Crt rptd"/>
+                    </CNAddress>
+                    <CNAddress code="FA" description="Former Address">
+                        <DateReported>2009-10</DateReported>
+                        <CivicNumber>5099</CivicNumber>
+                        <StreetName>CREEKBANK</StreetName>
+                        <City code="MIS">MISSISSAUGA</City>
+                        <Province code="ON" description="ONTARIO"/>
+                        <PostalCode>L4W5N2</PostalCode>
+                        <UpdateSource code="S" description="Sts rptd"/>
+                    </CNAddress>
+                </CNAddresses>
+                <CNEmployments>
+                    <CNEmployment code="ES" description="Subject'sCurrent Employment">
+                        <Occupation>MTLDECGEN0000115</Occupation>
+                        <Employer>CREATED BY CMSC QA</Employer>
+                    </CNEmployment>
+                </CNEmployments>
+                <CNTrades>
+                    <CNTrade>
+                        <DateReported>2012-12</DateReported>
+                        <CreditorId>
+                            <CustomerNumber>650ON00044</CustomerNumber>
+                            <Name>TD CREDIT CARDS</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>800</AreaCode>
+                                    <Number>983-8472</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CreditorId>
+                        <AccountNumber>124124124124124</AccountNumber>
+                        <HighCreditAmount>15000</HighCreditAmount>
+                        <BalanceAmount>3100</BalanceAmount>
+                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <MonthsReviewed>2</MonthsReviewed>
+                        <DateOpened>2008-02</DateOpened>
+                        <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
+                        <PortfolioType code="R" description="Revolving"/>
+                        <PaymentRate code="1" description="Paid as agreed and up to date"/>
+                        <Narratives>
+                            <Narrative code="EX" description="Monthly payments"/>
+                            <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
+                        </Narratives>
+                    </CNTrade>
+                    <CNTrade>
+                        <DateReported>2012-12</DateReported>
+                        <CreditorId>
+                            <CustomerNumber>650ON00044</CustomerNumber>
+                            <Name>TD CREDIT CARDS</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>800</AreaCode>
+                                    <Number>983-8472</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CreditorId>
+                        <AccountNumber>187187187187187</AccountNumber>
+                        <HighCreditAmount>12000</HighCreditAmount>
+                        <BalanceAmount>550</BalanceAmount>
+                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <MonthsReviewed>2</MonthsReviewed>
+                        <DateOpened>2007-02</DateOpened>
+                        <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
+                        <PortfolioType code="I" description="Installment"/>
+                        <PaymentRate code="1" description="Paid as agreed and up to date"/>
+                        <Narratives>
+                            <Narrative code="EY" description="Bi-weekly payments"/>
+                        </Narratives>
+                    </CNTrade>
+                    <CNTrade>
+                        <DateReported>2012-12</DateReported>
+                        <CreditorId>
+                            <CustomerNumber>650ON00044</CustomerNumber>
+                            <Name>TD CREDIT CARDS</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>800</AreaCode>
+                                    <Number>983-8472</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CreditorId>
+                        <AccountNumber>156715671567156</AccountNumber>
+                        <HighCreditAmount>15000</HighCreditAmount>
+                        <BalanceAmount>657</BalanceAmount>
+                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <MonthsReviewed>1</MonthsReviewed>
+                        <DateOpened>2010-02</DateOpened>
+                        <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
+                        <PortfolioType code="R" description="Revolving"/>
+                        <PaymentRate code="1" description="Paid as agreed and up to date"/>
+                        <Narratives>
+                            <Narrative code="EX" description="Monthly payments"/>
+                            <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
+                        </Narratives>
+                    </CNTrade>
+                </CNTrades>
+                <CNLocalInquiries>
+                    <CNLocalInquiry date="2013-01-09">
+                        <CustomerId>
+                            <CustomerNumber>999ZS00399</CustomerNumber>
+                            <Name>DETI TENANT VERIFICA</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>250</AreaCode>
+                                    <Number>740-0304</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CustomerId>
+                    </CNLocalInquiry>
+                    <CNLocalInquiry date="2013-01-05">
+                        <CustomerId>
+                            <CustomerNumber>999ZZ00616</CustomerNumber>
+                            <Name>STRATEGIC INFO TEST</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>905</AreaCode>
+                                    <Number>640-0808</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CustomerId>
+                    </CNLocalInquiry>
+                    <CNLocalInquiry date="2009-10-20">
+                        <CustomerId>
+                            <CustomerNumber>481UT00167</CustomerNumber>
+                            <Name>BELL MOBILITY</Name>
+                            <Telephone>
+                                <ParsedTelephone>
+                                    <AreaCode>800</AreaCode>
+                                    <Number>567-3061</Number>
+                                </ParsedTelephone>
+                            </Telephone>
+                        </CustomerId>
+                    </CNLocalInquiry>
+                </CNLocalInquiries>
+                <CNScores>
+                    <CNScore productType="SCBS" productId="30103" description="CRP 3.0">
+                        <VersionNumber>010</VersionNumber>
+                        <ModelId>A</ModelId>
+                        <ScoreNumber>1</ScoreNumber>
+                        <ScoreIndicator>S</ScoreIndicator>
+                        <Result>
+                            <Value>00680</Value>
+                        </Result>
+                        <Reasons>
+                            <Reason code="00012" description="Number of inquiries in last 3 months."/>
+                            <Reason code="00063" description="Total balance for open national card trades."/>
+                            <Reason code="000B6" description="Number of satisfactory trades with balance &gt; $0."/>
+                            <Reason code="000S5" description="Thin Prime Credit File"/>
+                        </Reasons>
+                    </CNScore>
+                    <CNScore productType="SCOR" productId="10301" description="iDecision">
+                        <VersionNumber>010</VersionNumber>
+                        <ModelId>S</ModelId>
+                        <ModelIdDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Property Vista</ModelIdDescription>
+                        <ScoreNumber>1</ScoreNumber>
+                        <ScoreIndicator>S</ScoreIndicator>
+                        <ScoreAttributes>
+                            <ScoreAttribute identifier="CLASS CODE" value="ACPT"/>
+                            <ScoreAttribute identifier="ECBS" value="00"/>
+                            <ScoreAttribute identifier="TDSR" value="019"/>
+                            <ScoreAttribute identifier="MATRIX" value="M1"/>
+                            <ScoreAttribute identifier="SOFT DECLINE" value="NA"/>
+                            <ScoreAttribute identifier="HARD DECLINE" value="NA"/>
+                        </ScoreAttributes>
+                        <RejectCodes>
+                            <RejectCode code="01" description="Accept - requested rent amount"/>
+                        </RejectCodes>
+                    </CNScore>
+                </CNScores>
+                <CNFraudWarnings>
+                    <CNFraudWarning productId="SF" description="SAFESCAN WARNING">
+                        <Messages>
+                            <Message priority="0" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
+                        </Messages>
+                    </CNFraudWarning>
+                    <CNFraudWarning productId="SI" description="SAFESCAN ID WARNING">
+                        <Messages>
+                            <Message priority="0" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
+                        </Messages>
+                    </CNFraudWarning>
+                </CNFraudWarnings>
+            </CNConsumerCreditReport>
+        </CNConsumerCreditReports>
+    </EfxReport>
+</EfxTransmit>

@@ -77,6 +77,13 @@ public class PmcCreatorDev {
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
 
+        if (VistaDemo.isDemo()) {
+            pmc.equifaxFee().recommendationReportPerApplicantFee().setValue(BigDecimal.ZERO);
+            pmc.equifaxFee().recommendationReportSetUpFee().setValue(BigDecimal.ZERO);
+            pmc.equifaxFee().fullCreditReportPerApplicantFee().setValue(BigDecimal.ZERO);
+            pmc.equifaxFee().fullCreditReportSetUpFee().setValue(BigDecimal.ZERO);
+        }
+
         PmcBusinessInfoDocument doc = pmc.equifaxInfo().businessInformation().documents().$();
         doc.type().setValue(Type.BusinessLicense);
         PmcDocumentFile docPage = doc.documentPages().$();
