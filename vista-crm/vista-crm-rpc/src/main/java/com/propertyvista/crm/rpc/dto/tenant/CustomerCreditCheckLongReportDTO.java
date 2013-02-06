@@ -34,7 +34,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Caption(name = "% Rent Covered")
     IPrimitive<BigDecimal> percentOfRentCovered();
 
-    // ?? "this is our data"?
+    // Our data - calculated in Service:
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> grossMonthlyIncome();
 
@@ -52,10 +52,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingCollectionsBalance();
 
-    // ?? estimate from our data
+    // Our data - calculated in Service:
     IPrimitive<Double> monthlyIncomeToRentRatio();
 
-    // ?? another estimate from our data
+    // Our data - calculated in Service:
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> estimatedDebtandRentPayments();
 

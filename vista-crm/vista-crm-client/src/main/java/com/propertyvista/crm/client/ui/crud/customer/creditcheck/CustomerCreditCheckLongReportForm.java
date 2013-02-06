@@ -99,29 +99,30 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     private Widget createQuickSummary() {
         FormFlexPanel summary = new FormFlexPanel();
         int row = -1;
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentOfRentCovered()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossMonthlyIncome()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAccounts()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOutstandingBalance()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfLegalItems()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 15).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentOfRentCovered()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossMonthlyIncome()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAccounts()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOutstandingBalance()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfLegalItems()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 10).labelWidth(20).build());
 
         row = -1;
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().monthlyIncomeToRentRatio()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().estimatedDebtandRentPayments()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfEvictions()), 15).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().landlordCollectionsFiled()), 15).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().monthlyIncomeToRentRatio()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().estimatedDebtandRentPayments()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfEvictions()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().landlordCollectionsFiled()), 10).labelWidth(20).build());
 
         summary.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         FormFlexPanel accounts = new FormFlexPanel();
         int col = -1;
-        accounts.setWidget(0, ++col, new HTML(i18n.tr("Accounts paid late")));
+        accounts.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Accounts paid late:") + "</i>"));
         accounts.getWidget(0, col).setWidth("15em");
-        accounts.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        accounts.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments1_30days()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments31_60days()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
@@ -131,9 +132,10 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         FormFlexPanel equiifax = new FormFlexPanel();
         col = -1;
-        equiifax.setWidget(0, ++col, new HTML(i18n.tr("Equifax")));
+        equiifax.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Equifax:") + "</i>"));
         equiifax.getWidget(0, col).setWidth("15em");
-        equiifax.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        equiifax.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+
         equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
         equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)

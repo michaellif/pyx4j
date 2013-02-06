@@ -181,7 +181,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
         private class CCreditCheckReportHyperlink extends CHyperlink<Key> {
 
             public CCreditCheckReportHyperlink() {
-                super("View Full Report");
+                super(i18n.tr("View Full Report"));
 
                 setCommand(new Command() {
                     @Override
@@ -196,7 +196,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                     @Override
                     public String format(Key value) {
                         if (value != null) {
-                            return "View";
+                            return i18n.tr("View");
                         } else {
                             return null;
                         }
