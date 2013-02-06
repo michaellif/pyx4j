@@ -73,11 +73,13 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setH1(++row, 0, 1, i18n.tr("PROPOSALS AND BANKRUPTCIES"));
         main.setWidget(++row, 0, inject(proto().proposals(), new ProposalFolder()));
 
-        main.setH1(++row, 0, 1, i18n.tr("EVICTIONS"));
-        main.setWidget(++row, 0, inject(proto().evictions(), new EvictionFolder()));
-
-        main.setH1(++row, 0, 1, i18n.tr("RENT HISTORY"));
-        main.setWidget(++row, 0, inject(proto().rents(), new RentFolder()));
+// Not implemented in Equifax:
+//        
+//        main.setH1(++row, 0, 1, i18n.tr("EVICTIONS"));
+//        main.setWidget(++row, 0, inject(proto().evictions(), new EvictionFolder()));
+//
+//        main.setH1(++row, 0, 1, i18n.tr("RENT HISTORY"));
+//        main.setWidget(++row, 0, inject(proto().rents(), new RentFolder()));
 
         main.setH1(++row, 0, 1, i18n.tr("COLLECTIONS"));
         main.setWidget(++row, 0, inject(proto().collections(), new CollectionFolder()));
