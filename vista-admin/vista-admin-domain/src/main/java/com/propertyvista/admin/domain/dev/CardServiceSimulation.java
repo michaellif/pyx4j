@@ -53,6 +53,7 @@ public interface CardServiceSimulation extends IEntity {
     @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> expiryDate();
 
+    @Editor(type = EditorType.money)
     @Format("#0.00")
     IPrimitive<BigDecimal> balance();
 
