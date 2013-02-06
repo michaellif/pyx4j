@@ -133,12 +133,16 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         AddressSimple formerAddress();
 
+        @Caption(name = "Employer")
         IPrimitive<String> currentEmployer();
 
+        @Caption(name = "Occupation")
         IPrimitive<String> currentOccupation();
 
+        @Caption(name = "Employer")
         IPrimitive<String> formerEmployer();
 
+        @Caption(name = "Occupation")
         IPrimitive<String> formerOccupation();
     }
 

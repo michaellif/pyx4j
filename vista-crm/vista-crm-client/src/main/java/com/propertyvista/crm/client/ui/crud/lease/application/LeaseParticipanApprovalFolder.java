@@ -118,6 +118,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
+            main.getFlexCellFormatter().setWidth(0, 0, "35em");
+
             return main;
         }
 
@@ -131,7 +133,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 10).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
 
-            left.setBR(++row, 0, 1);
+            left.setHR(++row, 0, 1);
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CCreditCheckReportHyperlink()), 10).build());
@@ -155,6 +157,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
+            panel.getFlexCellFormatter().setWidth(0, 0, "30em");
+
             return panel;
         }
 
@@ -170,6 +174,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             get(proto().creditCheck().creditCheckResult()).setVisible(creditCheckResult != CreditCheckResult.Accept);
             get(proto().creditCheck().amountApproved()).setVisible(creditCheckResult == CreditCheckResult.Accept);
             get(proto().creditCheck().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
+
+            get(proto().creditCheck().creditCheckReport()).setVisible(!getValue().creditCheck().creditCheckReport().isNull());
         }
 
         private class CCreditCheckReportHyperlink extends CHyperlink<Key> {

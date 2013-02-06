@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -106,6 +107,7 @@ public interface CustomerCreditCheck extends IEntity {
     IPrimitive<BigDecimal> amountApproved();
 
     // Pointer To fullReport (CustomerCreditCheckReport) stored in second special schema...
+    @Caption(name = "Full Repoprt")
     IPrimitive<Key> creditCheckReport();
 
     @Editor(type = EditorType.textarea)
