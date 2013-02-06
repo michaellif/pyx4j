@@ -57,7 +57,13 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     @Override
     public void processReports(RunStats runStats, LogicalDate dueDate, ReportTableFormater formater) {
-        formater.newRow(); // this is for the header
+        formater.header("First Name");
+        formater.header("Last Name");
+        formater.header("Insurance Certificate Number");
+        formater.header("Monthly Payable");
+        formater.header("Status");
+        formater.header("Status From");
+        formater.newRow();
 
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
@@ -109,11 +115,14 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
      */
     private InsuranceTenantSureReport.ReportedStatus updateReportStatus(InsuranceTenantSureReport reportedStatusHolder) {
         ReportedStatus reportClientStatus = null;
-
+        LogicalDate statusFrom = null;
+        
+        boolean needsUpdate = false;        
         switch (reportedStatusHolder.insurance().status().getValue()) {
         case Cancelled:
             if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled ) {
                 reportClientStatus = ReportedStatus.Cancelled;
+                statusFrom = reportedStatusHolder.insurance().expiryDate().getValue();
             }
             break;
 
@@ -121,9 +130,12 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         case PendingCancellation:
             if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Active) {
                 reportClientStatus = ReportedStatus.New;
-
-            } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active) | (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
-                reportClientStatus = ReportedStatus.Active;
+                statusFrom = reportedStatusHolder.insurance().inceptionDate().getValue();
+                needsUpdate = true;
+                
+            } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active)  | (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
+                reportClientStatus = ReportedStatus.Active;                
+                needsUpdate = reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New;
             }
             break;
 
@@ -136,7 +148,12 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                     InsuranceTenantSure.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance().status().getValue()));
         }
 
-        Persistence.service().persist(reportedStatusHolder);
+        if (needsUpdate) {
+            reportedStatusHolder.reportedStatus().setValue(reportClientStatus);
+            reportedStatusHolder.statusFrom().setValue(statusFrom);
+            
+            Persistence.service().persist(reportedStatusHolder);
+        }
 
         return reportedStatusHolder.reportedStatus().getValue();
     }
