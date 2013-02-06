@@ -77,15 +77,15 @@
 	margin-right: 60px;
 }
 
-.vista-pmsite-residentPage .Button {
+.vista-pmsite-residentPage .Button, .gwt-Button {
     background: none repeat scroll 0 0 #FF0000;
     color: #FFE6E6;
     cursor: pointer;
     font-size: 16px;
     height: 32px;
-    margin: 15px auto 0;
+    margin: auto;
     text-transform: uppercase;
-    width: 128px;
+    min-width: 128px;
     text-align: center;
     white-space: nowrap;
 }
@@ -95,9 +95,10 @@
 	margin-left: 30px;
 }
 
-.vista-pmsite-residentPage .Button.TSPurchaseViewNextStepButton.Button-disabled {
+.vista-pmsite-residentPage .Button.TSPurchaseViewNextStepButton.Button-disabled, .Button.TSPurchaseViewNextStepButton {
 	float: right;
 	margin: 0 20px 20px 20px;
+	width: auto;
 }
 
 .vista-pmsite-residentPage .ButtonText  {
