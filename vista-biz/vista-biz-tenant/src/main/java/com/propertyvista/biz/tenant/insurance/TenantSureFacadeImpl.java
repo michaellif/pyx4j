@@ -215,6 +215,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             }
         }
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
+        Persistence.service().persist(transaction);
         Persistence.service().commit();
 
     }
