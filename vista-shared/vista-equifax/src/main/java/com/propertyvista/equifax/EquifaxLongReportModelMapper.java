@@ -65,10 +65,13 @@ public class EquifaxLongReportModelMapper {
             dto.totalAccounts().setValue(cnTrades.size());
             dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(cnTrades));
             dto.accountsWithNoLatePayments().setValue(countAccounts(cnTrades, "R1"));
+            dto.outstandingRevolvingDebt().setValue(getTotalRevolvingDebt(cnTrades));
+
             int[] lateAccounts = countLateAccounts(cnTrades);
             dto.latePayments1_30days().setValue(lateAccounts[0]);
             dto.latePayments31_60days().setValue(lateAccounts[1]);
             dto.latePayments61_90days().setValue(lateAccounts[2]);
+
             dto.rating1().setValue(countAccounts(cnTrades, "R1"));
             dto.rating2().setValue(countAccounts(cnTrades, "R2"));
             dto.rating3().setValue(countAccounts(cnTrades, "R3"));
@@ -78,8 +81,6 @@ public class EquifaxLongReportModelMapper {
             dto.rating7().setValue(countAccounts(cnTrades, "R7"));
             dto.rating8().setValue(countAccounts(cnTrades, "R8"));
             dto.rating9().setValue(countAccounts(cnTrades, "R9"));
-
-            dto.outstandingRevolvingDebt().setValue(getTotalRevolvingDebt(cnTrades));
         }
 
         dto.numberOfBancruptciesOrActs().setValue(
@@ -160,8 +161,6 @@ public class EquifaxLongReportModelMapper {
             List<CNBankruptcyOrActType> cnActs = report.getCNBankruptciesOrActs().getCNBankruptcyOrAct();
             for (CNBankruptcyOrActType cnAct : cnActs) {
                 CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
-                // TODO is Case Number a real thing? we have Case Number And Trustee below.
-                // proposal.caseNumber().setValue();
                 proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
                 proposal.personName().setValue(cnAct.getCourtId().getName());
                 proposal.dispositionDate().setValue(
@@ -219,7 +218,6 @@ public class EquifaxLongReportModelMapper {
             }
         }
 
-        // TODO Add rest of business mapping here
         return dto;
     }
 

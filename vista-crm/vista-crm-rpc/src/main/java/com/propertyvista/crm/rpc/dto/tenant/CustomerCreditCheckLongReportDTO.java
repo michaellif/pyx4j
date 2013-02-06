@@ -203,6 +203,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface ProposalDTO extends IEntity {
 
+        // not present
         IPrimitive<String> caseNumber();
 
         IPrimitive<String> customerNumber();
