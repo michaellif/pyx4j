@@ -25,7 +25,7 @@ public class VistaSystemsSimulationConfig {
 
     static {
         configuration = EntityFactory.create(VistaSystemsSimulationConfigDTO.class);
-        configuration.useEquifaxSimulator().getValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
+        configuration.useEquifaxSimulator().setValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
     }
 
     public static VistaSystemsSimulationConfigDTO getConfiguration() {
