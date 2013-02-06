@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -38,6 +39,9 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @MemberColumn(notNull = true)
     @JoinColumn
     CardServiceSimulation card();
+
+    @OrderColumn
+    IPrimitive<Integer> odr();
 
     @NotNull
     @Format("#,##0.00")
