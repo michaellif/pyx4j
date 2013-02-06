@@ -12,6 +12,16 @@
                         <OutputFormatCode>X</OutputFormatCode>
                     </Request>
                     <CreditFile>
+                    <UniqueNumber>0035410349</UniqueNumber>    
+                    <FileSinceDate>2008-09-18</FileSinceDate>    
+                    <DateOfLastActivity>2012-08-09</DateOfLastActivity>    
+                    <DateOfRequest>2012-09-17</DateOfRequest>  
+                    <FileOwner>   
+                    	<BureauCode>180</BureauCode>    
+                    	<BureauContactInformation>Equifax inc.</BureauContactInformation>    
+                    	</FileOwner>  
+                    	 <HitCode code="1" description="HIT" />    
+                    	 <HitStrengthIndicator code="11" description="Regular hit" />
                         <UniqueNumber>35410349</UniqueNumber>
                         <FileSinceDate>2008-09-18</FileSinceDate>
                         <DateOfLastActivity>2013-01-09</DateOfLastActivity>
@@ -25,7 +35,7 @@
                     </CreditFile>
                     <Subject>
                         <SubjectName>
-                            <LastName>TESTDATA</LastName>
+                            <LastName>FORD</LastName>
                             <FirstName>SOLO</FirstName>
                         </SubjectName>
                         <SubjectId>
@@ -46,7 +56,16 @@
                     <CNAddress code="FA" description="Former Address">
                         <DateReported>2009-10</DateReported>
                         <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
+                        <StreetName>CREEKBANK-PREVIOUS</StreetName>
+                        <City code="MIS">MISSISSAUGA</City>
+                        <Province code="ON" description="ONTARIO"/>
+                        <PostalCode>L4W5N2</PostalCode>
+                        <UpdateSource code="S" description="Sts rptd"/>
+                    </CNAddress>
+                        <CNAddress code="FA" description="Former Address">
+                        <DateReported>2005-10</DateReported>
+                        <CivicNumber>5099</CivicNumber>
+                        <StreetName>CREEKBANK-VERY_OLD</StreetName>
                         <City code="MIS">MISSISSAUGA</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L4W5N2</PostalCode>
@@ -55,9 +74,13 @@
                 </CNAddresses>
                 <CNEmployments>
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
-                        <Occupation>MTLDECGEN0000115</Occupation>
-                        <Employer>CREATED BY CMSC QA</Employer>
+                        <Occupation>BANKIR</Occupation>
+                        <Employer>SEARS</Employer>
                     </CNEmployment>
+                    <CNEmployment code="EF" description="Subject's Former Employment">
+                    	<Occupation>Sales Person</Occupation>
+                    	<Employer>Home Depot</Employer>
+                    	</CNEmployment>
                 </CNEmployments>
                 <CNTrades>
                     <CNTrade>
@@ -73,15 +96,19 @@
                             </Telephone>
                         </CreditorId>
                         <AccountNumber>124124124124124</AccountNumber>
-                        <HighCreditAmount>15000</HighCreditAmount>
-                        <BalanceAmount>3100</BalanceAmount>
-                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <HighCreditAmount>000000015000</HighCreditAmount>
+                        <BalanceAmount>000000003100</BalanceAmount>
+                        <!--PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/-->
+                        <!--From Artur Document -->
+                        <!--PastDueAmount xsi:nil="true"/--> 
                         <MonthsReviewed>2</MonthsReviewed>
                         <DateOpened>2008-02</DateOpened>
                         <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
                         <PortfolioType code="R" description="Revolving"/>
                         <PaymentRate code="1" description="Paid as agreed and up to date"/>
                         <Narratives>
+                        <Narrative code="EX" description="Monthly payments"/>
+                        <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
                             <Narrative code="EX" description="Monthly payments"/>
                             <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
                         </Narratives>
@@ -90,49 +117,57 @@
                         <DateReported>2012-12</DateReported>
                         <CreditorId>
                             <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
+                            <Name>TD VISA</Name>
                             <Telephone>
                                 <ParsedTelephone>
                                     <AreaCode>800</AreaCode>
-                                    <Number>983-8472</Number>
+                                    <Number>983-1313</Number>
                                 </ParsedTelephone>
                             </Telephone>
                         </CreditorId>
                         <AccountNumber>187187187187187</AccountNumber>
-                        <HighCreditAmount>12000</HighCreditAmount>
-                        <BalanceAmount>550</BalanceAmount>
-                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <HighCreditAmount>000000012000</HighCreditAmount>
+                        <BalanceAmount>000000000550</BalanceAmount>
+                        <!--PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/-->
+                        <!--From Artur Document -->
+                        <!--PastDueAmount xsi:nil="true"/--> 
                         <MonthsReviewed>2</MonthsReviewed>
                         <DateOpened>2007-02</DateOpened>
                         <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
                         <PortfolioType code="I" description="Installment"/>
                         <PaymentRate code="1" description="Paid as agreed and up to date"/>
                         <Narratives>
+                        <Narrative code="EX" description="Monthly payments"/>
+                        <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
                             <Narrative code="EY" description="Bi-weekly payments"/>
                         </Narratives>
                     </CNTrade>
                     <CNTrade>
-                        <DateReported>2012-12</DateReported>
+                        <DateReported>2012-07</DateReported>
                         <CreditorId>
                             <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
+                            <Name>Royal Bank CREDIT CARDS</Name>
                             <Telephone>
                                 <ParsedTelephone>
                                     <AreaCode>800</AreaCode>
-                                    <Number>983-8472</Number>
+                                    <Number>983-1111</Number>
                                 </ParsedTelephone>
                             </Telephone>
                         </CreditorId>
                         <AccountNumber>156715671567156</AccountNumber>
-                        <HighCreditAmount>15000</HighCreditAmount>
-                        <BalanceAmount>657</BalanceAmount>
-                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        <HighCreditAmount>000000015000</HighCreditAmount>
+                        <BalanceAmount>000000000657</BalanceAmount>
+                        <!--PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/-->
+                         <!--From Artur Document -->
+                        <!--PastDueAmount xsi:nil="true"/--> 
                         <MonthsReviewed>1</MonthsReviewed>
                         <DateOpened>2010-02</DateOpened>
                         <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
                         <PortfolioType code="R" description="Revolving"/>
                         <PaymentRate code="1" description="Paid as agreed and up to date"/>
                         <Narratives>
+                        <Narrative code="EX" description="Monthly payments"/>
+                        <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
                             <Narrative code="EX" description="Monthly payments"/>
                             <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
                         </Narratives>
@@ -177,6 +212,39 @@
                     </CNLocalInquiry>
                 </CNLocalInquiries>
                 <CNScores>
+                <CNScore productType="SCBS" productId="30103" description="CRP 3.0">   
+                	<VersionNumber>010</VersionNumber>    
+                	<ModelId>A</ModelId>    
+                	<ScoreNumber>1</ScoreNumber>    
+                	<ScoreIndicator>S</ScoreIndicator>  
+                	<Result>   
+                		<Value>00680</Value>    
+                		</Result> 
+                		<Reasons>   
+                			<Reason code="00012" description="Number of inquiries in last 3 months." />    
+                			<Reason code="00063" description="Total balance for open national card trades." />    
+                			<Reason code="000B6" description="Number of satisfactory trades with balance > $0." />   
+                      <Reason code="000S5" description="Thin Prime Credit File" /> 
+                      </Reasons>   
+                      </CNScore> 
+                      <CNScore productType="SCOR" productId="10301" description="iDecision">   
+                      <VersionNumber>010</VersionNumber>    
+                      <ModelId>S</ModelId>    
+                      <ModelIdDescription>Property Vista</ModelIdDescription>    
+                      <ScoreNumber>1</ScoreNumber>    
+                      <ScoreIndicator>S</ScoreIndicator>  
+                      <ScoreAttributes>   
+                      	<ScoreAttribute identifier="CLASS CODE" value="REV2" />    
+                      	<ScoreAttribute identifier="ECBS" value="00" />    
+                      	<ScoreAttribute identifier="TDSR" value="000" />    
+                      	<ScoreAttribute identifier="MATRIX" value="M2" />    
+                      	<ScoreAttribute identifier="SOFT DECLINE" value="NA" />    
+                      	<ScoreAttribute identifier="HARD DECLINE" value="NA" />    
+                      	</ScoreAttributes> 
+                      	<RejectCodes>   
+                      		<RejectCode code="01" description="Accept - requested rent amount" />    
+                      	</RejectCodes>   
+                      </CNScore>  	
                     <CNScore productType="SCBS" productId="30103" description="CRP 3.0">
                         <VersionNumber>010</VersionNumber>
                         <ModelId>A</ModelId>
@@ -214,12 +282,12 @@
                 <CNFraudWarnings>
                     <CNFraudWarning productId="SF" description="SAFESCAN WARNING">
                         <Messages>
-                            <Message priority="0" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
+                            <Message priority="000" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
                         </Messages>
                     </CNFraudWarning>
                     <CNFraudWarning productId="SI" description="SAFESCAN ID WARNING">
                         <Messages>
-                            <Message priority="0" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
+                            <Message priority="0000" code="0" description="NO FRAUD INDICATION WAS DETECTED"/>
                         </Messages>
                     </CNFraudWarning>
                 </CNFraudWarnings>
