@@ -126,8 +126,7 @@ public class SchedulerHelper {
         schedulerFactory = new StdSchedulerFactory(quartzProperties);
 
         scheduler = schedulerFactory.getScheduler();
-        scheduler.start();
-
+        scheduler.standby();
     }
 
     public static synchronized void init() {
@@ -157,6 +156,23 @@ public class SchedulerHelper {
             } finally {
                 instance = null;
             }
+        }
+    }
+
+    public static synchronized void setActive(boolean active) {
+        try {
+            if (active) {
+                if (instance.scheduler.isInStandbyMode()) {
+                    instance.scheduler.start();
+                }
+            } else {
+                if (!instance.scheduler.isInStandbyMode()) {
+                    instance.scheduler.standby();
+                }
+            }
+        } catch (Throwable e) {
+            log.error("quartz error", e);
+            throw new Error(e);
         }
     }
 
