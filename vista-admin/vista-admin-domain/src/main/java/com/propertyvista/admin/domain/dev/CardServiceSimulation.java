@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -24,9 +25,11 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -40,7 +43,8 @@ public interface CardServiceSimulation extends IEntity {
 
     IPrimitive<String> number();
 
-    IPrimitive<String> token();
+    @Owned
+    IList<CardServiceSimulationToken> tokens();
 
     @NotNull
     @ToString(index = 2)
@@ -54,7 +58,8 @@ public interface CardServiceSimulation extends IEntity {
 
     IPrimitive<String> responseCode();
 
-    @Owned
-    IList<CardServiceSimulationTransaction> transactions();
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<CardServiceSimulationTransaction> transactions();
 
 }

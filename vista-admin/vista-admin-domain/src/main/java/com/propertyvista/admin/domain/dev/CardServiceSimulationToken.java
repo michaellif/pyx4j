@@ -13,17 +13,11 @@
  */
 package com.propertyvista.admin.domain.dev;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -32,21 +26,15 @@ import com.propertyvista.domain.VistaNamespace;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
-public interface CardServiceSimulationTransaction extends IEntity {
+public interface CardServiceSimulationToken extends IEntity {
 
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
     CardServiceSimulation card();
 
-    @NotNull
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> amount();
+    IPrimitive<String> token();
 
-    IPrimitive<String> responseCode();
-
-    IPrimitive<String> authorizationNumber();
-
-    IPrimitive<Date> transactionDate();
+    @OrderColumn
+    IPrimitive<Integer> odr();
 }
