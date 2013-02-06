@@ -84,10 +84,10 @@ public interface SiteDescriptor extends Descriptor {
 
     @NotNull
     @ToString(index = 0)
-    @Caption(name = "Resident Portal Skin")
+    @Caption(name = "Website Skin")
     IPrimitive<Skin> skin();
 
-    @Caption(name = "Portal Enabled")
+    @Caption(name = "Website Enabled")
     IPrimitive<Boolean> enabled();
 
     IPrimitive<Boolean> disableMapView();

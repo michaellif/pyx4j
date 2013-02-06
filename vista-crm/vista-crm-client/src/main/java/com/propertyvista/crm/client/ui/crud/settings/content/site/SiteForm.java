@@ -17,6 +17,8 @@ import java.util.EnumSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
@@ -26,9 +28,12 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -36,7 +41,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.RadioGroup.Layout;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -45,6 +52,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageFolder;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.PortalImageResourceFolder.SiteImageThumbnail;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
@@ -53,6 +61,10 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private static final I18n i18n = I18n.get(SiteForm.class);
+
+    private final CCheckBox publicPortalSwitch = new CCheckBox();
+
+    private final CRadioGroupBoolean residentSkinSwitch = new CRadioGroupBoolean(Layout.VERTICAL);
 
     private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
@@ -63,7 +75,35 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         int row = 0;
         content.setH1(row++, 0, 2, i18n.tr("Website"));
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled(), publicPortalSwitch), 10).build());
+        publicPortalSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                Boolean enable = event.getValue();
+                // if public portal is turning on while resident portal is on and custom skin is enabled, display warning
+                if (enable != null && enable) {
+                    ResidentPortalSettings residentSettings = SiteForm.this.getValue().isEmpty() ? null : SiteForm.this.getValue().residentPortalSettings();
+                    if (residentSettings != null && residentSettings.enabled().isBooleanTrue() && residentSettings.useCustomHtml().isBooleanTrue()) {
+                        OkCancelDialog confirm = new OkCancelDialog("Please Confirm") {
+                            @Override
+                            public boolean onClickOk() {
+                                residentSkinSwitch.setValue(false);
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onClickCancel() {
+                                publicPortalSwitch.setValue(false);
+                                return true;
+                            }
+
+                        };
+                        confirm.setBody(new HTML(i18n.tr("This will turn off Resident Portal Custom Skin!")));
+                        confirm.show();
+                    }
+                }
+            }
+        });
         CComponent<?, ?> skinComp;
         content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
@@ -79,8 +119,53 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().enabled()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml()), 10).build());
-        content.setH3(row++, 0, 2, i18n.tr("Resident Portal Content"));
+        residentSkinSwitch.setFormat(new IFormat<Boolean>() {
+            @Override
+            public String format(Boolean value) {
+                if (value == null) {
+                    return format(false);
+                } else if (value) {
+                    return i18n.tr("Custom");
+                } else {
+                    return i18n.tr("Same as Website");
+                }
+            }
+
+            @Override
+            public Boolean parse(String string) {
+                return null;
+            }
+        });
+        residentSkinSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                Boolean customSkin = event.getValue();
+                // if custom resident skin is turning on while public portal is enabled, display warning
+                if (customSkin != null && customSkin) {
+                    SiteDescriptorDTO site = SiteForm.this.getValue() == null ? null : SiteForm.this.getValue();
+                    if (site != null && site.enabled().isBooleanTrue() && site.residentPortalSettings().enabled().isBooleanTrue()) {
+                        OkCancelDialog confirm = new OkCancelDialog("Please Confirm") {
+                            @Override
+                            public boolean onClickOk() {
+                                publicPortalSwitch.setValue(false);
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onClickCancel() {
+                                residentSkinSwitch.setValue(false);
+                                return true;
+                            }
+
+                        };
+                        confirm.setBody(new HTML(i18n.tr("This will turn off Public Website!")));
+                        confirm.show();
+                    }
+                }
+            }
+        });
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml(), residentSkinSwitch), 10).build());
+        content.setH3(row++, 0, 2, i18n.tr("Resident Portal Custom Content"));
         content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), new ResidentCustomContentFolder(isEditable())));
         selectTab(addTab(content));
 
@@ -169,6 +254,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        // resident portal skin dependencies:
+        // 1. if public portal enabled, resident skin selection is disabled
+        residentSkinSwitch.setEnabled(!getValue().enabled().isBooleanTrue());
 
         thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
     }

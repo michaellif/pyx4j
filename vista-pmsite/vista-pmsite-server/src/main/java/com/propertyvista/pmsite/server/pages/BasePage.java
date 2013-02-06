@@ -59,9 +59,9 @@ public abstract class BasePage extends WebPage {
 
     public static final String META_KEYWORDS = "pageKeywords";
 
-    public static final String CONTENT_PANEL = "contentPanel";
+    public static final String RESIDENT_CUSTOM_CONTENT_PANEL = "contentPanel";
 
-    public static final String LOGIN_PANEL = "loginPanel";
+    public static final String RESIDENT_LOGIN_PANEL = "loginPanel";
 
     public static class LocalizedHtmlTag extends TransparentWebMarkupContainer {
         private static final long serialVersionUID = 1L;
@@ -209,8 +209,8 @@ public abstract class BasePage extends WebPage {
     public Markup getAssociatedMarkup() {
         if (cm != null && cm.isCustomResidentsContentEnabled()) {
             String content = cm.getCustomResidentsContent(locale);
-            content = content.replaceFirst(DeploymentConsts.RESIDENT_CONTENT_ID, "wicket:id=\"" + CONTENT_PANEL + "\"");
-            content = content.replaceFirst(DeploymentConsts.RESIDENT_LOGIN_ID, "wicket:id=\"" + LOGIN_PANEL + "\"");
+            content = content.replaceFirst(DeploymentConsts.RESIDENT_CONTENT_ID, "wicket:id=\"" + RESIDENT_CUSTOM_CONTENT_PANEL + "\"");
+            content = content.replaceFirst(DeploymentConsts.RESIDENT_LOGIN_ID, "wicket:id=\"" + RESIDENT_LOGIN_PANEL + "\"");
             return Markup.of(content);
         } else {
             return super.getAssociatedMarkup();

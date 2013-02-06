@@ -13,7 +13,10 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 
 import templates.TemplateResources;
 
@@ -33,10 +36,25 @@ public class ResidentsPage extends BasePage {
     public ResidentsPage() {
         super();
 
+        // redirect if not enabled
+        boolean residentPortalEnabled = false;
+        try {
+            residentPortalEnabled = getCM().getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue();
+        } catch (Exception ignore) {
+        }
+        if (!residentPortalEnabled) {
+            throw new RestartResponseException(LandingPage.class);
+        }
+
         // redirect if not secure
         PMSiteApplication.onSecurePage(getRequest());
 
-        add(new GwtInclude("gwtInclude"));
+        if (getCM().isCustomResidentsContentEnabled()) {
+            add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "vista.siteAuth")));
+            add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "vista.resident")));
+        } else {
+            add(new GwtInclude("gwtInclude"));
+        }
     }
 
     @Override

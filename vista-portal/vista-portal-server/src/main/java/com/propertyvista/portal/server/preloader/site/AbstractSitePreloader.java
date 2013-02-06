@@ -239,6 +239,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
     }
 
     protected void createCustomResidentPage(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        // enable resident portal by default
         ResidentPortalSettings settings = EntityFactory.create(ResidentPortalSettings.class);
         settings.enabled().setValue(true);
         settings.useCustomHtml().setValue(false);
@@ -257,7 +258,9 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
         }
         if ((settings.customHtml().size() > 0) && (!VistaDemo.isDemo())) {
+            // for custom resident portal content disable public portal
             settings.useCustomHtml().setValue(true);
+            site.enabled().setValue(false);
         }
         site.residentPortalSettings().set(settings);
     }

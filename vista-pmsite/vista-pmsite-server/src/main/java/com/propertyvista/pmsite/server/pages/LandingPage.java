@@ -48,8 +48,8 @@ public class LandingPage extends BasePage {
         setVersioned(false);
 
         if (getCM().isCustomResidentsContentEnabled()) {
-            add(new GwtInclude(BasePage.CONTENT_PANEL).add(AttributeModifier.replace("id", "vista.resident")));
-            add(new Label(BasePage.LOGIN_PANEL).add(AttributeModifier.replace("id", "vista.siteAuth")));
+            add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "vista.resident")));
+            add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "vista.siteAuth")));
         } else {
             // set aptlist view mode preference to Map
             PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());

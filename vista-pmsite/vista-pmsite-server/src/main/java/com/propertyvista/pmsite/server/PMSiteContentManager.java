@@ -45,6 +45,7 @@ import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
@@ -103,7 +104,8 @@ public class PMSiteContentManager implements Serializable {
         } catch (NamespaceNotFoundException e) {
             foundSiteDescriptor = null;
         }
-        if ((foundSiteDescriptor == null) || (!foundSiteDescriptor.enabled().getValue(Boolean.FALSE))) {
+        if ((foundSiteDescriptor == null)
+                || (!foundSiteDescriptor.enabled().isBooleanTrue() && !foundSiteDescriptor.residentPortalSettings().enabled().isBooleanTrue())) {
             throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         siteDescriptor = foundSiteDescriptor;
@@ -216,7 +218,10 @@ public class PMSiteContentManager implements Serializable {
         for (int i = 0; i < 4 && i < siteDescriptor.childPages().size(); i++) {
             PageDescriptor descriptor = siteDescriptor.childPages().get(i);
             if (descriptor != null) {
-                list.add(new NavigationItem(descriptor));
+                // show residents only if enabled
+                if (descriptor.type().getValue() != Type.residents || siteDescriptor.residentPortalSettings().enabled().isBooleanTrue()) {
+                    list.add(new NavigationItem(descriptor));
+                }
             } else {
                 break;
             }

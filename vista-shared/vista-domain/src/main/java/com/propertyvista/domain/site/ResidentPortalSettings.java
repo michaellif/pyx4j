@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.site;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
@@ -31,8 +32,10 @@ public interface ResidentPortalSettings extends IEntity {
     @Detached
     SiteDescriptor site();
 
+    @Caption(name = "Resident Portal Enabled")
     IPrimitive<Boolean> enabled();
 
+    @Caption(name = "Resident Portal Skin")
     IPrimitive<Boolean> useCustomHtml();
 
     @Owned
