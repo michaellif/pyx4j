@@ -278,6 +278,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
         }
 
         report.grossMonthlyIncome().setValue(grossMonthlyIncome);
+        report.monthlyIncomeToRentRatio().setValue(grossMonthlyIncome.divide(ccc.amountChecked().getValue(), RoundingMode.DOWN).doubleValue());
 
         return report;
     }
