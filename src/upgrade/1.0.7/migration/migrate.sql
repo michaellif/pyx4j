@@ -227,7 +227,7 @@ BEGIN TRANSACTION;
         AND     substring(namespace,1,1) = 'y';
 COMMIT;
 
-BEGIN TRANSACTION;1.0.6
+BEGIN TRANSACTION;
         SELECT  namespace,_dba_.migrate_pmc_107(namespace)
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
