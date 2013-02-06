@@ -22,10 +22,12 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
+import com.propertyvista.config.VistaDeployment;
 
 public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements MaintenanceCrudService {
 
@@ -60,6 +62,7 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     @Override
     public void save(AsyncCallback<Key> callback, VistaSystemMaintenanceState state) {
         SystemMaintenance.setSystemMaintenanceInfo(state);
+        SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
         callback.onSuccess(state.getPrimaryKey());
     }
 

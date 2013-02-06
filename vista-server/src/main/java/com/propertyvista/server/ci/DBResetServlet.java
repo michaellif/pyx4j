@@ -244,6 +244,7 @@ public class DBResetServlet extends HttpServlet {
                                     o(out, "DB Dropped: " + TimeUtils.secSince(start));
                                     Thread.sleep(150);
                                     SchedulerHelper.init();
+                                    SchedulerHelper.setActive(true);
                                     log.debug("Initialize Admin");
                                     NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
                                     try {
