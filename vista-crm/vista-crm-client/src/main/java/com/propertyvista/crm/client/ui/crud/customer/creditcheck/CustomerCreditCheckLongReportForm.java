@@ -47,7 +47,6 @@ import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.Inq
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.JudgementDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.ProposalDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RentDTO;
-import com.propertyvista.domain.person.Name;
 
 public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCreditCheckLongReportDTO> {
 
@@ -319,8 +318,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().customerNumber()), 15).labelWidth(15).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).labelWidth(20).layout(Layout.vertical)
-                        .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().customerName()), 20).labelWidth(20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                                .componentAlignment(Alignment.center).build());
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().status()), 10).labelWidth(10).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
@@ -331,18 +331,10 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                         new DecoratorBuilder(inject(proto().dateSatisfied()), 10).labelWidth(10).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
 
-                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff(), new NameEditor()), 25).build());
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
 
-                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants(), new VistaBoxFolder<Name>(Name.class, false) {
-                    @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
-                        if (member instanceof Name) {
-                            return new NameEditor();
-                        }
-                        return super.create(member);
-                    }
-                }), 25).build());
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants()), 40).build());
                 main.getFlexCellFormatter().setColSpan(2, 0, col);
 
                 return main;
@@ -381,8 +373,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().customerNumber()), 15).labelWidth(15).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).labelWidth(20).layout(Layout.vertical)
-                        .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().customerName()), 20).labelWidth(20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                                .componentAlignment(Alignment.center).build());
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().dispositionDate()), 10).labelWidth(10).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
@@ -435,8 +428,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().customerNumber()), 15).labelWidth(15).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).labelWidth(20).layout(Layout.vertical)
-                        .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().customerName()), 20).labelWidth(20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                                .componentAlignment(Alignment.center).build());
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().dateFiled()), 10).labelWidth(10).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
@@ -447,18 +441,10 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                         new DecoratorBuilder(inject(proto().judgment()), 10).labelWidth(10).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
 
-                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff(), new NameEditor()), 25).build());
+                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
 
-                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants(), new VistaBoxFolder<Name>(Name.class, false) {
-                    @Override
-                    public CComponent<?, ?> create(IObject<?> member) {
-                        if (member instanceof Name) {
-                            return new NameEditor();
-                        }
-                        return super.create(member);
-                    }
-                }), 25).build());
+                main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants()), 40).build());
                 main.getFlexCellFormatter().setColSpan(2, 0, col);
 
                 main.setWidget(3, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
@@ -494,8 +480,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().landlord(), new NameEditor()), 20).labelWidth(20).layout(Layout.vertical)
-                        .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().landlord()), 20).labelWidth(20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                                .componentAlignment(Alignment.center).build());
                 main.setWidget(0, ++col,
                         new DecoratorBuilder(inject(proto().rent()), 10).labelWidth(10).layout(Layout.vertical).componentAlignment(Alignment.right).build());
                 main.setWidget(0, ++col,
@@ -592,14 +579,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                     new EntityFolderColumnDescriptor(proto().customerNumber(), "15em"),
                     new EntityFolderColumnDescriptor(proto().phone(), "10em"));
               //@formatter:on        
-        }
-
-        @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Name) {
-                return new NameEditor();
-            }
-            return super.create(member);
         }
     }
 }

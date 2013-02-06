@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -153,13 +154,16 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface AccountDTO extends IEntity {
 
+        @ToString(index = 0)
         IPrimitive<String> name();
 
+        @ToString(index = 1)
         IPrimitive<String> number();
 
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> creditAmount();
 
+        @ToString(index = 2)
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> balanceAmount();
 
@@ -180,12 +184,15 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface JudgementDTO extends IEntity {
 
+        @ToString(index = 0)
         IPrimitive<String> caseNumber();
 
         IPrimitive<String> customerNumber();
 
-        IPrimitive<String> personName();
+        @ToString(index = 1)
+        IPrimitive<String> customerName();
 
+        @ToString(index = 2)
         IPrimitive<String> status();
 
         IPrimitive<LogicalDate> dateFiled();
@@ -204,11 +211,13 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     interface ProposalDTO extends IEntity {
 
         // not present
+        @ToString(index = 0)
         IPrimitive<String> caseNumber();
 
         IPrimitive<String> customerNumber();
 
-        IPrimitive<String> personName();
+        @ToString(index = 1)
+        IPrimitive<String> customerName();
 
         IPrimitive<LogicalDate> dispositionDate();
 
@@ -230,21 +239,24 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface EvictionDTO extends IEntity {
 
+        @ToString(index = 0)
         IPrimitive<String> caseNumber();
 
         IPrimitive<String> customerNumber();
 
-        Name personName();
+        @ToString(index = 1)
+        IPrimitive<String> customerName();
 
         IPrimitive<LogicalDate> dateFiled();
 
         IPrimitive<LogicalDate> judgementDate();
 
+        @ToString(index = 2)
         IPrimitive<String> judgment();
 
-        Name plaintiff();
+        IPrimitive<String> plaintiff();
 
-        IList<Name> defendants();
+        IPrimitive<String> defendants();
 
         AddressSimple address();
     }
@@ -256,8 +268,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface RentDTO extends IEntity {
 
-        Name landlord();
+        @ToString(index = 0)
+        IPrimitive<String> landlord();
 
+        @ToString(index = 1)
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> rent();
 
@@ -265,8 +279,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<Boolean> noticeGiven();
 
+        @ToString(index = 2)
         IPrimitive<Integer> latePayments();
 
+        @ToString(index = 3)
         IPrimitive<Integer> NSFChecks();
 
         IPrimitive<LogicalDate> lastUpdated();
@@ -288,8 +304,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface CollectionDTO extends IEntity {
 
+        @ToString(index = 0)
         IPrimitive<String> onBehalf();
 
+        @ToString(index = 1)
         IPrimitive<LogicalDate> date();
 
         IPrimitive<LogicalDate> lastActive();
@@ -297,9 +315,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> originalAmount();
 
+        @ToString(index = 2)
         @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> balance();
 
+        @ToString(index = 3)
         IPrimitive<String> status();
 
         // Not present
@@ -312,10 +332,13 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Transient
     interface InquiryDTO extends IEntity {
 
+        @ToString(index = 0)
         IPrimitive<String> onBehalf();
 
+        @ToString(index = 1)
         IPrimitive<LogicalDate> date();
 
+        @ToString(index = 2)
         IPrimitive<String> customerNumber();
 
         IPrimitive<String> phone();

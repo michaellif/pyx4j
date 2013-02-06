@@ -57,9 +57,9 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
     @Caption(name = "Position")
     IPrimitive<String> position();
 
+    @NotNull
     @Override
     @Caption(name = "Monthly Salary")
-    @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();

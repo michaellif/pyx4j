@@ -264,6 +264,9 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             throw new UserRuntimeException(i18n.tr("Credit Check Full Credit Report was not activated"));
         }
         CustomerCreditCheck ccc = retrivePersonCreditCheck(customerId);
+
+        // TODO: enhance with our data here: 
+
         return EquifaxCreditCheck.createLongReport(ccc);
     }
 }

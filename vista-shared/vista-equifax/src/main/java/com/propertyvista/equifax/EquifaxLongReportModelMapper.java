@@ -143,7 +143,7 @@ public class EquifaxLongReportModelMapper {
                 CustomerCreditCheckLongReportDTO.JudgementDTO judgement = EntityFactory.create(CustomerCreditCheckLongReportDTO.JudgementDTO.class);
                 judgement.caseNumber().setValue(cnLegal.getCaseNumber());
                 judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
-                judgement.personName().setValue(cnLegal.getCourtId().getName());
+                judgement.customerName().setValue(cnLegal.getCourtId().getName());
                 judgement.status().setValue(cnLegal.getStatus().getDescription());
                 judgement.dateFiled().setValue(cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
                 judgement.dateSatisfied().setValue(
@@ -162,7 +162,7 @@ public class EquifaxLongReportModelMapper {
             for (CNBankruptcyOrActType cnAct : cnActs) {
                 CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
                 proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
-                proposal.personName().setValue(cnAct.getCourtId().getName());
+                proposal.customerName().setValue(cnAct.getCourtId().getName());
                 proposal.dispositionDate().setValue(
                         cnAct.getIntentOrDisposition() != null ? new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime())
                                 : null);
