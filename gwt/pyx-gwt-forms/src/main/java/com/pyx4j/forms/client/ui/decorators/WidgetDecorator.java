@@ -32,14 +32,17 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -51,6 +54,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
 public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
@@ -82,7 +86,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     private final FlowPanel labelHolder;
 
-    private final HorizontalPanel contentPanel;
+    private final CellPanel contentPanel;
 
     public WidgetDecorator(CComponent<?, ?> component) {
         this(new Builder(component));
@@ -164,7 +168,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
-        getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
@@ -183,16 +186,26 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.setWidget(builder.assistantWidget);
 
-        contentPanel = new HorizontalPanel();
+        switch (builder.layout) {
+        case horisontal:
+            contentPanel = new HorizontalPanel();
+            break;
+        case vertical:
+            contentPanel = new VerticalPanel();
+            break;
+        default:
+            contentPanel = null;
+        }
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
+
         if (builder.readOnlyMode) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
         }
 
-        layout(builder.layout);
+        layout(builder);
     }
 
     public Label getLabel() {
@@ -203,13 +216,25 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         return component;
     }
 
-    protected void layout(Layout layout) {
-        switch (layout) {
+    protected void layout(final Builder builder) {
+        HorizontalAlignmentConstant labelAlignment = builder.labelAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
+                : builder.labelAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
+
+        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
+                : builder.labelAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
+
+        switch (builder.layout) {
         case horisontal:
             setWidget(0, 0, labelHolder);
             setWidget(0, 1, contentPanel);
             setWidget(1, 1, validationLabel);
             setWidget(2, 1, noteLabel);
+
+            getCellFormatter().setHorizontalAlignment(0, 0, labelAlignment);
+            getCellFormatter().setHorizontalAlignment(0, 1, componentAlignment);
+            getCellFormatter().setHorizontalAlignment(1, 1, componentAlignment);
+            getCellFormatter().setHorizontalAlignment(2, 1, componentAlignment);
+
             break;
 
         case vertical:
@@ -217,6 +242,14 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             setWidget(1, 0, contentPanel);
             setWidget(2, 0, validationLabel);
             setWidget(3, 0, noteLabel);
+
+            getCellFormatter().setHorizontalAlignment(0, 0, labelAlignment);
+            getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
+            getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
+            getCellFormatter().setHorizontalAlignment(3, 0, componentAlignment);
+
+            labelHolder.getElement().getStyle().setPaddingRight(0, Unit.EM);
+
             break;
         }
     }
@@ -284,7 +317,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
     public static class Builder {
 
         public enum Alignment {
-            left, right
+            left, right, center
         }
 
         public enum Layout {
