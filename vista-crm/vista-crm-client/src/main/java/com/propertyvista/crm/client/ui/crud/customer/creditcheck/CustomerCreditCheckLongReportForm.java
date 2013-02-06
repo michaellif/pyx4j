@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -121,30 +122,45 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         accounts.setWidget(0, ++col, new HTML(i18n.tr("Accounts paid late")));
         accounts.getWidget(0, col).setWidth("15em");
         accounts.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments1_30days()), 20).layout(Layout.vertical).build());
-        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments31_60days()), 20).layout(Layout.vertical).build());
-        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments61_90days()), 20).layout(Layout.vertical).build());
+        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments1_30days()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments31_60days()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments61_90days()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
 
         FormFlexPanel equiifax = new FormFlexPanel();
         col = -1;
         equiifax.setWidget(0, ++col, new HTML(i18n.tr("Equifax")));
         equiifax.getWidget(0, col).setWidth("15em");
         equiifax.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 20).layout(Layout.vertical).build());
-        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 20).layout(Layout.vertical).build());
-        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRiskLevel()), 20).layout(Layout.vertical).build());
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRiskLevel()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
 
         FormFlexPanel raitings = new FormFlexPanel();
         col = -1;
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 5).labelWidth(5).layout(Layout.vertical).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 5).labelWidth(5).layout(Layout.vertical).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
 
         // put all together:
         FormFlexPanel main = new FormFlexPanel();
@@ -225,13 +241,21 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().name()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().number()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().creditAmount()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balanceAmount()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastPaymentDate()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().portfolioTypeCode()), 5).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().portfolioTypeDescription()), 5).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().name()), 20).layout(Layout.vertical).labelAlignment(Alignment.center)
+                        .componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().number()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
+                        .componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().creditAmount()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balanceAmount()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastPayment()), 10).layout(Layout.vertical).labelAlignment(Alignment.center)
+                        .componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().code()), 5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                        .componentAlignment(Alignment.center).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().type()), 5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                                .componentAlignment(Alignment.center).build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().paymentRate()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
@@ -269,12 +293,18 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().status()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateFiled()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateSatisfied()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).componentAlignment(Alignment.right)
+                                .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().status()), 10).layout(Layout.vertical).componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateFiled()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateSatisfied()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff(), new NameEditor()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
@@ -320,12 +350,19 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dispositionDate()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().liabilityAmount()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().assetAmount()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).componentAlignment(Alignment.right)
+                                .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dispositionDate()), 10).layout(Layout.vertical)
+                        .componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().liabilityAmount()), 10).layout(Layout.vertical)
+                        .componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().assetAmount()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().caseNumberAndTrustee()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
@@ -363,12 +400,19 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateFiled()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgementDate()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgment()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().caseNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().customerNumber()), 15).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().personName(), new NameEditor()), 20).layout(Layout.vertical).componentAlignment(Alignment.right)
+                                .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().dateFiled()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgementDate()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().judgment()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().plaintiff(), new NameEditor()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
@@ -417,12 +461,18 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().landlord(), new NameEditor()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rent()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().writeOffs()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().noticeGiven()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().NSFChecks()), 10).layout(Layout.vertical).build());
+                main.setWidget(0, ++col,
+                        new DecoratorBuilder(inject(proto().landlord(), new NameEditor()), 20).layout(Layout.vertical).componentAlignment(Alignment.right)
+                                .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rent()), 10).layout(Layout.vertical).componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().writeOffs()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().noticeGiven()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().NSFChecks()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().lastUpdated()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
@@ -465,12 +515,16 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 FormFlexPanel main = new FormFlexPanel();
 
                 int col = -1;
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().onBehalf()), 20).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().date()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastActive()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().originalAmount()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balance()), 10).layout(Layout.vertical).build());
-                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().status()), 15).layout(Layout.vertical).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().onBehalf()), 20).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().date()), 10).layout(Layout.vertical).componentAlignment(Alignment.right).build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().lastActive()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().originalAmount()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().balance()), 10).layout(Layout.vertical).componentAlignment(Alignment.right)
+                        .build());
+                main.setWidget(0, ++col, new DecoratorBuilder(inject(proto().status()), 15).layout(Layout.vertical).componentAlignment(Alignment.right).build());
 
                 main.setWidget(1, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
                 main.getFlexCellFormatter().setColSpan(1, 0, col);

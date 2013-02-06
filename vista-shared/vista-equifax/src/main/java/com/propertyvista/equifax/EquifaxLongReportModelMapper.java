@@ -119,13 +119,12 @@ public class EquifaxLongReportModelMapper {
                 account.number().setValue(cnTrade.getAccountNumber().getValue());
                 account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
                 account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
-                account.lastPaymentDate()
+                account.lastPayment()
                         .setValue(
                                 cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
                                         .getTime()) : null);
-                account.portfolioTypeCode().setValue(cnTrade.getPortfolioType().getCode());
-                account.paymentRateCode().setValue(cnTrade.getPaymentRate().getCode());
-                account.portfolioTypeDescription().setValue(cnTrade.getPortfolioType().getDescription());
+                account.code().setValue(cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode());
+                account.type().setValue(cnTrade.getPortfolioType().getDescription());
                 account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
                 // TODO do we need all descriptions here or just first one?
                 account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());

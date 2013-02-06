@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,10 +35,12 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     IPrimitive<BigDecimal> percentOfRentCovered();
 
     // ?? "this is our data"?
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> grossMonthlyIncome();
 
     IPrimitive<Integer> totalAccounts();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalOutstandingBalance();
 
     @Caption(name = "Bankruptcies/Proposals")
@@ -45,16 +49,19 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Caption(name = "Landlord/Tenant Court")
     IPrimitive<Integer> numberOfLegalItems();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingCollectionsBalance();
 
     // ?? estimate from our data
     IPrimitive<Double> monthlyIncomeToRentRatio();
 
     // ?? another estimate from our data
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> estimatedDebtandRentPayments();
 
     IPrimitive<Integer> accountsWithNoLatePayments();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> outstandingRevolvingDebt();
 
     // skipped
@@ -146,17 +153,17 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> number();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> creditAmount();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> balanceAmount();
 
-        IPrimitive<LogicalDate> lastPaymentDate();
+        IPrimitive<LogicalDate> lastPayment();
 
-        IPrimitive<String> portfolioTypeCode();
+        IPrimitive<String> code();
 
-        IPrimitive<String> paymentRateCode();
-
-        IPrimitive<String> portfolioTypeDescription();
+        IPrimitive<String> type();
 
         IPrimitive<String> paymentRate();
 
@@ -200,8 +207,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<LogicalDate> dispositionDate();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> liabilityAmount();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> assetAmount();
 
         IPrimitive<String> caseNumberAndTrustee();
@@ -244,15 +253,16 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         Name landlord();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> rent();
 
         IPrimitive<String> writeOffs();
 
         IPrimitive<Boolean> noticeGiven();
 
-        IPrimitive<BigDecimal> latePayments();
+        IPrimitive<Integer> latePayments();
 
-        IPrimitive<BigDecimal> NSFChecks();
+        IPrimitive<Integer> NSFChecks();
 
         IPrimitive<LogicalDate> lastUpdated();
 
@@ -279,8 +289,10 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<LogicalDate> lastActive();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> originalAmount();
 
+        @Editor(type = EditorType.money)
         IPrimitive<BigDecimal> balance();
 
         IPrimitive<String> status();
