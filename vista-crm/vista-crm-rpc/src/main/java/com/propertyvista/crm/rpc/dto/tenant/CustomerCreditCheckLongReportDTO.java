@@ -32,6 +32,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Caption(name = "% Rent Covered")
     IPrimitive<BigDecimal> percentOfRentCovered();
 
+    // ?? "this is our data"?
     IPrimitive<BigDecimal> grossMonthlyIncome();
 
     IPrimitive<Integer> totalAccounts();
@@ -46,14 +47,17 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     IPrimitive<BigDecimal> outstandingCollectionsBalance();
 
+    // ?? estimate from our data
     IPrimitive<Double> monthlyIncomeToRentRatio();
 
+    // ?? another estimate from our data
     IPrimitive<BigDecimal> estimatedDebtandRentPayments();
 
     IPrimitive<Integer> accountsWithNoLatePayments();
 
     IPrimitive<BigDecimal> outstandingRevolvingDebt();
 
+    // skipped
     IPrimitive<Integer> numberOfEvictions();
 
     IPrimitive<Integer> landlordCollectionsFiled();
@@ -70,9 +74,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Caption(name = "Check Score")
     IPrimitive<Double> equifaxCheckScore();
 
+    // where from?
     @Caption(name = "Rating Level")
     IPrimitive<Double> equifaxRatingLevel();
 
+    // where from?
     @Caption(name = "Risk Level")
     IPrimitive<Double> equifaxRiskLevel();
 

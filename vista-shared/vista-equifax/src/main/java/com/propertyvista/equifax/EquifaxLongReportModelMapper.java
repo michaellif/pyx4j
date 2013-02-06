@@ -60,19 +60,38 @@ public class EquifaxLongReportModelMapper {
         CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
         dto.percentOfRentCovered().setValue(
                 getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode(), score.getRejectCodes().getRejectCode().get(0).getDescription()));
-        dto.totalAccounts().setValue(report.getCNTrades().getCNTrade().size());
-        dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(report.getCNTrades().getCNTrade()));
+        if (report.getCNTrades() != null) {
+            List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+            dto.totalAccounts().setValue(cnTrades.size());
+            dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(cnTrades));
+            dto.accountsWithNoLatePayments().setValue(countAccounts(cnTrades, "R1"));
+            int[] lateAccounts = countLateAccounts(cnTrades);
+            dto.latePayments1_30days().setValue(lateAccounts[0]);
+            dto.latePayments31_60days().setValue(lateAccounts[1]);
+            dto.latePayments61_90days().setValue(lateAccounts[2]);
+            dto.rating1().setValue(countAccounts(cnTrades, "R1"));
+            dto.rating2().setValue(countAccounts(cnTrades, "R2"));
+            dto.rating3().setValue(countAccounts(cnTrades, "R3"));
+            dto.rating4().setValue(countAccounts(cnTrades, "R4"));
+            dto.rating5().setValue(countAccounts(cnTrades, "R5"));
+            dto.rating6().setValue(countAccounts(cnTrades, "R6"));
+            dto.rating7().setValue(countAccounts(cnTrades, "R7"));
+            dto.rating8().setValue(countAccounts(cnTrades, "R8"));
+            dto.rating9().setValue(countAccounts(cnTrades, "R9"));
+        }
+
         dto.numberOfBancruptciesOrActs().setValue(
                 report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : null);
         dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : null);
         dto.outstandingCollectionsBalance().setValue(
                 getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
+
 //        dto.outstandingRevolvingDebt().setValue();
         dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
+
         // TODO mapping says SCBC, error?
         dto.equifaxCheckScore().setValue(
-                getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? new Double(getCNScore(report.getCNScores().getCNScore(), "SCBS").getResult()
-                        .getValue()) : null);
+                getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? getScoreResult(getCNScore(report.getCNScores().getCNScore(), "SCBS")) : null);
 
         // Identity
         CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
@@ -92,24 +111,27 @@ public class EquifaxLongReportModelMapper {
         dto.identity().set(identity);
 
         // Accounts
-        List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
-        for (CNTradeType cnTrade : cnTrades) {
-            CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
-            account.name().setValue(cnTrade.getCreditorId().getName());
-            account.number().setValue(cnTrade.getAccountNumber().getValue());
-            account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
-            account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
-            account.lastPaymentDate().setValue(
-                    cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar().getTime())
-                            : null);
-            account.portfolioTypeCode().setValue(cnTrade.getPortfolioType().getCode());
-            account.paymentRateCode().setValue(cnTrade.getPaymentRate().getCode());
-            account.portfolioTypeDescription().setValue(cnTrade.getPortfolioType().getDescription());
-            account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
-            // TODO do we need all descriptions here or just first one?
-            account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
+        if (report.getCNTrades() != null) {
+            List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+            for (CNTradeType cnTrade : cnTrades) {
+                CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
+                account.name().setValue(cnTrade.getCreditorId().getName());
+                account.number().setValue(cnTrade.getAccountNumber().getValue());
+                account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+                account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+                account.lastPaymentDate()
+                        .setValue(
+                                cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
+                                        .getTime()) : null);
+                account.portfolioTypeCode().setValue(cnTrade.getPortfolioType().getCode());
+                account.paymentRateCode().setValue(cnTrade.getPaymentRate().getCode());
+                account.portfolioTypeDescription().setValue(cnTrade.getPortfolioType().getDescription());
+                account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
+                // TODO do we need all descriptions here or just first one?
+                account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
 
-            dto.accounts().add(account);
+                dto.accounts().add(account);
+            }
         }
 
         // Court Judgements
@@ -202,6 +224,47 @@ public class EquifaxLongReportModelMapper {
         return dto;
     }
 
+    private static Double getScoreResult(CNScoreType cnScore) {
+        if (cnScore.getResult() != null) {
+            return new Double(cnScore.getResult().getValue());
+        }
+        return null;
+    }
+
+    private static int[] countLateAccounts(List<CNTradeType> cnTrades) {
+        int[] numbers = { 0, 0, 0 };
+        if (cnTrades != null) {
+            for (CNTradeType cnTrade : cnTrades) {
+                if (!"R1".equals((cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode()))) {
+                    if (cnTrade.getHistoryDerogatoryCounters() != null) {
+                        if (cnTrade.getHistoryDerogatoryCounters().getCount30DayPastDue() != null) {
+                            numbers[0]++;
+                        }
+                        if (cnTrade.getHistoryDerogatoryCounters().getCount60DayPastDue() != null) {
+                            numbers[1]++;
+                        }
+                        if (cnTrade.getHistoryDerogatoryCounters().getCount90DayPastDue() != null) {
+                            numbers[2]++;
+                        }
+                    }
+                }
+            }
+        }
+        return numbers;
+    }
+
+    private static Integer countAccounts(List<CNTradeType> cnTrades, String code) {
+        Integer number = 0;
+        if (cnTrades != null) {
+            for (CNTradeType cnTrade : cnTrades) {
+                if (code.equals((cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode()))) {
+                    number++;
+                }
+            }
+        }
+        return number;
+    }
+
     private static String getEmployer(CNEmploymentType employment) {
         if (employment != null) {
             return employment.getEmployer();
@@ -217,7 +280,7 @@ public class EquifaxLongReportModelMapper {
     }
 
     private static LogicalDate getLogicalDateFromString(String string) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if (string == null) {
             return null;
         }
@@ -325,7 +388,7 @@ public class EquifaxLongReportModelMapper {
             return new BigDecimal(100);
         }
         Pattern p = Pattern.compile("\\d+%");
-        Matcher m = p.matcher(codeString);
+        Matcher m = p.matcher(description);
         List<BigDecimal> codeList = new ArrayList<BigDecimal>();
         while (m.find()) {
             try {
