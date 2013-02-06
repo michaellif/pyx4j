@@ -107,7 +107,7 @@ public interface CustomerCreditCheck extends IEntity {
     IPrimitive<BigDecimal> amountApproved();
 
     // Pointer To fullReport (CustomerCreditCheckReport) stored in second special schema...
-    @Caption(name = "Full Repoprt")
+    @Caption(name = "Full Report")
     IPrimitive<Key> creditCheckReport();
 
     @Editor(type = EditorType.textarea)
