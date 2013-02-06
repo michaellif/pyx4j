@@ -146,24 +146,24 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
         FormFlexPanel raitings = new FormFlexPanel();
         col = -1;
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
-        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.right)
-                .componentAlignment(Alignment.right).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating2()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating3()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating4()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating5()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating6()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating7()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating8()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
 
         // put all together:
         FormFlexPanel main = new FormFlexPanel();
