@@ -43,6 +43,9 @@ public interface CreditCardFacade {
 
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
+    public CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber,
+            CreditCardInfo cc);
+
     /**
      * @return authorizationNumber
      */

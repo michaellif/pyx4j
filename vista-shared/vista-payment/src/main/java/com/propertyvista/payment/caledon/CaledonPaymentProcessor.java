@@ -53,6 +53,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
     private PaymentResponse createResponse(CaledonResponse cresponse) {
         PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.success().setValue("0000".equals(cresponse.code));
         response.code().setValue(cresponse.code);
         response.message().setValue(cresponse.text);
         response.authorizationNumber().setValue(cresponse.authorizationNumber);

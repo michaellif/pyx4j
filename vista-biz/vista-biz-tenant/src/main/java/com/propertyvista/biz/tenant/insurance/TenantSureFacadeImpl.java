@@ -133,6 +133,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
         transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue());
+        transaction.paymentDue().setValue(insuranceTenantSure.inceptionDate().getValue());
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();

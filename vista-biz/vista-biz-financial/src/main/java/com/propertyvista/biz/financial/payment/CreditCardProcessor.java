@@ -143,7 +143,7 @@ class CreditCardProcessor {
             response = proc.createToken(merchant, ccInfo, token);
         }
 
-        if (response.code().getValue().equals("0000")) {
+        if (response.success().getValue()) {
             cc.token().setValue(token.code().getValue());
         } else if (response.code().getValue().equals("1019")) {
             throw new UserRuntimeException(i18n.tr("Merchant account is not setup to receive CreditCard Payments"));
@@ -202,7 +202,7 @@ class CreditCardProcessor {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
         PaymentResponse response = proc.realTimeSale(merchant, request);
-        if (response.code().getValue().equals("0000")) {
+        if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
@@ -223,6 +223,36 @@ class CreditCardProcessor {
         }
     }
 
+    static CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(merchantTerminalId);
+
+        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        request.referenceNumber().setValue(referenceNumber);
+        request.amount().setValue(amount);
+
+        request.paymentInstrument().set(createPaymentInstrument(cc));
+
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+
+        PaymentResponse response = proc.realTimeSale(merchant, request);
+        if (response.success().getValue()) {
+            log.debug("ccPayment transaction accepted {}", response);
+        } else {
+            log.debug("ccPayment transaction rejected {}", response);
+        }
+        return createResponse(response);
+    }
+
+    private static CreditCardTransactionResponse createResponse(PaymentResponse cresponse) {
+        CreditCardTransactionResponse response = EntityFactory.create(CreditCardTransactionResponse.class);
+        response.success().setValue(cresponse.success().getValue());
+        response.code().setValue(cresponse.code().getValue());
+        response.message().setValue(cresponse.message().getValue());
+        response.authorizationNumber().setValue(cresponse.authorizationNumber().getValue());
+        return response;
+    }
+
     static String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
@@ -236,7 +266,7 @@ class CreditCardProcessor {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
         PaymentResponse response = proc.realTimePreAuthorization(merchant, request);
-        if (response.code().getValue().equals("0000")) {
+        if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();
         } else {
@@ -257,7 +287,7 @@ class CreditCardProcessor {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
         PaymentResponse response = proc.realTimePreAuthorizationReversal(merchant, request);
-        if (response.code().getValue().equals("0000")) {
+        if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
         } else {
             log.debug("ccTransaction rejected {}", response);
@@ -278,7 +308,7 @@ class CreditCardProcessor {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
         PaymentResponse response = proc.realTimePreAuthorizationCompletion(merchant, request);
-        if (response.code().getValue().equals("0000")) {
+        if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();
         } else {

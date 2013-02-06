@@ -25,6 +25,12 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
+    public CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber,
+            CreditCardInfo cc) {
+        return CreditCardProcessor.realTimeSale(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    }
+
+    @Override
     public String authorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
         return CreditCardProcessor.authorization(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }

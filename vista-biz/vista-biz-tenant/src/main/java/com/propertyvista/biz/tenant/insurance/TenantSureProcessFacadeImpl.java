@@ -52,7 +52,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     @Override
     public void processPayments(RunStats runStats, LogicalDate dueDate) {
-        // TODO Auto-generated method stub
+        TenantSurePayments.processPayments(runStats, dueDate);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
                 formater.newRow();
 
-                StatisticsUtils.addProcessed(runStats, 1, 0.0);
+                StatisticsUtils.addProcessed(runStats, 1, reportedStatusHolder.insurance().monthlyPayable().getValue());
             }
         } finally {
             iterator.completeRetrieval();
@@ -102,42 +102,42 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         HQUpdate.processHQUpdate(runStats, fileId);
     }
 
-    /** 
+    /**
      * @param reportedStatusHolder
      * @return updated reported status
      * @throws IllegalArgumentException if previously reported status and current insurance status cannot be updated
      */
-    private InsuranceTenantSureReport.ReportedStatus updateReportStatus(InsuranceTenantSureReport reportedStatusHolder) {        
+    private InsuranceTenantSureReport.ReportedStatus updateReportStatus(InsuranceTenantSureReport reportedStatusHolder) {
         ReportedStatus reportClientStatus = null;
 
         switch (reportedStatusHolder.insurance().status().getValue()) {
-        case Cancelled: 
+        case Cancelled:
             if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled ) {
-                reportClientStatus = ReportedStatus.Cancelled;            
+                reportClientStatus = ReportedStatus.Cancelled;
             }
             break;
-            
+
         case Active:
         case PendingCancellation:
             if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Active) {
                 reportClientStatus = ReportedStatus.New;
-                
+
             } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active) | (reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.New)) {
                 reportClientStatus = ReportedStatus.Active;
             }
             break;
-            
+
         default:
             reportClientStatus = null;
         }
-        
+
         if (reportClientStatus == null) {
             throw new IllegalArgumentException(SimpleMessageFormat.format("wrong insurance status for report: {0} id = {1},  status = {2}",
                     InsuranceTenantSure.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance().status().getValue()));
         }
-        
+
         Persistence.service().persist(reportedStatusHolder);
-        
+
         return reportedStatusHolder.reportedStatus().getValue();
     }
 }

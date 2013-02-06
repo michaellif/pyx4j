@@ -1,0 +1,12 @@
+# @version $Revision$ ($Author$) $Date$
+
+
+VISTA-2216 vlads TenantSure
+  new  InsuranceTenantSureReport
+  new  InsuranceTenantSureTransaction.paymentDue
+       change in InsuranceTenantSureTransaction.status constraints
+  new  InsuranceTenantSure.paymentDay
+  _admin_.TenantSureHQUpdateFile
+  _admin_.TenantSureHQUpdateRecord
+  _admin_.TenantSureSubscribers
+

@@ -16,6 +16,7 @@ package com.propertyvista.domain.tenant.insurance;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -42,11 +43,8 @@ public interface InsuranceTenantSureTransaction extends IEntity {
      * 
      * Monthly process:
      * Draft -> Cleared
-     * Draft -> PaymentError; Caledon connection error -> create a new InsuranceTenantSureTransaction next day until GracePeriodEnds; on GracePeriodEnds make
-     * insurance "Cancelled" and send Email
+     * Draft -> PaymentError; Caledon connection error -> create a new InsuranceTenantSureTransaction next time.
      * Draft -> PaymentRejected; make insurance "PendingCancellation" and send Email
-     * 
-     * 
      * 
      */
     enum TransactionStatus {
@@ -77,6 +75,11 @@ public interface InsuranceTenantSureTransaction extends IEntity {
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    /**
+     * Store the day when the payment should pave been changed if payment was done later.
+     */
+    IPrimitive<LogicalDate> paymentDue();
 
     InsurancePaymentMethod paymentMethod();
 
