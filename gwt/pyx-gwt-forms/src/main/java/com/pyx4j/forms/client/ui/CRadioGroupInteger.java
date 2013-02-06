@@ -35,7 +35,7 @@ public class CRadioGroupInteger extends CRadioGroup<Integer> {
 
             @Override
             public String format(Integer value) {
-                return CRadioGroupInteger.this.options.get(value);
+                return value == null ? "" : CRadioGroupInteger.this.options.get(value);
             }
 
             @Override
