@@ -48,6 +48,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
@@ -264,9 +265,20 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
             throw new UserRuntimeException(i18n.tr("Credit Check Full Credit Report was not activated"));
         }
         CustomerCreditCheck ccc = retrivePersonCreditCheck(customerId);
+        return updateCustomerCreditCheckLongReport(EquifaxCreditCheck.createLongReport(ccc), ccc);
+    }
 
-        // TODO: enhance with our data here: 
+    private CustomerCreditCheckLongReportDTO updateCustomerCreditCheckLongReport(CustomerCreditCheckLongReportDTO report, CustomerCreditCheck ccc) {
+        Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
+        Persistence.service().retrieveMember(ccc.screening().version().incomes(), AttachLevel.Attached);
 
-        return EquifaxCreditCheck.createLongReport(ccc);
+        BigDecimal grossMonthlyIncome = new BigDecimal(0);
+        for (CustomerScreeningIncome income : ccc.screening().version().incomes()) {
+            grossMonthlyIncome = grossMonthlyIncome.add(income.details().monthlyAmount().getValue());
+        }
+
+        report.grossMonthlyIncome().setValue(grossMonthlyIncome);
+
+        return report;
     }
 }
