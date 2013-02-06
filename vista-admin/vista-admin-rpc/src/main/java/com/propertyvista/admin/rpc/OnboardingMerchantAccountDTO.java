@@ -18,7 +18,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountStatus;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountPaymentsStatus;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 
 @Transient
@@ -33,6 +33,6 @@ public interface OnboardingMerchantAccountDTO extends OnboardingMerchantAccount 
      */
     @Transient
     @Editor(type = Editor.EditorType.label)
-    IPrimitive<MerchantAccountStatus> status();
+    IPrimitive<MerchantAccountPaymentsStatus> status();
 
 }

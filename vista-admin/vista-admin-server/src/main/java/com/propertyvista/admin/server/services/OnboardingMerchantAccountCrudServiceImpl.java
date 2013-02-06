@@ -46,7 +46,7 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
 
     public static void setCalulatedFileds(final OnboardingMerchantAccount entity, OnboardingMerchantAccountDTO dto) {
         if (entity.merchantTerminalId().isNull()) {
-            dto.status().setValue(MerchantAccount.MerchantAccountStatus.NoElectronicPaymentsAllowed);
+            dto.status().setValue(MerchantAccount.MerchantAccountPaymentsStatus.NoElectronicPaymentsAllowed);
         } else {
             MerchantAccount merchantAccount = TaskRunner.runInTargetNamespace(entity.pmc().namespace().getValue(), new Callable<MerchantAccount>() {
                 @Override
@@ -56,9 +56,9 @@ public class OnboardingMerchantAccountCrudServiceImpl extends AbstractCrudServic
             });
 
             if (merchantAccount == null || merchantAccount.invalid().getValue(Boolean.TRUE)) {
-                dto.status().setValue(MerchantAccount.MerchantAccountStatus.Invalid);
+                dto.status().setValue(MerchantAccount.MerchantAccountPaymentsStatus.Invalid);
             } else {
-                dto.status().setValue(MerchantAccount.MerchantAccountStatus.ElectronicPaymentsAllowed);
+                dto.status().setValue(MerchantAccount.MerchantAccountPaymentsStatus.ElectronicPaymentsAllowed);
             }
         }
     }

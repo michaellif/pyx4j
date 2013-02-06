@@ -36,7 +36,7 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),
                 new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
-                new MemberColumnDescriptor.Builder(proto().status()).build()
+                new MemberColumnDescriptor.Builder(proto().paymentsStatus()).build()
             );//@formatter:on
         }
     }
