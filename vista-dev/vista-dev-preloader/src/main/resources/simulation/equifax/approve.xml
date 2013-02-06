@@ -12,6 +12,24 @@
                         <OutputFormatCode>X</OutputFormatCode>
                     </Request>
                     <CreditFile>
+                    	<UniqueNumber>2147483647</UniqueNumber> 
+                    	<FileSinceDate>1997-08-13</FileSinceDate> 
+                    	<DateOfLastActivity>1999-08-13</DateOfLastActivity> 
+                    	<DateOfRequest>2013-01-13</DateOfRequest> 
+                    	<TotalNumberOfInquiries>123</TotalNumberOfInquiries> 
+                    	<FileOwner> 
+                    		<BureauCode>ABCD_Bereau</BureauCode> 
+                    		<BureauContactInformation> Mr. Smith </BureauContactInformation> 
+                    	</FileOwner> 
+                    	<HitCode/> 
+                    	<HitStrengthIndicator/> 
+                    	<DataWarningMessages> 
+                    		<DataWarningMessage/> 
+                    	</DataWarningMessages> 
+                    	<CardAlertWarningMessage/> 
+                    	<AlertIndicators> 
+                    		<AlertIndicator/> 
+                    	</AlertIndicators>
                     <UniqueNumber>0035410349</UniqueNumber>    
                     <FileSinceDate>2008-09-18</FileSinceDate>    
                     <DateOfLastActivity>2012-08-09</DateOfLastActivity>    
@@ -37,9 +55,17 @@
                         <SubjectName>
                             <LastName>FORD</LastName>
                             <FirstName>SOLO</FirstName>
+                            <MiddleName>Oleg</MiddleName>
+                            <Suffix/>
                         </SubjectName>
                         <SubjectId>
+                        	  <SocialInsuranceNumber>123 321 123</SocialInsuranceNumber>
                             <DateOfBirth type="DATE">1950-01-01</DateOfBirth>
+                            <SocialInsuranceNumber>123 321 123</SocialInsuranceNumber> 
+                            <DateOfBirth type="DATE">1950-01-01</DateOfBirth>   
+                            <DateOfDeath></DateOfDeath> 
+                            <MaritalStatus code="Merried" description="Merried"/> 
+                            <NumberOfDependants>3</NumberOfDependants>
                         </SubjectId>
                     </Subject>
                 </CNHeader>
@@ -72,16 +98,204 @@
                         <UpdateSource code="S" description="Sts rptd"/>
                     </CNAddress>
                 </CNAddresses>
+                <CNOtherNames> 
+                	<CNOtherName> 
+                		<LastName>Petrov</LastName> 
+                		<FirstName>Ivan</FirstName>
+                		<MiddleName>Basilii</MiddleName> 
+                		<Suffix/> 
+                		</CNOtherName> 
+                		</CNOtherNames>
                 <CNEmployments>
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
                         <Occupation>BANKIR</Occupation>
                         <Employer>SEARS</Employer>
+                        <City>code="TOR">TORONTO </City> 
+                        <Provincecode="ON" description="ONTARIO"/> 
+                        <DateEmployed>2001-12</DateEmployed> 
+                        <DateLeft>20011-12</DateLeft> 
+                        <Verification> 
+                        	<Date>2011-12</Date> 
+                        	</Verification> 
+                        	<Salary> 
+                        		<SalaryAmount>199999.12</SalaryAmount> 
+                        		<SalaryVerification/> 
+                        		</Salary>
                     </CNEmployment>
                     <CNEmployment code="EF" description="Subject's Former Employment">
                     	<Occupation>Sales Person</Occupation>
                     	<Employer>Home Depot</Employer>
+                    	<City>code="TOR">TORONTO </City> 
+                        <Provincecode="ON" description="ONTARIO"/> 
+                        <DateEmployed>2001-12</DateEmployed> 
+                        <DateLeft>20011-12</DateLeft> 
+                        <Verification> 
+                        	<Date>2011-12</Date> 
+                        	</Verification> 
+                        	<Salary> 
+                        		<SalaryAmount>77777.12</SalaryAmount> 
+                        		<SalaryVerification/> 
+                        		</Salary>
                     	</CNEmployment>
                 </CNEmployments>
+                <CNOtherIncomes> 
+                	<CNOtherIncome> 
+                		<DateReported>2011-12</DateReported> 
+                		<Amount>555.12</Amount> 
+                		<IncomeSource>Other Income</IncomeSource> 
+                		<VerificationDate>2012-12</VerificationDate> 
+                	</CNOtherIncome> 
+                </CNOtherIncomes>
+                <CNBankruptciesOrActs> 
+                	<CNBankruptcyOrAct> 
+                		<DateFiled>2011-12</DateFiled> 
+                		<CourtId> 
+                			<CustomerNumber>ABC979</CustomerNumber> 
+                			<Name>PEtia</Name> 
+                		</CourtId> 
+                		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
+                		<Type/> 
+                		<Filer/> 
+                		<IntentOrDisposition> 
+                			<Date>2010-12</Date> 
+                		</IntentOrDisposition> 
+                		<LiabilityAmount>1000.12</LiabilityAmount>
+                		<AssetAmount>300000.12</AssetAmount> 
+                		<Narratives> 
+                			<Narrative/> 
+                			</Narratives> 
+                			<UpdateSource/> 
+                			</CNBankruptcyOrAct> 
+                	</CNBankruptciesOrActs>
+               <CNCollections> 
+                	<CNCollection> 
+                		<AssignedDate>2001-12</AssignedDate> 
+                		<AgencyId> 
+                			<CustomerNumber>ABCD</CustomerNumber> 
+                			<Name>Masha</Name> 
+                			</AgencyId> 
+                			<LedgerNumber>EKJEORF</LedgerNumber> 
+                			<CollectionCreditor> 
+                				<AccountNumberAndOrName>2132515</AccountNumberAndOrName> 
+                				<Industry/> 
+                				</CollectionCreditor> 
+                				<Reason/> 
+                				<OriginalAmount>345.12</OriginalAmount> 
+                				<BalanceAmount>345.12</BalanceAmount> 
+                				<DateOfLastPayment>2011-12</DateOfLastPayment> 
+                				<DatePaid>2011-12</DatePaid> 
+                				<VerificationDate>2011-12</VerificationDate> 
+                				<Narratives> 
+                					<Narrative/> 
+                					</Narratives> 
+                				<UpdateSource/> 
+                			</CNCollection> 
+               	</CNCollections>
+               <CNLegalItems> 
+                		<CNLegalItem> 
+                			<DateFiled>2001-12</DateFiled>
+                			<CourtId> 
+                				<CustomerNumber>DSAFJKDKI</CustomerNumber> 
+                				<Name>Masha</Name> 
+                				</CourtId> 
+                				<CaseNumber>EOKFOF</CaseNumber> 
+                				<Status/> 
+                				<DateSatisfied>2001-12</DateSatisfied> 
+                				<Amount>912345.12</Amount> 
+                				<VerificationDate>2001-12</VerificationDate> 
+                				<Defendant>MAMA</Defendant> 
+                				<Plaintiff>SAldl</Plaintiff> 
+                				<LawyerNameAddress>Ontario</LawyerNameAddress> 
+                				<Narratives> 
+                					<Narrative/> 
+                					</Narratives>
+                				<UpdateSource/> 
+                			</CNLegalItem> 
+               	</CNLegalItems>
+               <CNSecuredLoans> 
+                		<CNSecuredLoan> 
+                			<DateFiled>2012-12</DateFiled> 
+                			<CourtId> 
+                				<CustomerNumber>FKSOLFK</CustomerNumber> 
+                				<Name>Masha</Name> 
+                				</CourtId> 
+                				<SecuredLoanCreditorId>
+                					 <NameAddressAndAmount>SADL2323</NameAddressAndAmount> 
+                					 <Industry/> 
+                					 </SecuredLoanCreditorId> 
+                					 <MaturityDate>2001-12</MaturityDate> 
+                					 <Narratives> 
+                					 	<Narrative/> 
+                					 	</Narratives> 
+                					 </CNSecuredLoan> 
+               	</CNSecuredLoans>  
+               <CNNonResponsibilityNotices> 
+                			<CNNonResponsibilityNotice> 
+                				<DateReported>2001-12</DateReported> 
+                				<Filer/> 
+                				<Narratives> 
+                					<Narrative/> 
+                					</Narratives> 
+                				</CNNonResponsibilityNotice> 
+               	</CNNonResponsibilityNotices> 
+               <CNMaritalItems> 
+                				<CNMaritalItem> 
+                					<DivorceStatus/> 
+                					<DateFiled>2001-12</DateFiled> 
+                					<CourtId> 
+                						<CustomerNumber>DFDF87834</CustomerNumber> 
+                						<Name>Masha</Name> 
+                					</CourtId> 
+                					<CaseNumber>QWEORKEWQOR1</CaseNumber> 
+                					<SpouseName>Lara</SpouseName> 
+                					<VerificationDate>2001-12</VerificationDate> 
+                				<Narratives> 
+                					<Narrative/> 
+                				</Narratives> 
+                			</CNMaritalItem> 
+               	</CNMaritalItems> 
+               <CNNSFs> 
+                			<CNNSF> 
+                				<DateReported>2011-12</DateReported> 
+                				<CreditorId> 
+                					<CustomerNumber>321SAKJSKA</CustomerNumber> 
+                					<Name>Masha</Name> 
+                					<Telephone> 
+                						<ParsedTelephone> 
+                							<AreaCode>905</AreaCode> 
+                							<Number>123-5587</Number> 
+                							<Extension>111</Extension> 
+                						</ParsedTelephone> 
+                					</Telephone> 
+                			</CreditorId> 
+                		<NSFAmount>123</NSFAmount> 
+                		<Details>Test details</Details> 
+                		<VerificationDate>2001-12</VerificationDate> 
+                		<Narratives> 
+                			<Narrative/> 
+                			</Narratives> 
+                	</CNNSF> 
+               	</CNNSFs> 
+               <CNGarnishments> 
+               	<CNGarnishment> 
+               		<DateFiled>2001-12</DateFiled> 
+               	<CourtId> 
+               		<CustomerNumber>KSJDF23</CustomerNumber> 
+               		<Name>Katia</Name> 
+               	</CourtId> 
+               	<CaseNumber>34234SADAS</CaseNumber> 
+               	<Amount>2345.12</Amount> 
+               	<DateSatisfied>2001-05</DateSatisfied> 
+               	<VerificationDate>2001-12</VerificationDate> 
+               <Plaintiff>ASdldf</Plaintiff> 
+               <Garnishee>Wldfdfgv</Garnishee>
+                <Defendant>Slkopkd</Defendant> 
+               <Narratives> 
+               	<Narrative/> 
+               	</Narratives> 
+               <UpdateSource/> 
+              </CNGarnishment> 
+               	</CNGarnishments>    		
                 <CNTrades>
                     <CNTrade>
                         <DateReported>2012-12</DateReported>
@@ -173,6 +387,50 @@
                         </Narratives>
                     </CNTrade>
                 </CNTrades>
+                <CNBankAccounts> 
+                	<CNBankAccount> 
+                		<DateReported>2012-12</DateReported> 
+                			<CreditorId> 
+                				<CustomerNumber>VAS123</CustomerNumber> 
+                				<Name>CIBC</Name> -
+                				<Telephone> 
+                					<ParsedTelephone> <AreaCode>905</AreaCode> 
+                					<Number>321-4569</Number> 
+                					<Extension>404</Extension> 
+                					</ParsedTelephone> 
+                				</Telephone> 
+                			</CreditorId> <AccountNumber>123654789</AccountNumber> 
+                			<FigureAmount>11587.23</FigureAmount> 
+                			<DateOpened>1997-12</DateOpened> 
+                			<Account Typecode="CHK" description="Checking"/>
+                			<Status/>
+                		 <NumberOfNSF>2123</NumberOfNSF> 
+                		<Narratives> 
+                			<Narrative/> 
+                			</Narratives> 
+                		</CNBankAccount> 
+                		<CNBankAccount> 
+                		<DateReported>2012-12</DateReported> 
+                			<CreditorId> 
+                				<CustomerNumber>VAS123</CustomerNumber> 
+                				<Name>Roayl Bank</Name> -
+                				<Telephone> 
+                					<ParsedTelephone> <AreaCode>905</AreaCode> 
+                					<Number>321-4569</Number> 
+                					<Extension>404</Extension> 
+                					</ParsedTelephone> 
+                				</Telephone> 
+                			</CreditorId> <AccountNumber>123654789</AccountNumber> 
+                			<FigureAmount>11587.23</FigureAmount> 
+                			<DateOpened>1997-12</DateOpened> 
+                			<Account Typecode="SAV" description="Saving"/> 
+                			<Status/>
+                		 <NumberOfNSF>2123</NumberOfNSF> 
+                		<Narratives> 
+                			<Narrative/> 
+                			</Narratives> 
+                		</CNBankAccount> 
+                	</CNBankAccounts>
                 <CNLocalInquiries>
                     <CNLocalInquiry date="2013-01-09">
                         <CustomerId>
