@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
@@ -87,7 +88,7 @@ class TenantSurePayments {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(transaction.paymentDue().getValue());
 
-        cal.set(Calendar.DAY_OF_MONTH, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.add(Calendar.MONTH, 1);
 
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -144,7 +145,9 @@ class TenantSurePayments {
         }
 
         EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        criteria.le(criteria.proto().expiryDate(), dueDate);
+        OrCriterion or = criteria.or();
+        or.right().eq(criteria.proto().expiryDate(), dueDate);
+        or.left().isNull(criteria.proto().expiryDate());
         criteria.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active);
         criteria.in(criteria.proto().paymentDay(), paymentDays);
         ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
