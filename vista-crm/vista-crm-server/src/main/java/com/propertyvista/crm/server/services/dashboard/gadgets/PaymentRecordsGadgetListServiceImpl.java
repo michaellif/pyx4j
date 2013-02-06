@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,7 +31,8 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForRepor
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements PaymentRecordsGadgetListService {
+public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements
+        PaymentRecordsGadgetListService {
 
     public PaymentRecordsGadgetListServiceImpl() {
         super(PaymentRecord.class, PaymentRecordForReportDTO.class);
@@ -76,7 +77,13 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, EntityListCriteria<PaymentRecordForReportDTO> dtoCriteria) {
-        dtoCriteria.add(PropertyCriterion.in(dtoCriteria.proto().buildingFilterAnchor(), Util.enforcePortfolio(new Vector<Building>())));
+        Vector<Building> bulidings = Util.enforcePortfolio(new Vector<Building>());
+        if (bulidings.isEmpty()) {
+            //TODO Return nothing!  Fix security properly
+            dtoCriteria.eq(dtoCriteria.proto().buildingFilterAnchor(), -1L);
+        } else {
+            dtoCriteria.add(PropertyCriterion.in(dtoCriteria.proto().buildingFilterAnchor(), bulidings));
+        }
         super.list(callback, dtoCriteria);
     }
 
