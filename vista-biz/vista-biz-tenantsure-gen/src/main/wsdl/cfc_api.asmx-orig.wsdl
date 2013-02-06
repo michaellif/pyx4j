@@ -46,6 +46,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="quoteData" type="tns:QuoteOut" />
           <s:element minOccurs="0" maxOccurs="1" name="clientData" type="tns:ClientDetails" />
           <s:element minOccurs="0" maxOccurs="1" name="terrorism_location_breakdown" type="tns:ArrayOfTerrorismLocationDetails" />
+          <s:element minOccurs="1" maxOccurs="1" name="effectiveDate" type="s:dateTime" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="QuoteOut">
@@ -696,6 +697,7 @@
           <s:enumeration value="RES" />
           <s:enumeration value="FIT" />
           <s:enumeration value="Terrorism" />
+          <s:enumeration value="Tenantsure" />
         </s:restriction>
       </s:simpleType>
       <s:complexType name="ArrayOfActivity">

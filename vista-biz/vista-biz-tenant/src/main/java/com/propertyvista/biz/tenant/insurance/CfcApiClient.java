@@ -58,26 +58,28 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
+// TODO rename to CFC API ADAPTER
 public class CfcApiClient implements ICfcApiClient {
 
     private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_CRAP = true;
 
+    // TODO this monster need refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
-            String url = "https://api.cfcprograms.com/cfc_api.asmx";
-            if (!VistaDeployment.isVistaProduction()) {
-//                boolean tcpMonitor = true;
-//                if (tcpMonitor) {
-//                    url = "http://localhost:9992/cfc_api.asmx";
-//                } else {
+            String url = null;
+            if (VistaDeployment.isVistaProduction()) {
+                url = "https://api.cfcprograms.com/cfc_api.asmx";
+            } else {
                 url = "http://testapi.cfcprograms.com/cfc_api.asmx";
-//                }
             }
+
             api = new CFCAPI(new URL(url), new QName("http://api.cfcprograms.com/", "CFC_API"));
+
         } catch (MalformedURLException e) {
             throw new Error(e);
         }
+
         api.setHandlerResolver(new HandlerResolver() {
             @SuppressWarnings("rawtypes")
             @Override
@@ -210,9 +212,7 @@ public class CfcApiClient implements ICfcApiClient {
 
         Result result = cfcApiSoap.mtaCancelPolicy(sessionId, policyId, null, cancellationType.name(), toEmailArray, bccEmailArray);
         assertSuccessfulResponse(result);
-
-        // TODO try to get the expiry date
-        return new LogicalDate();
+        return new LogicalDate(result.getEffectiveDate().toGregorianCalendar().getTime());
     }
 
     @Override
@@ -230,6 +230,7 @@ public class CfcApiClient implements ICfcApiClient {
         assertSuccessfulResponse(result);
     }
 
+    // TODO create a special CFC API exception
     private void assertSuccessfulResponse(Result response) {
         if (!isSuccessfulCode(response.getCode())) {
             throw new Error(response.getCode());

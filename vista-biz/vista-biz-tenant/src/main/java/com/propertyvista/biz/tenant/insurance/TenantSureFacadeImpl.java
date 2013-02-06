@@ -14,8 +14,6 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -316,18 +314,14 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             tenantsEmail = tenant.customer().user().email().getValue();
         }
 
-        cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, tenantsEmail);
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
+        insuranceTenantSure.expiryDate().setValue(expiryDate);
 
-        // TODO this doesn't work like that anymore...
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.add(Calendar.MONTH, 1);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
         Persistence.service().merge(insuranceTenantSure);
 
         insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
@@ -351,17 +345,13 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             tenantsEmail = tenant.customer().user().email().getValue();
         }
 
-        cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, tenantsEmail);
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
-
-        // TODO this doesn't work like that anymore
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        insuranceTenantSure.expiryDate().setValue(new LogicalDate(cal.getTime()));
+        insuranceTenantSure.expiryDate().setValue(expiryDate);
         Persistence.service().merge(insuranceTenantSure);
 
         insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
@@ -370,6 +360,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().commit();
     }
 
+    /** Warning: this method is not implemented properly */
+    @Deprecated
     @Override
     public void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate) {
         if (true) {
