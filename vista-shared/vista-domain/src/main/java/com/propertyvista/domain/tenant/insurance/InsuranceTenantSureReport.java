@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -37,4 +38,7 @@ public interface InsuranceTenantSureReport extends IEntity {
     InsuranceTenantSure insurance();
 
     IPrimitive<ReportedStatus> reportedStatus();
+
+    /** Denotes the date when reportedStatus has become active */
+    IPrimitive<LogicalDate> statusFrom();
 }
