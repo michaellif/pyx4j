@@ -71,7 +71,8 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Payment Details"));
-        panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureQuoteViewer()));
+        // TODO refactor: next payment should be part of some monthly payment DTO and handled by the following viewer
+        panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureMonthlyPaymentViewer()));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextPaymentDate())).build());
 
         panel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));

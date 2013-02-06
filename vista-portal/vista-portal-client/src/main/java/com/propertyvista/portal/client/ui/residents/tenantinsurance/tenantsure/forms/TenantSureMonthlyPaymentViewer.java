@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-15
+ * Created on 2012-11-12
  * @author ArtyomB
  * @version $Id$
  */
@@ -15,10 +15,6 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import java.math.BigDecimal;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -27,23 +23,23 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
-public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
+// TODO needs refactoring see a TODO in TenantSureStatusFrom
+public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSureQuoteDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureQuoteViewer.class);
+    private static final I18n i18n = I18n.get(TenantSureMonthlyPaymentViewer.class);
 
     private final NumberFormat currencyFormat;
 
-    public TenantSureQuoteViewer(NumberFormat currencyFormat) {
+    public TenantSureMonthlyPaymentViewer(NumberFormat currencyFormat) {
         this.currencyFormat = currencyFormat;
     }
 
-    public TenantSureQuoteViewer() {
+    public TenantSureMonthlyPaymentViewer() {
         this(NumberFormat.getFormat(i18n.tr("CAD #,##0.00")));
     }
 
@@ -62,27 +58,6 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
                 addTotalRecord(paymentBreakdownPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getValue());
 
                 contentPanel.add(paymentBreakdownPanel);
-
-                if (!quote.underwriterFee().isNull()) {
-                    Label underwriterFeeLabel = new Label();
-                    underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
-                    underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-                    underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
-                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee of CAD {0,number,#,##0.00} will be charged upon enrollment.", quote
-                            .underwriterFee().getValue()));
-
-                    contentPanel.add(underwriterFeeLabel);
-                }
-
-            } else {
-                Label specialQuoteText = new Label();
-                specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-                specialQuoteText.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-                specialQuoteText.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-                specialQuoteText.setWidth("100%");
-                specialQuoteText.setText(quote.specialQuote().getValue());
-
-                contentPanel.add(specialQuoteText);
             }
         }
 
