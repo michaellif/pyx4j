@@ -144,6 +144,13 @@ public class AdminSiteMap implements SiteMap {
             @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
             public static class PadSimBatch extends CrudAppPlace {
             }
+
+        }
+
+        public static class CardServiceSimulation extends CrudAppPlace {
+            public static class CardServiceSimulationTransaction extends CrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(navigLabel = "Users", caption = "User")

@@ -28,7 +28,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.admin.client.ui.NavigView;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
 
@@ -95,13 +94,19 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
         folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
-        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+        folder.addNavigItem(new AdminSiteMap.Administration.AdminUsers());
+        list.add(folder);
+
+        if (ApplicationMode.isDevelopment()) {
+            folder = new NavigFolder("Dev Simulation");
+
             folder.addNavigItem(new AdminSiteMap.Administration.SimulatedDataPreload());
             folder.addNavigItem(new AdminSiteMap.Administration.PadSimulation.PadSimFile());
-        }
-        folder.addNavigItem(new AdminSiteMap.Administration.AdminUsers());
+            folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation());
+            folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction());
 
-        list.add(folder);
+            list.add(folder);
+        }
 
         return list;
     }

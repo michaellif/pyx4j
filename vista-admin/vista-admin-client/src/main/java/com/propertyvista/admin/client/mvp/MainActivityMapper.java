@@ -31,6 +31,10 @@ import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorAc
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.auditrecords.AuditRecordsActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationEditorActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationListerActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionEditorActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionListerActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -286,6 +290,28 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new OnboardingMerchantAccountViewerActivity((CrudAppPlace) place);
+                            break;
+                        }
+// - Simulation
+                    } else if (place instanceof AdminSiteMap.Administration.CardServiceSimulation) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                        case editor:
+                            activity = new CardServiceSimulationEditorActivity((CrudAppPlace) place);
+                            break;
+                        case lister:
+                            activity = new CardServiceSimulationListerActivity(place);
+                            break;
+                        }
+
+                    } else if (place instanceof AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                        case editor:
+                            activity = new CardServiceSimulationTransactionEditorActivity((CrudAppPlace) place);
+                            break;
+                        case lister:
+                            activity = new CardServiceSimulationTransactionListerActivity(place);
                             break;
                         }
                     }

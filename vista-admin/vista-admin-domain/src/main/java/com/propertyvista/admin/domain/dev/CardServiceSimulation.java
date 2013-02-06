@@ -56,4 +56,5 @@ public interface CardServiceSimulation extends IEntity {
 
     @Owned
     IList<CardServiceSimulationTransaction> transactions();
+
 }

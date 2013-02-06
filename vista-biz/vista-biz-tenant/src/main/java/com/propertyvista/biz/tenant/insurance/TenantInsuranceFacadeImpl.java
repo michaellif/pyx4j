@@ -24,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
@@ -67,8 +66,8 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             noInsuranceStatus.tenantInsuranceInvitation().setValue(tenantInsurancePolicy.tenantInsuranceInvitation().getValue());
             insuranceStatus = noInsuranceStatus;
         } else {
-            if (TenantSureConstants.TENANTSURE_LEGAL_NAME.equals(insuranceCertificate.insuranceProvider().getValue())) {
-
+            if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
+                // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 TenantSureTenantInsuranceStatusDetailedDTO tsStatusDetailed = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
 
                 TenantSureTenantInsuranceStatusShortDTO tsStatusShort = EntityFactory.create(TenantSureTenantInsuranceStatusShortDTO.class);

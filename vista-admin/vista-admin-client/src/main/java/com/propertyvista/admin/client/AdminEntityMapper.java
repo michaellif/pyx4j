@@ -18,6 +18,8 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.propertyvista.admin.client.resources.AdminImages;
+import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.admin.domain.scheduler.Run;
@@ -39,5 +41,8 @@ public class AdminEntityMapper {
         register(Run.class, AdminSiteMap.Management.Run.class, DEFAULT_IMAGE);
         register(PadSimFile.class, AdminSiteMap.Administration.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
         register(PadSimBatch.class, AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
+        register(CardServiceSimulation.class, AdminSiteMap.Administration.CardServiceSimulation.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationTransaction.class, AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction.class,
+                DEFAULT_IMAGE);
     }
 }
