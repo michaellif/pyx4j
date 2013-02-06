@@ -28,28 +28,23 @@ public class DevYardiCredentials {
             cr.credential().setValue("52673");
             cr.serverName().setValue("aspdb04");
             cr.database().setValue("afqoml_live");
-        } else {
+        } else if (false) {
             cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20.asmx");
             cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirdqa/webservices/itfResidentTransactions20_SysBatch.asmx");
             cr.username().setValue("propertyvista");
             cr.credential().setValue("52673");
             cr.serverName().setValue("aspdb06\\sql2k5");
             cr.database().setValue("afqoml_qa6008");
+        } else if (false) {
+            cr.residentTransactionsServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
+            cr.sysBatchServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
+            cr.username().setValue("propvist");
+            cr.credential().setValue("access@123");
+            cr.serverName().setValue("SLDB02");
+            cr.database().setValue("PropertyVista_TEST");
         }
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
 
-        return cr;
-    }
-
-    public static PmcYardiCredential getTest2PmcYardiCredential() {
-        PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
-        cr.residentTransactionsServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
-        cr.sysBatchServiceURL().setValue("http://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
-        cr.username().setValue("pvuser");
-        cr.credential().setValue("access@123");
-        cr.serverName().setValue("Yardi_Server");
-        cr.database().setValue("Property Vista TEST");
-        cr.platform().setValue(PmcYardiCredential.Platform.SQL);
         return cr;
     }
 
