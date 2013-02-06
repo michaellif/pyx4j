@@ -20,9 +20,12 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -31,7 +34,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
-public interface CardServicesSimulations {
+public interface CardServiceSimulation extends IEntity {
 
     IPrimitive<CreditCardType> cardType();
 
@@ -48,4 +51,9 @@ public interface CardServicesSimulations {
 
     @Format("#0.00")
     IPrimitive<BigDecimal> balance();
+
+    IPrimitive<String> responseCode();
+
+    @Owned
+    IList<CardServiceSimulationTransaction> transactions();
 }
