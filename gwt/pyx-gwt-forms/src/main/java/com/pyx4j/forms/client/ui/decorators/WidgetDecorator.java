@@ -168,6 +168,12 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
+        if (builder.labelAlignment == Alignment.center) {
+            // add the same sized placeholder on the right in for symmetry: 
+            SpaceHolder spaceHolder = new SpaceHolder();
+            spaceHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
+            labelHolder.add(spaceHolder);
+        }
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
