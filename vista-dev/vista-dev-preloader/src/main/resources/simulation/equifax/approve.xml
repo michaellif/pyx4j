@@ -154,7 +154,7 @@
                 		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
                 		<Type/> 
                 		<Filer/> 
-                		<IntentOrDisposition> 
+                		<IntentOrDisposition description="Refund"> 
                 			<Date>2010-12</Date> 
                 		</IntentOrDisposition> 
                 		<LiabilityAmount>1000.12</LiabilityAmount>
