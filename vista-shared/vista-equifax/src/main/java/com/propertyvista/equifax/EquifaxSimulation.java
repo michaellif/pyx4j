@@ -179,6 +179,10 @@ public class EquifaxSimulation {
 
         creditReport.getCNHeader().getSubject().getSubjectName().setFirstName(customer.person().name().firstName().getStringView());
         creditReport.getCNHeader().getSubject().getSubjectName().setLastName(customer.person().name().lastName().getStringView());
+
+        creditReport.getCNHeader().getSubject().getSubjectName()
+                .setMiddleName(customer.person().name().middleName() != null ? customer.person().name().middleName().getStringView() : null);
+
     }
 
     private static void appendScore(EfxTransmit efxResponse, SimulationDefinition simulationDefinition) {
