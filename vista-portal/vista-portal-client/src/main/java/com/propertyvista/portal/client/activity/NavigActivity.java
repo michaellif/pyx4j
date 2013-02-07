@@ -52,8 +52,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         panel.setWidget(view);
         List<AppPlace> items = new ArrayList<AppPlace>();
         items.add(new Residents());
-        items.add(new Residents.BillSummary());
-        items.add(new Residents.BillingHistory());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            items.add(new Residents.Financial.BillSummary());
+            items.add(new Residents.Financial.BillingHistory());
+        } else {
+            items.add(new Residents.Financial.FinancialStatus());
+        }
         items.add(new Residents.Maintenance());
         items.add(new Residents.CommunicationCenter());
 

@@ -35,6 +35,7 @@ import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.FinancialTransactionsTheme;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -88,10 +89,11 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         lineItemsView.setWidget(row, COL_BALANCE, new HTML(i18n.tr("Balance")));
         lineItemsView.getFlexCellFormatter().setWidth(row, COL_BALANCE, "10em");
 
-        lineItemsView.getRowFormatter().setStyleName(row, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryColumnTitle.name());
-        lineItemsView.getCellFormatter().setStyleName(row, COL_DEBIT, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
-        lineItemsView.getCellFormatter().setStyleName(row, COL_CREDIT, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
-        lineItemsView.getCellFormatter().setStyleName(row, COL_BALANCE, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
+        lineItemsView.getRowFormatter().addStyleName(row, FinancialTransactionsTheme.StyleName.FinancialTransactionHeaderRow.name());
+
+        lineItemsView.getCellFormatter().addStyleName(row, COL_DEBIT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+        lineItemsView.getCellFormatter().addStyleName(row, COL_CREDIT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+        lineItemsView.getCellFormatter().addStyleName(row, COL_BALANCE, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
         BigDecimal balance = balanceForward != null ? balanceForward : new BigDecimal("0.0");
 
@@ -99,11 +101,15 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
         lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(i18n.tr("Balance Forward")));
         lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balance.toString()));
-        lineItemsView.getRowFormatter().setStyleName(
+        lineItemsView.getRowFormatter().setStyleName(row, FinancialTransactionsTheme.StyleName.FinancialTransactionRow.name());
+        lineItemsView.getRowFormatter().addStyleName(//@formatter:off
                 row,
-                row % 2 == 0 ? CrmTheme.TransactionHistoryStyleName.TransactionRecordOdd.name() : CrmTheme.TransactionHistoryStyleName.TransactionRecordEven
-                        .name());
-        lineItemsView.getFlexCellFormatter().setStyleName(row, COL_BALANCE, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
+                row % 2 == 0 ? 
+                        FinancialTransactionsTheme.StyleName.FinancialTransactionEvenRow.name() :
+                        FinancialTransactionsTheme.StyleName.FinancialTransactionOddRow.name()
+        );//@formatter:on
+        lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+        lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyCell.name());
 
         for (InvoiceLineItem item : items) {
             ++row;
@@ -132,13 +138,17 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balanceRespresentation));
 
             // apply style
-            lineItemsView.getRowFormatter().setStyleName(
+            lineItemsView.getRowFormatter().addStyleName(row, FinancialTransactionsTheme.StyleName.FinancialTransactionRow.name());
+            lineItemsView.getRowFormatter().addStyleName(//@formatter:off
                     row,
-                    row % 2 == 0 ? CrmTheme.TransactionHistoryStyleName.TransactionRecordOdd.name()
-                            : CrmTheme.TransactionHistoryStyleName.TransactionRecordEven.name());
-            lineItemsView.getFlexCellFormatter().setStyleName(row, colAmount, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
-            lineItemsView.getFlexCellFormatter().setStyleName(row, colAmount, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
-            lineItemsView.getFlexCellFormatter().setStyleName(row, COL_BALANCE, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
+                    row % 2 == 0 ? 
+                            FinancialTransactionsTheme.StyleName.FinancialTransactionEvenRow.name(): 
+                            FinancialTransactionsTheme.StyleName.FinancialTransactionOddRow.name() 
+            );//@formatter:on
+            lineItemsView.getFlexCellFormatter().addStyleName(row, colAmount, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+            lineItemsView.getFlexCellFormatter().addStyleName(row, colAmount, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyCell.name());
+            lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+            lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyCell.name());
         }
 
         return lineItemsView;

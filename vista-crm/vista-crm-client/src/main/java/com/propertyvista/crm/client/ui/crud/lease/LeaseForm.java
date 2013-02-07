@@ -20,9 +20,9 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.ui.components.LeaseYardiFinancialInfoViewer;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
-import com.propertyvista.crm.client.ui.crud.lease.invoice.LeaseYardiFinancialInfoViewer;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
@@ -72,5 +72,4 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         return financialTransactionHistory;
     }
-
 }

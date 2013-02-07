@@ -56,6 +56,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.rpc.portal.services.resident.FinancialStatusService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
@@ -176,7 +177,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.GuarantorSubmitted, VistaCustomerBehavior.ProspectiveSubmitted);
 
         // -------------
-
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(FinancialStatusService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingHistoryService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillSummaryService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DashboardService.class));

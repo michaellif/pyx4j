@@ -11,12 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.invoice;
+package com.propertyvista.common.client.ui.components;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -32,13 +31,23 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.crm.client.themes.CrmTheme;
+import com.propertyvista.common.client.theme.FinancialTransactionsTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
 
 public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinancialInfoDTO> {
 
     private static final I18n i18n = I18n.get(I18n.class);
+
+    private final NumberFormat currencyFormat;
+
+    public LeaseYardiFinancialInfoViewer(NumberFormat currencyFormat) {
+        this.currencyFormat = currencyFormat;
+    }
+
+    public LeaseYardiFinancialInfoViewer() {
+        this(NumberFormat.getFormat(i18n.tr("#,##0.00")));
+    }
 
     @Override
     public IsWidget createContent(LeaseYardiFinancialInfoDTO value) {
@@ -53,7 +62,7 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
         return contentPanel;
     }
 
-    private static <E extends InvoiceLineItem> void createLineItems(int[] row, FormFlexPanel panel, List<E> items) {
+    private <E extends InvoiceLineItem> void createLineItems(int[] row, FormFlexPanel panel, List<E> items) {
         // this code should be very defensive because you never know the quality of information that is coming from Yardi
         if (!items.isEmpty()) {
             int COL_DATE = 0;
@@ -65,11 +74,10 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
             panel.setWidget(row[0], COL_DESCRIPTION, new HTML(i18n.tr("Description")));
             panel.setWidget(row[0], COL_AMOUNT, new HTML(i18n.tr("Amount")));
 
-            panel.getRowFormatter().setStyleName(row[0], CrmTheme.TransactionHistoryStyleName.TransactionsHistoryColumnTitle.name());
-            panel.getCellFormatter().setStyleName(row[0], COL_AMOUNT, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
+            panel.getRowFormatter().setStyleName(row[0], FinancialTransactionsTheme.StyleName.FinancialTransactionHeaderRow.name());
+            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
             DateTimeFormat dateFormat = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
-            NumberFormat currencyFormat = TransactionHistoryViewer.NUMBER_FORMAT;
 
             BigDecimal totalAmount = new BigDecimal("0.00");
 
@@ -88,11 +96,14 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
                 panel.setWidget(row[0], COL_DESCRIPTION, descriptionHtml);
                 panel.setWidget(row[0], COL_AMOUNT, amountHtml);
 
-                panel.getRowFormatter().setStyleName(
-                        row[0],
-                        row[0] % 2 == 0 ? CrmTheme.TransactionHistoryStyleName.TransactionRecordEven.name()
-                                : CrmTheme.TransactionHistoryStyleName.TransactionRecordOdd.name());
-                panel.getCellFormatter().setStyleName(row[0], COL_AMOUNT, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
+                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionRow.name());
+                panel.getRowFormatter().addStyleName(//@formatter:off
+                        row[0], 
+                        row[0] % 2 == 0 ? 
+                                FinancialTransactionsTheme.StyleName.FinancialTransactionEvenRow.name() : 
+                                FinancialTransactionsTheme.StyleName.FinancialTransactionOddRow.name()
+                );//@formatter:on
+                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
                 if (amount != null) {
                     totalAmount = totalAmount.add(amount);
@@ -105,8 +116,10 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
             ++row[0];
             panel.setWidget(row[0], COL_DESCRIPTION, totalDescription);
             panel.setWidget(row[0], COL_AMOUNT, totalHtml);
-            panel.getRowFormatter().getElement(row[0]).getStyle().setFontWeight(FontWeight.BOLD);
-            panel.getCellFormatter().setStyleName(row[0], COL_AMOUNT, CrmTheme.TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
+            panel.getRowFormatter().addStyleName(row[0], FinancialTransactionsTheme.StyleName.FinancialTransactionRow.name());
+            panel.getRowFormatter().addStyleName(row[0], FinancialTransactionsTheme.StyleName.FinancialTransactionTotalRow.name());
+            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
+            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyCell.name());
 
         } else {
             Label noItems = new Label();

@@ -73,15 +73,24 @@ public class PortalSiteMap implements SiteMap {
         public static class PersonalInformation extends AppPlace {
         }
 
-        public static class BillSummary extends AppPlace {
+        public static class Financial extends AppPlace {
 
-            public static class PayNow extends AppPlace {
+            // Billing* are relevant for users who's financials managed by PV */
+            public static class BillSummary extends AppPlace {
+
+                public static class PayNow extends AppPlace {
+                }
             }
-        }
 
-        public static class BillingHistory extends AppPlace {
+            public static class BillingHistory extends AppPlace {
 
-            public static class ViewBill extends AppPlace {
+                public static class ViewBill extends AppPlace {
+                }
+            }
+
+            // this one is for tenants from Yardi integrated accounts
+            public static class FinancialStatus extends AppPlace {
+
             }
         }
 

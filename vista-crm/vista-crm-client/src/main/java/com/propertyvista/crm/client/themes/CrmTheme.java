@@ -34,6 +34,7 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
+import com.propertyvista.common.client.theme.FinancialTransactionsTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -62,10 +63,6 @@ public class CrmTheme extends VistaTheme {
 
     public static enum ArrearsStyleName implements IStyleName {
         ArrearsColumnTitle, ArrearsMoneyColumnTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell;
-    }
-
-    public static enum TransactionHistoryStyleName implements IStyleName {
-        TransactionsHistoryColumnTitle, TransactionsHistoryMoneyColumnTitle, TransactionRecordEven, TransactionRecordOdd, TransactionRecordMoneyCell;
     }
 
     public CrmTheme() {
@@ -107,6 +104,7 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DraggerMixin());
 
         addTheme(new BillingTheme());
+        addTheme(new FinancialTransactionsTheme());
 
         initGeneralStyles();
         initBodyStyles();
@@ -126,7 +124,6 @@ public class CrmTheme extends VistaTheme {
         initMenuBarStyles();
 
         initAddGadgetDialogStyles();
-        initTransactionHistoryStyles();
         initArrearsViewStyles();
 
         initSuggestBoxStyle();
@@ -519,39 +516,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("text-align", "justify");
         addStyle(style);
-    }
-
-    protected void initTransactionHistoryStyles() {
-        {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryColumnTitle.name());
-            style.addProperty("font-weight", "bold");
-            style.addProperty("text-align", "left");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
-            style.addProperty("font-weight", "bold");
-            style.addProperty("text-align", "right");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordEven.name());
-            style.addProperty("padding", "1em 2px");
-            addStyle(style);
-
-        }
-        {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordOdd.name());
-            style.addProperty("padding", "1em 2px");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
-            style.addProperty("text-align", "right");
-            style.addProperty("font-family", "monospace");
-            addStyle(style);
-        }
-
     }
 
     protected void initArrearsViewStyles() {

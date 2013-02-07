@@ -49,7 +49,9 @@ public class DashboardServiceImpl implements DashboardService {
         address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
 
-        dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
+        }
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {

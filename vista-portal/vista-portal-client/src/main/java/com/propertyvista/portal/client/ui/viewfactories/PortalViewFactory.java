@@ -43,6 +43,8 @@ import com.propertyvista.portal.client.ui.residents.communicationcenter.Communic
 import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterViewImpl;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardViewImpl;
+import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialStatusView;
+import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialStatusViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
@@ -95,6 +97,9 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new BillingHistoryViewImpl());
             } else if (ViewBillView.class.equals(type)) {
                 map.put(type, new ViewBillViewImpl());
+
+            } else if (FinancialStatusView.class.equals(type)) {
+                map.put(type, new FinancialStatusViewImpl());
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
