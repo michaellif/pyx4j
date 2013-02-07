@@ -32,6 +32,7 @@ import ca.equifax.uat.from.CNBankruptcyOrActType;
 import ca.equifax.uat.from.CNCollectionType;
 import ca.equifax.uat.from.CNConsumerCreditReportType;
 import ca.equifax.uat.from.CNEmploymentType;
+import ca.equifax.uat.from.CNHeaderType.Subject;
 import ca.equifax.uat.from.CNLegalItemType;
 import ca.equifax.uat.from.CNLocalInquiryType;
 import ca.equifax.uat.from.CNScoreType;
@@ -98,13 +99,22 @@ public class EquifaxLongReportModelMapper {
 
         // Identity
         CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
-        Name identityName = EntityFactory.create(Name.class);
-        identityName.firstName().setValue(report.getCNHeader().getSubject().getSubjectName().getFirstName());
-        identityName.lastName().setValue(report.getCNHeader().getSubject().getSubjectName().getLastName());
-        identityName.middleName().setValue(report.getCNHeader().getSubject().getSubjectName().getMiddleName());
-        identity.name().set(identityName);
-
-        identity.birthDate().setValue(getLogicalDateFromString(report.getCNHeader().getSubject().getSubjectId().getDateOfBirth().getValue()));
+        if (report.getCNHeader().getSubject() != null) {
+            Subject subject = report.getCNHeader().getSubject();
+            Name identityName = EntityFactory.create(Name.class);
+            identityName.firstName().setValue(subject.getSubjectName().getFirstName());
+            identityName.lastName().setValue(subject.getSubjectName().getLastName());
+            identityName.middleName().setValue(subject.getSubjectName().getMiddleName());
+            identity.name().set(identityName);
+            if (subject.getSubjectId() != null) {
+                identity.birthDate().setValue(
+                        getLogicalDateFromString(subject.getSubjectId().getDateOfBirth() != null ? subject.getSubjectId().getDateOfBirth().getValue() : null));
+                identity.SIN().setValue(subject.getSubjectId().getSocialInsuranceNumber());
+                identity.deathDate().setValue(
+                        subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
+                                .getTime()) : null);
+            }
+        }
         identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
         identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
         identity.currentEmployer().setValue(

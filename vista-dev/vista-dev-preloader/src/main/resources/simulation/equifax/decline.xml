@@ -51,8 +51,6 @@
                         <SubjectId>
 							<SocialInsuranceNumber>123 321 123</SocialInsuranceNumber>
                             <DateOfBirth type="DATE">1950-01-01</DateOfBirth>
-							<SocialInsuranceNumber>123 321 123</SocialInsuranceNumber> 
-                            <DateOfBirth type="DATE">1950-01-01</DateOfBirth>   
                             <DateOfDeath></DateOfDeath> 
                             <MaritalStatus code="Married" description="Married"/> 
                             <NumberOfDependants>3</NumberOfDependants>
