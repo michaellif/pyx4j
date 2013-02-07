@@ -447,7 +447,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.setWidget(2, 0, new DecoratorBuilder(inject(proto().defendants()), 40).build());
                 main.getFlexCellFormatter().setColSpan(2, 0, col);
 
-                main.setWidget(3, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.setWidget(3, 0, inject(proto().address(), new AddressSimpleEditor()));
                 main.getFlexCellFormatter().setColSpan(3, 0, col);
 
                 return main;
@@ -506,7 +506,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 main.getFlexCellFormatter().setColSpan(2, 0, col / 2);
                 main.getFlexCellFormatter().setColSpan(2, 1, col / 2);
 
-                main.setWidget(3, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.setWidget(3, 0, inject(proto().address(), new AddressSimpleEditor()));
                 main.getFlexCellFormatter().setColSpan(3, 0, col);
 
                 return main;
@@ -557,7 +557,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                         new DecoratorBuilder(inject(proto().status()), 15).labelWidth(15).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
 
-                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().address(), new AddressSimpleEditor()), 25).build());
+                main.setWidget(1, 0, inject(proto().address(), new AddressSimpleEditor()));
                 main.getFlexCellFormatter().setColSpan(1, 0, col);
 
                 return main;
