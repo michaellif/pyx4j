@@ -32,7 +32,7 @@ import com.propertyvista.domain.person.Name;
 @Transient
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
-    @Caption(name = "% Rent Covered")
+    @Caption(name = "Rent Covered")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentOfRentCovered();
 
