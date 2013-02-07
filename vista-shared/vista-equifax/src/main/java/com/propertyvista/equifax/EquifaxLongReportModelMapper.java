@@ -57,180 +57,188 @@ public class EquifaxLongReportModelMapper {
 
     public static CustomerCreditCheckLongReportDTO createLongReport(EfxTransmit efxResponse, CustomerCreditCheck ccc) {
         CustomerCreditCheckLongReportDTO dto = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
-        CNConsumerCreditReportType report = efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().get(0);
 
-        CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
-        dto.percentOfRentCovered().setValue(
-                getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode(), score.getRejectCodes().getRejectCode().get(0).getDescription()));
-        if (report.getCNTrades() != null) {
-            List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
-            dto.totalAccounts().setValue(cnTrades.size());
-            dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(cnTrades));
-            dto.accountsWithNoLatePayments().setValue(countAccounts(cnTrades, "R1"));
-            dto.outstandingRevolvingDebt().setValue(getTotalRevolvingDebt(cnTrades));
+        if (efxResponse.getEfxReport() != null && efxResponse.getEfxReport().get(0).getCNConsumerCreditReports() != null) {
+            CNConsumerCreditReportType report = efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().get(0);
 
-            int[] lateAccounts = countLateAccounts(cnTrades);
-            dto.latePayments1_30days().setValue(lateAccounts[0]);
-            dto.latePayments31_60days().setValue(lateAccounts[1]);
-            dto.latePayments61_90days().setValue(lateAccounts[2]);
+            CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
+            dto.percentOfRentCovered().setValue(
+                    getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode(), score.getRejectCodes().getRejectCode().get(0).getDescription()));
+            if (report.getCNTrades() != null) {
+                List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+                dto.totalAccounts().setValue(cnTrades.size());
+                dto.totalOutstandingBalance().setValue(getTotalCNTradesBalance(cnTrades));
+                dto.accountsWithNoLatePayments().setValue(countAccounts(cnTrades, "R1"));
+                dto.outstandingRevolvingDebt().setValue(getTotalRevolvingDebt(cnTrades));
 
-            dto.rating1().setValue(countAccounts(cnTrades, "R1"));
-            dto.rating2().setValue(countAccounts(cnTrades, "R2"));
-            dto.rating3().setValue(countAccounts(cnTrades, "R3"));
-            dto.rating4().setValue(countAccounts(cnTrades, "R4"));
-            dto.rating5().setValue(countAccounts(cnTrades, "R5"));
-            dto.rating6().setValue(countAccounts(cnTrades, "R6"));
-            dto.rating7().setValue(countAccounts(cnTrades, "R7"));
-            dto.rating8().setValue(countAccounts(cnTrades, "R8"));
-            dto.rating9().setValue(countAccounts(cnTrades, "R9"));
-        }
+                int[] lateAccounts = countLateAccounts(cnTrades);
+                dto.latePayments1_30days().setValue(lateAccounts[0]);
+                dto.latePayments31_60days().setValue(lateAccounts[1]);
+                dto.latePayments61_90days().setValue(lateAccounts[2]);
 
-        dto.numberOfBancruptciesOrActs().setValue(
-                report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : null);
-        dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : null);
-        dto.outstandingCollectionsBalance().setValue(
-                getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
-
-        dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
-
-        // TODO mapping says SCBC, error in mapping?
-        dto.equifaxCheckScore().setValue(
-                getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? getScoreResult(getCNScore(report.getCNScores().getCNScore(), "SCBS")) : null);
-
-        // Identity
-        CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
-        if (report.getCNHeader().getSubject() != null) {
-            Subject subject = report.getCNHeader().getSubject();
-            Name identityName = EntityFactory.create(Name.class);
-            identityName.firstName().setValue(subject.getSubjectName().getFirstName());
-            identityName.lastName().setValue(subject.getSubjectName().getLastName());
-            identityName.middleName().setValue(subject.getSubjectName().getMiddleName());
-            identity.name().set(identityName);
-            if (subject.getSubjectId() != null) {
-                identity.birthDate().setValue(
-                        getLogicalDateFromString(subject.getSubjectId().getDateOfBirth() != null ? subject.getSubjectId().getDateOfBirth().getValue() : null));
-                identity.SIN().setValue(subject.getSubjectId().getSocialInsuranceNumber());
-                identity.deathDate().setValue(
-                        subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
-                                .getTime()) : null);
+                dto.rating1().setValue(countAccounts(cnTrades, "R1"));
+                dto.rating2().setValue(countAccounts(cnTrades, "R2"));
+                dto.rating3().setValue(countAccounts(cnTrades, "R3"));
+                dto.rating4().setValue(countAccounts(cnTrades, "R4"));
+                dto.rating5().setValue(countAccounts(cnTrades, "R5"));
+                dto.rating6().setValue(countAccounts(cnTrades, "R6"));
+                dto.rating7().setValue(countAccounts(cnTrades, "R7"));
+                dto.rating8().setValue(countAccounts(cnTrades, "R8"));
+                dto.rating9().setValue(countAccounts(cnTrades, "R9"));
             }
-        }
-        identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
-        identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
-        identity.currentEmployer().setValue(
-                getEmployer(getEmployment(report.getCNEmployments() != null ? report.getCNEmployments().getCNEmployment() : null, "ES")));
-        identity.currentOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "ES")));
-        identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
-        identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
-        dto.identity().set(identity);
 
-        // Accounts
-        if (report.getCNTrades() != null) {
-            List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
-            for (CNTradeType cnTrade : cnTrades) {
-                CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
-                account.name().setValue(cnTrade.getCreditorId().getName());
-                account.number().setValue(cnTrade.getAccountNumber().getValue());
-                account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
-                account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
-                account.lastPayment()
-                        .setValue(
-                                cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
-                                        .getTime()) : null);
-                account.code().setValue(cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode());
-                account.type().setValue(cnTrade.getPortfolioType().getDescription());
-                account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
-                // TODO do we need all descriptions here or just first one?
-                account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
+            dto.numberOfBancruptciesOrActs().setValue(
+                    report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : null);
+            dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : null);
+            dto.outstandingCollectionsBalance().setValue(
+                    getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
 
-                dto.accounts().add(account);
-            }
-        }
+            dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
 
-        // Court Judgements
+            // TODO mapping says SCBC, error in mapping?
+            dto.equifaxCheckScore().setValue(
+                    getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? getScoreResult(getCNScore(report.getCNScores().getCNScore(), "SCBS"))
+                            : null);
 
-        if (report.getCNLegalItems() != null) {
-            List<CNLegalItemType> cnLegals = report.getCNLegalItems().getCNLegalItem();
-            for (CNLegalItemType cnLegal : cnLegals) {
-                CustomerCreditCheckLongReportDTO.JudgementDTO judgement = EntityFactory.create(CustomerCreditCheckLongReportDTO.JudgementDTO.class);
-                judgement.caseNumber().setValue(cnLegal.getCaseNumber());
-                judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
-                judgement.customerName().setValue(cnLegal.getCourtId().getName());
-                judgement.status().setValue(cnLegal.getStatus().getDescription());
-                judgement.dateFiled().setValue(cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
-                judgement.dateSatisfied().setValue(
-                        cnLegal.getDateSatisfied() != null ? new LogicalDate(cnLegal.getDateSatisfied().toGregorianCalendar().getTime()) : null);
-                judgement.plaintiff().setValue(cnLegal.getPlaintiff().getValue());
-                judgement.defendants().setValue(cnLegal.getDefendant());
-
-                dto.judgements().add(judgement);
-            }
-        }
-
-        // Proposals and Bankrupcies
-
-        if (report.getCNBankruptciesOrActs() != null) {
-            List<CNBankruptcyOrActType> cnActs = report.getCNBankruptciesOrActs().getCNBankruptcyOrAct();
-            for (CNBankruptcyOrActType cnAct : cnActs) {
-                CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
-                proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
-                proposal.customerName().setValue(cnAct.getCourtId().getName());
-                proposal.dispositionDate().setValue(
-                        cnAct.getIntentOrDisposition() != null ? new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime())
-                                : null);
-                proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount().getValue());
-                proposal.assetAmount().setValue(cnAct.getAssetAmount().getValue());
-                proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
-                proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
-                dto.proposals().add(proposal);
-            }
-        }
-
-        // Evictions not present in this equifax report version
-
-        // Rent History not present in this equifax report version
-
-        // Collections
-
-        if (report.getCNCollections() != null) {
-            List<CNCollectionType> cnCollections = report.getCNCollections().getCNCollection();
-            for (CNCollectionType cnCollection : cnCollections) {
-                CustomerCreditCheckLongReportDTO.CollectionDTO collection = EntityFactory.create(CustomerCreditCheckLongReportDTO.CollectionDTO.class);
-                collection.onBehalf().setValue(cnCollection.getCollectionCreditor().getAccountNumberAndOrName());
-                collection.date().setValue(
-                        cnCollection.getAssignedDate() != null ? new LogicalDate(cnCollection.getAssignedDate().toGregorianCalendar().getTime()) : null);
-                collection.lastActive().setValue(
-                        cnCollection.getDateOfLastPayment() != null ? new LogicalDate(cnCollection.getDateOfLastPayment().toGregorianCalendar().getTime())
-                                : null);
-                collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
-                collection.balance().setValue(cnCollection.getBalanceAmount().getValue());
-                collection.status().setValue(cnCollection.getDescription());
-                dto.collections().add(collection);
-            }
-        }
-
-        // Inquiries
-
-        if (report.getCNLocalInquiries() != null) {
-            List<CNLocalInquiryType> cnInquiries = report.getCNLocalInquiries().getCNLocalInquiry();
-            for (CNLocalInquiryType cnInquiry : cnInquiries) {
-                CustomerCreditCheckLongReportDTO.InquiryDTO inquiry = EntityFactory.create(CustomerCreditCheckLongReportDTO.InquiryDTO.class);
-                inquiry.onBehalf().setValue(cnInquiry.getCustomerId().getName());
-                inquiry.date().setValue(cnInquiry.getDate() != null ? new LogicalDate(cnInquiry.getDate().toGregorianCalendar().getTime()) : null);
-                inquiry.customerNumber().setValue(cnInquiry.getCustomerId() != null ? cnInquiry.getCustomerId().getCustomerNumber() : null);
-                if (cnInquiry.getCustomerId().getTelephone() != null) {
-                    ParsedTelephone cnPhone = cnInquiry.getCustomerId().getTelephone().getParsedTelephone();
-                    String phone = cnPhone.getAreaCode().toString() + "-" + cnPhone.getNumber();
-                    if (cnPhone.getExtension() != null) {
-                        phone = phone + " ex. " + cnPhone.getExtension().toString();
-                    }
-                    inquiry.phone().setValue(phone);
+            // Identity
+            CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
+            if (report.getCNHeader().getSubject() != null) {
+                Subject subject = report.getCNHeader().getSubject();
+                Name identityName = EntityFactory.create(Name.class);
+                identityName.firstName().setValue(subject.getSubjectName().getFirstName());
+                identityName.lastName().setValue(subject.getSubjectName().getLastName());
+                identityName.middleName().setValue(subject.getSubjectName().getMiddleName());
+                identity.name().set(identityName);
+                if (subject.getSubjectId() != null) {
+                    identity.birthDate().setValue(
+                            getLogicalDateFromString(subject.getSubjectId().getDateOfBirth() != null ? subject.getSubjectId().getDateOfBirth().getValue()
+                                    : null));
+                    identity.SIN().setValue(subject.getSubjectId().getSocialInsuranceNumber());
+                    identity.deathDate().setValue(
+                            subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
+                                    .getTime()) : null);
                 }
-                dto.inquiries().add(inquiry);
             }
-        }
+            identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
+            identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
+            if (report.getCNEmployments() != null) {
+                identity.currentEmployer().setValue(
+                        getEmployer(getEmployment(report.getCNEmployments() != null ? report.getCNEmployments().getCNEmployment() : null, "ES")));
+                identity.currentOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "ES")));
+                identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+                identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
+            }
+            dto.identity().set(identity);
 
-        return dto;
+            // Accounts
+            if (report.getCNTrades() != null) {
+                List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
+                for (CNTradeType cnTrade : cnTrades) {
+                    CustomerCreditCheckLongReportDTO.AccountDTO account = EntityFactory.create(CustomerCreditCheckLongReportDTO.AccountDTO.class);
+                    account.name().setValue(cnTrade.getCreditorId().getName());
+                    account.number().setValue(cnTrade.getAccountNumber().getValue());
+                    account.creditAmount().setValue(cnTrade.getHighCreditAmount().getValue());
+                    account.balanceAmount().setValue(cnTrade.getBalanceAmount().getValue());
+                    account.lastPayment().setValue(
+                            cnTrade.getDateLastActivityOrPayment() != null ? new LogicalDate(cnTrade.getDateLastActivityOrPayment().toGregorianCalendar()
+                                    .getTime()) : null);
+                    account.code().setValue(cnTrade.getPortfolioType().getCode() + cnTrade.getPaymentRate().getCode());
+                    account.type().setValue(cnTrade.getPortfolioType().getDescription());
+                    account.paymentRate().setValue(cnTrade.getPaymentRate().getDescription());
+                    // TODO do we need all descriptions here or just first one?
+                    account.paymentType().setValue(cnTrade.getNarratives().getNarrative().get(0).getDescription());
+
+                    dto.accounts().add(account);
+                }
+            }
+
+            // Court Judgements
+
+            if (report.getCNLegalItems() != null) {
+                List<CNLegalItemType> cnLegals = report.getCNLegalItems().getCNLegalItem();
+                for (CNLegalItemType cnLegal : cnLegals) {
+                    CustomerCreditCheckLongReportDTO.JudgementDTO judgement = EntityFactory.create(CustomerCreditCheckLongReportDTO.JudgementDTO.class);
+                    judgement.caseNumber().setValue(cnLegal.getCaseNumber());
+                    judgement.customerNumber().setValue(cnLegal.getCourtId().getCustomerNumber());
+                    judgement.customerName().setValue(cnLegal.getCourtId().getName());
+                    judgement.status().setValue(cnLegal.getStatus().getDescription());
+                    judgement.dateFiled().setValue(
+                            cnLegal.getDateFiled() != null ? new LogicalDate(cnLegal.getDateFiled().toGregorianCalendar().getTime()) : null);
+                    judgement.dateSatisfied().setValue(
+                            cnLegal.getDateSatisfied() != null ? new LogicalDate(cnLegal.getDateSatisfied().toGregorianCalendar().getTime()) : null);
+                    judgement.plaintiff().setValue(cnLegal.getPlaintiff().getValue());
+                    judgement.defendants().setValue(cnLegal.getDefendant());
+
+                    dto.judgements().add(judgement);
+                }
+            }
+
+            // Proposals and Bankrupcies
+
+            if (report.getCNBankruptciesOrActs() != null) {
+                List<CNBankruptcyOrActType> cnActs = report.getCNBankruptciesOrActs().getCNBankruptcyOrAct();
+                for (CNBankruptcyOrActType cnAct : cnActs) {
+                    CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
+                    proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
+                    proposal.customerName().setValue(cnAct.getCourtId().getName());
+                    proposal.dispositionDate().setValue(
+                            cnAct.getIntentOrDisposition() != null ? new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime())
+                                    : null);
+                    proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount().getValue());
+                    proposal.assetAmount().setValue(cnAct.getAssetAmount().getValue());
+                    proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
+                    proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
+                    dto.proposals().add(proposal);
+                }
+            }
+
+            // Evictions not present in this equifax report version
+
+            // Rent History not present in this equifax report version
+
+            // Collections
+
+            if (report.getCNCollections() != null) {
+                List<CNCollectionType> cnCollections = report.getCNCollections().getCNCollection();
+                for (CNCollectionType cnCollection : cnCollections) {
+                    CustomerCreditCheckLongReportDTO.CollectionDTO collection = EntityFactory.create(CustomerCreditCheckLongReportDTO.CollectionDTO.class);
+                    collection.onBehalf().setValue(cnCollection.getCollectionCreditor().getAccountNumberAndOrName());
+                    collection.date().setValue(
+                            cnCollection.getAssignedDate() != null ? new LogicalDate(cnCollection.getAssignedDate().toGregorianCalendar().getTime()) : null);
+                    collection.lastActive().setValue(
+                            cnCollection.getDateOfLastPayment() != null ? new LogicalDate(cnCollection.getDateOfLastPayment().toGregorianCalendar().getTime())
+                                    : null);
+                    collection.originalAmount().setValue(cnCollection.getOriginalAmount().getValue().getValue());
+                    collection.balance().setValue(cnCollection.getBalanceAmount().getValue());
+                    collection.status().setValue(cnCollection.getDescription());
+                    dto.collections().add(collection);
+                }
+            }
+
+            // Inquiries
+
+            if (report.getCNLocalInquiries() != null) {
+                List<CNLocalInquiryType> cnInquiries = report.getCNLocalInquiries().getCNLocalInquiry();
+                for (CNLocalInquiryType cnInquiry : cnInquiries) {
+                    CustomerCreditCheckLongReportDTO.InquiryDTO inquiry = EntityFactory.create(CustomerCreditCheckLongReportDTO.InquiryDTO.class);
+                    inquiry.onBehalf().setValue(cnInquiry.getCustomerId().getName());
+                    inquiry.date().setValue(cnInquiry.getDate() != null ? new LogicalDate(cnInquiry.getDate().toGregorianCalendar().getTime()) : null);
+                    inquiry.customerNumber().setValue(cnInquiry.getCustomerId() != null ? cnInquiry.getCustomerId().getCustomerNumber() : null);
+                    if (cnInquiry.getCustomerId().getTelephone() != null) {
+                        ParsedTelephone cnPhone = cnInquiry.getCustomerId().getTelephone().getParsedTelephone();
+                        String phone = cnPhone.getAreaCode().toString() + "-" + cnPhone.getNumber();
+                        if (cnPhone.getExtension() != null) {
+                            phone = phone + " ex. " + cnPhone.getExtension().toString();
+                        }
+                        inquiry.phone().setValue(phone);
+                    }
+                    dto.inquiries().add(inquiry);
+                }
+            }
+
+            return dto;
+        }
+        return null;
     }
 
     private static BigDecimal getTotalRevolvingDebt(List<CNTradeType> trades) {
