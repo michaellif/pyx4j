@@ -159,6 +159,15 @@ public class SchedulerHelper {
         }
     }
 
+    public static synchronized boolean isActive() {
+        try {
+            return !instance.scheduler.isInStandbyMode();
+        } catch (Throwable e) {
+            log.error("quartz error", e);
+            throw new Error(e);
+        }
+    }
+
     public static synchronized void setActive(boolean active) {
         try {
             if (active) {
