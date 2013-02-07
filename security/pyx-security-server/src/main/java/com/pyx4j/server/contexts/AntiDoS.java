@@ -82,8 +82,9 @@ public class AntiDoS {
             counter = new AccessCounter();
             accessByIP.put(remoteAddr, counter);
         } else {
+            String uri = "";
             if (request instanceof HttpServletRequest) {
-                String uri = ((HttpServletRequest) request).getRequestURI();
+                uri = ((HttpServletRequest) request).getRequestURI();
                 String[] split = uri.split("/", 4);
                 if (split.length >= 3) {
                     String uriPart = "/" + split[1] + "/" + split[2];
@@ -97,7 +98,10 @@ public class AntiDoS {
                 if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                     RequestDebug.debug(request);
                 }
-                log.error("possible denial-of-service attack from {}; {}", remoteAddr, counter);
+                if (counter.requests == throttleConfig.getMaxRequests() || (counter.requests % 1000 == 0)) {
+                    log.error("possible denial-of-service attack from {}; {}; {}", remoteAddr, counter, uri);
+                }
+                counter.requests++;
                 return null;
             }
         }
