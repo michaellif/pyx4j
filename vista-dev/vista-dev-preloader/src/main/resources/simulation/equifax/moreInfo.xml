@@ -90,7 +90,7 @@
                         <Occupation>MTLDECGEN0000115</Occupation>
                         <Employer>CREATED BY CMSC QA</Employer>
 						<City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 
@@ -105,7 +105,7 @@
                     	<Occupation>Sales Person</Occupation>
                     	<Employer>Home Depot</Employer>
                     	<City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 

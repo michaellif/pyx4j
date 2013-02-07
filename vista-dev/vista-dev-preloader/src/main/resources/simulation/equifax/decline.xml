@@ -89,8 +89,8 @@
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
                         <Occupation>MTLDECGEN0000115</Occupation>
                         <Employer>CREATED BY CMSC QA</Employer>
-						<City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+						<City code="TOR">TORONTO </City> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 
@@ -104,8 +104,8 @@
 					<CNEmployment code="EF" description="Subject's Former Employment">
                     	<Occupation>Sales Person</Occupation>
                     	<Employer>Home Depot</Employer>
-                    	<City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+                    	<City code="TOR">TORONTO </City> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 
