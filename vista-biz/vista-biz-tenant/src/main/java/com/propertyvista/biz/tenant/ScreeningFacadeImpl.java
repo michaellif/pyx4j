@@ -48,7 +48,6 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
@@ -269,16 +268,19 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     private CustomerCreditCheckLongReportDTO updateCustomerCreditCheckLongReport(CustomerCreditCheckLongReportDTO report, CustomerCreditCheck ccc) {
-        Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
-        Persistence.service().retrieveMember(ccc.screening().version().incomes(), AttachLevel.Attached);
 
-        BigDecimal grossMonthlyIncome = new BigDecimal(0);
-        for (CustomerScreeningIncome income : ccc.screening().version().incomes()) {
-            grossMonthlyIncome = grossMonthlyIncome.add(income.details().monthlyAmount().getValue());
-        }
+// Do not add non-Equifax data!         
 
-        report.grossMonthlyIncome().setValue(grossMonthlyIncome);
-        report.monthlyIncomeToRentRatio().setValue(grossMonthlyIncome.divide(ccc.amountChecked().getValue(), RoundingMode.DOWN).doubleValue());
+//        Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
+//        Persistence.service().retrieveMember(ccc.screening().version().incomes(), AttachLevel.Attached);
+//
+//        BigDecimal grossMonthlyIncome = new BigDecimal(0);
+//        for (CustomerScreeningIncome income : ccc.screening().version().incomes()) {
+//            grossMonthlyIncome = grossMonthlyIncome.add(income.details().monthlyAmount().getValue());
+//        }
+//
+//        report.grossMonthlyIncome().setValue(grossMonthlyIncome);
+//        report.monthlyIncomeToRentRatio().setValue(grossMonthlyIncome.divide(ccc.amountChecked().getValue(), RoundingMode.DOWN).doubleValue());
 
         return report;
     }

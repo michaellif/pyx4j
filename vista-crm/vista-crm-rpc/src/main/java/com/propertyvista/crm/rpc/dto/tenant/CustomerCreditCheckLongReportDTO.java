@@ -48,7 +48,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
     @Caption(name = "Bankruptcies/Proposals")
     IPrimitive<Integer> numberOfBancruptciesOrActs();
 
-    @Caption(name = "Landlord/Tenant Court")
+    @Caption(name = "Landlord/Tenant Courts")
     IPrimitive<Integer> numberOfLegalItems();
 
     @Editor(type = EditorType.money)

@@ -101,20 +101,18 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         FormFlexPanel summary = new FormFlexPanel();
         int row = -1;
         summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentOfRentCovered()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossMonthlyIncome()), 10).labelWidth(20).build());
         summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAccounts()), 10).labelWidth(20).build());
         summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalOutstandingBalance()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfLegalItems()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 10).labelWidth(20).build());
         summary.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 10).labelWidth(20).build());
 
-        row = -1;
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().monthlyIncomeToRentRatio()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().estimatedDebtandRentPayments()), 10).labelWidth(20).build());
+        row = 0;
         summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfEvictions()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfLegalItems()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 10).labelWidth(20).build());
         summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().landlordCollectionsFiled()), 10).labelWidth(20).build());
+// Not implemented in Equifax:
+//      summary.setWidget(++row, 1, new DecoratorBuilder(inject(proto().numberOfEvictions()), 10).labelWidth(20).build());
 
         summary.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
