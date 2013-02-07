@@ -17,6 +17,7 @@ BEGIN TRANSACTION;
   
  -- New sequences
  CREATE SEQUENCE dev_card_service_simulation_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE dev_card_service_simulation_token_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_card_service_simulation_transaction_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_equifax_simulator_config_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE insurance_tenant_sure_report_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -29,6 +30,7 @@ BEGIN TRANSACTION;
   
   -- Change owner to vista
  ALTER SEQUENCE dev_card_service_simulation_seq OWNER TO vista ;
+ ALTER SEQUENCE dev_card_service_simulation_token_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_transaction_seq OWNER TO vista ;
  ALTER SEQUENCE dev_equifax_simulator_config_seq OWNER TO vista ;
  ALTER SEQUENCE insurance_tenant_sure_report_seq OWNER TO vista ;

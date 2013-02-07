@@ -40,6 +40,62 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_vista_features ADD COLUMN tenant_sure_integration BOOLEAN;
         
+        /** simulation tables - not really needed for production **/
+        
+        -- dev_card_service_simulation
+        
+        CREATE TABLE dev_card_service_simulation
+        (
+                id                              BIGINT                  NOT NULL,
+                card_type                       VARCHAR(50),
+                number                          VARCHAR(500),
+                expiry_date                     DATE,
+                balance                         NUMERIC(18,2),
+                response_code                   VARCHAR(500),
+                        CONSTRAINT      dev_card_service_simulation_pk PRIMARY KEY(id)
+        );
+        
+        
+        -- dev_card_service_simulation_token
+        
+        CREATE TABLE dev_card_service_simulation_token
+        (
+                id                              BIGINT                  NOT NULL,
+                card                            BIGINT                  NOT NULL,
+                token                           VARCHAR(500),
+                odr                             INT,
+                        CONSTRAINT      dev_card_service_simulation_token_pk PRIMARY KEY(id)
+        );
+        
+        
+        -- dev_card_service_simulation_transaction
+        
+        CREATE TABLE dev_card_service_simulation_transaction
+        (
+                id                              BIGINT                  NOT NULL,
+                card                            BIGINT                  NOT NULL,
+                amount                          NUMERIC(18,2),
+                response_code                   VARCHAR(500),
+                authorization_number            VARCHAR(500),
+                transaction_date                TIMESTAMP WITHOUT TIME ZONE,
+                        CONSTRAINT      dev_card_service_simulation_transaction_pk PRIMARY KEY(id)
+        );
+        
+        
+        -- dev_equifax_simulator_config
+        
+        CREATE TABLE dev_equifax_simulator_config
+        (
+                id                              BIGINT                  NOT NULL,
+                approve_xml                     VARCHAR(300000),
+                decline_xml                     VARCHAR(300000),
+                more_info_xml                   VARCHAR(300000),
+                        CONSTRAINT      dev_equifax_simulator_config_pk PRIMARY KEY(id)
+        );
+        
+        /** simulation done **/
+                
+        
         -- legal_document
         
         ALTER TABLE legal_document ALTER COLUMN content TYPE VARCHAR(300000);
@@ -89,12 +145,18 @@ SET search_path = '_admin_';
         **/
         
         -- Foreign keys to create
-        
+        ALTER TABLE dev_card_service_simulation_token ADD CONSTRAINT dev_card_service_simulation_token_card_fk FOREIGN KEY(card) 
+                REFERENCES dev_card_service_simulation(id);
+        ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_card_fk FOREIGN KEY(card) 
+                REFERENCES dev_card_service_simulation(id);
         ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_file_fk FOREIGN KEY(file) REFERENCES tenant_sure_hqupdate_file(id);
         ALTER TABLE tenant_sure_subscribers ADD CONSTRAINT tenant_sure_subscribers_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id);
 
                 
         -- Check constraint to create
+        
+        ALTER TABLE dev_card_service_simulation ADD CONSTRAINT dev_card_service_simulation_card_type_e_ck 
+                CHECK ((card_type) IN ('MasterCard', 'Visa'));
         
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 
