@@ -15,10 +15,10 @@ package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public interface FinancialStatusView extends IsWidget {
 
-    void populate(LeaseYardiFinancialInfoDTO financialStatus);
+    void populate(TransactionHistoryDTO financialStatus);
 
 }

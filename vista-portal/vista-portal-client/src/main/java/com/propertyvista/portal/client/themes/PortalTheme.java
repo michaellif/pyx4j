@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.common.client.theme.FinancialTransactionsTheme;
+import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -171,7 +171,7 @@ public class PortalTheme extends VistaTheme {
         initSuggestBoxStyle();
 
         addTheme(new BillingTheme());
-        addTheme(new FinancialTransactionsTheme());
+        addTheme(new TransactionHistoryViewerTheme());
         addTheme(new LandingPagesTheme());
         addTheme(new TenantInsuranceTheme());
 

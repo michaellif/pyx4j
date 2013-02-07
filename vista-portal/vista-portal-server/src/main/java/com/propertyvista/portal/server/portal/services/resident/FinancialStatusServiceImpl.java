@@ -19,9 +19,9 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.biz.financial.yardi.FinancialStatusFacade;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
-import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.FinancialStatusService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -29,17 +29,16 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class FinancialStatusServiceImpl implements FinancialStatusService {
 
     @Override
-    public void getFinancialStatus(AsyncCallback<LeaseYardiFinancialInfoDTO> callback) {
+    public void getFinancialStatus(AsyncCallback<TransactionHistoryDTO> callback) {
         if (!VistaFeatures.instance().yardiIntegration()) {
             throw new IllegalStateException("this PMC should be integrated with Yardi");
         }
 
         EntityQueryCriteria<YardiBillingAccount> criteria = EntityQueryCriteria.create(YardiBillingAccount.class);
         criteria.eq(criteria.proto().lease(), TenantAppContext.getCurrentUserTenant().lease());
-
         YardiBillingAccount yardiBillingAccount = Persistence.service().retrieve(criteria);
         if (yardiBillingAccount != null) {
-            LeaseYardiFinancialInfoDTO status = ServerSideFactory.create(FinancialStatusFacade.class).getFinancialStatus(yardiBillingAccount);
+            TransactionHistoryDTO status = ServerSideFactory.create(ARFacade.class).getTransactionHistory(yardiBillingAccount);
             callback.onSuccess(status);
         } else {
             throw new Error("Yardi Billng Account for tenant " + TenantAppContext.getCurrentUserTenant().getPrimaryKey() + " was not found");

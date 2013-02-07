@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialStatusView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.FinancialStatusService;
@@ -43,10 +43,10 @@ public class FinancialStatusActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        service.getFinancialStatus(new DefaultAsyncCallback<LeaseYardiFinancialInfoDTO>() {
+        service.getFinancialStatus(new DefaultAsyncCallback<TransactionHistoryDTO>() {
 
             @Override
-            public void onSuccess(LeaseYardiFinancialInfoDTO result) {
+            public void onSuccess(TransactionHistoryDTO result) {
                 view.populate(result);
                 panel.setWidget(view);
             }

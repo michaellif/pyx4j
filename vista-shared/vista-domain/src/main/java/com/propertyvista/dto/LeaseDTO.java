@@ -25,11 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @ExtendsDBO
 public interface LeaseDTO extends Lease {
 
-    /** Used for leases with internal billing */
     TransactionHistoryDTO transactionHistory();
-
-    /** Used for leases with billing managed by Yardi */
-    LeaseYardiFinancialInfoDTO yardiFinancialInfo();
 
     // -----------------------------------------------------
     // temporary runtime data:

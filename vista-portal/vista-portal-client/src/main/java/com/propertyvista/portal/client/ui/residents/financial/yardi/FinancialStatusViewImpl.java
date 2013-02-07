@@ -16,8 +16,8 @@ package com.propertyvista.portal.client.ui.residents.financial.yardi;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.common.client.ui.components.LeaseYardiFinancialInfoViewer;
-import com.propertyvista.dto.LeaseYardiFinancialInfoDTO;
+import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class FinancialStatusViewImpl extends Composite implements FinancialStatusView {
 
@@ -29,8 +29,8 @@ public class FinancialStatusViewImpl extends Composite implements FinancialStatu
     }
 
     @Override
-    public void populate(LeaseYardiFinancialInfoDTO financialStatus) {
-        viewPanel.setWidget(new LeaseYardiFinancialInfoViewer().createContent(financialStatus));
+    public void populate(TransactionHistoryDTO financialStatus) {
+        viewPanel.setWidget(new TransactionHistoryViewerYardi().createContent(financialStatus));
     }
 
 }

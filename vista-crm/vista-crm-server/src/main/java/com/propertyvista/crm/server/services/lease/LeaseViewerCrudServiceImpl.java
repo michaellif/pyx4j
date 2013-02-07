@@ -29,7 +29,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.yardi.FinancialStatusFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -39,7 +38,6 @@ import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceIm
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -62,11 +60,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     protected void enhanceRetrieved(Lease in, LeaseDTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
-        if (!isManagedByYardi(dto)) {
+        if (!dto.billingAccount().isNull()) {
             dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
-        } else {
-            dto.yardiFinancialInfo().set(
-                    ServerSideFactory.create(FinancialStatusFacade.class).getFinancialStatus(dto.billingAccount().duplicate(YardiBillingAccount.class)));
         }
     }
 
@@ -226,10 +221,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
-    }
-
-    private boolean isManagedByYardi(LeaseDTO dto) {
-        return !dto.billingAccount().isNull() && (dto.billingAccount().isInstanceOf(YardiBillingAccount.class));
     }
 
 }

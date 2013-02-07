@@ -17,7 +17,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 
-public class FinancialTransactionsTheme extends Theme {
+public class TransactionHistoryViewerTheme extends Theme {
 
     public static enum StyleName implements IStyleName {//@formatter:off
         FinancialTransactionHeaderRow,
@@ -31,7 +31,7 @@ public class FinancialTransactionsTheme extends Theme {
         FinancialTransactionTotalRow,
     }//@formatter:on
 
-    public FinancialTransactionsTheme() {
+    public TransactionHistoryViewerTheme() {
         Style style = null;
 
         style = new Style(".", StyleName.FinancialTransactionHeaderRow);

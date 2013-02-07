@@ -15,15 +15,18 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.LeaseYardiFinancialInfoViewer;
+import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
@@ -53,22 +56,17 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
 
-        noFinanicalHistoryLabel.setVisible(getValue().transactionHistory().isEmpty() & getValue().yardiFinancialInfo().isEmpty());
-        (get(proto().transactionHistory())).setVisible(!getValue().transactionHistory().isEmpty());
-        (get(proto().yardiFinancialInfo())).setVisible(!getValue().yardiFinancialInfo().isEmpty());
-
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
         FormFlexPanel financialTransactionHistory = new FormFlexPanel();
         int row = -1;
 
-        noFinanicalHistoryLabel = new Label();
-        noFinanicalHistoryLabel.setText(i18n.tr("No Financial History"));
-
         financialTransactionHistory.setWidget(++row, 0, noFinanicalHistoryLabel);
-        financialTransactionHistory.setWidget(++row, 0, inject(proto().transactionHistory(), new TransactionHistoryViewer()));
-        financialTransactionHistory.setWidget(++row, 0, inject(proto().yardiFinancialInfo(), new LeaseYardiFinancialInfoViewer()));
+
+        CEntityViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
+                : new TransactionHistoryViewer();
+        financialTransactionHistory.setWidget(++row, 0, inject(proto().transactionHistory(), transactionHistoryViewer));
 
         return financialTransactionHistory;
     }

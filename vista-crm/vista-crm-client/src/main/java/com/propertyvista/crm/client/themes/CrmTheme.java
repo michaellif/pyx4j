@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
-import com.propertyvista.common.client.theme.FinancialTransactionsTheme;
+import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
@@ -104,7 +104,7 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DraggerMixin());
 
         addTheme(new BillingTheme());
-        addTheme(new FinancialTransactionsTheme());
+        addTheme(new TransactionHistoryViewerTheme());
 
         initGeneralStyles();
         initBodyStyles();
