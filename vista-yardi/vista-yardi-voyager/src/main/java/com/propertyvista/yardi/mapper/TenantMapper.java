@@ -37,10 +37,11 @@ public class TenantMapper {
         tenantInLease.leaseParticipant().customer().set(customer);
         if (yardiCustomer.getLease().isResponsibleForLease() && !applicantExists(tenants)) {
             tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
-            tenantInLease.percentage().setValue(new BigDecimal(100));
+            tenantInLease.percentage().setValue(new BigDecimal(1));
         } else {
             tenantInLease.role().setValue(
                     yardiCustomer.getLease().isResponsibleForLease() ? LeaseTermParticipant.Role.CoApplicant : LeaseTermParticipant.Role.Dependent);
+            tenantInLease.percentage().setValue(BigDecimal.ZERO);
         }
 
         return tenantInLease;
