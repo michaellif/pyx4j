@@ -81,7 +81,15 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        Media media = Persistence.service().retrieve(Media.class, new Key(id));
+        long key;
+        try {
+            key = Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_GONE);
+            serveNotSet(thumbnailSize, response);
+            return;
+        }
+        Media media = Persistence.service().retrieve(Media.class, new Key(key));
         if (media == null) {
             log.debug("no media {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
