@@ -214,6 +214,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             @Override
             public void execute() {
                 revalidate();
+                setUnconditionalValidationErrorRendering(true);
                 if (isValid()) {
                     onSubmit(getValue().duplicate(PmcAccountCreationRequest.class));
                 }
