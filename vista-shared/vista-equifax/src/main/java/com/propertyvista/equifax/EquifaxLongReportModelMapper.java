@@ -101,6 +101,7 @@ public class EquifaxLongReportModelMapper {
         Name identityName = EntityFactory.create(Name.class);
         identityName.firstName().setValue(report.getCNHeader().getSubject().getSubjectName().getFirstName());
         identityName.lastName().setValue(report.getCNHeader().getSubject().getSubjectName().getLastName());
+        identityName.middleName().setValue(report.getCNHeader().getSubject().getSubjectName().getMiddleName());
         identity.name().set(identityName);
 
         identity.birthDate().setValue(getLogicalDateFromString(report.getCNHeader().getSubject().getSubjectId().getDateOfBirth().getValue()));
