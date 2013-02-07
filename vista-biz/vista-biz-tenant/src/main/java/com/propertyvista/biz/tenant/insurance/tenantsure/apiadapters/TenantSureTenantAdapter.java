@@ -43,7 +43,7 @@ public class TenantSureTenantAdapter {
         if ("Canada".equals(country)) {
             parameters.setCountryCode("CA");
         } else {
-            throw new Error(SimpleMessageFormat.format("tenant's country ({0}) is not supported!", country));
+            throw new Error(SimpleMessageFormat.format("tenant''s country ({0}) is not supported!", country));
         }
 
         parameters.setEmailAddress(tenant.customer().person().email().getValue());
