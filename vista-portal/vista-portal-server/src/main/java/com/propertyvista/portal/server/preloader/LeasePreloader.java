@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,6 +32,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.generator.LeaseGenerator;
@@ -85,9 +86,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
                 Persistence.service().commit();
 
-                for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                    tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                    Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
+                for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                    participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+                }
+                for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                    participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
                 }
 
                 ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
@@ -103,7 +108,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
                 if (numCreatedWithBilling < config().numOfPseudoRandomLeasesWithSimulatedBilling) {
-                    // create simulation events that happen between 4 years ago, and and the end of the previous month 
+                    // create simulation events that happen between 4 years ago, and and the end of the previous month
                     Calendar cal = new GregorianCalendar();
                     cal.setTime(new Date());
                     cal.add(Calendar.YEAR, -4);
@@ -129,7 +134,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     }
                     simBuilder.start(new LogicalDate(cal.getTime()));
 
-                    // To 
+                    // To
                     {
                         Calendar leaseToCal = new GregorianCalendar();
                         leaseToCal.setTime(new LogicalDate());
@@ -144,7 +149,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                             // produce lease completed by the day of the preload run
                             leaseToCal.add(Calendar.MONTH, -1 - month);
                         } else {
-                            // produce a lease that ends after the day of the preload run 
+                            // produce a lease that ends after the day of the preload run
                             leaseToCal.add(Calendar.MONTH, 1 + month);
                         }
                         simBuilder.leaseTo(new LogicalDate(leaseToCal.getTime()));
@@ -220,9 +225,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
             }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
+            for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+            }
+            for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
             if (mustHaveApplication || RandomUtil.randomBoolean()) {
                 ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
@@ -240,9 +249,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
             LeaseGenerator.attachDocumentData(lease);
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
+            for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+            }
+            for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
         }
 

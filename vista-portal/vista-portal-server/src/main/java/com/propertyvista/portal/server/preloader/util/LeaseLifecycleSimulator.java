@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
@@ -265,9 +266,13 @@ public class LeaseLifecycleSimulator {
             mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
             Persistence.service().merge(mainTenant.leaseParticipant());
 
-            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                tenant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(tenant.leaseParticipant().customer().personScreening());
+            for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+            }
+            for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
+                participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
             }
 
             if (debug) {
