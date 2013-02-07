@@ -22,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -43,6 +44,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -58,6 +60,12 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
     public CrmMediaFolder(boolean modifyable, ImageTarget imageTarget) {
         super(Media.class, "", modifyable);
         this.imageTarget = imageTarget;
+    }
+
+    @Override
+    protected void createNewEntity(Media newEntity, AsyncCallback<Media> callback) {
+        newEntity.visibility().setValue(PublicVisibilityType.global);
+        super.createNewEntity(newEntity, callback);
     }
 
     @Override
