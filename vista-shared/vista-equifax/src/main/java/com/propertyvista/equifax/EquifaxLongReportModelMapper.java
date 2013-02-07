@@ -114,7 +114,11 @@ public class EquifaxLongReportModelMapper {
                     identity.deathDate().setValue(
                             subject.getSubjectId().getDateOfDeath() != null ? new LogicalDate(subject.getSubjectId().getDateOfDeath().toGregorianCalendar()
                                     .getTime()) : null);
+                    if (subject.getSubjectId().getMaritalStatus() != null) {
+                        identity.maritalStatus().setValue(subject.getSubjectId().getMaritalStatus().getDescription());
+                    }
                 }
+
             }
             identity.currentAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "CA")));
             identity.formerAddress().set(createAddress(getCNAddress(report.getCNAddresses().getCNAddress(), "FA")));
@@ -125,16 +129,7 @@ public class EquifaxLongReportModelMapper {
                 identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
                 identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
             }
-            if (report.getCNMaritalItems() != null && report.getCNMaritalItems().getCNMaritalItem() != null) {
-                if (report.getCNMaritalItems().getCNMaritalItem().get(0).getDivorceStatus() != null) {
-                    // TODO get proper data example and correct mapping based on divorce codes
-                    identity.maritalStatus().setValue("Divorced");
-                } else {
-                    identity.maritalStatus().setValue("Married");
-                }
-            } else {
-                identity.maritalStatus().setValue("Single");
-            }
+
             dto.identity().set(identity);
 
             // Accounts
