@@ -248,7 +248,8 @@ public class EquifaxLongReportModelMapper {
         if (trades != null) {
             for (CNTradeType trade : trades) {
                 if (trade.getPortfolioType() != null && trade.getPortfolioType().getCode() != null && trade.getPortfolioType().getCode().equals("R")) {
-                    total = total.add(trade.getBalanceAmount().getValue());
+                    if (trade.getBalanceAmount() != null && trade.getBalanceAmount().getValue() != null)
+                        total = total.add(trade.getBalanceAmount().getValue());
                 }
             }
         }
@@ -422,7 +423,9 @@ public class EquifaxLongReportModelMapper {
         BigDecimal total = BigDecimal.ZERO;
         if (trades != null) {
             for (CNTradeType trade : trades) {
-                total = total.add(trade.getBalanceAmount().getValue());
+                if (trade.getBalanceAmount() != null && trade.getBalanceAmount().getValue() != null) {
+                    total = total.add(trade.getBalanceAmount().getValue());
+                }
             }
         }
         return total;
