@@ -45,14 +45,14 @@
                         <SubjectName>
                             <LastName>TESTDATA</LastName>
                             <FirstName>SOLO</FirstName>
-							<MiddleName>Oleg</MiddleName>
+							<MiddleName>R.</MiddleName>
                             <Suffix/>
                         </SubjectName>
                         <SubjectId>
 							<SocialInsuranceNumber>123 321 123</SocialInsuranceNumber>
                             <DateOfBirth type="DATE">1950-01-01</DateOfBirth>
                             <DateOfDeath></DateOfDeath> 
-                            <MaritalStatus code="Married" description="Married"/> 
+                            <MaritalStatus code="Single" description="Single"/> 
                             <NumberOfDependants>3</NumberOfDependants>
                         </SubjectId>
                     </Subject>
@@ -60,18 +60,18 @@
                 <CNAddresses>
                     <CNAddress code="CA" description="Current Address">
                         <DateReported>2013-02</DateReported>
-                        <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
-                        <City code="WHIT">WHITBY</City>
+                        <CivicNumber>545</CivicNumber>
+                        <StreetName>Bloor st.</StreetName>
+                        <City code="MIS">Mississauga</City>
                         <Province code="ON" description="ONTARIO"/>
-                        <PostalCode>L1P1T6</PostalCode>
+                        <PostalCode>L4W1L6</PostalCode>
                         <UpdateSource code="C" description="Crt rptd"/>
                     </CNAddress>
                     <CNAddress code="FA" description="Former Address">
                         <DateReported>2009-10</DateReported>
                         <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
-                        <City code="MIS">MISSISSAUGA</City>
+                        <StreetName>Dixie rd.</StreetName>
+                        <City code="MIS">Mississauga</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L4W5N2</PostalCode>
                         <UpdateSource code="S" description="Sts rptd"/>
@@ -87,9 +87,9 @@
                 </CNOtherNames>
                 <CNEmployments>
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
-                        <Occupation>MTLDECGEN0000115</Occupation>
-                        <Employer>CREATED BY CMSC QA</Employer>
-						<City>code="TOR">TORONTO </City> 
+                        <Occupation>Manager</Occupation>
+                        <Employer>Burger King</Employer>
+						<City>code="TOR">Toronto </City> 
                         <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
@@ -104,7 +104,7 @@
 					<CNEmployment code="EF" description="Subject's Former Employment">
                     	<Occupation>Sales Person</Occupation>
                     	<Employer>Home Depot</Employer>
-                    	<City>code="TOR">TORONTO </City> 
+                    	<City>code="TOR">Toronto </City> 
                         <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
@@ -125,33 +125,12 @@
                 		<VerificationDate>2012-12</VerificationDate> 
                 	</CNOtherIncome> 
                 </CNOtherIncomes>
-                <CNBankruptciesOrActs> 
-                	<CNBankruptcyOrAct> 
-                		<DateFiled>2011-12</DateFiled> 
-                		<CourtId> 
-                			<CustomerNumber>ABC979</CustomerNumber> 
-                			<Name>PEtia</Name> 
-                		</CourtId> 
-                		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
-                		<Type/> 
-                		<Filer/> 
-                		<IntentOrDisposition> 
-                			<Date>2010-12</Date> 
-                		</IntentOrDisposition> 
-                		<LiabilityAmount>1000.12</LiabilityAmount>
-                		<AssetAmount>300000.12</AssetAmount> 
-                		<Narratives> 
-							<Narrative/> 
-                		</Narratives> 
-                		<UpdateSource/> 
-                	</CNBankruptcyOrAct> 
-                </CNBankruptciesOrActs>
                <CNCollections> 
-                	<CNCollection> 
+                	<CNCollection description="Completed"> 
                 		<AssignedDate>2001-12</AssignedDate> 
                 		<AgencyId> 
                 			<CustomerNumber>ABCD</CustomerNumber> 
-                			<Name>Masha</Name> 
+                			<Name>Michelle Door</Name> 
                 		</AgencyId> 
                 		<LedgerNumber>EKJEORF</LedgerNumber> 
                 		<CollectionCreditor> 
@@ -172,18 +151,17 @@
                	</CNCollections>
                <CNLegalItems> 
                 	<CNLegalItem> 
-                		<DateFiled>2001-12</DateFiled>
+                		<DateFiled>2012-12</DateFiled>
                 		<CourtId> 
 							<CustomerNumber>DSAFJKDKI</CustomerNumber> 
-							<Name>Masha</Name> 
+							<Name>Michael Bell</Name> 
                 		</CourtId> 
                 		<CaseNumber>EOKFOF</CaseNumber> 
-                		<Status/> 
-                		<DateSatisfied>2001-12</DateSatisfied> 
+                		<Status description="In Progress"/> 
                 		<Amount>912345.12</Amount> 
                 		<VerificationDate>2001-12</VerificationDate> 
-                		<Defendant>MAMA</Defendant> 
-                		<Plaintiff>SAldl</Plaintiff> 
+                		<Defendant>Dell Inc.</Defendant> 
+                		<Plaintiff>Melinda</Plaintiff> 
                 		<LawyerNameAddress>Ontario</LawyerNameAddress> 
                 		<Narratives> 
                 			<Narrative/> 
@@ -196,7 +174,7 @@
                 		<DateFiled>2012-12</DateFiled> 
                 		<CourtId> 
 							<CustomerNumber>FKSOLFK</CustomerNumber> 
-							<Name>Masha</Name> 
+							<Name>Harry White</Name> 
                 		</CourtId> 
                 		<SecuredLoanCreditorId>
 							<NameAddressAndAmount>SADL2323</NameAddressAndAmount> 
@@ -223,7 +201,7 @@
 						<DateFiled>2001-12</DateFiled> 
                 		<CourtId> 
                 			<CustomerNumber>DFDF87834</CustomerNumber> 
-                			<Name>Masha</Name> 
+                			<Name>Roger Schmidt</Name> 
                 		</CourtId> 
                 		<CaseNumber>QWEORKEWQOR1</CaseNumber> 
                 		<SpouseName>Lara</SpouseName> 
@@ -238,7 +216,7 @@
                 		<DateReported>2011-12</DateReported> 
                 		<CreditorId> 
 							<CustomerNumber>321SAKJSKA</CustomerNumber> 
-							<Name>Masha</Name> 
+							<Name>Oleg Smirnoff</Name> 
 							<Telephone> 
 								<ParsedTelephone> 
 									<AreaCode>905</AreaCode> 
@@ -260,13 +238,13 @@
 						<DateFiled>2001-12</DateFiled> 
 						<CourtId> 
 							<CustomerNumber>KSJDF23</CustomerNumber> 
-							<Name>Katia</Name> 
+							<Name>Kate Johnson</Name> 
 						</CourtId> 
 						<CaseNumber>34234SADAS</CaseNumber> 
 						<Amount>2345.12</Amount> 
 						<DateSatisfied>2001-05</DateSatisfied> 
 						<VerificationDate>2001-12</VerificationDate> 
-						<Plaintiff>ASdldf</Plaintiff> 
+						<Plaintiff>Geaorge</Plaintiff> 
 						<Garnishee>Wldfdfgv</Garnishee>
 						<Defendant>Slkopkd</Defendant> 
 						<Narratives> 
@@ -306,7 +284,7 @@
                         <DateReported>2012-12</DateReported>
                         <CreditorId>
                             <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
+                            <Name>RBC</Name>
                             <Telephone>
                                 <ParsedTelephone>
                                     <AreaCode>800</AreaCode>
@@ -331,7 +309,7 @@
                         <DateReported>2012-12</DateReported>
                         <CreditorId>
                             <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
+                            <Name>Scotiabank</Name>
                             <Telephone>
                                 <ParsedTelephone>
                                     <AreaCode>800</AreaCode>
