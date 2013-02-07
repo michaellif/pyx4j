@@ -129,7 +129,7 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         IPrimitive<String> SIN();
 
-        IPrimitive<String> marritialStatus();
+        IPrimitive<String> maritalStatus();
 
         AddressSimple currentAddress();
 

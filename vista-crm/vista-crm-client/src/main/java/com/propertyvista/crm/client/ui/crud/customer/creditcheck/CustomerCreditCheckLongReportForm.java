@@ -185,7 +185,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         name.setWidget(1, 0, new DecoratorBuilder(inject(proto().identity().SIN()), 20).build());
 
         name.setWidget(0, 1, new DecoratorBuilder(inject(proto().identity().birthDate()), 10).build());
-        name.setWidget(1, 1, new DecoratorBuilder(inject(proto().identity().marritialStatus()), 10).build());
+        name.setWidget(1, 1, new DecoratorBuilder(inject(proto().identity().maritalStatus()), 10).build());
         name.setWidget(2, 1, new DecoratorBuilder(inject(proto().identity().deathDate()), 10).build());
 
         name.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);

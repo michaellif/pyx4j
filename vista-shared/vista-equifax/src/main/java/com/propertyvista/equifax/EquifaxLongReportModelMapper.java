@@ -128,6 +128,16 @@ public class EquifaxLongReportModelMapper {
                 identity.formerEmployer().setValue(getEmployer(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
                 identity.formerOccupation().setValue(getOccupation(getEmployment(report.getCNEmployments().getCNEmployment(), "EF")));
             }
+            if (report.getCNMaritalItems() != null && report.getCNMaritalItems().getCNMaritalItem() != null) {
+                if (report.getCNMaritalItems().getCNMaritalItem().get(0).getDivorceStatus() != null) {
+                    // TODO get proper data example and correct mapping based on divorce codes
+                    identity.maritalStatus().setValue("Divorced");
+                } else {
+                    identity.maritalStatus().setValue("Married");
+                }
+            } else {
+                identity.maritalStatus().setValue("Single");
+            }
             dto.identity().set(identity);
 
             // Accounts
@@ -348,7 +358,9 @@ public class EquifaxLongReportModelMapper {
             address.street1().setValue(streetName);
             if (cnAddress.getProvince() != null) {
                 address.province().code().setValue(cnAddress.getProvince().getCode());
-                address.country().name().setValue(getCountry(getProvinces(), cnAddress.getProvince().getCode()));
+                List<Province> provinces = getProvinces();
+                address.country().name().setValue(getCountry(provinces, cnAddress.getProvince().getCode()));
+                address.province().name().setValue(getProvince(provinces, cnAddress.getProvince().getCode()));
             }
             return address;
         }
@@ -370,6 +382,15 @@ public class EquifaxLongReportModelMapper {
         EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
         criteria.asc(criteria.proto().name());
         return Persistence.service().query(criteria);
+    }
+
+    private static String getProvince(List<Province> provinces, String code) {
+        for (Province province : provinces) {
+            if (StringUtils.equals(province.code().getValue(), code)) {
+                return province.name().getValue();
+            }
+        }
+        return null;
     }
 
     private static String getCountry(List<Province> provinces, String stateCode) {
