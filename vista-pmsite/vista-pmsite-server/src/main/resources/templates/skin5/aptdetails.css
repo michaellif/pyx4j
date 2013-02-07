@@ -1,4 +1,5 @@
 .vista-pmsite-aptDetailsPage {
+	background: #000000;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-mainWrap {
 	width: 960px;
@@ -35,7 +36,6 @@
     
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-	border-top: 1px solid black;
 	border-bottom: 5px solid black;
 }
 
