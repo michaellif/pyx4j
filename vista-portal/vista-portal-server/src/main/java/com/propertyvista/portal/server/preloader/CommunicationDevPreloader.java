@@ -69,6 +69,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // get a few existing CustomerUsers
         CustomerUser t001 = null;
         CustomerUser t002 = null;
+        CustomerUser t003 = null;
         if (listCustomerUser != null) {
             String email;
             for (CustomerUser customerUser : listCustomerUser) {
@@ -77,6 +78,8 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                     t001 = customerUser;
                 } else if ("t002@pyx4j.com".equals(email)) {
                     t002 = customerUser;
+                } else if ("t003@pyx4j.com".equals(email)) {
+                    t003 = customerUser;
                 }
             }
         }
@@ -86,6 +89,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         CommunicationPerson personE001 = createPerson(e001);
         CommunicationPerson personT001 = createPerson(t001);
         CommunicationPerson personT002 = createPerson(t002);
+        CommunicationPerson personT003 = createPerson(t003);
 
         if (personM001 == null || personE001 == null || personT001 == null || personT002 == null) {
             return "Couldn't create the desired CommunicationPersons!";
@@ -97,6 +101,9 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         // t002 -> e001 (unread, important)
         // m001 -> e001 (unread)
         // TODO: add favorites messages too
+        // t001-> t002  (unread)
+        // t001-> t003  (read, important)
+        // t003-> t001  (unread, important) - reply
 
         //(CommunicationPerson from, CommunicationPerson to, CommunicationMessage parent, String topic, String msgContent,boolean highImportance, boolean isRead)
         CommunicationMessage msg1 = createMessage(personM001, personT001, null, "No water",
@@ -105,6 +112,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
         if (msg1 == null) {
             return "Couldn't create the first CommunicationMessage!";
         }
+
         CommunicationMessage msg2 = createMessage(personT001, personM001, msg1, "No water",
                 "Hi,\n     Thanks for communication, I went to Black Sea to become White :)", true, false);
         if (msg2 == null) {
@@ -119,6 +127,21 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
                 "Please come back from hollyday we miss you, mostly because there is to mucjh work for us.", false, false);
         if (msg4 == null) {
             return "Couldn't create the forth CommunicationMessage!";
+        }
+        CommunicationMessage msg5 = createMessage(personT001, personT002, null, "Happy New Year", "We wish you Happy New Year, all best", false, false);
+        if (msg5 == null) {
+            return "Couldn't create the fifth CommunicationMessage!";
+        }
+        CommunicationMessage msg6 = createMessage(personT001, personT003, null, "Late payment notification",
+                "Dear Kenneth Puent,\nWe inform you are late on payment. Please play it ASAP!\n\nRegards,\n", true, true);
+        if (msg6 == null) {
+            return "Couldn't create the sixth CommunicationMessage!";
+        }
+        CommunicationMessage msg7 = createMessage(personT003, personT001, msg6, "Late payment notification",
+                "Dear Veronica W Canoy,\nThanks for reminder. My payment it will be delaying one more week, until that please accept my dinner invitation!:)",
+                true, false);
+        if (msg7 == null) {
+            return "Couldn't create the seventh CommunicationMessage!";
         }
 
         return "persons and messages created";

@@ -18,11 +18,16 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.dto.CommunicationCenterDTO;
 
 public interface CommunicationCenterService extends AbstractCrudService<CommunicationCenterDTO> {
 
     void listMyMessages(AsyncCallback<Vector<CommunicationCenterDTO>> callback);
+
+    void createAndSendMessage(AsyncCallback<VoidSerializable> callback, String topic, String messageContent, boolean isHighImportance,
+            AbstractUser[] destinations);
 
 }

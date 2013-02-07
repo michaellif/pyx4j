@@ -17,11 +17,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.dto.CommunicationCenterDTO;
 
 public interface CommunicationCenterView extends IsWidget {
 
     interface Presenter {
+        void sendNewMessage(String topic, String messageContent, boolean isHighImportance, AbstractUser[] destinations);
     }
 
     void setPresenter(Presenter presenter);
