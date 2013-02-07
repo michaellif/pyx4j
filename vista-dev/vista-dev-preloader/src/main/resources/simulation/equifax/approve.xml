@@ -18,7 +18,7 @@
                     	<DateOfRequest>2013-01-13</DateOfRequest> 
                     	<TotalNumberOfInquiries>123</TotalNumberOfInquiries> 
                     	<FileOwner> 
-                    		<BureauCode>ABCD_Bereau</BureauCode> 
+                    		<BureauCode>DHFGV98</BureauCode> 
                     		<BureauContactInformation> Mr. Smith </BureauContactInformation> 
                     	</FileOwner> 
                     	<HitCode/> 
@@ -55,7 +55,7 @@
                         <SubjectName>
                             <LastName>FORD</LastName>
                             <FirstName>SOLO</FirstName>
-                            <MiddleName>Oleg</MiddleName>
+                            <MiddleName>R.</MiddleName>
                             <Suffix/>
                         </SubjectName>
                         <SubjectId>
@@ -149,7 +149,7 @@
                 		<DateFiled>2011-12</DateFiled> 
                 		<CourtId> 
                 			<CustomerNumber>ABC979</CustomerNumber> 
-                			<Name>Petia</Name> 
+                			<Name>Peter Grant</Name> 
                 		</CourtId> 
                 		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
                 		<Type/> 
@@ -166,11 +166,11 @@
                 			</CNBankruptcyOrAct> 
                 	</CNBankruptciesOrActs>
                <CNCollections> 
-                	<CNCollection> 
+                	<CNCollection description="Completed"> 
                 		<AssignedDate>2001-12</AssignedDate> 
                 		<AgencyId> 
                 			<CustomerNumber>ABCD</CustomerNumber> 
-                			<Name>Masha</Name> 
+                			<Name>Maria Smith</Name> 
                 			</AgencyId> 
                 			<LedgerNumber>EKJEORF</LedgerNumber> 
                 			<CollectionCreditor> 
@@ -190,32 +190,32 @@
                 			</CNCollection> 
                	</CNCollections>
                <CNLegalItems> 
-                		<CNLegalItem> 
-                			<DateFiled>2001-12</DateFiled>
-                			<CourtId> 
-                				<CustomerNumber>DSAFJKDKI</CustomerNumber> 
-                				<Name>Masha</Name> 
-                				</CourtId> 
-                				<CaseNumber>EOKFOF</CaseNumber> 
-                				<Status/> 
-                				<DateSatisfied>2001-12</DateSatisfied> 
-                				<Amount>912345.12</Amount> 
-                				<VerificationDate>2001-12</VerificationDate> 
-                				<Defendant>MAMA</Defendant> 
-                				<Plaintiff>SAldl</Plaintiff> 
-                				<LawyerNameAddress>Ontario</LawyerNameAddress> 
-                				<Narratives> 
-                					<Narrative/> 
-                					</Narratives>
-                				<UpdateSource/> 
-                			</CNLegalItem> 
+                	<CNLegalItem description="Completed"> 
+                		<DateFiled>2001-12</DateFiled>
+                		<CourtId> 
+                			<CustomerNumber>DSAFJKDKI</CustomerNumber> 
+                			<Name>Bob Smith</Name> 
+                		</CourtId> 
+                		<CaseNumber>EOKFOF</CaseNumber> 
+                		<Status/> 
+                		<DateSatisfied>2001-12</DateSatisfied> 
+                		<Amount>912345.12</Amount> 
+                		<VerificationDate>2001-12</VerificationDate> 
+                		<Defendant>Omar Smirnov</Defendant> 
+                		<Plaintiff>SAldl</Plaintiff> 
+                		<LawyerNameAddress>Ontario</LawyerNameAddress> 
+                		<Narratives> 
+                			<Narrative/> 
+                		</Narratives>
+                		<UpdateSource/> 
+                	</CNLegalItem> 
                	</CNLegalItems>
                <CNSecuredLoans> 
                 		<CNSecuredLoan> 
                 			<DateFiled>2012-12</DateFiled> 
                 			<CourtId> 
                 				<CustomerNumber>FKSOLFK</CustomerNumber> 
-                				<Name>Masha</Name> 
+                				<Name>Andrew White</Name> 
                 				</CourtId> 
                 				<SecuredLoanCreditorId>
                 					 <NameAddressAndAmount>SADL2323</NameAddressAndAmount> 
@@ -242,7 +242,7 @@
                 					<DateFiled>2001-12</DateFiled> 
                 					<CourtId> 
                 						<CustomerNumber>DFDF87834</CustomerNumber> 
-                						<Name>Masha</Name> 
+                						<Name>Gregory B.</Name> 
                 					</CourtId> 
                 					<CaseNumber>QWEORKEWQOR1</CaseNumber> 
                 					<SpouseName>Lara</SpouseName> 
@@ -257,7 +257,7 @@
                 				<DateReported>2011-12</DateReported> 
                 				<CreditorId> 
                 					<CustomerNumber>321SAKJSKA</CustomerNumber> 
-                					<Name>Masha</Name> 
+                					<Name>Amanda Tree</Name> 
                 					<Telephone> 
                 						<ParsedTelephone> 
                 							<AreaCode>905</AreaCode> 
@@ -279,7 +279,7 @@
                		<DateFiled>2001-12</DateFiled> 
                	<CourtId> 
                		<CustomerNumber>KSJDF23</CustomerNumber> 
-               		<Name>Katia</Name> 
+               		<Name>Kate Lockwell</Name> 
                	</CourtId> 
                	<CaseNumber>34234SADAS</CaseNumber> 
                	<Amount>2345.12</Amount> 
