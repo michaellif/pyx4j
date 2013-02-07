@@ -182,7 +182,7 @@
                 		<DateSatisfied>2013-01</DateSatisfied> 
                 		<Amount>9345.12</Amount> 
                 		<VerificationDate>2013-12</VerificationDate> 
-                		<Defendant>SUBJECT</Defendant> 
+                		<Defendant>Andrew Ryan</Defendant> 
                 		<Plaintiff>Leons Furniture Wearhouse</Plaintiff> 
                 		<LawyerNameAddress>Rosenblat J.C., 200 Finch Ave, Toronto, ON M1B 5W6 </LawyerNameAddress> 
                 		<Narratives> 
@@ -268,7 +268,7 @@
 						<VerificationDate>2013-02</VerificationDate> 
 						<Plaintiff>RBC Financial Services</Plaintiff> 
 						<Garnishee>RBC Financial Services</Garnishee>
-						<Defendant>SUBJECT</Defendant> 
+						<Defendant>Andrew Ryan</Defendant> 
 						<Narratives> 
 							<Narrative/> 
 						</Narratives> 
