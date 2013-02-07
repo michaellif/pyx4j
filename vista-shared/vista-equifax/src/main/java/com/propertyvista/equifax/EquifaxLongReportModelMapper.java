@@ -317,7 +317,7 @@ public class EquifaxLongReportModelMapper {
     private static CNEmploymentType getEmployment(List<CNEmploymentType> employments, String type) {
         if (employments != null) {
             for (CNEmploymentType employment : employments) {
-                if (employment.getCode().equals(type)) {
+                if (type.equals(employment.getCode())) {
                     return employment;
                 }
             }
@@ -330,7 +330,14 @@ public class EquifaxLongReportModelMapper {
             AddressSimple address = EntityFactory.create(AddressSimple.class);
             address.city().setValue(cnAddress.getCity() != null ? cnAddress.getCity().getValue() : null);
             address.postalCode().setValue(cnAddress.getPostalCode());
-            address.street1().setValue(cnAddress.getStreetName());
+            String streetName = "";
+            if (cnAddress.getCivicNumber() != null) {
+                streetName = streetName + cnAddress.getCivicNumber();
+            }
+            if (cnAddress.getStreetName() != null) {
+                streetName = streetName + " " + cnAddress.getStreetName();
+            }
+            address.street1().setValue(streetName);
             if (cnAddress.getProvince() != null) {
                 address.province().code().setValue(cnAddress.getProvince().getCode());
                 address.country().name().setValue(getCountry(getProvinces(), cnAddress.getProvince().getCode()));
@@ -369,7 +376,7 @@ public class EquifaxLongReportModelMapper {
     private static CNAddressType getCNAddress(List<CNAddressType> addresses, String type) {
         if (addresses != null) {
             for (CNAddressType address : addresses) {
-                if (address.getCode().equals(type)) {
+                if (type.equals(address.getCode())) {
                     return address;
                 }
             }
@@ -383,7 +390,7 @@ public class EquifaxLongReportModelMapper {
         }
         BigDecimal total = BigDecimal.ZERO;
         for (CNCollectionType collection : collections) {
-            if (collection.getCode().equals("RA") || collection.getCode().equals("RE")) {
+            if ("RA".equals(collection.getCode()) || "RE".equals(collection.getCode())) {
                 total = total.add(collection.getBalanceAmount().getValue());
             }
         }
@@ -401,7 +408,7 @@ public class EquifaxLongReportModelMapper {
     }
 
     private static BigDecimal getRejectCode(String codeString, String description) {
-        if (codeString.equals("01")) {
+        if ("01".equals(codeString)) {
             return new BigDecimal(1);
         }
 

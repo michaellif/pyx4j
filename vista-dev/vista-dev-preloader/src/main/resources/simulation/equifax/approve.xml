@@ -70,9 +70,9 @@
                 <CNAddresses>
                     <CNAddress code="CA" description="Current Address">
                         <DateReported>2013-02</DateReported>
-                        <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
-                        <City code="WHIT">WHITBY</City>
+                        <CivicNumber>3251</CivicNumber>
+                        <StreetName>Country Ln.</StreetName>
+                        <City code="WHIT">Whitby</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L1P1T6</PostalCode>
                         <UpdateSource code="C" description="Crt rptd"/>
@@ -80,8 +80,8 @@
                     <CNAddress code="FA" description="Former Address">
                         <DateReported>2009-10</DateReported>
                         <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK-PREVIOUS</StreetName>
-                        <City code="MIS">MISSISSAUGA</City>
+                        <StreetName>Creekbank</StreetName>
+                        <City code="MIS">Mississauga</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L4W5N2</PostalCode>
                         <UpdateSource code="S" description="Sts rptd"/>
@@ -89,8 +89,8 @@
                         <CNAddress code="FA" description="Former Address">
                         <DateReported>2005-10</DateReported>
                         <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK-VERY_OLD</StreetName>
-                        <City code="MIS">MISSISSAUGA</City>
+                        <StreetName>Creekbank</StreetName>
+                        <City code="MIS">Mississauga</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L4W5N2</PostalCode>
                         <UpdateSource code="S" description="Sts rptd"/>
@@ -106,10 +106,10 @@
                 		</CNOtherNames>
                 <CNEmployments>
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
-                        <Occupation>BANKIR</Occupation>
-                        <Employer>SEARS</Employer>
-                        <City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+                        <Occupation>Banker</Occupation>
+                        <Employer>Sears</Employer>
+                        <City code="TOR">Toronto</City> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 
@@ -123,8 +123,8 @@
                     <CNEmployment code="EF" description="Subject's Former Employment">
                     	<Occupation>Sales Person</Occupation>
                     	<Employer>Home Depot</Employer>
-                    	<City>code="TOR">TORONTO </City> 
-                        <Provincecode="ON" description="ONTARIO"/> 
+                    	<City code="TOR">Toronto</City> 
+                        <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
                         <DateLeft>20011-12</DateLeft> 
                         <Verification> 
@@ -149,7 +149,7 @@
                 		<DateFiled>2011-12</DateFiled> 
                 		<CourtId> 
                 			<CustomerNumber>ABC979</CustomerNumber> 
-                			<Name>PEtia</Name> 
+                			<Name>Petia</Name> 
                 		</CourtId> 
                 		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
                 		<Type/> 
@@ -411,7 +411,7 @@
                 		<DateReported>2012-12</DateReported> 
                 			<CreditorId> 
                 				<CustomerNumber>VAS123</CustomerNumber> 
-                				<Name>Roayl Bank</Name> -
+                				<Name>Royal Bank</Name> -
                 				<Telephone> 
                 					<ParsedTelephone> <AreaCode>905</AreaCode> 
                 					<Number>321-4569</Number> 
