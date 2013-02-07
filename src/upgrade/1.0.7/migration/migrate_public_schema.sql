@@ -9,8 +9,10 @@
 **/                                                     
 
 SET client_min_messages = 'error';
+SET search_path = 'public';
 
 BEGIN TRANSACTION;
+
 
  -- Sequences to drop
  DROP SEQUENCE insurance_tenant_sure_details$taxes_seq;
