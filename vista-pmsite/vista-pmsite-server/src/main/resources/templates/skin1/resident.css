@@ -101,6 +101,10 @@
 	width: auto;
 }
 
+.vista-pmsite-residentPage .Button-disabled{
+	cursor: default;
+}
+
 .vista-pmsite-residentPage .ButtonText  {
     bottom: -7px;;
 }
@@ -108,4 +112,8 @@
 #gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
 	white-space: nowrap;
 	float: right;
+}
+
+.vista-pmsite-residentPage .ValidationLabel ul {
+	padding-left: 10px;
 }

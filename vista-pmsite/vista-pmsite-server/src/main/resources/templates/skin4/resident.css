@@ -111,7 +111,7 @@
     font-style: normal;
 }
 
-.vista-pmsite-residentPage .Button {
+.vista-pmsite-residentPage .Button, .gwt-Button {
     background: none repeat scroll 0 0 #000000;
     border: none;
     color: #E6E6E6;
@@ -122,12 +122,15 @@
     width: auto;
     min-width: 70px;
     text-align: center;
-    opacity: 100;
 }
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{
 	float: none;
 	width: 130px;
+}
+
+.vista-pmsite-residentPage .Button-disabled{
+	cursor: default;
 }
 
 .vista-pmsite-residentPage .EntityFolderAddButton, .vista-pmsite-residentPage .EntityFolderTableHeaderLabel  {
@@ -157,4 +160,13 @@
 
 .vista-pmsite-residentPage .ValidationLabel ul {
 	padding-left: 6px;
+}
+
+
+.vista-pmsite-residentPage .PaymentEditorForm {
+	max-width: 491px;
+}
+
+.vista-pmsite-residentPage .PaymentEditorLegalTerms {
+	max-width: 673px;
 }

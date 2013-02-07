@@ -98,6 +98,10 @@
 	width: auto;
 }
 
+.vista-pmsite-residentPage .Button-disabled{
+	cursor: default;
+}
+
 .vista-pmsite-residentPage .ButtonText  {
     bottom: -7px;;
 }
@@ -107,3 +111,6 @@
 	float: right;
 }
 
+.vista-pmsite-residentPage .ValidationLabel ul {
+	padding-left: 10px;
+}
