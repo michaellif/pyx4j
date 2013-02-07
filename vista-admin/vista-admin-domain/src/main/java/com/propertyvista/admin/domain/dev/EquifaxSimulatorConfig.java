@@ -26,15 +26,15 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
 public interface EquifaxSimulatorConfig extends IEntity {
 
-    @Editor(type = Editor.EditorType.textarea)
+    @Editor(type = Editor.EditorType.richtextarea)
     @Length(300000)
     IPrimitive<String> approveXml();
 
-    @Editor(type = Editor.EditorType.textarea)
+    @Editor(type = Editor.EditorType.richtextarea)
     @Length(300000)
     IPrimitive<String> declineXml();
 
-    @Editor(type = Editor.EditorType.textarea)
+    @Editor(type = Editor.EditorType.richtextarea)
     @Length(300000)
     IPrimitive<String> moreInfoXml();
 }

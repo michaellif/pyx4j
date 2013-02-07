@@ -27,36 +27,57 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
     public SimulationForm(IFormView<SimulationDTO> view) {
         super(SimulationDTO.class, view);
 
+        selectTab(addTab(createGeneralTab()));
+        addTab(createCaledonTab());
+        addTab(createEquifaxTab());
+        addTab(createOnboardingTab());
+    }
+
+    private FormFlexPanel createGeneralTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setH1(++row, 0, 1, i18n.tr("Cache"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().generalCacheEnabled())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().entityCacheServiceEnabled())).build());
+        content.setH2(++row, 0, 1, i18n.tr("Cache"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().generalCacheEnabled()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().entityCacheServiceEnabled()), 5).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("Network Simulation"));
+        content.setH2(++row, 0, 1, i18n.tr("Network Simulation"));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().enabled())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().delay())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().enabled()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().delay()), 10).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("External System Caledon PAD"));
+        return content;
+    }
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator())).build());
+    private FormFlexPanel createCaledonTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Caledon PAD"));
+        int row = -1;
 
-        content.setH1(++row, 0, 1, i18n.tr("External System Equifax"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator()), 5).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useEquifaxSimulator())).build());
+        return content;
+    }
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().approveXml())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().declineXml())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().moreInfoXml())).build());
+    private FormFlexPanel createEquifaxTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Equifax"));
+        int row = -1;
 
-        content.setH1(++row, 0, 1, i18n.tr("External System On-Boarding"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useEquifaxSimulator()), 5).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().enabled())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().simpulationType())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().approveXml()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().declineXml()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().moreInfoXml()), 50).build());
 
-        selectTab(addTab(content));
+        return content;
+    }
 
+    private FormFlexPanel createOnboardingTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("On-Boarding"));
+        int row = -1;
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().enabled()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().simpulationType()), 15).build());
+
+        return content;
     }
 }
