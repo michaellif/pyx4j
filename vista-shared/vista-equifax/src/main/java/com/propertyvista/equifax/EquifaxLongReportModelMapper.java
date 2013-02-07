@@ -85,12 +85,12 @@ public class EquifaxLongReportModelMapper {
             }
 
             dto.numberOfBancruptciesOrActs().setValue(
-                    report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : null);
-            dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : null);
+                    report.getCNBankruptciesOrActs() != null ? report.getCNBankruptciesOrActs().getCNBankruptcyOrAct().size() : 0);
+            dto.numberOfLegalItems().setValue(report.getCNLegalItems() != null ? report.getCNLegalItems().getCNLegalItem().size() : 0);
             dto.outstandingCollectionsBalance().setValue(
                     getTotalCNCollectionsBalance(report.getCNCollections() != null ? report.getCNCollections().getCNCollection() : null));
 
-            dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : null);
+            dto.landlordCollectionsFiled().setValue(report.getCNCollections() != null ? report.getCNCollections().getCNCollection().size() : 0);
 
             // TODO mapping says SCBC, error in mapping?
             dto.equifaxCheckScore().setValue(

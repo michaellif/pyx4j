@@ -45,11 +45,11 @@
                         <SubjectName>
                             <LastName>TESTDATA</LastName>
                             <FirstName>SOLO</FirstName>
-							<MiddleName>Oleg</MiddleName>
+							<MiddleName>R.</MiddleName>
                             <Suffix/>
                         </SubjectName>
                         <SubjectId>
-							<SocialInsuranceNumber>123 321 123</SocialInsuranceNumber>
+							<SocialInsuranceNumber>658 648 924</SocialInsuranceNumber>
                             <DateOfBirth type="DATE">1950-01-01</DateOfBirth>
                             <DateOfDeath></DateOfDeath> 
                             <MaritalStatus code="Married" description="Married"/> 
@@ -60,18 +60,18 @@
                 <CNAddresses>
                     <CNAddress code="CA" description="Current Address">
                         <DateReported>2013-02</DateReported>
-                        <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
-                        <City code="WHIT">WHITBY</City>
+                        <CivicNumber>498</CivicNumber>
+                        <StreetName>Rossland Road East</StreetName>
+                        <City code="WHIT">Whitby</City>
                         <Province code="ON" description="ONTARIO"/>
-                        <PostalCode>L1P1T6</PostalCode>
+                        <PostalCode>L1N9G5</PostalCode>
                         <UpdateSource code="C" description="Crt rptd"/>
                     </CNAddress>
                     <CNAddress code="FA" description="Former Address">
                         <DateReported>2009-10</DateReported>
                         <CivicNumber>5099</CivicNumber>
-                        <StreetName>CREEKBANK</StreetName>
-                        <City code="MIS">MISSISSAUGA</City>
+                        <StreetName>Creekbank</StreetName>
+                        <City code="MIS">Mississauga</City>
                         <Province code="ON" description="ONTARIO"/>
                         <PostalCode>L4W5N2</PostalCode>
                         <UpdateSource code="S" description="Sts rptd"/>
@@ -79,25 +79,25 @@
                 </CNAddresses>
 				<CNOtherNames> 
                 	<CNOtherName> 
-                		<LastName>Petrov</LastName> 
-                		<FirstName>Ivan</FirstName>
-                		<MiddleName>Basilii</MiddleName> 
+                		<LastName>Gomez</LastName> 
+                		<FirstName>Scott</FirstName>
+                		<MiddleName>James</MiddleName> 
                 		<Suffix/> 
                 	</CNOtherName> 
                 </CNOtherNames>
                 <CNEmployments>
                     <CNEmployment code="ES" description="Subject'sCurrent Employment">
-                        <Occupation>MTLDECGEN0000115</Occupation>
-                        <Employer>CREATED BY CMSC QA</Employer>
+                        <Occupation>Truck Operator</Occupation>
+                        <Employer>CMC</Employer>
 						<City code="TOR">TORONTO </City> 
                         <Province code="ON" description="ONTARIO"/> 
                         <DateEmployed>2001-12</DateEmployed> 
-                        <DateLeft>20011-12</DateLeft> 
+                        <DateLeft>2011-12</DateLeft> 
                         <Verification> 
                         	<Date>2011-12</Date> 
                         </Verification> 
                         <Salary> 
-                        	<SalaryAmount>199999.12</SalaryAmount> 
+                        	<SalaryAmount>20000.00</SalaryAmount> 
                         	<SalaryVerification/> 
                         </Salary>
                     </CNEmployment>
@@ -106,13 +106,13 @@
                     	<Employer>Home Depot</Employer>
                     	<City code="TOR">TORONTO </City> 
                         <Province code="ON" description="ONTARIO"/> 
-                        <DateEmployed>2001-12</DateEmployed> 
-                        <DateLeft>20011-12</DateLeft> 
+                        <DateEmployed>1995-10</DateEmployed> 
+                        <DateLeft>2001-11</DateLeft> 
                         <Verification> 
-                        	<Date>2011-12</Date> 
+                        	<Date>2001-11</Date> 
                         </Verification> 
                         <Salary> 
-                        	<SalaryAmount>77777.12</SalaryAmount> 
+                        	<SalaryAmount>24580.50</SalaryAmount> 
                         	<SalaryVerification/> 
                         </Salary>
                     </CNEmployment>
@@ -127,19 +127,19 @@
                 </CNOtherIncomes>
                 <CNBankruptciesOrActs> 
                 	<CNBankruptcyOrAct> 
-                		<DateFiled>2011-12</DateFiled> 
+                		<DateFiled>2012-10</DateFiled> 
                 		<CourtId> 
                 			<CustomerNumber>ABC979</CustomerNumber> 
-                			<Name>PEtia</Name> 
+                			<Name>Ontario Court Services</Name> 
                 		</CourtId> 
-                		<CaseNumberAndTrustee>Kolia Smith</CaseNumberAndTrustee> 
+                		<CaseNumberAndTrustee>123454567 MCOURT AND MCOURT.</CaseNumberAndTrustee> 
                 		<Type/> 
                 		<Filer/> 
-                		<IntentOrDisposition> 
+                		<IntentOrDisposition description="Bankruptcy"> 
                 			<Date>2010-12</Date> 
                 		</IntentOrDisposition> 
-                		<LiabilityAmount>1000.12</LiabilityAmount>
-                		<AssetAmount>300000.12</AssetAmount> 
+                		<LiabilityAmount>41240.50</LiabilityAmount>
+                		<AssetAmount>18500.00</AssetAmount> 
                 		<Narratives> 
 							<Narrative/> 
                 		</Narratives> 
@@ -147,20 +147,20 @@
                 	</CNBankruptcyOrAct> 
                 </CNBankruptciesOrActs>
                <CNCollections> 
-                	<CNCollection> 
-                		<AssignedDate>2001-12</AssignedDate> 
+                	<CNCollection description="Completed"> 
+                		<AssignedDate>2012-10</AssignedDate> 
                 		<AgencyId> 
-                			<CustomerNumber>ABCD</CustomerNumber> 
-                			<Name>Masha</Name> 
+                			<CustomerNumber>TD Bank Financial Services</CustomerNumber> 
+                			<Name>Graham Smith</Name> 
                 		</AgencyId> 
-                		<LedgerNumber>EKJEORF</LedgerNumber> 
+                		<LedgerNumber>EKJEORF1234</LedgerNumber> 
                 		<CollectionCreditor> 
-							<AccountNumberAndOrName>2132515</AccountNumberAndOrName> 
+							<AccountNumberAndOrName>8009-2132515</AccountNumberAndOrName> 
 							<Industry/> 
                 		</CollectionCreditor> 
                 		<Reason/> 
-                		<OriginalAmount>345.12</OriginalAmount> 
-                		<BalanceAmount>345.12</BalanceAmount> 
+                		<OriginalAmount>3045.12</OriginalAmount> 
+                		<BalanceAmount>3045.12</BalanceAmount> 
                 		<DateOfLastPayment>2011-12</DateOfLastPayment> 
                 		<DatePaid>2011-12</DatePaid> 
                 		<VerificationDate>2011-12</VerificationDate> 
@@ -172,19 +172,19 @@
                	</CNCollections>
                <CNLegalItems> 
                 	<CNLegalItem> 
-                		<DateFiled>2001-12</DateFiled>
+                		<DateFiled>2012-12</DateFiled>
                 		<CourtId> 
-							<CustomerNumber>DSAFJKDKI</CustomerNumber> 
-							<Name>Masha</Name> 
+							<CustomerNumber>JXC-100-0908765</CustomerNumber> 
+							<Name>Small Claims Court</Name> 
                 		</CourtId> 
-                		<CaseNumber>EOKFOF</CaseNumber> 
-                		<Status/> 
-                		<DateSatisfied>2001-12</DateSatisfied> 
-                		<Amount>912345.12</Amount> 
-                		<VerificationDate>2001-12</VerificationDate> 
-                		<Defendant>MAMA</Defendant> 
-                		<Plaintiff>SAldl</Plaintiff> 
-                		<LawyerNameAddress>Ontario</LawyerNameAddress> 
+                		<CaseNumber>EOKFOF212-212</CaseNumber> 
+                		<Status description="Completed"/> 
+                		<DateSatisfied>2013-01</DateSatisfied> 
+                		<Amount>9345.12</Amount> 
+                		<VerificationDate>2013-12</VerificationDate> 
+                		<Defendant>SUBJECT</Defendant> 
+                		<Plaintiff>Leons Furniture Wearhouse</Plaintiff> 
+                		<LawyerNameAddress>Rosenblat J.C., 200 Finch Ave, Toronto, ON M1B 5W6 </LawyerNameAddress> 
                 		<Narratives> 
                 			<Narrative/> 
                 		</Narratives>
@@ -193,16 +193,16 @@
                	</CNLegalItems>
                <CNSecuredLoans> 
                 	<CNSecuredLoan> 
-                		<DateFiled>2012-12</DateFiled> 
+                		<DateFiled>2010-02</DateFiled> 
                 		<CourtId> 
 							<CustomerNumber>FKSOLFK</CustomerNumber> 
-							<Name>Masha</Name> 
+							<Name>Sisley Honda</Name> 
                 		</CourtId> 
                 		<SecuredLoanCreditorId>
-							<NameAddressAndAmount>SADL2323</NameAddressAndAmount> 
+							<NameAddressAndAmount>TD Bank, 100 Steels Ave West, Toronto, ON M6K 7J8, $5000.00 </NameAddressAndAmount> 
 							<Industry/> 
 						</SecuredLoanCreditorId> 
-                		<MaturityDate>2001-12</MaturityDate> 
+                		<MaturityDate>2008-08</MaturityDate> 
                 		<Narratives> 
                 		 	<Narrative/> 
                 		</Narratives> 
@@ -210,7 +210,7 @@
                	</CNSecuredLoans>  
                <CNNonResponsibilityNotices> 
                 	<CNNonResponsibilityNotice> 
-						<DateReported>2001-12</DateReported> 
+						<DateReported>2009-12</DateReported> 
 						<Filer/> 
 						<Narratives> 
 							<Narrative/> 
@@ -220,14 +220,14 @@
                <CNMaritalItems> 
                 	<CNMaritalItem> 
 						<DivorceStatus/> 
-						<DateFiled>2001-12</DateFiled> 
+						<DateFiled>2007-04</DateFiled> 
                 		<CourtId> 
                 			<CustomerNumber>DFDF87834</CustomerNumber> 
-                			<Name>Masha</Name> 
+                			<Name>Vaughan Civic Court</Name> 
                 		</CourtId> 
                 		<CaseNumber>QWEORKEWQOR1</CaseNumber> 
                 		<SpouseName>Lara</SpouseName> 
-                		<VerificationDate>2001-12</VerificationDate> 
+                		<VerificationDate>2007-04</VerificationDate> 
                 		<Narratives> 
                 			<Narrative/> 
                 		</Narratives> 
@@ -238,7 +238,7 @@
                 		<DateReported>2011-12</DateReported> 
                 		<CreditorId> 
 							<CustomerNumber>321SAKJSKA</CustomerNumber> 
-							<Name>Masha</Name> 
+							<Name>Money Mart #165768</Name> 
 							<Telephone> 
 								<ParsedTelephone> 
 									<AreaCode>905</AreaCode> 
@@ -247,9 +247,9 @@
                 				</ParsedTelephone> 
            					</Telephone> 
                			</CreditorId> 
-                		<NSFAmount>123</NSFAmount> 
-                		<Details>Test details</Details> 
-                		<VerificationDate>2001-12</VerificationDate> 
+                		<NSFAmount>$1230</NSFAmount> 
+                		<Details>Short Term Loan</Details> 
+                		<VerificationDate>2011-12</VerificationDate> 
                 		<Narratives> 
                 			<Narrative/> 
                			</Narratives> 
@@ -257,18 +257,18 @@
                	</CNNSFs> 
 				<CNGarnishments> 
 					<CNGarnishment> 
-						<DateFiled>2001-12</DateFiled> 
+						<DateFiled>2011-04</DateFiled> 
 						<CourtId> 
 							<CustomerNumber>KSJDF23</CustomerNumber> 
-							<Name>Katia</Name> 
+							<Name>JJK LLC, 31-3231</Name> 
 						</CourtId> 
 						<CaseNumber>34234SADAS</CaseNumber> 
-						<Amount>2345.12</Amount> 
-						<DateSatisfied>2001-05</DateSatisfied> 
-						<VerificationDate>2001-12</VerificationDate> 
-						<Plaintiff>ASdldf</Plaintiff> 
-						<Garnishee>Wldfdfgv</Garnishee>
-						<Defendant>Slkopkd</Defendant> 
+						<Amount>$2345.12</Amount> 
+						<DateSatisfied>2012-05</DateSatisfied> 
+						<VerificationDate>2013-02</VerificationDate> 
+						<Plaintiff>RBC Financial Services</Plaintiff> 
+						<Garnishee>RBC Financial Services</Garnishee>
+						<Defendant>SUBJECT</Defendant> 
 						<Narratives> 
 							<Narrative/> 
 						</Narratives> 
@@ -288,9 +288,9 @@
                                 </ParsedTelephone>
                             </Telephone>
                         </CreditorId>
-                        <AccountNumber>124124124124124</AccountNumber>
-                        <HighCreditAmount>15000</HighCreditAmount>
-                        <BalanceAmount>3100</BalanceAmount>
+                        <AccountNumber>124123478123824</AccountNumber>
+                        <HighCreditAmount>1500</HighCreditAmount>
+                        <BalanceAmount>700</BalanceAmount>
                         <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
                         <MonthsReviewed>2</MonthsReviewed>
                         <DateOpened>2008-02</DateOpened>
@@ -306,7 +306,7 @@
                         <DateReported>2012-12</DateReported>
                         <CreditorId>
                             <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
+                            <Name>RBC MASTER CARDS</Name>
                             <Telephone>
                                 <ParsedTelephone>
                                     <AreaCode>800</AreaCode>
@@ -314,9 +314,9 @@
                                 </ParsedTelephone>
                             </Telephone>
                         </CreditorId>
-                        <AccountNumber>187187187187187</AccountNumber>
-                        <HighCreditAmount>12000</HighCreditAmount>
-                        <BalanceAmount>550</BalanceAmount>
+                        <AccountNumber>3458907645673456</AccountNumber>
+                        <HighCreditAmount>1000</HighCreditAmount>
+                        <BalanceAmount>550.00</BalanceAmount>
                         <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
                         <MonthsReviewed>2</MonthsReviewed>
                         <DateOpened>2007-02</DateOpened>
@@ -327,39 +327,13 @@
                             <Narrative code="EY" description="Bi-weekly payments"/>
                         </Narratives>
                     </CNTrade>
-                    <CNTrade>
-                        <DateReported>2012-12</DateReported>
-                        <CreditorId>
-                            <CustomerNumber>650ON00044</CustomerNumber>
-                            <Name>TD CREDIT CARDS</Name>
-                            <Telephone>
-                                <ParsedTelephone>
-                                    <AreaCode>800</AreaCode>
-                                    <Number>983-8472</Number>
-                                </ParsedTelephone>
-                            </Telephone>
-                        </CreditorId>
-                        <AccountNumber>156715671567156</AccountNumber>
-                        <HighCreditAmount>15000</HighCreditAmount>
-                        <BalanceAmount>657</BalanceAmount>
-                        <PastDueAmount xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                        <MonthsReviewed>1</MonthsReviewed>
-                        <DateOpened>2010-02</DateOpened>
-                        <DateLastActivityOrPayment>2012-12</DateLastActivityOrPayment>
-                        <PortfolioType code="R" description="Revolving"/>
-                        <PaymentRate code="1" description="Paid as agreed and up to date"/>
-                        <Narratives>
-                            <Narrative code="EX" description="Monthly payments"/>
-                            <Narrative code="AZ" description="Amount in h/c column is credit limit"/>
-                        </Narratives>
-                    </CNTrade>
                 </CNTrades>
 				<CNBankAccounts> 
                 	<CNBankAccount> 
                 		<DateReported>2012-12</DateReported> 
                 		<CreditorId> 
                 			<CustomerNumber>VAS123</CustomerNumber> 
-                			<Name>CIBC</Name> -
+                			<Name>CIBC</Name>
                 			<Telephone> 
                 				<ParsedTelephone> <AreaCode>905</AreaCode> 
                 					<Number>321-4569</Number> 
@@ -367,11 +341,11 @@
                 				</ParsedTelephone> 
                 			</Telephone> 
                 		</CreditorId> <AccountNumber>123654789</AccountNumber> 
-                		<FigureAmount>11587.23</FigureAmount> 
+                		<FigureAmount>$11587.23</FigureAmount> 
                 		<DateOpened>1997-12</DateOpened> 
                 		<Account Typecode="CHK" description="Checking"/>
                 		<Status/>
-                		<NumberOfNSF>2123</NumberOfNSF> 
+                		<NumberOfNSF>23</NumberOfNSF> 
                 		<Narratives> 
                 			<Narrative/> 
                 		</Narratives> 
@@ -389,11 +363,11 @@
                 			</Telephone> 
                 		</CreditorId>
 						<AccountNumber>123654789</AccountNumber> 
-                		<FigureAmount>11587.23</FigureAmount> 
+                		<FigureAmount>$11587.23</FigureAmount> 
                 		<DateOpened>1997-12</DateOpened> 
                 		<Account Typecode="SAV" description="Saving"/> 
                 		<Status/>
-                		<NumberOfNSF>2123</NumberOfNSF> 
+                		<NumberOfNSF>13</NumberOfNSF> 
                 		<Narratives> 
 							<Narrative/> 
                 		</Narratives> 
