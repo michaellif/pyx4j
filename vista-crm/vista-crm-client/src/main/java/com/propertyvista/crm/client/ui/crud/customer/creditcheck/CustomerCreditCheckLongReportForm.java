@@ -557,9 +557,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                         new DecoratorBuilder(inject(proto().status()), 15).labelWidth(15).layout(Layout.vertical).labelAlignment(Alignment.center)
                                 .componentAlignment(Alignment.center).build());
 
-                main.setWidget(1, 0, inject(proto().address(), new AddressSimpleEditor()));
-                main.getFlexCellFormatter().setColSpan(1, 0, col);
-
                 return main;
             }
         }

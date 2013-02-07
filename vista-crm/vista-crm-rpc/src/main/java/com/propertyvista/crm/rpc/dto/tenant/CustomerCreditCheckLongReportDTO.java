@@ -322,9 +322,6 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         @ToString(index = 3)
         IPrimitive<String> status();
-
-        // Not present
-        AddressSimple address();
     }
 
     IList<CollectionDTO> collections();
