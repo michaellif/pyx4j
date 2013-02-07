@@ -14,14 +14,10 @@
 package com.propertyvista.equifax;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -62,8 +58,9 @@ public class EquifaxLongReportModelMapper {
             CNConsumerCreditReportType report = efxResponse.getEfxReport().get(0).getCNConsumerCreditReports().getCNConsumerCreditReport().get(0);
 
             CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
-            dto.percentOfRentCovered().setValue(
-                    getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode(), score.getRejectCodes().getRejectCode().get(0).getDescription()));
+            if (score.getRejectCodes() != null && score.getRejectCodes().getRejectCode() != null && !score.getRejectCodes().getRejectCode().isEmpty()) {
+                dto.percentOfRentCovered().setValue(getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode()));
+            }
             if (report.getCNTrades() != null) {
                 List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
                 dto.totalAccounts().setValue(cnTrades.size());
@@ -436,29 +433,12 @@ public class EquifaxLongReportModelMapper {
         return total;
     }
 
-    private static BigDecimal getRejectCode(String codeString, String description) {
-        if ("01".equals(codeString)) {
-            return new BigDecimal(1);
+    private static BigDecimal getRejectCode(String codeString) {
+        if (EquifaxCreditCheck.riskCodeAmountPrcMapping.containsKey(codeString)) {
+            BigDecimal result = new BigDecimal(EquifaxCreditCheck.riskCodeAmountPrcMapping.get(codeString));
+            result = result.divide(new BigDecimal(100));
+            return result;
         }
-
-        Pattern p = Pattern.compile("\\d+%");
-        Matcher m = p.matcher(description);
-        List<BigDecimal> codeList = new ArrayList<BigDecimal>();
-        while (m.find()) {
-            try {
-                String code = m.group();
-                code = code.substring(0, code.length() - 1);
-                codeList.add(new BigDecimal(code).divide(new BigDecimal(100), RoundingMode.DOWN));
-            } catch (Exception e) {
-                log.error("Problem converting String to BigDecimal in efxResponse, cannot convert " + m.group() + " to BigDecimal", e);
-                throw new Error(e);
-            }
-        }
-        if (!codeList.isEmpty()) {
-            return codeList.get(0);
-        } else {
-            log.debug("No numbers found in reject code. Code: " + description + ". Returning 0%");
-            return BigDecimal.ZERO;
-        }
+        return BigDecimal.ZERO;
     }
 }

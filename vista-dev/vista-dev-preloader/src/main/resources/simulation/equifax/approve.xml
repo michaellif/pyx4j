@@ -190,14 +190,14 @@
                 			</CNCollection> 
                	</CNCollections>
                <CNLegalItems> 
-                	<CNLegalItem description="Completed"> 
+                	<CNLegalItem> 
                 		<DateFiled>2001-12</DateFiled>
                 		<CourtId> 
                 			<CustomerNumber>DSAFJKDKI</CustomerNumber> 
                 			<Name>Bob Smith</Name> 
                 		</CourtId> 
                 		<CaseNumber>EOKFOF</CaseNumber> 
-                		<Status/> 
+                		<Status description="Completed"/> 
                 		<DateSatisfied>2001-12</DateSatisfied> 
                 		<Amount>912345.12</Amount> 
                 		<VerificationDate>2001-12</VerificationDate> 
