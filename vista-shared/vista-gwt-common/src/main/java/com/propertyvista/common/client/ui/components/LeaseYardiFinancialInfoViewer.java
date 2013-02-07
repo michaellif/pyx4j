@@ -103,6 +103,7 @@ public class LeaseYardiFinancialInfoViewer extends CEntityViewer<LeaseYardiFinan
                                 FinancialTransactionsTheme.StyleName.FinancialTransactionEvenRow.name() : 
                                 FinancialTransactionsTheme.StyleName.FinancialTransactionOddRow.name()
                 );//@formatter:on
+                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyCell.name());
                 panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, FinancialTransactionsTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
                 if (amount != null) {
