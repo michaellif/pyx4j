@@ -52,7 +52,7 @@ BEGIN
         
         -- insurance_tenant_sure
         
-        ALTER TABLE insurance_tenant_sure ADD COLUMN payment_date INT;
+        ALTER TABLE insurance_tenant_sure ADD COLUMN payment_day INT;
         
         -- insurance_tenant_sure_report
         
@@ -77,6 +77,11 @@ BEGIN
         -- insurance_tenant_sure_transaction
         
         ALTER TABLE insurance_tenant_sure_transaction ADD COLUMN payment_due DATE;
+        
+        -- merchant_account 
+        
+        ALTER TABLE merchant_account ADD COLUMN status VARCHAR(50);
+        
         
         -- resident_portal_settings
         
@@ -128,6 +133,8 @@ BEGIN
                 CHECK ((reported_status) IN ('Active', 'Cancelled', 'New'));
         ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_status_e_ck 
                 CHECK ((status) IN ('AuthorizationRejected', 'AuthorizationReversal', 'Authorized', 'AuthorizedPaymentRejectedRetry', 'Cleared', 'Draft', 'PaymentError', 'PaymentRejected'));
+        ALTER TABLE merchant_account ADD CONSTRAINT merchant_account_status_e_ck 
+                CHECK ((status) IN ('Active', 'Cancelled', 'PendindAcknowledgement', 'PendindAppoval', 'Rejected'));
 
         
         /**
@@ -139,6 +146,13 @@ BEGIN
         **/
         
         CREATE INDEX resident_portal_settings$custom_html_owner_idx ON resident_portal_settings$custom_html USING btree (owner);
+        
+        /** Final touch - update _admin_.admin_pmc **/
+        
+        UPDATE  _admin_.admin_pmc
+        SET     schema_version = '1.0.7',
+                schema_data_upgrade_steps = NULL
+        WHERE   namespace = v_schema_name;
 
 END;
 $$
