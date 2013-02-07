@@ -33,6 +33,7 @@ import com.propertyvista.domain.person.Name;
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     @Caption(name = "% Rent Covered")
+    @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentOfRentCovered();
 
     // Our data - calculated in Service:

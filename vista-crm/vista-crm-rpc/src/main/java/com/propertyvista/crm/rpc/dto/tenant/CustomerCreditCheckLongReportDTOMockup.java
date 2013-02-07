@@ -22,7 +22,7 @@ public class CustomerCreditCheckLongReportDTOMockup {
     public static CustomerCreditCheckLongReportDTO createLongReport() {
         CustomerCreditCheckLongReportDTO report = EntityFactory.create(CustomerCreditCheckLongReportDTO.class);
 
-        report.percentOfRentCovered().setValue(new BigDecimal(1234.56));
+        report.percentOfRentCovered().setValue(new BigDecimal(1.23456));
 
         return report;
     }

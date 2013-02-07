@@ -14,6 +14,7 @@
 package com.propertyvista.equifax;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -390,8 +391,9 @@ public class EquifaxLongReportModelMapper {
 
     private static BigDecimal getRejectCode(String codeString, String description) {
         if (codeString.equals("01")) {
-            return new BigDecimal(100);
+            return new BigDecimal(1);
         }
+
         Pattern p = Pattern.compile("\\d+%");
         Matcher m = p.matcher(description);
         List<BigDecimal> codeList = new ArrayList<BigDecimal>();
@@ -399,13 +401,13 @@ public class EquifaxLongReportModelMapper {
             try {
                 String code = m.group();
                 code = code.substring(0, code.length() - 1);
-                codeList.add(new BigDecimal(code));
+                codeList.add(new BigDecimal(code).divide(new BigDecimal(100), RoundingMode.DOWN));
             } catch (Exception e) {
                 log.error("Problem converting String to BigDecimal in efxResponse, cannot convert " + m.group() + " to BigDecimal", e);
                 throw new Error(e);
             }
         }
-        if (codeList.size() == 1) {
+        if (!codeList.isEmpty()) {
             return codeList.get(0);
         } else {
             log.debug("No numbers found in reject code. Code: " + description + ". Returning 0%");
