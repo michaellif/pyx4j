@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,6 +13,7 @@
  */
 package com.propertyvista.ob.client.forms;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Clear;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
@@ -21,6 +22,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -42,11 +44,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 
 public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAccountCreationRequest> {
@@ -187,14 +191,18 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         Label termsAgreementLabel = new Label(i18n.tr("By clicking Sign Up, you are acknowledging that you have read and agree to our "));
         termsAgreementLabel.getElement().getStyle().setDisplay(Display.INLINE);
         termsAgreementShortcutPanel.add(termsAgreementLabel);
-        Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"));
+
+        Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"),
+                AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class));
         termsAnchor.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 onTermsOpenRequest();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
+
         termsAgreementShortcutPanel.add(termsAnchor);
         Label dot = new Label(".");
         dot.getElement().getStyle().setDisplay(Display.INLINE);

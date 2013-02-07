@@ -78,7 +78,8 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void openTerms() {
         try {
-            Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class), "new", null);
+            Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class), "new",
+                    "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
         } catch (Throwable popupBlocked) {
             AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountTerms());
         }
