@@ -89,10 +89,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                     participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
                 }
                 for (LeaseTermGuarantor participant : lease.currentTerm().version().guarantors()) {
                     participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
                     Persistence.service().persist(participant.leaseParticipant().customer().personScreening());
+                    Persistence.service().persist(participant.leaseParticipant().customer().personScreening().creditChecks());
                 }
 
                 ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);

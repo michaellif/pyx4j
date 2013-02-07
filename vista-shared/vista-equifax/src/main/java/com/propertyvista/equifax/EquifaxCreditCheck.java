@@ -15,6 +15,7 @@ package com.propertyvista.equifax;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -50,6 +51,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.EquifaxHttpClient;
 import com.propertyvista.equifax.request.EquifaxModelMapper;
@@ -66,7 +68,7 @@ public class EquifaxCreditCheck {
 
     private final static Map<String, CreditCheckResult> riskCodeMapping = new HashMap<String, CreditCheckResult>();
 
-    private final static Map<String, Integer> riskCodeAmountPrcMapping = new HashMap<String, Integer>();
+    final static Map<String, Integer> riskCodeAmountPrcMapping = new LinkedHashMap<String, Integer>();
 
     private final static Map<String, String> riskCodeOverrideDescription = new HashMap<String, String>();
 
@@ -108,7 +110,10 @@ public class EquifaxCreditCheck {
         riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
     }
 
-    public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber, Lease lease) {
+    public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber,
+    /* simulation data parameters */
+    Lease lease, LeaseTermParticipant<?> leaseParticipant) {
+
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
 
         if (ApplicationMode.isDevelopment()) {
@@ -117,7 +122,7 @@ public class EquifaxCreditCheck {
 
         EfxTransmit efxResponse;
         if (VistaSystemsSimulationConfig.getConfiguration().useEquifaxSimulator().getValue(Boolean.FALSE)) {
-            efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber, lease);
+            efxResponse = EquifaxSimulation.simulateResponce(requestMessage, customer, pcc, strategyNumber, lease, leaseParticipant);
         } else {
             try {
                 efxResponse = EquifaxHttpClient.execute(requestMessage);

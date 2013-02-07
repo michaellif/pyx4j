@@ -13,6 +13,7 @@
  */
 package com.propertyvista.equifax;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import ca.equifax.uat.from.CNConsumerCreditReportType;
@@ -29,7 +30,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.XmlCreator;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -38,8 +42,17 @@ public class EquifaxSimulation {
 
     private static ObjectFactory factory = new ObjectFactory();
 
+    private static class SimulationDefinition {
+
+        CreditCheckResult simulateCheckResult = null;
+
+        int simulateRiskPrc = 0;
+
+        String description;
+    }
+
     public static EfxTransmit simulateResponce(CNConsAndCommRequestType requestMessage, Customer customer, CustomerCreditCheck pcc, int strategyNumber,
-            Lease lease) {
+            Lease lease, LeaseTermParticipant<?> leaseParticipant) {
 
         EquifaxSimulatorConfig equifaxSimulatorConfig = TaskRunner.runInAdminNamespace(new Callable<EquifaxSimulatorConfig>() {
             @Override
@@ -50,20 +63,21 @@ public class EquifaxSimulation {
 
         EfxTransmit efxResponse;
 
+        SimulationDefinition simulationDefinition = createSimulationDefinition(lease, leaseParticipant);
+
         String xml = null;
-        int simDecision = (int) (lease.id().getValue().asLong() % 10) % 3;
-        switch (simDecision) {
-        case 0:
-            xml = equifaxSimulatorConfig.declineXml().getValue();
-            break;
-        case 1:
+        switch (simulationDefinition.simulateCheckResult) {
+        case Accept:
             xml = equifaxSimulatorConfig.approveXml().getValue();
             break;
-        case 2:
+        case Decline:
+            xml = equifaxSimulatorConfig.declineXml().getValue();
+            break;
+        case Review:
             xml = equifaxSimulatorConfig.moreInfoXml().getValue();
             break;
         default:
-            throw new Error("# % 3 = " + simDecision + " not working");
+            throw new IllegalArgumentException();
         }
 
         if (xml == null) {
@@ -72,29 +86,82 @@ public class EquifaxSimulation {
             efxResponse = XmlCreator.fromStorageXMl(xml);
         }
 
-        boolean riskCodeFound = false;
-        reportsLoop: for (EfxReportType efxReportType : efxResponse.getEfxReport()) {
-            for (CNConsumerCreditReportType creditReport : efxReportType.getCNConsumerCreditReports().getCNConsumerCreditReport()) {
-                for (CNScoreType score : creditReport.getCNScores().getCNScore()) {
-                    if (EquifaxConsts.scoringProductId_iDecisionPower.equals(score.getProductId())) {
-                        for (CodeType codeType : score.getRejectCodes().getRejectCode()) {
-                            if (codeType.getCode() != null) {
-                                riskCodeFound = true;
-                                break reportsLoop;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         appendCustomerInfo(efxResponse, customer);
 
-        if (!riskCodeFound) {
-            appendScore(efxResponse, pcc);
-        }
+        appendScore(efxResponse, simulationDefinition);
 
         return efxResponse;
+    }
+
+    private static SimulationDefinition createSimulationDefinition(Lease lease, LeaseTermParticipant<?> leaseParticipant) {
+
+        SimulationDefinition simulationDefinition = new SimulationDefinition();
+
+        boolean hasDependent = false;
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            if (tenant.role().getValue() == LeaseTermParticipant.Role.Dependent) {
+                hasDependent = true;
+                break;
+            }
+        }
+        boolean hasGuarantors = (lease.currentTerm().version().guarantors().size() != 0);
+        //
+        int sDecision = 0;
+        if (hasDependent) {
+            sDecision = 1;
+        } else if (hasGuarantors) {
+            sDecision = 2;
+        } else {
+            sDecision = 3;
+        }
+
+        switch (sDecision) {
+        case 1:
+            simulationDefinition.simulateCheckResult = CreditCheckResult.Accept;
+            simulationDefinition.simulateRiskPrc = 100;
+            simulationDefinition.description = "Accept - requested rent amount";
+            break;
+        case 2:
+            switch (leaseParticipant.role().getValue()) {
+            case Applicant:
+                simulationDefinition.simulateCheckResult = CreditCheckResult.Review;
+                simulationDefinition.simulateRiskPrc = 50;
+                simulationDefinition.description = "Approve rent for 50% of requested amount";
+                break;
+            case CoApplicant:
+                simulationDefinition.simulateCheckResult = CreditCheckResult.Review;
+                simulationDefinition.simulateRiskPrc = 30;
+                simulationDefinition.description = "Approve rent for 30% of requested amount";
+                break;
+            case Guarantor:
+                simulationDefinition.simulateCheckResult = CreditCheckResult.Accept;
+                simulationDefinition.simulateRiskPrc = 100;
+                simulationDefinition.description = "Accept - requested rent amount";
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
+            break;
+        case 3:
+            switch (leaseParticipant.role().getValue()) {
+            case Applicant:
+                simulationDefinition.simulateCheckResult = CreditCheckResult.Review;
+                simulationDefinition.simulateRiskPrc = 100;
+                simulationDefinition.description = "Accept - requested rent amount";
+                break;
+            case CoApplicant:
+                simulationDefinition.simulateCheckResult = CreditCheckResult.Decline;
+                simulationDefinition.description = "Decline applicant due to Bankruptcy";
+                break;
+            default:
+                throw new IllegalArgumentException();
+            }
+            break;
+        default:
+            throw new Error("Simulation Decision" + sDecision + " not designed");
+        }
+
+        return simulationDefinition;
     }
 
     private static void appendCustomerInfo(EfxTransmit efxResponse, Customer customer) {
@@ -114,24 +181,52 @@ public class EquifaxSimulation {
         creditReport.getCNHeader().getSubject().getSubjectName().setLastName(customer.person().name().lastName().getStringView());
     }
 
-    private static void appendScore(EfxTransmit efxResponse, CustomerCreditCheck pcc) {
+    private static void appendScore(EfxTransmit efxResponse, SimulationDefinition simulationDefinition) {
         CNConsumerCreditReportType creditReport = getOrCreateCreditReport(efxResponse);
 
-        CNScoreType score = factory.createCNScoreType();
-        creditReport.setCNScores(factory.createCNScoresType());
-        creditReport.getCNScores().getCNScore().add(score);
-        score.setProductId(EquifaxConsts.scoringProductId_iDecisionPower);
-
-        CodeType codeType = factory.createCodeType();
-        score.setRejectCodes(factory.createCNScoreTypeRejectCodes());
-        score.getRejectCodes().getRejectCode().add(codeType);
-
-        String riskCode = pcc.screening().version().currentAddress().suiteNumber().getValue();
-        if (riskCode == null) {
-            riskCode = "01";
+        CNScoreType scoreIDecision = null;
+        for (CNScoreType score : creditReport.getCNScores().getCNScore()) {
+            if (EquifaxConsts.scoringProductId_iDecisionPower.equals(score.getProductId())) {
+                scoreIDecision = score;
+            }
         }
+        if (scoreIDecision == null) {
+            scoreIDecision = factory.createCNScoreType();
+            creditReport.setCNScores(factory.createCNScoresType());
+            creditReport.getCNScores().getCNScore().add(scoreIDecision);
+            scoreIDecision.setProductId(EquifaxConsts.scoringProductId_iDecisionPower);
+        }
+        if (scoreIDecision.getRejectCodes() == null) {
+            scoreIDecision.setRejectCodes(factory.createCNScoreTypeRejectCodes());
+        }
+
+        CodeType codeType;
+        if (scoreIDecision.getRejectCodes().getRejectCode() == null) {
+            codeType = factory.createCodeType();
+            scoreIDecision.getRejectCodes().getRejectCode().add(codeType);
+        } else {
+            codeType = scoreIDecision.getRejectCodes().getRejectCode().get(0);
+        }
+
+        String riskCode = null;
+
+        if (simulationDefinition.simulateCheckResult == CreditCheckResult.Decline) {
+            riskCode = "B5"; // Bankruptcy
+        } else if (simulationDefinition.simulateCheckResult == CreditCheckResult.Accept) {
+            riskCode = "01";
+        } else {
+            String prevRiskCode = "01";
+            for (Map.Entry<String, Integer> me : EquifaxCreditCheck.riskCodeAmountPrcMapping.entrySet()) {
+                if (me.getValue() < simulationDefinition.simulateRiskPrc) {
+                    riskCode = prevRiskCode;
+                    break;
+                }
+                prevRiskCode = me.getKey();
+            }
+        }
+
         codeType.setCode(riskCode);
-        codeType.setDescription("Simulation reason Description");
+        codeType.setDescription(simulationDefinition.description);
     }
 
     private static CNConsumerCreditReportType getOrCreateCreditReport(EfxTransmit efxResponse) {

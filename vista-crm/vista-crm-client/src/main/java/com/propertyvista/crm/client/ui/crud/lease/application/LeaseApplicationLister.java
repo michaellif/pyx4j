@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,34 +39,35 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         setColumnDescriptors(//@formatter:off
             new Builder(proto().leaseId()).columnTitle(i18n.tr("Id")).build(),
             new Builder(proto().type()).build(),
-            
+
             new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
-            
+
             new Builder(proto().leaseApplication().status(), true).build(),
-            
+
             new Builder(proto().currentTerm().termFrom()).build(),
             new Builder(proto().currentTerm().termTo()).build(),
-            
+
             new Builder(proto().expectedMoveIn()).build(),
             new Builder(proto().expectedMoveOut(), false).build(),
             new Builder(proto().actualMoveIn(), false).build(),
             new Builder(proto().actualMoveOut(), false).build(),
             new Builder(proto().moveOutSubmissionDate(), false).build(),
-            
+
             new Builder(proto().creationDate(), false).build(),
-            
+
             new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).searchable(!VistaTODO.complextQueryCriteria).build(),
-            
+
             new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),
+            new Builder(proto().numberOfDepentands(), true).sortable(false).searchable(false).title(i18n.tr("Depentands")).build(),
             new Builder(proto().numberOfGuarantors(), true).sortable(false).searchable(false).title(i18n.tr("Guarantors")).build(),
-            
+
             //TODO make this work
             //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName(), false).build(),
             //new Builder(proto().currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName(), false).build(),
             new Builder(proto().currentTerm().version().tenants()).searchable(false).build()
-            
+
         );//@formatter:on
     }
 

@@ -48,6 +48,8 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApprovalDTO;
 import com.propertyvista.dto.LeaseApprovalDTO.SuggestedDecision;
@@ -169,10 +171,16 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
         pcc.transactionId().setValue(ScreeningPayments.preAuthorization(equifaxInfo));
 
+        // Need this for simulations
+        Lease lease = leaseParticipant.leaseTermV().holder().lease();
+        lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+
         boolean success = false;
         try {
             pcc = EquifaxCreditCheck.runCreditCheck(equifaxInfo, leaseParticipant.leaseParticipant().customer(), pcc, backgroundCheckPolicy.strategyNumber()
-                    .getValue(), leaseParticipant.leaseTermV().holder().lease());
+                    .getValue(), lease, leaseParticipant);
 
             // This is the business, we charge only when riskCode is returned
             success = !pcc.riskCode().isNull();
@@ -269,7 +277,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     private CustomerCreditCheckLongReportDTO updateCustomerCreditCheckLongReport(CustomerCreditCheckLongReportDTO report, CustomerCreditCheck ccc) {
 
-// Do not add non-Equifax data!         
+// Do not add non-Equifax data!
 
 //        Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
 //        Persistence.service().retrieveMember(ccc.screening().version().incomes(), AttachLevel.Attached);

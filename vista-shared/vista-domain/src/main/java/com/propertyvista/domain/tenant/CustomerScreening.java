@@ -39,8 +39,8 @@ import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.tenant.CustomerScreening.CustomerScreeningV;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 
 @DiscriminatorValue("CustomerScreening")
 public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV>, ApplicationDocumentHolder<IdentificationDocument> {
@@ -53,7 +53,7 @@ public interface CustomerScreening extends IVersionedEntity<CustomerScreeningV>,
     @JoinColumn
     Customer screene();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<CustomerCreditCheck> creditChecks();
 

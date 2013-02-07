@@ -135,11 +135,22 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             Persistence.service().retrieve(tenant);
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
-            if (tenant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
+            switch (tenant.role().getValue()) {
+            case Applicant:
                 dto.mainApplicant().set(tenant.leaseParticipant().customer());
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
-            } else if (tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
+                break;
+            case CoApplicant:
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
+                break;
+            case Dependent:
+                if (dto.numberOfDepentands().isNull()) {
+                    dto.numberOfDepentands().setValue(0);
+                }
+                dto.numberOfDepentands().setValue(dto.numberOfDepentands().getValue() + 1);
+                break;
+            case Guarantor:
+                break;
             }
         }
     }
