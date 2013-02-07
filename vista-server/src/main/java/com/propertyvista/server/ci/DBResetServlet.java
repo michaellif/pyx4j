@@ -100,11 +100,14 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Drop All Tables")
         clear,
 
+        @Translate("Drop PMC Tables and Preload one PMC")
+        resetPmc(true),
+
+        @Translate("Drop <b>Admin</b> and PMC Tables and Preload one PMC")
+        resetAdminAndPmc(true),
+
         @Translate("Preload this PMC")
         preloadPmc(true),
-
-        @Translate("Drop Tables and Preload one PMC")
-        resetPmc(true),
 
         @Translate("Preload this PMC : Mockup version  (~5 minutes)")
         preloadPmcWithMockup,
@@ -194,6 +197,8 @@ public class DBResetServlet extends HttpServlet {
                         h(out, "Usage:<br/><table>");
                         for (ResetType t : EnumSet.allOf(ResetType.class)) {
                             if (t.pmcParam) {
+                                h(out, "<tr><td>&nbsp;</td></tr>");
+
                                 h(out, "<tr><td>");
                                 h(out, "</td><td>", t.toString());
                                 h(out, "</td></tr>");
@@ -206,7 +211,7 @@ public class DBResetServlet extends HttpServlet {
                                     h(out, "?type=", t.name());
                                     h(out, "&pmc=", demoPmc.name());
 
-                                    h(out, "</a></td><td>", demoPmc.name(), t.toString());
+                                    h(out, "</a></td><td>", "<b>" + demoPmc.name() + "</b> &nbsp;", t.toString());
                                     h(out, "</td></tr>");
                                 }
                                 h(out, "<tr><td>&nbsp;");
@@ -236,7 +241,7 @@ public class DBResetServlet extends HttpServlet {
                             ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                             try {
                                 if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.allWithMockup,
-                                        ResetType.clear).contains(type)) {
+                                        ResetType.resetAdminAndPmc, ResetType.clear).contains(type)) {
                                     Validate.isTrue(!VistaDeployment.isVistaProduction(), "Destruction is disabled");
                                     SchedulerHelper.shutdown();
                                     RDBUtils.resetDatabase();
@@ -303,6 +308,7 @@ public class DBResetServlet extends HttpServlet {
                                 case addPmcMockupTest1:
                                 case preloadPmcWithMockup:
                                 case resetPmc:
+                                case resetAdminAndPmc:
                                 case preloadPmc: {
                                     String pmc = req.getParameter("pmc");
                                     if (pmc == null) {
