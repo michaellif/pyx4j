@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,7 +19,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.client.DefaultRecoverableAsyncCallback;
 
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcTermsView;
@@ -42,7 +42,7 @@ public class PmcTermsActivity extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.populate(i18n.tr("Loading..."));
         panel.setWidget(view);
-        service.getPmcAccountTerms(new DefaultAsyncCallback<String>() {
+        service.getPmcAccountTerms(new DefaultRecoverableAsyncCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
