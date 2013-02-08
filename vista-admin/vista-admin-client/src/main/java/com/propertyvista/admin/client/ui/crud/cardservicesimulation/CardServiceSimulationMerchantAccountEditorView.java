@@ -11,12 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.admin.rpc.services.sim;
+package com.propertyvista.admin.client.ui.crud.cardservicesimulation;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 
-public interface CardServiceSimulationTransactionCrudService extends AbstractCrudService<CardServiceSimulationTransaction> {
+public interface CardServiceSimulationMerchantAccountEditorView extends IEditorView<CardServiceSimulationMerchantAccount> {
 
 }

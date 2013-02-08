@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.client.activity.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationEditorView;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationCardEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.SimulationViewFactory;
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
-import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCrudService;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCardCrudService;
 
-public class CardServiceSimulationEditorActivity extends EditorActivityBase<CardServiceSimulation> {
+public class CardServiceSimulationCardEditorActivity extends EditorActivityBase<CardServiceSimulationCard> {
 
-    public CardServiceSimulationEditorActivity(CrudAppPlace place) {
-        super(place, SimulationViewFactory.instance(CardServiceSimulationEditorView.class), GWT
-                .<CardServiceSimulationCrudService> create(CardServiceSimulationCrudService.class), CardServiceSimulation.class);
+    public CardServiceSimulationCardEditorActivity(CrudAppPlace place) {
+        super(place, SimulationViewFactory.instance(CardServiceSimulationCardEditorView.class), GWT
+                .<CardServiceSimulationCardCrudService> create(CardServiceSimulationCardCrudService.class), CardServiceSimulationCard.class);
     }
 
 }

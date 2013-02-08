@@ -17,18 +17,18 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 
-public class CardServiceSimulationListerViewImpl extends ListerViewImplBase<CardServiceSimulation> implements CardServiceSimulationListerView {
+public class CardServiceSimulationMerchantAccountListerViewImpl extends ListerViewImplBase<CardServiceSimulationMerchantAccount> implements
 
-    private static class CardServiceSimulationLister extends ListerBase<CardServiceSimulation> {
+CardServiceSimulationMerchantAccountListerView {
+
+    private static class CardServiceSimulationLister extends ListerBase<CardServiceSimulationMerchantAccount> {
 
         public CardServiceSimulationLister() {
-            super(CardServiceSimulation.class, true, true);
+            super(CardServiceSimulationMerchantAccount.class, true, true);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().cardType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().number()).build(),
-                    new MemberColumnDescriptor.Builder(proto().expiryDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().terminalID()).build(),
                     new MemberColumnDescriptor.Builder(proto().balance()).build(),
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build()
             );//@formatter:off
@@ -36,7 +36,7 @@ public class CardServiceSimulationListerViewImpl extends ListerViewImplBase<Card
 
     }
 
-    public CardServiceSimulationListerViewImpl() {
+    public CardServiceSimulationMerchantAccountListerViewImpl() {
         setLister(new CardServiceSimulationLister());
     }
 

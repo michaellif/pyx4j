@@ -15,13 +15,13 @@ package com.propertyvista.admin.server.services.sim;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
-import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCrudService;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCardCrudService;
 
-public class CardServiceSimulationCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulation> implements CardServiceSimulationCrudService {
+public class CardServiceSimulationCardCrudServiceImpl extends AbstractCrudServiceImpl<CardServiceSimulationCard> implements CardServiceSimulationCardCrudService {
 
-    public CardServiceSimulationCrudServiceImpl() {
-        super(CardServiceSimulation.class);
+    public CardServiceSimulationCardCrudServiceImpl() {
+        super(CardServiceSimulationCard.class);
     }
 
     @Override

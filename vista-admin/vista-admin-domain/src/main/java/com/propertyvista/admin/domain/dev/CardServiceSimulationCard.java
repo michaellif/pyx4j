@@ -14,39 +14,61 @@
 package com.propertyvista.admin.domain.dev;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
-public interface CardServiceSimulationTransaction extends IEntity {
+public interface CardServiceSimulationCard extends IEntity {
 
     @Owner
-    @MemberColumn(notNull = true)
     @JoinColumn
-    CardServiceSimulationCard card();
+    CardServiceSimulationMerchantAccount merchant();
+
+    @ToString
+    IPrimitive<CreditCardType> cardType();
+
+    @ToString
+    IPrimitive<String> number();
+
+    @Owned
+    IList<CardServiceSimulationToken> tokens();
 
     @NotNull
-    @Format("#,##0.00")
+    @ToString(index = 2)
+    @Format("MM/yyyy")
+    @Caption(name = "Expiry Date")
+    @Editor(type = EditorType.monthyearpicker)
+    IPrimitive<LogicalDate> expiryDate();
+
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> amount();
+    @Format("#0.00")
+    IPrimitive<BigDecimal> balance();
 
     IPrimitive<String> responseCode();
 
-    IPrimitive<String> authorizationNumber();
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<CardServiceSimulationTransaction> transactions();
 
-    IPrimitive<Date> transactionDate();
 }

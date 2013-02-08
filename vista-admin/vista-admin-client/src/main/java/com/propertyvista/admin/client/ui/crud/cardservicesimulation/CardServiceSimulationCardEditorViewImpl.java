@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,12 +29,12 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 
-public class CardServiceSimulationEditorViewImpl extends AdminEditorViewImplBase<CardServiceSimulation> implements CardServiceSimulationEditorView {
+public class CardServiceSimulationCardEditorViewImpl extends AdminEditorViewImplBase<CardServiceSimulationCard> implements CardServiceSimulationCardEditorView {
 
     private static class CardServiceSimulationTokenTableFolder extends VistaTableFolder<CardServiceSimulationToken> {
 
@@ -72,14 +72,15 @@ public class CardServiceSimulationEditorViewImpl extends AdminEditorViewImplBase
 
     }
 
-    private static class CardServiceSimulationForm extends AdminEntityForm<CardServiceSimulation> {
+    private static class CardServiceSimulationForm extends AdminEntityForm<CardServiceSimulationCard> {
 
-        public CardServiceSimulationForm(IFormView<CardServiceSimulation> view) {
-            super(CardServiceSimulation.class, view);
+        public CardServiceSimulationForm(IFormView<CardServiceSimulationCard> view) {
+            super(CardServiceSimulationCard.class, view);
 
-            FormFlexPanel contentPanel = new FormFlexPanel("Card Service Simulation");
+            FormFlexPanel contentPanel = new FormFlexPanel("Cards Simulation");
 
             int row = -1;
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchant())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).build());
@@ -95,7 +96,7 @@ public class CardServiceSimulationEditorViewImpl extends AdminEditorViewImplBase
         }
     }
 
-    public CardServiceSimulationEditorViewImpl() {
+    public CardServiceSimulationCardEditorViewImpl() {
         super(AdminSiteMap.Administration.CardServiceSimulation.class);
         setForm(new CardServiceSimulationForm(this));
     }

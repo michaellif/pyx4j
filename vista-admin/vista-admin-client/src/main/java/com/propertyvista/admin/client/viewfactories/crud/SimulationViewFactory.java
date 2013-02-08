@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,10 +16,14 @@ package com.propertyvista.admin.client.viewfactories.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.IView;
 
-import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationEditorView;
-import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationEditorViewImpl;
-import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationListerView;
-import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationCardEditorView;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationCardEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationCardListerView;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationCardListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorView;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerView;
+import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionEditorView;
 import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionListerView;
@@ -30,14 +34,20 @@ public class SimulationViewFactory extends ViewFactoryBase {
     public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
 
         if (!map.containsKey(type)) {
-            if (type.equals(CardServiceSimulationListerView.class)) {
-                map.put(type, new CardServiceSimulationListerViewImpl());
-            } else if (type.equals(CardServiceSimulationEditorView.class)) {
-                map.put(type, new CardServiceSimulationEditorViewImpl());
+            if (type.equals(CardServiceSimulationCardListerView.class)) {
+                map.put(type, new CardServiceSimulationCardListerViewImpl());
+            } else if (type.equals(CardServiceSimulationCardEditorView.class)) {
+                map.put(type, new CardServiceSimulationCardEditorViewImpl());
+
             } else if (type.equals(CardServiceSimulationTransactionListerView.class)) {
                 map.put(type, new CardServiceSimulationTransactionListerViewImpl());
             } else if (type.equals(CardServiceSimulationTransactionEditorView.class)) {
                 map.put(type, new CardServiceSimulationTransactionEditorViewImpl());
+
+            } else if (type.equals(CardServiceSimulationMerchantAccountListerView.class)) {
+                map.put(type, new CardServiceSimulationMerchantAccountListerViewImpl());
+            } else if (type.equals(CardServiceSimulationMerchantAccountEditorView.class)) {
+                map.put(type, new CardServiceSimulationMerchantAccountEditorViewImpl());
             }
         }
 

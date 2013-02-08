@@ -104,7 +104,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
             folder.addNavigItem(new AdminSiteMap.Administration.SimulatedDataPreload());
             folder.addNavigItem(new AdminSiteMap.Administration.PadSimulation.PadSimFile());
-            folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation());
+
+            folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount());
+            folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard());
             folder.addNavigItem(new AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction());
 
             list.add(folder);

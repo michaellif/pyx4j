@@ -15,8 +15,8 @@ package com.propertyvista.admin.client.ui.crud.cardservicesimulation;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
 
-public interface CardServiceSimulationEditorView extends IEditorView<CardServiceSimulation> {
+public interface CardServiceSimulationCardEditorView extends IEditorView<CardServiceSimulationCard> {
 
 }

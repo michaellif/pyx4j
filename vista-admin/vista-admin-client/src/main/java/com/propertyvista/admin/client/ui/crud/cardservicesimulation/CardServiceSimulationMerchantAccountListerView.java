@@ -15,8 +15,8 @@ package com.propertyvista.admin.client.ui.crud.cardservicesimulation;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 
-public interface CardServiceSimulationListerView extends IListerView<CardServiceSimulation> {
+public interface CardServiceSimulationMerchantAccountListerView extends IListerView<CardServiceSimulationMerchantAccount> {
 
 }

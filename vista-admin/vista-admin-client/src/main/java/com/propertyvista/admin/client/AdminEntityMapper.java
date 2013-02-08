@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,7 +18,8 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.propertyvista.admin.client.resources.AdminImages;
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
@@ -41,7 +42,9 @@ public class AdminEntityMapper {
         register(Run.class, AdminSiteMap.Management.Run.class, DEFAULT_IMAGE);
         register(PadSimFile.class, AdminSiteMap.Administration.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
         register(PadSimBatch.class, AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
-        register(CardServiceSimulation.class, AdminSiteMap.Administration.CardServiceSimulation.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationMerchantAccount.class, AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,
+                DEFAULT_IMAGE);
+        register(CardServiceSimulationCard.class, AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
         register(CardServiceSimulationTransaction.class, AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
     }

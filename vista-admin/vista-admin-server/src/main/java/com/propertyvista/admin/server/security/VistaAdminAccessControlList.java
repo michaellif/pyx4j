@@ -18,7 +18,8 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulation;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.admin.domain.legal.LegalDocument;
 import com.propertyvista.admin.domain.legal.VistaTerms;
@@ -54,7 +55,8 @@ import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.SelectPmcListService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
-import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCrudService;
+import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationCardCrudService;
+import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationMerchantAccountCrudService;
 import com.propertyvista.admin.rpc.services.sim.CardServiceSimulationTransactionCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
@@ -123,17 +125,20 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
-        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCrudService.class));
-        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(CardServiceSimulation.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationTransactionCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationTransaction.class, EntityPermission.ALL));
+
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
         }
 
-        // let Onboarding API change their own user info and own password        
+        // let Onboarding API change their own user info and own password
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaAdminBehavior.OnboardingApi, new AdminUserAccountAccesRule(), AdminUserCredential.class);

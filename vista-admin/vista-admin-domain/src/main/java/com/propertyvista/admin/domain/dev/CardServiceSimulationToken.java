@@ -31,7 +31,7 @@ public interface CardServiceSimulationToken extends IEntity {
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
-    CardServiceSimulation card();
+    CardServiceSimulationCard card();
 
     IPrimitive<String> token();
 

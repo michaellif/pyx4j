@@ -151,7 +151,16 @@ public class AdminSiteMap implements SiteMap {
         }
 
         public static class CardServiceSimulation extends CrudAppPlace {
+
+            public static class CardServiceSimulationCard extends CrudAppPlace {
+
+            }
+
             public static class CardServiceSimulationTransaction extends CrudAppPlace {
+
+            }
+
+            public static class CardServiceSimulationMerchantAccount extends CrudAppPlace {
 
             }
         }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -31,8 +31,10 @@ import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorAc
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.auditrecords.AuditRecordsActivity;
-import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationEditorActivity;
-import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationListerActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationCardEditorActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationCardListerActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorActivity;
+import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerActivity;
 import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionEditorActivity;
 import com.propertyvista.admin.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionListerActivity;
 import com.propertyvista.admin.client.activity.crud.legal.VistaTermsDefaultActivity;
@@ -308,14 +310,14 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Simulation
-                    } else if (place instanceof AdminSiteMap.Administration.CardServiceSimulation) {
+                    } else if (place instanceof AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
-                            activity = new CardServiceSimulationEditorActivity((CrudAppPlace) place);
+                            activity = new CardServiceSimulationCardEditorActivity((CrudAppPlace) place);
                             break;
                         case lister:
-                            activity = new CardServiceSimulationListerActivity(place);
+                            activity = new CardServiceSimulationCardListerActivity(place);
                             break;
                         }
 
@@ -329,8 +331,18 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new CardServiceSimulationTransactionListerActivity(place);
                             break;
                         }
-                    }
 
+                    } else if (place instanceof AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                        case editor:
+                            activity = new CardServiceSimulationMerchantAccountEditorActivity((CrudAppPlace) place);
+                            break;
+                        case lister:
+                            activity = new CardServiceSimulationMerchantAccountListerActivity(place);
+                            break;
+                        }
+                    }
 // - Settings:
                 } else if (place instanceof AdminSiteMap.Settings) {
                     activity = new SettingsActivity(place);

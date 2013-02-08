@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-06
+ * Created on 2013-02-08
  * @author vlads
  * @version $Id$
  */
@@ -15,8 +15,6 @@ package com.propertyvista.admin.domain.dev;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -24,34 +22,20 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
-public interface CardServiceSimulation extends IEntity {
+public interface CardServiceSimulationMerchantAccount extends IEntity {
 
-    IPrimitive<CreditCardType> cardType();
-
-    IPrimitive<String> number();
-
-    @Owned
-    IList<CardServiceSimulationToken> tokens();
-
-    @NotNull
-    @ToString(index = 2)
-    @Format("MM/yyyy")
-    @Caption(name = "Expiry Date")
-    @Editor(type = EditorType.monthyearpicker)
-    IPrimitive<LogicalDate> expiryDate();
+    @ToString
+    IPrimitive<String> terminalID();
 
     @Editor(type = EditorType.money)
     @Format("#0.00")
@@ -61,6 +45,5 @@ public interface CardServiceSimulation extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<CardServiceSimulationTransaction> transactions();
-
+    ISet<CardServiceSimulationCard> cards();
 }

@@ -15,8 +15,8 @@ package com.propertyvista.admin.rpc.services.sim;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 
-public interface CardServiceSimulationTransactionCrudService extends AbstractCrudService<CardServiceSimulationTransaction> {
+public interface CardServiceSimulationMerchantAccountCrudService extends AbstractCrudService<CardServiceSimulationMerchantAccount> {
 
 }
