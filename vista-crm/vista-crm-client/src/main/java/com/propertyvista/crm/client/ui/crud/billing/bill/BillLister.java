@@ -42,14 +42,15 @@ public class BillLister extends ListerBase<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().billingPeriodStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().billingPeriodEndDate()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().dueDate()).build(),
-            
+         
+            new MemberColumnDescriptor.Builder(proto().bill().pastDueAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().currentAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().taxes()).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().bill().totalDueAmount()).build(),
             
             new MemberColumnDescriptor.Builder(proto().bill().billStatus()).build(),
             
+            new MemberColumnDescriptor.Builder(proto().bill().balanceForwardAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().paymentReceivedAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().depositRefundAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().immediateAccountAdjustments(),false).build(),
@@ -58,7 +59,6 @@ public class BillLister extends ListerBase<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().pendingAccountAdjustments(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().depositAmount(),false).build(),
             
-            new MemberColumnDescriptor.Builder(proto().bill().pastDueAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().serviceCharge(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()

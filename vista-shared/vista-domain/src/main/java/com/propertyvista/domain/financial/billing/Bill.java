@@ -173,7 +173,6 @@ public interface Bill extends IEntity {
      * pastDueAmount = previousBalanceAmount + paymentReceivedAmount + depositRefundAmount +
      * immediateAdjustments
      */
-
     @Caption(name = "Balance from last bill")
     @Editor(type = EditorType.money)
     @Format("#,##0.00")
