@@ -50,7 +50,7 @@ public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSureQuot
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                addDetailRecord(paymentBreakdownPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
+                addDetailRecord(paymentBreakdownPanel, ++row, quote.premium().getMeta().getCaption(), quote.premium().getValue());
 
                 for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());

@@ -36,7 +36,7 @@ public interface TenantSureQuoteDTO extends IEntity {
     TenantSureCoverageDTO coverage();
 
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> grossPremium();
+    IPrimitive<BigDecimal> premium();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> underwriterFee();

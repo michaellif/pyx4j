@@ -118,7 +118,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.details().liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
         insuranceTenantSure.details().contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
         insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
-        insuranceTenantSure.details().grossPremium().setValue(quote.grossPremium().getValue());
+        insuranceTenantSure.details().grossPremium().setValue(quote.premium().getValue());
         insuranceTenantSure.details().underwriterFee().setValue(quote.underwriterFee().getValue());
         for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
             insuranceTenantSure.details().taxes().add(tax);
@@ -269,7 +269,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.quote().coverage().deductible().setValue(insuranceTenantSure.details().deductible().getValue());
         status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.insuranceCertificate().inceptionDate().getValue());
 
-        status.quote().grossPremium().setValue(insuranceTenantSure.details().grossPremium().getValue());
+        status.quote().premium().setValue(insuranceTenantSure.details().grossPremium().getValue());
         status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
         status.quote().taxBreakdown().addAll(insuranceTenantSure.details().taxes());
         status.quote().totalMonthlyPayable().setValue(insuranceTenantSure.monthlyPayable().getValue());

@@ -33,7 +33,7 @@ public class MoneyComboBox extends FormattableCombo<BigDecimal> {
                 if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {
                     return i18n.tr("None");
                 } else {
-                    return NumberFormat.getFormat(i18n.tr("$#,##0")).format(value);
+                    return NumberFormat.getFormat(i18n.tr("CAD #,##0")).format(value);
                 }
             }
 

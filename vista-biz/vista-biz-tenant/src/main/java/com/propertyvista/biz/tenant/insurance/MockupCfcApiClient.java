@@ -44,7 +44,7 @@ public class MockupCfcApiClient implements ICfcApiClient {
     @Override
     public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
-        quote.grossPremium().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.premium().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.underwriterFee().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));

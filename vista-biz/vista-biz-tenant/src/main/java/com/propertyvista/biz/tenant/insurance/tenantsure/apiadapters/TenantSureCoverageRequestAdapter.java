@@ -80,7 +80,7 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setEmployeeCount(countNumberOfTenants(tenantSureClient.tenant().lease().currentTerm()));
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
-        optionQuote.setPolicyPeriod("1M");
+        optionQuote.setPolicyPeriod("12M");
         optionQuote.setOptionalExtras(getOptionalExtras(coverageRequest, tenantSureClient.tenant().lease().unit().building()));
 
         // quote from the CFC-API doc:

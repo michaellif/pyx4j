@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.pyx4j.gwt.server.IOUtils;
@@ -73,8 +72,7 @@ public class TenantSureReportsProcess implements PmcProcess {
             out = new FileOutputStream(new File(sftpDir, reportName));
             out.write(formater.getBinaryData());
 
-            // commit the changes of InsuranceTenantSureReport table that might have been updated during the report processing
-            Persistence.service().commit();
+            // TODO commit should be here and not in the end of the process facade method
         } catch (Throwable e) {
             System.err.println(e);
         } finally {

@@ -96,6 +96,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
             iterator.completeRetrieval();
         }
 
+        Persistence.service().commit();
     }
 
     @Override

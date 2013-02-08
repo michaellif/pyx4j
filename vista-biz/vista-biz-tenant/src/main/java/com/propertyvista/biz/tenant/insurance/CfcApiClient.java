@@ -15,6 +15,8 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -58,12 +60,12 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
-// TODO rename to CFC API ADAPTER
+// TODO rename to CFC API ADAPTER?
 public class CfcApiClient implements ICfcApiClient {
 
-    private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_CRAP = true;
+    private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_STUFF = true;
 
-    // TODO this monster need refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
+    // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
@@ -152,7 +154,7 @@ public class CfcApiClient implements ICfcApiClient {
         }
 
         TenantSureQuoteDTO tenantSureQuote = EntityFactory.create(TenantSureQuoteDTO.class);
-        if (ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_CRAP) {
+        if (ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_STUFF) {
             // THIS IS ACCORDING TO REAL LIFE EXPERIENCE:
             tenantSureQuote.quoteId().setValue(quoteResponse.getId());
         } else {
@@ -160,17 +162,25 @@ public class CfcApiClient implements ICfcApiClient {
             tenantSureQuote.quoteId().setValue(quoteResponse.getQuoteData().getQuoteId());
         }
 
-        tenantSureQuote.grossPremium().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()));
         tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
+        tenantSureQuote.premium().setValue(
+                TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()).divide(new BigDecimal(12), RoundingMode.HALF_UP));
 
+        // parse taxes
         for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
             InsuranceTenantSureTax tenantSureTax = EntityFactory.create(InsuranceTenantSureTax.class);
-            tenantSureTax.absoluteAmount().setValue(tax.getAbsoluteAmount());
+            tenantSureTax.absoluteAmount().setValue(tax.getAbsoluteAmount().divide(new BigDecimal(12), RoundingMode.HALF_UP));
             tenantSureTax.description().setValue(tax.getDescription());
             tenantSureTax.buinessLine().setValue(tax.getBusinessLine());
             tenantSureQuote.taxBreakdown().add(tenantSureTax);
         }
-        tenantSureQuote.totalMonthlyPayable().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getTotalPayable()));
+
+        BigDecimal total = tenantSureQuote.premium().getValue();
+        for (InsuranceTenantSureTax tenantSureTax : tenantSureQuote.taxBreakdown()) {
+            total = total.add(tenantSureTax.absoluteAmount().getValue());
+        }
+        // WARNING: quoteResponse.getTotalPayable() hold a value that should be ignored
+        tenantSureQuote.totalMonthlyPayable().setValue(total);
 
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         return tenantSureQuote;
