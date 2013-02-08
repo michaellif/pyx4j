@@ -1,20 +1,15 @@
 .vista-pmsite-contentWrap {
-	margin: 0px auto 0px;
-	width: 920px;
-	background: #fff;
-	padding: 0 20px 20px 20px;
+	background: url("images/content_bg.png") repeat-x scroll 0 0 #2F292A;
 }
 
 .vista-pmsite-content {
     margin: 0 auto;
-    margin-bottom:0;
-	font-size:0;
-	background-color: #FFFFFF;
+    padding: 0 19px;
+    width: 960px;
 }
 
 .infobox_header {
-	border-top: 1px solid #000000;
-	background: #fff;
+	border-top: 1px solid #E8E8E8;;
 	height: 30px;
 	padding: 5px 0;
 }
@@ -40,14 +35,12 @@
 }
 
 .banner_img {
-	border-top: 5px solid #000000;
+	background: url("images/banner.jpg") no-repeat center;
     height: 375px;
-    width: 920px;
-    margin-bottom: 30px;
+	padding: 10px 0;
 }
 
 .banner .infobox_header {
-	background: #fff;
 	height: 30px;
 	padding: 5px 0;
 }
@@ -92,11 +85,8 @@
 }
 
 .quickSearch .submit {
-	background: ${object1_100};
 	float: right;
 	overflow: hidden;
-	border: 2px solid ${object1_100};
-	
 }
 
 .wideGadgetBox.quickSearch .selectField {
@@ -105,8 +95,6 @@
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
-	background: #fff;
-	background-color: #FFFFFF;
 	font-size:13px;
 	width: 100%;
 }
@@ -128,7 +116,6 @@
 	width: 620px;
 	float: right;
 	position: relative;
-	background: ${bgC0lor_100};
 	display:inline-block;
 }
 
@@ -166,7 +153,6 @@
 
 .testimBox .infobox_content {
 	width: 255px;
-/*	height: 150px;*/
 	padding: 20px;
 	background: #CCCCCC;
 	font-family: monospace;
@@ -186,7 +172,7 @@
 }
 
 .newsBox .headline {
-	color: #000000;
+	color: #E8E8E8;
 	font-family: monospace;
 	font-weight: bold;
 	text-transform: uppercase;
@@ -197,9 +183,7 @@
 }
 
 .newsBox .text {
-	color: ${object2_100};
-	font-family: monospace;
-	font-size: 1em;
+	color: #E8E8E8;
     font-family: Arial, Helvetica, sans-serif;
  	font-size: 9pt;
 	line-height: 11pt;
@@ -212,7 +196,7 @@
 }
 
 .infobox_content .read_more {
-	color: ${object1_50};
+	color: #E8E8E8;
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
@@ -220,13 +204,11 @@
 
 .infobox_header .read_more {
 	color: #fff;
-	background: #000000;
 	padding: 7px;
 }
 
 .infobox_header_title {
-	font-family: monospace;
-    font-weight: normal;
+	color: #fff;
 	font-size: 14pt;
     display: inline-block;
 	margin: 0 20px 0 0;
@@ -253,7 +235,6 @@
 
 .address {
 	display: inline-block;
-	color: #000000;
 }
 
 .promoBox .infobox_content:first-child {
@@ -261,14 +242,14 @@
 }
 
 .promoBox .picture {
-	background:#fff;
+
 }
 
 .promoBox a .picture {
 }
 
 .promoBox a:hover + .address {
-	border-bottom: 3px solid #000000;
+	border-bottom: 3px solid #E8E8E8;;
 }
 .promoBox .citySelectionForm {
 	margin: 15px 0 10px 0;
