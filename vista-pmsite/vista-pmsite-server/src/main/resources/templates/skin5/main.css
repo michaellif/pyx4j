@@ -145,8 +145,8 @@ select {
 .navigation {
 	height: 60px;
 	position: absolute;
-	top: 68%;
-	left: 434px;
+	top: 75%;
+	left: 518px;
 	width: auto;
     /*background: ${object1_100}*/
 }
@@ -162,11 +162,11 @@ select {
 	 display: inline-block;
 	 zoom: 1;
 	*display: inline;
-     margin: 0;
+     margin: 0 10px;
 }
 
 .navigation ul li span {
-	font-size: 18px;
+	font-size: 17px;
 	/*border-top: 1px solid #000;*/
     border-collapse: collapse;
     color: #E8E8E8;
@@ -179,15 +179,15 @@ select {
 }
 
 .navigation ul li span:hover {
-	border-top: 4px solid #FA8D0C;
-    padding-top: 7px;
+	border-top: 3px solid #FA8D0C;
+    padding-top: 4px;
     cursor: pointer;
     color: #FA8D0C;
 }
 
 .navigation .active span {
-	border-top: 4px solid #fa8d0c;
-	padding-top: 7px;
+	border-top: 3px solid #fa8d0c;
+	padding-top: 4px;
 	color: #FA8D0C;
 }
 
@@ -390,15 +390,16 @@ ul.footer_locations li {
 	/*font-family: monospace;*/
 	text-transform: uppercase;
 	color: #FFFFFF;
-    font-size: 16pt;
+    font-size: 15pt;
     font-weight: normal;
 }
 .vista-pmsite-main .caption2 .rightControl {
 	height:25px;
 	margin:5px 0;
 	float:right;
-	color:${object2_30};
-	font-weight:bold;
+	/*color:${object2_30};*/
+	color: #d7ac3f;
+	font-size: 13pt;
 	text-transform:uppercase;
 	cursor:pointer;
 }
@@ -407,5 +408,5 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-sidebarWrap {
-	background-color: #fff;
+	/*background-color: #fff;*/
 }
