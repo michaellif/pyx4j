@@ -350,7 +350,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
-        // TODO send warning email (use the following methods for establishihng the proper email context 
+        // TODO send warning email (use the following methods for establishing the proper email context 
         //getTenantsEmail(tenantId);
         //getGracePeriodEndDate(insuranceTenantSure)
 
@@ -362,7 +362,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        // TODO send notification email (use the following methods for establishihng the proper email context 
+        // TODO send notification email (use the following methods for establishing the proper email context 
         //getTenantsEmail(tenantId);
         //getGracePeriodEndDate(insuranceTenantSure)
 
