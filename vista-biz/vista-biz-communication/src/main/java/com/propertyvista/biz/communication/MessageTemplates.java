@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -54,6 +55,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MessageTemplates {
 
@@ -269,6 +271,28 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createPaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
+
+        EmailTemplate emailTemplate = emailTemplatePaymentNotProcessed(gracePeriodEndDate);
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+
+        return email;
+    }
+
+    public static MailMessage createPaymentsResumedEmail() {
+
+        EmailTemplate emailTemplate = emailTemplatePaymentsResumed();
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {
@@ -380,5 +404,44 @@ public class MessageTemplates {
         resetUrl.append(AuthenticationService.AUTH_TOKEN_ARG).append("=").append(authToken);
 
         return resetUrl.toString();
+    }
+
+    private static EmailTemplate emailTemplatePaymentNotProcessed(LogicalDate gracePeriodEndDate) {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("15 Day Notice of Cancellation for Non-payment of Premium"));
+        try {
+            String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
+            body = body.replace("${periodEndDate}", gracePeriodEndDate.toString());
+            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true),
+                    PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
+            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+                body
+        )));//@formatter:on
+
+            return template;
+
+        } catch (IOException e) {
+            throw new UserRuntimeException("Unable to send TenantSure email");
+        }
+    }
+
+    public static EmailTemplate emailTemplatePaymentsResumed() {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("Payment Processing Resumed"));
+        try {
+            // TODO add email html
+            String body = IOUtils.getTextResource("email/tenantsure-payments-resumed.html");
+            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true),
+                    PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
+
+            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+                body
+        )));//@formatter:on
+
+            return template;
+
+        } catch (IOException e) {
+            throw new UserRuntimeException("Unable to send TenantSure email");
+        }
     }
 }

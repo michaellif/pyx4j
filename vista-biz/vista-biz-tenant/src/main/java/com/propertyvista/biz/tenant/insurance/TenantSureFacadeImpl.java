@@ -26,6 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,6 +36,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.admin.domain.tenantsure.TenantSureSubscribers;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -350,9 +352,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
-        // TODO send warning email (use the following methods for establishing the proper email context 
-        //getTenantsEmail(tenantId);
-        //getGracePeriodEndDate(insuranceTenantSure)
+        sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure));
 
         Persistence.service().commit();
     }
@@ -362,9 +362,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        // TODO send notification email (use the following methods for establishing the proper email context 
-        //getTenantsEmail(tenantId);
-        //getGracePeriodEndDate(insuranceTenantSure)
+        sendPaymentsResumedEmail(getTenantsEmail(tenantId));
 
         insuranceTenantSure.status().setValue(Status.Active);
         insuranceTenantSure.cancellation().setValue(null);
@@ -492,6 +490,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         gracePeriodEnd.setTime(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
         return new LogicalDate(gracePeriodEnd.getTime());
+    }
+
+    private void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
+        ServerSideFactory.create(CommunicationFacade.class).sendPaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate);
+    }
+
+    private void sendPaymentsResumedEmail(String tenantEmail) {
+        ServerSideFactory.create(CommunicationFacade.class).sendPaymentsResumedEmail(tenantEmail);
+
     }
 
 }

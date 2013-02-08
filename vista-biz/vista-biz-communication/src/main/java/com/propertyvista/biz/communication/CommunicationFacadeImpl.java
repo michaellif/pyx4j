@@ -15,6 +15,7 @@ package com.propertyvista.biz.communication;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
@@ -247,5 +248,37 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
+    }
+
+    @Override
+    public void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
+        if (disabled) {
+            return;
+        }
+
+        final MailMessage m = MessageTemplates.createPaymentNotProcessedEmail(gracePeriodEndDate);
+
+        m.setTo(tenantEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+
+    }
+
+    @Override
+    public void sendPaymentsResumedEmail(String tenantEmail) {
+        if (disabled) {
+            return;
+        }
+
+        final MailMessage m = MessageTemplates.createPaymentsResumedEmail();
+
+        m.setTo(tenantEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+
     }
 }
