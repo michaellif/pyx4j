@@ -107,6 +107,9 @@ public class AdminSiteMap implements SiteMap {
 
         public static class PmcPaymentPad extends CrudAppPlace {
         }
+
+        public static class TenantSurePreAuthorizedPayments extends CrudAppPlace {
+        }
     }
 
     public static class Administration extends AppPlace {

@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
 public interface TenantSureQuotationRequestParamsDTO extends IEntity {
@@ -37,7 +36,9 @@ public interface TenantSureQuotationRequestParamsDTO extends IEntity {
 
     IPrimitiveSet<BigDecimal> deductibleOptions();
 
-    IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
+    IPrimitive<String> preAuthorizedDebitAgreement();
+
+    TenantSurePersonalDisclaimerHolderDTO personalDisclaimerHolder();
 
     IList<DigitalSignature> digitalSignatures();
 

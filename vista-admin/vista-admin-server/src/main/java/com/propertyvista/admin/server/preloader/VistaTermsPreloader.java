@@ -36,6 +36,7 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         createTerms(Target.PmcCaledonTemplate, "PmcCaledonTemplateVistaTerms.html");
         createTerms(Target.PmcCaldedonSolePropetorshipSection, "PmcCaledonSoleProprietorshipVistaTerms.html");
         createTerms(Target.PmcPaymentPad, "PmcPaymentPadVistaTerms.html");
+        createTerms(Target.TenantSurePreAuthorizedPaymentsAgreement, "TenantSurePreAuthorizedPaymentsAgreement.html");
 
         return null;
     }

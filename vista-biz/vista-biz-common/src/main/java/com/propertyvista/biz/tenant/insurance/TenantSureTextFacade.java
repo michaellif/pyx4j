@@ -15,7 +15,13 @@ package com.propertyvista.biz.tenant.insurance;
 
 public interface TenantSureTextFacade {
 
+    /** not implemented: this is populated via gwt resource bundle */
+    @Deprecated
     String getPersonalDisclaimerText();
 
+    /** not implemented: this is populated via gwt resource bundle */
+    @Deprecated
     String getFaq();
+
+    String getPreAuthorizedAgreement();
 }

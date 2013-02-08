@@ -223,6 +223,8 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new AccountViewerActivity(crudPlace);
                             break;
                         }
+
+                        // TODO all these legal places should be mareged to one the type of legal terms should be arg of the place
                     } else if (place instanceof AdminSiteMap.Legal.PortalTerms) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -283,6 +285,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new VistaTermsViewerActivity(crudPlace);
                             break;
                         }
+                    } else if (place instanceof AdminSiteMap.Legal.TenantSurePreAuthorizedPayments) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new VistaTermsDefaultActivity(crudPlace, Target.TenantSurePreAuthorizedPaymentsAgreement);
+                            break;
+                        case editor:
+                            activity = new VistaTermsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new VistaTermsViewerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (place instanceof AdminSiteMap.Management.OnboardingMerchantAccounts) {
                         switch (crudPlace.getType()) {
                         case editor:

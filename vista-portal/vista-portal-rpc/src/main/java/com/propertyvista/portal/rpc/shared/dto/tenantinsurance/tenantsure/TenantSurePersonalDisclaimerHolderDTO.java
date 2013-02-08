@@ -13,11 +13,19 @@
  */
 package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
-
-import com.propertyvista.dto.LegalTermsDescriptorDTO;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantSurePersonalDisclaimerHolderDTO extends LegalTermsDescriptorDTO {
+public interface TenantSurePersonalDisclaimerHolderDTO extends IEntity {
+
+    IPrimitive<String> terms();
+
+    @NotNull
+    @Caption(name = "I agree")
+    IPrimitive<Boolean> isAgreed();
 
 }

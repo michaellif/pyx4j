@@ -30,12 +30,10 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
@@ -59,16 +57,11 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
-                quotationRequestParams.personalDisclaimerTerms().get(0).content().content()
-                        .setValue(TenantSureResources.INSTANCE.personalDisclaimer().getText());
 
                 InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);
 
-                TenantSurePersonalDisclaimerHolderDTO disclaimerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);
-                disclaimerHolder.set(quotationRequestParams.personalDisclaimerTerms().get(0).duplicate(TenantSurePersonalDisclaimerHolderDTO.class));
-
-                view.init(disclaimerHolder, quotationRequestParams, paymentMethod);
+                view.init(quotationRequestParams, paymentMethod);
 
                 panel.setWidget(view);
             }

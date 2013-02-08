@@ -43,8 +43,6 @@ import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.ptapp.IAgree;
-import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -102,17 +100,11 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
         params.deductibleOptions().addAll(getDeductibleOptions());
 
-        LegalTermsDescriptorDTO personalDisclaimerTerms = params.personalDisclaimerTerms().$();
-        personalDisclaimerTerms.content().localizedCaption().setValue(i18n.tr("Personal Disclaimer"));
         if (false) {
             // TODO right now this is filled on client from resources
-            personalDisclaimerTerms.content().content().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPersonalDisclaimerText());
+            params.personalDisclaimerHolder();
         }
-
-        IAgree agreeHolder = EntityFactory.create(IAgree.class);
-        agreeHolder.person().set(TenantAppContext.getCurrentUserCustomer().person().duplicate());
-        personalDisclaimerTerms.agrees().add(agreeHolder.duplicate(IAgree.class));
-        params.personalDisclaimerTerms().add(personalDisclaimerTerms);
+        params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
 
         callback.onSuccess(params);
 

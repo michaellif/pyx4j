@@ -19,12 +19,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.moveinwizardmockup.components.AgreeFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
@@ -69,9 +72,20 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
 
+        contentPanel.setH1(++row, 0, 1, i18n.tr("Personal Disclaimer Terms"));
         contentPanel.setWidget(++row, 0, personalDisclaimerHolder = new SimplePanel());
         contentPanel.setBR(++row, 0, 1);
-        contentPanel.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(isEditable())));
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isAgreed(), new CCheckBox())).build());
+        get(proto().isAgreed()).addValueValidator(new EditableValueValidator<Boolean>() {
+
+            @Override
+            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+                if (value != null && value != true) {
+                    return new ValidationError(component, i18n.tr("You must accept the personal disclaimer terms to continue"));
+                }
+                return null;
+            }
+        });
 
         return contentPanel;
     }
@@ -79,7 +93,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        HTMLPanel personalDisclaimer = new HTMLPanel(getValue().content().content().getValue());
+        HTMLPanel personalDisclaimer = new HTMLPanel(getValue().terms().getValue());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);

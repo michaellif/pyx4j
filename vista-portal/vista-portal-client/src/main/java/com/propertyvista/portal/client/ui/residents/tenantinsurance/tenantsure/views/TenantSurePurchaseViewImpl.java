@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -42,6 +43,7 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.f
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -84,6 +86,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private final StepDriver stepDriver;
 
+    private TenantSurePersonalDisclaimerHolderDTO personalDiscalmerHolder;
+
     public TenantSurePurchaseViewImpl() {
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
         viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
@@ -115,16 +119,22 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
-            InsurancePaymentMethod paymentMethod) {
+    public void init(TenantSureQuotationRequestParamsDTO quotationRequestParams, InsurancePaymentMethod paymentMethod) {
         tenantSureServiceUnavailable.setVisible(false);
 
         stepDriver.setVisible(true);
         stepDriver.reset();
 
-        personalDisclaimerForm.populate(disclaimerHolder);
+        personalDiscalmerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);
+        personalDiscalmerHolder.terms().setValue(TenantSureResources.INSTANCE.personalDisclaimer().getText());
+        personalDiscalmerHolder.isAgreed().setValue(false);
+        personalDisclaimerForm.populate(personalDiscalmerHolder);
+
         quoteRequestForm.setCoverageParams(quotationRequestParams);
+
         paymentMethodForm.populate(paymentMethod);
+        paymentMethodForm.setPreAuthorizedAgreement(quotationRequestParams.preAuthorizedDebitAgreement().getValue());
+
         setQuote(null);
     }
 
@@ -251,6 +261,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
                 personalDisclaimerForm.revalidate();
+                personalDisclaimerForm.setUnconditionalValidationErrorRendering(true);
                 if (personalDisclaimerForm.isValid()) {
                     callback.onSuccess(null);
                 } else {

@@ -13,6 +13,16 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.admin.domain.legal.LegalDocument;
+import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.server.jobs.TaskRunner;
+
 public class TenantSureTextFacadeImpl implements TenantSureTextFacade {
 
     @Override
@@ -25,6 +35,34 @@ public class TenantSureTextFacadeImpl implements TenantSureTextFacade {
         //@formatter:off        
         return "THIS IS FAQ";
         //@formatter:on
+    }
+
+    @Override
+    public String getPreAuthorizedAgreement() {
+        /// TODO needs refactoring and to join with the rest of stuff
+        String terms = TaskRunner.runInAdminNamespace(new Callable<String>() {
+            @Override
+            public String call() {
+                String result = null;
+                EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
+                criteria.eq(criteria.proto().target(), VistaTerms.Target.TenantSurePreAuthorizedPaymentsAgreement);
+                List<VistaTerms> list = Persistence.service().query(criteria);
+                if (!list.isEmpty()) {
+                    VistaTerms terms = list.get(0);
+                    for (LegalDocument doc : terms.version().document()) {
+                        if (doc.locale().getValue().getLanguage().startsWith("en")) {
+                            result = doc.content().getValue();
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+        });
+        if (terms == null) {
+            throw new RuntimeException("Terms not found");
+        }
+        return terms;
     }
 
 }

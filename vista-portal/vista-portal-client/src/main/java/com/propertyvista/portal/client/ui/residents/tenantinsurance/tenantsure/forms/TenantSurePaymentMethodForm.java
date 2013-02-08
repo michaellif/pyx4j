@@ -24,7 +24,6 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaymentMethod> {
 
@@ -51,16 +50,13 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         return EnumSet.of(PaymentType.CreditCard);
     }
 
+    public void setPreAuthorizedAgreement(String agreementHtml) {
+        legalTerms.setValue(agreementHtml);
+    }
+
     @Override
     protected void loadLegalTerms(PaymentType type) {
-        switch (type) {
-        case CreditCard:
-            legalTerms.setValue(TenantSureResources.INSTANCE.preAuthorizedPaymentDisclaimer().getText());
-            break;
-        default:
-            assert false : type.name() + " cannot be used for TenantSure!";
-            break;
-        }
+        // DO nothin, we set it via setPreAuthorizedAgreement()
     }
 
     @Override
