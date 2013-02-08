@@ -24,14 +24,19 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 
 public interface TenantSurePurchaseView extends IsWidget {
 
+    // TODO rename methods from "on" to action name...
     interface Presenter {
 
+        // TODO rename to requestQuote
         void onCoverageRequestChanged();
 
+        // TODO rename to populateCurrentAddressAsBillingAddress
         void onBillingAddressSameAsCurrentSelected();
 
+        // TODO rename to acceptQuoteAndPurchaseInsurance()
         void onQuoteAccepted();
 
+        // TODO rename acknowledgeInsurancePurchaseSuccess()
         void onPaymentProcessingSuccessAccepted();
 
         void cancel();
@@ -43,6 +48,9 @@ public interface TenantSurePurchaseView extends IsWidget {
     /** resets the view with new parameters */
     void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
             InsurancePaymentMethod initialPaymentMethod);
+
+    /** render view in the maintenance mode */
+    void setTenantSureOnMaintenance(String message);
 
     void setQuote(TenantSureQuoteDTO quote);
 
@@ -58,12 +66,11 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     TenantSureCoverageDTO getCoverageRequest();
 
-    /** @return <code>null</code> when there's no accepted quote, or accepted quote */
+    /** @return returns the quote that was selected by the view, or <code>null</code> when there's no accepted quote */
     TenantSureQuoteDTO getAcceptedQuote();
 
     InsurancePaymentMethod getPaymentMethod();
 
     void reportError(String message);
 
-    void setTenantSureOnMaintenance(String message);
 }

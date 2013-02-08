@@ -37,8 +37,8 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.themes.TenantInsuranceTheme;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
@@ -105,6 +105,9 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Button reinstateTenantSureButton;
 
     public TenantSureManagementViewImpl() {
+        TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
+        viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+        viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
 
         FlowPanel viewPanel = new FlowPanel();
 
@@ -112,7 +115,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         viewPanel.add(makeStatusDetailsPanel());
         viewPanel.add(makeActionsPanel());
 
-        initWidget(viewPanel);
+        viewDecorator.setContent(viewPanel);
+        initWidget(viewDecorator);
     }
 
     @Override
@@ -156,9 +160,6 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Widget makeGreetingPanel() {
         FlowPanel tenantSureGreetingPanel = new FlowPanel();
         tenantSureGreetingPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementGreetingPanel.name());
-
-        TenantSureLogo tenantSureLogo = new TenantSureLogo();
-        tenantSureGreetingPanel.add(tenantSureLogo);
 
         // TODO put this in a resource
         Label greeting = new Label(//@formatter:off

@@ -59,9 +59,10 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
-                InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
                 quotationRequestParams.personalDisclaimerTerms().get(0).content().content()
                         .setValue(TenantSureResources.INSTANCE.personalDisclaimer().getText());
+
+                InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);
 
                 TenantSurePersonalDisclaimerHolderDTO disclaimerHolder = EntityFactory.create(TenantSurePersonalDisclaimerHolderDTO.class);

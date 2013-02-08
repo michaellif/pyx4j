@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -28,6 +26,7 @@ import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.moveinwizardmockup.components.AgreeFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 
@@ -82,12 +81,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         super.onValueSet(populate);
         HTMLPanel personalDisclaimer = new HTMLPanel(getValue().content().content().getValue());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new PrivacyPolicyTermsDialog().show();
-            }
-        });
+        privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);
         personalDisclaimerHolder.setWidget(personalDisclaimer);
     }

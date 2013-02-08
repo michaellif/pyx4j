@@ -14,23 +14,17 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -41,118 +35,22 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
+import com.propertyvista.portal.client.themes.TenantSureTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
+// TODO refactor this one 
 public class TenantSurePurchaseViewImpl extends Composite implements TenantSurePurchaseView {
 
-    public static enum Styles implements IStyleName {
-        TSPurchaseViewSection, TSPurchaseViewNextStepButton, TSPurchaseViewCancelButton, TSPucrhaseViewMessageText, TSPurchaseViewError, TSUnavailableMessage;
-    }
-
-    private interface Step extends IsWidget {
-
-        void reset();
-
-        String getTitle();
-
-        void onProceedToNext(AsyncCallback<VoidSerializable> callback);
-
-        void setNextButton(Button next);
-
-    }
-
-    private class StepDriver extends Composite {
-
-        private final List<Step> steps;
-
-        private int currentStep = 0;
-
-        private final Button nextStepButton;
-
-        private final Anchor cancelButton;
-
-        public StepDriver(List<Step> steps) {
-            FlowPanel stepsPanel = new FlowPanel();
-            this.steps = steps;
-            for (Step step : steps) {
-                stepsPanel.add(step);
-            }
-
-            FlowPanel buttonsPanel = new FlowPanel();
-            buttonsPanel.addStyleName(Styles.TSPurchaseViewSection.name());
-            buttonsPanel.getElement().getStyle().setPaddingBottom(30, Unit.PX);
-            cancelButton = new Anchor(i18n.tr("Cancel"));
-            cancelButton.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.cancel();
-                }
-            });
-            cancelButton.addStyleName(Styles.TSPurchaseViewCancelButton.name());
-
-            buttonsPanel.add(cancelButton);
-            nextStepButton = new Button(i18n.tr("Buy TenantSure"), new Command() {
-                @Override
-                public void execute() {
-                    StepDriver.this.steps.get(currentStep).onProceedToNext(new AsyncCallback<VoidSerializable>() {
-
-                        @Override
-                        public void onSuccess(VoidSerializable result) {
-                            activateStep(currentStep + 1);
-                        }
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            // TODO display error
-                        }
-
-                    });
-                }
-            });
-            nextStepButton.addStyleName(Styles.TSPurchaseViewNextStepButton.name());
-            buttonsPanel.add(nextStepButton);
-
-            stepsPanel.add(buttonsPanel);
-            initWidget(stepsPanel);
-            reset();
-        }
-
-        public void reset() {
-            for (Step step : steps) {
-                step.reset();
-            }
-            activateStep(0);
-        }
-
-        private void activateStep(int stepNumber) {
-            currentStep = stepNumber;
-            for (Step step : steps) {
-                step.asWidget().setVisible(false);
-                step.setNextButton(nextStepButton);
-            }
-            steps.get(stepNumber).asWidget().setVisible(true);
-            if (stepNumber < steps.size() - 1) {
-                nextStepButton.setTextLabel(steps.get(stepNumber + 1).getTitle());
-                nextStepButton.setVisible(true);
-                nextStepButton.setEnabled(false);
-                cancelButton.setVisible(true);
-            } else {
-                nextStepButton.setVisible(false);
-                cancelButton.setVisible(false);
-            }
-        }
-
-    }
-
-    private static final I18n i18n = I18n.get(TenantSurePurchaseViewImpl.class);
+    static final I18n i18n = I18n.get(TenantSurePurchaseViewImpl.class);
 
     private Presenter presenter;
 
@@ -164,9 +62,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private Label pleaseFillOutTheFormMessage;
 
-    private TenantSureQuotationRequestForm quotationRequestForm;
+    private TenantSureQuotationRequestForm quoteRequestForm;
 
     private TenantSureQuoteViewer quoteViewer;
+
+    private TenantSureQuoteViewer paymentStepQuoteViewer;
 
     private TenantSurePaymentMethodForm paymentMethodForm;
 
@@ -176,56 +76,55 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private FormFlexPanel paymentStepPanel;
 
-    private StepDriver stepDriver;
-
     private Button acceptQuoteButton;
 
     protected AsyncCallback<VoidSerializable> paymentSucceededCallback;
 
     private final Label tenantSureServiceUnavailable;
 
+    private final StepDriver stepDriver;
+
     public TenantSurePurchaseViewImpl() {
+        TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
+        viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
+        viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+
         FormFlexPanel viewPanel = new FormFlexPanel();
         int row = -1;
 
-        TenantSureLogo logo = new TenantSureLogo();
-        logo.getElement().getStyle().setMarginTop(20, Unit.PX);
-        logo.getElement().getStyle().setMarginBottom(20, Unit.PX);
-        viewPanel.setWidget(++row, 0, logo);
-        viewPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        viewPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        viewPanel.setWidget(++row, 0, stepDriver = new StepDriver(Arrays.asList(//@formatter:off
-                makePersonalDisclaimerStep(),
-                makeQuotationRequestStep(),
-                makePaymentStep(),
-                makePaymentSucceededStep()
-        )));//@formatter:on
+        stepDriver = new StepDriver(Arrays.asList(//@formatter:off
+                        makePersonalDisclaimerStep(),
+                        makeQuotationRequestStep(),
+                        makePaymentStep(),
+                        makePaymentSucceededStep()),
+                new Command() {            
+                @Override
+                public void execute() {
+                    presenter.cancel();
+                }
+        });//@formatter:on
+        viewPanel.setWidget(++row, 0, stepDriver);
 
         tenantSureServiceUnavailable = new Label();
-        tenantSureServiceUnavailable.setStyleName(Styles.TSUnavailableMessage.name());
+        tenantSureServiceUnavailable.setStyleName(TenantSureTheme.StyleName.TSUnavailableMessage.name());
         tenantSureServiceUnavailable.setVisible(false);
         viewPanel.setWidget(++row, 0, tenantSureServiceUnavailable);
 
-        initWidget(viewPanel);
+        viewDecorator.setContent(viewPanel);
+        initWidget(viewDecorator);
     }
 
     @Override
     public void init(TenantSurePersonalDisclaimerHolderDTO disclaimerHolder, TenantSureQuotationRequestParamsDTO quotationRequestParams,
             InsurancePaymentMethod paymentMethod) {
         tenantSureServiceUnavailable.setVisible(false);
+
         stepDriver.setVisible(true);
         stepDriver.reset();
 
         personalDisclaimerForm.populate(disclaimerHolder);
-
-        // quote request params section
-        quotationRequestForm.setCoverageParams(quotationRequestParams);
-
-        // payment section        
+        quoteRequestForm.setCoverageParams(quotationRequestParams);
         paymentMethodForm.populate(paymentMethod);
-
-        // reset quote
         setQuote(null);
     }
 
@@ -243,14 +142,16 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void setQuote(TenantSureQuoteDTO quote) {
-        quoteViewer.setValue(quote);
-
         retrievingQuoteMessage.setVisible(false);
+        quoteViewer.setValue(quote);
+        paymentStepQuoteViewer.setValue(quote);
+
+        quoteViewer.setVisible(quote != null);
+
         boolean canAcceptQuote = quote != null && !quote.isNull() && quote.specialQuote().isNull();
         if (acceptQuoteButton != null) {
             acceptQuoteButton.setEnabled(canAcceptQuote);
         }
-        quoteViewer.setVisible(quote != null);
 
     }
 
@@ -268,7 +169,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public TenantSureCoverageDTO getCoverageRequest() {
-        return quotationRequestForm.getValue();
+        return quoteRequestForm.getValue();
     }
 
     @Override
@@ -283,10 +184,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void populatePaymentProcessingError(String errorReason) {
-        if (false) {
-            paymentProcessingErrorMessage.setText(errorReason);
-            paymentProcessingErrorMessage.setVisible(true);
-        }
         processingPaymentMessage.setVisible(false);
         MessageDialog.error(i18n.tr("Payment Failed"), errorReason);
     }
@@ -373,17 +270,17 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quotationRequestStepPanel = new FormFlexPanel();
         int qrpRow = -1;
         quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Coverage"));
-        quotationRequestForm = new TenantSureQuotationRequestForm();
-        quotationRequestForm.initContent();
-        quotationRequestForm.asWidget().addStyleName(Styles.TSPurchaseViewSection.name());
-        quotationRequestStepPanel.setWidget(++qrpRow, 0, quotationRequestForm);
+        quoteRequestForm = new TenantSureQuotationRequestForm();
+        quoteRequestForm.initContent();
+        quoteRequestForm.asWidget().addStyleName(TenantSureTheme.StyleName.TSPurchaseViewSection.name());
+        quotationRequestStepPanel.setWidget(++qrpRow, 0, quoteRequestForm);
 
         quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Quote"));
         FlowPanel quoteSection = new FlowPanel();
-        quoteSection.addStyleName(Styles.TSPurchaseViewSection.name());
+        quoteSection.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewSection.name());
 
         pleaseFillOutTheFormMessage = new Label();
-        pleaseFillOutTheFormMessage.addStyleName(Styles.TSPucrhaseViewMessageText.name());
+        pleaseFillOutTheFormMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
@@ -392,7 +289,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quoteSection.add(quoteViewer);
 
         retrievingQuoteMessage = new Label();
-        retrievingQuoteMessage.addStyleName(Styles.TSPucrhaseViewMessageText.name());
+        retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
         quoteSection.add(retrievingQuoteMessage);
 
@@ -403,13 +300,13 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         return new Step() {
 
             {
-                quotationRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
+                quoteRequestForm.addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
                         setQuote(null);
-                        pleaseFillOutTheFormMessage.setVisible(!quotationRequestForm.isValid());
-                        quotationRequestForm.revalidate();
-                        if (quotationRequestForm.getValidationResults().isValid()) {
+                        pleaseFillOutTheFormMessage.setVisible(!quoteRequestForm.isValid());
+                        quoteRequestForm.revalidate();
+                        if (quoteRequestForm.getValidationResults().isValid()) {
                             presenter.onCoverageRequestChanged();
                         }
                     }
@@ -424,7 +321,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void reset() {
-                quotationRequestForm.setVisited(false);
+                quoteRequestForm.setVisited(false);
                 pleaseFillOutTheFormMessage.setVisible(true);
                 quoteViewer.setValue(null);
                 quoteViewer.setVisible(false);
@@ -438,8 +335,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
-                quotationRequestForm.revalidate();
-                if (quotationRequestForm.isValid()) {
+                quoteRequestForm.revalidate();
+                if (quoteRequestForm.isValid()) {
                     callback.onSuccess(null);
                 } else {
                     MessageDialog.info(i18n.tr("Please fill out the form to continue"));
@@ -458,6 +355,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     private Step makePaymentStep() {
         int row = -1;
         paymentStepPanel = new FormFlexPanel();
+        paymentStepQuoteViewer = new TenantSureQuoteViewer();
+        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
+        paymentStepPanel.setWidget(++row, 0, paymentStepQuoteViewer);
 
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
         paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
@@ -470,13 +370,13 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         paymentStepPanel.setWidget(++row, 0, paymentMethodForm);
 
         processingPaymentMessage = new Label();
-        processingPaymentMessage.addStyleName(Styles.TSPucrhaseViewMessageText.name());
+        processingPaymentMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         processingPaymentMessage.setText(i18n.tr("Processing payment..."));
         paymentStepPanel.setWidget(++row, 0, processingPaymentMessage);
 
         paymentProcessingErrorMessage = new Label();
-        paymentProcessingErrorMessage.addStyleName(Styles.TSPucrhaseViewMessageText.name());
-        paymentProcessingErrorMessage.addStyleName(Styles.TSPurchaseViewError.name());
+        paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
+        paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewError.name());
 
         paymentProcessingErrorMessage.setText("");
         paymentStepPanel.setWidget(++row, 0, paymentProcessingErrorMessage);
@@ -507,14 +407,17 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             public void reset() {
                 processingPaymentMessage.setVisible(false);
                 paymentProcessingErrorMessage.setVisible(false);
-
                 paymentMethodForm.setVisited(false);
+                paymentStepQuoteViewer.setValue(null);
             }
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
                 if (paymentMethodForm.isAgreedToPreauthorizedPayments()) {
                     presenter.onQuoteAccepted();
+
+                    // save the callback to use it's 'onSuccess()' when we get acknowledgment
+                    // from the presenter that we've processed the payment and have bound the quote successfully
                     TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
                 } else {
                     MessageDialog.info(i18n.tr("You must accept the Pre-Authorized Payments Agreement in order to proceed!"));
@@ -541,7 +444,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         finishStepPanel.getElement().getStyle().setHeight(10., Unit.EM);
 
         Label label = new Label();
-        label.addStyleName(Styles.TSPucrhaseViewMessageText.name());
+        label.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         label.setText(i18n.tr("Payment Processed Successfuly: an email with your insurance policy has been sent to your email."));
         finishStepPanel.add(label);
 

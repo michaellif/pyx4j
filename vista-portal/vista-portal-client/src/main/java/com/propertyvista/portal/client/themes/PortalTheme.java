@@ -29,18 +29,15 @@ import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
+import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 
 public class PortalTheme extends VistaTheme {
@@ -174,6 +171,7 @@ public class PortalTheme extends VistaTheme {
         addTheme(new TransactionHistoryViewerTheme());
         addTheme(new LandingPagesTheme());
         addTheme(new TenantInsuranceTheme());
+        addTheme(new TenantSureTheme());
 
         initTenantInsuranceStyles(); // TODO move this to a theme class
     }
@@ -268,6 +266,7 @@ public class PortalTheme extends VistaTheme {
 
     private void initTenantInsuranceStyles() {
 
+        // TODO move to TenantDashboardTheme?
         // Dashboard ******************************************************************************************************************************************
         {
             Style style = new Style("." + TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
@@ -350,75 +349,6 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("width", "100%");
             style.addProperty("text-align", "center");
             style.addProperty("padding-top", "0.5em");
-            addStyle(style);
-        }
-
-        // Purchase Tenent Sure View
-        {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewSection.name());
-            style.addProperty("margin-right", "20px");
-            style.addProperty("margin-left", "20px");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPucrhaseViewMessageText.name());
-            style.addProperty("margin-right", "auto");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("text-align", "center");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewSection.name());
-            style.addProperty("margin-right", "20px");
-            style.addProperty("margin-left", "20px");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewNextStepButton.name());
-            style.addProperty("float", "right");
-            style.addProperty("margin-right", "20px");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TenantSurePurchaseViewImpl.Styles.TSPurchaseViewCancelButton.name());
-            style.addProperty("float", "right");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + TenantSureResources.PrivacyPolicyStyles.TenantSurePrivacyPolicySection.name());
-            style.addProperty("margin-bottom", "20px");
-            addStyle(style);
-        }
-
-        // TenantSure Faq Styles
-        {
-            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqQnA.name());
-            style.addProperty("margin-bottom", "20px");
-            addStyle(style);
-        }
-        {
-            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqQ.name());
-            style.addProperty("font-weight", "bold");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + TenantSureResources.FaqStyles.TenantSureFaqA.name());
-            style.addProperty("text-align", "justify");
-            addStyle(style);
-        }
-
-        // TenantSure about View
-        {
-            Style style = new Style("." + TenantSureAboutViewImpl.Styles.TenantSureAboutContactInfo.name());
-            style.addProperty("marign-left", "auto");
-            style.addProperty("marign-right", "auto");
-            style.addProperty("padding-left", "20px");
-            style.addProperty("padding-right", "20px");
-            style.addProperty("padding-top", "20px");
-            style.addProperty("text-align", "center");
             addStyle(style);
         }
 
