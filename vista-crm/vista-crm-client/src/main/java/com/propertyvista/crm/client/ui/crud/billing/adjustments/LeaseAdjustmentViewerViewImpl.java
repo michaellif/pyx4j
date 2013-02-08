@@ -53,6 +53,7 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
         super.populate(value);
 
         setActionVisible(submitAction, value.status().getValue() != Status.submited);
+        setActionHighlighted(submitAction, value.status().getValue() != Status.submited);
 
         // enable editing for draft items only:
         setEditingVisible(value.status().getValue() == Status.draft);
