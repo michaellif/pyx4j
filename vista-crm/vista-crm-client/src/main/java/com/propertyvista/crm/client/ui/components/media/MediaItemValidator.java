@@ -31,9 +31,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
         }
 
         boolean valid = true;
-        if (value.type().isNull()) {
-            valid = false;
-        } else {
+        if (!value.type().isNull()) {
             switch (value.type().getValue()) {
             case file:
                 valid = !value.file().isNull();

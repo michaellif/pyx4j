@@ -163,10 +163,9 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                     }
                 });
 
-                get(proto().youTubeVideoID()).addValueValidator(new YouTubeVideoIdValidator());
-
                 // Validate media completeness:
                 addValueValidator(new MediaItemValidator());
+                get(proto().youTubeVideoID()).addValueValidator(new YouTubeVideoIdValidator());
             }
         }
 

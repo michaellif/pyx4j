@@ -91,9 +91,4 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
         return panel;
     }
-
-    private ComplexViewerView getParentComplexViewerView() {
-        return (ComplexViewerView) getParentView();
-    }
-
 }
