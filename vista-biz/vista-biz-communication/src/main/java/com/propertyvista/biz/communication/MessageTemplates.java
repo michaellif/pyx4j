@@ -293,6 +293,16 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createOnlinePaymentSetupCompletedEmail(String userName) {
+        EmailTemplate emailTemplate = emailOnlinePaymentSetupCompleted(userName);
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {
@@ -431,9 +441,6 @@ public class MessageTemplates {
         try {
             // TODO add email html
             String body = IOUtils.getTextResource("email/tenantsure-payments-resumed.html");
-            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true),
-                    PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
-
             template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
                 body
         )));//@formatter:on
@@ -444,4 +451,23 @@ public class MessageTemplates {
             throw new UserRuntimeException("Unable to send TenantSure email");
         }
     }
+
+    private static EmailTemplate emailOnlinePaymentSetupCompleted(String userName) {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("Payment Processing Resumed"));
+        try {
+            // TODO add email html
+            String body = IOUtils.getTextResource("email/online-payment-setup-completed.html");
+            body = body.replace("${userName}", userName);
+            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+                body
+        )));//@formatter:on
+
+            return template;
+
+        } catch (IOException e) {
+            throw new UserRuntimeException("Unable to send TenantSure email");
+        }
+    }
+
 }

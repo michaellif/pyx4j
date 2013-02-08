@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -27,6 +28,7 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.domain.legal.VistaTerms.Target;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
@@ -57,6 +59,11 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     @ServiceExecution(waitCaption = "Submitting...")
     public void finish(AsyncCallback<VoidSerializable> callback, OnlinePaymentSetupDTO editableEntity) {
         callback.onSuccess(null);
+
+        // TODO get current user name and email, pass it to CommunicationFacade
+        String userName = "";
+        String userEmail = "";
+        ServerSideFactory.create(CommunicationFacade.class).sendOnlinePaymentSetupCompletedEmail(userName, userEmail);
     }
 
     @Override

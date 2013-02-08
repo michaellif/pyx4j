@@ -281,4 +281,19 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
 
     }
+
+    @Override
+    public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
+        if (disabled) {
+            return;
+        }
+
+        final MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
+
+        m.setTo(userEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
 }

@@ -63,6 +63,8 @@ public interface CommunicationFacade {
 
     void sendPaymentsResumedEmail(String tenantEmail);
 
+    void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
+
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
