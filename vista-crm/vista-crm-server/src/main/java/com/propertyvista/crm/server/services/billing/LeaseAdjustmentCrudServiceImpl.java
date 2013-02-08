@@ -22,10 +22,12 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 
 public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<LeaseAdjustment> implements LeaseAdjustmentCrudService {
@@ -68,10 +70,14 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
 
     @Override
     public void submitAdjustment(AsyncCallback<LeaseAdjustment> callback, Key entityId) {
-        LeaseAdjustment entity = Persistence.service().retrieve(LeaseAdjustment.class, entityId);
-        entity.status().setValue(Status.submited);
-        Persistence.service().merge(entity);
+        LeaseAdjustment adjustment = Persistence.service().retrieve(LeaseAdjustment.class, entityId);
+        adjustment.status().setValue(Status.submited);
+        Persistence.service().merge(adjustment);
         Persistence.service().commit();
+
+        if (adjustment.executionType().getValue() == ExecutionType.immediate) {
+            ServerSideFactory.create(ARFacade.class).postImmediateAdjustment(adjustment);
+        }
 
         retrieve(callback, entityId, RetrieveTraget.View);
     }
