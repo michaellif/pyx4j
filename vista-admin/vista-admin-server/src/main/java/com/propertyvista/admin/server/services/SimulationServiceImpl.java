@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.admin.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.admin.rpc.SimulationDTO;
 import com.propertyvista.admin.rpc.services.SimulationService;
@@ -53,6 +54,11 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         result.equifax().set(Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class)));
 
+        result.cardService().set(Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class)));
+        if (result.cardService().responseType().isNull()) {
+            result.cardService().responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
+        }
+
         callback.onSuccess(result);
     }
 
@@ -70,6 +76,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         VistaSystemsSimulationConfig.setConfiguration(entity.systems());
 
         Persistence.service().persist(entity.equifax());
+        Persistence.service().persist(entity.cardService());
         Persistence.service().commit();
 
         callback.onSuccess(entity.getPrimaryKey());

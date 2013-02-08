@@ -13,11 +13,16 @@
  */
 package com.propertyvista.admin.client.ui.crud.simulation;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.domain.dev.CardServiceSimulatorConfig;
+import com.propertyvista.admin.domain.dev.CardServiceSimulatorConfig.SimpulationType;
 import com.propertyvista.admin.rpc.SimulationDTO;
 
 public class SimulationForm extends AdminEntityForm<SimulationDTO> {
@@ -31,6 +36,11 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
         addTab(createCaledonTab());
         addTab(createEquifaxTab());
         addTab(createOnboardingTab());
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        updatecardServiceVisibility();
     }
 
     private FormFlexPanel createGeneralTab() {
@@ -50,12 +60,49 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
     }
 
     private FormFlexPanel createCaledonTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Caledon PAD"));
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Caledon (Payments)"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator()), 5).build());
 
+        content.setH2(++row, 0, 1, i18n.tr("Credit Cards"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5).build());
+        // TODO This should be in separate server/separate forms
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseType()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseCode()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseHttpCode()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseText()), 5).build());
+
+        get(proto().cardService().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<SimpulationType> event) {
+                updatecardServiceVisibility();
+            }
+
+        });
+
         return content;
+    }
+
+    private void updatecardServiceVisibility() {
+        get(proto().cardService().responseCode()).setVisible(false);
+        get(proto().cardService().responseText()).setVisible(false);
+        get(proto().cardService().responseHttpCode()).setVisible(false);
+
+        switch (getValue().cardService().responseType().getValue()) {
+        case RespondWithCode:
+            get(proto().cardService().responseCode()).setVisible(true);
+            break;
+        case RespondWithText:
+            get(proto().cardService().responseText()).setVisible(true);
+            break;
+        case RespondWithHttpCode:
+            get(proto().cardService().responseHttpCode()).setVisible(true);
+            break;
+        default:
+            break;
+        }
     }
 
     private FormFlexPanel createEquifaxTab() {

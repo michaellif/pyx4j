@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 
+import com.propertyvista.admin.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.admin.dto.VistaSystemsSimulationConfigDTO;
 
@@ -37,4 +38,7 @@ public interface SimulationDTO extends IEntity {
     VistaSystemsSimulationConfigDTO systems();
 
     EquifaxSimulatorConfig equifax();
+
+    // TODO This should be in separate server/separate forms
+    CardServiceSimulatorConfig cardService();
 }

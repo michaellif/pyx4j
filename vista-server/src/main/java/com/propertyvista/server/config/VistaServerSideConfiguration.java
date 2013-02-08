@@ -173,6 +173,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public String getCardServiceSimulatorUrl() {
+        return "http://" + "admin" + getApplicationURLNamespace() + "o/" + "CardServiceSimulation";
+    }
+
+    @Override
     public String getDefaultBaseURLvistaOnboarding() {
         String base = getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace();
         if (isAppsContextlessDepoyment()) {

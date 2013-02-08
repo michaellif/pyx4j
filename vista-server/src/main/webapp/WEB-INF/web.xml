@@ -261,6 +261,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CardServiceSimulationServlet</servlet-name>
+        <servlet-class>com.propertyvista.admin.server.services.sim.CardServiceSimulationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CardServiceSimulationServlet</servlet-name>
+        <url-pattern>/o/CardServiceSimulation</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>VistaDevSessionServlet</servlet-name>
         <servlet-class>com.propertyvista.server.security.openId.VistaDevSessionServlet</servlet-class>
     </servlet>

@@ -193,4 +193,9 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         return null;
     }
 
+    @Override
+    public String getCardServiceSimulatorUrl() {
+        return null;
+    }
+
 }

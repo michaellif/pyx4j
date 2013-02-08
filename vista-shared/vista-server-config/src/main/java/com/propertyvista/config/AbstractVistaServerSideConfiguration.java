@@ -85,6 +85,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
      */
     public abstract String getDefaultBaseURLvistaOnboarding();
 
+    public abstract String getCardServiceSimulatorUrl();
+
     public abstract String getCaledonCompanyId();
 
     public abstract File getCaledonInterfaceWorkDirectory();

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -34,9 +34,12 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.caledon.dev.DevSSLProtocolSocketFactory;
 
@@ -58,10 +61,16 @@ public class CaledonHttpClient {
 
         String url;
 
-        if (useTestServer) {
-            url = urlTests;
+        boolean useCardServiceSimulator = VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().getValue(Boolean.FALSE);
+
+        if (useCardServiceSimulator) {
+            url = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCardServiceSimulatorUrl();
         } else {
-            url = urlProd;
+            if (useTestServer) {
+                url = urlTests;
+            } else {
+                url = urlProd;
+            }
         }
 
         GetMethod httpMethod = new GetMethod(url);
@@ -74,13 +83,16 @@ public class CaledonHttpClient {
         }
 
         HttpClient httpClient = new HttpClient();
-        ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
-        if (proxy != null) {
-            log.debug("use caledon proxy {}", proxy.getHost());
-            httpClient.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
-            if (proxy.getUser() != null) {
-                Credentials proxyCreds = new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword());
-                httpClient.getState().setProxyCredentials(AuthScope.ANY, proxyCreds);
+
+        if (!useCardServiceSimulator) {
+            ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
+            if (proxy != null) {
+                log.debug("use caledon proxy {}", proxy.getHost());
+                httpClient.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
+                if (proxy.getUser() != null) {
+                    Credentials proxyCreds = new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword());
+                    httpClient.getState().setProxyCredentials(AuthScope.ANY, proxyCreds);
+                }
             }
         }
 
@@ -167,7 +179,8 @@ public class CaledonHttpClient {
                 if (nameAndValue.length == 2) {
                     values.put(nameAndValue[0], nameAndValue[1]);
                 } else {
-                    log.warn("Can't pars argument {}", nameValues[i]);
+                    log.warn("Can't pars argument '{}'", nameValues[i]);
+                    throw new PaymentProcessingException("invalid Caledon response");
                 }
             }
         }
