@@ -53,9 +53,9 @@ public class PortalSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
-    public static final String RESIDENT_INSERTION_ID = "vista.resident";
+    public static final String RESIDENT_INSERTION_ID = "residentInsert";
 
-    public static final String TOP_RIGHT_INSERTION_ID = "vista.siteAuth";
+    public static final String TOP_RIGHT_INSERTION_ID = "siteAuthInsert";
 
     public PortalSite() {
         super("vista-portal", PortalSiteMap.class, new PortalSiteDispatcher());

@@ -122,20 +122,21 @@ select {
 	line-height:80px;
 }
 
-#vista.siteAuth {
+#siteAuthInsert {
 	float:right;
 	margin:10px;
 }
-#vista.siteAuth .greeting {
+#siteAuthInsert .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
 	padding-right:10px;
 }
-#vista.siteAuth a {
+#siteAuthInsert a {
 	color: #000000;
+	margin-right: 1em;
 }
 
-#vista.siteAuth a:hover {
+#siteAuthInsert a:hover {
 	color: ${object1_20};
 }
 

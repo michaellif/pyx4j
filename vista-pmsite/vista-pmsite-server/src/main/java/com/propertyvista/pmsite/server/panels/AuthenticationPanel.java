@@ -52,10 +52,10 @@ public class AuthenticationPanel extends Panel {
 
         if (Context.isUserLoggedIn()) {
             greet.setText(i18n.tr("Welcome {0}", Context.getVisit().getUserVisit().getName()));
-            auth.setBody(new Model<String>(i18n.tr("LogOut")));
+            auth.setBody(new Model<String>(i18n.tr("Log Out")));
         } else {
             greet.setVisible(false);
-            auth.setBody(new Model<String>(i18n.tr("LogIn")));
+            auth.setBody(new Model<String>(i18n.tr("Log In")));
         }
 
         add(auth);

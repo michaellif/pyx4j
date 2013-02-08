@@ -50,8 +50,8 @@ public class ResidentsPage extends BasePage {
         PMSiteApplication.onSecurePage(getRequest());
 
         if (getCM().isCustomResidentsContentEnabled()) {
-            add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "vista.siteAuth")));
-            add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "vista.resident")));
+            add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "siteAuthInsert")));
+            add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "residentInsert")));
         } else {
             add(new GwtInclude("gwtInclude"));
         }
