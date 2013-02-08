@@ -13,8 +13,9 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
-
 public class TenantSureConstants {
+
+    public static final int TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS = 15;
 
     public static final String TENANTSURE_LEGAL_NAME = "Highcourt Partners Limited";
 
@@ -23,5 +24,9 @@ public class TenantSureConstants {
     public static final String TENANTSURE_PHONE_NUMBER = "+1-647-931-2886";
 
     public static final String TENANTSURE_EMAIL = "info@highcourtpartners.com";
+
+    public static final String HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF = "http://highcourtpartners.com/privacy-policy.html";
+
+    public static final String HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF = "http://highcourtpartners.com/client-portal.html";
 
 }

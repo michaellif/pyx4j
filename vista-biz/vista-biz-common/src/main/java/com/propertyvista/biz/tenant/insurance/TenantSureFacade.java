@@ -53,6 +53,10 @@ public interface TenantSureFacade {
 
     void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate);
 
+    void startCancellationDueToSkippedPayment(Tenant tenantId);
+
+    void reverseCancellationDueToSkippedPayment(Tenant tenantId);
+
     void cancelDueToSkippedPayment(Tenant tenantId);
 
     void reinstate(Tenant tenantId);
@@ -66,5 +70,4 @@ public interface TenantSureFacade {
 
     void sendDocumentation(Tenant tenantId, String email);
 
-    //payOutstandingPayment ?
 }

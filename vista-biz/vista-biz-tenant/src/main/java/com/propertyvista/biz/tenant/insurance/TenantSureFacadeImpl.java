@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -281,8 +282,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 status.isPaymentFailed().setValue(true);
                 message.messageText()
                         .setValue(
-                                i18n.tr("There was a problem with your last scheduled payment. If you don't update your credit card details until {0,date,short}, your TeantSure insurance will expire on {1,date,short}.",
-                                        insuranceTenantSure.expiryDate().getValue()));
+                                i18n.tr("There was a problem with your last scheduled payment. If you don't update your credit card details until {0,date,short}, your TeantSure insurance will expire",
+                                        getGracePeriodEndDate(insuranceTenantSure)));
             } else {
                 message.messageText().setValue(
                         i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
@@ -304,18 +305,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
         validateIsCancellable(insuranceTenantSure);
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        String tenantsEmail;
-
-        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-            tenantsEmail = mailConfig.getForwardAllTo();
-        } else {
-            tenantsEmail = tenant.customer().user().email().getValue();
-        }
-
         LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
-                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, tenantsEmail);
+                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.PendingCancellation);
@@ -335,21 +326,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        String tenantsEmail;
-
-        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-            tenantsEmail = mailConfig.getForwardAllTo();
-        } else {
-            tenantsEmail = tenant.customer().user().email().getValue();
-        }
-
         LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
-                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, tenantsEmail);
+                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.status().setValue(Status.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
         Persistence.service().merge(insuranceTenantSure);
@@ -358,6 +339,37 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
 
         Persistence.service().commit();
+    }
+
+    @Override
+    public void startCancellationDueToSkippedPayment(Tenant tenantId) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        validateIsCancellable(insuranceTenantSure);
+
+        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
+        Persistence.service().merge(insuranceTenantSure);
+
+        // TODO send warning email (use the following methods for establishihng the proper email context 
+        //getTenantsEmail(tenantId);
+        //getGracePeriodEndDate(insuranceTenantSure)
+
+        Persistence.service().commit();
+    }
+
+    @Override
+    public void reverseCancellationDueToSkippedPayment(Tenant tenantId) {
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        validateIsCancellable(insuranceTenantSure);
+
+        // TODO send notification email (use the following methods for establishihng the proper email context 
+        //getTenantsEmail(tenantId);
+        //getGracePeriodEndDate(insuranceTenantSure)
+
+        insuranceTenantSure.status().setValue(Status.Active);
+        insuranceTenantSure.cancellation().setValue(null);
+        Persistence.service().merge(insuranceTenantSure);
+
     }
 
     /** Warning: this method is not implemented properly */
@@ -459,6 +471,27 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             emails.add(email);
         }
         cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+    }
+
+    private String getTenantsEmail(Tenant tenantId) {
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+
+        String tenantsEmail;
+
+        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+            tenantsEmail = mailConfig.getForwardAllTo();
+        } else {
+            tenantsEmail = tenant.customer().user().email().getValue();
+        }
+        return tenantsEmail;
+    }
+
+    private LogicalDate getGracePeriodEndDate(InsuranceTenantSure insuranceTenantSure) {
+        GregorianCalendar gracePeriodEnd = new GregorianCalendar();
+        gracePeriodEnd.setTime(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
+        gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);
+        return new LogicalDate(gracePeriodEnd.getTime());
     }
 
 }
