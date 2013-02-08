@@ -104,7 +104,7 @@ class TenantSurePayments {
     static InsuranceTenantSureTransaction preAuthorization(InsuranceTenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
         String referenceNumber = transaction.id().getStringView();
-        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(amount, tenantSureMerchantTerminalId(),
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(amount, tenantSureMerchantTerminalId(),
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
@@ -113,7 +113,7 @@ class TenantSurePayments {
 
     static void preAuthorizationReversal(InsuranceTenantSureTransaction transaction) {
         String referenceNumber = transaction.id().getStringView();
-        ServerSideFactory.create(CreditCardFacade.class).authorizationReversal(tenantSureMerchantTerminalId(), ReferenceNumberPrefix.TenantSure,
+        ServerSideFactory.create(CreditCardFacade.class).preAuthorizationReversal(tenantSureMerchantTerminalId(), ReferenceNumberPrefix.TenantSure,
                 referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
     }
 

@@ -31,13 +31,13 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public String authorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.authorization(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public String preAuthorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.preAuthorization(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override
-    public void authorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        CreditCardProcessor.authorizationReversal(merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public void preAuthorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        CreditCardProcessor.preAuthorizationReversal(merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override

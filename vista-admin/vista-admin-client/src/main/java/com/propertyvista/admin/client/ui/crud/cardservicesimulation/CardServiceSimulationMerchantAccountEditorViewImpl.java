@@ -35,6 +35,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends AdminEdi
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalID())).build());
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balance())).build());
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().responseCode())).build());
+            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created())).build());
 
             selectTab(addTab(tabPanel));
         }

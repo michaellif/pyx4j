@@ -13,11 +13,13 @@
  */
 package com.propertyvista.admin.domain.dev;
 
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -33,7 +35,11 @@ public interface CardServiceSimulationToken extends IEntity {
     @JoinColumn
     CardServiceSimulationCard card();
 
+    @ToString
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> token();
+
+    IPrimitive<Boolean> active();
 
     @OrderColumn
     IPrimitive<Integer> odr();

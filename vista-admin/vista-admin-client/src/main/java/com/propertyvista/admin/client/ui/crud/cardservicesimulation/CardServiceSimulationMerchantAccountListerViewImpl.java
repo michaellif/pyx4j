@@ -30,7 +30,8 @@ CardServiceSimulationMerchantAccountListerView {
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().terminalID()).build(),
                     new MemberColumnDescriptor.Builder(proto().balance()).build(),
-                    new MemberColumnDescriptor.Builder(proto().responseCode()).build()
+                    new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto().created()).build()
             );//@formatter:off
         }
 

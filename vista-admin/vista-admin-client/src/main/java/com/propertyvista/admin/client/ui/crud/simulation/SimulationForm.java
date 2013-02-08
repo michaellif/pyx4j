@@ -68,10 +68,10 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
         content.setH2(++row, 0, 1, i18n.tr("Credit Cards"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5).build());
         // TODO This should be in separate server/separate forms
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseType()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseCode()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseHttpCode()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseText()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseType()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseCode()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardService().responseText()), 15).build());
 
         get(proto().cardService().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 

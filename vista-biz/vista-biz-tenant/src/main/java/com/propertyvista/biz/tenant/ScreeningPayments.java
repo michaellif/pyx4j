@@ -86,7 +86,7 @@ class ScreeningPayments {
 
         // Do authorization
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).authorization(transaction.amount().getValue(), merchantTerminalId(),
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(transaction.amount().getValue(), merchantTerminalId(),
                     ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 
@@ -128,7 +128,7 @@ class ScreeningPayments {
         });
 
         try {
-            ServerSideFactory.create(CreditCardFacade.class).authorizationReversal(merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening,
+            ServerSideFactory.create(CreditCardFacade.class).preAuthorizationReversal(merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening,
                     transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Reversal);

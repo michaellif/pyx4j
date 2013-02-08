@@ -23,6 +23,8 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,19 +36,36 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.adminNamespace)
 public interface CardServiceSimulationTransaction extends IEntity {
 
+    public enum SimpulationTransactionType {
+
+        sale,
+
+        preAuthorization,
+
+        preAuthorizationReversal,
+
+        completion;
+
+    }
+
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
     CardServiceSimulationCard card();
+
+    IPrimitive<SimpulationTransactionType> transactionType();
 
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    IPrimitive<String> reference();
+
     IPrimitive<String> responseCode();
 
     IPrimitive<String> authorizationNumber();
 
+    @Timestamp(Update.Updated)
     IPrimitive<Date> transactionDate();
 }

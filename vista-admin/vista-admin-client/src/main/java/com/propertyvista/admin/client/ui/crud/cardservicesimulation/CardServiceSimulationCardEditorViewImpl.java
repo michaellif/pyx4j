@@ -85,7 +85,12 @@ public class CardServiceSimulationCardEditorViewImpl extends AdminEditorViewImpl
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balance())).build());
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reserved())).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().responseCode())).build());
+
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created())).build());
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated())).build());
+
             contentPanel.setWidget(++row, 0, new Label("Tokens"));
             contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
             contentPanel.setWidget(++row, 0, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));

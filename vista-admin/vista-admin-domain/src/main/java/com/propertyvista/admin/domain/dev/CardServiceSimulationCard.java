@@ -14,6 +14,7 @@
 package com.propertyvista.admin.domain.dev;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -25,6 +26,8 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -65,7 +68,17 @@ public interface CardServiceSimulationCard extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> balance();
 
+    @Editor(type = EditorType.money)
+    @Format("#0.00")
+    IPrimitive<BigDecimal> reserved();
+
     IPrimitive<String> responseCode();
+
+    @Timestamp(Update.Created)
+    IPrimitive<Date> created();
+
+    @Timestamp(Update.Updated)
+    IPrimitive<Date> updated();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

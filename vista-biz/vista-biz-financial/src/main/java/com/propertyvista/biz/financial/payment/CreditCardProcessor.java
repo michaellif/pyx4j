@@ -253,7 +253,7 @@ class CreditCardProcessor {
         return response;
     }
 
-    static String authorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static String preAuthorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -275,7 +275,7 @@ class CreditCardProcessor {
         }
     }
 
-    static void authorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static void preAuthorizationReversal(String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 

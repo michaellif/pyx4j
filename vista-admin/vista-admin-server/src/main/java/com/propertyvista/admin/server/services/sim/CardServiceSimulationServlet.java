@@ -29,10 +29,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.dev.CardServiceSimulatorConfig;
-import com.propertyvista.payment.caledon.CaledonRequest;
+import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.payment.caledon.CaledonRequestToken;
 import com.propertyvista.payment.caledon.CaledonResponse;
+import com.propertyvista.payment.caledon.HttpRequestField;
 import com.propertyvista.payment.caledon.HttpResponseField;
 
 @SuppressWarnings("serial")
@@ -42,6 +45,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         String responseBody = null;
         try {
             CardServiceSimulatorConfig simulatorConfig = Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class));
@@ -64,23 +68,23 @@ public class CardServiceSimulationServlet extends HttpServlet {
                 break;
             }
 
-            if (responseBody != null) {
-                CaledonRequest caledonRequest = buildCaledonRequest(httpRequest);
+            if (responseBody == null) {
+                CaledonRequestToken caledonRequest = buildCaledonRequest(httpRequest);
                 CaledonResponse caledonResponse = CardServiceSimulationProcessor.execute(caledonRequest);
                 responseBody = buildResponse(caledonResponse);
             }
         } catch (Throwable e) {
             log.error("Error", e);
-            responseBody = "TEXT=" + e.getMessage() + "&CODE=1000";
+            responseBody = "TEXT=Simulated " + e.getMessage() + "&CODE=1000";
         }
         writeResponse(responseBody, httpResponse);
     }
 
-    private CaledonRequest buildCaledonRequest(HttpServletRequest httpRequest) {
-        CaledonRequest caledonRequest = new CaledonRequest();
+    private CaledonRequestToken buildCaledonRequest(HttpServletRequest httpRequest) {
+        CaledonRequestToken caledonRequest = new CaledonRequestToken();
 
-        for (Field field : CaledonRequest.class.getDeclaredFields()) {
-            HttpResponseField nameDeclared = field.getAnnotation(HttpResponseField.class);
+        for (Field field : CaledonRequestToken.class.getFields()) {
+            HttpRequestField nameDeclared = field.getAnnotation(HttpRequestField.class);
             if (nameDeclared == null) {
                 continue;
             }

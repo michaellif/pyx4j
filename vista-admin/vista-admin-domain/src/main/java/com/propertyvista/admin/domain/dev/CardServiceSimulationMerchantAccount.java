@@ -14,14 +14,19 @@
 package com.propertyvista.admin.domain.dev;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,6 +40,8 @@ import com.propertyvista.domain.VistaNamespace;
 public interface CardServiceSimulationMerchantAccount extends IEntity {
 
     @ToString
+    @Indexed(uniqueConstraint = true)
+    @NotNull
     IPrimitive<String> terminalID();
 
     @Editor(type = EditorType.money)
@@ -42,6 +49,9 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     IPrimitive<BigDecimal> balance();
 
     IPrimitive<String> responseCode();
+
+    @Timestamp(Update.Created)
+    IPrimitive<Date> created();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
