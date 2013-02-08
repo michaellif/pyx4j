@@ -144,7 +144,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         this.addValueValidator(new EditableValueValidator<List<Building>>() {
             @Override
             public ValidationError isValid(CComponent<List<Building>, ?> component, List<Building> value) {
-                if (value != null) {
+                if (value != null && !value.isEmpty()) {
                     boolean primaryFound = false;
                     for (Building item : value) {
                         if (item.complexPrimary().isBooleanTrue()) {
