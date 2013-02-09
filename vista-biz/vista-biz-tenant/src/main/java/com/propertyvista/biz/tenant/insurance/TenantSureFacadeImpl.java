@@ -41,7 +41,6 @@ import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
@@ -111,13 +110,16 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
         InsuranceTenantSure insuranceTenantSure = EntityFactory.create(InsuranceTenantSure.class);
+        insuranceTenantSure.tenant().set(tenantId);
+        insuranceTenantSure.isPropertyVistaIntegratedProvider().setValue(true);
+        insuranceTenantSure.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
         insuranceTenantSure.quoteId().setValue(quote.quoteId().getValue());
         insuranceTenantSure.client().set(initializeClient(tenantId, tenantPhone, tenantName));
         insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Draft);
 
         insuranceTenantSure.inceptionDate().setValue(new LogicalDate());
         insuranceTenantSure.monthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
-        insuranceTenantSure.details().liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
+        insuranceTenantSure.liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
         insuranceTenantSure.details().contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
         insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
         insuranceTenantSure.details().grossPremium().setValue(quote.premium().getValue());
@@ -164,7 +166,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             try {
                 tenantSureCertificateNumber = cfcApiClient.bindQuote(insuranceTenantSure.quoteId().getValue());
             } catch (Throwable e) {
-                log.error("Error", e);
+                log.error("failed to bind quote. ", e);
                 insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
 
                 TenantSurePayments.preAuthorizationReversal(transaction);
@@ -180,9 +182,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 }
             }
 
+            insuranceTenantSure.insuranceCertificateNumber().setValue(tenantSureCertificateNumber);
             insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
             insuranceTenantSure.paymentDay().setValue(TenantSurePayments.calulatePaymentDay(insuranceTenantSure.inceptionDate().getValue()));
             Persistence.service().persist(insuranceTenantSure);
+
+            InsuranceTenantSureReport tsReportStatusHolder = EntityFactory.create(InsuranceTenantSureReport.class);
+            tsReportStatusHolder.insurance().set(insuranceTenantSure);
+            Persistence.service().persist(tsReportStatusHolder);
+
             Persistence.service().commit();
 
             List<String> emails = new ArrayList<String>();
@@ -222,24 +230,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     private void createInsuranceCertificate(Tenant tenantId, String insuranceCertifiateNumber, InsuranceTenantSure ts) {
-        InsuranceCertificate ic = EntityFactory.create(InsuranceCertificate.class);
-        ic.isPropertyVistaIntegratedProvider().setValue(true);
-        ic.tenant().set(tenantId);
 
-        ic.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
-        ic.insuranceCertificateNumber().setValue(insuranceCertifiateNumber);
-        ic.liabilityCoverage().setValue(ts.details().liabilityCoverage().getValue());
-        ic.inceptionDate().setValue(ts.inceptionDate().getValue());
-        ic.expiryDate().setValue(null); // doesn't expire unless payment fails
-
-        Persistence.service().persist(ic);
-
-        ts.insuranceCertificate().set(ic);
-        Persistence.service().persist(ts);
-
-        InsuranceTenantSureReport tsReportStatusHolder = EntityFactory.create(InsuranceTenantSureReport.class);
-        tsReportStatusHolder.insurance().set(ts);
-        Persistence.service().persist(tsReportStatusHolder);
     }
 
     private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
@@ -264,19 +255,19 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
 
         TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);
-        status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue());
+        status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificateNumber().getValue());
 
-        status.quote().coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.details().liabilityCoverage().getValue());
+        status.quote().coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.liabilityCoverage().getValue());
         status.quote().coverage().contentsCoverage().setValue(insuranceTenantSure.details().contentsCoverage().getValue());
         status.quote().coverage().deductible().setValue(insuranceTenantSure.details().deductible().getValue());
-        status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.insuranceCertificate().inceptionDate().getValue());
+        status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.inceptionDate().getValue());
 
         status.quote().premium().setValue(insuranceTenantSure.details().grossPremium().getValue());
         status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
         status.quote().taxBreakdown().addAll(insuranceTenantSure.details().taxes());
         status.quote().totalMonthlyPayable().setValue(insuranceTenantSure.monthlyPayable().getValue());
 
-        status.expiryDate().setValue(insuranceTenantSure.insuranceCertificate().expiryDate().getValue());
+        status.expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
 
         if (insuranceTenantSure.status().getValue() == Status.PendingCancellation) {
             TenantSureMessageDTO message = status.messages().$();
@@ -307,7 +298,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
         validateIsCancellable(insuranceTenantSure);
 
-        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
@@ -316,10 +307,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.expiryDate().setValue(expiryDate);
 
         Persistence.service().merge(insuranceTenantSure);
-
-        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
-        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
-
         Persistence.service().commit();
     }
 
@@ -328,18 +315,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(),
+        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(Status.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
+
         Persistence.service().merge(insuranceTenantSure);
-
-        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
-        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
-
         Persistence.service().commit();
     }
 
@@ -388,9 +372,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.expiryDate().setValue(expiryDate);
         Persistence.service().merge(insuranceTenantSure);
 
-        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
-        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
-
         Persistence.service().commit();
     }
 
@@ -404,21 +385,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
         insuranceTenantSure.cancellation().setValue(null);
         insuranceTenantSure.expiryDate().setValue(null);
-        insuranceTenantSure.insuranceCertificate().expiryDate().setValue(null);
+
         Persistence.service().merge(insuranceTenantSure);
-        Persistence.service().merge(insuranceTenantSure.insuranceCertificate());
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        String tenantsEmail;
-
-        SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-        if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-            tenantsEmail = mailConfig.getForwardAllTo();
-        } else {
-            tenantsEmail = tenant.customer().user().email().getValue();
-        }
-        cfcApiClient.reinstate(insuranceTenantSure.insuranceCertificate().insuranceCertificateNumber().getValue(), ReinstatementType.REINSTATEMENT_PROACTIVE,
-                tenantsEmail);
+        String tenantsEmail = getTenantsEmail(tenantId);
+        cfcApiClient.reinstate(insuranceTenantSure.insuranceCertificateNumber().getValue(), ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
 
         Persistence.service().commit();
     }
@@ -444,7 +415,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
         criteria.or(PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active),
                 PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.PendingCancellation));
-        criteria.add(PropertyCriterion.eq(criteria.proto().insuranceCertificate().tenant().lease().leaseParticipants(), tenantId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), tenantId));
 
         InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
         return insurance;

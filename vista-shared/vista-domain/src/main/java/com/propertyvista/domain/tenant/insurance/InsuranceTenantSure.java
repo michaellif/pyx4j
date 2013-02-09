@@ -17,14 +17,13 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
@@ -32,7 +31,8 @@ import com.pyx4j.entity.shared.ISet;
  * TenantSure operational data, updated by processes.
  * Created when insurance is approved and bound
  */
-public interface InsuranceTenantSure extends IEntity {
+@DiscriminatorValue("InsuranceTenantSure")
+public interface InsuranceTenantSure extends InsuranceCertificate {
 
     public enum Status {
 
@@ -65,11 +65,9 @@ public interface InsuranceTenantSure extends IEntity {
         CancelledByTenantSure;
     }
 
-    @Owner
-    @JoinColumn
+    @ReadOnly
+    @MemberColumn(notNull = true)
     InsuranceTenantSureClient client();
-
-    InsuranceCertificate insuranceCertificate();
 
     /**
      * PK in TenantSure API of the accepted quote that was bound to the owner client/tenant.
@@ -87,12 +85,14 @@ public interface InsuranceTenantSure extends IEntity {
     /**
      * Defines billing cycle days: every month
      */
+    @Override
     @NotNull
     IPrimitive<LogicalDate> inceptionDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<Integer> paymentDay();
 
+    @Override
     IPrimitive<LogicalDate> expiryDate();
 
     /** a date when cancellation command has been issued */

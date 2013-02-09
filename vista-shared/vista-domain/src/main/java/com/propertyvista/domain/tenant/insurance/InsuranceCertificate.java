@@ -16,11 +16,14 @@ package com.propertyvista.domain.tenant.insurance;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -32,6 +35,8 @@ import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
+@AbstractEntity
+@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @DiscriminatorValue("InsuranceCertificate")
 // TODO this format fails during update of new instances of InsuranceCertificate via BoxFolder
 //@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,choice,null#|!null#,#,##0.00}, Expiry: {3}")

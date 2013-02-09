@@ -87,7 +87,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 
                 formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
                 formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
-                formater.cell(reportedStatusHolder.insurance().insuranceCertificate().insuranceCertificateNumber().getStringView());
+                formater.cell(reportedStatusHolder.insurance().insuranceCertificateNumber().getStringView());
                 formater.cell(reportedStatusHolder.insurance().monthlyPayable().getValue().toString());                
                 formater.cell(reportedStatusHolder.reportedStatus().getValue());
                 formater.cell(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));

@@ -31,19 +31,18 @@ public interface InsuranceTenantSureDetails extends IEntity {
     @MemberColumn(notNull = true)
     InsuranceTenantSure insurance();
 
-    // TODO i don't like this duplication, actually this value is held in parent insurance certificate
-    IPrimitive<BigDecimal> liabilityCoverage();
-
     IPrimitive<BigDecimal> contentsCoverage();
 
     IPrimitive<BigDecimal> deductible();
 
     IPrimitive<BigDecimal> grossPremium();
 
-    IPrimitive<BigDecimal> underwriterFee();
-
     @Owned
     @OrderBy(InsuranceTenantSureTax.OrderInOwner.class)
     IList<InsuranceTenantSureTax> taxes();
+
+    IPrimitive<BigDecimal> underwriterFee();
+
+    // TODO underwriter fee taxes???
 
 }
