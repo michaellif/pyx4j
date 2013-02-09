@@ -51,6 +51,7 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     IPrimitive<String> responseCode();
 
     @Timestamp(Update.Created)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();
 
     @Owned(cascade = {})

@@ -129,7 +129,7 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.text = "TOKEN ALREADY EXISTS";
             } else {
                 token = EntityFactory.create(CardServiceSimulationToken.class);
-                CardServiceSimulationCard card = createCard(merchantAccount, caledonRequest);
+                CardServiceSimulationCard card = ensureUnAttachedCard(merchantAccount, caledonRequest);
                 token.token().setValue(caledonRequest.token);
                 token.active().setValue(Boolean.TRUE);
                 card.tokens().add(token);
@@ -208,7 +208,7 @@ public class CardServiceSimulationProcessor {
 
     private static CaledonResponse processCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         CaledonResponse caledonResponse = new CaledonResponse();
-        CardServiceSimulationCard card = ehshureCard(merchantAccount, caledonRequest);
+        CardServiceSimulationCard card = ensureCard(merchantAccount, caledonRequest);
         if (card == null) {
             caledonResponse.code = "1101";
             caledonResponse.text = "TOKEN NOT FOUND";
@@ -274,13 +274,38 @@ public class CardServiceSimulationProcessor {
                     caledonResponse.text = caledonResponse.authorizationNumber + " $" + transaction.amount().getStringView();
                 }
                 break;
-            case AUTH_REVERSE:
-                caledonResponse.code = "0000";
-                caledonResponse.text = "REVERSE OK";
+            case AUTH_REVERSE: {
+                CardServiceSimulationTransaction preAuthorizationTransaction = findPreAuthorization(card, caledonRequest.referenceNumber);
+                if (preAuthorizationTransaction != null) {
+                    BigDecimal reversalAmount;
+                    //Pre-authorization reversal full amount (amount of '0' is used as the replacement amount)
+                    if (transaction.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
+                        reversalAmount = preAuthorizationTransaction.amount().getValue();
+                    } else {
+                        reversalAmount = transaction.amount().getValue();
+                    }
+                    card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(reversalAmount));
+                    caledonResponse.code = "0000";
+                    caledonResponse.text = "REVERSE OK";
+                } else {
+                    caledonResponse.code = "1016";
+                    caledonResponse.text = "REVERSE NO MATCH";
+                }
+            }
                 break;
             case COMPLETION:
-                caledonResponse.code = "0000";
-                moveMoney(merchantAccount, transaction.amount().getValue());
+                CardServiceSimulationTransaction preAuthorizationTransaction = findPreAuthorization(card, caledonRequest.referenceNumber);
+                if (preAuthorizationTransaction != null) {
+                    newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
+                    card.balance().setValue(newBalance);
+                    card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(transaction.amount().getValue()));
+
+                    caledonResponse.code = "0000";
+                    moveMoney(merchantAccount, transaction.amount().getValue());
+                } else {
+                    caledonResponse.code = "1016";
+                    caledonResponse.text = "COMPLETION NO MATCH";
+                }
                 break;
             default:
                 throw new Error("Unsupported transactionType '" + transactionType + "'");
@@ -292,6 +317,13 @@ public class CardServiceSimulationProcessor {
         Persistence.service().persist(transaction);
         Persistence.service().persist(card);
         return caledonResponse;
+    }
+
+    private static CardServiceSimulationTransaction findPreAuthorization(CardServiceSimulationCard card, String referenceNumber) {
+        EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
+        criteria.eq(criteria.proto().card(), card);
+        criteria.eq(criteria.proto().reference(), referenceNumber);
+        return Persistence.service().retrieve(criteria);
     }
 
     private static Date getExpiryMonthEnd() {
@@ -317,7 +349,35 @@ public class CardServiceSimulationProcessor {
         return card;
     }
 
-    private static CardServiceSimulationCard ehshureCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+    private static CardServiceSimulationCard ensureUnAttachedCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+        CardServiceSimulationCard card;
+        {
+            EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
+            criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
+            criteria.isNull(criteria.proto().merchant());
+            card = Persistence.service().retrieve(criteria);
+            if (card != null) {
+                card.merchant().set(merchantAccount);
+                Persistence.service().persist(card);
+                return card;
+            }
+        }
+        {
+            EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
+            criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
+            criteria.eq(criteria.proto().merchant(), merchantAccount);
+            criteria.notExists(criteria.proto().tokens());
+            card = Persistence.service().retrieve(criteria);
+            if (card != null) {
+                return card;
+            }
+        }
+        card = createCard(merchantAccount, caledonRequest);
+        Persistence.service().persist(card);
+        return card;
+    }
+
+    private static CardServiceSimulationCard ensureCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         if (CommonsStringUtils.isStringSet(caledonRequest.token)) {
             EntityQueryCriteria<CardServiceSimulationToken> criteria = EntityQueryCriteria.create(CardServiceSimulationToken.class);
             criteria.eq(criteria.proto().token(), caledonRequest.token);
@@ -329,15 +389,7 @@ public class CardServiceSimulationProcessor {
                 return null;
             }
         } else {
-            EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
-            criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
-            criteria.eq(criteria.proto().merchant(), merchantAccount);
-            CardServiceSimulationCard card = Persistence.service().retrieve(criteria);
-            if (card == null) {
-                card = createCard(merchantAccount, caledonRequest);
-                Persistence.service().persist(card);
-            }
-            return card;
+            return ensureUnAttachedCard(merchantAccount, caledonRequest);
         }
     }
 }

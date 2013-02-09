@@ -75,9 +75,11 @@ public interface CardServiceSimulationCard extends IEntity {
     IPrimitive<String> responseCode();
 
     @Timestamp(Update.Created)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();
 
     @Timestamp(Update.Updated)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> updated();
 
     @Owned(cascade = {})

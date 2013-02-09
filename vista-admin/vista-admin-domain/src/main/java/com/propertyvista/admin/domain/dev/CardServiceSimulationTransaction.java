@@ -67,5 +67,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
     IPrimitive<String> authorizationNumber();
 
     @Timestamp(Update.Updated)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> transactionDate();
 }
