@@ -16,6 +16,7 @@ package com.propertyvista.admin.server.services.sim;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Random;
@@ -241,7 +242,7 @@ public class CardServiceSimulationProcessor {
         if (!card.responseCode().isNull()) {
             caledonResponse.code = card.responseCode().getStringView();
             caledonResponse.text = "Simulated code '" + card.responseCode().getStringView() + "'";
-        } else if (card.expiryDate().getValue().after(new Date())) {
+        } else if (card.expiryDate().getValue().after(getExpiryMonthEnd())) {
             caledonResponse.code = "1254";
             caledonResponse.text = "EXPIRED CARD";
         } else {
@@ -291,6 +292,14 @@ public class CardServiceSimulationProcessor {
         Persistence.service().persist(transaction);
         Persistence.service().persist(card);
         return caledonResponse;
+    }
+
+    private static Date getExpiryMonthEnd() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(Persistence.service().getTransactionSystemTime());
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.add(Calendar.MONTH, 1);
+        return c.getTime();
     }
 
     private static void moveMoney(CardServiceSimulationMerchantAccount merchantAccount, BigDecimal value) {

@@ -20,8 +20,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 
 public class CardServiceSimulationMerchantAccountListerViewImpl extends ListerViewImplBase<CardServiceSimulationMerchantAccount> implements
-
-CardServiceSimulationMerchantAccountListerView {
+        CardServiceSimulationMerchantAccountListerView {
 
     private static class CardServiceSimulationLister extends ListerBase<CardServiceSimulationMerchantAccount> {
 

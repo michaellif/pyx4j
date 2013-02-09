@@ -24,9 +24,9 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 public class CardServiceSimulationMerchantAccountEditorViewImpl extends AdminEditorViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountEditorView {
 
-    public static class CardServiceSimulationTransactionForm extends AdminEntityForm<CardServiceSimulationMerchantAccount> {
+    public static class CardServiceSimulationMerchantAccountForm extends AdminEntityForm<CardServiceSimulationMerchantAccount> {
 
-        public CardServiceSimulationTransactionForm(IFormView<CardServiceSimulationMerchantAccount> view) {
+        public CardServiceSimulationMerchantAccountForm(IFormView<CardServiceSimulationMerchantAccount> view) {
             super(CardServiceSimulationMerchantAccount.class, view);
 
             FormFlexPanel tabPanel = new FormFlexPanel("Merchant Account");
@@ -44,6 +44,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends AdminEdi
 
     public CardServiceSimulationMerchantAccountEditorViewImpl() {
         super(AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount.class);
+        setForm(new CardServiceSimulationMerchantAccountForm(this));
     }
 
 }

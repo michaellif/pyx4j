@@ -47,6 +47,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends AdminEditorV
 
     public CardServiceSimulationTransactionEditorViewImpl() {
         super(AdminSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction.class);
+        setForm(new CardServiceSimulationTransactionForm(this));
     }
 
 }
