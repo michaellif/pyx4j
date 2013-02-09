@@ -124,7 +124,6 @@ select {
 #siteAuthInsert .greeting {
 	color:  ${object1_20};
 	font-weight: bold;
-	padding-right:10px;
 }
 #siteAuthInsert a {
 	color:  ${object1_20};

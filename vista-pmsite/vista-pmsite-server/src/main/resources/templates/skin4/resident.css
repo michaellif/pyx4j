@@ -84,16 +84,16 @@
 	font-size: 14px;
 }
 
-#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
+#gwt-debug-login, #siteAuthInsert #gwt-debug-account, #siteAuthInsert #gwt-debug-logout {
 	color: #999999;
 	white-space: nowrap;
 	float: right;
 }
 
+
 .vista-pmsite-residentPage .TenantDashboardSection {
 	padding-top: 20px;
 }
-
 
 .LandingButtonHolder {
     margin-left: auto;
@@ -122,6 +122,7 @@
     width: auto;
     min-width: 70px;
     text-align: center;
+    filter: false; /*for IE9*/
 }
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{

@@ -88,6 +88,7 @@
     min-width: 128px;
     text-align: center;
     white-space: nowrap;
+    filter: false; /*for IE9*/
 }
 
 .vista-pmsite-residentPage .Button.ProvideTIBGetTenantSure {

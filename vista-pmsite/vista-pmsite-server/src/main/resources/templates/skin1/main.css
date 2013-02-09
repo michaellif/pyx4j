@@ -112,7 +112,6 @@ select {
 #siteAuthInsert .greeting {
 	color: ${foreground_100};
 	font-weight: bold;
-	padding-right:10px;
 }
 
 #siteAuthInsert a {

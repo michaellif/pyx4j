@@ -126,18 +126,24 @@ select {
 	float:right;
 	margin:10px;
 }
-#siteAuthInsert .greeting {
-	color:  ${object1_20};
+
+.main #siteAuthInsert .greeting {
+	color:  #999999;
 	font-weight: bold;
-	padding-right:10px;
 }
-#siteAuthInsert a {
+
+#siteAuthInsert a:last-child {
+    color: #999999;
+    margin-right: 1em;
+}
+
+#siteAuthInsert a:first-child {
 	color: #000000;
 	margin-right: 1em;
 }
 
 #siteAuthInsert a:hover {
-	color: ${object1_20};
+	color: #999999;
 }
 
 .navigation {
