@@ -36,10 +36,10 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<InsuranceCertificate> {
+public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<InsuranceGeneric> {
 
     private final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
 
@@ -107,7 +107,7 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
     public TenantInsuranceCertificateForm(boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceCertificate.class);
+        super(InsuranceGeneric.class);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;

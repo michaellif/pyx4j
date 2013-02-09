@@ -21,14 +21,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantInsuranceByOtherProviderManagementServiceImpl implements TenantInsuranceByOtherProviderManagementService {
 
     @Override
-    public void save(AsyncCallback<VoidSerializable> callback, InsuranceCertificate insuranceDetails) {
+    public void save(AsyncCallback<VoidSerializable> callback, InsuranceGeneric insuranceDetails) {
         if (insuranceDetails.tenant().isNull()) {
             insuranceDetails.tenant().set(TenantAppContext.getCurrentUserTenant());
         }
@@ -38,14 +38,14 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
     }
 
     @Override
-    public void get(AsyncCallback<InsuranceCertificate> callback) {
-        EntityQueryCriteria<InsuranceCertificate> criteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+    public void get(AsyncCallback<InsuranceGeneric> callback) {
+        EntityQueryCriteria<InsuranceGeneric> criteria = EntityQueryCriteria.create(InsuranceGeneric.class);
         criteria.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenant());
         criteria.ge(criteria.proto().expiryDate(), new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
-        InsuranceCertificate insuranceCertificate = Persistence.secureRetrieve(criteria);
+        InsuranceGeneric insuranceCertificate = Persistence.secureRetrieve(criteria);
         if (insuranceCertificate == null) {
-            insuranceCertificate = EntityFactory.create(InsuranceCertificate.class);
+            insuranceCertificate = EntityFactory.create(InsuranceGeneric.class);
             insuranceCertificate.documents().add(insuranceCertificate.documents().$());
         }
         callback.onSuccess(insuranceCertificate);

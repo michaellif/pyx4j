@@ -19,10 +19,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
-public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<InsuranceCertificate> implements TenantInsuranceByOtherProviderUpdateView {
+public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<InsuranceGeneric> implements TenantInsuranceByOtherProviderUpdateView {
 
     private static final I18n i18n = I18n.get(TenantInsuranceByOtherProviderUpdateViewImpl.class);
 
