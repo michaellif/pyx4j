@@ -32,7 +32,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'a';
+        AND     LOWER(substring(namespace,1,1)) = 'a';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -40,7 +40,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'b';
+        AND     LOWER(substring(namespace,1,1)) = 'b';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -48,7 +48,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'c';
+        AND     LOWER(substring(namespace,1,1)) = 'c';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -56,7 +56,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'd';
+        AND     LOWER(substring(namespace,1,1)) = 'd';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -64,7 +64,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'e';
+        AND     LOWER(substring(namespace,1,1)) = 'e';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -72,7 +72,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'f';
+        AND     LOWER(substring(namespace,1,1)) = 'f';
 COMMIT;
         
 BEGIN TRANSACTION;
@@ -80,7 +80,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'g';
+        AND     LOWER(substring(namespace,1,1)) = 'g';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -88,7 +88,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'h';
+        AND     LOWER(substring(namespace,1,1)) = 'h';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -96,7 +96,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'i';
+        AND     LOWER(substring(namespace,1,1)) = 'i';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -104,7 +104,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'j';
+        AND     LOWER(substring(namespace,1,1)) = 'j';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -112,7 +112,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'k';
+        AND     LOWER(substring(namespace,1,1)) = 'k';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -120,7 +120,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'l';
+        AND     LOWER(substring(namespace,1,1)) = 'l';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -128,7 +128,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'm';
+        AND     LOWER(substring(namespace,1,1)) = 'm';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -136,7 +136,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'n';
+        AND     LOWER(substring(namespace,1,1)) = 'n';
 COMMIT;
        
 BEGIN TRANSACTION;
@@ -144,7 +144,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'o';
+        AND     LOWER(substring(namespace,1,1)) = 'o';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -152,7 +152,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'p';
+        AND     LOWER(substring(namespace,1,1)) = 'p';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -160,7 +160,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'q';
+        AND     LOWER(substring(namespace,1,1)) = 'q';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -168,7 +168,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'r';
+        AND     LOWER(substring(namespace,1,1)) = 'r';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -176,7 +176,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 's';
+        AND     LOWER(substring(namespace,1,1)) = 's';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -184,7 +184,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 't';
+        AND     LOWER(substring(namespace,1,1)) = 't';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -192,7 +192,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'u';
+        AND     LOWER(substring(namespace,1,1)) = 'u';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -200,7 +200,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'v';
+        AND     LOWER(substring(namespace,1,1)) = 'v';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -208,7 +208,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'w';
+        AND     LOWER(substring(namespace,1,1)) = 'w';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -216,7 +216,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'x';
+        AND     LOWER(substring(namespace,1,1)) = 'x';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -224,7 +224,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'y';
+        AND     LOWER(substring(namespace,1,1)) = 'y';
 COMMIT;
 
 BEGIN TRANSACTION;
@@ -232,7 +232,7 @@ BEGIN TRANSACTION;
         FROM    _admin_.admin_pmc
         WHERE   schema_version != '1.0.7'
         AND     status != 'Created'
-        AND     substring(namespace,1,1) = 'z';
+        AND     LOWER(substring(namespace,1,1)) = 'z';
 COMMIT;
 
 SET client_min_messages = 'notice';
