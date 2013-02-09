@@ -14,10 +14,11 @@
 package com.propertyvista.field.client;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.field.client.ui.FieldPanel;
 import com.propertyvista.field.rpc.FiledSiteMap;
 
 public class FieldSite extends VistaSite {
@@ -32,7 +33,9 @@ public class FieldSite extends VistaSite {
 
         hideLoadingIndicator();
 
-        RootPanel.get().add(new Button("Start Here"));
+        RootPanel.get().add(RootLayoutPanel.get());
+
+        RootLayoutPanel.get().add(new FieldPanel());
     }
 
     @Override
