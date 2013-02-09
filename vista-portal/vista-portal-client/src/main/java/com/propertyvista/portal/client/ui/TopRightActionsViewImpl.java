@@ -69,7 +69,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         });
 
         logout.ensureDebugId("logout");
-        logout.setHTML(i18n.tr("LogOut"));
+        logout.setHTML(i18n.tr("Log Out"));
         logout.setVisible(false);
         logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
