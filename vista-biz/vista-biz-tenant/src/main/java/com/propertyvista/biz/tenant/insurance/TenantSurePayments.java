@@ -192,7 +192,7 @@ class TenantSurePayments {
         transaction.paymentMethod().set(getPaymentMethod(insuranceTenantSure.client().tenant()));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
         transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue());
-        transaction.paymentDue().setValue(insuranceTenantSure.inceptionDate().getValue());
+        transaction.paymentDue().setValue(dueDate);
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
