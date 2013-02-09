@@ -57,7 +57,8 @@ class ARTransactionManager {
         }
 
         if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            throw new ARException("The LineItem has 0 value");
+            // ignore free items
+            return;
         }
 
         invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
