@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.ISet;
 @DiscriminatorValue("InsuranceTenantSure")
 public interface InsuranceTenantSure extends InsuranceCertificate {
 
-    public enum Status {
+    public enum TenantSureStatus {
 
         Draft,
 
@@ -75,7 +75,7 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     @NotNull
     IPrimitive<String> quoteId();
 
-    IPrimitive<InsuranceTenantSure.Status> status();
+    IPrimitive<InsuranceTenantSure.TenantSureStatus> status();
 
     IPrimitive<InsuranceTenantSure.CancellationType> cancellation();
 

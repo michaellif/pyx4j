@@ -43,7 +43,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
@@ -115,7 +115,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
         insuranceTenantSure.quoteId().setValue(quote.quoteId().getValue());
         insuranceTenantSure.client().set(initializeClient(tenantId, tenantPhone, tenantName));
-        insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Draft);
+        insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Draft);
 
         insuranceTenantSure.inceptionDate().setValue(new LogicalDate());
         insuranceTenantSure.monthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
@@ -150,7 +150,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 log.error("Error", e);
                 transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizationRejected);
                 Persistence.service().persist(transaction);
-                insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
+                insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Failed);
                 Persistence.service().persist(insuranceTenantSure);
                 Persistence.service().commit();
                 if (e instanceof UserRuntimeException) {
@@ -167,7 +167,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 tenantSureCertificateNumber = cfcApiClient.bindQuote(insuranceTenantSure.quoteId().getValue());
             } catch (Throwable e) {
                 log.error("failed to bind quote. ", e);
-                insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Failed);
+                insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Failed);
 
                 TenantSurePayments.preAuthorizationReversal(transaction);
                 transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizationReversal);
@@ -183,7 +183,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             }
 
             insuranceTenantSure.insuranceCertificateNumber().setValue(tenantSureCertificateNumber);
-            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+            insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Active);
             insuranceTenantSure.paymentDay().setValue(TenantSurePayments.calulatePaymentDay(insuranceTenantSure.inceptionDate().getValue()));
             Persistence.service().persist(insuranceTenantSure);
 
@@ -214,7 +214,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             log.error("Error", e);
             transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.AuthorizedPaymentRejectedRetry);
             Persistence.service().persist(transaction);
-            insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Pending);
+            insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Pending);
             Persistence.service().persist(insuranceTenantSure);
             Persistence.service().commit();
             if (e instanceof UserRuntimeException) {
@@ -269,7 +269,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         status.expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
 
-        if (insuranceTenantSure.status().getValue() == Status.PendingCancellation) {
+        if (insuranceTenantSure.status().getValue() == TenantSureStatus.PendingCancellation) {
             TenantSureMessageDTO message = status.messages().$();
             if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
                 status.isPaymentFailed().setValue(true);
@@ -282,7 +282,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                         i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
             }
             status.messages().add(message);
-        } else if (insuranceTenantSure.status().getValue() != Status.Cancelled) {
+        } else if (insuranceTenantSure.status().getValue() != TenantSureStatus.Cancelled) {
             status.nextPaymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         }
 
@@ -302,7 +302,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
 
@@ -319,7 +319,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        insuranceTenantSure.status().setValue(Status.Cancelled);
+        insuranceTenantSure.status().setValue(TenantSureStatus.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
 
@@ -332,7 +332,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        insuranceTenantSure.status().setValue(Status.PendingCancellation);
+        insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
@@ -348,7 +348,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         sendPaymentsResumedEmail(getTenantsEmail(tenantId));
 
-        insuranceTenantSure.status().setValue(Status.Active);
+        insuranceTenantSure.status().setValue(TenantSureStatus.Active);
         insuranceTenantSure.cancellation().setValue(null);
         Persistence.service().merge(insuranceTenantSure);
 
@@ -365,7 +365,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         validateIsCancellable(insuranceTenantSure);
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        insuranceTenantSure.status().setValue(expiryDate.compareTo(new LogicalDate()) < 0 ? Status.PendingCancellation : Status.Cancelled);
+        insuranceTenantSure.status().setValue(expiryDate.compareTo(new LogicalDate()) < 0 ? TenantSureStatus.PendingCancellation : TenantSureStatus.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenantSure);
         insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);
 
@@ -378,11 +378,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public void reinstate(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-        if (insuranceTenantSure.status().getValue() != InsuranceTenantSure.Status.PendingCancellation) {
+        if (insuranceTenantSure.status().getValue() != InsuranceTenantSure.TenantSureStatus.PendingCancellation) {
             throw new UserRuntimeException(i18n.tr("Cannot be reinstanted because it's not cancelled"));
         }
         insuranceTenantSure.cancellationDate().setValue(null);
-        insuranceTenantSure.status().setValue(InsuranceTenantSure.Status.Active);
+        insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Active);
         insuranceTenantSure.cancellation().setValue(null);
         insuranceTenantSure.expiryDate().setValue(null);
 
@@ -411,10 +411,10 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private InsuranceTenantSure retrieveActiveInsuranceTenantSure(Tenant tenantId) {
         EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Draft));
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.Status.Failed));
-        criteria.or(PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active),
-                PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.Status.PendingCancellation));
+        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Draft));
+        criteria.add(PropertyCriterion.ne(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Failed));
+        criteria.or(PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active),
+                PropertyCriterion.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.PendingCancellation));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), tenantId));
 
         InsuranceTenantSure insurance = Persistence.service().retrieve(criteria);
@@ -423,8 +423,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private void validateIsCancellable(InsuranceTenantSure insuranceTenantSure) {
         Validate.notNull(insuranceTenantSure, "no active TenantSure insurance was found");
-        if (insuranceTenantSure.status().getValue() != Status.Active) {
-            throw new Error("It's impossible to cancel a tenant sure insurance which is not " + Status.Active);
+        if (insuranceTenantSure.status().getValue() != TenantSureStatus.Active) {
+            throw new Error("It's impossible to cancel a tenant sure insurance which is not " + TenantSureStatus.Active);
         }
     }
 

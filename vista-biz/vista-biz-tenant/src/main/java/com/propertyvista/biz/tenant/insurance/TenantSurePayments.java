@@ -148,7 +148,7 @@ class TenantSurePayments {
         OrCriterion or = criteria.or();
         or.right().eq(criteria.proto().expiryDate(), dueDate);
         or.left().isNull(criteria.proto().expiryDate());
-        criteria.eq(criteria.proto().status(), InsuranceTenantSure.Status.Active);
+        criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
         criteria.in(criteria.proto().paymentDay(), paymentDays);
         ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {

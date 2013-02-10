@@ -28,7 +28,7 @@ import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Status;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
 import com.propertyvista.server.jobs.StatisticsUtils;
@@ -39,7 +39,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     public void processCancellations(RunStats runStats, LogicalDate dueDate) {
         EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
         criteria.le(criteria.proto().expiryDate(), dueDate);
-        criteria.eq(criteria.proto().status(), InsuranceTenantSure.Status.PendingCancellation);
+        criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.PendingCancellation);
         ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
@@ -70,12 +70,12 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:
-                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSure.Status.Active, InsuranceTenantSure.Status.PendingCancellation)),
+                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSure.TenantSureStatus.Active, InsuranceTenantSure.TenantSureStatus.PendingCancellation)),
 
                 // cancelled but not reported insurance certificates:
                 new AndCriterion(
-                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSure.Status.Cancelled),
-                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSure.Status.Cancelled)
+                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSure.TenantSureStatus.Cancelled),
+                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSure.TenantSureStatus.Cancelled)
                 )
          );//@formatter:off
 
@@ -93,10 +93,10 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 formater.cell(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));
                 
                 String specialFlag = "";
-                if (reportedStatusHolder.insurance().status().getValue() == Status.PendingCancellation) {
+                if (reportedStatusHolder.insurance().status().getValue() == TenantSureStatus.PendingCancellation) {
                     specialFlag = SimpleMessageFormat.format(//@formatter:off
                             "{0} due to {1} since {2,date,short}",
-                            Status.PendingCancellation,
+                            TenantSureStatus.PendingCancellation,
                             reportedStatusHolder.insurance().cancellation().getValue(),
                             reportedStatusHolder.insurance().cancellationDate().getValue()
                     );//@formatter:on
