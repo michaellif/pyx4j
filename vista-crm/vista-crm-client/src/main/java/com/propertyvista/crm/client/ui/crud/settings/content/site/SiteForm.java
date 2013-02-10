@@ -80,6 +80,8 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 Boolean enable = event.getValue();
+                // enable skin switch when public portal is disabled
+                residentSkinSwitch.setEnabled(!enable);
                 // if public portal is turning on while resident portal is on and custom skin is enabled, display warning
                 if (enable != null && enable) {
                     ResidentPortalSettings residentSettings = SiteForm.this.getValue().isEmpty() ? null : SiteForm.this.getValue().residentPortalSettings();
