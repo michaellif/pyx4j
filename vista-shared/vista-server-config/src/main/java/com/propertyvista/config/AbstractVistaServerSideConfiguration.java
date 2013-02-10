@@ -75,9 +75,9 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     /**
      * This method should not be used directly
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true);
      */
-    public abstract String getDefaultBaseURLvistaAdmin();
+    public abstract String getDefaultBaseURLvistaOperations();
 
     /**
      * This method should not be used directly

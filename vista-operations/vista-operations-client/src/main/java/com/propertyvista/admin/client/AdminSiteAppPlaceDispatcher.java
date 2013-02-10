@@ -36,7 +36,7 @@ public class AdminSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.Admin);
+        return SecurityController.checkBehavior(VistaBasicBehavior.Operations);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class AdminSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace specialForward(AppPlace newPlace) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.AdminPasswordChangeRequired)) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
             return new AdminSiteMap.PasswordReset();
         } else {
             return null;

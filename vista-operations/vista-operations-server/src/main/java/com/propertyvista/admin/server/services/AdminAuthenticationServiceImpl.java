@@ -39,12 +39,12 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
 
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.Admin;
+        return VistaBasicBehavior.Operations;
     }
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaBasicBehavior.AdminPasswordChangeRequired;
+        return VistaBasicBehavior.OperationsPasswordChangeRequired;
     }
 
     @Override

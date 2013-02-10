@@ -90,8 +90,8 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
     }
 
     @Override
-    public String getDefaultBaseURLvistaAdmin() {
-        return "https://localhost:8080/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+    public String getDefaultBaseURLvistaOperations() {
+        return "https://localhost:8080/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
     }
 
 }

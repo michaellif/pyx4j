@@ -72,7 +72,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
     public VistaAdminAccessControlList() {
         grant(new IServiceExecutePermission(AdminAuthenticationService.class));
-        grant(VistaBasicBehavior.AdminPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
+        grant(VistaBasicBehavior.OperationsPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Pmc.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(DeferredProcessService.class));

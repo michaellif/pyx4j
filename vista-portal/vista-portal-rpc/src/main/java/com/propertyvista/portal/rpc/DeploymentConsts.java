@@ -23,7 +23,7 @@ public interface DeploymentConsts {
 
     public static final String TENANT_URL_PATH = "residents";
 
-    public static final String ADMIN_URL = "admin/";
+    public static final String OPERATIONS_URL = "operations/";
 
     public static final String ONBOARDING_URL = "ob/";
 

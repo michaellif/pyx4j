@@ -41,9 +41,9 @@ public class MediaUtils {
 
     public static String createPmcDocumentUrl(PmcDocumentFile file) {
         String baseURL = ClientNavigUtils.getDeploymentBaseURL();
-        if (SecurityController.checkBehavior(VistaBasicBehavior.Admin)) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.Operations)) {
             // Admin is exception, TODO use FileURLBuilder
-            baseURL += DeploymentConsts.ADMIN_URL;
+            baseURL += DeploymentConsts.OPERATIONS_URL;
         }
         return baseURL + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/" + file.fileName().getStringView();
     }

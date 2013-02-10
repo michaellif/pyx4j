@@ -86,7 +86,7 @@ public class VistaDeployment {
      * @return full URL
      */
     public static String getBaseApplicationURL(VistaBasicBehavior application, boolean secure) {
-        if (application == VistaBasicBehavior.Admin) {
+        if (application == VistaBasicBehavior.Operations) {
             return getBaseApplicationURL(null, application, secure);
         } else {
             return getBaseApplicationURL(getCurrentPmc(), application, secure);
@@ -96,8 +96,8 @@ public class VistaDeployment {
     public static String getBaseApplicationURL(Pmc pmc, VistaBasicBehavior application, boolean secure) {
         DnsNameTarget target;
         switch (application) {
-        case Admin:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaAdmin();
+        case Operations:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOperations();
         case Onboarding:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOnboarding();
         case CRM:

@@ -222,7 +222,7 @@ public class MessageTemplates {
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         pwdReqT.RequestorName().set(user.name());
         pwdReqT.PasswordResetUrl().setValue(
-                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true), AdminSiteMap.LoginWithToken.class,
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), AdminSiteMap.LoginWithToken.class,
                         AuthenticationService.AUTH_TOKEN_ARG, token));
         data.add(pwdReqT);
 

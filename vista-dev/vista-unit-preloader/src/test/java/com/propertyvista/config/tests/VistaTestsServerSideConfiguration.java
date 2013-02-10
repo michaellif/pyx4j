@@ -144,7 +144,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLvistaAdmin() {
+    public String getDefaultBaseURLvistaOperations() {
         return getMainApplicationURL() + "a";
     }
 

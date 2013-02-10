@@ -64,7 +64,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     public String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
             String servletPath = httprequest.getServletPath();
-            if ((servletPath.startsWith("/" + DeploymentConsts.ADMIN_URL) || servletPath.startsWith("/interfaces"))) {
+            if ((servletPath.startsWith("/" + DeploymentConsts.OPERATIONS_URL) || servletPath.startsWith("/interfaces"))) {
                 return VistaNamespace.adminNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")

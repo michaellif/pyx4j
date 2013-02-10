@@ -55,10 +55,10 @@ class EnvLinksBuilder extends XMLStringWriter {
         {
             startIdented("tr");
             td("");
-            td("Admin");
+            td("Operations");
 
             startIdented("td");
-            a(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Admin, true));
+            a(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true));
             endIdented();
             endIdented();
         }

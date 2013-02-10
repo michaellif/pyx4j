@@ -38,8 +38,8 @@ public enum VistaBasicBehavior implements Behavior {
 
     TenantPortalPasswordChangeRequired,
 
-    Admin,
+    Operations,
 
-    AdminPasswordChangeRequired,
+    OperationsPasswordChangeRequired,
 
 }

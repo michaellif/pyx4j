@@ -62,8 +62,8 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     }
 
     @Override
-    public String getDefaultBaseURLvistaAdmin() {
-        return "https://demo.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.ADMIN_URL;
+    public String getDefaultBaseURLvistaOperations() {
+        return "https://demo.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
     }
 
     @Override

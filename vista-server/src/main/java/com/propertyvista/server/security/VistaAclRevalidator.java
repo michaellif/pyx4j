@@ -33,7 +33,7 @@ public class VistaAclRevalidator implements AclRevalidator {
         AclRevalidator aclRevalidator;
         if (currentBehaviours.contains(VistaBasicBehavior.CRM) || currentBehaviours.contains(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             aclRevalidator = new CrmAuthenticationServiceImpl();
-        } else if (currentBehaviours.contains(VistaBasicBehavior.Admin) || currentBehaviours.contains(VistaBasicBehavior.AdminPasswordChangeRequired)) {
+        } else if (currentBehaviours.contains(VistaBasicBehavior.Operations) || currentBehaviours.contains(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
             aclRevalidator = new AdminAuthenticationServiceImpl();
         } else if (currentBehaviours.contains(VistaBasicBehavior.ProspectiveApp)
                 || currentBehaviours.contains(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
