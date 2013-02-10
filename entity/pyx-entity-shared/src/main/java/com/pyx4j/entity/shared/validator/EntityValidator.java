@@ -38,7 +38,7 @@ public class EntityValidator {
 
     private static final I18n i18n = I18n.get(EntityValidator.class);
 
-    public static class DefaultValidationMesageFormater implements ValidationMesageFormater {
+    public static class DefaultValidationMesageFormatter implements ValidationMesageFormatter {
 
         @Override
         public String format(IEntity entity, IObject<?> member) {
@@ -47,7 +47,7 @@ public class EntityValidator {
 
     };
 
-    public static class StringViewValidationMesageFormater implements ValidationMesageFormater {
+    public static class StringViewValidationMesageFormatter implements ValidationMesageFormatter {
 
         @Override
         public String format(IEntity entity, IObject<?> member) {
@@ -62,37 +62,37 @@ public class EntityValidator {
     };
 
     public static void validate(IEntity entity) {
-        validate(entity, new DefaultValidationMesageFormater());
+        validate(entity, new DefaultValidationMesageFormatter());
     }
 
-    public static void validate(IEntity entity, ValidationMesageFormater formater) {
+    public static void validate(IEntity entity, ValidationMesageFormatter formatter) {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             IObject<?> member = entity.getMember(memberName);
             if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
-                throw new RuntimeException(i18n.tr("{0} is required", formater.format(entity, member)));
+                throw new RuntimeException(i18n.tr("{0} is required", formatter.format(entity, member)));
             }
             if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
                 String value = (String) member.getValue();
                 if ((value != null) && (value.length() > memberMeta.getLength())) {
-                    throw new RuntimeException(i18n.tr("Length of member {0} is greater then required", formater.format(entity, member)));
+                    throw new RuntimeException(i18n.tr("Length of member {0} is greater then required", formatter.format(entity, member)));
                 }
             }
 
         }
     }
 
-    public static void validateRecursively(IEntity entity, ValidationMesageFormater formater) {
-        validateRecursively(entity, formater, new HashSet<IEntity>());
+    public static void validateRecursively(IEntity entity, ValidationMesageFormatter formatter) {
+        validateRecursively(entity, formatter, new HashSet<IEntity>());
     }
 
-    private static void validateRecursively(IEntity entity, ValidationMesageFormater formater, Set<IEntity> dejaVu) {
+    private static void validateRecursively(IEntity entity, ValidationMesageFormatter formatter, Set<IEntity> dejaVu) {
         if (dejaVu.contains(entity)) {
             return;
         }
         dejaVu.add(entity);
-        EntityValidator.validate(entity, formater);
+        EntityValidator.validate(entity, formatter);
         EntityMeta em = entity.getEntityMeta();
 
         for (String memberName : em.getMemberNames()) {
@@ -101,10 +101,10 @@ public class EntityValidator {
             case Entity:
                 if (member.isNull()) {
                     if ((member.getMeta().isValidatorAnnotationPresent(NotNull.class))) {
-                        throw new RuntimeException(i18n.tr("{0} is required", formater.format(entity, member)));
+                        throw new RuntimeException(i18n.tr("{0} is required", formatter.format(entity, member)));
                     }
                 } else {
-                    EntityValidator.validateRecursively(((IEntity) member).cast(), formater, dejaVu);
+                    EntityValidator.validateRecursively(((IEntity) member).cast(), formatter, dejaVu);
                 }
                 break;
             case EntityList:
@@ -113,7 +113,7 @@ public class EntityValidator {
                 Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
                 while (lit.hasNext()) {
                     IEntity ent = lit.next();
-                    EntityValidator.validateRecursively(ent.cast(), formater, dejaVu);
+                    EntityValidator.validateRecursively(ent.cast(), formatter, dejaVu);
                 }
                 break;
             default:

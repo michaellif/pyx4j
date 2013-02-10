@@ -26,13 +26,13 @@ import com.pyx4j.log4gwt.shared.LogEvent;
 
 public class AppenderStdOut implements Appender {
 
-    public static interface StackTraceFormater {
+    public static interface StackTraceFormatter {
 
         public String format(LogEvent event);
 
     }
 
-    private static class EmptyStackTraceFormater implements StackTraceFormater {
+    private static class EmptyStackTraceFormatter implements StackTraceFormatter {
 
         @Override
         public String format(LogEvent event) {
@@ -41,13 +41,13 @@ public class AppenderStdOut implements Appender {
 
     }
 
-    StackTraceFormater stackTraceFormater;
+    StackTraceFormatter stackTraceFormatter;
 
     public AppenderStdOut() {
         if (!GWT.isScript()) {
-            stackTraceFormater = new HostedStackTraceFormater();
+            stackTraceFormatter = new HostedStackTraceFormatter();
         } else {
-            stackTraceFormater = new EmptyStackTraceFormater();
+            stackTraceFormatter = new EmptyStackTraceFormatter();
         }
     }
 
@@ -59,9 +59,9 @@ public class AppenderStdOut implements Appender {
     @Override
     public void doAppend(LogEvent event) {
         if (event.getLevel().ordinal() <= Level.ERROR.ordinal()) {
-            System.err.println(LogFormatter.format(event, LogFormatter.FormatStyle.LINE) + stackTraceFormater.format(event));
+            System.err.println(LogFormatter.format(event, LogFormatter.FormatStyle.LINE) + stackTraceFormatter.format(event));
         } else {
-            System.out.println(LogFormatter.format(event, LogFormatter.FormatStyle.LINE) + stackTraceFormater.format(event));
+            System.out.println(LogFormatter.format(event, LogFormatter.FormatStyle.LINE) + stackTraceFormatter.format(event));
         }
     }
 

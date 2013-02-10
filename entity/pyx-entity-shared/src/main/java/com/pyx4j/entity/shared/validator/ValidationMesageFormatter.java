@@ -23,7 +23,7 @@ package com.pyx4j.entity.shared.validator;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-public interface ValidationMesageFormater {
+public interface ValidationMesageFormatter {
 
     String format(IEntity entity, IObject<?> member);
 

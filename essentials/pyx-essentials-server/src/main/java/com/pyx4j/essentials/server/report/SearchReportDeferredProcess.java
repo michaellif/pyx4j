@@ -51,7 +51,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
 
     private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
 
-    protected ReportTableFormater formater;
+    protected ReportTableFormatter formatter;
 
     protected final ReportRequest request;
 
@@ -75,8 +75,8 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         SecurityController.assertPermission(new EntityPermission(request.getCriteria().getEntityClass(), EntityPermission.READ));
         this.request = request;
         this.entityClass = request.getCriteria().getEntityClass();
-        this.formater = new ReportTableCSVFormater();
-        ((ReportTableCSVFormater) this.formater).setTimezoneOffset(request.getTimezoneOffset());
+        this.formatter = new ReportTableCSVFormatter();
+        ((ReportTableCSVFormatter) this.formatter).setTimezoneOffset(request.getTimezoneOffset());
     }
 
     @Override
@@ -115,7 +115,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                         if (ServerSideConfiguration.instance().getEnvironmentType() != ServerSideConfiguration.EnvironmentType.LocalJVM) {
                             if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
                                 log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
-                                log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
+                                log.debug("fetch will continue rows {}; characters {}", fetchCount, formatter.getBinaryDataSize());
                                 encodedCursorReference = it.encodedCursorReference();
                                 return;
                             }
@@ -128,12 +128,12 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                 } finally {
                     it.completeRetrieval();
                 }
-                log.debug("fetch complete rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
+                log.debug("fetch complete rows {}; characters {}", fetchCount, formatter.getBinaryDataSize());
                 fetchCompleate = true;
             } finally {
                 Persistence.service().endTransaction();
                 if (canceled) {
-                    formater = null;
+                    formatter = null;
                 }
             }
         }
@@ -152,7 +152,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     protected void createHeaderEnds() {
-        formater.newRow();
+        formatter.newRow();
     }
 
     protected void createHeader() {
@@ -172,10 +172,10 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             }
             if (memberMeta.isEntity()) {
                 selectedMemberNames.add(memberName);
-                formater.header(getMemberCaption(memberName, memberMeta));
+                formatter.header(getMemberCaption(memberName, memberMeta));
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
                 selectedMemberNames.add(memberName);
-                formater.header(getMemberCaption(memberName, memberMeta));
+                formatter.header(getMemberCaption(memberName, memberMeta));
             }
         }
         createHeaderEnds();
@@ -186,7 +186,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     protected void reportEntityEnds(E entity) {
-        formater.newRow();
+        formatter.newRow();
     }
 
     protected void reportEntity(E entity) {
@@ -197,9 +197,9 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                 continue;
             }
             if (memberMeta.isEntity()) {
-                formater.cell(((IEntity) entity.getMember(memberName)).getStringView());
+                formatter.cell(((IEntity) entity.getMember(memberName)).getStringView());
             } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                formater.cell(entity.getMember(memberName).getValue());
+                formatter.cell(entity.getMember(memberName).getValue());
             }
         }
         reportEntityEnds(entity);
@@ -210,7 +210,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
     }
 
     protected void createDownloadable() {
-        Downloadable d = new Downloadable(formater.getBinaryData(), formater.getContentType());
+        Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
         d.save(getFileName());
     }
 

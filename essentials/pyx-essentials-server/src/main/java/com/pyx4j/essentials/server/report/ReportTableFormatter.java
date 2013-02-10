@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.report;
 
 import java.io.Serializable;
 
-public interface ReportTableFormater extends Serializable {
+public interface ReportTableFormatter extends Serializable {
 
     /**
      * Start adding cells to new row.

@@ -43,11 +43,11 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 
-public class ReportTableXLSXFormater implements ReportTableFormater {
+public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     private static final long serialVersionUID = 7937142277508559591L;
 
-    private static final I18n i18n = I18n.get(ReportTableXLSXFormater.class);
+    private static final I18n i18n = I18n.get(ReportTableXLSXFormatter.class);
 
     private final Workbook workbook;
 
@@ -75,7 +75,7 @@ public class ReportTableXLSXFormater implements ReportTableFormater {
 
     private boolean autosize = true;
 
-    public ReportTableXLSXFormater() {
+    public ReportTableXLSXFormatter() {
         workbook = new XSSFWorkbook();
 
         //Create column heading0 font.

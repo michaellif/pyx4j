@@ -28,7 +28,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-public class ReportTableCSVFormater implements ReportTableFormater {
+public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     private static final long serialVersionUID = 6357364356839304581L;
 
@@ -38,7 +38,7 @@ public class ReportTableCSVFormater implements ReportTableFormater {
 
     protected SimpleDateFormat dateTimeFormat;
 
-    public ReportTableCSVFormater() {
+    public ReportTableCSVFormatter() {
         dataBuilder = new DataBuilder();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");

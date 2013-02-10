@@ -28,7 +28,7 @@ import com.pyx4j.log4gwt.shared.LogEvent;
 /**
  * This class is used in Hosted mode to format console output
  */
-public class HostedStackTraceFormater implements AppenderStdOut.StackTraceFormater {
+public class HostedStackTraceFormatter implements AppenderStdOut.StackTraceFormatter {
 
     private static final String FQCN = ClientLogger.class.getName();
 
