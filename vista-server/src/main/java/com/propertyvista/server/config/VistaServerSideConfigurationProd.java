@@ -92,9 +92,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     public String getDefaultBaseURLvistaOperations() {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "https://admin-prod03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
+            return "https://operations-prod03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
         case staging:
-            return "https://admin-staging03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
+            return "https://operations-staging03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }

@@ -69,7 +69,7 @@ public class MessageTemplates {
 
     /**
      * Warning: can return <code>null</code> if the policy is not found.
-     * 
+     *
      * @param type
      * @param building
      * @return
@@ -360,7 +360,7 @@ public class MessageTemplates {
         template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista Support Administration account password.<br/>\n" +
-                "Click the link below to go to the Property Vista Administration site and create new password for your account:<br/>\n" +
+                "Click the link below to go to the Property Vista Operations site and create new password for your account:<br/>\n" +
                 "    <a href=\"{1}\">Change Your Password</a>",
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())

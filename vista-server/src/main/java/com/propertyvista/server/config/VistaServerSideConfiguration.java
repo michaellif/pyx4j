@@ -169,12 +169,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaOperations() {
-        return getApplicationDeploymentProtocol() + "://" + "admin" + getApplicationURLNamespace() + DeploymentConsts.OPERATIONS_URL;
+        return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace() + DeploymentConsts.OPERATIONS_URL;
     }
 
     @Override
     public String getCardServiceSimulatorUrl() {
-        return "http://" + "admin" + getApplicationURLNamespace() + "o/" + "CardServiceSimulation";
+        return "http://" + "operations" + getApplicationURLNamespace() + "o/" + "CardServiceSimulation";
     }
 
     @Override
