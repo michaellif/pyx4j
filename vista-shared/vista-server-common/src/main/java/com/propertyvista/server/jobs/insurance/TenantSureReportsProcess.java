@@ -67,14 +67,14 @@ public class TenantSureReportsProcess implements PmcProcess {
         }
 
         String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(context.getForDate()) + ".csv";
+        File file = new File(sftpDir, reportName);
         OutputStream out = null;
         try {
-            out = new FileOutputStream(new File(sftpDir, reportName));
+            out = new FileOutputStream(file);
             out.write(formater.getBinaryData());
-
-            // TODO commit should be here and not in the end of the process facade method
         } catch (Throwable e) {
-            System.err.println(e);
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
         } finally {
             IOUtils.closeQuietly(out);
         }
