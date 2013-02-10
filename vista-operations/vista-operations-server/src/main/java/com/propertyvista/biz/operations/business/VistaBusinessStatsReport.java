@@ -36,6 +36,7 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -133,11 +134,31 @@ class VistaBusinessStatsReport {
             criteria.ge(criteria.proto().created(), reportSince);
             data.newTenantsCount().setValue(Persistence.service().count(criteria));
         }
+
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.eq(criteria.proto().registeredInPortal(), Boolean.TRUE);
+            data.registeredTenantsCount().setValue(Persistence.service().count(criteria));
+        }
+
         {
             EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
             criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
             data.tenantInsurance().setValue(Persistence.service().count(criteria));
         }
+
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.processed());
+            data.processedPayments().setValue(Persistence.service().count(criteria));
+        }
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.processed());
+            criteria.ge(criteria.proto().createdDate(), reportSince);
+            data.newProcessedPayments().setValue(Persistence.service().count(criteria));
+        }
+
         er.reportEntity(formatter, data);
     }
 

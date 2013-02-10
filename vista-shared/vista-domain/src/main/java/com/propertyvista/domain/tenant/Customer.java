@@ -50,6 +50,7 @@ public interface Customer extends IEntity {
     @NotNull
     @ReadOnly(allowOverrideNull = true)
     @Detached
+    @Indexed
     @MemberColumn(name = "user_id")
     @Owned(cascade = {})
     CustomerUser user();
@@ -95,4 +96,6 @@ public interface Customer extends IEntity {
     CustomerAcceptedTerms signedTerms();
 
     IPrimitive<String> portalRegistrationToken();
+
+    IPrimitive<Boolean> registeredInPortal();
 }

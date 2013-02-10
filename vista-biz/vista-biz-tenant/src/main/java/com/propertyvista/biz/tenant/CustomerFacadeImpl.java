@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
-import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.security.CustomerUser;
@@ -42,6 +41,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -202,7 +202,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         Tenant tenant = Persistence.service().retrieve(criteria);
         if (tenant == null) {
-            throw new UserRuntimeException(i18n.tr("One of the fileds you entered was incorrect"));
+            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
         }
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
         tenant.customer().portalRegistrationToken().setValue(null);

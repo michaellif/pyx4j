@@ -15,3 +15,4 @@ VISTA-2216 vlads TenantSure
   AuditRecord.app constrain now have 'operations' insterad of admin
 
   New in PMC Customer.created, Building.created  (set to updated during migration)
+  Customer.registeredInPortal boolean set null in migration

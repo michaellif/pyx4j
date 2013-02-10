@@ -42,6 +42,11 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     IPrimitive<Integer> newTenantsCount();
 
+    IPrimitive<Integer> registeredTenantsCount();
+
     IPrimitive<Integer> tenantInsurance();
 
+    IPrimitive<Integer> processedPayments();
+
+    IPrimitive<Integer> newProcessedPayments();
 }

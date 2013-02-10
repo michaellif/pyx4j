@@ -109,6 +109,15 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }
 
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+        Customer customer = Persistence.service().retrieve(criteria);
+        if (customer.registeredInPortal().getValue(Boolean.FALSE)) {
+            customer.registeredInPortal().getValue(Boolean.TRUE);
+            Persistence.service().persist(customer);
+            Persistence.service().commit();
+        }
+
         // check if terms have been signed
         if (ServerSideFactory.create(CustomerFacade.class).hasToAcceptTerms(user)) {
             actualBehaviors.add(VistaCustomerBehavior.VistaTermsAcceptanceRequired);
