@@ -14,19 +14,19 @@
 package com.propertyvista.interfaces.importer;
 
 import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
-import com.pyx4j.essentials.server.report.ReportTableXLSXFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 
 import com.propertyvista.interfaces.importer.model.ImportInformation;
 
 class ProcessingResponseReport {
 
-    protected ReportTableFormater formater;
+    protected ReportTableFormatter formater;
 
     protected int messagesCount = 0;
 
     ProcessingResponseReport() {
-        this.formater = new ReportTableXLSXFormater();
+        this.formater = new ReportTableXLSXFormatter();
     }
 
     public int getMessagesCount() {

@@ -70,10 +70,10 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     @Override
     protected void createHeader() {
-        formater.header("pmc");
-        formater.header("table");
-        formater.header("count");
-        formater.newRow();
+        formatter.header("pmc");
+        formatter.header("table");
+        formatter.header("count");
+        formatter.newRow();
 
         specificNamespaceIntegrityCheck(VistaNamespace.operationsNamespace);
         specificNamespaceIntegrityCheck(VistaNamespace.expiringNamespace);
@@ -144,10 +144,10 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             }
         }
         for (Entry<String, Integer> entry : tablesMap.entrySet()) {
-            formater.cell(NamespaceManager.getNamespace());
-            formater.cell(entry.getKey());
-            formater.cell(entry.getValue());
-            formater.newRow();
+            formatter.cell(NamespaceManager.getNamespace());
+            formatter.cell(entry.getKey());
+            formatter.cell(entry.getValue());
+            formatter.newRow();
         }
     }
 }

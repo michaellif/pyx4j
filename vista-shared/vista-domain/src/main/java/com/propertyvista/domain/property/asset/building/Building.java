@@ -121,6 +121,9 @@ public interface Building extends PolicyNode {
     @Timestamp
     IPrimitive<Date> updated();
 
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
+
     @Owned
     @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();

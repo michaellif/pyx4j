@@ -16,7 +16,7 @@ package com.propertyvista.biz.tenant.insurance;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
@@ -31,10 +31,10 @@ public interface TenantSureProcessFacade {
 
     void processCancellations(RunStats runStats, LogicalDate dueDate);
 
-    ReportTableFormater startReport();
+    ReportTableFormatter startReport();
 
-    void processReportPmc(RunStats runStats, Date date, ReportTableFormater formater);
+    void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater);
 
-    void completeReport(ReportTableFormater formater, Date date);
+    void completeReport(ReportTableFormatter formater, Date date);
 
 }

@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.operations.domain.scheduler.RunStats;
@@ -60,17 +60,17 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public ReportTableFormater startReport() {
+    public ReportTableFormatter startReport() {
         return TenantSureReports.startReport();
     }
 
     @Override
-    public void processReportPmc(RunStats runStats, Date date, ReportTableFormater formater) {
+    public void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater) {
         TenantSureReports.processReportPmc(runStats, date, formater);
     }
 
     @Override
-    public void completeReport(ReportTableFormater formater, Date date) {
+    public void completeReport(ReportTableFormatter formater, Date date) {
         TenantSureReports.completeReport(formater, date);
     }
 }

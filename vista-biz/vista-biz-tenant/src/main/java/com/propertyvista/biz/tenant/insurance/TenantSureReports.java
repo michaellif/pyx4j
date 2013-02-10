@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -49,8 +49,8 @@ class TenantSureReports {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureReports.class);
 
-    static ReportTableFormater startReport() {
-        ReportTableFormater formater = new ReportTableCSVFormater();
+    static ReportTableFormatter startReport() {
+        ReportTableFormatter formater = new ReportTableCSVFormatter();
 
         formater.header("First Name");
         formater.header("Last Name");
@@ -64,7 +64,7 @@ class TenantSureReports {
         return formater;
     }
 
-    static void completeReport(ReportTableFormater formater, Date date) {
+    static void completeReport(ReportTableFormatter formater, Date date) {
         // create the file actually
         File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
         File dirReports = new File(sftpDir, "reports");
@@ -89,7 +89,7 @@ class TenantSureReports {
         }
     }
 
-    static void processReportPmc(RunStats runStats, Date date, ReportTableFormater formater) {
+    static void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater) {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:

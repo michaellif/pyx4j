@@ -14,7 +14,7 @@
 package com.propertyvista.server.jobs.insurance;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.server.jobs.PmcProcess;
@@ -22,7 +22,7 @@ import com.propertyvista.server.jobs.PmcProcessContext;
 
 public class TenantSureReportsProcess implements PmcProcess {
 
-    protected ReportTableFormater formater;
+    protected ReportTableFormatter formater;
 
     public TenantSureReportsProcess() {
     }

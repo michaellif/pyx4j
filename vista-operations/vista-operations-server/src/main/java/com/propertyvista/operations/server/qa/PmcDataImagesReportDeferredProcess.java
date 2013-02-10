@@ -49,10 +49,10 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
 
     @Override
     protected void createHeaderEnds() {
-        formater.header("BuildingId");
-        formater.header("FloorplanId");
-        formater.header("ImageId");
-        formater.header("ImageCaption");
+        formatter.header("BuildingId");
+        formatter.header("FloorplanId");
+        formatter.header("ImageId");
+        formatter.header("ImageCaption");
         super.createHeaderEnds();
     }
 
@@ -106,14 +106,14 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
         }
 
         super.reportEntity(pmc);
-        formater.cell(building.getPrimaryKey());
+        formatter.cell(building.getPrimaryKey());
         if (floorplan != null) {
-            formater.cell(floorplan.getPrimaryKey());
+            formatter.cell(floorplan.getPrimaryKey());
         } else {
-            formater.cell(null);
+            formatter.cell(null);
         }
-        formater.cell(media.getPrimaryKey());
-        formater.cell(media.caption().getValue());
-        formater.newRow();
+        formatter.cell(media.getPrimaryKey());
+        formatter.cell(media.caption().getValue());
+        formatter.newRow();
     }
 }

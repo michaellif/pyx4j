@@ -14,13 +14,13 @@
 package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.operations.business.VistaBusinessFacade;
 
 public class VistaBusinessStatsReportProcess implements PmcProcess {
 
-    protected ReportTableFormater formater;
+    protected ReportTableFormatter formater;
 
     @Override
     public boolean start(PmcProcessContext context) {

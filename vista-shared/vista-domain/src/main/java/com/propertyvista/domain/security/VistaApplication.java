@@ -15,7 +15,7 @@ package com.propertyvista.domain.security;
 
 public enum VistaApplication {
 
-    admin,
+    operations,
 
     crm,
 

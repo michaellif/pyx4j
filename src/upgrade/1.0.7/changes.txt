@@ -12,3 +12,6 @@ VISTA-2216 vlads TenantSure
 
 
   _Admin_.scheduler_RunStats add Erred  and amount_erred
+  AuditRecord.app constrain now have 'operations' insterad of admin
+
+  New in PMC Customer.created, Building.created  (set to updated during migration)

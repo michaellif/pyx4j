@@ -50,11 +50,11 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
 
     @Override
     protected void createHeaderEnds() {
-        formater.header("Province");
-        formater.header("City");
-        formater.header("BuildingId");
-        formater.header("PropertyCode");
-        formater.header("FloorplanId");
+        formatter.header("Province");
+        formatter.header("City");
+        formatter.header("BuildingId");
+        formatter.header("PropertyCode");
+        formatter.header("FloorplanId");
         super.createHeaderEnds();
     }
 
@@ -90,12 +90,12 @@ public class PmcDataBuildingsReportDeferredProcess extends SearchReportDeferredP
 
     private void exportPmcBuilding(Pmc pmc, Building building, Floorplan floorplan) {
         super.reportEntity(pmc);
-        formater.cell(escapeURI(building.info().address().province().name().getStringView()));
-        formater.cell(escapeURI(building.info().address().city().getStringView()));
-        formater.cell(building.getPrimaryKey());
-        formater.cell(building.propertyCode().getStringView());
-        formater.cell(floorplan.getPrimaryKey());
-        formater.newRow();
+        formatter.cell(escapeURI(building.info().address().province().name().getStringView()));
+        formatter.cell(escapeURI(building.info().address().city().getStringView()));
+        formatter.cell(building.getPrimaryKey());
+        formatter.cell(building.propertyCode().getStringView());
+        formatter.cell(floorplan.getPrimaryKey());
+        formatter.newRow();
     }
 
     private String escapeURI(String value) {
