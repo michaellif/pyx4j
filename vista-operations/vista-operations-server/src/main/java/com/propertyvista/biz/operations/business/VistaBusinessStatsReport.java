@@ -168,8 +168,7 @@ class VistaBusinessStatsReport {
         if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
             emails.add(mailConfig.getForwardAllTo());
         } else if (VistaDeployment.isVistaProduction()) {
-            emails.add("leonard@propertyvista.com");
-            emails.add("vladsd@propertyvista.com");
+            emails.add("vista-operations-stats@propertyvista.com");
         } else {
             emails.add("vista-operations-stats@pyx4j.com");
         }
