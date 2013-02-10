@@ -8,13 +8,13 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-admin</artifactId>
+        <artifactId>vista-operations</artifactId>
         <version>1.0.7-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-admin-server</artifactId>
-    <name>vista-admin-server</name>
+    <artifactId>vista-operations-server</artifactId>
+    <name>vista-operations-server</name>
 
     <dependencies>
 
@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-admin-rpc</artifactId>
+            <artifactId>vista-operations-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
 

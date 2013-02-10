@@ -8,47 +8,30 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-admin</artifactId>
+        <artifactId>vista-operations</artifactId>
         <version>1.0.7-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-admin-rpc</artifactId>
-    <name>vista-admin-rpc</name>
+    <artifactId>vista-operations-domain</artifactId>
+    <name>vista-operations-domain</name>
 
     <dependencies>
 
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-admin-domain</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-crm-rpc</artifactId>
+            <artifactId>vista-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-rpc</artifactId>
+            <artifactId>pyx-entity-shared</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-shared</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
     </dependencies>

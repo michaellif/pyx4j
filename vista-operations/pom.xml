@@ -13,15 +13,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-admin</artifactId>
-    <name>vista-admin</name>
+    <artifactId>vista-operations</artifactId>
+    <name>vista-operations</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-admin-rpc</module>
-        <module>vista-admin-domain</module>
-        <module>vista-admin-client</module>
-        <module>vista-admin-server</module>
+        <module>vista-operations-rpc</module>
+        <module>vista-operations-domain</module>
+        <module>vista-operations-client</module>
+        <module>vista-operations-server</module>
     </modules>
 
 </project>

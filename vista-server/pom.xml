@@ -46,7 +46,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-admin-server</artifactId>
+            <artifactId>vista-operations-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

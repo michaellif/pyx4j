@@ -26,10 +26,10 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-admin-domain</artifactId>
+            <artifactId>vista-operations-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
     </dependencies>
 
 </project>

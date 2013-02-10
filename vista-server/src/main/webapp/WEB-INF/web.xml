@@ -212,7 +212,7 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
-        <url-pattern>/admin/debug/*</url-pattern>
+        <url-pattern>/operations/debug/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -257,7 +257,7 @@
 
     <servlet-mapping>
         <servlet-name>DBResetServlet</servlet-name>
-        <url-pattern>/admin/db-reset</url-pattern>
+        <url-pattern>/operations/db-reset</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -307,7 +307,7 @@
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/admin/srv/*</url-pattern>
+        <url-pattern>/operations/srv/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -331,7 +331,7 @@
 
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
-        <url-pattern>/admin/download/*</url-pattern>
+        <url-pattern>/operations/download/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -351,7 +351,7 @@
 
     <servlet-mapping>
         <servlet-name>VistaUploadServlet</servlet-name>
-        <url-pattern>/admin/upload/*</url-pattern>
+        <url-pattern>/operations/upload/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -391,7 +391,7 @@
 
     <servlet-mapping>
     	<servlet-name>PmcDocumentServlet</servlet-name>
-    	<url-pattern>/admin/pmc_document/*</url-pattern>
+    	<url-pattern>/operations/pmc_document/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -449,7 +449,7 @@
 
     <servlet-mapping>
         <servlet-name>VistaConfigInfoServlet</servlet-name>
-        <url-pattern>/admin/config</url-pattern>
+        <url-pattern>/operations/config</url-pattern>
     </servlet-mapping>
 
     <servlet>
