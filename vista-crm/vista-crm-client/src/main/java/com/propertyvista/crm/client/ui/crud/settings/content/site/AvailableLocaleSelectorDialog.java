@@ -54,19 +54,17 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
         }
         // this triggers option load
         localeSelector.setValueByString("");
-        // this handler will fire when options loaded
-        localeSelector.addAsyncValueChangeHandler(new AsyncValueChangeHandler<AvailableLocale>() {
-            @Override
-            public void onAsyncChange(AsyncValueChangeEvent<AvailableLocale> event) {
-                int optSize = localeSelector.getOptions().size();
-                if (optSize == 0) {
-                    panel.add(new Label("Sorry, no more items to choose from."));
-                } else {
-                    panel.add(localeSelector);
-                    localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
+        if (localeSelector.isOptionsLoaded()) {
+            setContentPanel(localeSelector);
+        } else {
+            // this handler will fire when options loaded
+            localeSelector.addAsyncValueChangeHandler(new AsyncValueChangeHandler<AvailableLocale>() {
+                @Override
+                public void onAsyncChange(AsyncValueChangeEvent<AvailableLocale> event) {
+                    setContentPanel(localeSelector);
                 }
-            }
-        });
+            });
+        }
 
         localeSelector.addValueChangeHandler(new ValueChangeHandler<AvailableLocale>() {
             @Override
@@ -77,6 +75,16 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
         });
 
         setBody(panel);
+    }
+
+    private void setContentPanel(CEntityComboBox<AvailableLocale> localeSelector) {
+        int optSize = localeSelector.getOptions().size();
+        if (optSize == 0) {
+            panel.add(new Label("Sorry, no more items to choose from."));
+        } else {
+            panel.add(localeSelector);
+            localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
+        }
     }
 
     @Override
