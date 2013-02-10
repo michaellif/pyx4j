@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
 
@@ -45,4 +46,8 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
         return CreditCardProcessor.completion(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
+    @Override
+    public boolean isNetworkError(String responseCode) {
+        return new CaledonPaymentProcessor().isNetworkError(responseCode);
+    }
 }

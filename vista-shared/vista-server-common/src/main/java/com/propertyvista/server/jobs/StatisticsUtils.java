@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -54,7 +54,9 @@ public class StatisticsUtils {
     }
 
     private static void sumTotals(StatisticsRecord dynamicStatisticsRecord) {
-        dynamicStatisticsRecord.total().setValue(nvl(dynamicStatisticsRecord.failed().getValue()) + nvl(dynamicStatisticsRecord.processed().getValue()));
+        dynamicStatisticsRecord.total().setValue(
+                nvl(dynamicStatisticsRecord.erred().getValue()) + nvl(dynamicStatisticsRecord.failed().getValue())
+                        + nvl(dynamicStatisticsRecord.processed().getValue()));
     }
 
     public static void addProcessed(StatisticsRecord dynamicStatisticsRecord, int count) {
@@ -80,5 +82,15 @@ public class StatisticsUtils {
     public static void addFailed(StatisticsRecord dynamicStatisticsRecord, int count, BigDecimal amount) {
         addFailed(dynamicStatisticsRecord, count);
         dynamicStatisticsRecord.amountFailed().setValue(nvl(dynamicStatisticsRecord.amountFailed().getValue()) + amount.doubleValue());
+    }
+
+    public static void addErred(StatisticsRecord dynamicStatisticsRecord, int count) {
+        dynamicStatisticsRecord.erred().setValue(nvl(dynamicStatisticsRecord.erred().getValue()) + count);
+        sumTotals(dynamicStatisticsRecord);
+    }
+
+    public static void addErred(StatisticsRecord dynamicStatisticsRecord, int count, BigDecimal amount) {
+        addErred(dynamicStatisticsRecord, count);
+        dynamicStatisticsRecord.amountErred().setValue(nvl(dynamicStatisticsRecord.amountErred().getValue()) + amount.doubleValue());
     }
 }

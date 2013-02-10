@@ -14,6 +14,8 @@
 package com.propertyvista.payment.caledon;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,8 +33,26 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
     private final CaledonHttpClient client;
 
+    private static final Set<String> networkErrorCodes = initNetworkErrorCodes();
+
     public CaledonPaymentProcessor() {
         client = new CaledonHttpClient();
+    }
+
+    private static Set<String> initNetworkErrorCodes() {
+        Set<String> codes = new HashSet<String>();
+        codes.add("1023");
+        codes.add("1024");
+        codes.add("1025");
+        codes.add("1088");
+        codes.add("1099");
+        codes.add("1106");
+        return codes;
+    }
+
+    @Override
+    public boolean isNetworkError(String responseCode) {
+        return networkErrorCodes.contains(responseCode);
     }
 
     private CaledonRequest createRequestInstrument(PaymentInstrument paymentInstrument) {

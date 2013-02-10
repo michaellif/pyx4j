@@ -41,6 +41,8 @@ public interface CreditCardFacade {
         }
     }
 
+    public boolean isNetworkError(String responseCode);
+
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
     public CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber,

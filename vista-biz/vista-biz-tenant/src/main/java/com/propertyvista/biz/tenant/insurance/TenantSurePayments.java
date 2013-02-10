@@ -165,8 +165,10 @@ class TenantSurePayments {
 
                     if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.Cleared) {
                         StatisticsUtils.addProcessed(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
-                    } else {
+                    } else if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
                         StatisticsUtils.addFailed(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
+                    } else {
+                        StatisticsUtils.addErred(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
                     }
 
                 }
@@ -209,6 +211,9 @@ class TenantSurePayments {
             if (response.success().getValue()) {
                 transaction.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
                 transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
+            } else if (ServerSideFactory.create(CreditCardFacade.class).isNetworkError(response.code().getValue())) {
+                transaction.transactionAuthorizationNumber().setValue(response.code().getValue());
+                transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.PaymentError);
             } else {
                 transaction.transactionAuthorizationNumber().setValue(response.code().getValue());
                 transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected);

@@ -10,3 +10,5 @@ VISTA-2216 vlads TenantSure
   _admin_.TenantSureHQUpdateRecord
   _admin_.TenantSureSubscribers
 
+
+  _Admin_.scheduler_RunStats add Erred  and amount_erred
