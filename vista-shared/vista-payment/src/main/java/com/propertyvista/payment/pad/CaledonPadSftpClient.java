@@ -34,7 +34,7 @@ import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.payment.pad.data.PadAkFile;

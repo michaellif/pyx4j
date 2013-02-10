@@ -39,7 +39,7 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
 
         try {
             Lifecycle.startElevatedUserContext();
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             PmcCreatorDev.createPmc(VistaNamespace.demoNamespace);
             NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
             log.info(dp.preloadAll());

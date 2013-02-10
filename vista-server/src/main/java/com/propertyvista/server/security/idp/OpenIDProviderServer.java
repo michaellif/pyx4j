@@ -48,7 +48,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.server.onboarding.rh.OnboardingUserAuthenticationRequestHandler;
+import com.propertyvista.operations.server.onboarding.rh.OnboardingUserAuthenticationRequestHandler;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
@@ -241,7 +241,7 @@ public class OpenIDProviderServer {
 
         UserData userData = new UserData();
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
 
             OnboardingUserAuthenticationResponseIO authResponse = OnboardingUserAuthenticationRequestHandler.processOnboardingUserLogin(
                     asOnboardingAuthRequest(httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null, null), false);

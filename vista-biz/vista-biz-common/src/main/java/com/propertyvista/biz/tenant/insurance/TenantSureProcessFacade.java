@@ -16,8 +16,8 @@ package com.propertyvista.biz.tenant.insurance;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
-import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
+import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 public interface TenantSureProcessFacade {
 

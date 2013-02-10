@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;

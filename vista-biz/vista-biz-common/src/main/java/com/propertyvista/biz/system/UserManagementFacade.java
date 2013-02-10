@@ -18,7 +18,7 @@ import java.util.Set;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;

@@ -46,7 +46,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
         if (!dto.transactionId().isNull()) {
             final Key transactionId = dto.transactionId().getValue();
             dto.transactionRef().setValue(transactionId.toString());
-            dto.transaction().set(TaskRunner.runInAdminNamespace(new Callable<CustomerCreditCheckTransaction>() {
+            dto.transaction().set(TaskRunner.runInOperationsNamespace(new Callable<CustomerCreditCheckTransaction>() {
                 @Override
                 public CustomerCreditCheckTransaction call() {
                     CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);

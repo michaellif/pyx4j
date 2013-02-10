@@ -58,14 +58,14 @@ public class VistaDeployment {
 
     public static boolean isSystemNamespace() {
         String namespace = NamespaceManager.getNamespace();
-        return VistaNamespace.noNamespace.equals(namespace) || VistaNamespace.adminNamespace.equals(namespace);
+        return VistaNamespace.noNamespace.equals(namespace) || VistaNamespace.operationsNamespace.equals(namespace);
     }
 
     public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
             return Persistence.service().retrieve(criteria);
@@ -154,9 +154,9 @@ public class VistaDeployment {
 
     public static PmcYardiCredential getPmcYardiCredential() {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc().namespace(), namespace));
             return Persistence.service().retrieve(criteria);

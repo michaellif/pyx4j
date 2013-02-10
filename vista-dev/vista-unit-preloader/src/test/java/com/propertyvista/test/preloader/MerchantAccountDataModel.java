@@ -62,7 +62,7 @@ public class MerchantAccountDataModel {
             // join accounts
             globalbMerchantAccount.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
 
-            NamespaceManager.runInTargetNamespace(VistaNamespace.adminNamespace, new Callable<Void>() {
+            NamespaceManager.runInTargetNamespace(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
                     Persistence.service().persist(globalbMerchantAccount);

@@ -65,7 +65,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         if (httprequest.getServletPath() != null) {
             String servletPath = httprequest.getServletPath();
             if ((servletPath.startsWith("/" + DeploymentConsts.OPERATIONS_URL) || servletPath.startsWith("/interfaces"))) {
-                return VistaNamespace.adminNamespace;
+                return VistaNamespace.operationsNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
                     || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")
@@ -112,7 +112,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
         String pmcNamespace;
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             pmcNamespace = CacheService.get(VistaNamespaceResolver.class.getName() + "." + serverName);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);

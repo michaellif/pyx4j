@@ -39,7 +39,7 @@ import com.propertyvista.domain.pmc.payment.CustomerCreditCheckTransaction;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
-@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @Caption(name = "PMC")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface Pmc extends IEntity {

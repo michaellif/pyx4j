@@ -17,7 +17,7 @@ public interface VistaNamespace {
 
     public static final String noNamespace = "_";
 
-    public static final String adminNamespace = "_admin_";
+    public static final String operationsNamespace = "_admin_";
 
     public static final String expiringNamespace = "_expiring_";
 

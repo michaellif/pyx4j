@@ -19,8 +19,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.payment.pad.CaledonPadReconciliationParser;
 

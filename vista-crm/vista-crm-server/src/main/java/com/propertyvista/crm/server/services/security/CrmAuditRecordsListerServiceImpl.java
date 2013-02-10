@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.security.AuditRecord;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.dto.AuditRecordDTO;
@@ -46,7 +46,7 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
     @Override
     public void list(AsyncCallback<EntitySearchResult<AuditRecordDTO>> callback, EntityListCriteria<AuditRecordDTO> dtoCriteria) {
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             super.list(callback, dtoCriteria);
         } finally {
             NamespaceManager.remove();

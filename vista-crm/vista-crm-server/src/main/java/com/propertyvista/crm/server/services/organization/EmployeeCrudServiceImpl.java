@@ -28,7 +28,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
@@ -155,7 +155,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 final EntityQueryCriteria<OnboardingUserCredential> onbUCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
                 onbUCrt.add(PropertyCriterion.eq(onbUCrt.proto().crmUser(), user.getPrimaryKey()));
 
-                onbUserCred = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+                onbUserCred = TaskRunner.runInOperationsNamespace(new Callable<OnboardingUserCredential>() {
                     @Override
                     public OnboardingUserCredential call() {
 
@@ -163,7 +163,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                     }
                 });
 
-                onbUser = TaskRunner.runInAdminNamespace(new Callable<OnboardingUser>() {
+                onbUser = TaskRunner.runInOperationsNamespace(new Callable<OnboardingUser>() {
                     @Override
                     public OnboardingUser call() {
                         if (onbUserCred != null) {
@@ -190,7 +190,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                     onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
                     onbUserCred.interfaceUid().setValue(credential.interfaceUid().getValue());
 
-                    Boolean res = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
+                    Boolean res = TaskRunner.runInOperationsNamespace(new Callable<Boolean>() {
                         @Override
                         public Boolean call() throws Exception {
                             Persistence.service().persist(onbUser);
@@ -211,7 +211,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                     }
 
                 } else { // Delete if role removed
-                    TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                    TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                         @Override
                         public Void call() throws Exception {
                             if (onbUserCred.getPrimaryKey() != null)

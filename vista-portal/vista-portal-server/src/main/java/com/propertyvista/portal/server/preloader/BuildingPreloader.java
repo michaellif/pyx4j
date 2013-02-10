@@ -295,7 +295,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     private MerchantAccount createMerchantAccount() {
         final EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), VistaDeployment.getCurrentPmc()));
-        final List<OnboardingMerchantAccount> accs = TaskRunner.runInAdminNamespace(new Callable<List<OnboardingMerchantAccount>>() {
+        final List<OnboardingMerchantAccount> accs = TaskRunner.runInOperationsNamespace(new Callable<List<OnboardingMerchantAccount>>() {
             @Override
             public List<OnboardingMerchantAccount> call() {
                 return Persistence.service().query(criteria);
@@ -325,7 +325,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             acc.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
         }
 
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().persist(accs);

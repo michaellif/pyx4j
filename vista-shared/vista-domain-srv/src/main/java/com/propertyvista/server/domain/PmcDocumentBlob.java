@@ -28,7 +28,7 @@ import com.propertyvista.domain.VistaNamespace;
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 /** Blob of the documents PMCs upload via during Credit Check Setup Wizard */
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface PmcDocumentBlob extends IEntity {
 
     IPrimitive<String> contentType();

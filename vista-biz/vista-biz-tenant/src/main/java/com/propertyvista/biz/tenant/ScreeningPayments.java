@@ -74,7 +74,7 @@ class ScreeningPayments {
             throw new UserRuntimeException(i18n.tr("Credit Card is not setup for Credit Check payments"));
         }
 
-        TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().persist(transaction);
@@ -104,7 +104,7 @@ class ScreeningPayments {
             }
         } finally {
 
-            TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+            TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
                     Persistence.service().persist(transaction);
@@ -118,7 +118,7 @@ class ScreeningPayments {
     }
 
     static void preAuthorizationReversal(final Key transactionId) {
-        final CustomerCreditCheckTransaction transaction = TaskRunner.runInAdminNamespace(new Callable<CustomerCreditCheckTransaction>() {
+        final CustomerCreditCheckTransaction transaction = TaskRunner.runInOperationsNamespace(new Callable<CustomerCreditCheckTransaction>() {
             @Override
             public CustomerCreditCheckTransaction call() {
                 CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
@@ -133,7 +133,7 @@ class ScreeningPayments {
             transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Reversal);
 
-            TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+            TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
                     Persistence.service().persist(transaction);
@@ -148,7 +148,7 @@ class ScreeningPayments {
     }
 
     static void compleateTransaction(final Key transactionId) {
-        final CustomerCreditCheckTransaction transaction = TaskRunner.runInAdminNamespace(new Callable<CustomerCreditCheckTransaction>() {
+        final CustomerCreditCheckTransaction transaction = TaskRunner.runInOperationsNamespace(new Callable<CustomerCreditCheckTransaction>() {
             @Override
             public CustomerCreditCheckTransaction call() {
                 CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);
@@ -174,7 +174,7 @@ class ScreeningPayments {
             }
         } finally {
 
-            TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+            TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
                     Persistence.service().persist(transaction);

@@ -23,7 +23,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
-import com.propertyvista.admin.domain.dev.DevelopmentUser;
+import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.server.common.security.DevelopmentSecurity;

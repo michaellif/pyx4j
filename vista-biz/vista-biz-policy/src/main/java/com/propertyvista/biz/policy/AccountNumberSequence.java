@@ -74,7 +74,7 @@ class AccountNumberSequence {
         sequence.maximum().setValue(9999l);
         final String namespace = NamespaceManager.getNamespace();
 
-        Long newPrefix = TaskRunner.runInAdminNamespace(new Callable<Long>() {
+        Long newPrefix = TaskRunner.runInOperationsNamespace(new Callable<Long>() {
             @Override
             public Long call() throws Exception {
                 Long nextValue;

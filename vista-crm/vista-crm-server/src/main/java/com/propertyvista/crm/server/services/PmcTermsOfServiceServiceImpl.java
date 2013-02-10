@@ -22,8 +22,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.legal.LegalDocument;
-import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.LegalDocument;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -33,7 +33,7 @@ public class PmcTermsOfServiceServiceImpl implements PmcTermsOfServiceService {
     @Override
     public void retrieveLegalTerms(AsyncCallback<LegalTermsContent> callback) {
         LegalTermsContent legalTerms = EntityFactory.create(LegalTermsContent.class);
-        String terms = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
                 String result = null;

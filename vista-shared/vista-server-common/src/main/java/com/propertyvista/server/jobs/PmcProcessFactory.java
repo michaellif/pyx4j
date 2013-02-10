@@ -13,7 +13,7 @@
  */
 package com.propertyvista.server.jobs;
 
-import com.propertyvista.admin.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
 import com.propertyvista.server.jobs.insurance.TenantSureReportsProcess;

@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
-import com.propertyvista.admin.domain.legal.VistaTerms.VistaTermsV;
+import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.security.CustomerUser;
@@ -139,7 +139,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 return true;
             }
         }
-        Key versionKey = TaskRunner.runInAdminNamespace(new Callable<Key>() {
+        Key versionKey = TaskRunner.runInOperationsNamespace(new Callable<Key>() {
             @Override
             public Key call() {
                 VistaTermsV vistaTermsV = Persistence.service().retrieve(VistaTermsV.class, acceptedTerms.vistaTerms().getValue());

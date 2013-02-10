@@ -27,7 +27,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 
-@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @Caption(name = "PMC Payment Type Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcPaymentTypeInfo extends AbstractPaymentFees {

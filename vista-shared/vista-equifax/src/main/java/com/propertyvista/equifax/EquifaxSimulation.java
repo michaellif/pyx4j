@@ -27,7 +27,7 @@ import ca.equifax.uat.to.CNConsAndCommRequestType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.dev.EquifaxSimulatorConfig;
+import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -54,7 +54,7 @@ public class EquifaxSimulation {
     public static EfxTransmit simulateResponce(CNConsAndCommRequestType requestMessage, Customer customer, CustomerCreditCheck pcc, int strategyNumber,
             Lease lease, LeaseTermParticipant<?> leaseParticipant) {
 
-        EquifaxSimulatorConfig equifaxSimulatorConfig = TaskRunner.runInAdminNamespace(new Callable<EquifaxSimulatorConfig>() {
+        EquifaxSimulatorConfig equifaxSimulatorConfig = TaskRunner.runInOperationsNamespace(new Callable<EquifaxSimulatorConfig>() {
             @Override
             public EquifaxSimulatorConfig call() {
                 return Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class));

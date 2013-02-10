@@ -15,7 +15,7 @@ package com.propertyvista.server;
 
 import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
-import com.propertyvista.admin.server.services.ImportUploadServiceImpl;
+import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;

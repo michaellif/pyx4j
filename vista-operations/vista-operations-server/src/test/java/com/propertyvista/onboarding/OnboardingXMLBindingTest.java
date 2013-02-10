@@ -29,9 +29,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 
-import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
-import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
-import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
+import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
+import com.propertyvista.operations.server.onboarding.rh.OnboardingRequestHandlerFactory;
+import com.propertyvista.operations.server.onboarding.rhf.RequestHandler;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 public class OnboardingXMLBindingTest {

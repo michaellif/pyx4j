@@ -15,7 +15,7 @@ package com.propertyvista.server.jobs.insurance;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
+import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;

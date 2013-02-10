@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.dev.DevelopmentUser;
+import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.shared.config.VistaDemo;
@@ -62,7 +62,7 @@ public class DevelopmentSecurity {
     public static DevelopmentUser findDevelopmentUser() {
         final String requestNamespace = NamespaceManager.getNamespace();
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             DevelopmentUser developmentUser = findByOpenId();
             if (developmentUser != null) {
                 return developmentUser;

@@ -25,7 +25,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
-import com.propertyvista.admin.domain.security.AuditRecord;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -44,7 +44,7 @@ public class AuditFacadeImpl implements AuditFacade {
     public void loginFailed(final AbstractUser user) {
         final String namespace = NamespaceManager.getNamespace();
         final String ip = getRequestRemoteAddr();
-        TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
             @Override
             public Void call() {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);
@@ -82,7 +82,7 @@ public class AuditFacadeImpl implements AuditFacade {
     private void record(final AuditRecordEventType event, final IEntity entity) {
         final String namespace = NamespaceManager.getNamespace();
         final String ip = getRequestRemoteAddr();
-        TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
             @Override
             public Void call() {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);
@@ -111,7 +111,7 @@ public class AuditFacadeImpl implements AuditFacade {
         final String namespace = NamespaceManager.getNamespace();
         final String ip = getRequestRemoteAddr();
         final String details = SimpleMessageFormat.format(format, args);
-        TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
+        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
             @Override
             public Void call() {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);

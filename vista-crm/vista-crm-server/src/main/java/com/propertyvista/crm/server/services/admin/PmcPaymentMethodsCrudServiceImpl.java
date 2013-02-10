@@ -46,7 +46,7 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         PmcPaymentMethodsDTO paymentMethodsHolder = EntityFactory.create(PmcPaymentMethodsDTO.class);
-        paymentMethodsHolder.paymentMethods().addAll(TaskRunner.runInAdminNamespace(new Callable<Vector<PmcPaymentMethod>>() {
+        paymentMethodsHolder.paymentMethods().addAll(TaskRunner.runInOperationsNamespace(new Callable<Vector<PmcPaymentMethod>>() {
 
             @Override
             public Vector<PmcPaymentMethod> call() throws Exception {
@@ -72,7 +72,7 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
     public void save(AsyncCallback<Key> callback, final PmcPaymentMethodsDTO paymentMethodsHolder) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
-        TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
+        TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
 
             @Override
             public VoidSerializable call() throws Exception {

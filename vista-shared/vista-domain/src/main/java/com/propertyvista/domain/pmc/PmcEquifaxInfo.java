@@ -35,7 +35,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.info.BusinessInformation;
 import com.propertyvista.domain.pmc.info.PersonalInformation;
 
-@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @Caption(name = "PMC Equifax Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {

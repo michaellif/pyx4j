@@ -32,7 +32,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface CustomerCreditCheckTransaction extends IEntity {
 
     enum TransactionStatus {

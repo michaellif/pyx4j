@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.payment.pad.PadTestTransactionOffset;
+import com.propertyvista.operations.domain.payment.pad.PadTestTransactionOffset;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -63,7 +63,7 @@ public class PadTransactionUtils {
     }
 
     private static String testDBversionId() {
-        return TaskRunner.runInAdminNamespace(new Callable<String>() {
+        return TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
                 return readTestDBversionId();

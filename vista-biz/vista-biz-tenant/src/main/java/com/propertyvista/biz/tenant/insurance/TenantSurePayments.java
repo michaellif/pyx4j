@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.financial.payment.CreditCardTransactionResponse;

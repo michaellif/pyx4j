@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -168,7 +168,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                 emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
                 emp.email().setValue(email);
 
-                final OnboardingUserCredential userCred = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+                final OnboardingUserCredential userCred = TaskRunner.runInOperationsNamespace(new Callable<OnboardingUserCredential>() {
                     @Override
                     public OnboardingUserCredential call() {
                         return ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser(emp.name().firstName().getStringView(),
@@ -180,7 +180,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
 
                 Persistence.service().persist(emp);
 
-                TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() {
 

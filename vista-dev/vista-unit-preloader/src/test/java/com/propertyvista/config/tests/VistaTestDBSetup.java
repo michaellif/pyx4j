@@ -42,7 +42,7 @@ public class VistaTestDBSetup {
             Mail.getMailService().setDisabled(true);
             if (databaseType == DatabaseType.PostgreSQL) {
                 Persistence.service();
-                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 RDBUtils.ensureNamespace();
                 NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
                 RDBUtils.ensureNamespace();
@@ -55,7 +55,7 @@ public class VistaTestDBSetup {
         RDBUtils.resetDatabase();
         switch (((Configuration) initOnce.getPersistenceConfiguration()).databaseType()) {
         case PostgreSQL:
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             RDBUtils.ensureNamespace();
             NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
             RDBUtils.ensureNamespace();

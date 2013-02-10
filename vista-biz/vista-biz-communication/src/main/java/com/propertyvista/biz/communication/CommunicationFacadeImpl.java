@@ -23,8 +23,8 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.admin.domain.security.AdminUserCredential;
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;

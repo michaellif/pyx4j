@@ -27,7 +27,7 @@ import com.propertyvista.domain.VistaNamespace;
 
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface PmcDocument extends IEntity {
 
     @Owned

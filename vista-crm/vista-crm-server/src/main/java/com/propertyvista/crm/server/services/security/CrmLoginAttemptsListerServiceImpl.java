@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.security.AuditRecord;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
@@ -89,6 +89,6 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
         // we have to do it BEFORE setNamespace() because getCurrentPmc() works only in pmc's namespace        
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().namespace(), VistaDeployment.getCurrentPmc().namespace()));
 
-        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
     }
 }

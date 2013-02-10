@@ -19,7 +19,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.server.domain.security.CrmUserCredential;

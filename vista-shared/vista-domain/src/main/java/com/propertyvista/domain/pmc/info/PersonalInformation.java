@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.person.Name;
 
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface PersonalInformation extends IEntity {
 
     @NotNull

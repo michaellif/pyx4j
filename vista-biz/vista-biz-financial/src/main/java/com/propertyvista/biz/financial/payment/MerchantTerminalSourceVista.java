@@ -19,7 +19,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.vista2pmc.VistaMerchantAccount;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -27,7 +27,7 @@ public class MerchantTerminalSourceVista implements MerchantTerminalSource {
 
     @Override
     public String getMerchantTerminalId() {
-        VistaMerchantAccount ma = TaskRunner.runInAdminNamespace(new Callable<VistaMerchantAccount>() {
+        VistaMerchantAccount ma = TaskRunner.runInOperationsNamespace(new Callable<VistaMerchantAccount>() {
             @Override
             public VistaMerchantAccount call() {
                 return Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class));

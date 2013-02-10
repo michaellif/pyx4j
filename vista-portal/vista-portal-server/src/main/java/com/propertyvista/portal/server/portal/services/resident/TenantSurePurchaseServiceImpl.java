@@ -30,7 +30,7 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;

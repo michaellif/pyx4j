@@ -52,7 +52,7 @@ public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<
     @Override
     public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(final UploadData data,
             UploadDeferredProcess<IEntity, IEntity> process, final UploadResponse<IEntity> response) {
-        return TaskRunner.runInAdminNamespace(new Callable<ProcessingStatus>() {
+        return TaskRunner.runInOperationsNamespace(new Callable<ProcessingStatus>() {
 
             @Override
             public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus call() throws Exception {

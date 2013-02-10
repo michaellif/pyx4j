@@ -55,7 +55,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         final AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
 
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 BusinessInformation businessInformation = EntityFactory.create(BusinessInformation.class);

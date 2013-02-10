@@ -76,7 +76,7 @@ class EnvLinksBuilder extends XMLStringWriter {
 
         tr_hr();
 
-        List<Pmc> pmcs = TaskRunner.runInAdminNamespace(new Callable<List<Pmc>>() {
+        List<Pmc> pmcs = TaskRunner.runInOperationsNamespace(new Callable<List<Pmc>>() {
             @Override
             public List<Pmc> call() {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);

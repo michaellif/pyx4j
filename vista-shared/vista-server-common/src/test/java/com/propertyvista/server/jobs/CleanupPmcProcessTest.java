@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {

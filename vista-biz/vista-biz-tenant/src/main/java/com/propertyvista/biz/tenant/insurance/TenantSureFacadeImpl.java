@@ -35,7 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
-import com.propertyvista.admin.domain.tenantsure.TenantSureSubscribers;
+import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
 import com.propertyvista.config.VistaDeployment;
@@ -235,7 +235,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
-        TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
+        TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
             @Override
             public VoidSerializable call() throws Exception {
                 TenantSureSubscribers tenantSureSubscriber = EntityFactory.create(TenantSureSubscribers.class);

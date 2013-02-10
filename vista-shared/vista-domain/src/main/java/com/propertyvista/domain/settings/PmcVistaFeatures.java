@@ -22,7 +22,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 
-@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcVistaFeatures extends IEntity {
 

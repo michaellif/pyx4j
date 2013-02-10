@@ -75,7 +75,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         // Case of application reload
         final OnboardingUserVisit visit = Context.getUserVisit(OnboardingUserVisit.class);
         if (visit != null) {
-            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
 
                 @Override
                 public Void call() throws Exception {

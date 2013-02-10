@@ -42,7 +42,7 @@ public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudSe
         final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         final AbstractEquifaxFee fees = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
-        TaskRunner.runInAdminNamespace(new Callable<VoidSerializable>() {
+        TaskRunner.runInOperationsNamespace(new Callable<VoidSerializable>() {
 
             @Override
             public VoidSerializable call() throws Exception {

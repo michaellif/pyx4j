@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.preloader;
 
-import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.PmcDTO;
 
 public interface PmcCreatorFacade {
 

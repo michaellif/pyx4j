@@ -22,7 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
@@ -49,7 +49,7 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
 
     @Override
     public void execute() {
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 PmcActivationUserDeferredProcess.super.execute();
@@ -63,7 +63,7 @@ public class PmcActivationUserDeferredProcess extends PmcActivationDeferredProce
         ServerSideFactory.create(CommunicationFacade.class).sendNewPmcEmail(credential.user(), pmcId);
         visit.setStatus(OnboardingApplicationStatus.accountCreated);
 
-        final OnboardingUserCredential credentialUpdated = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+        final OnboardingUserCredential credentialUpdated = TaskRunner.runInOperationsNamespace(new Callable<OnboardingUserCredential>() {
             @Override
             public OnboardingUserCredential call() {
                 return Persistence.service().retrieve(OnboardingUserCredential.class, credential.getPrimaryKey());

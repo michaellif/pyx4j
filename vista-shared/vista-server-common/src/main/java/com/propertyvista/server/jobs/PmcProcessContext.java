@@ -15,7 +15,7 @@ package com.propertyvista.server.jobs;
 
 import java.util.Date;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 
 public class PmcProcessContext {
 

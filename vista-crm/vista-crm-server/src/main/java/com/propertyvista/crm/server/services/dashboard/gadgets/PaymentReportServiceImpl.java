@@ -104,7 +104,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         // TODO: WARNING getCurrentPmc() uses current namespace to get currentPmc:        
         final Pmc currentPmc = VistaDeployment.getCurrentPmc();
 
-        PmcPaymentTypeInfo paymentTypeInfo = TaskRunner.runInAdminNamespace(new Callable<PmcPaymentTypeInfo>() {
+        PmcPaymentTypeInfo paymentTypeInfo = TaskRunner.runInOperationsNamespace(new Callable<PmcPaymentTypeInfo>() {
             @Override
             public PmcPaymentTypeInfo call() throws Exception {
                 EntityQueryCriteria<PmcPaymentTypeInfo> criteria = EntityQueryCriteria.create(PmcPaymentTypeInfo.class);

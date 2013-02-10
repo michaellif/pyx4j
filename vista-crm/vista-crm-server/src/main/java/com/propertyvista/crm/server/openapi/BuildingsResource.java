@@ -74,8 +74,8 @@ public class BuildingsResource {
     public BuildingsRS listBuildings(@QueryParam("pmc") String pmcDnsName, @QueryParam("pm") String propertyManagerName,
             @QueryParam("buildingAmenitiesOnFloorplansFixed") Boolean buildingAmenitiesOnFloorplansFixed) {
 
-        if (VistaNamespace.adminNamespace.equals(NamespaceManager.getNamespace()) || CommonsStringUtils.isStringSet(pmcDnsName)) {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        if (VistaNamespace.operationsNamespace.equals(NamespaceManager.getNamespace()) || CommonsStringUtils.isStringSet(pmcDnsName)) {
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
             Pmc pmc = Persistence.service().retrieve(criteria);

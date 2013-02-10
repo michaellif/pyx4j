@@ -20,7 +20,7 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;

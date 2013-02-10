@@ -82,7 +82,7 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
 
             dynamicStatisticsRecord.message().setValue(message.toString());
         } finally {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         }
     }
 }

@@ -32,7 +32,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
@@ -63,7 +63,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
     @Override
     public void createAccount(AsyncCallback<String> callback, final PmcAccountCreationRequest request) {
 
-        final OnboardingUserCredential credential = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+        final OnboardingUserCredential credential = TaskRunner.runInOperationsNamespace(new Callable<OnboardingUserCredential>() {
             @Override
             public OnboardingUserCredential call() throws Exception {
 
@@ -125,7 +125,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
         OnboardingCrmURL onboardingCrmURL = new OnboardingCrmURL();
 
-        onboardingCrmURL.urlVisible = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        onboardingCrmURL.urlVisible = TaskRunner.runInOperationsNamespace(new Callable<String>() {
 
             @Override
             public String call() throws Exception {

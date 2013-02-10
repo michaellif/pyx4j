@@ -262,7 +262,7 @@
 
     <servlet>
         <servlet-name>CardServiceSimulationServlet</servlet-name>
-        <servlet-class>com.propertyvista.admin.server.services.sim.CardServiceSimulationServlet</servlet-class>
+        <servlet-class>com.propertyvista.operations.server.services.sim.CardServiceSimulationServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -444,7 +444,7 @@
 
     <servlet>
         <servlet-name>VistaConfigInfoServlet</servlet-name>
-        <servlet-class>com.propertyvista.admin.server.services.VistaConfigInfoServlet</servlet-class>
+        <servlet-class>com.propertyvista.operations.server.services.VistaConfigInfoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -502,7 +502,7 @@
 
     <servlet>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
-        <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingSchemaServlet</servlet-class>
+        <servlet-class>com.propertyvista.operations.server.onboarding.OnboardingSchemaServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -512,7 +512,7 @@
 
     <servlet>
         <servlet-name>OnboardingServiceServlet</servlet-name>
-        <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingServiceServlet</servlet-class>
+        <servlet-class>com.propertyvista.operations.server.onboarding.OnboardingServiceServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

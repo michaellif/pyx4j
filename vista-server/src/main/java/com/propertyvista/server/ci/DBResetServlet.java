@@ -56,7 +56,6 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -67,6 +66,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.shared.config.VistaDemo;
@@ -79,7 +79,7 @@ public class DBResetServlet extends HttpServlet {
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum ResetType {
 
-        @Translate("Drop All and Configure Vista Admin")
+        @Translate("Drop All and Configure Vista Operations")
         prodReset,
 
         @Translate("Drop All and Preload all demo PMC (~3 min 30 seconds) [No Mockup]")
@@ -103,8 +103,8 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Drop PMC Tables and Preload one PMC")
         resetPmc(true),
 
-        @Translate("Drop <b>Admin</b> and PMC Tables and Preload one PMC")
-        resetAdminAndPmc(true),
+        @Translate("Drop <b>Operations</b> and PMC Tables and Preload one PMC")
+        resetOperationsAndPmc(true),
 
         @Translate("Preload this PMC")
         preloadPmc(true),
@@ -241,7 +241,7 @@ public class DBResetServlet extends HttpServlet {
                             ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                             try {
                                 if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.allWithMockup,
-                                        ResetType.resetAdminAndPmc, ResetType.clear).contains(type)) {
+                                        ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
                                     Validate.isTrue(!VistaDeployment.isVistaProduction(), "Destruction is disabled");
                                     SchedulerHelper.shutdown();
                                     RDBUtils.resetDatabase();
@@ -251,7 +251,7 @@ public class DBResetServlet extends HttpServlet {
                                     SchedulerHelper.init();
                                     SchedulerHelper.setActive(true);
                                     log.debug("Initialize Admin");
-                                    NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                                     try {
                                         RDBUtils.ensureNamespace();
                                         long astart = System.currentTimeMillis();
@@ -268,7 +268,7 @@ public class DBResetServlet extends HttpServlet {
 
                                         CacheService.resetAll();
 
-                                        new VistaAdminDataPreloaders().preloadAll();
+                                        new VistaOperationsDataPreloaders().preloadAll();
                                         Persistence.service().commit();
                                     } finally {
                                         NamespaceManager.setNamespace(requestNamespace);
@@ -308,7 +308,7 @@ public class DBResetServlet extends HttpServlet {
                                 case addPmcMockupTest1:
                                 case preloadPmcWithMockup:
                                 case resetPmc:
-                                case resetAdminAndPmc:
+                                case resetOperationsAndPmc:
                                 case preloadPmc: {
                                     String pmc = req.getParameter("pmc");
                                     if (pmc == null) {
@@ -324,7 +324,7 @@ public class DBResetServlet extends HttpServlet {
                                     }
                                     o(out, "\n--- PMC  '" + pmc + "' ---\n");
                                     RDBUtils.deleteFromAllEntityTables();
-                                    NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                                     EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                                     criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
                                     Persistence.service().delete(criteria);
@@ -375,7 +375,7 @@ public class DBResetServlet extends HttpServlet {
 
     private void resetPmcTables(String pmc) {
         final String requestNamespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         try {
             CacheService.resetAll();
             RDBUtils.resetSchema(pmc);
@@ -395,7 +395,7 @@ public class DBResetServlet extends HttpServlet {
 
     private void preloadPmc(HttpServletRequest req, OutputStream out, String pmcDnsName, ResetType type) throws IOException {
         long pmcStart = System.currentTimeMillis();
-        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         log.debug("Preload PMC '{}'", pmcDnsName);
 
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);

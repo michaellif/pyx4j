@@ -117,7 +117,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.dnsName().setValue(NamespaceManager.getNamespace());
         pmc.namespace().setValue(NamespaceManager.getNamespace());
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().persist(pmc);

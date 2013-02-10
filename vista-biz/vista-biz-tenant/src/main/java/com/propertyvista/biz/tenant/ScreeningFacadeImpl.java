@@ -77,7 +77,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
     private static PmcEquifaxInfo getCurrentPmcEquifaxInfo() {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().retrieveMember(pmc.equifaxInfo());

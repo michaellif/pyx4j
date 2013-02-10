@@ -38,7 +38,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;

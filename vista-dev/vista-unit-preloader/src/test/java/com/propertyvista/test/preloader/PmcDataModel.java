@@ -48,7 +48,7 @@ public class PmcDataModel {
         if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
             String namespace = NamespaceManager.getNamespace();
             try {
-                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 RDBUtils.ensureNamespace();
             } finally {
                 NamespaceManager.setNamespace(namespace);
@@ -78,7 +78,7 @@ public class PmcDataModel {
         orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
         Persistence.service().persist(orgNode);
 
-        NamespaceManager.runInTargetNamespace(VistaNamespace.adminNamespace, new Callable<Void>() {
+        NamespaceManager.runInTargetNamespace(VistaNamespace.operationsNamespace, new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().persist(pmc);

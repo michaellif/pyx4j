@@ -26,8 +26,8 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.admin.domain.legal.VistaTerms;
-import com.propertyvista.admin.domain.legal.VistaTerms.Target;
+import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
@@ -72,7 +72,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     }
 
     private String retrieveTerms(final VistaTerms.Target target) {
-        String termsText = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        String termsText = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);

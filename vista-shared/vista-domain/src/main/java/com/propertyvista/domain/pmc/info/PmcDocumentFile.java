@@ -19,7 +19,7 @@ import com.propertyvista.domain.File;
 import com.propertyvista.domain.VistaNamespace;
 
 /** Holds the metadata of a file and the key of Blob */
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface PmcDocumentFile extends File {
 
 }

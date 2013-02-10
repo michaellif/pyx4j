@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.vista2pmc.DefaultEquifaxFee;
-import com.propertyvista.admin.domain.vista2pmc.DefaultPaymentFees;
+import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceTenantSure;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceVista;
 import com.propertyvista.config.VistaDeployment;
@@ -49,14 +49,14 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
 
     @Override
     public AbstractEquifaxFee getEquifaxFee() {
-        DefaultEquifaxFee defaultEfxFeee = TaskRunner.runInAdminNamespace(new Callable<DefaultEquifaxFee>() {
+        DefaultEquifaxFee defaultEfxFeee = TaskRunner.runInOperationsNamespace(new Callable<DefaultEquifaxFee>() {
             @Override
             public DefaultEquifaxFee call() {
                 return Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class));
             }
         });
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
-        TaskRunner.runInAdminNamespace(new Callable<PmcEquifaxFee>() {
+        TaskRunner.runInOperationsNamespace(new Callable<PmcEquifaxFee>() {
             @Override
             public PmcEquifaxFee call() {
                 Persistence.service().retrieveMember(pmc.equifaxFee());
@@ -75,7 +75,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
     @Override
     public BigDecimal getPmcPerApplicantFee() {
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
-        TaskRunner.runInAdminNamespace(new Callable<PmcEquifaxFee>() {
+        TaskRunner.runInOperationsNamespace(new Callable<PmcEquifaxFee>() {
             @Override
             public PmcEquifaxFee call() {
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
@@ -97,7 +97,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
     @Override
     public AbstractPaymentFees getPaymentFees() {
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
-        DefaultPaymentFees defaultFeee = TaskRunner.runInAdminNamespace(new Callable<DefaultPaymentFees>() {
+        DefaultPaymentFees defaultFeee = TaskRunner.runInOperationsNamespace(new Callable<DefaultPaymentFees>() {
             @Override
             public DefaultPaymentFees call() {
                 Persistence.service().retrieveMember(pmc.paymentTypeInfo());

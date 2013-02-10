@@ -32,7 +32,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
+import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
@@ -67,7 +67,7 @@ public class VistaDBReset {
             SchedulerHelper.init();
             log.info("Generating new Data...");
 
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             RDBUtils.ensureNamespace();
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
@@ -78,7 +78,7 @@ public class VistaDBReset {
 
             Pmc pmc = PmcCreatorDev.createPmc(VistaNamespace.demoNamespace);
 
-            new VistaAdminDataPreloaders().preloadAll();
+            new VistaOperationsDataPreloaders().preloadAll();
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 NamespaceManager.setNamespace(VistaNamespace.expiringNamespace);

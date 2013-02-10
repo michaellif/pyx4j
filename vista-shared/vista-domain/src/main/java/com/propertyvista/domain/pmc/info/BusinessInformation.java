@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.VistaNamespace;
 
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface BusinessInformation extends IEntity {
 
     @I18n(context = "Company Type")

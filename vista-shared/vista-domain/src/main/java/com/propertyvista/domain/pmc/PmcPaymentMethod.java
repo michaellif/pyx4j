@@ -28,7 +28,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 
-@Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 public interface PmcPaymentMethod extends AbstractPaymentMethod {
 
     @ReadOnly

@@ -36,7 +36,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
@@ -222,7 +222,7 @@ public class MessageTemplates {
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         pwdReqT.RequestorName().set(user.name());
         pwdReqT.PasswordResetUrl().setValue(
-                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), AdminSiteMap.LoginWithToken.class,
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), OperationsSiteMap.LoginWithToken.class,
                         AuthenticationService.AUTH_TOKEN_ARG, token));
         data.add(pwdReqT);
 

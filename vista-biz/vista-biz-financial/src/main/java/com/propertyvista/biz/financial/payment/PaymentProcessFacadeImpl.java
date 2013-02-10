@@ -31,13 +31,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.payment.pad.PadBatch;
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.StatisticsRecord;
@@ -99,7 +99,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         }
 
         final String namespace = NamespaceManager.getNamespace();
-        List<PadDebitRecord> rejectedRecodrs = TaskRunner.runInAdminNamespace(new Callable<List<PadDebitRecord>>() {
+        List<PadDebitRecord> rejectedRecodrs = TaskRunner.runInOperationsNamespace(new Callable<List<PadDebitRecord>>() {
             @Override
             public List<PadDebitRecord> call() {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
@@ -115,7 +115,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
         }
 
-        List<PadBatch> rejectedBatch = TaskRunner.runInAdminNamespace(new Callable<List<PadBatch>>() {
+        List<PadBatch> rejectedBatch = TaskRunner.runInOperationsNamespace(new Callable<List<PadBatch>>() {
             @Override
             public List<PadBatch> call() {
                 EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
@@ -137,7 +137,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         Persistence.service().commit();
 
         if (rejectedBatch.size() == 0 && rejectedRecodrs.size() == 0) {
-            Integer countBatchs = TaskRunner.runInAdminNamespace(new Callable<Integer>() {
+            Integer countBatchs = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
                 @Override
                 public Integer call() throws Exception {
                     EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
@@ -197,7 +197,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     public void processPadReconciliation(StatisticsRecord dynamicStatisticsRecord, final PadReconciliationFile reconciliationFile) {
         final String namespace = NamespaceManager.getNamespace();
 
-        List<PadReconciliationSummary> transactions = TaskRunner.runInAdminNamespace(new Callable<List<PadReconciliationSummary>>() {
+        List<PadReconciliationSummary> transactions = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationSummary>>() {
             @Override
             public List<PadReconciliationSummary> call() throws Exception {
                 EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);

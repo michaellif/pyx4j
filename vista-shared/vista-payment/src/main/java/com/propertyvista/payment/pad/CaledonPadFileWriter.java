@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 
-import com.propertyvista.admin.domain.payment.pad.PadBatch;
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.config.VistaDeployment;
 
 public class CaledonPadFileWriter implements Closeable {

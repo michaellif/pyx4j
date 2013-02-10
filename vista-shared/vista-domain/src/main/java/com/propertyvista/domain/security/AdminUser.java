@@ -20,7 +20,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.common.AbstractUser;
 
 @Caption(name = "User")
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 public interface AdminUser extends AbstractUser {
 
 }

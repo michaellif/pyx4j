@@ -28,11 +28,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.payment.pad.PadBatch;
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
@@ -60,7 +60,7 @@ public class PadProcessor {
         Persistence.service().retrieve(paymentRecord.billingAccount());
 
         final String namespace = NamespaceManager.getNamespace();
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 PadBatch padBatch = getPadBatch(padFile, namespace, paymentRecord.merchantAccount());
@@ -147,7 +147,7 @@ public class PadProcessor {
 
         log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
                 debitRecord.processed().setValue(Boolean.TRUE);
@@ -284,7 +284,7 @@ public class PadProcessor {
             }
 
             // Verify PAD record
-            final PadDebitRecord padDebitRecord = TaskRunner.runInAdminNamespace(new Callable<PadDebitRecord>() {
+            final PadDebitRecord padDebitRecord = TaskRunner.runInOperationsNamespace(new Callable<PadDebitRecord>() {
                 @Override
                 public PadDebitRecord call() throws Exception {
                     EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
@@ -319,7 +319,7 @@ public class PadProcessor {
                 throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());
             }
 
-            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                 @Override
                 public Void call() {
                     padDebitRecord.processed().setValue(Boolean.TRUE);

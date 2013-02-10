@@ -23,8 +23,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 
-import com.propertyvista.admin.domain.legal.LegalDocument;
-import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.LegalDocument;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.ob.rpc.services.OnboardingPublicActivationService;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -33,7 +33,7 @@ public class OnboardingPublicActivationServiceImpl implements OnboardingPublicAc
 
     @Override
     public void checkDNSAvailability(AsyncCallback<Boolean> callback, final String dnsName) {
-        callback.onSuccess(TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
+        callback.onSuccess(TaskRunner.runInOperationsNamespace(new Callable<Boolean>() {
 
             @Override
             public Boolean call() throws Exception {
@@ -46,7 +46,7 @@ public class OnboardingPublicActivationServiceImpl implements OnboardingPublicAc
     @Override
     @IgnoreSessionToken
     public void getPmcAccountTerms(AsyncCallback<String> callback) {
-        String terms = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
                 String result = null;

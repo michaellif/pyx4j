@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
-import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
+import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 
 public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {

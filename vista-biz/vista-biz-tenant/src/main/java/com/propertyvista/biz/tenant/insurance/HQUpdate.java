@@ -17,8 +17,8 @@ import java.io.File;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
-import com.propertyvista.admin.domain.tenantsure.TenantSureHQUpdateFile;
+import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 class HQUpdate {

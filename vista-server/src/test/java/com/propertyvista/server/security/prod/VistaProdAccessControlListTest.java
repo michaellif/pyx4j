@@ -28,7 +28,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.admin.rpc.services.PmcCrudService;
+import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;

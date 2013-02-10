@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 
-@Table(prefix = "fee", namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "fee", namespace = VistaNamespace.operationsNamespace)
 public interface PmcEquifaxFee extends AbstractEquifaxFee {
 
     @ReadOnly

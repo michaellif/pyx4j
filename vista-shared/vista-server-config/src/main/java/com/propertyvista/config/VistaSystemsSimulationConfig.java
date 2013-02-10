@@ -16,7 +16,7 @@ package com.propertyvista.config;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.dto.VistaSystemsSimulationConfigDTO;
+import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaSystemsSimulationConfig {

@@ -19,8 +19,8 @@ import java.util.concurrent.Callable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.admin.domain.legal.LegalDocument;
-import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.LegalDocument;
+import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class TenantSureTextFacadeImpl implements TenantSureTextFacade {
@@ -40,7 +40,7 @@ public class TenantSureTextFacadeImpl implements TenantSureTextFacade {
     @Override
     public String getPreAuthorizedAgreement() {
         /// TODO needs refactoring and to join with the rest of stuff
-        String terms = TaskRunner.runInAdminNamespace(new Callable<String>() {
+        String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
                 String result = null;

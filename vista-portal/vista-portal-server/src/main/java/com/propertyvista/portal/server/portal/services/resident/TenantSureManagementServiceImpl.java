@@ -19,7 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;

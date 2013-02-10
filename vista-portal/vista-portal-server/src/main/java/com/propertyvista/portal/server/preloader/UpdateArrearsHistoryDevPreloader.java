@@ -21,7 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;

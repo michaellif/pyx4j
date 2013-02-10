@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.admin.domain.security.AuditRecord;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;

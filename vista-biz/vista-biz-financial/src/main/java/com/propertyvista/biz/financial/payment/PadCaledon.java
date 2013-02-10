@@ -34,11 +34,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.payment.pad.PadBatch;
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.payment.pad.PadFileCreationNumber;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;

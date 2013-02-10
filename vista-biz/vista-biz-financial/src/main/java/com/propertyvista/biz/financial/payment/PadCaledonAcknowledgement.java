@@ -20,10 +20,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.admin.domain.payment.pad.PadBatch;
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.payment.pad.CaledonPadAcknowledgmentParser;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAkBatch;

@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
+import com.propertyvista.operations.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.ob.server.security.OnboardingAccessControlList;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
