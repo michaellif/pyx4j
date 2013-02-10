@@ -7,39 +7,35 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-27
+ * Created on 2013-02-10
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.jobs.insurance;
+package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 
-import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
-import com.propertyvista.server.jobs.PmcProcess;
-import com.propertyvista.server.jobs.PmcProcessContext;
+import com.propertyvista.biz.operations.business.VistaBusinessFacade;
 
-public class TenantSureReportsProcess implements PmcProcess {
+public class VistaBusinessStatsReportProcess implements PmcProcess {
 
     protected ReportTableFormater formater;
 
-    public TenantSureReportsProcess() {
-    }
-
     @Override
     public boolean start(PmcProcessContext context) {
-        formater = ServerSideFactory.create(TenantSureProcessFacade.class).startReport();
+        formater = ServerSideFactory.create(VistaBusinessFacade.class).startStatsReport();
         return true;
     }
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processReportPmc(context.getRunStats(), context.getForDate(), formater);
+        ServerSideFactory.create(VistaBusinessFacade.class).processStatsReportsPmc(context.getRunStats(), formater);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).completeReport(formater, context.getForDate());
+        ServerSideFactory.create(VistaBusinessFacade.class).completeStatsReport(formater);
     }
+
 }

@@ -20,14 +20,14 @@ import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.operations.client.viewfactories.LoginVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.AdminAuthenticationService;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 
 public class LoginActivity extends AbstractLoginActivty implements LoginView.Presenter {
 
     public LoginActivity(Place place) {
-        super(place, LoginVeiwFactory.instance(LoginView.class), GWT.<AuthenticationService> create(AdminAuthenticationService.class),
+        super(place, LoginVeiwFactory.instance(LoginView.class), GWT.<AuthenticationService> create(OperationsAuthenticationService.class),
                 new OperationsSiteMap.PasswordResetRequest());
     }
 

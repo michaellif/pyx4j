@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.rpc.services.AuditRecordListerService;
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -52,7 +52,7 @@ public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<Aud
             TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    AdminUser user = Persistence.service().retrieve(AdminUser.class, entity.user().getValue());
+                    OperationsUser user = Persistence.service().retrieve(OperationsUser.class, entity.user().getValue());
                     if (user != null) {
                         dto.userName().setValue(user.email().getValue());
                     }

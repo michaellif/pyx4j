@@ -27,7 +27,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.AdminAuthenticationService;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
 public class SigningOutActivity extends AbstractActivity {
 
@@ -45,7 +45,7 @@ public class SigningOutActivity extends AbstractActivity {
     }
 
     private void logoutDeferred() {
-        ClientContext.logout((AuthenticationService) GWT.create(AdminAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
+        ClientContext.logout((AuthenticationService) GWT.create(OperationsAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onSuccess(AuthenticationResponse result) {

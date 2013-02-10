@@ -20,9 +20,9 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
-public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<AdminUserDTO> implements AdminUserViewerView {
+public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<OperationsUserDTO> implements AdminUserViewerView {
 
     private final static I18n i18n = I18n.get(AdminUserViewerViewImpl.class);
 
@@ -43,7 +43,7 @@ public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<AdminU
     }
 
     @Override
-    public void populate(AdminUserDTO value) {
+    public void populate(OperationsUserDTO value) {
         super.populate(value);
         passwordAction.setVisible(getPresenter().canEdit());
     }

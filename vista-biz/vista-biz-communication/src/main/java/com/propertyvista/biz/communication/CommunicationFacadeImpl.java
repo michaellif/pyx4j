@@ -23,12 +23,12 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -169,11 +169,11 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendAdminPasswordRetrievalToken(AdminUser user) {
+    public void sendAdminPasswordRetrievalToken(OperationsUser user) {
         if (disabled) {
             return;
         }
-        String token = AccessKey.createAccessToken(user, AdminUserCredential.class, 1);
+        String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }

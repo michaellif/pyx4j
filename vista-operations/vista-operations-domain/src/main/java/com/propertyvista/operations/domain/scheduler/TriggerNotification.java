@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 
 @ToStringFormat("{0} {1}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.operationsNamespace)
@@ -50,6 +50,6 @@ public interface TriggerNotification extends IEntity {
     @ToString
     @NotNull
     @MemberColumn(name = "usr")
-    AdminUser user();
+    OperationsUser user();
 
 }

@@ -24,11 +24,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
-public class AdminUserViewerActivity extends ViewerActivityBase<AdminUserDTO> implements AdminUserViewerView.Presenter {
+public class AdminUserViewerActivity extends ViewerActivityBase<OperationsUserDTO> implements AdminUserViewerView.Presenter {
 
     public AdminUserViewerActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(AdminUserViewerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class));

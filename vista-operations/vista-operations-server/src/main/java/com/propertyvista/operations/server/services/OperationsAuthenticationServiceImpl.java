@@ -19,17 +19,17 @@ import java.util.Set;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
-import com.propertyvista.operations.rpc.services.AdminAuthenticationService;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
-public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<AdminUser, AdminUserCredential> implements AdminAuthenticationService {
+public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<OperationsUser, OperationsUserCredential> implements OperationsAuthenticationService {
 
-    public AdminAuthenticationServiceImpl() {
-        super(AdminUser.class, AdminUserCredential.class);
+    public OperationsAuthenticationServiceImpl() {
+        super(OperationsUser.class, OperationsUserCredential.class);
     }
 
     @Override
@@ -48,14 +48,14 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
     }
 
     @Override
-    protected Set<Behavior> getBehaviors(AdminUserCredential userCredential) {
+    protected Set<Behavior> getBehaviors(OperationsUserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(userCredential.behaviors());
         return behaviors;
     }
 
     @Override
-    protected void sendPasswordRetrievalToken(AdminUser user) {
+    protected void sendPasswordRetrievalToken(OperationsUser user) {
         ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
     }
 

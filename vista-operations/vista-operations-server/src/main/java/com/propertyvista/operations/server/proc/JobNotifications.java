@@ -22,7 +22,7 @@ import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 import com.propertyvista.operations.domain.scheduler.TriggerNotificationEvent;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 
 public class JobNotifications {
 
@@ -51,7 +51,7 @@ public class JobNotifications {
 
     }
 
-    private static void sendNotification(Trigger trigger, Run run, AdminUser user) {
+    private static void sendNotification(Trigger trigger, Run run, OperationsUser user) {
         MailMessage m = new MailMessage();
         m.setTo(user.email().getValue());
         m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());

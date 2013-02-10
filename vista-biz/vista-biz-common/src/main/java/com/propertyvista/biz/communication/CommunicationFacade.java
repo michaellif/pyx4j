@@ -16,7 +16,7 @@ package com.propertyvista.biz.communication;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.tenant.Customer;
@@ -34,7 +34,7 @@ public interface CommunicationFacade {
 
     boolean isDisabled();
 
-    void sendAdminPasswordRetrievalToken(AdminUser user);
+    void sendAdminPasswordRetrievalToken(OperationsUser user);
 
     void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl);
 

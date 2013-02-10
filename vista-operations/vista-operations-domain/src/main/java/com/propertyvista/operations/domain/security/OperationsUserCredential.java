@@ -20,15 +20,15 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.AdminUser;
-import com.propertyvista.domain.security.VistaAdminBehavior;
+import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 
 @RpcBlacklist
 @GwtBlacklist
-@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class, namespace = VistaNamespace.operationsNamespace)
+@Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = OperationsUser.class, namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface AdminUserCredential extends AbstractUserCredential<AdminUser> {
+public interface OperationsUserCredential extends AbstractUserCredential<OperationsUser> {
 
-    IPrimitiveSet<VistaAdminBehavior> behaviors();
+    IPrimitiveSet<VistaOperationsBehavior> behaviors();
 }

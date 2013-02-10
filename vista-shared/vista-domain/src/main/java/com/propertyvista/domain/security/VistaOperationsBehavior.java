@@ -15,7 +15,7 @@ package com.propertyvista.domain.security;
 
 import com.pyx4j.security.shared.Behavior;
 
-public enum VistaAdminBehavior implements Behavior {
+public enum VistaOperationsBehavior implements Behavior {
 
     SystemAdmin,
 

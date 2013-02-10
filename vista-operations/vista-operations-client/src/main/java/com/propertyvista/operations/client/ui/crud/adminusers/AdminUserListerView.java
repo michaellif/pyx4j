@@ -15,8 +15,8 @@ package com.propertyvista.operations.client.ui.crud.adminusers;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
-public interface AdminUserListerView extends IListerView<AdminUserDTO> {
+public interface AdminUserListerView extends IListerView<OperationsUserDTO> {
 
 }

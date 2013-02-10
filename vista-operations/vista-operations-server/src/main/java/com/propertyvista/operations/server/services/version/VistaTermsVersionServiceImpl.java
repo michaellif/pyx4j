@@ -15,13 +15,13 @@ package com.propertyvista.operations.server.services.version;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.rpc.services.version.VistaTermsVersionService;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
 public class VistaTermsVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<VistaTerms.VistaTermsV> implements VistaTermsVersionService {
 
     public VistaTermsVersionServiceImpl() {
-        super(VistaTerms.VistaTermsV.class, AdminUser.class);
+        super(VistaTerms.VistaTermsV.class, OperationsUser.class);
     }
 
     @Override

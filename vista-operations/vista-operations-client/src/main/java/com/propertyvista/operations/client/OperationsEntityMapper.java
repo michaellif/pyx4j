@@ -27,7 +27,7 @@ import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.TriggerDTO;
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.OnboardingUser;
 
 public class OperationsEntityMapper {
@@ -35,7 +35,7 @@ public class OperationsEntityMapper {
     private static ImageResource DEFAULT_IMAGE = OperationsImages.INSTANCE.blank();
 
     public static void init() {
-        register(AdminUser.class, OperationsSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
+        register(OperationsUser.class, OperationsSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
         register(OnboardingUser.class, OperationsSiteMap.Management.OnboardingUser.class, DEFAULT_IMAGE);
         register(PmcDTO.class, OperationsSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);

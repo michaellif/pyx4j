@@ -20,13 +20,13 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserEditorView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
 
-public class AccountEditorActivity extends EditorActivityBase<AdminUserDTO> {
+public class AccountEditorActivity extends EditorActivityBase<OperationsUserDTO> {
 
     public AccountEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(AdminUserEditorView.class), GWT.<AdminUserService> create(AdminUserService.class), AdminUserDTO.class);
+        super(place, AdministrationVeiwFactory.instance(AdminUserEditorView.class), GWT.<AdminUserService> create(AdminUserService.class), OperationsUserDTO.class);
     }
 
 }

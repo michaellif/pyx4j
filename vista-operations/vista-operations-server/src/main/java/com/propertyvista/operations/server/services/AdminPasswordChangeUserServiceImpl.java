@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.server.services;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
 
-public class AdminPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<AdminUserCredential> implements AdminPasswordChangeUserService {
+public class AdminPasswordChangeUserServiceImpl extends VistaUserSelfPasswordChangeServiceImpl<OperationsUserCredential> implements AdminPasswordChangeUserService {
 
     public AdminPasswordChangeUserServiceImpl() {
-        super(AdminUserCredential.class);
+        super(OperationsUserCredential.class);
     }
 
 }

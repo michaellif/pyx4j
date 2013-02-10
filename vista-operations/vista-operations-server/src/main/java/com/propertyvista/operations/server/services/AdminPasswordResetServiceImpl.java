@@ -15,19 +15,19 @@ package com.propertyvista.operations.server.services;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 
-public class AdminPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<AdminUserCredential> implements AdminPasswordResetService {
+public class AdminPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<OperationsUserCredential> implements AdminPasswordResetService {
 
     public AdminPasswordResetServiceImpl() {
-        super(AdminUserCredential.class);
+        super(OperationsUserCredential.class);
     }
 
     @Override
-    protected AuthenticationResponse authenticate(AdminUserCredential credentials) {
-        return new AdminAuthenticationServiceImpl().authenticate(credentials, null);
+    protected AuthenticationResponse authenticate(OperationsUserCredential credentials) {
+        return new OperationsAuthenticationServiceImpl().authenticate(credentials, null);
     }
 
 }

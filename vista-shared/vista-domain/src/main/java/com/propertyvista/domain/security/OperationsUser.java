@@ -21,6 +21,6 @@ import com.propertyvista.domain.security.common.AbstractUser;
 
 @Caption(name = "User")
 @Table(namespace = VistaNamespace.operationsNamespace)
-public interface AdminUser extends AbstractUser {
+public interface OperationsUser extends AbstractUser {
 
 }

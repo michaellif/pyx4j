@@ -23,7 +23,7 @@ import com.propertyvista.shared.config.VistaDemo;
 public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
 
     public VistaOperationsDataPreloaders() {
-        add(new AdminUsersPreloader());
+        add(new OperationsUsersPreloader());
         add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {
             add(new V2BPreloader());

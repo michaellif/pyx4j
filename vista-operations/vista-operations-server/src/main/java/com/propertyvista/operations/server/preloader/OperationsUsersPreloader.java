@@ -21,22 +21,22 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.domain.security.AdminUser;
-import com.propertyvista.domain.security.VistaAdminBehavior;
+import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.shared.config.VistaDemo;
 
-class AdminUsersPreloader extends AbstractDataPreloader {
+class OperationsUsersPreloader extends AbstractDataPreloader {
 
-    public static AdminUser createAdminUser(String name, String email, String password, VistaAdminBehavior behaivior) {
-        AdminUser user = EntityFactory.create(AdminUser.class);
+    public static OperationsUser createAdminUser(String name, String email, String password, VistaOperationsBehavior behaivior) {
+        OperationsUser user = EntityFactory.create(OperationsUser.class);
         user.name().setValue(name);
         user.email().setValue(email);
         Persistence.service().persist(user);
 
-        AdminUserCredential credential = EntityFactory.create(AdminUserCredential.class);
+        OperationsUserCredential credential = EntityFactory.create(OperationsUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
@@ -56,18 +56,18 @@ class AdminUsersPreloader extends AbstractDataPreloader {
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             for (int i = 1; i <= DemoData.UserType.ADMIN.getDefaultMax(); i++) {
                 String email = DemoData.UserType.ADMIN.getEmail(i);
-                createAdminUser(email, email, email, VistaAdminBehavior.SystemAdmin);
+                createAdminUser(email, email, email, VistaOperationsBehavior.SystemAdmin);
                 cnt++;
             }
         }
         cnt += 4;
         if (!VistaDemo.isDemo()) {
-            createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-            createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-            createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-            createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-            createAdminUser("YuriyL", "yuriyl@propertyvista.com", rnd4prod("yuriyl@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-            createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
+            createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("YuriyL", "yuriyl@propertyvista.com", rnd4prod("yuriyl@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaOperationsBehavior.OnboardingApi);
         }
 
         return "Created " + cnt + " Admin Users";

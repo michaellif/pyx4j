@@ -17,13 +17,13 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.VistaContext;
 
-public class AdminUserAccountAccesRule implements DatasetAccessRule<AdminUserCredential> {
+public class OperationsUserAccountAccesRule implements DatasetAccessRule<OperationsUserCredential> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<AdminUserCredential> criteria) {
+    public void applyRule(EntityQueryCriteria<OperationsUserCredential> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), VistaContext.getCurrentUserPrimaryKey()));
     }
 

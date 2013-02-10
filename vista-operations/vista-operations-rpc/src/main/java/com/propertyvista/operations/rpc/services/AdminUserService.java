@@ -15,11 +15,11 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
 /**
  * Used for self administration only
  */
-public interface AdminUserService extends AbstractCrudService<AdminUserDTO> {
+public interface AdminUserService extends AbstractCrudService<OperationsUserDTO> {
 
 }

@@ -22,6 +22,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum PmcProcessType implements Serializable {
 
+    vistaBusinessReport,
+
     billing(true),
 
     @Translate("Issue PreAuthorized Payments")

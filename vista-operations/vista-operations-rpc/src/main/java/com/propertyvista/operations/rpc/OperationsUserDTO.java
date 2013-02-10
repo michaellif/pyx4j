@@ -18,14 +18,14 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.security.AdminUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.UserCredentialEditDTO;
-import com.propertyvista.domain.security.VistaAdminBehavior;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 
 @Transient
 @Caption(name = "User")
-@ExtendsDBO(AdminUser.class)
-public interface AdminUserDTO extends AdminUser, UserCredentialEditDTO {
+@ExtendsDBO(OperationsUser.class)
+public interface OperationsUserDTO extends OperationsUser, UserCredentialEditDTO {
 
-    IPrimitive<VistaAdminBehavior> role();
+    IPrimitive<VistaOperationsBehavior> role();
 }

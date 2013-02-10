@@ -13,28 +13,45 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.EnumSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
+import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.server.jobs.StatisticsUtils;
 
 class TenantSureReports {
 
-    static void processReports(RunStats runStats, LogicalDate dueDate, ReportTableFormater formater) {
+    private static final Logger log = LoggerFactory.getLogger(TenantSureReports.class);
+
+    static ReportTableFormater startReport() {
+        ReportTableFormater formater = new ReportTableCSVFormater();
+
         formater.header("First Name");
         formater.header("Last Name");
         formater.header("Insurance Certificate Number");
@@ -44,6 +61,35 @@ class TenantSureReports {
         formater.header("Cancellation");
         formater.newRow();
 
+        return formater;
+    }
+
+    static void completeReport(ReportTableFormater formater, Date date) {
+        // create the file actually
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
+        String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date) + ".csv";
+        File file = new File(sftpDir, reportName);
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            out.write(formater.getBinaryData());
+        } catch (Throwable e) {
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    static void processReportPmc(RunStats runStats, Date date, ReportTableFormater formater) {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:

@@ -16,9 +16,9 @@ package com.propertyvista.operations.client.ui.crud.adminusers;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
-public interface AdminUserViewerView extends IViewerView<AdminUserDTO> {
+public interface AdminUserViewerView extends IViewerView<OperationsUserDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 

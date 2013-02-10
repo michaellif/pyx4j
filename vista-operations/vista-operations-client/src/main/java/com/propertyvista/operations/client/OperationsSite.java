@@ -25,7 +25,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.operations.client.ui.OperationsPanel;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.AdminAuthenticationService;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 
@@ -56,7 +56,7 @@ public class OperationsSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(((AdminAuthenticationService) GWT.create(AdminAuthenticationService.class)),
+        ClientContext.obtainAuthenticationData(((OperationsAuthenticationService) GWT.create(OperationsAuthenticationService.class)),
                 new DefaultAsyncCallback<Boolean>() {
 
                     @Override

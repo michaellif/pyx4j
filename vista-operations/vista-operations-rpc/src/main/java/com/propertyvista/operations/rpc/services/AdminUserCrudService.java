@@ -15,11 +15,11 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
 /**
  * Service used to create update new users in Admin Application.
  */
-public interface AdminUserCrudService extends AbstractCrudService<AdminUserDTO> {
+public interface AdminUserCrudService extends AbstractCrudService<OperationsUserDTO> {
 
 }

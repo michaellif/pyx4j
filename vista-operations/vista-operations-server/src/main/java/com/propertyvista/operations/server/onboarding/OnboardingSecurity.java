@@ -27,8 +27,8 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.operations.rpc.services.AdminAuthenticationService;
-import com.propertyvista.domain.security.VistaAdminBehavior;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.onboarding.RequestMessageIO;
 
 public class OnboardingSecurity {
@@ -43,7 +43,7 @@ public class OnboardingSecurity {
 
             final AtomicBoolean rc = new AtomicBoolean(false);
             // This does the actual authentication; will throw an exception in case of failure
-            LocalService.create(AdminAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
+            LocalService.create(OperationsAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     log.error("Authentication error for interfaceEntity {} ", requestMessage.interfaceEntity().getValue());
@@ -53,7 +53,7 @@ public class OnboardingSecurity {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     // Our wicket session authentication simply returns true, so this call will just create wicket session
-                    rc.set(SecurityController.checkBehavior(VistaAdminBehavior.OnboardingApi));
+                    rc.set(SecurityController.checkBehavior(VistaOperationsBehavior.OnboardingApi));
                 }
             }, new ClientSystemInfo(), request);
 
@@ -65,7 +65,7 @@ public class OnboardingSecurity {
     }
 
     public static void exit() {
-        LocalService.create(AdminAuthenticationService.class).logout(new AsyncCallback<AuthenticationResponse>() {
+        LocalService.create(OperationsAuthenticationService.class).logout(new AsyncCallback<AuthenticationResponse>() {
 
             @Override
             public void onFailure(Throwable caught) {

@@ -22,19 +22,19 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 
-public class AdminUserListerViewImpl extends OperationsListerViewImplBase<AdminUserDTO> implements AdminUserListerView {
+public class AdminUserListerViewImpl extends OperationsListerViewImplBase<OperationsUserDTO> implements AdminUserListerView {
 
     public AdminUserListerViewImpl() {
         super(OperationsSiteMap.Administration.AdminUsers.class);
         setLister(new AdminUserLister());
     }
 
-    private static class AdminUserLister extends ListerBase<AdminUserDTO> {
+    private static class AdminUserLister extends ListerBase<OperationsUserDTO> {
 
         public AdminUserLister() {
-            super(AdminUserDTO.class, true);
+            super(OperationsUserDTO.class, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().name()).build(),
                     new MemberColumnDescriptor.Builder(proto().email()).build(),

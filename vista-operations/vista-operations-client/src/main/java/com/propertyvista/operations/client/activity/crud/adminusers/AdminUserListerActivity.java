@@ -20,13 +20,13 @@ import com.pyx4j.site.client.activity.ListerActivityBase;
 
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserListerView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 
-public class AdminUserListerActivity extends ListerActivityBase<AdminUserDTO> {
+public class AdminUserListerActivity extends ListerActivityBase<OperationsUserDTO> {
 
     public AdminUserListerActivity(Place place) {
         super(place, AdministrationVeiwFactory.instance(AdminUserListerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
-                AdminUserDTO.class);
+                OperationsUserDTO.class);
     }
 }

@@ -11,15 +11,15 @@ package com.propertyvista.operations.server.services;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.operations.domain.security.AdminUserCredential;
-import com.propertyvista.operations.rpc.AdminUserDTO;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
-public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUserCredential, AdminUserDTO> implements AdminUserCrudService {
+public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserCrudService {
 
     public AdminUserCrudServiceImpl() {
-        super(AdminUserCredential.class, AdminUserDTO.class);
+        super(OperationsUserCredential.class, OperationsUserDTO.class);
     }
 
     @Override
@@ -36,24 +36,24 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUs
     }
 
     @Override
-    protected void enhanceRetrieved(AdminUserCredential entity, AdminUserDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTraget retrieveTraget) {
         if (!entity.behaviors().isEmpty()) {
             dto.role().setValue(entity.behaviors().iterator().next());
         }
     }
 
     @Override
-    protected void retrievedForList(AdminUserCredential entity) {
+    protected void retrievedForList(OperationsUserCredential entity) {
         Persistence.service().retrieve(entity.user());
     }
 
     @Override
-    protected void retrievedSingle(AdminUserCredential entity, RetrieveTraget retrieveTraget) {
+    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTraget retrieveTraget) {
         Persistence.service().retrieve(entity.user());
     }
 
     @Override
-    protected void persist(AdminUserCredential dbo, AdminUserDTO dto) {
+    protected void persist(OperationsUserCredential dbo, OperationsUserDTO dto) {
         dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
         Persistence.service().merge(dbo.user());
 
