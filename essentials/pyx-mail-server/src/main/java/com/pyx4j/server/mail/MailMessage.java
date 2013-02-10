@@ -20,14 +20,19 @@
  */
 package com.pyx4j.server.mail;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-public class MailMessage {
+public class MailMessage implements Serializable {
+
+    private static final long serialVersionUID = -104910075896758956L;
 
     private String sender;
 
@@ -45,7 +50,7 @@ public class MailMessage {
 
     private String htmlBody;
 
-    //private List<MailAttachment> attachments;
+    private List<MailAttachment> attachments;
 
     private Map<String, String> headers;
 
@@ -138,4 +143,14 @@ public class MailMessage {
         headers.put(name, value);
     }
 
+    public List<MailAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void addAttachment(MailAttachment attachment) {
+        if (attachments == null) {
+            attachments = new ArrayList<MailAttachment>();
+        }
+        attachments.add(attachment);
+    }
 }

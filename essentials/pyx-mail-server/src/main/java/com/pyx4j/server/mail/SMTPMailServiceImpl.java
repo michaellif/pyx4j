@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -191,16 +193,17 @@ class SMTPMailServiceImpl implements IMailService {
                 message.setContent(content);
             }
 
-            //            if (mailMessage.getAttachments() != null) {
-            //                for (DataSource attachment : mailMessage.getAttachments()) {
-            //                    MimeBodyPart bodyPart = new MimeBodyPart();
-            //                    // attach the file to the message
-            //                    bodyPart.setDataHandler(new DataHandler(attachment));
-            //                    bodyPart.setDisposition(javax.mail.Part.ATTACHMENT);
-            //                    bodyPart.setFileName(attachment.getName());
-            //                    content.addBodyPart(bodyPart);
-            //                }
-            //            }
+            if (mailMessage.getAttachments() != null) {
+                for (MailAttachment attachment : mailMessage.getAttachments()) {
+                    DataSource dataSource = new SMTPMailAttachmentDataSource(attachment);
+                    MimeBodyPart bodyPart = new MimeBodyPart();
+                    // attach the file to the message
+                    bodyPart.setDataHandler(new DataHandler(dataSource));
+                    bodyPart.setDisposition(javax.mail.Part.ATTACHMENT);
+                    bodyPart.setFileName(attachment.getName());
+                    content.addBodyPart(bodyPart);
+                }
+            }
 
         } catch (MessagingException e) {
             log.error("Error", e);
