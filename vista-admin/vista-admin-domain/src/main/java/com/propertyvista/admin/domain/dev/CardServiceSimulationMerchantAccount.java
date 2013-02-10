@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.dev;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -48,6 +49,7 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> balance();
 
+    @Caption(description = "Force rejection code on all transactions to this Account")
     IPrimitive<String> responseCode();
 
     @Timestamp(Update.Created)

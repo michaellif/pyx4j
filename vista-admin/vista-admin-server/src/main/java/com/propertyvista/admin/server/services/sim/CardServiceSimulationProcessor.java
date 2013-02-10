@@ -35,6 +35,8 @@ import com.propertyvista.admin.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.payment.caledon.CaledonRequest;
 import com.propertyvista.payment.caledon.CaledonRequestToken;
 import com.propertyvista.payment.caledon.CaledonResponse;
@@ -130,14 +132,19 @@ public class CardServiceSimulationProcessor {
             } else {
                 token = EntityFactory.create(CardServiceSimulationToken.class);
                 CardServiceSimulationCard card = ensureUnAttachedCard(merchantAccount, caledonRequest);
-                token.token().setValue(caledonRequest.token);
-                token.active().setValue(Boolean.TRUE);
-                card.tokens().add(token);
+                if (card.cardType().isNull()) {
+                    caledonResponse.code = "1020";
+                    caledonResponse.text = "CARD NUMBER INVALID";
+                } else {
+                    token.token().setValue(caledonRequest.token);
+                    token.active().setValue(Boolean.TRUE);
+                    card.tokens().add(token);
 
-                Persistence.service().persist(card);
+                    Persistence.service().persist(card);
 
-                caledonResponse.code = "0000";
-                caledonResponse.text = "TOKEN ADDED";
+                    caledonResponse.code = "0000";
+                    caledonResponse.text = "TOKEN ADDED";
+                }
             }
             break;
         case DEACTIVATE:
@@ -212,6 +219,11 @@ public class CardServiceSimulationProcessor {
         if (card == null) {
             caledonResponse.code = "1101";
             caledonResponse.text = "TOKEN NOT FOUND";
+            return caledonResponse;
+        }
+        if (card.cardType().isNull()) {
+            caledonResponse.code = "1020";
+            caledonResponse.text = "CARD NUMBER INVALID";
             return caledonResponse;
         }
 
@@ -339,10 +351,20 @@ public class CardServiceSimulationProcessor {
         Persistence.service().persist(merchantAccount);
     }
 
+    private static CreditCardType detectCardType(String creditCardNumber) {
+        for (CreditCardType type : CreditCardType.values()) {
+            if (ValidationUtils.isCreditCardNumberIinValid(type.iinsPatterns, creditCardNumber)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
     private static CardServiceSimulationCard createCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         CardServiceSimulationCard card = EntityFactory.create(CardServiceSimulationCard.class);
         card.merchant().set(merchantAccount);
         card.number().setValue(caledonRequest.creditCardNumber);
+        card.cardType().setValue(detectCardType(caledonRequest.creditCardNumber));
         card.expiryDate().setValue(parsDate(caledonRequest.expiryDate));
         card.balance().setValue(new BigDecimal("10000"));
         card.reserved().setValue(BigDecimal.ZERO);
@@ -373,7 +395,9 @@ public class CardServiceSimulationProcessor {
             }
         }
         card = createCard(merchantAccount, caledonRequest);
-        Persistence.service().persist(card);
+        if (!card.cardType().isNull()) {
+            Persistence.service().persist(card);
+        }
         return card;
     }
 

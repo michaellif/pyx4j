@@ -72,6 +72,7 @@ public interface CardServiceSimulationCard extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> reserved();
 
+    @Caption(description = "Force rejection code on all transactions to this Account")
     IPrimitive<String> responseCode();
 
     @Timestamp(Update.Created)

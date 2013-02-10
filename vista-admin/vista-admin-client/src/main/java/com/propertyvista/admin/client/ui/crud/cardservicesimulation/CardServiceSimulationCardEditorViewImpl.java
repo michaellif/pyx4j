@@ -19,9 +19,14 @@ import java.util.List;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -33,6 +38,8 @@ import com.propertyvista.admin.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.admin.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 
 public class CardServiceSimulationCardEditorViewImpl extends AdminEditorViewImplBase<CardServiceSimulationCard> implements CardServiceSimulationCardEditorView {
 
@@ -98,6 +105,31 @@ public class CardServiceSimulationCardEditorViewImpl extends AdminEditorViewImpl
 
             selectTab(addTab(contentPanel));
 
+        }
+
+        @Override
+        public void addValidations() {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        generateCreditCard();
+                    }
+                }
+
+            });
+        }
+
+        private void generateCreditCard() {
+            if (get(proto().cardType()).getValue() == null) {
+                get(proto().cardType()).setValue(CreditCardType.Visa);
+            }
+            ((CTextFieldBase<?, ?>) get(proto().number())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
+
+            LogicalDate nextMonth = new LogicalDate();
+            TimeUtils.addDays(nextMonth, 31);
+            get(proto().expiryDate()).setValue(nextMonth);
         }
     }
 

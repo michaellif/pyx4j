@@ -165,9 +165,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         }
         ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
-        LogicalDate nextNoth = new LogicalDate();
-        TimeUtils.addDays(nextNoth, 31);
-        get(proto().expiryDate()).setValue(nextNoth);
+        LogicalDate nextMonth = new LogicalDate();
+        TimeUtils.addDays(nextMonth, 31);
+        get(proto().expiryDate()).setValue(nextMonth);
         get(proto().securityCode()).setValue("123");
     }
 }
