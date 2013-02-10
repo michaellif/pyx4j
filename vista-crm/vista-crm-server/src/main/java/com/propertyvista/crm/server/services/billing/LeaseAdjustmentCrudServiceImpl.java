@@ -72,12 +72,13 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     public void submitAdjustment(AsyncCallback<LeaseAdjustment> callback, Key entityId) {
         LeaseAdjustment adjustment = Persistence.service().retrieve(LeaseAdjustment.class, entityId);
         adjustment.status().setValue(Status.submited);
-        Persistence.service().merge(adjustment);
-        Persistence.service().commit();
 
         if (adjustment.executionType().getValue() == ExecutionType.immediate) {
             ServerSideFactory.create(ARFacade.class).postImmediateAdjustment(adjustment);
         }
+
+        Persistence.service().merge(adjustment);
+        Persistence.service().commit();
 
         retrieve(callback, entityId, RetrieveTraget.View);
     }

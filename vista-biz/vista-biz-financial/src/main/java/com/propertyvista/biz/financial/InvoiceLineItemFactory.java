@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -32,6 +33,10 @@ public class InvoiceLineItemFactory {
         charge.description().setValue(adjustment.reason().name().getValue());
         charge.debitType().setValue(DebitType.accountCharge);
 
+        Persistence.service().retrieve(adjustment.billingAccount());
+        Persistence.service().retrieve(adjustment.billingAccount().lease());
+        Persistence.service().retrieve(adjustment.billingAccount().lease().unit());
+        Persistence.service().retrieve(adjustment.billingAccount().lease().unit().building());
         TaxUtils.calculateAccountChargeTax(charge, adjustment.billingAccount().lease().unit().building());
 
         return charge;
