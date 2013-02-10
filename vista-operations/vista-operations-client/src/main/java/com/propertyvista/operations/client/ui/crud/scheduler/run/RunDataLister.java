@@ -33,7 +33,6 @@ public class RunDataLister extends ListerBase<RunData> {
             new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().amountFailed()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().erred()).build(),
-            new MemberColumnDescriptor.Builder(proto().stats().amountFailed()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().amountErred()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().message()).build(),
