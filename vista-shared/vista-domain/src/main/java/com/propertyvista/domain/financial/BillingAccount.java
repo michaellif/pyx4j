@@ -49,6 +49,7 @@ public interface BillingAccount extends IEntity {
     @I18n(context = "Payment Accepted")
     @XmlType(name = "PaymentAccepted")
     public enum PaymentAccepted {
+
         Any(0),
 
         DoNotAccept(1),

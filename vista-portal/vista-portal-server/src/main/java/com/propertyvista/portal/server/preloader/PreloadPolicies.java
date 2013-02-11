@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepo
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
@@ -42,6 +43,8 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
         add(new TenantInsurancePolicyPreloader());
+        add(new PaymentMethodSelectionPolicyPreloader());
+
         if (!VistaTODO.Equifax_Short_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
         }
