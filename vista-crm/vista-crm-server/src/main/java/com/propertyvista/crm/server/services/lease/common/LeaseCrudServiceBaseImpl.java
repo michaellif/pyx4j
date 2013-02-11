@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.TenantInsuranceCertificateDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
 
@@ -102,9 +104,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         criteria.eq(criteria.proto().tenant().lease(), lease);
         List<InsuranceCertificate> certificates = Persistence.service().query(criteria);
 
+        List<TenantInsuranceCertificateDTO> dtoCertificates = new ArrayList<TenantInsuranceCertificateDTO>();
         // TODO add sorting
         if (certificates != null) {
-            lease.tenantInsuranceCertificates().addAll(certificates);
+            for (InsuranceCertificate c : certificates) {
+                dtoCertificates.add(c.duplicate(TenantInsuranceCertificateDTO.class));
+            }
+            lease.tenantInsuranceCertificates().addAll(dtoCertificates);
         }
     }
 

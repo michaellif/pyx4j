@@ -27,7 +27,7 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
     private static final I18n i18n = I18n.get(TenantInsuranceByOtherProviderUpdateViewImpl.class);
 
     public TenantInsuranceByOtherProviderUpdateViewImpl() {
-        setForm(new TenantInsuranceCertificateForm());
+        setForm(new TenantInsuranceCertificateForm<InsuranceGeneric>(InsuranceGeneric.class));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((TenantInsuranceCertificateForm) form).setMinRequiredLiability(minRequiredLiability);
+        ((TenantInsuranceCertificateForm<InsuranceGeneric>) form).setMinRequiredLiability(minRequiredLiability);
     }
 
 }

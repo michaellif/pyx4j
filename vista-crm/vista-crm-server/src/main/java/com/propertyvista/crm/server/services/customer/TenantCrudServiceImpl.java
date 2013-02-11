@@ -13,27 +13,39 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
+import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.TenantInsuranceCertificateDTO;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<LeaseTermTenant, Tenant, TenantDTO> implements TenantCrudService {
+
+    private static final Logger log = LoggerFactory.getLogger(TenantCrudServiceImpl.class);
 
     public TenantCrudServiceImpl() {
         super(Tenant.class, TenantDTO.class);
@@ -91,15 +103,58 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
             }
         }
 
-        for (InsuranceCertificate insuranceCertificate : tenantDto.insuranceCertificates()) {
-            if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
-                // property vista integrated insurance certificates should be managed by software, i.e. the users have no right to manually modify such insurance certificates 
+        EntityQueryCriteria<InsuranceCertificate> oldInsuranceCertificatesCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
+        oldInsuranceCertificatesCriteria.eq(oldInsuranceCertificatesCriteria.proto().tenant(), tenant.getPrimaryKey());
+        List<InsuranceCertificate> oldInsuranceCertificates = Persistence.service().query(oldInsuranceCertificatesCriteria);
+        List<InsuranceCertificate> deletedInsuranceCertificates = new ArrayList<InsuranceCertificate>();
+
+        for (InsuranceCertificate oldCertificate : oldInsuranceCertificates) {
+            boolean isDeleted = true;
+            found: for (TenantInsuranceCertificateDTO newCertificate : tenantDto.insuranceCertificates()) {
+                if (oldCertificate.getPrimaryKey().equals(newCertificate.getPrimaryKey())) {
+                    isDeleted = false;
+                    break found;
+                }
+            }
+            if (isDeleted) {
+                deletedInsuranceCertificates.add(oldCertificate);
+            }
+        }
+        // TODO support delete insurance
+        for (TenantInsuranceCertificateDTO insuranceCertificate : tenantDto.insuranceCertificates()) {
+            if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue() | insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+                // property vista integrated insurance certificates should be managed by software, i.e. the users have no right to manually modify such insurance certificates
+                // tenant is managed by tenant alos are managed by tenant... so no pmc can touch it
+
                 continue;
             }
-            if (insuranceCertificate.getPrimaryKey() == null) {
-                insuranceCertificate.tenant().set(tenant);
-                Persistence.service().merge(insuranceCertificate);
+            // we use insurance generic for those insurances that are managed by pmc
+            InsuranceGeneric insuranceGeneric = insuranceCertificate.duplicate(InsuranceCertificate.class).duplicate(InsuranceGeneric.class);
+            // workaround since 'duplicate' seems not to do this
+            for (InsuranceCertificateDocument document : insuranceGeneric.documents()) {
+                document.owner().set(insuranceGeneric);
             }
+
+            if (insuranceCertificate.getPrimaryKey() == null) {
+                // This is new                               
+                insuranceGeneric.tenant().set(tenant.createIdentityStub());
+            } else {
+                // check that nobody is tampering the PV/Tenant managed insurance certificates:
+                InsuranceCertificate preUpdated = Persistence.service().retrieve(InsuranceCertificate.class, insuranceCertificate.getPrimaryKey());
+                if (preUpdated.isPropertyVistaIntegratedProvider().isBooleanTrue() | insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+                    log.warn(SimpleMessageFormat.format("Evil CRM user {0} has tried to override insurance settting for insurance id={1}", VistaContext
+                            .getCurrentUser().getPrimaryKey(), preUpdated.getPrimaryKey()));
+                    throw new Error();
+                }
+            }
+            Persistence.secureSave(insuranceGeneric);
+        }
+
+        for (InsuranceCertificate deletedCertificate : deletedInsuranceCertificates) {
+            if (deletedCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue() | deletedCertificate.isManagedByTenant().isBooleanTrue()) {
+                throw new SecurityViolationException("it's forbidden to delete property vista integrated or user managed insurance certificates");
+            }
+            Persistence.service().delete(deletedCertificate.getInstanceValueClass(), deletedCertificate.getPrimaryKey());
         }
     }
 
@@ -115,10 +170,15 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<L
         return Persistence.service().retrieve(criteria);
     }
 
-    private List<InsuranceCertificate> retrieveInsuranceCertificates(Tenant tenantId) {
+    private List<TenantInsuranceCertificateDTO> retrieveInsuranceCertificates(Tenant tenantId) {
         EntityQueryCriteria<InsuranceCertificate> tenantInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
         tenantInsuranceCriteria.eq(tenantInsuranceCriteria.proto().tenant(), tenantId);
         tenantInsuranceCriteria.desc(tenantInsuranceCriteria.proto().inceptionDate());
-        return Persistence.service().query(tenantInsuranceCriteria);
+        List<InsuranceCertificate> certificates = Persistence.service().query(tenantInsuranceCriteria);
+        List<TenantInsuranceCertificateDTO> dtoCertificates = new ArrayList<TenantInsuranceCertificateDTO>();
+        for (InsuranceCertificate c : certificates) {
+            dtoCertificates.add(c.duplicate(TenantInsuranceCertificateDTO.class));
+        }
+        return dtoCertificates;
     }
 }

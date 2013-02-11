@@ -31,6 +31,8 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
     public void save(AsyncCallback<VoidSerializable> callback, InsuranceGeneric insuranceDetails) {
         if (insuranceDetails.tenant().isNull()) {
             insuranceDetails.tenant().set(TenantAppContext.getCurrentUserTenant());
+            insuranceDetails.isManagedByTenant().setValue(true);
+            insuranceDetails.isPropertyVistaIntegratedProvider().setValue(false);
         }
         Persistence.secureSave(insuranceDetails); // security checks must be performed via data access rule
         Persistence.service().commit();

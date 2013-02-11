@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -37,6 +36,6 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     @Caption(description = "This is the minimum liability that was set by tenant insurance policy")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
-    IList<InsuranceCertificate> insuranceCertificates();
+    IList<TenantInsuranceCertificateDTO> insuranceCertificates();
 
 }

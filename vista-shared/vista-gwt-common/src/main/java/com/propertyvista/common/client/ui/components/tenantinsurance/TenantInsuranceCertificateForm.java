@@ -36,10 +36,10 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<InsuranceGeneric> {
+public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> extends CEntityDecoratableForm<E> {
 
     private final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
 
@@ -100,26 +100,30 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
 
     private Label scannedInsuranceCertificateNotAvailable;
 
+    private int insuranceCeritificatesHeaderRow;
+
+    private FormFlexPanel contentPanel;
+
     /**
      * @param displayTenantOwner
      *            display the owners name (if true then populated insurance certificated entity <b>must</b> have the tenant.customer.person() name)
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public TenantInsuranceCertificateForm(boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceGeneric.class);
+    public TenantInsuranceCertificateForm(Class<E> insuranceCertificateClass, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+        super(insuranceCertificateClass);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
     }
 
-    public TenantInsuranceCertificateForm() {
-        this(false, null);
+    public TenantInsuranceCertificateForm(Class<E> insuranceCertificateClass) {
+        this(insuranceCertificateClass, false, null);
     }
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        contentPanel = new FormFlexPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
             CComponent<Customer, ?> comp = null;
@@ -133,12 +137,12 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
             } else {
                 comp = new CLabel<Customer>();
             }
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), comp), 15).build());
+            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), comp), 15).build());
         }
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 20).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 20).build());
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
@@ -157,7 +161,7 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
                 return null;
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
 
         get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
@@ -168,7 +172,7 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
                 return null;
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
+        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
         get(proto().expiryDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
@@ -179,15 +183,15 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
             }
         });
 
-        content.setH2(++row, 0, 1, isEditable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));
-        content.setWidget(++row, 0, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
+        insuranceCeritificatesHeaderRow = ++row;
+        contentPanel.setWidget(++row, 0, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
         scannedInsuranceCertificateNotAvailable = new Label(i18n.tr("N/A"));
         scannedInsuranceCertificateNotAvailable.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         scannedInsuranceCertificateNotAvailable.getElement().getStyle().setProperty("marginLeft", "auto");
         scannedInsuranceCertificateNotAvailable.getElement().getStyle().setProperty("marginRight", "auto");
         scannedInsuranceCertificateNotAvailable.setVisible(false);
-        content.setWidget(++row, 0, scannedInsuranceCertificateNotAvailable);
-        return content;
+        contentPanel.setWidget(++row, 0, scannedInsuranceCertificateNotAvailable);
+        return contentPanel;
     }
 
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
@@ -197,7 +201,9 @@ public class TenantInsuranceCertificateForm extends CEntityDecoratableForm<Insur
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        scannedInsuranceCertificateNotAvailable.setVisible(!isEditable() & getValue().documents().isEmpty());
-        setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue());
+        setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue()); // TODO this should not be controlled by the form itstelf
+        scannedInsuranceCertificateNotAvailable.setVisible(isViewable() & getValue().documents().isEmpty());
+        contentPanel.setH2(insuranceCeritificatesHeaderRow, 0, 1,
+                isEditable() & !isViewable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));
     }
 }

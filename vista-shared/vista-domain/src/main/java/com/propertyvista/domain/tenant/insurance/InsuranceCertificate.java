@@ -51,6 +51,9 @@ public interface InsuranceCertificate extends ApplicationDocumentHolder<Insuranc
     /** <code>true</code> for certificates create via Property Vista integrated systems */
     IPrimitive<Boolean> isPropertyVistaIntegratedProvider();
 
+    /** <code>true</code> for certificates that have been uploaded / created by tenant's initiative */
+    IPrimitive<Boolean> isManagedByTenant();
+
     @NotNull
     @ToString(index = 0)
     IPrimitive<String> insuranceProvider();
