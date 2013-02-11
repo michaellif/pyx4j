@@ -15,6 +15,7 @@ package com.propertyvista.common.client.handlers;
 
 import java.util.Date;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -54,7 +55,12 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     @Override
     protected void showUnauthorized() {
         ClientContext.terminateSession();
-        showMessage(i18n.tr("This Session Has Been Terminated"), UserMessageType.FAILURE);
+        if (ApplicationMode.isDevelopment()) {
+            // This is response from our GoolgeApps login, environment restarted. Need to relogin.
+            Window.Location.reload();
+        } else {
+            showMessage(i18n.tr("This Session Has Been Terminated"), UserMessageType.FAILURE);
+        }
 
     }
 
