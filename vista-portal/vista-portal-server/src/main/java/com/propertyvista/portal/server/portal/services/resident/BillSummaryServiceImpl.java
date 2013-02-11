@@ -17,36 +17,50 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillSummaryServiceImpl implements BillSummaryService {
 
     @Override
-    public void retrieve(AsyncCallback<BillSummaryDTO> callback) {
+    public void retrieve(AsyncCallback<FinancialSummaryDTO> callback) {
         callback.onSuccess(retrieve());
     }
 
-    static BillSummaryDTO retrieve() {
-        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseTermV());
-        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
+    // TODO this method should be more polymophic (with less "IF"s and "instance off"s), the question is how?
+    static FinancialSummaryDTO retrieve() {
+        FinancialSummaryDTO financialSummary = VistaFeatures.instance().yardiIntegration() ? EntityFactory.create(YardiFinancialSummaryDTO.class)
+                : EntityFactory.create(PvBillingFinancialSummaryDTO.class);
 
-        Lease lease = tenant.leaseTermV().holder().lease();
+        Lease contextLease = TenantAppContext.getCurrentUserTenant().lease();
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        criteria.eq(criteria.proto().lease(), contextLease);
+        BillingAccount contextBillingAccount = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
+        financialSummary.currentBalance().setValue(arFacade.getCurrentBalance(contextBillingAccount));
 
-        BillSummaryDTO entity = EntityFactory.create(BillSummaryDTO.class);
-        entity.currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(lease));
-        entity.currentBalance().setValue(arFacade.getCurrentBalance(lease.billingAccount()));
-        entity.latestActivities().addAll(arFacade.getNotAcquiredLineItems(lease.billingAccount()));
+        // TODO has to stay here until billing facade and AR facade merged together
+        if (financialSummary.isInstanceOf(YardiFinancialSummaryDTO.class)) {
+            ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(arFacade.getTransactionHistory(contextBillingAccount));
+        } else if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
+            ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(contextLease));
+            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getNotAcquiredLineItems(contextBillingAccount));
+        }
 
-        return entity;
+        return financialSummary;
+
     }
 }

@@ -31,9 +31,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView.Presenter;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 
-public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
+public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSummaryDTO> {
 
     private static final I18n i18n = I18n.get(BillSummaryForm.class);
 
@@ -42,7 +42,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
     private Button payButton;
 
     public BillSummaryForm() {
-        super(BillSummaryDTO.class, new VistaViewersComponentFactory());
+        super(PvBillingFinancialSummaryDTO.class, new VistaViewersComponentFactory());
         setViewable(true);
     }
 

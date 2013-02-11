@@ -19,7 +19,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 
 public class BillSummaryViewImpl extends FlowPanel implements BillSummaryView {
 
@@ -39,7 +39,7 @@ public class BillSummaryViewImpl extends FlowPanel implements BillSummaryView {
     }
 
     @Override
-    public void populate(BillSummaryDTO bill) {
+    public void populate(PvBillingFinancialSummaryDTO bill) {
         form.getPayButton().setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
         form.populate(bill);
     }

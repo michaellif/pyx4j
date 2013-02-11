@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
 public class FinancialSummaryViewImpl extends Composite implements FinancialSummaryView {
 
@@ -51,7 +51,7 @@ public class FinancialSummaryViewImpl extends Composite implements FinancialSumm
     }
 
     @Override
-    public void populate(FinancialSummaryDTO financialSummary) {
+    public void populate(YardiFinancialSummaryDTO financialSummary) {
         form.setVisited(false);
         form.populate(financialSummary);
     }

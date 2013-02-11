@@ -24,7 +24,8 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
@@ -45,10 +46,11 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.retrieve(new DefaultAsyncCallback<BillSummaryDTO>() {
+        srv.retrieve(new DefaultAsyncCallback<FinancialSummaryDTO>() {
             @Override
-            public void onSuccess(BillSummaryDTO result) {
-                view.populate(result);
+            public void onSuccess(FinancialSummaryDTO result) {
+                // TODO merge all financial summary related views activies to the same class
+                view.populate(result.duplicate(PvBillingFinancialSummaryDTO.class));
             }
         });
     }

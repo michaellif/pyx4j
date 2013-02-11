@@ -26,9 +26,10 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.resident.FinancialSummaryService;
+import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 /**
  * Used to display financial status of Tenants from Yardi integrated accounts.
@@ -37,23 +38,22 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
 
     private final FinancialSummaryView view;
 
-    private final FinancialSummaryService service;
+    private final BillSummaryService service;
 
     public FinancialSummaryActivity(Place place) {
         view = PortalViewFactory.instance(FinancialSummaryView.class);
-        service = GWT.<FinancialSummaryService> create(FinancialSummaryService.class);
+        service = GWT.<BillSummaryService> create(BillSummaryService.class);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-
-        service.getFinancialStatus(new DefaultAsyncCallback<FinancialSummaryDTO>() {
-
+        service.retrieve(new DefaultAsyncCallback<FinancialSummaryDTO>() {
             @Override
             public void onSuccess(FinancialSummaryDTO result) {
                 view.setPresenter(FinancialSummaryActivity.this);
                 view.setEnablePayments(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
-                view.populate(result);
+                // TODO need to merge FinancialSummaryView someday
+                view.populate(result.duplicate(YardiFinancialSummaryDTO.class));
                 panel.setWidget(view);
             }
 

@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.client.ui.residents.dashboard;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -25,8 +28,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEntityViewer;
-import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -45,7 +48,8 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
@@ -99,8 +103,8 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
         get(proto().general()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
-        leftPanel.setH1(++row, 0, 1, i18n.tr("BILL SUMMARY"));
-        leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new BillSummaryViewer()));
+        leftPanel.setH1(++row, 0, 1, i18n.tr("FINANCIAL SUMMARY"));
+        leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
         get(proto().billSummary()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
         // =============================================================================================
@@ -206,9 +210,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         }
     }
 
-    class BillSummaryViewer extends CEntityViewer<BillSummaryDTO> {
+    class FinancialSummaryViewer extends CEntityViewer<FinancialSummaryDTO> {
         @Override
-        public IsWidget createContent(BillSummaryDTO value) {
+        public IsWidget createContent(FinancialSummaryDTO value) {
             FlexTable dataPanel = new FlexTable();
 
             dataPanel.setWidth("100%");
@@ -220,13 +224,16 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-            dataPanel.setHTML(row, 1, CMoneyField.symbol + value.currentBalance().getValue());
+            dataPanel.setHTML(row, 1, formatBalanceField(value.currentBalance()));
 
-            dataPanel.setHTML(++row, 0, value.currentBill().dueDate().getMeta().getCaption());
-            dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-            dataPanel.setHTML(row, 1, value.currentBill().dueDate().getStringView());
-
+            // TODO wrong polymorphism
+            if (value.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
+                PvBillingFinancialSummaryDTO pvBillingSumarry = value.duplicate(PvBillingFinancialSummaryDTO.class);
+                dataPanel.setHTML(++row, 0, pvBillingSumarry.currentBill().dueDate().getMeta().getCaption());
+                dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
+                dataPanel.setHTML(row, 1, pvBillingSumarry.currentBill().dueDate().getStringView());
+            }
             VerticalPanel content = new VerticalPanel();
             content.add(dataPanel);
             content.setCellWidth(dataPanel, "100%");
@@ -234,7 +241,8 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             HorizontalPanel actions = new HorizontalPanel();
             actions.getElement().getStyle().setMargin(1, Unit.EM);
 
-            if (!VistaFeatures.instance().yardiIntegration()) {
+            // TODO wrong polymorphism
+            if (value.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
                 Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
                 };
                 viewBill.addClickHandler(new ClickHandler() {
@@ -260,6 +268,11 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             content.setCellHorizontalAlignment(actions, HorizontalPanel.ALIGN_RIGHT);
             content.setWidth("100%");
             return content;
+        }
+
+        private String formatBalanceField(IPrimitive<BigDecimal> moneyField) {
+            return NumberFormat.getFormat(i18n.tr("$#,##0.00")).format(moneyField.getValue().abs())
+                    + (moneyField.getValue().compareTo(BigDecimal.ZERO) < 0 ? " CR" : 0);
         }
     }
 

@@ -11,10 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.domain.dto.financial;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -22,15 +23,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
-
 @Transient
+@AbstractEntity
 public interface FinancialSummaryDTO extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> currentBalance();
-
-    TransactionHistoryDTO transactionsHistory();
 
 }

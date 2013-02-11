@@ -7,23 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-07
+ * Created on 2013-02-11
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.portal.domain.dto.financial;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
-import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
+@Transient
+public interface YardiFinancialSummaryDTO extends FinancialSummaryDTO {
 
-/**
- * Fetches finanical status for tenants that come from Yardi integrated systems
- */
-public interface FinancialSummaryService extends IService {
-
-    void getFinancialStatus(AsyncCallback<FinancialSummaryDTO> financialStatus);
+    TransactionHistoryDTO transactionsHistory();
 
 }

@@ -22,9 +22,9 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
-public class FinancialSummaryForm extends CEntityDecoratableForm<FinancialSummaryDTO> {
+public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialSummaryDTO> {
 
     private static final I18n i18n = I18n.get(FinancialSummaryForm.class);
 
@@ -33,7 +33,7 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<FinancialSummar
     private Button payButton;
 
     public FinancialSummaryForm(Command payNowCommand) {
-        super(FinancialSummaryDTO.class);
+        super(YardiFinancialSummaryDTO.class);
         setViewable(true);
         this.payNowCommand = payNowCommand;
     }

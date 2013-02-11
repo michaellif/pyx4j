@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
 @Transient
@@ -28,7 +28,7 @@ public interface TenantDashboardDTO extends IEntity {
 
     TenantGeneralInfoDTO general();
 
-    BillSummaryDTO billSummary();
+    FinancialSummaryDTO billSummary();
 
     IList<MessageDTO> notifications();
 

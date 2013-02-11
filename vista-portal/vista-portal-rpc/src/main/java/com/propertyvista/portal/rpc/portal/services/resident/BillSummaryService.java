@@ -17,9 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 
 public interface BillSummaryService extends IService {
 
-    void retrieve(AsyncCallback<BillSummaryDTO> callback);
+    void retrieve(AsyncCallback<FinancialSummaryDTO> callback);
 }

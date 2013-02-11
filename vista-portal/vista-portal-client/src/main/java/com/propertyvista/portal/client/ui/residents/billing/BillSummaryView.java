@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 
 public interface BillSummaryView extends IsWidget {
 
@@ -28,5 +28,5 @@ public interface BillSummaryView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
-    void populate(BillSummaryDTO bill);
+    void populate(PvBillingFinancialSummaryDTO bill);
 }

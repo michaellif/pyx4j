@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.domain.dto.financial;
 
 import java.math.BigDecimal;
 
@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 @Transient
-public interface BillSummaryDTO extends IEntity {
+public interface PvBillingFinancialSummaryDTO extends FinancialSummaryDTO {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
