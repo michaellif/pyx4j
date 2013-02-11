@@ -104,7 +104,8 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
                 HTML descriptionHtml = new HTML(htmlEscape(description));
 
                 BigDecimal amount = item.amount().getValue();
-                HTML amountHtml = amount != null ? new HTML(htmlEscape(currencyFormat.format(amount))) : new HTML("&nbsp;");
+                // we take the absolute value so that both outstanding charges and unapplied payments will look as positive amounts, (unapplied payments are negative)
+                HTML amountHtml = amount != null ? new HTML(htmlEscape(currencyFormat.format(amount.abs()))) : new HTML("&nbsp;");
 
                 ++row[0];
                 panel.setWidget(row[0], COL_DATE, dateHtml);
