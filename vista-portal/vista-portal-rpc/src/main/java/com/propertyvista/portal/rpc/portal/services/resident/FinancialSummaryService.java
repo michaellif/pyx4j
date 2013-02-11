@@ -17,13 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
 
 /**
  * Fetches finanical status for tenants that come from Yardi integrated systems
  */
-public interface FinancialStatusService extends IService {
+public interface FinancialSummaryService extends IService {
 
-    void getFinancialStatus(AsyncCallback<TransactionHistoryDTO> financialStatus);
+    void getFinancialStatus(AsyncCallback<FinancialSummaryDTO> financialStatus);
 
 }

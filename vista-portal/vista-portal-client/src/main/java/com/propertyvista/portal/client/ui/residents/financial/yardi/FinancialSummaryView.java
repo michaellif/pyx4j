@@ -15,10 +15,20 @@ package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.domain.dto.FinancialSummaryDTO;
 
-public interface FinancialStatusView extends IsWidget {
+public interface FinancialSummaryView extends IsWidget {
 
-    void populate(TransactionHistoryDTO financialStatus);
+    interface Presenter {
+
+        void payNow();
+
+    }
+
+    void setPresenter(Presenter presenter);
+
+    void populate(FinancialSummaryDTO financialSummary);
+
+    void setEnablePayments(boolean eable);
 
 }

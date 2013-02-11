@@ -56,7 +56,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
             items.add(new Residents.Financial.BillSummary());
             items.add(new Residents.Financial.BillingHistory());
         } else {
-            items.add(new Residents.Financial.FinancialStatus());
+            items.add(new Residents.Financial.FinancialSummary());
         }
         items.add(new Residents.Maintenance());
         items.add(new Residents.CommunicationCenter());

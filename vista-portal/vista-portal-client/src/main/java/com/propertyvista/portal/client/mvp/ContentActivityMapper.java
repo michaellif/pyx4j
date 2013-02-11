@@ -29,7 +29,7 @@ import com.propertyvista.portal.client.activity.residents.billing.BillSummaryAct
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.ViewBillActivity;
 import com.propertyvista.portal.client.activity.residents.communicationcenter.CommunicationCenterActivity;
-import com.propertyvista.portal.client.activity.residents.financial.FinancialStatusActivity;
+import com.propertyvista.portal.client.activity.residents.financial.FinancialSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.EditMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
@@ -90,8 +90,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof Residents.Financial.BillingHistory.ViewBill) {
                     activity = new ViewBillActivity(place);
 
-                } else if (place instanceof Residents.Financial.FinancialStatus) {
-                    activity = new FinancialStatusActivity(place);
+                } else if (place instanceof Residents.Financial.FinancialSummary) {
+                    activity = new FinancialSummaryActivity(place);
 
                 } else if (place instanceof PortalSiteMap.Residents.TenantInsurance) {
                     activity = new TenantInsuranceActivity();

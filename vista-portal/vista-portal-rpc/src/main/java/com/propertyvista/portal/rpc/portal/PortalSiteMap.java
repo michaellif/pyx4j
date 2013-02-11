@@ -89,7 +89,7 @@ public class PortalSiteMap implements SiteMap {
             }
 
             // this one is for tenants from Yardi integrated accounts
-            public static class FinancialStatus extends AppPlace {
+            public static class FinancialSummary extends AppPlace {
 
             }
         }

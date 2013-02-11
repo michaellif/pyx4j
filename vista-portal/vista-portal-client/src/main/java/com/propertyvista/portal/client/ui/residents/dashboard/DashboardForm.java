@@ -234,16 +234,18 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             HorizontalPanel actions = new HorizontalPanel();
             actions.getElement().getStyle().setMargin(1, Unit.EM);
 
-            Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
-            };
-            viewBill.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    presenter.viewCurrentBill();
-                }
-            });
-            viewBill.getElement().getStyle().setPaddingRight(20, Unit.PX);
-            actions.add(viewBill);
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
+                };
+                viewBill.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.viewCurrentBill();
+                    }
+                });
+                viewBill.getElement().getStyle().setPaddingRight(20, Unit.PX);
+                actions.add(viewBill);
+            }
 
             payButton = new Button(i18n.tr("Pay Now"));
             payButton.addClickHandler(new ClickHandler() {

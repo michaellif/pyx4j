@@ -48,12 +48,12 @@ public class DashboardServiceImpl implements DashboardService {
         AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
-
         if (!VistaFeatures.instance().yardiIntegration()) {
             dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
         }
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
 
+        // TODO review this
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             dashboard.tenantInsuranceStatus().set(
                     ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
