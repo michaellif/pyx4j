@@ -35,7 +35,7 @@ public interface ResidentPortalSettings extends IEntity {
     @Caption(name = "Resident Portal Enabled")
     IPrimitive<Boolean> enabled();
 
-    @Caption(name = "Resident Portal Skin")
+    @Caption(name = "Use Custom Skin")
     IPrimitive<Boolean> useCustomHtml();
 
     @Owned

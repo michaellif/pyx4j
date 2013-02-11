@@ -88,9 +88,15 @@ public abstract class BasePage extends WebPage {
         locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
 
         if (!cm.isCustomResidentsContentEnabled()) {
+            // default view
             add(new LocalizedHtmlTag("localizedHtml"));
-            add(new HeaderPanel());
-            add(new FooterPanel());
+            boolean residentsOnly = getCM().isResidentOnlyMode();
+            add(new HeaderPanel(residentsOnly));
+            add(new FooterPanel(residentsOnly));
+
+            if (residentsOnly && !(this instanceof ResidentsPage) && !(this instanceof StaticPage)) {
+                setResponsePage(ResidentsPage.class);
+            }
         }
     }
 

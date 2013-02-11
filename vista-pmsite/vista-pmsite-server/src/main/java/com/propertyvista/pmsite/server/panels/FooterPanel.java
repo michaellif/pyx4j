@@ -47,34 +47,38 @@ public class FooterPanel extends Panel {
 
     private static final I18n i18n = I18n.get(FooterPanel.class);
 
-    public FooterPanel() {
+    public FooterPanel(boolean residentsOnly) {
         super("footer");
 
         final AvailableLocale siteLocale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
         final PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         WebMarkupContainer footerLocations = new WebMarkupContainer("footer_locations");
-        List<City> cities = cm.getCities();
-        if (cities != null && cities.size() > 0) {
-            footerLocations.add(new ListView<City>("footer_locations_city", cities) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void populateItem(ListItem<City> item) {
-                    City city = item.getModelObject();
-                    String _city = city.name().getValue();
-                    String _prov = city.province().name().getValue();
-                    String _prov2 = city.province().code().getValue();
-                    if (_city != null && _prov != null && _prov2 != null) {
-                        PageParameters params = new PageParameters();
-                        params.set(PMSiteApplication.ParamNameCityProv, preprocess(_city) + "-" + _prov);
-                        BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", CityPage.class, params);
-                        link.add(new Label("city", _city + " (" + _prov2 + ")"));
-                        item.add(link);
-                    }
-                }
-            });
-        } else {
+        if (residentsOnly) {
             footerLocations.setVisible(false);
+        } else {
+            List<City> cities = cm.getCities();
+            if (cities != null && cities.size() > 0) {
+                footerLocations.add(new ListView<City>("footer_locations_city", cities) {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    protected void populateItem(ListItem<City> item) {
+                        City city = item.getModelObject();
+                        String _city = city.name().getValue();
+                        String _prov = city.province().name().getValue();
+                        String _prov2 = city.province().code().getValue();
+                        if (_city != null && _prov != null && _prov2 != null) {
+                            PageParameters params = new PageParameters();
+                            params.set(PMSiteApplication.ParamNameCityProv, preprocess(_city) + "-" + _prov);
+                            BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", CityPage.class, params);
+                            link.add(new Label("city", _city + " (" + _prov2 + ")"));
+                            item.add(link);
+                        }
+                    }
+                });
+            } else {
+                footerLocations.setVisible(false);
+            }
         }
         add(footerLocations);
 

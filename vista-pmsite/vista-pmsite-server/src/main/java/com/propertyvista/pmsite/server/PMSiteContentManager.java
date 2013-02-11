@@ -546,6 +546,10 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && siteDescriptor.residentPortalSettings().useCustomHtml().isBooleanTrue();
     }
 
+    public boolean isResidentOnlyMode() {
+        return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && !siteDescriptor.enabled().isBooleanTrue();
+    }
+
     public String getCustomResidentsContent(AvailableLocale locale) {
         String html = null;
         String lang = locale.lang().getValue().name();

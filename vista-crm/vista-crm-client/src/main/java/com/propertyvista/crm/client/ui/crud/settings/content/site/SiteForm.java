@@ -32,8 +32,6 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -41,7 +39,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.RadioGroup.Layout;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -64,7 +61,9 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private final CCheckBox publicPortalSwitch = new CCheckBox();
 
-    private final CRadioGroupBoolean residentSkinSwitch = new CRadioGroupBoolean(Layout.VERTICAL);
+    private final CCheckBox residentSkinSwitch = new CCheckBox();
+
+    private final ResidentCustomContentFolder contentFolder = new ResidentCustomContentFolder(isEditable());
 
     private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
@@ -74,6 +73,16 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
+        content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
+        CComponent<?, ?> skinComp;
+        content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
+        if (skinComp instanceof CComboBox) {
+            ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
+        }
         content.setH1(row++, 0, 2, i18n.tr("Website"));
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled(), publicPortalSwitch), 10).build());
         publicPortalSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -106,69 +115,21 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
                 }
             }
         });
-        CComponent<?, ?> skinComp;
-        content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
-
-        if (skinComp instanceof CComboBox) {
-            ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
-        }
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().enabled()), 10).build());
-        residentSkinSwitch.setFormat(new IFormat<Boolean>() {
-            @Override
-            public String format(Boolean value) {
-                if (value == null) {
-                    return format(false);
-                } else if (value) {
-                    return i18n.tr("Custom");
-                } else {
-                    return i18n.tr("Same as Website");
-                }
-            }
-
-            @Override
-            public Boolean parse(String string) {
-                return null;
-            }
-        });
         residentSkinSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 Boolean customSkin = event.getValue();
-                // if custom resident skin is turning on while public portal is enabled, display warning
-                if (customSkin != null && customSkin) {
-                    SiteDescriptorDTO site = SiteForm.this.getValue() == null ? null : SiteForm.this.getValue();
-                    if (site != null && site.enabled().isBooleanTrue() && site.residentPortalSettings().enabled().isBooleanTrue()) {
-                        OkCancelDialog confirm = new OkCancelDialog("Please Confirm") {
-                            @Override
-                            public boolean onClickOk() {
-                                publicPortalSwitch.setValue(false);
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onClickCancel() {
-                                residentSkinSwitch.setValue(false);
-                                return true;
-                            }
-
-                        };
-                        confirm.setBody(new HTML(i18n.tr("This will turn off Public Website!")));
-                        confirm.show();
-                    }
-                }
+                contentFolder.setEnabled(customSkin != null && customSkin);
             }
         });
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml(), residentSkinSwitch), 10).build());
         content.setH3(row++, 0, 2, i18n.tr("Resident Portal Custom Content"));
-        content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), new ResidentCustomContentFolder(isEditable())));
+        content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), contentFolder));
         selectTab(addTab(content));
 
         content = new FormFlexPanel(proto().locales().getMeta().getCaption());
@@ -260,6 +221,8 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         // resident portal skin dependencies:
         // 1. if public portal enabled, resident skin selection is disabled
         residentSkinSwitch.setEnabled(!getValue().enabled().isBooleanTrue());
+        // 2. enable content folder on useCustomSkin
+        contentFolder.setEnabled(getValue().residentPortalSettings().useCustomHtml().isBooleanTrue());
 
         thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
     }

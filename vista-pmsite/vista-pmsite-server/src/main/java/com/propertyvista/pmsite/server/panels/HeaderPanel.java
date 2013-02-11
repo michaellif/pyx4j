@@ -29,7 +29,7 @@ public class HeaderPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public HeaderPanel() {
+    public HeaderPanel(boolean residentsOnly) {
         super("header");
 
         PageLink logoLink = new PageLink("logoLink", LandingPage.class);
@@ -55,6 +55,10 @@ public class HeaderPanel extends Panel {
         // login
         add(new AuthenticationPanel("auth"));
         // main menu
-        add(new MainNavigationPanel("mainNavig"));
+        if (!residentsOnly) {
+            add(new MainNavigationPanel("mainNavig"));
+        } else {
+            add(new Label("mainNavig").setVisible(false));
+        }
     }
 }
