@@ -48,7 +48,7 @@ public class PmcCreatorDev {
 
     static List<OnboardingMerchantAccountImport> accountImport;
 
-    public static Pmc createPmc(String pmcName) {
+    public static Pmc createPmc(String pmcName, boolean mini) {
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
@@ -69,7 +69,7 @@ public class PmcCreatorDev {
         } else {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         }
-        if (pmcName.equals(DemoPmc.star.name())) {
+        if ((!mini) && pmcName.equals(DemoPmc.star.name())) {
             pmc.features().occupancyModel().setValue(Boolean.FALSE);
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
         }

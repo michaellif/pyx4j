@@ -85,7 +85,7 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Drop All and Preload all demo PMC (~3 min 30 seconds) [No Mockup]")
         all,
 
-        @Translate("Drop All and Preload all demo PMC : Mini version for UI Design (~1 min 30 seconds)")
+        @Translate("Drop All and Preload all demo PMC (+<b>star</b> tenants and buildings) : Mini version for UI Design (~1 min 45 seconds)")
         allMini,
 
         @Translate("Drop All and Preload One 'vista' PMC : Mini version for UI Design (~30 seconds)")
@@ -402,7 +402,7 @@ public class DBResetServlet extends HttpServlet {
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
         ServerSideFactory.create(PmcFacade.class).deleteAllPmcData(Persistence.service().retrieve(criteria));
 
-        Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName);
+        Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
         Persistence.service().commit();
 
         VistaDeployment.changePmcContext();
@@ -441,7 +441,8 @@ public class DBResetServlet extends HttpServlet {
         default:
             cfg = VistaDevPreloadConfig.createDefault();
         }
-        if (pmcDnsName.equals(DemoPmc.star.name())) {
+        //TODO fix LeasePreloader
+        if (pmcDnsName.equals(DemoPmc.star.name()) && (type != ResetType.allMini)) {
             cfg.numComplexes = 0;
             cfg.numResidentialBuildings = 0;
             cfg.numPotentialTenants2CreditCheck = 0;
