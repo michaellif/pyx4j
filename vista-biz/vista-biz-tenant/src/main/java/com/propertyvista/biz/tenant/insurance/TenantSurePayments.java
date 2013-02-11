@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.financial.payment.CreditCardTransactionResponse;
@@ -43,6 +42,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -228,7 +228,7 @@ class TenantSurePayments {
         Persistence.service().commit();
 
         if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
-            ServerSideFactory.create(TenantSureFacade.class).cancelDueToSkippedPayment(insuranceTenantSure.client().tenant());
+            ServerSideFactory.create(TenantSureFacade.class).startCancellationDueToSkippedPayment(insuranceTenantSure.client().tenant());
         }
 
         return transaction;
