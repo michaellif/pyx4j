@@ -22,12 +22,14 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -193,17 +195,22 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public void selfRegistration(SelfRegistrationDTO selfRegistration) {
-        // TODO do we need protection from attacks that check names of the user?
+        // We need protection from attacks that check names of the user?
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
-        criteria.eq(criteria.proto().customer().person().name().firstName(), selfRegistration.firstName());
-        criteria.eq(criteria.proto().customer().person().name().lastName(), selfRegistration.lastName());
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
 
         Tenant tenant = Persistence.service().retrieve(criteria);
         if (tenant == null) {
             throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
         }
+        if (!equalsIgnoreCase(tenant.customer().person().name().lastName(), selfRegistration.lastName())) {
+            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
+        }
+        if (!equalsIgnoreCase(tenant.customer().person().name().firstName(), selfRegistration.firstName())) {
+            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
+        }
+
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
         tenant.customer().portalRegistrationToken().setValue(null);
         persistCustomer(tenant.customer());
@@ -221,5 +228,15 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Persistence.service().commit();
         log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
+    }
+
+    private boolean equalsIgnoreCase(IPrimitive<String> name, IPrimitive<String> nameRegistration) {
+        if (CommonsStringUtils.equals(name.getValue(), nameRegistration.getValue())) {
+            return true;
+        }
+        if (name.isNull() || nameRegistration.isNull()) {
+            return false;
+        }
+        return name.getValue().trim().compareToIgnoreCase(nameRegistration.getValue().trim()) == 0;
     }
 }
