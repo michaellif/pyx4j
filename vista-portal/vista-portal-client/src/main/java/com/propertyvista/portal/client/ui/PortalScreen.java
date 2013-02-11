@@ -86,6 +86,7 @@ public class PortalScreen extends SimplePanel {
         //============= Container for login and retrieve password views ===========
         utilityDisplay = new UtilityDisplayPanel();
         utilityDisplay.setStyleName("content");
+        utilityDisplay.setVisible(false);
         main.add(utilityDisplay);
 
         //============= Container for login/logout links on external HTML page ===========
