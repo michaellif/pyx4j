@@ -277,7 +277,7 @@ public class CardServiceSimulationProcessor {
         {
             EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
             criteria.eq(criteria.proto().card(), card);
-            criteria.eq(criteria.proto().reference(), CardServiceSimulationUtils.toSimTransactionType(caledonRequest.transactionType));
+            criteria.eq(criteria.proto().transactionType(), CardServiceSimulationUtils.toSimTransactionType(caledonRequest.transactionType));
             criteria.eq(criteria.proto().scheduledSimulatedResponce(), Boolean.TRUE);
             transaction = Persistence.service().retrieve(criteria);
             if (transaction != null) {
