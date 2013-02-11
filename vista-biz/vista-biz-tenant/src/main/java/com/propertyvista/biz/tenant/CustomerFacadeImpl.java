@@ -200,14 +200,19 @@ public class CustomerFacadeImpl implements CustomerFacade {
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
 
-        Tenant tenant = Persistence.service().retrieve(criteria);
+        Tenant tenant = null;
+        List<Tenant> tenants = Persistence.service().query(criteria);
+        for (Tenant t : tenants) {
+            if (!equalsIgnoreCase(t.customer().person().name().lastName(), selfRegistration.lastName())) {
+                continue;
+            }
+            if (!equalsIgnoreCase(t.customer().person().name().firstName(), selfRegistration.firstName())) {
+                continue;
+            }
+            tenant = t;
+            break;
+        }
         if (tenant == null) {
-            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
-        }
-        if (!equalsIgnoreCase(tenant.customer().person().name().lastName(), selfRegistration.lastName())) {
-            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
-        }
-        if (!equalsIgnoreCase(tenant.customer().person().name().firstName(), selfRegistration.firstName())) {
             throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
         }
 
