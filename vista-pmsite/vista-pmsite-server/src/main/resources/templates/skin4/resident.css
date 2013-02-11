@@ -171,3 +171,8 @@
 .vista-pmsite-residentPage .PaymentEditorLegalTerms {
 	max-width: 673px;
 }
+
+.FormFlexPanel {
+	max-width: 685px;
+	overflow: hidden;
+}
