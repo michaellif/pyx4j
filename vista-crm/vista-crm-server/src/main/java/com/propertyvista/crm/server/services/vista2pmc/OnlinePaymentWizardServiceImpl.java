@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -26,14 +26,16 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.vista2pmc.AgreementDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
+import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.VistaTerms.Target;
+import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {
@@ -45,7 +47,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         // init property accounts
         onlinePaymentSetup.propertyAccounts().add(onlinePaymentSetup.propertyAccounts().$());
 
-        // init default company legal name        
+        // init default company legal name
         onlinePaymentSetup.businessInformation().companyName().setValue(VistaDeployment.getCurrentPmc().name().getValue());
 
         initTerms(onlinePaymentSetup.caledonAgreement(), retrieveTerms(Target.PmcCaledonTemplate));
@@ -60,10 +62,11 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     public void finish(AsyncCallback<VoidSerializable> callback, OnlinePaymentSetupDTO editableEntity) {
         callback.onSuccess(null);
 
-        // TODO get current user name and email, pass it to CommunicationFacade
-        String userName = "";
-        String userEmail = "";
-        ServerSideFactory.create(CommunicationFacade.class).sendOnlinePaymentSetupCompletedEmail(userName, userEmail);
+        EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
+        criteria.eq(criteria.proto().id(), VistaContext.getCurrentUserPrimaryKey());
+        CrmUser user = Persistence.service().query(criteria).get(0);
+
+        ServerSideFactory.create(CommunicationFacade.class).sendOnlinePaymentSetupCompletedEmail(user.name().getValue(), user.email().getValue());
     }
 
     @Override
