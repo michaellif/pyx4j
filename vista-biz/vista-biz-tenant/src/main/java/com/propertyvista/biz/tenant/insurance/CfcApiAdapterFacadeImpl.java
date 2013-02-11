@@ -60,8 +60,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
-// TODO rename to CFC API ADAPTER?
-public class CfcApiClient implements ICfcApiClient {
+// TODO CFCAPISOAP
+public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_STUFF = true;
 

@@ -28,7 +28,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
-public class MockupCfcApiClient implements ICfcApiClient {
+public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
 
     @Override
     public String createClient(Tenant tenant, String name, String phone) {

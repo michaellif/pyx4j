@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
-public interface ICfcApiClient {
+public interface CfcApiAdapterFacade {
 
     public enum CancellationType {
 

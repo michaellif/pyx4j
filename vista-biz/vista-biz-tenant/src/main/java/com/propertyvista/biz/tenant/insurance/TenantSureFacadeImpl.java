@@ -36,7 +36,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
+import com.propertyvista.biz.tenant.insurance.CfcApiAdapterFacade.ReinstatementType;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
@@ -56,24 +56,14 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class TenantSureFacadeImpl implements TenantSureFacade {
-
-    private static final boolean USE_CFC_API_MOCKUP_CLIENT = false;
 
     private static final I18n i18n = I18n.get(TenantSureFacadeImpl.class);
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
 
-    private final ICfcApiClient cfcApiClient;
-
-    public TenantSureFacadeImpl(ICfcApiClient cfcApiClient) {
-        this.cfcApiClient = cfcApiClient;
-    }
-
     public TenantSureFacadeImpl() {
-        this((VistaDemo.isDemo() | USE_CFC_API_MOCKUP_CLIENT) ? new MockupCfcApiClient() : new CfcApiClient());
     }
 
     @Override
@@ -85,7 +75,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     public TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId) {
         if (coverage.numberOfPreviousClaims().getValue() != PreviousClaims.MoreThanTwo) {
             InsuranceTenantSureClient client = initializeClient(tenantId, coverage.tenantName().getValue(), coverage.tenantPhone().getValue());
-            TenantSureQuoteDTO quote = cfcApiClient.getQuote(client, coverage);
+            TenantSureQuoteDTO quote = ServerSideFactory.create(CfcApiAdapterFacade.class).getQuote(client, coverage);
             return quote;
         } else {
             TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
@@ -185,7 +175,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
 
             try {
-                tenantSureCertificateNumber = cfcApiClient.bindQuote(insuranceTenantSure.quoteId().getValue());
+                tenantSureCertificateNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).bindQuote(insuranceTenantSure.quoteId().getValue());
             } catch (Throwable e) {
                 log.error("failed to bind quote. ", e);
                 insuranceTenantSure.status().setValue(InsuranceTenantSure.TenantSureStatus.Failed);
@@ -222,7 +212,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
                 emails.add(tenant.customer().user().email().getValue());
             }
-            cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+            ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
 
         }
 
@@ -319,8 +309,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
         validateIsCancellable(insuranceTenantSure);
 
-        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
-                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
+        LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                CfcApiAdapterFacade.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
@@ -336,8 +326,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        LogicalDate expiryDate = cfcApiClient.cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
-                com.propertyvista.biz.tenant.insurance.ICfcApiClient.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
+        LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                CfcApiAdapterFacade.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
         insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         insuranceTenantSure.status().setValue(TenantSureStatus.Cancelled);
@@ -413,7 +403,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().merge(insuranceTenantSure);
 
         String tenantsEmail = getTenantsEmail(tenantId);
-        cfcApiClient.reinstate(insuranceTenantSure.insuranceCertificateNumber().getValue(), ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
+        ServerSideFactory.create(CfcApiAdapterFacade.class).reinstate(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
 
         Persistence.service().commit();
     }
@@ -425,7 +416,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (tenantSureClient == null) {
             tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
             tenantSureClient.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
-            String clientReferenceNumber = cfcApiClient.createClient(tenantId, name, phone);
+            String clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
             tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
             Persistence.service().persist(tenantSureClient);
             Persistence.service().commit();
@@ -463,7 +454,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         } else {
             emails.add(email);
         }
-        cfcApiClient.requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
     }
 
     private String getTenantsEmail(Tenant tenantId) {
@@ -493,7 +484,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private void sendPaymentsResumedEmail(String tenantEmail) {
         ServerSideFactory.create(CommunicationFacade.class).sendPaymentsResumedEmail(tenantEmail);
-
     }
 
 }
