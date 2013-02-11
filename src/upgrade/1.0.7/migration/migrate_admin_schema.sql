@@ -10,7 +10,7 @@
 
 SET client_min_messages = 'error';
 
---BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 
 SET search_path = '_admin_';
 
@@ -274,6 +274,6 @@ SET search_path = '_admin_';
         UPDATE  admin_pmc_vista_features
         SET     tenant_sure_integration = TRUE;
 
---COMMIT;
+COMMIT;
 
 SET client_min_messages = 'notice';

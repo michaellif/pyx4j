@@ -21,6 +21,12 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- Foreign keys to drop
+        ALTER TABLE insurance_tenant_sure DROP CONSTRAINT insurance_tenant_sure_client_fk;
+        ALTER TABLE insurance_tenant_sure_details DROP CONSTRAINT insurance_tenant_sure_details_insurance_fk;
+        ALTER TABLE insurance_tenant_sure DROP CONSTRAINT insurance_tenant_sure_insurance_certificate_fk;
+        ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_insurance_fk;
+        
          -- Check constraints to drop
         ALTER TABLE billing_arrears_snapshot DROP CONSTRAINT billing_arrears_snapshot_billing_account_discriminator_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
@@ -34,7 +40,7 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
-        
+        DROP TABLE insurance_tenant_sure;
         DROP TABLE insurance_tenant_sure_details$taxes;
         
         
@@ -59,9 +65,19 @@ BEGIN
         
         ALTER TABLE html_content ALTER COLUMN html TYPE VARCHAR(48000);
         
-        -- insurance_tenant_sure
         
-        ALTER TABLE insurance_tenant_sure ADD COLUMN payment_day INT;
+        -- insurance_certificate
+        
+        ALTER TABLE insurance_certificate       ADD COLUMN id_discriminator VARCHAR(64),                   
+                                                ADD COLUMN client BIGINT,
+                                                ADD COLUMN quote_id VARCHAR(500),
+                                                ADD COLUMN status VARCHAR(50),
+                                                ADD COLUMN cancellation VARCHAR(50),
+                                                ADD COLUMN cancellation_description_reason_from_tenant_sure VARCHAR(500),
+                                                ADD COLUMN payment_day INT,
+                                                ADD COLUMN cancellation_date DATE,
+                                                ADD COLUMN monthly_payable NUMERIC(18,2);
+                       
         
         -- insurance_tenant_sure_report
         
@@ -129,8 +145,15 @@ BEGIN
         **/
         
         -- Foreig keys to create
-        ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_fk FOREIGN KEY(insurance) REFERENCES insurance_tenant_sure(id);
-        ALTER TABLE insurance_tenant_sure_tax ADD CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_fk FOREIGN KEY(tenant_sure_details) REFERENCES insurance_tenant_sure_details(id);
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_client_fk FOREIGN KEY(client) REFERENCES insurance_tenant_sure_client(id);
+        ALTER TABLE insurance_tenant_sure_details ADD CONSTRAINT insurance_tenant_sure_details_insurance_fk FOREIGN KEY(insurance) 
+                REFERENCES insurance_certificate(id);
+        ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_fk FOREIGN KEY(insurance) 
+                REFERENCES insurance_certificate(id);
+        ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_insurance_fk FOREIGN KEY(insurance) 
+                REFERENCES insurance_certificate(id);
+        ALTER TABLE insurance_tenant_sure_tax ADD CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_fk FOREIGN KEY(tenant_sure_details) 
+                REFERENCES insurance_tenant_sure_details(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_value_fk FOREIGN KEY(value) REFERENCES html_content(id);
         ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_resident_portal_settings_fk FOREIGN KEY(resident_portal_settings) REFERENCES resident_portal_settings(id);
@@ -156,6 +179,20 @@ BEGIN
         **/
         
         CREATE INDEX resident_portal_settings$custom_html_owner_idx ON resident_portal_settings$custom_html USING btree (owner);
+        
+        /**
+        ***     =====================================================================================================
+        ***
+        ***             UPDATES
+        ***
+        ***     =====================================================================================================
+        **/
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET created = updated ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.customer '
+                ||'SET created = updated ';
         
         /** Final touch - update _admin_.admin_pmc **/
         
