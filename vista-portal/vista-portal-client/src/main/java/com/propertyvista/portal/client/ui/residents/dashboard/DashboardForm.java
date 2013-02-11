@@ -13,12 +13,9 @@
  */
 package com.propertyvista.portal.client.ui.residents.dashboard;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -28,7 +25,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -47,6 +43,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
+import com.propertyvista.portal.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
@@ -211,6 +208,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
     }
 
     class FinancialSummaryViewer extends CEntityViewer<FinancialSummaryDTO> {
+
+        private final CurrentBalanceFormat currentBalanceFormat = new CurrentBalanceFormat();
+
         @Override
         public IsWidget createContent(FinancialSummaryDTO value) {
             FlexTable dataPanel = new FlexTable();
@@ -224,7 +224,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-            dataPanel.setHTML(row, 1, formatBalanceField(value.currentBalance()));
+            dataPanel.setHTML(row, 1, currentBalanceFormat.format(value.currentBalance().getValue()));
 
             // TODO wrong polymorphism
             if (value.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
@@ -270,10 +270,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             return content;
         }
 
-        private String formatBalanceField(IPrimitive<BigDecimal> moneyField) {
-            return NumberFormat.getFormat(i18n.tr("$#,##0.00")).format(moneyField.getValue().abs())
-                    + (moneyField.getValue().compareTo(BigDecimal.ZERO) < 0 ? " CR" : 0);
-        }
     }
 
     public Button getPayButton() {

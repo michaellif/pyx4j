@@ -17,13 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
@@ -44,20 +41,17 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         FinancialSummaryDTO financialSummary = VistaFeatures.instance().yardiIntegration() ? EntityFactory.create(YardiFinancialSummaryDTO.class)
                 : EntityFactory.create(PvBillingFinancialSummaryDTO.class);
 
-        Lease contextLease = TenantAppContext.getCurrentUserTenant().lease();
-        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-        criteria.eq(criteria.proto().lease(), contextLease);
-        BillingAccount contextBillingAccount = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        Lease contextLease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserTenant().lease().getPrimaryKey());
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
-        financialSummary.currentBalance().setValue(arFacade.getCurrentBalance(contextBillingAccount));
+        financialSummary.currentBalance().setValue(arFacade.getCurrentBalance(contextLease.billingAccount()));
 
         // TODO has to stay here until billing facade and AR facade merged together
         if (financialSummary.isInstanceOf(YardiFinancialSummaryDTO.class)) {
-            ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(arFacade.getTransactionHistory(contextBillingAccount));
+            ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(arFacade.getTransactionHistory(contextLease.billingAccount()));
         } else if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
             ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(contextLease));
-            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getNotAcquiredLineItems(contextBillingAccount));
+            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getNotAcquiredLineItems(contextLease.billingAccount()));
         }
 
         return financialSummary;
