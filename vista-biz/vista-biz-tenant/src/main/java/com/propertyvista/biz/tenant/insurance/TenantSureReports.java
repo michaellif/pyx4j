@@ -30,9 +30,11 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
@@ -50,46 +52,18 @@ class TenantSureReports {
     private static final Logger log = LoggerFactory.getLogger(TenantSureReports.class);
 
     static ReportTableFormatter startReport() {
-        ReportTableFormatter formater = new ReportTableCSVFormatter();
+        ReportTableFormatter formatter = new ReportTableCSVFormatter();
 
-        formater.header("First Name");
-        formater.header("Last Name");
-        formater.header("Insurance Certificate Number");
-        formater.header("Monthly Payable");
-        formater.header("Status");
-        formater.header("Status From");
-        formater.header("Cancellation");
-        formater.newRow();
+        // Header for data
+        EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
+        er.createHeader(formatter);
 
-        return formater;
+        return formatter;
     }
 
-    static void completeReport(ReportTableFormatter formater, Date date) {
-        // create the file actually
-        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
-        File dirReports = new File(sftpDir, "reports");
-        if (!dirReports.exists()) {
-            if (!dirReports.mkdirs()) {
-                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
-            }
-        }
+    static void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formatter) {
+        EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
 
-        String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date) + ".csv";
-        File file = new File(sftpDir, reportName);
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            out.write(formater.getBinaryData());
-        } catch (Throwable e) {
-            log.error("Unable write to file {}", file.getAbsolutePath(), e);
-            throw new Error(e);
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
-    }
-
-    static void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater) {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:
@@ -100,7 +74,7 @@ class TenantSureReports {
                         PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSure.TenantSureStatus.Cancelled),
                         PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSure.TenantSureStatus.Cancelled)
                 )
-         );//@formatter:off
+         );//@formatter:on
 
         ICursorIterator<InsuranceTenantSureReport> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
@@ -108,12 +82,14 @@ class TenantSureReports {
                 InsuranceTenantSureReport reportedStatusHolder = iterator.next();
                 reportedStatusHolder = updateReportStatus(reportedStatusHolder);
 
-                formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
-                formater.cell(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
-                formater.cell(reportedStatusHolder.insurance().insuranceCertificateNumber().getStringView());
-                formater.cell(reportedStatusHolder.insurance().monthlyPayable().getValue().toString());
-                formater.cell(reportedStatusHolder.reportedStatus().getValue());
-                formater.cell(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));
+                TenantSureReportStatusData data = EntityFactory.create(TenantSureReportStatusData.class);
+
+                data.firstName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
+                data.lastName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
+                data.insuranceCertificateNumber().setValue(reportedStatusHolder.insurance().insuranceCertificateNumber().getStringView());
+                data.monthlyPayable().setValue(reportedStatusHolder.insurance().monthlyPayable().getValue().toString());
+                data.status().setValue(reportedStatusHolder.reportedStatus().getValue().name());
+                data.statusFrom().setValue(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));
 
                 String specialFlag = "";
                 if (reportedStatusHolder.insurance().status().getValue() == TenantSureStatus.PendingCancellation) {
@@ -124,9 +100,9 @@ class TenantSureReports {
                             reportedStatusHolder.insurance().cancellationDate().getValue()
                     );//@formatter:on
                 }
-                formater.cell(specialFlag);
+                data.cancellation().setValue(specialFlag);
 
-                formater.newRow();
+                er.reportEntity(formatter, data);
 
                 StatisticsUtils.addProcessed(runStats, 1, reportedStatusHolder.insurance().monthlyPayable().getValue());
             }
@@ -189,6 +165,31 @@ class TenantSureReports {
         }
 
         return reportedStatusHolder;
+    }
+
+    static void completeReport(ReportTableFormatter formatter, Date date) {
+        // create the file actually
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
+        String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date) + ".csv";
+        File file = new File(dirReports, reportName);
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            out.write(formatter.getBinaryData());
+        } catch (Throwable e) {
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
     }
 
 }
