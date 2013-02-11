@@ -59,8 +59,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("border-radius", "5px");
         style.addProperty("border", "solid 1px #666");
         style.addProperty("margin", "1em");
-        style.addProperty("height", "180px");
-        style.addProperty("width", "550px");
+        style.addProperty("padding", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages);
