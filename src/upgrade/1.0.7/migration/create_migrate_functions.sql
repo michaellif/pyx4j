@@ -46,6 +46,15 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- building
+        
+        ALTER TABLE building ADD COLUMN created TIMESTAMP WITHOUT TIME ZONE;
+        
+        -- customer
+        
+        ALTER TABLE customer    ADD COLUMN created TIMESTAMP WITHOUT TIME ZONE,
+                                ADD COLUMN registered_in_portal BOOLEAN;
+        
         -- html_content
         
         ALTER TABLE html_content ALTER COLUMN html TYPE VARCHAR(48000);
@@ -60,6 +69,7 @@ BEGIN
         (
                 id                              BIGINT                          NOT NULL,
                 insurance                       BIGINT                          NOT NULL,
+                insurance_discriminator         VARCHAR(50),
                 reported_status                 VARCHAR(50),
                 status_from                     DATE,
                         CONSTRAINT      insurance_tenant_sure_report_pk PRIMARY KEY(id)
