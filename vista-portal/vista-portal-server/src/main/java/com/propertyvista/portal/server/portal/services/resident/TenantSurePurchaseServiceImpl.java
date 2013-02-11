@@ -130,7 +130,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
 
         // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
-        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
+        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(paymentMethod,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
 
         ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(), tenantName,

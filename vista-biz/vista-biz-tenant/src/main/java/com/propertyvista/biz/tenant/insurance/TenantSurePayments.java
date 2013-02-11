@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
@@ -50,6 +52,8 @@ class TenantSurePayments {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSurePayments.class);
 
+    private static final I18n i18n = I18n.get(TenantSurePayments.class);
+
     private static String tenantSureMerchantTerminalId() {
         return ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId();
     }
@@ -58,7 +62,7 @@ class TenantSurePayments {
         return ServerSideFactory.create(PaymentMethodFacade.class).retrieveInsurancePaymentMethod(tenantId);
     }
 
-    static InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
+    static InsurancePaymentMethod savePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
         return ServerSideFactory.create(PaymentMethodFacade.class).persistInsurancePaymentMethod(paymentMethod, tenantId);
     }
 
@@ -124,6 +128,19 @@ class TenantSurePayments {
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+    }
+
+    public static void performOutstandingPayment(final InsuranceTenantSure insuranceTenantSure) {
+        final LogicalDate dueDate = getNextPaymentDate(insuranceTenantSure);
+        InsuranceTenantSureTransaction transaction = TaskRunner.runAutonomousTransation(new Callable<InsuranceTenantSureTransaction>() {
+            @Override
+            public InsuranceTenantSureTransaction call() {
+                return makePaymentTransaction(insuranceTenantSure, dueDate);
+            }
+        });
+        if (transaction.status().getValue() != InsuranceTenantSureTransaction.TransactionStatus.Cleared) {
+            throw new UserRuntimeException(i18n.tr("Credit Card payment failed"));
+        }
     }
 
     static void processPayments(RunStats runStats, final LogicalDate dueDate) {

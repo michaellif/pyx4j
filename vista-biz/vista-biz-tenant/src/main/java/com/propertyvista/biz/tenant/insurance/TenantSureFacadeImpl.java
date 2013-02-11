@@ -98,8 +98,29 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
      * Only update credit card, do not perform outstanding payment
      */
     @Override
+    public InsurancePaymentMethod savePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
+        return TenantSurePayments.savePaymentMethod(paymentMethod, tenantId);
+    }
+
+    @Override
     public InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
-        return TenantSurePayments.updatePaymentMethod(paymentMethod, tenantId);
+        {
+            InsurancePaymentMethod originalpaymentMethod = TenantSurePayments.getPaymentMethod(tenantId);
+            if (originalpaymentMethod != null) {
+                originalpaymentMethod.isDeleted().setValue(Boolean.TRUE);
+                Persistence.service().persist(originalpaymentMethod);
+            }
+
+            paymentMethod = TenantSurePayments.savePaymentMethod(paymentMethod, tenantId);
+
+            Persistence.service().commit();
+        }
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
+        if (insuranceTenantSure.status().getValue() == TenantSureStatus.PendingCancellation) {
+            TenantSurePayments.performOutstandingPayment(insuranceTenantSure);
+            reverseCancellationDueToSkippedPayment(tenantId);
+        }
+        return paymentMethod;
     }
 
     /**
@@ -344,7 +365,10 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public void reverseCancellationDueToSkippedPayment(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-        validateIsCancellable(insuranceTenantSure);
+        //TODO Assert 15 days.
+        if (insuranceTenantSure.status().getValue() != TenantSureStatus.PendingCancellation) {
+            throw new Error("It's impossible to activate a tenant sure insurance which is not " + TenantSureStatus.PendingCancellation);
+        }
 
         sendPaymentsResumedEmail(getTenantsEmail(tenantId));
 
