@@ -35,7 +35,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
-import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.ICfcApiClient.ReinstatementType;
 import com.propertyvista.config.VistaDeployment;
@@ -50,6 +49,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
@@ -451,7 +451,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
             tenantsEmail = mailConfig.getForwardAllTo();
         } else {
-            tenantsEmail = tenant.customer().user().email().getValue();
+            tenantsEmail = tenant.customer().person().email().getValue();
         }
         return tenantsEmail;
     }
