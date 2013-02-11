@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.dev;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -54,6 +55,9 @@ public interface CardServiceSimulationTransaction extends IEntity {
     CardServiceSimulationCard card();
 
     IPrimitive<SimpulationTransactionType> transactionType();
+
+    @Caption(description = "Force rejection code on next transaction (of this type)")
+    IPrimitive<Boolean> scheduledSimulatedResponce();
 
     @NotNull
     @Format("#,##0.00")

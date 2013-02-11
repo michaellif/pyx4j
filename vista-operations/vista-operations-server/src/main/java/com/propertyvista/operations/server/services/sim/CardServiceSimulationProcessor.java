@@ -14,18 +14,9 @@
 package com.propertyvista.operations.server.services.sim;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.EnumSet;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -34,9 +25,6 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
-import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction.SimpulationTransactionType;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.payment.caledon.CaledonRequest;
 import com.propertyvista.payment.caledon.CaledonRequestToken;
 import com.propertyvista.payment.caledon.CaledonResponse;
@@ -45,8 +33,6 @@ import com.propertyvista.payment.caledon.CaledonTransactionType;
 
 public class CardServiceSimulationProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(CardServiceSimulationProcessor.class);
-
     public static CaledonResponse execute(CaledonRequestToken caledonRequest) {
         CaledonResponse caledonResponse;
         try {
@@ -54,9 +40,9 @@ public class CardServiceSimulationProcessor {
             if (!merchantAccount.responseCode().isNull()) {
                 caledonResponse = new CaledonResponse();
                 caledonResponse.code = merchantAccount.responseCode().getValue();
-                caledonResponse.text = "Simulator " + caledonResponse.code;
+                caledonResponse.text = "Simulated merchant code '" + caledonResponse.code + "'";
             } else {
-                CaledonTransactionType transactionType = findCaledonTransactionType(caledonRequest.transactionType);
+                CaledonTransactionType transactionType = CardServiceSimulationUtils.toCaledonTransactionType(caledonRequest.transactionType);
                 switch (transactionType) {
                 case TOKEN:
                     caledonResponse = processTokenAction(merchantAccount, caledonRequest);
@@ -76,24 +62,6 @@ public class CardServiceSimulationProcessor {
             Persistence.service().commit();
         }
         return caledonResponse;
-    }
-
-    private static CaledonTransactionType findCaledonTransactionType(String transactionTypeChar) {
-        for (CaledonTransactionType transactionType : EnumSet.allOf(CaledonTransactionType.class)) {
-            if (transactionType.getValue().equals(transactionTypeChar)) {
-                return transactionType;
-            }
-        }
-        throw new Error("Invalid transactionType '" + transactionTypeChar + "'");
-    }
-
-    private static CaledonTokenAction findCaledonTokenAction(String tokenAction) {
-        for (CaledonTokenAction type : EnumSet.allOf(CaledonTokenAction.class)) {
-            if (type.getValue().equals(tokenAction)) {
-                return type;
-            }
-        }
-        throw new Error("Invalid tokenAction '" + tokenAction + "'");
     }
 
     private static CardServiceSimulationMerchantAccount ehshureMerchantAccount(String terminalID) {
@@ -123,7 +91,7 @@ public class CardServiceSimulationProcessor {
         criteria.eq(criteria.proto().card().merchant(), merchantAccount);
         CardServiceSimulationToken token = Persistence.service().retrieve(criteria);
 
-        CaledonTokenAction tokenAction = findCaledonTokenAction(caledonRequest.tokenAction);
+        CaledonTokenAction tokenAction = CardServiceSimulationUtils.toCaledonTokenAction(caledonRequest.tokenAction);
         switch (tokenAction) {
         case ADD:
             if (token != null) {
@@ -177,7 +145,7 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.text = "TOKEN NOT FOUND";
             } else {
                 token.card().number().setValue(caledonRequest.creditCardNumber);
-                token.card().expiryDate().setValue(parsDate(caledonRequest.expiryDate));
+                token.card().expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
                 Persistence.service().persist(token.card());
 
                 caledonResponse.code = "0000";
@@ -186,31 +154,6 @@ public class CardServiceSimulationProcessor {
             break;
         }
         return caledonResponse;
-    }
-
-    private static LogicalDate parsDate(String expiryDate) {
-        try {
-            Date date = new SimpleDateFormat("MMyydd").parse(expiryDate + "01");
-            return new LogicalDate(date);
-        } catch (ParseException e) {
-            throw new Error(e);
-        }
-    }
-
-    private static BigDecimal parsAmount(String amount) {
-        String valueCents;
-        String valueDollars;
-        int len = amount.length();
-        if (len <= 2) {
-            valueCents = amount;
-            valueDollars = "0";
-        } else {
-            valueCents = amount.substring(len - 2, len);
-            valueDollars = amount.substring(0, len - 2);
-        }
-
-        BigDecimal money = new BigDecimal(valueDollars + "." + valueCents);
-        return money.setScale(2);
     }
 
     private static CaledonResponse processCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
@@ -227,34 +170,31 @@ public class CardServiceSimulationProcessor {
             return caledonResponse;
         }
 
-        CaledonTransactionType transactionType = findCaledonTransactionType(caledonRequest.transactionType);
+        CaledonTransactionType transactionType = CardServiceSimulationUtils.toCaledonTransactionType(caledonRequest.transactionType);
+
+        CardServiceSimulationTransaction createdTransaction = findSimulatedResponce(card, caledonRequest);
+        if (createdTransaction != null) {
+            caledonResponse.code = createdTransaction.responseCode().getValue();
+            caledonResponse.text = "Simulated Tx code '" + card.responseCode().getStringView() + "'";
+
+            createdTransaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
+            createdTransaction.reference().setValue(caledonRequest.referenceNumber);
+            createdTransaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
+            createdTransaction.scheduledSimulatedResponce().setValue(Boolean.FALSE);
+            Persistence.service().persist(createdTransaction);
+            return caledonResponse;
+        }
 
         CardServiceSimulationTransaction transaction = EntityFactory.create(CardServiceSimulationTransaction.class);
         transaction.card().set(card);
-        transaction.amount().setValue(parsAmount(caledonRequest.amount));
+        transaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
         transaction.reference().setValue(caledonRequest.referenceNumber);
-
-        switch (transactionType) {
-        case SALE:
-            transaction.transactionType().setValue(SimpulationTransactionType.sale);
-            break;
-        case PREAUTH:
-            transaction.transactionType().setValue(SimpulationTransactionType.preAuthorization);
-            break;
-        case AUTH_REVERSE:
-            transaction.transactionType().setValue(SimpulationTransactionType.preAuthorizationReversal);
-            break;
-        case COMPLETION:
-            transaction.transactionType().setValue(SimpulationTransactionType.completion);
-            break;
-        default:
-            throw new Error("Unsupported transactionType '" + transactionType + "'");
-        }
+        transaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
 
         if (!card.responseCode().isNull()) {
             caledonResponse.code = card.responseCode().getStringView();
-            caledonResponse.text = "Simulated code '" + card.responseCode().getStringView() + "'";
-        } else if (card.expiryDate().getValue().after(getExpiryMonthEnd())) {
+            caledonResponse.text = "Simulated Card code '" + card.responseCode().getStringView() + "'";
+        } else if (card.expiryDate().getValue().after(CardServiceSimulationUtils.getExpiryMonthEnd())) {
             caledonResponse.code = "1254";
             caledonResponse.text = "EXPIRED CARD";
         } else {
@@ -326,9 +266,34 @@ public class CardServiceSimulationProcessor {
 
         transaction.authorizationNumber().setValue(caledonResponse.authorizationNumber);
         transaction.responseCode().setValue(caledonResponse.code);
+        transaction.scheduledSimulatedResponce().setValue(Boolean.FALSE);
         Persistence.service().persist(transaction);
         Persistence.service().persist(card);
         return caledonResponse;
+    }
+
+    private static CardServiceSimulationTransaction findSimulatedResponce(CardServiceSimulationCard card, CaledonRequest caledonRequest) {
+        CardServiceSimulationTransaction transaction;
+        {
+            EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
+            criteria.eq(criteria.proto().card(), card);
+            criteria.eq(criteria.proto().reference(), CardServiceSimulationUtils.toSimTransactionType(caledonRequest.transactionType));
+            criteria.eq(criteria.proto().scheduledSimulatedResponce(), Boolean.TRUE);
+            transaction = Persistence.service().retrieve(criteria);
+            if (transaction != null) {
+                return transaction;
+            }
+        }
+        {
+            EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
+            criteria.eq(criteria.proto().card(), card);
+            criteria.eq(criteria.proto().scheduledSimulatedResponce(), Boolean.TRUE);
+            transaction = Persistence.service().retrieve(criteria);
+            if (transaction != null) {
+                return transaction;
+            }
+        }
+        return null;
     }
 
     private static CardServiceSimulationTransaction findPreAuthorization(CardServiceSimulationCard card, String referenceNumber) {
@@ -338,34 +303,17 @@ public class CardServiceSimulationProcessor {
         return Persistence.service().retrieve(criteria);
     }
 
-    private static Date getExpiryMonthEnd() {
-        Calendar c = Calendar.getInstance();
-        c.setTime(Persistence.service().getTransactionSystemTime());
-        c.set(Calendar.DAY_OF_MONTH, 1);
-        c.add(Calendar.MONTH, 1);
-        return c.getTime();
-    }
-
     private static void moveMoney(CardServiceSimulationMerchantAccount merchantAccount, BigDecimal value) {
         merchantAccount.balance().setValue(merchantAccount.balance().getValue(BigDecimal.ZERO).add(value));
         Persistence.service().persist(merchantAccount);
-    }
-
-    private static CreditCardType detectCardType(String creditCardNumber) {
-        for (CreditCardType type : CreditCardType.values()) {
-            if (ValidationUtils.isCreditCardNumberIinValid(type.iinsPatterns, creditCardNumber)) {
-                return type;
-            }
-        }
-        return null;
     }
 
     private static CardServiceSimulationCard createCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         CardServiceSimulationCard card = EntityFactory.create(CardServiceSimulationCard.class);
         card.merchant().set(merchantAccount);
         card.number().setValue(caledonRequest.creditCardNumber);
-        card.cardType().setValue(detectCardType(caledonRequest.creditCardNumber));
-        card.expiryDate().setValue(parsDate(caledonRequest.expiryDate));
+        card.cardType().setValue(CardServiceSimulationUtils.detectCardType(caledonRequest.creditCardNumber));
+        card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
         card.balance().setValue(new BigDecimal("10000"));
         card.reserved().setValue(BigDecimal.ZERO);
         return card;
