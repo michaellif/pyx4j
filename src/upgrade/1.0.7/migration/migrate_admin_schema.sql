@@ -116,6 +116,7 @@ SET search_path = '_admin_';
                 response_code                   VARCHAR(500),
                 authorization_number            VARCHAR(500),
                 transaction_date                TIMESTAMP WITHOUT TIME ZONE,
+                scheduled_simulated_responce    BOOLEAN,
                         CONSTRAINT      dev_card_service_simulation_transaction_pk PRIMARY KEY(id)
         );
         

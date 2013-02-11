@@ -30,7 +30,9 @@ BEGIN
          -- Check constraints to drop
         ALTER TABLE billing_arrears_snapshot DROP CONSTRAINT billing_arrears_snapshot_billing_account_discriminator_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
-
+        ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
+        ALTER TABLE insurance_certificate_document DROP CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck;
+        ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck;
         
         
         /**
@@ -77,7 +79,10 @@ BEGIN
                                                 ADD COLUMN payment_day INT,
                                                 ADD COLUMN cancellation_date DATE,
                                                 ADD COLUMN monthly_payable NUMERIC(18,2);
-                       
+        -- insurance_tenant_sure_details 
+        
+        ALTER TABLE insurance_tenant_sure_details ADD COLUMN insurance_discriminator VARCHAR(50);  
+        ALTER TABLE insurance_tenant_sure_details DROP COLUMN liability_coverage;          
         
         -- insurance_tenant_sure_report
         
@@ -85,11 +90,13 @@ BEGIN
         (
                 id                              BIGINT                          NOT NULL,
                 insurance                       BIGINT                          NOT NULL,
-                insurance_discriminator         VARCHAR(50),
+                insurance_discriminator         VARCHAR(50)                     NOT NULL,
                 reported_status                 VARCHAR(50),
                 status_from                     DATE,
                         CONSTRAINT      insurance_tenant_sure_report_pk PRIMARY KEY(id)
         );
+        
+        ALTER TABLE insurance_tenant_sure_report OWNER TO vista;
         
         
         -- insurance_tenant_sure_tax
@@ -102,7 +109,8 @@ BEGIN
         
         -- insurance_tenant_sure_transaction
         
-        ALTER TABLE insurance_tenant_sure_transaction ADD COLUMN payment_due DATE;
+        ALTER TABLE insurance_tenant_sure_transaction ADD COLUMN payment_due DATE,
+                                                        ADD COLUMN insurance_discriminator VARCHAR(50);
         
         -- merchant_account 
         
@@ -119,6 +127,7 @@ BEGIN
                         CONSTRAINT      resident_portal_settings_pk PRIMARY KEY(id)
         );
         
+        ALTER TABLE resident_portal_settings OWNER TO vista;
         
         -- resident_portal_settings$custom_html
         
@@ -130,6 +139,8 @@ BEGIN
                 seq                             INT,
                         CONSTRAINT      resident_portal_settings$custom_html_pk PRIMARY KEY(id)
         );
+        
+        ALTER TABLE resident_portal_settings$custom_html OWNER TO vista;
         
         -- site_descriptor
         
@@ -168,6 +179,27 @@ BEGIN
                 CHECK ((status) IN ('AuthorizationRejected', 'AuthorizationReversal', 'Authorized', 'AuthorizedPaymentRejectedRetry', 'Cleared', 'Draft', 'PaymentError', 'PaymentRejected'));
         ALTER TABLE merchant_account ADD CONSTRAINT merchant_account_status_e_ck 
                 CHECK ((status) IN ('Active', 'Cancelled', 'PendindAcknowledgement', 'PendindAppoval', 'Rejected'));
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceGeneric', 'InsuranceTenantSure'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_cancellation_e_ck 
+                CHECK ((cancellation) IN ('CancelledByTenant', 'CancelledByTenantSure', 'SkipPayment'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_client_ck 
+                CHECK ((id_discriminator = 'InsuranceTenantSure' AND client IS NOT NULL) OR (id_discriminator != 'InsuranceTenantSure' AND client IS NULL));
+        ALTER TABLE insurance_certificate_document ADD CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceGeneric', 'InsuranceTenantSure'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_id_discriminator_ck CHECK ((id_discriminator) IN ('InsuranceGeneric', 'InsuranceTenantSure'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_status_e_ck CHECK ((status) IN ('Active', 'Cancelled', 'Draft', 'Failed', 'Pending', 'PendingCancellation'));
+        ALTER TABLE insurance_tenant_sure_details ADD CONSTRAINT insurance_tenant_sure_details_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
+        ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
+        ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
+        ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceGeneric', 'InsuranceTenantSure'));
+                
+        -- Not Null Constraints
+        
+        ALTER TABLE insurance_certificate ALTER COLUMN id_discriminator SET NOT NULL;
+        ALTER TABLE insurance_tenant_sure_details ALTER COLUMN insurance_discriminator SET NOT NULL;
+        ALTER TABLE insurance_tenant_sure_transaction ALTER COLUMN insurance_discriminator SET NOT NULL;
 
         
         /**
@@ -178,6 +210,7 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX customer_user_id_idx ON customer USING btree (user_id);
         CREATE INDEX resident_portal_settings$custom_html_owner_idx ON resident_portal_settings$custom_html USING btree (owner);
         
         /**
