@@ -7,15 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-10-13
+ * Created on 2013-02-12
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain;
+package com.propertyvista.operations.domain.encryption;
 
 import java.util.Date;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -28,33 +27,24 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
-/**
- * The data in this table will not bee stored in backup for 52 days (60 - 8 days).
- */
 @RpcTransient
-@Table(namespace = VistaNamespace.expiringNamespace)
+@Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface CustomerCreditCheckReport extends IEntity {
-
-    @ReadOnly
-    @MemberColumn(notNull = true)
-    IPrimitive<Key> pmc();
-
-    //@MemberColumn(notNull = true)
-    IPrimitive<Key> publicKey();
+public interface EncryptedStoragePublicKey extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     @MemberColumn(notNull = true)
     IPrimitive<Date> created();
 
-    @ReadOnly
-    @MemberColumn(notNull = true)
-    IPrimitive<Key> customer();
+    IPrimitive<Date> expired();
 
     @RpcTransient
     @ReadOnly
-    @Length(15 * 1024 * 1024)
-    IPrimitive<byte[]> data();
+    @Length(16 * 1024)
+    IPrimitive<byte[]> keyData();
 
+    @ReadOnly
+    @Length(16 * 1024)
+    IPrimitive<byte[]> keyTestData();
 }
