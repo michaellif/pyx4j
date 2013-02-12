@@ -59,12 +59,7 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (!form.isValid()) {
-                    Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
-                } else {
-                    presenter.save(form.getValue());
-                }
+                onSubmit();
             }
         });
         add(DecorationUtils.inline(submitButton));
@@ -116,5 +111,16 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     protected Button getSubmitButton() {
         return submitButton;
+    }
+
+    protected void onSubmit() {
+
+        if (!form.isValid()) {
+            Window.scrollTo(0, 0);
+            throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
+        } else {
+            presenter.save(form.getValue());
+        }
+
     }
 }

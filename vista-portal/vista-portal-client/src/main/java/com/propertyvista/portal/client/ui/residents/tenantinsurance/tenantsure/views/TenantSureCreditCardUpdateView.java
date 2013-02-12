@@ -31,4 +31,6 @@ public interface TenantSureCreditCardUpdateView extends View<InsurancePaymentMet
 
     void setTenantAddress(AddressStructured tenantAddress);
 
+    void setPreAuthorizedDebitAgreement(String agreementTextHml);
+
 }

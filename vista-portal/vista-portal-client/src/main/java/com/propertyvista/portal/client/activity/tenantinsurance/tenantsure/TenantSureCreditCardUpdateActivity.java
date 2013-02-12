@@ -45,15 +45,23 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+    public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         view.setPresenter(this);
 
-        InsurancePaymentMethod pm = EntityFactory.create(InsurancePaymentMethod.class);
-        pm.type().setValue(PaymentType.CreditCard);
-        view.populate(pm);
+        service.getPreAuthorizedPaymentsAgreement(new DefaultAsyncCallback<String>() {
 
-        panel.setWidget(view);
+            @Override
+            public void onSuccess(String agreementTextHtml) {
+                InsurancePaymentMethod pm = EntityFactory.create(InsurancePaymentMethod.class);
+                pm.type().setValue(PaymentType.CreditCard);
+
+                view.populate(pm);
+                view.setPreAuthorizedDebitAgreement(agreementTextHtml);
+                panel.setWidget(view);
+            }
+        });
+
     }
 
     @Override

@@ -82,6 +82,11 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     }
 
     @Override
+    public void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> areementHtml) {
+        areementHtml.onSuccess(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
+    }
+
+    @Override
     public void sendDocumentation(AsyncCallback<VoidSerializable> callback, String email) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();

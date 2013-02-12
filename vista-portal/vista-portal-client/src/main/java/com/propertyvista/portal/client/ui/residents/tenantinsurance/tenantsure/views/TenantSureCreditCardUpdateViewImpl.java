@@ -39,6 +39,12 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
     }
 
     @Override
+    public void setPresenter(com.propertyvista.portal.client.ui.residents.View.Presenter<InsurancePaymentMethod> presenter) {
+        super.setPresenter(presenter);
+        form.setVisited(false);
+    }
+
+    @Override
     public void reportCCUpdateSuccess() {
         MessageDialog.show("", i18n.tr("Credit card was updated sucessfully"), Type.Info, new OkOption() {
 
@@ -56,5 +62,21 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
         InsurancePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) form).getValue();
         paymentMethod.billingAddress().set(tenantAddress);
         ((TenantSurePaymentMethodForm) form).setValue(paymentMethod);
+    }
+
+    @Override
+    public void setPreAuthorizedDebitAgreement(String agreementTextHml) {
+        ((TenantSurePaymentMethodForm) form).setPreAuthorizedAgreement(agreementTextHml);
+    }
+
+    @Override
+    protected void onSubmit() {
+        form.revalidate();
+        form.setUnconditionalValidationErrorRendering(true);
+        if (form.isValid() & ((TenantSurePaymentMethodForm) form).isAgreedToPreauthorizedPayments()) {
+            super.onSubmit();
+        } else {
+            MessageDialog.info("You must fill out the form and agree to pre-authorized debit agreement to continue");
+        }
     }
 }
