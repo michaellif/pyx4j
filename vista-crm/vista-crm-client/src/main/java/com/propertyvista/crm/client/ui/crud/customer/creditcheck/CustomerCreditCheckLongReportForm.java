@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
@@ -88,6 +89,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, inject(proto().inquiries(), new InquiryFolder()));
 
         selectTab(addTab(main));
+
+        // Add do not print marker:
+        main.getElement().addClassName(StyleManger.DO_NOT_PRINT_CLASS_NAME);
     }
 
     @Override
