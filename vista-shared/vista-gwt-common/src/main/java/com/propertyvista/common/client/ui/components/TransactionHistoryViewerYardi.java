@@ -128,7 +128,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             }
 
             HTML totalDescription = new HTML(htmlEscape(i18n.tr("Total")));
-            HTML totalHtml = new HTML(htmlEscape(currencyFormat.format(totalAmount)));
+            HTML totalHtml = new HTML(htmlEscape(currencyFormat.format(totalAmount.abs())));
 
             ++row[0];
             panel.setWidget(row[0], COL_DESCRIPTION, totalDescription);
