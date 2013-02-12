@@ -34,6 +34,8 @@ public class StyleManger {
 
     private static final Logger log = LoggerFactory.getLogger(StyleManger.class);
 
+    public static final String DO_NOT_PRINT_CLASS_NAME = "do-not-print";
+
     private static class SingletonHolder {
         public static final StyleManger INSTANCE = new StyleManger();
     }
@@ -111,7 +113,6 @@ public class StyleManger {
                 element.removeFromParent();
             }
         }
-
     }
 
     public static Theme getTheme() {
@@ -124,6 +125,12 @@ public class StyleManger {
 
     public static String getThemeString() {
         StringBuilder stylesString = new StringBuilder();
+
+        // Add do-not-print css: 
+        stylesString.append("@media print {");
+        stylesString.append("." + DO_NOT_PRINT_CLASS_NAME + "{display: none;}");
+        stylesString.append("}");
+
         for (Style style : instance().theme.getAllStyles()) {
             stylesString.append(style.toString(instance().theme, instance().palette));
         }
