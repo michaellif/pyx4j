@@ -286,7 +286,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 status.isPaymentFailed().setValue(true);
                 message.messageText()
                         .setValue(
-                                i18n.tr("There was a problem with your last scheduled payment. If you don't update your credit card details until {0,date,short}, your TeantSure insurance will expire",
+                                i18n.tr("There was a problem with your last scheduled payment. If you don''t update your credit card details until {0,date,short}, your TenantSure insurance will expire.",
                                         getGracePeriodEndDate(insuranceTenantSure)));
             } else {
                 message.messageText().setValue(
@@ -345,6 +345,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(insuranceTenantSure);
 
         sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure));
