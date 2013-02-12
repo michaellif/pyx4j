@@ -83,6 +83,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         HTMLPanel personalDisclaimer = new HTMLPanel(getValue().terms().getValue());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+        privacyPolicyAnchor.setTarget("_blank");
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);
         personalDisclaimerHolder.setWidget(personalDisclaimer);
     }

@@ -13,10 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -59,14 +55,7 @@ public class TenantSureViewDecorator extends Composite {
         privacyPolicyAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSurePrivacyPolicyLink.name());
 
         privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                com.google.gwt.user.client.Window.open(privacyPolicyAnchor.getHref(), "Privacy Policy",
-                        "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+        privacyPolicyAnchor.setTarget("_blank");
         privacyPolicyAnchorHolder.setWidget(privacyPolicyAnchor);
         footer.add(privacyPolicyAnchorHolder);
 
@@ -75,13 +64,7 @@ public class TenantSureViewDecorator extends Composite {
         billingAndCancellationsPolicyAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
 
         billingAndCancellationsPolicyAnchor = new Anchor(i18n.tr("Billing and Cancellations Policy"));
-        billingAndCancellationsPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                Window.open(billingAndCancellationsPolicyAnchor.getHref(), "Privacy Policy", "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
+        billingAndCancellationsPolicyAnchor.setTarget("_blank");
         billingAndCancellationsPolicyAnchorHolder.setWidget(billingAndCancellationsPolicyAnchor);
         footer.add(billingAndCancellationsPolicyAnchorHolder);
 
