@@ -99,6 +99,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         builder.component.setDecorator(this);
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(WidgetDecoratorComponent.name());
+        nativeComponent.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
 
         String caption = builder.customLabel;
 
