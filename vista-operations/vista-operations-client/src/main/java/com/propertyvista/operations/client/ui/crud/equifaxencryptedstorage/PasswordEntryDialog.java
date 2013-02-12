@@ -78,6 +78,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
 
         form = new PasswordEntryForm();
         form.initContent();
+        form.populateNew();
 
         setBody(form);
     }
