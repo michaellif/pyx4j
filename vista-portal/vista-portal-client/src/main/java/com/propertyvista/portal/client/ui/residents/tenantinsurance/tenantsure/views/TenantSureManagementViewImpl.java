@@ -229,7 +229,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         reinstateTenantSureButton = new Button(i18n.tr("Reinstate"), new Command() {
             @Override
             public void execute() {
-                presenter.reinstate();
+                onReinstateTenantSure();
             }
         });
 
@@ -275,6 +275,15 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
             @Override
             public void execute() {
                 presenter.cancelTenantSure();
+            }
+        });
+    }
+
+    private void onReinstateTenantSure() {
+        MessageDialog.confirm(i18n.tr("TenantSure Reinstatement"), i18n.tr("Are you sure you want to reinstate TenantSure?"), new Command() {
+            @Override
+            public void execute() {
+                presenter.reinstate();
             }
         });
     }
