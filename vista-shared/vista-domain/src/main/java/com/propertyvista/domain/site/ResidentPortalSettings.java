@@ -40,4 +40,7 @@ public interface ResidentPortalSettings extends IEntity {
 
     @Owned
     IList<HtmlContent> customHtml();
+
+    @Owned
+    IList<HtmlContent> proxyHtml();
 }

@@ -553,7 +553,7 @@ public class PMSiteContentManager implements Serializable {
     public String getCustomResidentsContent(AvailableLocale locale) {
         String html = null;
         String lang = locale.lang().getValue().name();
-        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().customHtml();
+        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().proxyHtml();
         for (HtmlContent contentRc : contents) {
             if (contentRc.locale().lang().getValue().name().equals(lang)) {
                 html = contentRc.html().getValue();
