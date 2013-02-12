@@ -1,0 +1,293 @@
+<!doctype html public "-//w3c//dtd xhtml 1.0 transitional//en" "http://www.w3.org/tr/xhtml1/dtd/xhtml1-transitional.dtd" />
+<html>
+  <head>
+    <title>Gateway Property Management - Employee Contact Search</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR">
+    <meta content="C#" name="CODE_LANGUAGE">
+    <meta content="JavaScript" name="vs_defaultClientScript">
+    <meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema">
+    <meta content="#" name="Description">
+    <meta content="#" name="Keywords">
+    <meta content="#" name="Generator">
+    <meta content="#" name="robots">
+    <link href="http://www.gatewaypm.com/images/favicon.ico" rel="shortcut icon">
+    <link href="http://www.gatewaypm.com/images/favicon.ico" rel="bookmark">
+    <link href="http://www.gatewaypm.com/Css/main.css" type="text/css" rel="stylesheet"><!--[if gte IE 5.5]>
+<SCRIPT language=JavaScript src="Js/Menu.js" type=text/JavaScript></SCRIPT>
+<![endif]-->
+  </head>
+  <body>
+    <div id="page">
+      <form name="CondoDocuments" method="post" action="ContactSearch.aspx" id="CondoDocuments">
+<input type="hidden" name="__MAGICAJAX_SCRIPT_FINGERPRINTS" value="" />
+<input type="hidden" name="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" value="dDwtOTE5NTIxOTk0O3Q8O2w8aTwxPjtpPDM+Oz47bDx0PDtsPGk8MT47aTwxOT47PjtsPHQ8O2w8aTwxPjtpPDM+O2k8NT47aTw3PjtpPDk+O2k8MTE+O2k8MTM+O2k8MTU+O2k8MTc+O2k8MTk+O2k8MjE+O2k8MjM+O2k8Mjc+O2k8Mjk+O2k8MzE+O2k8MzM+O2k8MzU+O2k8Mzc+Oz47bDx0PHA8cDxsPE5hdmlnYXRlVXJsOz47bDwvRGVmYXVsdC5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0NvcnBvcmF0ZVByb2ZpbGUuYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9OZXdzLmFzcHg7Pj47Pjs7Pjt0PHA8cDxsPE5hdmlnYXRlVXJsOz47bDwvUmVzaWRlbnRpYWwuYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9SZW50YWxDb25zdWx0aW5nLmFzcHg7Pj47Pjs7Pjt0PHA8cDxsPE5hdmlnYXRlVXJsOz47bDwvQ29tbWVyY2lhbC5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0NvbmRvTWFuYWdlbWVudC5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0NvbmRvRG9jdW1lbnRTZWxlY3Rpb24uYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9BZHZlcnRpc2UuYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9MaW5rcy5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0dhdGV3YXlBZHZhbnRhZ2UuYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9DdXJyZW50T3Bwb3J0dW5pdGllcy5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L1Byb3Bvc2FsV29ya3NoZWV0LmFzcHg7Pj47Pjs7Pjt0PHA8cDxsPE5hdmlnYXRlVXJsOz47bDwvQ29ycG9yYXRlT2ZmaWNlcy5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0NvbnRhY3RTZWFyY2guYXNweDs+Pjs+Ozs+O3Q8cDxwPGw8TmF2aWdhdGVVcmw7PjtsPC9SZXNpZGVudGlhbFNlYXJjaC5hc3B4Oz4+Oz47Oz47dDxwPHA8bDxOYXZpZ2F0ZVVybDs+O2w8L0NvbmRvbWluaXVtU2VhcmNoLmFzcHg7Pj47Pjs7Pjt0PHA8cDxsPE5hdmlnYXRlVXJsOz47bDwvQ29tbWVyY2lhbFNlYXJjaC5hc3B4Oz4+Oz47Oz47Pj47dDw7bDxpPDE+O2k8Mz47aTw5PjtpPDE1Pjs+O2w8dDxwPHA8bDxUZXh0Oz47bDxTaWduIEluOz4+Oz47Oz47dDw7bDxpPDE+Oz47bDx0PHA8cDxsPFZpc2libGU7PjtsPG88Zj47Pj47Pjs7Pjs+Pjt0PDtsPGk8MT47aTwzPjtpPDU+O2k8Nz47aTw5Pjs+O2w8dDx0PHA8cDxsPERhdGFWYWx1ZUZpZWxkO0RhdGFUZXh0RmllbGQ7PjtsPEtleTtWYWx1ZTs+Pjs+O3Q8aTw2PjtAPFBsZWFzZSBTZWxlY3Q7QWxiZXJ0YTtCcml0aXNoIENvbHVtYmlhO09udGFyaW87UXVlYmVjO1Nhc2thdGNoZXdhbjs+O0A8XGU7QUI7QkM7T047UUM7U0s7Pj47Pjs7Pjt0PHQ8O3Q8aTwxPjtAPFBsZWFzZSBTZWxlY3Q7PjtAPFxlOz4+Oz47Oz47dDx0PDt0PGk8MT47QDxQbGVhc2UgU2VsZWN0Oz47QDxcZTs+Pjs+Ozs+O3Q8dDw7cDxsPGk8MD47aTwxPjtpPDI+O2k8Mz47aTw0PjtpPDU+Oz47bDxwPEFueSBQcmljZTswLTMyMDAwPjtwPFVuZGVyICQ1MDA7MC01MDA+O3A8JDUwMCB0byAkNzUwOzUwMC03NTA+O3A8JDc1MCB0byAkMTAwMDs3NTAtMTAwMD47cDwkMTAwMCB0byAkMTUwMDsxMDAwLTE1MDA+O3A8QWJvdmUgJDE1MDA7MTUwMC0zMjAwMD47Pj47Pjs7Pjt0PHQ8O3A8bDxpPDA+O2k8MT47aTwyPjtpPDM+O2k8ND47aTw1PjtpPDY+Oz47bDxwPEFsbDtcZT47cDxTdHVkaW87U3R1ZGlvPjtwPE9uZSBCZWRyb29tO09uZSBCZWRyb29tPjtwPFR3byBCZWRyb29tcztUd28gQmVkcm9vbXM+O3A8VGhyZWUgQmVkcm9vbXM7VGhyZWUgQmVkcm9vbXM+O3A8Rm91ciBCZWRyb29tcztGb3VyIEJlZHJvb21zPjtwPEZpdmUgQmVkcm9vbXM7Rml2ZSBCZWRyb29tcz47Pj47Pjs7Pjs+Pjt0PHA8O3A8bDxMSUM7PjtsPDIyODY4Oz4+Pjs7Pjs+Pjs+Pjt0PDtsPGk8MT47PjtsPHQ8cDxwPGw8VGV4dDs+O2w8MjAxMzs+Pjs+Ozs+Oz4+Oz4+Oz5tG2t2qOG02g+EnSjDwtLHxwRjKg==" />
+
+<script language="javascript" type="text/javascript">
+<!--
+	function __doPostBack(eventTarget, eventArgument) {
+		var theform;
+		if (window.navigator.appName.toLowerCase().indexOf("microsoft") > -1) {
+			theform = document.CondoDocuments;
+		}
+		else {
+			theform = document.forms["CondoDocuments"];
+		}
+		theform.__EVENTTARGET.value = eventTarget.split("$").join(":");
+		theform.__EVENTARGUMENT.value = eventArgument;
+		theform.submit();
+	}
+// -->
+</script>
+
+        <div id="nonFooter">
+          <div id="header">
+            <div id="logo"></div>
+          </div>
+          <div id="menu">
+<ul id="navmenu">
+  <li>
+    <a id="MainMenu_HomeHyperLink" href="http://www.gatewaypm.com/Default.aspx" target="_top">Home</a>
+  <li>
+    <a href="ContactSearch.aspx#">About Us</a>
+    <ul>
+      <li>
+        <a id="MainMenu_CorporateProfileHyperLink" href="http://www.gatewaypm.com/CorporateProfile.aspx" target="_top">Corporate Profile</a>
+      <li>
+        <a id="MainMenu_NewsHyperLink" href="http://www.gatewaypm.com/News.aspx" target="_top">News</a></li>
+    </ul>
+  <li>
+    <a href="ContactSearch.aspx#">Our Services</a>
+    <ul>
+      <li>
+        <a id="MainMenu_ResidentialRentalHyperLink" href="http://www.gatewaypm.com/Residential.aspx" target="_top">Rental Property Management</a>
+      <li>
+        <a id="MainMenu_RentalConsultingHyperlink" href="http://www.gatewaypm.com/RentalConsulting.aspx" target="_top">Rental Consulting Services</a>
+      <li>
+        <a id="MainMenu_CommercialManagementHyperLink" href="http://www.gatewaypm.com/Commercial.aspx" target="_top">Commercial Management</a>
+      <li>
+        <a id="MainMenu_CondoManagementHyperLink" href="http://www.gatewaypm.com/CondoManagement.aspx" target="_top">Condominium Management</a>
+      <li>
+        <a id="MainMenu_CondoDocumentsHyperLink" href="http://www.gatewaypm.com/CondoDocumentSelection.aspx" target="_top">Document Centre</a></li>
+      <li>
+		<a id="MainMenu_AdvertisingLink" href="http://www.gatewaypm.com/Advertise.aspx" target="_top">Advertise with Us</a></li>
+    </ul>
+  <li>
+    <a id="MainMenu_LinksHyperLink" href="http://www.gatewaypm.com/Links.aspx" target="_top">Links</a>
+  <li>
+    <a href="ContactSearch.aspx#">Careers</a>
+    <ul>
+      <li>
+        <a id="MainMenu_GatewayAdvantageHyperLink" href="http://www.gatewaypm.com/GatewayAdvantage.aspx" target="_top">The Gateway "Advantage"</a>
+      <li>
+        <a id="MainMenu_CurrentOpportunitiesHyperLink1" href="http://www.gatewaypm.com/CurrentOpportunities.aspx" target="_top">Current Opportunities</a>
+     <!-- <li>
+        <a id="MainMenu_TestimonialsHyperLink" target="_top">Testimonials</a></li> /-->
+    </ul>
+  <li>
+    <a href="ContactSearch.aspx#">Contact</a>
+    <ul>
+      <li>
+        <a id="MainMenu_RequestForProposalHyperLink" href="http://www.gatewaypm.com/ProposalWorksheet.aspx" target="_top">Request For Proposal</a>
+      <li>
+        <a id="MainMenu_CorporateOfficesHyperLink" href="http://www.gatewaypm.com/CorporateOffices.aspx" target="_top">Corporate Offices</a>
+      <li>
+        <a id="MainMenu_EmployeeDirectoryHyperLink" href="ContactSearch.aspx" target="_top">Employee Directory</a></li></ul>
+  <li>
+    <a href="ContactSearch.aspx#">Search</a>
+    <ul>
+      <li>
+        <a id="MainMenu_ResidentialSearchHyperLink" href="http://www.gatewaypm.com/ResidentialSearch.aspx" target="_top">Residential Rental Search</a></li>
+      <li>
+        <a id="MainMenu_CondominiumSearchHyperLink" href="http://www.gatewaypm.com/CondominiumSearch.aspx" target="_top">Condominium Search</a></li>
+      <li>
+        <a id="MainMenu_CommercialSearchHyperLink" href="http://www.gatewaypm.com/CommercialSearch.aspx" target="_top">Commercial Property Search</a></li>
+      <!-- <li>
+        <a id="MainMenu_VacancyTrackerHyperLink" target="_top">Vacancy Tracker</a></li> /-->
+    </ul>
+  </li>
+</ul>
+</div>
+          <div id="content">
+            <div id="leftcolumn">
+              <h2>
+                Residents
+	      </h2>
+	      <div class="public" RESIDENT_CONTENT>RESIDENT_CONTENT</div>
+            </div>
+            <div id="rightcolumn">
+              
+<div class="rightmenu">
+	<h3 id="administration">Sign In Here</h3>
+	<div class="innerSidemenu" RESIDENT_LOGIN>RESIDENT_LOGIN</div>
+</div>
+<div class="rightmenu">
+	<h3 id="rentalalerts">
+		Rental Vacancy Tracker</h3>
+	<div class="innerSidemenu">
+		<a id="RightMenu_RegisterHyperlink" class="asphyperlink" href="http://www.gatewaypm.com/Registration.aspx">Register to receive rental vacancy notifications via email</a><br>
+		<br>
+	</div>
+</div>
+<div class="rightmenu">
+	<h3 id="condoowners">
+		Condominium Owners</h3>
+	<div class="innerSidemenu">
+		<a id="RightMenu_CondominiumOwnersHyperlink" class="asphyperlink" href="http://www.gatewaypm.com/Registration.aspx?Mode=Condo">Register to gain access to your confidential condo information</a><br>
+		<br>
+	</div>
+</div>
+<div class="rightmenu">
+	<h3 id="rentalsearch">Apartment Rental Search</h3>
+	<div class="sidemenu">
+		<div class="innerSidemenu">
+			<span id='RightMenu_QuickSearchAjaxpanel$RBS_Holder'><span id="RightMenu_QuickSearchAjaxpanel" AjaxCall="async">
+				<label for="Province">Province:</label>
+				<span id="RightMenu_ProvinceDropDown$ajaxdest" name="__ajaxmark"><select name="RightMenu:ProvinceDropDown" onchange="__doPostBack('RightMenu$ProvinceDropDown','')" language="javascript" id="RightMenu_ProvinceDropDown" class="inputbox">
+	<option value="">Please Select</option>
+	<option value="AB">Alberta</option>
+	<option value="BC">British Columbia</option>
+	<option value="ON">Ontario</option>
+	<option value="QC">Quebec</option>
+	<option value="SK">Saskatchewan</option>
+
+</select></span>
+				<label for="Province">Region:</label>
+				<span id="RightMenu_RegionDropDown$ajaxdest" name="__ajaxmark"><select name="RightMenu:RegionDropDown" onchange="__doPostBack('RightMenu$RegionDropDown','')" language="javascript" id="RightMenu_RegionDropDown" class="inputbox">
+	<option value="">Please Select</option>
+
+</select></span>
+				<label for="City">City:</label>
+				<span id="RightMenu_CityDropDown$ajaxdest" name="__ajaxmark"><select name="RightMenu:CityDropDown" id="RightMenu_CityDropDown" class="inputbox">
+	<option value="">Please Select</option>
+
+</select></span>
+				<label for="Price&#9;Range">Price Range:</label>
+				<span id="RightMenu_PriceRangeDropDown$ajaxdest" name="__ajaxmark"><select name="RightMenu:PriceRangeDropDown" id="RightMenu_PriceRangeDropDown" class="inputbox">
+	<option value="0-32000">Any Price</option>
+	<option value="0-500">Under $500</option>
+	<option value="500-750">$500 to $750</option>
+	<option value="750-1000">$750 to $1000</option>
+	<option value="1000-1500">$1000 to $1500</option>
+	<option value="1500-32000">Above $1500</option>
+
+</select></span>
+				<label for="Bedrooms">Bedrooms:</label>
+				<span id="RightMenu_BedroomsDropDown$ajaxdest" name="__ajaxmark"><select name="RightMenu:BedroomsDropDown" id="RightMenu_BedroomsDropDown" class="inputbox">
+	<option value="">All</option>
+	<option value="Studio">Studio</option>
+	<option value="One Bedroom">One Bedroom</option>
+	<option value="Two Bedrooms">Two Bedrooms</option>
+	<option value="Three Bedrooms">Three Bedrooms</option>
+	<option value="Four Bedrooms">Four Bedrooms</option>
+	<option value="Five Bedrooms">Five Bedrooms</option>
+
+</select></span>
+			</span></span>
+			<br>
+			<input type="submit" name="RightMenu:SearchButton" value="Search" onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(); " language="javascript" id="RightMenu_SearchButton" class="button" />
+			<br>
+			<input type="submit" name="RightMenu:AdvancedSearchButton" value="Advanced Search" onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(); " language="javascript" id="RightMenu_AdvancedSearchButton" class="button" />
+		</div>
+	</div>
+</div>
+
+<div class="rightmenu">
+	<h3 id="social">Like us on Facebook</h3>
+	<div class="sidemenu">
+		<div class="innerSidemenu" style="margin-left: 17px">
+			<a href="http://www.facebook.com/GatewayPropertyManagementCorporation" target="_blank"><img src="http://www.gatewaypm.com/Images/Sidebar/find-us-on-facebook.jpg" alt="Find us on Facebook" /></a>
+		</div>
+	</div>
+</div>
+
+<div class="rightmenu">
+	<h3 id="social" class="twitter">Follow us on Twitter</h3>
+	<div class="sidemenu">
+		<div class="innerSidemenu" style="margin-left: 17px">
+			<a href="http://twitter.com/GatewayPMNews" target="_blank"><img src="http://www.gatewaypm.com/Images/Sidebar/twitter-follow.jpg" alt="Follow us on Twitter" /></a>	
+		</div>
+	</div>
+</div>
+
+<div class="rightmenu">
+	<h3 id="rentalsearch">Mobile Apartment Rental App</h3>
+
+		<a href="http://www.rentcompass.com/mobile" title="Find Gateway rental apartments on the iPhone">
+			<img src="http://www.gatewaypm.com/Images/WebsiteBase/gateway-rental-app.png" border="0" alt="Apartment Rentals on the go" />
+		</a>
+</div>
+
+<div class="rightmenu">
+	<h3 id="pollquestion">Poll Question</h3>
+	<div class="innerSidemenu" id="Poll">
+		<table id="RightMenu_WebPoll" class="Poll" LIC="22868" border="0" width="180">
+	<tr>
+		<td>There are no polls available right now.</td>
+	</tr>
+</table><br>
+		<br>
+	</div>
+</div>
+
+            </div>
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div id="footer">
+      
+<span style="float: left; padding-top: 1.5em">&copy;
+	<span id="Footer_YearCopyrightLabel">2013</span>
+	Gateway Property Management Corp. All rights reserved.
+</span>
+<ul id="bottomLinks">
+	<li class="first">
+		<a id="Footer_HyperLink1" href="http://www.gatewaypm.com/PrivacyPolicy.aspx">Privacy Policy</a>
+	<li>
+		<a id="Footer_HyperLink2" href="http://www.gatewaypm.com/TermsAndConditions.aspx">Terms and Conditions</a>
+	<li>
+		<a id="Footer_HyperLink3" href="http://www.gatewaypm.com/CorporateOffices.aspx">Contact Us</a>
+		<!--<li>
+		<a id="Footer_Hyperlink4" href="Disclaimer.aspx">Site Disclaimer</a>
+	</li>-->
+	</li>
+</ul>
+<p>
+	Find apartments for rent in <a href="http://www.gatewaypm.com/ViewUnitSearchResults.aspx?&amp;mode=quicksearch&amp;bedrooms=&amp;city=&amp;pricefrom=0&amp;priceto=32000&amp;province=AB&amp;regions=">Alberta</a>, 
+	<a href="http://www.gatewaypm.com/ViewUnitSearchResults.aspx?&amp;mode=quicksearch&amp;bedrooms=&amp;city=&amp;pricefrom=0&amp;priceto=32000&amp;province=BC&amp;regions=">British Columbia</a>, 
+	<a href="http://www.gatewaypm.com/ViewUnitSearchResults.aspx?&amp;mode=quicksearch&amp;bedrooms=&amp;city=&amp;pricefrom=0&amp;priceto=32000&amp;province=ON&amp;regions=">Ontario</a>, 
+	<a href="http://www.gatewaypm.com/ViewUnitSearchResults.aspx?&amp;mode=quicksearch&amp;bedrooms=&amp;city=&amp;pricefrom=0&amp;priceto=32000&amp;province=QC&amp;regions=">Quebec</a>, and				
+	<a href="http://www.gatewaypm.com/ViewUnitSearchResults.aspx?&amp;mode=quicksearch&amp;bedrooms=&amp;city=&amp;pricefrom=0&amp;priceto=32000&amp;province=SK&amp;regions=">Saskatchewan</a>.						
+	<br><br>
+	web development: <a href="http://www.deversus.com" target="_blank" title="Vancouver Web Development Services">
+		Vancouver Web Development by Deversus</a>&nbsp;|&nbsp; site created by: <a href="http://www.canadahomeguide.ca" target="_blank">
+		Canada Home Guide Inc.</a>
+</p>
+
+<script type="text/javascript">
+	document.write('<scr' + 'ipt src="' + document.location.protocol + '//fby.s3.amazonaws.com/fby.js"></scr' + 'ipt>');
+</script>
+<script type="text/javascript">
+	FBY.showTab({id: '379', position: 'right', color: '#476655'});
+</script>
+<script type="text/javascript">
+ 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17324301-1']);
+  _gaq.push(['_trackPageview']);
+ 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+ 
+</script>
+
+    </div></FONT></STRONG>
+  </body>
+</html>
