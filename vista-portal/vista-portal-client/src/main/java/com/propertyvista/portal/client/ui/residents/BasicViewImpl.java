@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
@@ -126,10 +125,9 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
     protected void onSubmit() {
         if (!form.isValid()) {
             Window.scrollTo(0, 0);
-            throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
+            showError(form.getValidationResults().getValidationMessage(true, false));
         } else {
             presenter.save(form.getValue());
         }
-
     }
 }
