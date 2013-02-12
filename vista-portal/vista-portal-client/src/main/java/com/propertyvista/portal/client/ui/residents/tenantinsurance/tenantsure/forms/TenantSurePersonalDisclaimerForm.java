@@ -20,10 +20,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -76,16 +73,6 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         contentPanel.setWidget(++row, 0, personalDisclaimerHolder = new SimplePanel());
         contentPanel.setBR(++row, 0, 1);
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isAgreed(), new CCheckBox())).build());
-        get(proto().isAgreed()).addValueValidator(new EditableValueValidator<Boolean>() {
-
-            @Override
-            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
-                if (value != null && value != true) {
-                    return new ValidationError(component, i18n.tr("You must accept the personal disclaimer terms to continue"));
-                }
-                return null;
-            }
-        });
 
         return contentPanel;
     }

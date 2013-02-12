@@ -140,6 +140,12 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void reportError(String message) {
+        // if error happened it means that all processing stopped
+        // so we hide all the progress related UI:
+        // TODO i think this kind of error processing should be done inside the current step context
+        retrievingQuoteMessage.setVisible(false);
+        paymentProcessingErrorMessage.setVisible(false);
+        processingPaymentMessage.setVisible(false);
         MessageDialog.info(message);
     }
 
@@ -228,20 +234,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         personalDisclaimerForm.initContent();
         personalDisclaimerStepPanel.add(personalDisclaimerForm);
         return new Step() {
-            private Button next;
-
-            {
-                personalDisclaimerForm.addValueChangeHandler(new ValueChangeHandler<TenantSurePersonalDisclaimerHolderDTO>() {
-
-                    @Override
-                    public void onValueChange(ValueChangeEvent<TenantSurePersonalDisclaimerHolderDTO> event) {
-                        personalDisclaimerForm.revalidate();
-                        if (next != null) {
-                            next.setEnabled(personalDisclaimerForm.isValid());
-                        }
-                    }
-                });
-            }
 
             @Override
             public Widget asWidget() {
@@ -260,18 +252,16 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
-                personalDisclaimerForm.revalidate();
-                personalDisclaimerForm.setUnconditionalValidationErrorRendering(true);
-                if (personalDisclaimerForm.isValid()) {
-                    callback.onSuccess(null);
-                } else {
+                if (!personalDisclaimerForm.getValue().isAgreed().isBooleanTrue()) {
                     MessageDialog.info("You must accept the agreement to continue");
+                } else {
+                    callback.onSuccess(null);
                 }
             }
 
             @Override
             public void setNextButton(Button next) {
-                this.next = next;
+                next.setEnabled(true);
             };
         };
 
@@ -357,6 +347,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             @Override
             public void setNextButton(Button next) {
                 TenantSurePurchaseViewImpl.this.acceptQuoteButton = next;
+                TenantSurePurchaseViewImpl.this.acceptQuoteButton.setEnabled(false);
             }
 
         };
@@ -394,21 +385,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         return new Step() {
 
-            private Button next = null;
-
-            {
-                paymentMethodForm.addValueChangeHandler(new ValueChangeHandler<InsurancePaymentMethod>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<InsurancePaymentMethod> event) {
-                        if (next != null) {
-                            paymentMethodForm.revalidate();
-                            next.setEnabled(paymentMethodForm.isValid());
-                        }
-
-                    }
-                });
-            }
-
             @Override
             public Widget asWidget() {
                 return paymentStepPanel;
@@ -424,14 +400,17 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
-                if (paymentMethodForm.isAgreedToPreauthorizedPayments()) {
-                    presenter.onQuoteAccepted();
-
+                paymentMethodForm.revalidate();
+                paymentMethodForm.setUnconditionalValidationErrorRendering(true);
+                if (paymentMethodForm.isValid() & paymentMethodForm.isAgreedToPreauthorizedPayments()) {
                     // save the callback to use it's 'onSuccess()' when we get acknowledgment
                     // from the presenter that we've processed the payment and have bound the quote successfully
                     TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
+
+                    presenter.onQuoteAccepted();
+
                 } else {
-                    MessageDialog.info(i18n.tr("You must accept the Pre-Authorized Payments Agreement in order to proceed!"));
+                    MessageDialog.info(i18n.tr("You must fill out the form and accept the Pre-Authorized Payments Agreement in order to proceed!"));
                 }
             }
 
@@ -442,7 +421,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
             @Override
             public void setNextButton(Button next) {
-                this.next = next;
+                next.setEnabled(true);
             }
         };
     }

@@ -96,13 +96,12 @@ public class StepDriver extends Composite {
         currentStep = stepNumber;
         for (Step step : steps) {
             step.asWidget().setVisible(false);
-            step.setNextButton(nextStepButton);
         }
         steps.get(stepNumber).asWidget().setVisible(true);
+        steps.get(stepNumber).setNextButton(nextStepButton);
+        // TODO maybe setNextStepButton should set text text label??
         if (stepNumber < steps.size() - 1) {
             nextStepButton.setTextLabel(steps.get(stepNumber + 1).getTitle());
-            nextStepButton.setVisible(true);
-            nextStepButton.setEnabled(false);
             cancelButton.setVisible(true);
         } else {
             nextStepButton.setVisible(false);
