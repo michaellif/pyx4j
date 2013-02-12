@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -59,6 +60,7 @@ public interface MaintenanceRequest extends IEntity {
     IPrimitive<LogicalDate> scheduledDate();
 
     @Editor(type = EditorType.timepicker)
+    @Format("h:mm a")
     IPrimitive<Time> scheduledTime();
 
     @Length(250)
