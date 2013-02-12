@@ -31,7 +31,7 @@ public interface EncryptedStorageFacade {
 
     EncryptedStorageDTO getSystemState();
 
-    byte[] createNewKeyPair(char[] passwrord);
+    byte[] createNewKeyPair(char[] password);
 
     void makeCurrent(Key publicKeyKey);
 

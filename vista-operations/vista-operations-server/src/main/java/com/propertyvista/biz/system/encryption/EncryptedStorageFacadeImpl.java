@@ -73,7 +73,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public byte[] createNewKeyPair(char[] passwrord) {
+    public byte[] createNewKeyPair(char[] password) {
         // TODO Auto-generated method stub
         return null;
     }
