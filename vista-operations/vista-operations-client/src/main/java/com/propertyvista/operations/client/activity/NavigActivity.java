@@ -74,6 +74,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Management.OnboardingUser());
         folder.addNavigItem(new OperationsSiteMap.Management.Trigger());
         folder.addNavigItem(new OperationsSiteMap.Management.BillingSetup());
+
         list.add(folder);
 
         // Security
@@ -97,6 +98,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Administration.Maintenance());
         folder.addNavigItem(new OperationsSiteMap.Administration.Simulation());
         folder.addNavigItem(new OperationsSiteMap.Administration.AdminUsers());
+        folder.addNavigItem(new OperationsSiteMap.Administration.EquifaxEncryptedStorage());
         list.add(folder);
 
         if (ApplicationMode.isDevelopment()) {

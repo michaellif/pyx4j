@@ -15,6 +15,7 @@ package com.propertyvista.operations.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.operations.client.ui.AlertView;
 import com.propertyvista.operations.client.ui.AlertViewImpl;
 import com.propertyvista.operations.client.ui.FooterView;
@@ -29,7 +30,6 @@ import com.propertyvista.operations.client.ui.ShortCutsView;
 import com.propertyvista.operations.client.ui.ShortCutsViewImpl;
 import com.propertyvista.operations.client.ui.TopRightActionsView;
 import com.propertyvista.operations.client.ui.TopRightActionsViewImpl;
-import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 
 public class OperationsVeiwFactory extends ViewFactoryBase {
 
@@ -54,6 +54,7 @@ public class OperationsVeiwFactory extends ViewFactoryBase {
 
             } else if (SettingsView.class.equals(type)) {
                 map.put(type, new SettingsViewImpl());
+
             }
 
         }

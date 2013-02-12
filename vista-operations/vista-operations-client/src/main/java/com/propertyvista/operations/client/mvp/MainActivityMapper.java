@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.activity.AlertActivity;
@@ -37,6 +38,7 @@ import com.propertyvista.operations.client.activity.crud.cardservicesimulation.C
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionEditorActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionListerActivity;
+import com.propertyvista.operations.client.activity.crud.equifaxencryptedstorage.EquifaxEncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -346,6 +348,9 @@ public class MainActivityMapper implements AppActivityMapper {
 // - Settings:
                 } else if (place instanceof OperationsSiteMap.Settings) {
                     activity = new SettingsActivity(place);
+
+                } else if (place instanceof OperationsSiteMap.Administration.EquifaxEncryptedStorage) {
+                    activity = new EquifaxEncryptedStorageActivity((AppPlace) place);
 
 // - Other:
                 } else if (place instanceof OperationsSiteMap.Alert) {

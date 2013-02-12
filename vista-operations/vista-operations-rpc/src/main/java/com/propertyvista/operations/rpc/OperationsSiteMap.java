@@ -168,6 +168,10 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Users", caption = "User")
         public static class AdminUsers extends CrudAppPlace {
         }
+
+        public static class EquifaxEncryptedStorage extends AppPlace {
+        }
+
     }
 
     @PlaceProperties(navigLabel = "Alerts")
