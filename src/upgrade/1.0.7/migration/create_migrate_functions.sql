@@ -78,7 +78,8 @@ BEGIN
                                                 ADD COLUMN cancellation_description_reason_from_tenant_sure VARCHAR(500),
                                                 ADD COLUMN payment_day INT,
                                                 ADD COLUMN cancellation_date DATE,
-                                                ADD COLUMN monthly_payable NUMERIC(18,2);
+                                                ADD COLUMN monthly_payable NUMERIC(18,2),
+                                                ADD COLUMN is_managed_by_tenant BOOLEAN;
         -- insurance_tenant_sure_details 
         
         ALTER TABLE insurance_tenant_sure_details ADD COLUMN insurance_discriminator VARCHAR(50);  
@@ -115,6 +116,38 @@ BEGIN
         -- merchant_account 
         
         ALTER TABLE merchant_account ADD COLUMN status VARCHAR(50);
+        
+        
+        -- payment_method_selection_policy
+        
+        CREATE TABLE payment_method_selection_policy
+        (
+                id                              BIGINT                          NOT NULL,
+                updated                         TIMESTAMP WITHOUT TIME ZONE,
+                node_discriminator              VARCHAR(50),
+                node                            BIGINT,
+                accepted_cash                   BOOLEAN,
+                accepted_check                  BOOLEAN,
+                accepted_echeck                 BOOLEAN,
+                accepted_eft                    BOOLEAN,
+                accepted_credit_card            BOOLEAN,
+                accepted_interac                BOOLEAN,
+                resident_portal_echeck          BOOLEAN,
+                resident_portal_eft             BOOLEAN,
+                resident_portal_credit_card     BOOLEAN,
+                resident_portal_interac         BOOLEAN,
+                cash_equivalent_cash            BOOLEAN,
+                cash_equivalent_check           BOOLEAN,
+                cash_equivalent_echeck          BOOLEAN,
+                cash_equivalent_eft             BOOLEAN,
+                cash_equivalent_credit_card     BOOLEAN,
+                cash_equivalent_interac         BOOLEAN,
+                        CONSTRAINT      payment_method_selection_policy_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE payment_method_selection_policy OWNER TO vista;
+                
         
         
         -- resident_portal_settings
@@ -192,6 +225,8 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_details ADD CONSTRAINT insurance_tenant_sure_details_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
+        ALTER TABLE payment_method_selection_policy ADD CONSTRAINT payment_method_selection_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceGeneric', 'InsuranceTenantSure'));
                 
