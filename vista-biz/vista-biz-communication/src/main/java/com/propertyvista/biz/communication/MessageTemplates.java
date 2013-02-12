@@ -36,7 +36,6 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObjectLoader;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
@@ -55,6 +54,8 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MessageTemplates {
@@ -69,7 +70,7 @@ public class MessageTemplates {
 
     /**
      * Warning: can return <code>null</code> if the policy is not found.
-     *
+     * 
      * @param type
      * @param building
      * @return
@@ -274,10 +275,9 @@ public class MessageTemplates {
     public static MailMessage createPaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
 
         EmailTemplate emailTemplate = emailTemplatePaymentNotProcessed(gracePeriodEndDate);
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildSimpleEmail(email, emailTemplate);
 
         return email;
     }
@@ -285,20 +285,18 @@ public class MessageTemplates {
     public static MailMessage createPaymentsResumedEmail() {
 
         EmailTemplate emailTemplate = emailTemplatePaymentsResumed();
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildSimpleEmail(email, emailTemplate);
 
         return email;
     }
 
     public static MailMessage createOnlinePaymentSetupCompletedEmail(String userName) {
         EmailTemplate emailTemplate = emailOnlinePaymentSetupCompleted(userName);
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        buildEmail(email, emailTemplate, data);
+        buildSimpleEmail(email, emailTemplate);
 
         return email;
     }
@@ -341,6 +339,11 @@ public class MessageTemplates {
                 contentHtml,
                 footerHtml
             ));//@formatter:on
+    }
+
+    private static void buildSimpleEmail(MailMessage email, EmailTemplate emailTemplate) {
+        email.setSubject(emailTemplate.subject().getValue());
+        email.setHtmlBody(emailTemplate.content().getValue());
     }
 
     private static String wrapAdminHtml(String text) {
@@ -422,11 +425,11 @@ public class MessageTemplates {
         try {
             String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
             body = body.replace("${periodEndDate}", gracePeriodEndDate.toString());
-            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true),
-                    PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
-            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
+                    + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
+            template.content().setValue(i18n.tr(//@formatter:off
                 body
-        )));//@formatter:on
+        ));//@formatter:on
 
             return template;
 
@@ -439,11 +442,10 @@ public class MessageTemplates {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.subject().setValue(i18n.tr("Payment Processing Resumed"));
         try {
-            // TODO add email html
             String body = IOUtils.getTextResource("email/tenantsure-payments-resumed.html");
-            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+            template.content().setValue(i18n.tr(//@formatter:off
                 body
-        )));//@formatter:on
+        ));//@formatter:on
 
             return template;
 
@@ -454,14 +456,14 @@ public class MessageTemplates {
 
     private static EmailTemplate emailOnlinePaymentSetupCompleted(String userName) {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
-        template.subject().setValue(i18n.tr("Payment Processing Resumed"));
+        template.subject().setValue(i18n.tr("Your Online Payment Setup Is Complete"));
         try {
             // TODO add email html
             String body = IOUtils.getTextResource("email/online-payment-setup-completed.html");
             body = body.replace("${userName}", userName);
-            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
+            template.content().setValue(i18n.tr(//@formatter:off
                 body
-        )));//@formatter:on
+        ));//@formatter:on
 
             return template;
 
