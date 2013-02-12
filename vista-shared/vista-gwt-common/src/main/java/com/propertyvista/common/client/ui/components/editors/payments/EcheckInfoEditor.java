@@ -123,6 +123,9 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         get(proto().nameOn()).setValue("Dev");
         get(proto().bankId()).setValue("123");
         get(proto().branchTransitNumber()).setValue("12345");
-        ((CTextFieldBase<?, ?>) get(proto().accountNo())).setValueByString("2345 6789");
+
+        CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
+        id.onEditingStop(); // assume new user input; will obfuscate the value if focused
+        id.setValueByString("2345 6789");
     }
 }
