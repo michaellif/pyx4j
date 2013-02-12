@@ -13,17 +13,27 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.PaymentMethodSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -84,6 +94,63 @@ class PaymentUtils {
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+    }
+
+    static Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
+
+        boolean electronicPaymentsAllowed = isElectronicPaymentsAllowed(billingAccountId);
+        PaymentMethodSelectionPolicy paymentMethodSelectionPolicy;
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto()._Leases().$().billingAccount(), billingAccountId));
+            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
+                    PaymentMethodSelectionPolicy.class);
+        }
+        if (paymentMethodSelectionPolicy.acceptedCash().getValue(Boolean.TRUE)) {
+
+        }
+        if (paymentMethodSelectionPolicy.acceptedCheck().getValue(Boolean.TRUE)) {
+
+        }
+        if (electronicPaymentsAllowed && paymentMethodSelectionPolicy.acceptedEcheck().getValue(Boolean.TRUE)) {
+
+        }
+        if (electronicPaymentsAllowed && paymentMethodSelectionPolicy.acceptedCreditCard().getValue(Boolean.TRUE)) {
+
+        }
+        if (electronicPaymentsAllowed && paymentMethodSelectionPolicy.acceptedEFT().getValue(Boolean.TRUE)) {
+
+        }
+        if (electronicPaymentsAllowed && paymentMethodSelectionPolicy.acceptedInterac().getValue(Boolean.TRUE)) {
+
+        }
+//        //=====  Accepted In residentPortal
+//
+//        IPrimitive<Boolean> residentPortalEcheck();
+//
+//        IPrimitive<Boolean> residentPortalEFT();
+//
+//        IPrimitive<Boolean> residentPortalCreditCard();
+//
+//        IPrimitive<Boolean> residentPortalInterac();
+//
+//        //===== Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
+//
+//        IPrimitive<Boolean> cashEquivalentCash();
+//
+//        IPrimitive<Boolean> cashEquivalentCheck();
+//
+//        IPrimitive<Boolean> cashEquivalentEcheck();
+//
+//        // There is no way to Disabled this, We can just not advertise it portal
+//        IPrimitive<Boolean> cashEquivalentEFT();
+//
+//        IPrimitive<Boolean> cashEquivalentCreditCard();
+//
+//        IPrimitive<Boolean> cashEquivalentInterac();
+
+        return Collections.unmodifiableCollection(allowedPaymentTypes);
     }
 
     public static MerchantAccount retrieveMerchantAccount(Building buildingStub) {

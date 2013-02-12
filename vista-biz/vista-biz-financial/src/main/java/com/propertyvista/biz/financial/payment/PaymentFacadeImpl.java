@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.Collection;
 import java.util.EnumSet;
 
 import org.apache.commons.lang.Validate;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
@@ -58,6 +60,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId) {
         return PaymentUtils.isElectronicPaymentsAllowed(leaseTermId);
+    }
+
+    @Override
+    public Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedPaymentTypes(billingAccountId, vistaApplication);
     }
 
     @Override

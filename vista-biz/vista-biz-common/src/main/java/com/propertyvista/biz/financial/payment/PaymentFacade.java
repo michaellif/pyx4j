@@ -13,15 +13,21 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.Collection;
+
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface PaymentFacade {
 
     boolean isPaymentsAllowed(BillingAccount billingAccountId);
+
+    Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
     boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId);
 
