@@ -22,14 +22,20 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.ContainerInfo;
 import org.apache.wicket.markup.Markup;
+import org.apache.wicket.markup.MarkupFactory;
+import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -87,16 +93,17 @@ public abstract class BasePage extends WebPage {
         cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
 
-        if (!cm.isCustomResidentsContentEnabled()) {
+        boolean residentOnly = cm.isResidentOnlyMode();
+
+        if (residentOnly && !(this instanceof ResidentsPage) && !(this instanceof StaticPage)) {
+            // render residents page
+            getRequestCycle().replaceAllRequestHandlers(
+                    new RenderPageRequestHandler(new PageProvider(ResidentsPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
+        } else if (!cm.isCustomResidentsContentEnabled()) {
             // default view
             add(new LocalizedHtmlTag("localizedHtml"));
-            boolean residentsOnly = getCM().isResidentOnlyMode();
-            add(new HeaderPanel(residentsOnly));
-            add(new FooterPanel(residentsOnly));
-
-            if (residentsOnly && !(this instanceof ResidentsPage) && !(this instanceof StaticPage)) {
-                setResponsePage(ResidentsPage.class);
-            }
+            add(new HeaderPanel(residentOnly));
+            add(new FooterPanel(residentOnly));
         }
     }
 
@@ -213,11 +220,12 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public Markup getAssociatedMarkup() {
-        if (cm != null && cm.isCustomResidentsContentEnabled()) {
+        if (this instanceof ResidentsPage && cm != null && cm.isCustomResidentsContentEnabled()) {
             String content = cm.getCustomResidentsContent(locale);
             content = content.replaceFirst(DeploymentConsts.RESIDENT_CONTENT_ID, "wicket:id=\"" + RESIDENT_CUSTOM_CONTENT_PANEL + "\"");
             content = content.replaceFirst(DeploymentConsts.RESIDENT_LOGIN_ID, "wicket:id=\"" + RESIDENT_LOGIN_PANEL + "\"");
-            return Markup.of(content);
+            return MarkupFactory.get()
+                    .loadMarkup(this, new MarkupResourceStream(new StringResourceStream(content), new ContainerInfo(this), getClass()), false);
         } else {
             return super.getAssociatedMarkup();
         }

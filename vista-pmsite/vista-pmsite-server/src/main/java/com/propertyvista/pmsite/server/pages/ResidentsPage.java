@@ -17,6 +17,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import templates.TemplateResources;
 
@@ -33,11 +34,12 @@ public class ResidentsPage extends BasePage {
 
     private static final I18n i18n = I18n.get(ResidentsPage.class);
 
+    private boolean residentPortalEnabled;
+
     public ResidentsPage() {
         super();
 
         // redirect if not enabled
-        boolean residentPortalEnabled = false;
         try {
             residentPortalEnabled = getCM().getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue();
         } catch (Exception ignore) {
@@ -64,11 +66,15 @@ public class ResidentsPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-        String fileCSS = skin + "/" + "resident.css";
-        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-        response.renderCSSReference(refCSS);
+        if (getCM().isCustomResidentsContentEnabled()) {
+            response.renderCSSReference(new CssResourceReference(TemplateResources.class, "common/resident.css"));
+        } else {
+            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+            String fileCSS = skin + "/" + "resident.css";
+            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+            response.renderCSSReference(refCSS);
+        }
         super.renderHead(response);
 
     }

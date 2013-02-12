@@ -279,8 +279,10 @@ public class WicketUtils {
 
         public static String getVariationHash(String name, IModel<Map<String, Object>> vars) {
             StringBuffer content = new StringBuffer(name);
-            for (Object o : vars.getObject().values()) {
-                content.append(o);
+            if (vars != null && vars.getObject() != null) {
+                for (Object o : vars.getObject().values()) {
+                    content.append(o);
+                }
             }
             return DigestUtils.md5Hex(content.toString());
         }

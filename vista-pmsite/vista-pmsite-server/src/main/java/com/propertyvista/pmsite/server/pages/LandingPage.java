@@ -32,7 +32,6 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.CustomGadgetPanel;
-import com.propertyvista.pmsite.server.panels.GwtInclude;
 import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
 import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchGadgetPanel;
@@ -47,93 +46,86 @@ public class LandingPage extends BasePage {
         setStatelessHint(true);
         setVersioned(false);
 
-        if (getCM().isCustomResidentsContentEnabled()) {
-            add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "residentInsert")));
-            add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "siteAuthInsert")));
-        } else {
-            // set aptlist view mode preference to Map
-            PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
+        // set aptlist view mode preference to Map
+        PMSiteClientPreferences.setClientPref("aptListMode", AptListPage.ViewMode.map.name());
 
-            // meta tags
-            PageMetaTags meta = getCM().getMetaTags(getAvailableLocale());
-            add(new Label(META_TITLE, meta.title().getValue()));
-            add(new Label(META_DESCRIPTION).add(AttributeModifier.replace("content", meta.description().getValue())));
-            add(new Label(META_KEYWORDS).add(AttributeModifier.replace("content", meta.keywords().getValue())));
+        // meta tags
+        PageMetaTags meta = getCM().getMetaTags(getAvailableLocale());
+        add(new Label(META_TITLE, meta.title().getValue()));
+        add(new Label(META_DESCRIPTION).add(AttributeModifier.replace("content", meta.description().getValue())));
+        add(new Label(META_KEYWORDS).add(AttributeModifier.replace("content", meta.keywords().getValue())));
 
-            // see if banner image is available
-            WebMarkupContainer bannerImg = new WebMarkupContainer("bannerImg");
-            SiteImageResource banner = getCM().getSiteBanner(getAvailableLocale());
-            if (banner != null) {
-                bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
+        // see if banner image is available
+        WebMarkupContainer bannerImg = new WebMarkupContainer("bannerImg");
+        SiteImageResource banner = getCM().getSiteBanner(getAvailableLocale());
+        if (banner != null) {
+            bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
+        }
+        add(bannerImg);
+
+        // gadgets
+        ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", getCM().getNarrowAreaGadgets()) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<HomePageGadget> item) {
+                HomePageGadget gadget = item.getModelObject();
+                @SuppressWarnings("unchecked")
+                GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+                switch (type) {
+                case quickSearch:
+                    item.add(new QuickSearchGadgetPanel("narrowBoxContent", gadget));
+                    break;
+                case news:
+                    item.add(new NewsGadgetPanel("narrowBoxContent", gadget));
+                    break;
+                case custom:
+                    item.add(new CustomGadgetPanel("narrowBoxContent", gadget));
+                    break;
+                }
             }
-            add(bannerImg);
+        };
+        add(narrowPanel);
 
-            // gadgets
-            ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", getCM().getNarrowAreaGadgets()) {
-                private static final long serialVersionUID = 1L;
+        ListView<HomePageGadget> widePanel = new ListView<HomePageGadget>("wideBox", getCM().getWideAreaGadgets()) {
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                protected void populateItem(ListItem<HomePageGadget> item) {
-                    HomePageGadget gadget = item.getModelObject();
-                    @SuppressWarnings("unchecked")
-                    GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+            @Override
+            protected void populateItem(ListItem<HomePageGadget> item) {
+                HomePageGadget gadget = item.getModelObject();
+                @SuppressWarnings("unchecked")
+                GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+                if (type != null) {
                     switch (type) {
                     case quickSearch:
-                        item.add(new QuickSearchGadgetPanel("narrowBoxContent", gadget));
+                        item.add(new QuickSearchGadgetPanel("wideBoxContent", gadget));
                         break;
-                    case news:
-                        item.add(new NewsGadgetPanel("narrowBoxContent", gadget));
+                    case promo:
+                        item.add(new PromoGadgetPanel("wideBoxContent"));
+                        break;
+                    case testimonials:
+                        item.add(new TestimGadgetPanel("wideBoxContent", gadget));
                         break;
                     case custom:
-                        item.add(new CustomGadgetPanel("narrowBoxContent", gadget));
+                        item.add(new CustomGadgetPanel("wideBoxContent", gadget));
                         break;
                     }
+                } else {
+                    item.setVisible(false);
                 }
-            };
-            add(narrowPanel);
-
-            ListView<HomePageGadget> widePanel = new ListView<HomePageGadget>("wideBox", getCM().getWideAreaGadgets()) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void populateItem(ListItem<HomePageGadget> item) {
-                    HomePageGadget gadget = item.getModelObject();
-                    @SuppressWarnings("unchecked")
-                    GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
-                    if (type != null) {
-                        switch (type) {
-                        case quickSearch:
-                            item.add(new QuickSearchGadgetPanel("wideBoxContent", gadget));
-                            break;
-                        case promo:
-                            item.add(new PromoGadgetPanel("wideBoxContent"));
-                            break;
-                        case testimonials:
-                            item.add(new TestimGadgetPanel("wideBoxContent", gadget));
-                            break;
-                        case custom:
-                            item.add(new CustomGadgetPanel("wideBoxContent", gadget));
-                            break;
-                        }
-                    } else {
-                        item.setVisible(false);
-                    }
-                }
-            };
-            add(widePanel);
-        }
+            }
+        };
+        add(widePanel);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (!getCM().isCustomResidentsContentEnabled()) {
-            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-            String fileCSS = skin + "/" + "landing.css";
-            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "landing.css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
 
-            response.renderCSSReference(refCSS);
-        }
+        response.renderCSSReference(refCSS);
         super.renderHead(response);
     }
 }
