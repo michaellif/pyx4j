@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.encryption;
 
 import java.io.Serializable;
 
+@Deprecated
 public enum KeyPairState implements Serializable {
 
     PreActivation,

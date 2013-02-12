@@ -163,3 +163,4 @@ hyperlink
 equifax
 editable
 vladlouk
+decrypt
