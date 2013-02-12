@@ -41,7 +41,7 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
     @Override
     public void setPresenter(com.propertyvista.portal.client.ui.residents.View.Presenter<InsurancePaymentMethod> presenter) {
         super.setPresenter(presenter);
-        form.setVisited(false);
+        getForm().setVisited(false);
     }
 
     @Override
@@ -66,14 +66,14 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
 
     @Override
     public void setPreAuthorizedDebitAgreement(String agreementTextHml) {
-        ((TenantSurePaymentMethodForm) form).setPreAuthorizedAgreement(agreementTextHml);
+        ((TenantSurePaymentMethodForm) getForm()).setPreAuthorizedAgreement(agreementTextHml);
     }
 
     @Override
     protected void onSubmit() {
-        form.revalidate();
-        form.setUnconditionalValidationErrorRendering(true);
-        if (form.isValid() & ((TenantSurePaymentMethodForm) form).isAgreedToPreauthorizedPayments()) {
+        getForm().revalidate();
+        getForm().setUnconditionalValidationErrorRendering(true);
+        if (getForm().isValid() & ((TenantSurePaymentMethodForm) getForm()).isAgreedToPreauthorizedPayments()) {
             super.onSubmit();
         } else {
             MessageDialog.info("You must fill out the form and agree to pre-authorized debit agreement to continue");
