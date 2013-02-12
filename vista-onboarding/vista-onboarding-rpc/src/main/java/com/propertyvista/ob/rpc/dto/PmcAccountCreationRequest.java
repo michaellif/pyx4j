@@ -69,7 +69,7 @@ public interface PmcAccountCreationRequest extends IEntity {
     IPrimitive<CountryOfOperation> countryOfOperation();
 
     @NotNull
-    @Caption(name = "URL", watermark = "url")
+    @Caption(name = "URL", watermark = "Choose Your Subdomain")
     IPrimitive<String> dnsName();
 
     /**
