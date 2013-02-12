@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,8 +19,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -60,6 +62,8 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void payNow() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillSummary.PayNow());
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillSummary.PayNow());
+        }
     }
 }

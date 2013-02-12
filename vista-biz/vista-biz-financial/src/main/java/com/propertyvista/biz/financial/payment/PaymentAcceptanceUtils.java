@@ -1,0 +1,140 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-02-11
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.biz.financial.payment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.policies.PaymentMethodSelectionPolicy;
+import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.misc.VistaTODO;
+
+public class PaymentAcceptanceUtils {
+
+    @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+    @Transient
+    public interface ElectronicPaymentMethodSelection extends PaymentMethodSelectionPolicy {
+
+        IPrimitive<Boolean> electronicPayments();
+
+        IPrimitive<Boolean> notCashEquivalent();
+    }
+
+    private static class Acceptance {
+
+        PaymentType paymentType;
+
+        Collection<IPrimitive<Boolean>> require;
+
+        public Acceptance(PaymentType paymentType, IPrimitive<Boolean>... require) {
+            super();
+            this.paymentType = paymentType;
+            this.require = Arrays.asList(require);
+        }
+
+        public boolean accept(ElectronicPaymentMethodSelection selection) {
+            for (IPrimitive<?> member : require) {
+                if (selection.getMember(member.getFieldName()).getValue() != Boolean.TRUE) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+    }
+
+    private static Collection<Acceptance> crmRequire = buildPaymentAcceptanceMatrixCrm();
+
+    private static Collection<Acceptance> residentPortalRequire = buildPaymentAcceptanceMatrixPortal();
+
+    static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, boolean electronicPaymentsAllowed, boolean requireCashEquivalent,
+            PaymentMethodSelectionPolicy paymentMethodSelectionPolicy) {
+        Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
+
+        Collection<Acceptance> requireAcceptance;
+        switch (vistaApplication) {
+        case resident:
+            requireAcceptance = residentPortalRequire;
+            break;
+        case crm:
+            requireAcceptance = crmRequire;
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
+        ElectronicPaymentMethodSelection selection = paymentMethodSelectionPolicy.duplicate(ElectronicPaymentMethodSelection.class);
+        selection.electronicPayments().setValue(electronicPaymentsAllowed);
+        selection.notCashEquivalent().setValue(!requireCashEquivalent);
+
+        for (Acceptance acceptance : requireAcceptance) {
+            if (acceptance.accept(selection)) {
+                allowedPaymentTypes.add(acceptance.paymentType);
+            }
+        }
+
+        return Collections.unmodifiableCollection(allowedPaymentTypes);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<Acceptance> buildPaymentAcceptanceMatrixCrm() {
+        Collection<Acceptance> require = new ArrayList<Acceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new Acceptance(PaymentType.Cash, p.acceptedCash(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.Cash, p.acceptedCash(), p.cashEquivalentCash()));
+
+        require.add(new Acceptance(PaymentType.Check, p.acceptedCheck(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.Check, p.acceptedCheck(), p.cashEquivalentCheck()));
+
+        require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.cashEquivalentEcheck()));
+
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.cashEquivalentCreditCard()));
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<Acceptance> buildPaymentAcceptanceMatrixPortal() {
+        Collection<Acceptance> require = new ArrayList<Acceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p.cashEquivalentEcheck()));
+
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.residentPortalCreditCard(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.residentPortalCreditCard(), p
+                .cashEquivalentCreditCard()));
+
+        if (!VistaTODO.removedForProduction && false) {
+            require.add(new Acceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p.notCashEquivalent()));
+            require.add(new Acceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p.cashEquivalentInterac()));
+
+            require.add(new Acceptance(PaymentType.EFT, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.notCashEquivalent()));
+            require.add(new Acceptance(PaymentType.EFT, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.cashEquivalentEFT()));
+        }
+
+        return require;
+    }
+}

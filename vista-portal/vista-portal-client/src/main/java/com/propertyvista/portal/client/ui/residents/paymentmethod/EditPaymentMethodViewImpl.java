@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -24,6 +24,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 
 public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements EditPaymentMethodView {
 
@@ -32,7 +33,7 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
 
             @Override
             public Collection<PaymentType> defaultPaymentTypes() {
-                return PaymentType.avalableInProfile();
+                return PortalPaymentTypesUtil.avalableInProfile();
             }
 
             @Override

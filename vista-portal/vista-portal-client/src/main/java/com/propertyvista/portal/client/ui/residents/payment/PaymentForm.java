@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -58,7 +56,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Collection<PaymentType> defaultPaymentTypes() {
-            return PaymentType.avalableInPortal();
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes();
         }
 
         @Override
@@ -204,20 +202,10 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseTermParticipant().isNull());
 
         if (isEditable()) {
-            paymentMethodEditor.setPaymentTypes(getAllowedPaymentTypes());
+            paymentMethodEditor.setPaymentTypes(PortalPaymentTypesUtil.getAllowedPaymentTypes());
             paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         }
 
-//        if (isEditable()) {
-//            get(proto().transactionAuthorizationNumber()).setVisible(false);
-//            get(proto().transactionErrorMessage()).setVisible(false);
-//        } else {
-//            boolean transactionResult = getValue().paymentMethod().isNull() ? false
-//                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
-//
-//            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
-//            get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
-//        }
     }
 
     private void checkProfiledPaymentMethods(final boolean populate) {
@@ -280,28 +268,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 break;
             }
         }
-    }
-
-    private Collection<PaymentType> getAllowedPaymentTypes() {
-        // set allowed for the lease payments types selection: 
-        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>(PaymentType.avalableInPortal());
-        switch (PaymentForm.this.getValue().paymentAccepted().getValue()) {
-        case Any:
-            break;
-
-        case CashEquivalent:
-            allowedTypes.retainAll(PaymentType.cashEquivalentPayments());
-            break;
-
-        case DoNotAccept:
-            allowedTypes = new ArrayList<PaymentType>(EnumSet.noneOf(PaymentType.class));
-            break;
-
-        default:
-            break;
-        }
-
-        return allowedTypes;
     }
 
     protected void onIAgree(boolean set) {

@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -61,7 +62,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.Maintenance());
         items.add(new Residents.CommunicationCenter());
 
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed)) {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
+                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
             items.add(new Residents.PaymentMethods());
         }
         items.add(new Residents.PersonalInformation());

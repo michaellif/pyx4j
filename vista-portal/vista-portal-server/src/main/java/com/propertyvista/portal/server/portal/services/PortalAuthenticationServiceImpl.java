@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.services;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +33,11 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -124,8 +128,25 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         }
 
         if (selectedLease != null) {
-            if (ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(selectedLease.billingAccount())) {
-                actualBehaviors.add(VistaCustomerBehavior.ElectronicPaymentsAllowed);
+            Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(selectedLease.billingAccount(),
+                    VistaApplication.resident);
+            for (PaymentType paymentType : allowedPaymentTypes) {
+                switch (paymentType) {
+                case CreditCard:
+                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed);
+                    break;
+                case Echeck:
+                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed);
+                    break;
+                case EFT:
+                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.EFTPaymentsAllowed);
+                    break;
+                case Interac:
+                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.InteracPaymentsAllowed);
+                    break;
+                default:
+                    break;
+                }
             }
         }
 

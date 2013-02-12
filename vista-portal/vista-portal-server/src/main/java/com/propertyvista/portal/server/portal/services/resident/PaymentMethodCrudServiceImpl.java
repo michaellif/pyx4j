@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -12,6 +12,8 @@
  * @version $Id$
  */
 package com.propertyvista.portal.server.portal.services.resident;
+
+import java.util.Collection;
 
 import org.apache.commons.lang.Validate;
 
@@ -24,10 +26,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -72,6 +76,10 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         entity.customer().set(tenantInLease.leaseParticipant().customer());
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
+        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
+                tenantInLease.leaseTermV().holder().lease().billingAccount(), VistaApplication.resident);
+        Validate.isTrue(allowedPaymentTypes.contains(entity.type().getValue()));
+
         entity.isOneTimePayment().setValue(Boolean.FALSE);
 
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);

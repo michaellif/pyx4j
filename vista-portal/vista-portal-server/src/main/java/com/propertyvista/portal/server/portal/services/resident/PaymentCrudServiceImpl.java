@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,13 +14,13 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Vector;
 
 import org.apache.commons.lang.Validate;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -35,6 +35,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -44,8 +45,6 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
 
-    private RetrieveTraget retrieveTraget;
-
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
@@ -53,12 +52,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleteDBO();
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        this.retrieveTraget = retrieveTraget;
-        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -96,7 +89,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer()));
 
-        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
+        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().getValue()));
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
+                VistaApplication.resident);
+        Validate.isTrue(allowedPaymentTypes.contains(dto.paymentMethod().type().getValue()));
 
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {
@@ -106,7 +103,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
             }
 
-            // some corrections for particular method types: 
+            // some corrections for particular method types:
             if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
                 entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
             }

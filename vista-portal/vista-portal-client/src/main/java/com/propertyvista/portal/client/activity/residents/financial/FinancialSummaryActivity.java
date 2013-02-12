@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,7 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
@@ -51,7 +51,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
             @Override
             public void onSuccess(FinancialSummaryDTO result) {
                 view.setPresenter(FinancialSummaryActivity.this);
-                view.setEnablePayments(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
+                view.setEnablePayments(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
                 // TODO need to merge FinancialSummaryView someday
                 view.populate(result.duplicate(YardiFinancialSummaryDTO.class));
                 panel.setWidget(view);
@@ -62,7 +62,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
 
     @Override
     public void payNow() {
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed)) {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillSummary.PayNow());
         }
     }
