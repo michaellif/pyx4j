@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.encryption;
 
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -22,7 +23,7 @@ import com.propertyvista.domain.VistaNamespace;
 @RpcTransient
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EncryptedStorageCurrentKey {
+public interface EncryptedStorageCurrentKey extends IEntity {
 
     EncryptedStoragePublicKey current();
 }
