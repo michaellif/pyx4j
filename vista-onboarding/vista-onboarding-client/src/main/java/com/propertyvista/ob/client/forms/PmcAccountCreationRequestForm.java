@@ -14,7 +14,6 @@
 package com.propertyvista.ob.client.forms;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Clear;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,7 +25,6 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -53,6 +51,7 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 
+// TODO refactor this form with using a special decorator (same or similar to one that is used in login/singup forms in portal
 public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAccountCreationRequest> {
 
     public enum Styles implements IStyleName {
@@ -101,17 +100,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         dnsNamePanel.add(dnsSubdomainNameHolder);
         dnsNamePanel.add(dnsDomainName);
 
-        if (false) {
-            HTML note = new HTML(PmcAccountCreationRequestFormResources.INSTANCE.urlFieldNote().getText());
-            note.getElement().getStyle().setClear(Clear.BOTH);
-            note.getElement().getStyle().setDisplay(Display.BLOCK);
-            dnsNamePanel.add(note);
-        }
         formPanel.add(dnsNamePanel);
-
-//        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
-//        contentPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-//        contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
