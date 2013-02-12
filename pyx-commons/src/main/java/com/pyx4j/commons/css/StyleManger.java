@@ -34,6 +34,7 @@ public class StyleManger {
 
     private static final Logger log = LoggerFactory.getLogger(StyleManger.class);
 
+    // add this class name to your not intended for print UI element:
     public static final String DO_NOT_PRINT_CLASS_NAME = "do-not-print";
 
     private static class SingletonHolder {
