@@ -89,7 +89,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer()));
 
-        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().getValue()));
+        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
                 VistaApplication.resident);
