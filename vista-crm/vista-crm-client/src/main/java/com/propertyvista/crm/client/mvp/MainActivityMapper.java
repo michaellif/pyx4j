@@ -185,6 +185,9 @@ import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentat
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
@@ -1094,6 +1097,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new TenantInsurancePolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.PaymentTypeSelection) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PaymentTypeSelectionPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new PaymentTypeSelectionPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PaymentTypeSelectionPolicyViewerActivity(crudPlace);
                             break;
                         }
 // - Security

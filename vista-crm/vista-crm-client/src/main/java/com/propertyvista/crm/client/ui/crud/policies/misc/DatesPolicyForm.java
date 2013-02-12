@@ -46,7 +46,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeStart())).labelWidth(20).componentWidth(5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeFutureSpan())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeFutureSpan())).labelWidth(20).componentWidth(5).build());
 
         // components tune up:
         CComponent<?, ?> comp = get(proto().yearRangeStart());

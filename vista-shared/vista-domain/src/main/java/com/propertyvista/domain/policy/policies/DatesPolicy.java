@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -29,11 +30,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface DatesPolicy extends Policy, TenantsAccessiblePolicy {
 
+    @ToString(index = 0)
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)
     @Caption(description = "Building history start year")
     IPrimitive<LogicalDate> yearRangeStart();
 
+    @ToString(index = 1)
     @Caption(description = "Building history future span")
     IPrimitive<Integer> yearRangeFutureSpan();
 }

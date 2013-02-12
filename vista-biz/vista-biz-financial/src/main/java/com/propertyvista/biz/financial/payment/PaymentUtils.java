@@ -31,7 +31,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.policies.PaymentMethodSelectionPolicy;
+import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaApplication;
@@ -106,12 +106,12 @@ class PaymentUtils {
         }
 
         boolean electronicPaymentsAllowed = isElectronicPaymentsAllowed(billingAccountId);
-        PaymentMethodSelectionPolicy paymentMethodSelectionPolicy;
+        PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto()._Leases().$().billingAccount(), billingAccountId));
             paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
-                    PaymentMethodSelectionPolicy.class);
+                    PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, electronicPaymentsAllowed, paymentAccepted == PaymentAccepted.CashEquivalent,
                 paymentMethodSelectionPolicy);

@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.policies.PaymentMethodSelectionPolicy;
+import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
 
@@ -32,7 +32,7 @@ public class PaymentAcceptanceUtils {
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     @Transient
-    public interface ElectronicPaymentMethodSelection extends PaymentMethodSelectionPolicy {
+    public interface ElectronicPaymentMethodSelection extends PaymentTypeSelectionPolicy {
 
         IPrimitive<Boolean> electronicPayments();
 
@@ -67,7 +67,7 @@ public class PaymentAcceptanceUtils {
     private static Collection<Acceptance> residentPortalRequire = buildPaymentAcceptanceMatrixPortal();
 
     static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, boolean electronicPaymentsAllowed, boolean requireCashEquivalent,
-            PaymentMethodSelectionPolicy paymentMethodSelectionPolicy) {
+            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
         Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
 
         Collection<Acceptance> requireAcceptance;

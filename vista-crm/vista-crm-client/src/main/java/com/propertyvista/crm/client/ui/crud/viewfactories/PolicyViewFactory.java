@@ -78,6 +78,12 @@ import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyListerView;
@@ -206,8 +212,14 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantInsurancePolicyEditorViewImpl());
             } else if (TenantInsurancePolicyViewerView.class.equals(type)) {
                 map.put(type, new TenantInsurancePolicyViewerViewImpl());
-            }
 
+            } else if (PaymentTypeSelectionPolicyListerView.class.equals(type)) {
+                map.put(PaymentTypeSelectionPolicyListerView.class, new PaymentTypeSelectionPolicyListerViewImpl());
+            } else if (PaymentTypeSelectionPolicyEditorView.class.equals(type)) {
+                map.put(PaymentTypeSelectionPolicyEditorView.class, new PaymentTypeSelectionPolicyEditorViewImpl());
+            } else if (PaymentTypeSelectionPolicyViewerView.class.equals(type)) {
+                map.put(PaymentTypeSelectionPolicyViewerView.class, new PaymentTypeSelectionPolicyViewerViewImpl());
+            }
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

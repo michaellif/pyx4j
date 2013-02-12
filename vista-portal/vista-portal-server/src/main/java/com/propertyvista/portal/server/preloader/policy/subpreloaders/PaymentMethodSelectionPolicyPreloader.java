@@ -15,18 +15,18 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.policies.PaymentMethodSelectionPolicy;
+import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class PaymentMethodSelectionPolicyPreloader extends AbstractPolicyPreloader<PaymentMethodSelectionPolicy> {
+public class PaymentMethodSelectionPolicyPreloader extends AbstractPolicyPreloader<PaymentTypeSelectionPolicy> {
 
     public PaymentMethodSelectionPolicyPreloader() {
-        super(PaymentMethodSelectionPolicy.class);
+        super(PaymentTypeSelectionPolicy.class);
     }
 
     @Override
-    protected PaymentMethodSelectionPolicy createPolicy(StringBuilder log) {
-        PaymentMethodSelectionPolicy policy = EntityFactory.create(PaymentMethodSelectionPolicy.class);
+    protected PaymentTypeSelectionPolicy createPolicy(StringBuilder log) {
+        PaymentTypeSelectionPolicy policy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
 
         // -- Accepted In CRM and in residentPortal
         policy.acceptedCash().setValue(Boolean.TRUE);

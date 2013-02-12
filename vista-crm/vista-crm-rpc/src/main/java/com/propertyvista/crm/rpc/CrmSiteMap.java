@@ -464,6 +464,9 @@ public class CrmSiteMap implements SiteMap {
             public static class LegalDocumentation extends CrmCrudAppPlace {
             }
 
+            public static class PaymentTypeSelection extends CrmCrudAppPlace {
+            }
+
             public static class Pet extends CrmCrudAppPlace {
             }
 
