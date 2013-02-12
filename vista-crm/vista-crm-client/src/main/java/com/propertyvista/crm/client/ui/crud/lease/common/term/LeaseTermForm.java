@@ -415,6 +415,19 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
+        get(proto().termTo()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null) {
+                    if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
+                        return value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, i18n
+                                .tr("The Date Must Be Later Than Today's Date"));
+                    }
+                }
+                return null;
+            }
+        });
+
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
