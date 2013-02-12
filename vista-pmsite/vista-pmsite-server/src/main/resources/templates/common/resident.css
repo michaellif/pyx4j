@@ -1169,10 +1169,6 @@ td.DatePickerMonth {
 }
 
 .PortalView {
-	width: 95%;
-	min-width: 960px;
-	max-width: 960px;
-	margin: 0 auto;
 }
 
 .PortalViewDisplay {
@@ -1180,7 +1176,6 @@ td.DatePickerMonth {
 }
 
 .PropertyCard {
-	
 }
 
 .PropertyCardCardImage {
@@ -1344,7 +1339,6 @@ td.DatePickerMonth {
 }
 
 .LandingGreetingPanel {
-	height: 100%;
 	width: 300px;
 	margin-left: auto;
 	margin-right: auto;
@@ -1369,21 +1363,18 @@ td.DatePickerMonth {
 
 .LandingViewSectionHeader {
 	width: 50%;
-	height: 100%;
 	display: inline-block;
 	vertical-align: bottom;
 }
 
 .LandingViewSectionContent {
 	width: 50%;
-	height: 100%;
 	display: inline-block;
 	vertical-align: middle;
 }
 
 .LandingViewSectionFooter {
 	width: 50%;
-	height: 100%;
 	display: inline-block;
 	vertical-align: top;
 }
@@ -1927,15 +1918,10 @@ cursor
 }
 
 .vista-pmsite-mainWrap {
-	width: 960px;
+	width: 100%;
 	margin: 0 auto;
 	overflow: hidden;
 	background: #fff;
-}
-
-.PortalView .vista-pmsite-mainWrap {
-	width: 920px;
-	padding: 0 20px 20px 20px;
 }
 
 .caption {
@@ -2049,7 +2035,8 @@ a {
 
 .LandingButtonHolder .Button {
 	float: none;
-	width: 130px;
+    height: 1.5em;
+    width: 7em;
 }
 
 .EntityFolderAddButton,.EntityFolderTableHeaderLabel {

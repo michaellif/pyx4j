@@ -59,7 +59,6 @@ public class LandingPagesTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.LandingGreetingPanel.name());
-        style.addProperty("height", "100%");
         style.addProperty("width", "300px");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
@@ -84,21 +83,18 @@ public class LandingPagesTheme extends Theme {
 
         style = new Style(".", StyleName.LandingViewSectionHeader.name());
         style.addProperty("width", "50%");
-        style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "bottom");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingViewSectionContent.name());
         style.addProperty("width", "50%");
-        style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
         style = new Style(".", StyleName.LandingViewSectionFooter.name());
         style.addProperty("width", "50%");
-        style.addProperty("height", "100%");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
         addStyle(style);

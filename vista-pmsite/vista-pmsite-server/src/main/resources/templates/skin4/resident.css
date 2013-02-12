@@ -127,7 +127,8 @@
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{
 	float: none;
-	width: 130px;
+    height: 1.5em;
+    width: 7em;
 }
 
 .vista-pmsite-residentPage .Button-disabled{
