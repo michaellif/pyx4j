@@ -108,14 +108,14 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         main.setWidget(++row, 0, previousAddress);
 
         main.setH1(++row, 0, 1, proto().version().legalQuestions().getMeta().getCaption());
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 54).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 54).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 54).labelAlignment(Alignment.left).useLabelSemicolon(false).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 54).labelAlignment(Alignment.left)
+                .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 54).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());

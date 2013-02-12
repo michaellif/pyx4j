@@ -50,6 +50,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -404,8 +406,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-                        return value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, i18n
-                                .tr("The Date Must Be Earlier Than Today's Date"));
+                        return new PastDateValidator().isValid(component, value);
                     }
                 }
                 return null;
@@ -420,8 +421,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
                     if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-                        return value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, i18n
-                                .tr("The Date Must Be Later Than Today's Date"));
+                        return new FutureDateValidator().isValid(component, value);
                     }
                 }
                 return null;

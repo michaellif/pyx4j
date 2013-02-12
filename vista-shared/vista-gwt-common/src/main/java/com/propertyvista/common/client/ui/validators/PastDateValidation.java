@@ -13,30 +13,16 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Date;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 
 public class PastDateValidation {
 
-    private static final I18n i18n = I18n.get(PastDateValidation.class);
-
     public PastDateValidation(CComponent<LogicalDate, ?> value) {
-        this(value, i18n.tr("The Date Must Be Earlier Than Today's Date"));
+        value.addValueValidator(new PastDateValidator());
     }
 
-    public PastDateValidation(final CComponent<LogicalDate, ?> component, final String message) {
-        component.addValueValidator(new EditableValueValidator<Date>() {
-            @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                return (value == null) || !value.after(ClientContext.getServerDate()) ? null : new ValidationError(component, message);
-            }
-
-        });
+    public PastDateValidation(CComponent<LogicalDate, ?> value, final String message) {
+        value.addValueValidator(new PastDateValidator(message));
     }
 }
