@@ -65,7 +65,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     public void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved, MaintenanceRequestStatus.Cancelled));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             Persistence.service().retrieve(mr.issueClassification());
