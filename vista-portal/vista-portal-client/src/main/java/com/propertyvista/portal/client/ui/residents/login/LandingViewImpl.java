@@ -328,7 +328,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         sideLayout.getContent().add(loginForm);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
-        Anchor termsAndConditions = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
+        Anchor termsAndConditions = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), new Command() {
             @Override
             public void execute() {
                 presenter.showVistaTerms();

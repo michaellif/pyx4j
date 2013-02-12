@@ -91,7 +91,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         layout.getContent().add(signupform);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.signUpViewTermsAgreementText().getText());
-        Anchor termsAndConditions = new Anchor(i18n.tr("Terms and Conditions"), new Command() {
+        Anchor termsAndConditions = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), new Command() {
             @Override
             public void execute() {
                 presenter.onShowVistaTerms();
