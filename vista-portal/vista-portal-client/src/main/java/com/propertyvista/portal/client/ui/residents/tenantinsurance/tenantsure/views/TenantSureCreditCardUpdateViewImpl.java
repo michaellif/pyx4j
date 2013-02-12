@@ -33,7 +33,7 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
         setForm(new TenantSurePaymentMethodForm(new Command() {
             @Override
             public void execute() {
-                ((TenantSureCreditCardUpdateView.Presenter) presenter).onTenantAddressRequested();
+                ((TenantSureCreditCardUpdateView.Presenter) getPresenter()).onTenantAddressRequested();
             }
         }));
     }
@@ -50,7 +50,7 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
 
             @Override
             public boolean onClickOk() {
-                ((TenantSureCreditCardUpdateView.Presenter) presenter).onCCUpdateSuccessAcknowledged();
+                ((TenantSureCreditCardUpdateView.Presenter) getPresenter()).onCCUpdateSuccessAcknowledged();
                 return true;
             }
 
@@ -59,9 +59,9 @@ public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsuranceP
 
     @Override
     public void setTenantAddress(AddressStructured tenantAddress) {
-        InsurancePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) form).getValue();
+        InsurancePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) getForm()).getValue();
         paymentMethod.billingAddress().set(tenantAddress);
-        ((TenantSurePaymentMethodForm) form).setValue(paymentMethod);
+        ((TenantSurePaymentMethodForm) getForm()).setValue(paymentMethod);
     }
 
     @Override

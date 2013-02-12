@@ -27,10 +27,10 @@ public class EditMaintenanceRequestViewImpl extends BasicViewImpl<MaintenanceReq
     public void populate(MaintenanceRequestDTO value) {
         boolean editable = (value.status().getValue() == MaintenanceRequestStatus.Submitted);
 
-        form.setViewable(!editable);
+        getForm().setViewable(!editable);
 
-        submitButton.setVisible(editable);
-        cancel.setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
+        getSubmitButton().setVisible(editable);
+        getCancelAnchor().setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
 
         super.populate(value);
     }

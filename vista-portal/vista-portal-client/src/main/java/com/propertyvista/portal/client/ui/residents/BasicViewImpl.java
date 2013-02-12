@@ -14,8 +14,6 @@
 package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -36,17 +34,17 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     protected static final I18n i18n = I18n.get(BasicViewImpl.class);
 
-    protected final UserMessagePanel messagePanel;
+    private Presenter<E> presenter;
 
-    protected final SimplePanel formHolder;
+    private final UserMessagePanel messagePanel;
 
-    protected CEntityForm<E> form;
+    private final SimplePanel formHolder;
 
-    protected Presenter<E> presenter;
+    private CEntityForm<E> form;
 
-    protected final Button submitButton;
+    private final Button submitButton;
 
-    protected final Anchor cancel;
+    private final Anchor cancelAnchor;
 
     public BasicViewImpl() {
         add(messagePanel = new UserMessagePanel());
@@ -56,23 +54,23 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         submitButton = new Button(i18n.tr("Save"));
         submitButton.getElement().getStyle().setMargin(10, Unit.PX);
         submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        submitButton.addClickHandler(new ClickHandler() {
+        submitButton.setCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 onSubmit();
             }
         });
         add(DecorationUtils.inline(submitButton));
 
-        cancel = new Anchor(i18n.tr("Cancel"), new Command() {
+        cancelAnchor = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 presenter.cancel();
             }
         });
-        cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(cancel);
+        cancelAnchor.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        cancelAnchor.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(cancelAnchor);
     }
 
     public BasicViewImpl(CEntityForm<E> viewForm) {
@@ -109,12 +107,23 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         messagePanel.setMessage(msg, UserMessageType.INFO);
     }
 
+    public Presenter<E> getPresenter() {
+        return presenter;
+    }
+
+    public CEntityForm<E> getForm() {
+        return form;
+    }
+
     protected Button getSubmitButton() {
         return submitButton;
     }
 
-    protected void onSubmit() {
+    public Anchor getCancelAnchor() {
+        return cancelAnchor;
+    }
 
+    protected void onSubmit() {
         if (!form.isValid()) {
             Window.scrollTo(0, 0);
             throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));

@@ -37,7 +37,6 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends BasicViewImpl<
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((TenantInsuranceCertificateForm<InsuranceGeneric>) form).setMinRequiredLiability(minRequiredLiability);
+        ((TenantInsuranceCertificateForm<InsuranceGeneric>) getForm()).setMinRequiredLiability(minRequiredLiability);
     }
-
 }

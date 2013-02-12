@@ -38,6 +38,6 @@ public class PaymentViewImpl extends BasicViewImpl<PaymentRecordDTO> implements 
     @Override
     public void setPresenter(View.Presenter<PaymentRecordDTO> presenter) {
         super.setPresenter(presenter);
-        ((PaymentForm) form).setPresenter((PaymentView.Presenter) presenter);
+        ((PaymentForm) getForm()).setPresenter((PaymentView.Presenter) presenter);
     }
 }

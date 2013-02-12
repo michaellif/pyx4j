@@ -20,5 +20,6 @@ public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements 
 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm());
+        getCancelAnchor().setVisible(false);
     }
 }
