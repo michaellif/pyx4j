@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.validators;
 
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -37,6 +38,6 @@ public class PastDateValidator implements EditableValueValidator<Date> {
 
     @Override
     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-        return (value == null) || !value.after(ClientContext.getServerDate()) ? null : new ValidationError(component, message);
+        return (value == null) || !value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }
