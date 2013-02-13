@@ -13,8 +13,15 @@
  */
 package com.propertyvista.dto;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -34,4 +41,10 @@ public interface LeaseDTO extends Lease {
     IPrimitive<String> unitMoveOutNote();
 
     IList<TenantInsuranceCertificateDTO> tenantInsuranceCertificates();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    @Caption(name = "Initial Balance")
+    IPrimitive<BigDecimal> carryforwardBalance();
 }

@@ -64,6 +64,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         setTabVisible(chargesTab, getValue().status().getValue().isDraft());
 
+        get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
+
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
         get(proto().completion()).setVisible(!getValue().completion().isNull());
@@ -110,6 +112,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                         0,
                         new DecoratorBuilder(inject(proto().currentTerm(),
                                 new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
+
+        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 
         FormFlexPanel detailsRight = new FormFlexPanel();
 
