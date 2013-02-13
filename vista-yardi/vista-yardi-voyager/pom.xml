@@ -35,7 +35,13 @@
         	<artifactId>vista-server-common</artifactId>
         	<version>${project.version}</version>
         </dependency>
-
+        
+         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-equifax</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain</artifactId>
