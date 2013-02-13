@@ -907,13 +907,15 @@ td.DatePickerMonth {
 	opacity: 1;
 }
 
-.EntityFolderAddButton {
+.EntityFolderAddButton .ButtonText {
 	display: inline-block;
 	margin: 6px;
 	color: #c2b693;
 	font-weight: normal;
 	font-style: italic;
 	cursor: pointer;
+	text-shadow: none;
+    text-transform: none;
 }
 
 .EntityFolderUpButton {
