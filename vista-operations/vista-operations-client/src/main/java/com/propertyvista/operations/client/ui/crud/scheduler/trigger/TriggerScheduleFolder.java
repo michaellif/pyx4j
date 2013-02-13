@@ -28,10 +28,10 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.operations.domain.scheduler.ScheduleType;
-import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.operations.domain.scheduler.ScheduleType;
+import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 
 public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
 
@@ -86,16 +86,16 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
                     get(proto().nextFireTime()).setValue(null);
                 }
             });
-
-            @SuppressWarnings("rawtypes")
-            CComponent starts = get(proto().startsOn());
-            ((CDatePicker) starts).setPastDateSelectionAllowed(false);
         }
 
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             updateVisibility();
+
+            @SuppressWarnings("rawtypes")
+            CComponent starts = get(proto().startsOn());
+            ((CDatePicker) starts).setPastDateSelectionAllowed(getValue().getPrimaryKey() != null);
         }
 
         private void updateVisibility() {
