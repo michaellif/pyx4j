@@ -23,6 +23,8 @@ public interface DeploymentConsts {
 
     public static final String TENANT_URL_PATH = "residents";
 
+    public static final String portalInectionProxy = "/vista/https/";
+
     public static final String OPERATIONS_URL = "operations/";
 
     public static final String ONBOARDING_URL = "ob/";
@@ -41,8 +43,8 @@ public interface DeploymentConsts {
 
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
 
-    public static final String RESIDENT_CONTENT_ID = "RESIDENT_CONTENT";
+    public static final String RESIDENT_CONTENT_ID = "id=\"resident_content\"";
 
-    public static final String RESIDENT_LOGIN_ID = "RESIDENT_LOGIN";
+    public static final String RESIDENT_LOGIN_ID = "id=\"resident_login\"";
 
 }

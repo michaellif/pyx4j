@@ -76,7 +76,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/robots.txt,/favicon.ico,/residents/\w*,/media/*,/o/*,*.siteimgrc</param-value>
+            <param-value>/robots.txt,/favicon.ico,/residents/\w*,/vista/https/*,/https/*,/media/*,/o/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
@@ -407,6 +407,21 @@
     <servlet-mapping>
         <servlet-name>SiteImageResourceServlet</servlet-name>
         <url-pattern>*.siteimgrc</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CustomSkinProxyServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.portal.CustomSkinProxyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CustomSkinProxyServlet</servlet-name>
+        <url-pattern>/https/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CustomSkinProxyServlet</servlet-name>
+        <url-pattern>/vista/https/*</url-pattern>
     </servlet-mapping>
 
     <!-- need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->

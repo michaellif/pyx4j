@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface HtmlContent extends IEntity {
+
     @NotNull
     AvailableLocale locale();
 
