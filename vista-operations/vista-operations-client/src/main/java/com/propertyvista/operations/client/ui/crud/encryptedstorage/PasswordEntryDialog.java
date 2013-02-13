@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage;
+package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;

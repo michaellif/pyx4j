@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage;
+package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -24,22 +24,22 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage.EquifaxEncryptedStorageView.Presenter;
+import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
-public class EquifaxEncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedStorageKeyDTO> {
+public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedStorageKeyDTO> {
 
-    private static final I18n i18n = I18n.get(EquifaxEncryptedStorageKeyForm.class);
+    private static final I18n i18n = I18n.get(EncryptedStorageKeyForm.class);
 
     private Presenter presenter;
 
     private Button makeCurrent;
 
-    private Button downloadPrivateKey;
+    private Button startKeyRotation;
 
     private Button enableDecrypt;
 
-    public EquifaxEncryptedStorageKeyForm() {
+    public EncryptedStorageKeyForm() {
         super(EncryptedStorageKeyDTO.class);
         setViewable(true);
         setEditable(false);
@@ -64,7 +64,7 @@ public class EquifaxEncryptedStorageKeyForm extends CEntityDecoratableForm<Encry
         makeCurrent = new Button(i18n.tr("Make Current"), new Command() {
             @Override
             public void execute() {
-                presenter.makeCurrentKey(EquifaxEncryptedStorageKeyForm.this.getValue());
+                presenter.makeCurrentKey(EncryptedStorageKeyForm.this.getValue());
             }
 
         });
@@ -77,7 +77,7 @@ public class EquifaxEncryptedStorageKeyForm extends CEntityDecoratableForm<Encry
                     @Override
                     public boolean onClickOk() {
                         if (getPassword() != null) {
-                            presenter.decryptionEnable(EquifaxEncryptedStorageKeyForm.this.getValue(), getPassword());
+                            presenter.activateDecryption(EncryptedStorageKeyForm.this.getValue(), getPassword());
                             return true;
                         } else {
                             return false;
@@ -89,18 +89,18 @@ public class EquifaxEncryptedStorageKeyForm extends CEntityDecoratableForm<Encry
         });
         controlPanel.add(enableDecrypt);
 
-        downloadPrivateKey = new Button(i18n.tr("Download Pr. Key"), new Command() {
+        startKeyRotation = new Button(i18n.tr("Start Key Rotation"), new Command() {
             @Override
             public void execute() {
-                presenter.downloadPrivateKey(EquifaxEncryptedStorageKeyForm.this.getValue());
+                presenter.startKeyRotation(EncryptedStorageKeyForm.this.getValue());
             }
         });
-        contentPanel.add(downloadPrivateKey);
+        contentPanel.add(startKeyRotation);
 
         return statusPanel;
     }
 
-    public void setPresenter(EquifaxEncryptedStorageView.Presenter presenter) {
+    public void setPresenter(EncryptedStorageView.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -109,6 +109,6 @@ public class EquifaxEncryptedStorageKeyForm extends CEntityDecoratableForm<Encry
         super.onValueSet(populate);
         makeCurrent.setVisible(!getValue().isCurrent().isBooleanTrue());
         enableDecrypt.setVisible(!getValue().decryptionEnabled().isBooleanTrue());
-        downloadPrivateKey.setVisible(true);
+        startKeyRotation.setVisible(true);
     }
 }

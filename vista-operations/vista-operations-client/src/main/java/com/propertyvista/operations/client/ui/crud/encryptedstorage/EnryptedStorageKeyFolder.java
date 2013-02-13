@@ -11,20 +11,20 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage;
+package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage.EquifaxEncryptedStorageView.Presenter;
+import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
-public class EquifaxEnryptedStorageKeyFolder extends VistaBoxFolder<EncryptedStorageKeyDTO> {
+public class EnryptedStorageKeyFolder extends VistaBoxFolder<EncryptedStorageKeyDTO> {
 
     private Presenter presenter;
 
-    public EquifaxEnryptedStorageKeyFolder() {
+    public EnryptedStorageKeyFolder() {
         super(EncryptedStorageKeyDTO.class);
         setAddable(false);
         setViewable(true);
@@ -34,14 +34,14 @@ public class EquifaxEnryptedStorageKeyFolder extends VistaBoxFolder<EncryptedSto
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EncryptedStorageKeyDTO) {
-            EquifaxEncryptedStorageKeyForm form = new EquifaxEncryptedStorageKeyForm();
+            EncryptedStorageKeyForm form = new EncryptedStorageKeyForm();
             form.setPresenter(presenter);
             return form;
         }
         return super.create(member);
     }
 
-    public void setPresenter(EquifaxEncryptedStorageView.Presenter presenter) {
+    public void setPresenter(EncryptedStorageView.Presenter presenter) {
         this.presenter = presenter;
     }
 }

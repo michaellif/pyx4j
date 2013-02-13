@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage;
+package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -19,22 +19,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
-public class EquifaxEnryptedStorageForm extends CEntityDecoratableForm<EncryptedStorageDTO> {
+public class EnryptedStorageForm extends CEntityDecoratableForm<EncryptedStorageDTO> {
 
-    private EquifaxEnryptedStorageKeyFolder folder;
+    private EnryptedStorageKeyFolder folder;
 
-    public EquifaxEnryptedStorageForm() {
+    public EnryptedStorageForm() {
         super(EncryptedStorageDTO.class);
     }
 
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
-        panel.add(inject(proto().keys(), folder = new EquifaxEnryptedStorageKeyFolder()));
+        panel.add(inject(proto().keys(), folder = new EnryptedStorageKeyFolder()));
         return panel;
     }
 
-    public void setPresenter(EquifaxEncryptedStorageView.Presenter presenter) {
+    public void setPresenter(EncryptedStorageView.Presenter presenter) {
         folder.setPresenter(presenter);
     }
 

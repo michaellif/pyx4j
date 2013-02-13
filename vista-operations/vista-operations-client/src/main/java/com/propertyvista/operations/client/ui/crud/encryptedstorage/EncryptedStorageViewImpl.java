@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage;
+package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.Command;
 
@@ -20,17 +20,17 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
-public class EquifaxEncryptedStorageViewImpl extends ViewImplBase implements EquifaxEncryptedStorageView {
+public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedStorageView {
 
-    private final EquifaxEnryptedStorageForm form;
+    private final EnryptedStorageForm form;
 
     private final Button newKeyButton;
 
-    private com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage.EquifaxEncryptedStorageView.Presenter presenter;
+    private com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter presenter;
 
-    public EquifaxEncryptedStorageViewImpl() {
+    public EncryptedStorageViewImpl() {
 
-        form = new EquifaxEnryptedStorageForm();
+        form = new EnryptedStorageForm();
         form.initContent();
         setContentPane(form);
 
@@ -59,7 +59,7 @@ public class EquifaxEncryptedStorageViewImpl extends ViewImplBase implements Equ
     }
 
     @Override
-    public void setPresenter(EquifaxEncryptedStorageView.Presenter presenter) {
+    public void setPresenter(EncryptedStorageView.Presenter presenter) {
         this.presenter = presenter;
         form.setPresenter(presenter);
     }

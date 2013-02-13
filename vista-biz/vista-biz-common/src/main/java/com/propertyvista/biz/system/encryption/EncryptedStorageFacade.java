@@ -46,6 +46,10 @@ public interface EncryptedStorageFacade {
      * @param publicKeyKey
      * @param passwrord
      */
-    void activate(Key publicKeyKey, char[] passwrord);
+    void activateDecryption(Key publicKeyKey, char[] passwrord);
+
+    void deactivateDecryption(Key publicKeyKey);
+
+    void deactivateDecryption();
 
 }

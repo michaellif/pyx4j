@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.viewfactories.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.IView;
 
-import com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage.EquifaxEncryptedStorageView;
-import com.propertyvista.operations.client.ui.crud.equifaxencryptedstorage.EquifaxEncryptedStorageViewImpl;
+import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView;
+import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageViewImpl;
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserEditorView;
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserEditorViewImpl;
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserListerView;
@@ -85,8 +85,8 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
             } else if (OnboardingMerchantAccountViewerView.class.equals(type)) {
                 map.put(type, new OnboardingMerchantAccountViewerViewImpl());
 
-            } else if (EquifaxEncryptedStorageView.class.equals(type)) {
-                map.put(type, new EquifaxEncryptedStorageViewImpl());
+            } else if (EncryptedStorageView.class.equals(type)) {
+                map.put(type, new EncryptedStorageViewImpl());
             }
 
         }

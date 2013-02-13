@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -61,6 +62,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         EntityQueryCriteria<EncryptedStoragePublicKey> criteria = EntityQueryCriteria.create(EncryptedStoragePublicKey.class);
         for (EncryptedStoragePublicKey publicKey : Persistence.service().query(criteria)) {
             EncryptedStorageKeyDTO keyDto = EntityFactory.create(EncryptedStorageKeyDTO.class);
+            keyDto.setPrimaryKey(publicKey.getPrimaryKey());
 
             if ((current != null) && publicKey.getPrimaryKey().equals(current.current().getPrimaryKey())) {
                 keyDto.isCurrent().setValue(Boolean.TRUE);
@@ -75,7 +77,12 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     @Override
     public byte[] createNewKeyPair(char[] password) {
         // TODO Auto-generated method stub
-        return null;
+        EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
+
+        Persistence.service().persist(publicKey);
+        Persistence.service().commit();
+
+        return "TODO".getBytes();
     }
 
     @Override
@@ -86,13 +93,17 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
         current.current().setPrimaryKey(publicKeyKey);
         Persistence.service().persist(current);
-
+        Persistence.service().commit();
     }
 
     @Override
     public void startKeyRotation(Key publicKeyKey) {
-        // TODO Auto-generated method stub
-
+        if (publicKeyKey.equals(getCurrentPublicKey())) {
+            throw new UserRuntimeException("Can't deactivate current key");
+        }
+        if (activeKeys.get(publicKeyKey == null)) {
+            throw new UserRuntimeException("Can't deactivate current with not activated decryption");
+        }
     }
 
     @Override
@@ -102,10 +113,20 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public void activate(Key publicKeyKey, char[] passwrord) {
+    public void activateDecryption(Key publicKeyKey, char[] passwrord) {
         EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStoragePublicKey.class));
         // asset
         activeKeys.put(publicKeyKey, Boolean.TRUE);
+    }
+
+    @Override
+    public void deactivateDecryption(Key publicKeyKey) {
+        activeKeys.remove(publicKeyKey);
+    }
+
+    @Override
+    public void deactivateDecryption() {
+        activeKeys.clear();
     }
 
 }

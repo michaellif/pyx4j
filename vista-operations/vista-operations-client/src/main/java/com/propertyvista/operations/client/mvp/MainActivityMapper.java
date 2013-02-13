@@ -38,7 +38,7 @@ import com.propertyvista.operations.client.activity.crud.cardservicesimulation.C
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionEditorActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionListerActivity;
-import com.propertyvista.operations.client.activity.crud.equifaxencryptedstorage.EquifaxEncryptedStorageActivity;
+import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -350,7 +350,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new SettingsActivity(place);
 
                 } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
-                    activity = new EquifaxEncryptedStorageActivity((AppPlace) place);
+                    activity = new EncryptedStorageActivity((AppPlace) place);
 
 // - Other:
                 } else if (place instanceof OperationsSiteMap.Alert) {

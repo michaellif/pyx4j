@@ -15,7 +15,10 @@ package com.propertyvista.operations.rpc.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.PasswordSerializable;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
@@ -23,5 +26,18 @@ public interface EncryptedStorageService extends IService {
 
     void getSystemState(AsyncCallback<EncryptedStorageDTO> callback);
 
-    void createNewKeyPair(AsyncCallback<String> callback, char[] password);
+    void activateCurrentKeyDecryption(AsyncCallback<VoidSerializable> callback, PasswordSerializable password);
+
+    void deactivateDecryption(AsyncCallback<VoidSerializable> callback);
+
+    void createNewKeyPair(AsyncCallback<String> callback, PasswordSerializable password);
+
+    void makeCurrent(AsyncCallback<VoidSerializable> callback, Key publicKeyKey);
+
+    void activateDecryption(AsyncCallback<VoidSerializable> callback, Key publicKeyKey, PasswordSerializable password);
+
+    void deactivateDecryption(AsyncCallback<VoidSerializable> callback, Key publicKeyKey);
+
+    void startKeyRotation(AsyncCallback<VoidSerializable> callback, Key publicKeyKey);
+
 }
