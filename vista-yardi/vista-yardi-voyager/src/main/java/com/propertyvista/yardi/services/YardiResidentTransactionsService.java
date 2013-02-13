@@ -135,7 +135,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 postReceiptReversal(yc, reversals);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (YardiServiceException e) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
         }
     }
@@ -147,7 +147,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 new YardiBuildingProcessor().updateBuildings(transaction);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
         }
         log.info("All buildings, units updated.");
@@ -160,7 +160,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 new YardiLeaseProcessor().updateLeases(transaction);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
         }
         log.info("All leases updated.");
@@ -173,7 +173,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 new YardiChargeProcessor().updateCharges(transaction);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
         }
         log.info("All charges updated.");
@@ -186,7 +186,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 new YardiPaymentProcessor().updatePayments(transaction);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
-                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
         }
         log.info("All payments updated.");
