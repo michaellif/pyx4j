@@ -45,6 +45,7 @@ import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
 import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
 import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.dto.SiteDescriptorDTO;
+import com.propertyvista.server.proxy.HttpsProxyInjection;
 
 public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
 

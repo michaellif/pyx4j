@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.admin;
+package com.propertyvista.server.proxy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

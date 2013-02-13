@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal;
+package com.propertyvista.server.proxy;
 
 import java.io.IOException;
 import java.io.OutputStream;

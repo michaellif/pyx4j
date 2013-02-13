@@ -62,6 +62,7 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.proxy.HttpsProxyInjection;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -254,6 +255,12 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 content.locale().set(li.aLocale);
                 content.html().setValue(contentText);
                 settings.customHtml().add(content);
+
+                HtmlContent injectedCustomHtml = EntityFactory.create(HtmlContent.class);
+                injectedCustomHtml.locale().set(li.aLocale);
+                injectedCustomHtml.html().setValue(HttpsProxyInjection.injectionPortalHttps(contentText));
+
+                settings.proxyHtml().add(injectedCustomHtml);
             } catch (IOException ignore) {
             }
         }
