@@ -53,4 +53,9 @@
             <jxb:class name="ChargeDetailInnerService"/>
         </jxb:bindings>
     </jxb:bindings>
+	<jxb:bindings namespace="" schemaLocation="Itf_MITS_ApplicantScreening2.0.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.screening"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
 </jxb:bindings>
