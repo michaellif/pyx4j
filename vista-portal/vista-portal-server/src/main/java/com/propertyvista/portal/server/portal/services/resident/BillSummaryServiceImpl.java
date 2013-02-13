@@ -49,9 +49,10 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         // TODO has to stay here until billing facade and AR facade merged together
         if (financialSummary.isInstanceOf(YardiFinancialSummaryDTO.class)) {
             ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(arFacade.getTransactionHistory(contextLease.billingAccount()));
+            ((YardiFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getLatestBillingActivity(contextLease.billingAccount()));
         } else if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
             ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(contextLease));
-            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getNotAcquiredLineItems(contextLease.billingAccount()));
+            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getLatestBillingActivity(contextLease.billingAccount()));
         }
 
         return financialSummary;

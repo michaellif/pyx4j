@@ -13,16 +13,22 @@
  */
 package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.portal.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
@@ -57,6 +63,7 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
         }));
 
         content.setWidget(++row, 0, inject(proto().transactionsHistory(), new TransactionHistoryViewerYardi()));
+        content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
 
         return content;
     }
@@ -65,4 +72,20 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
         payButton.setVisible(visible);
     }
 
+    // TODO - duplicate of BillSummaryForm.InvoiceLineItemFolder
+    class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {
+
+        public InvoiceLineItemFolder() {
+            super(InvoiceLineItem.class, false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(// @formatter:off
+                    new EntityFolderColumnDescriptor(proto().amount(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().postDate(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().description(), "20em")
+            ); // formatter:on
+        }
+    }
 }

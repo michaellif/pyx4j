@@ -14,6 +14,9 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,6 +44,7 @@ import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
@@ -223,8 +227,15 @@ public class ARFacadeYardyImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount) {
-        throw new UnsupportedOperationException();
+    public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
+        // get latest payments (for the last 3 months)
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.add(Calendar.MONTH, -3);
+        LogicalDate dateFrom = new LogicalDate(cal.getTime());
+        EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.gt(criteria.proto().postDate(), dateFrom));
+        return new ArrayList<InvoiceLineItem>(Persistence.service().query(criteria));
     }
 
 }

@@ -68,5 +68,5 @@ public interface ARFacade {
 
     void updateArrearsHistory(Building building);
 
-    List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount);
+    List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount);
 }

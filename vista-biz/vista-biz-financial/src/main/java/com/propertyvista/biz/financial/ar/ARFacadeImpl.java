@@ -120,7 +120,7 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount) {
+    public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
         return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
