@@ -22,11 +22,20 @@ public interface EncryptedStorageView extends IView {
 
     interface Presenter extends IView.Presenter {
 
+        // View actions:
+        void activateCurrentKeyDecryption(char[] keyPassword);
+
+        void deactivateDecryption();
+
         void createNewKey(char[] keyPassword);
+
+        // Key related actions
 
         void makeCurrentKey(EncryptedStorageKeyDTO keyToActivate);
 
         void activateDecryption(EncryptedStorageKeyDTO keyToEnableDecryption, char[] password);
+
+        void disableDecryption(EncryptedStorageKeyDTO keyToDisableDecryption);
 
         void startKeyRotation(EncryptedStorageKeyDTO key);
     }

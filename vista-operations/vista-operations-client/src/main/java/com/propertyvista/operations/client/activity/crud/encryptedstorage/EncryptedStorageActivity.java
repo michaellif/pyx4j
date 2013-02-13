@@ -15,19 +15,24 @@ package com.propertyvista.operations.client.activity.crud.encryptedstorage;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.PasswordSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.components.DownloadLinkDialog;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageService;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class EncryptedStorageActivity extends AbstractActivity implements EncryptedStorageView.Presenter {
 
@@ -66,10 +71,23 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
     @Override
     public void createNewKey(char[] keyPassword) {
         service.createNewKeyPair(new DefaultAsyncCallback<String>() {
+
             @Override
             public void onSuccess(String fileName) {
-                // TODO create Download Dialog and then refresh() from dialog close
-                refresh();
+                DownloadLinkDialog dd = new DownloadLinkDialog("Download Encrypted Private Key");
+                dd.addCloseHandler(new CloseHandler<PopupPanel>() {
+                    @Override
+                    public void onClose(CloseEvent<PopupPanel> event) {
+                        refresh();
+                    }
+                });
+                dd.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                dd.show(//@formatter:off
+                        "",
+                        "Encrypted Private Key",
+                        fileName
+                );//@formatter:on
+
             }
         }, new PasswordSerializable(keyPassword));
     }
@@ -99,6 +117,19 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
     }
 
     @Override
+    public void disableDecryption(EncryptedStorageKeyDTO keyToDisableDecryption) {
+        service.deactivateDecryption(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                refresh();
+            }
+
+        }, keyToDisableDecryption.getPrimaryKey());
+
+    }
+
+    @Override
     public void startKeyRotation(EncryptedStorageKeyDTO key) {
         service.startKeyRotation(new DefaultAsyncCallback<VoidSerializable>() {
 
@@ -108,6 +139,26 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
             }
 
         }, key.getPrimaryKey());
+    }
+
+    @Override
+    public void activateCurrentKeyDecryption(char[] password) {
+        service.activateCurrentKeyDecryption(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                refresh();
+            }
+        }, new PasswordSerializable(password));
+    }
+
+    @Override
+    public void deactivateDecryption() {
+        service.deactivateDecryption(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                refresh();
+            }
+        });
     }
 
 }

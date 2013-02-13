@@ -17,6 +17,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
@@ -24,9 +25,13 @@ public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedS
 
     private final EnryptedStorageForm form;
 
-    private final Button newKeyButton;
+    private final Button createNewKeyButton;
 
     private com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter presenter;
+
+    private final Button activateCurrentKeyForDecyptionButton;
+
+    private Button deactivateDecryption;
 
     public EncryptedStorageViewImpl() {
         form = new EnryptedStorageForm();
@@ -35,7 +40,43 @@ public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedS
         setContentPane(form);
         setSize("100%", "100%");
 
-        newKeyButton = new Button("Add new Key Pair", new Command() {
+        activateCurrentKeyForDecyptionButton = new Button("Activate Current Key Decryption", new Command() {
+
+            @Override
+            public void execute() {
+                new PasswordEntryDialog(false) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (getPassword() != null) {
+                            presenter.activateCurrentKeyDecryption(getPassword());
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }.show();
+            }
+        });
+        addHeaderToolbarItem(activateCurrentKeyForDecyptionButton);
+
+        deactivateDecryption = new Button("Deactivate Decryption", new Command() {
+
+            @Override
+            public void execute() {
+                MessageDialog.confirm("Are you sure?", "Please confirm you want to deactivate decription", new Command() {
+                    @Override
+                    public void execute() {
+                        presenter.deactivateDecryption();
+                    }
+                });
+
+            }
+
+        });
+        addHeaderToolbarItem(deactivateDecryption);
+
+        createNewKeyButton = new Button("Add New Key Pair", new Command() {
 
             @Override
             public void execute() {
@@ -55,7 +96,7 @@ public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedS
             }
 
         });
-        addHeaderToolbarItem(newKeyButton);
+        addHeaderToolbarItem(createNewKeyButton);
 
     }
 

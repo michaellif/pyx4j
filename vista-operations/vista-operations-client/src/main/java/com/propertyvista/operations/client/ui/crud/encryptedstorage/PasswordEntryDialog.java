@@ -83,7 +83,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
     }
 
     public PasswordEntryDialog(boolean requirePasswordConfirm) {
-        super("Enter New Password:");
+        super("");
 
         form = new PasswordEntryForm(requirePasswordConfirm);
         form.initContent();

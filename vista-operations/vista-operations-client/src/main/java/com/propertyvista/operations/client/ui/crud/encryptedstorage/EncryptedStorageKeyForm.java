@@ -131,7 +131,7 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
                         }
                     }.show();
                 } else {
-                    // TODO disable decrypt
+                    presenter.disableDecryption(EncryptedStorageKeyForm.this.getValue());
                 }
             }
 
@@ -151,6 +151,7 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
             @Override
             public void execute() {
                 // TODO upload dialog...
+                MessageDialog.info("NOT IMPLEMENTED!!!");
             }
 
         });
