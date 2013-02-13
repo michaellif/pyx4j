@@ -19,12 +19,12 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
-import com.propertyvista.operations.client.ui.components.AdminEditorsComponentFactory;
+import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 
 public abstract class OperationsEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
     public OperationsEntityForm(Class<E> rootClass, IFormView<E> view) {
-        super(rootClass, new AdminEditorsComponentFactory(), view);
+        super(rootClass, new OperationsEditorsComponentFactory(), view);
     }
 
     // decoration stuff:

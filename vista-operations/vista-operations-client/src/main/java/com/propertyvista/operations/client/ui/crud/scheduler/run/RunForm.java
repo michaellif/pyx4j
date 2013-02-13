@@ -17,8 +17,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.rpc.TriggerDTO;
 
 public class RunForm extends OperationsEntityForm<Run> {
 
@@ -30,7 +32,9 @@ public class RunForm extends OperationsEntityForm<Run> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)),
+                18).build());
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());

@@ -16,8 +16,10 @@ package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
@@ -32,7 +34,10 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             FormFlexPanel tabPanel = new FormFlexPanel("General Transaction Data");
             int row = -1;
 
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().card().number())).build());
+            tabPanel.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().card(), OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)), 18)
+                            .build());
+
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transactionType())).build());
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledSimulatedResponce())).build());
             tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount())).build());
@@ -43,11 +48,10 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
 
             selectTab(addTab(tabPanel));
         }
-
     }
 
     public CardServiceSimulationTransactionEditorViewImpl() {
-        super(OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction.class);
+        super(OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction.class);
         setForm(new CardServiceSimulationTransactionForm(this));
     }
 

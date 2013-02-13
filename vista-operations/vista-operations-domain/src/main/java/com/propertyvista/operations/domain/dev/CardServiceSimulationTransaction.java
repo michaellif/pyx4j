@@ -72,5 +72,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
 
     @Timestamp(Update.Updated)
     @Format("MM/dd/yyyy HH:mm")
+    @Editor(type = EditorType.label)
     IPrimitive<Date> transactionDate();
 }

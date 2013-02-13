@@ -77,10 +77,12 @@ public interface CardServiceSimulationCard extends IEntity {
 
     @Timestamp(Update.Created)
     @Format("MM/dd/yyyy HH:mm")
+    @Editor(type = EditorType.label)
     IPrimitive<Date> created();
 
     @Timestamp(Update.Updated)
     @Format("MM/dd/yyyy HH:mm")
+    @Editor(type = EditorType.label)
     IPrimitive<Date> updated();
 
     @Owned(cascade = {})

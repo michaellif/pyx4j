@@ -54,6 +54,7 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
 
     @Timestamp(Update.Created)
     @Format("MM/dd/yyyy HH:mm")
+    @Editor(type = EditorType.label)
     IPrimitive<Date> created();
 
     @Owned(cascade = {})

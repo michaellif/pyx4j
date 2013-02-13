@@ -20,7 +20,7 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 public class PadBatchViewerViewImpl extends OperationsViewerViewImplBase<PadSimBatch> implements PadBatchViewerView {
 
     public PadBatchViewerViewImpl() {
-        super(OperationsSiteMap.Administration.PadSimulation.PadSimBatch.class);
+        super(OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class);
         setForm(new PadBatchForm(this));
     }
 }

@@ -130,46 +130,50 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        public static class SimulatedDataPreload extends CrudAppPlace {
-
-            public SimulatedDataPreload() {
-                formViewerPlace(new Key(-1));
-            }
-
-        }
-
-        public static class PadSimulation extends CrudAppPlace {
-
-            @PlaceProperties(navigLabel = "Simulated PAD", caption = "Simulated PAD")
-            public static class PadSimFile extends CrudAppPlace {
-            }
-
-            @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
-            public static class PadSimBatch extends CrudAppPlace {
-            }
-
-        }
-
-        public static class CardServiceSimulation extends CrudAppPlace {
-
-            public static class CardServiceSimulationCard extends CrudAppPlace {
-
-            }
-
-            public static class CardServiceSimulationTransaction extends CrudAppPlace {
-
-            }
-
-            public static class CardServiceSimulationMerchantAccount extends CrudAppPlace {
-
-            }
-        }
-
         @PlaceProperties(navigLabel = "Users", caption = "User")
         public static class AdminUsers extends CrudAppPlace {
         }
 
-        public static class EquifaxEncryptedStorage extends AppPlace {
+        public static class EncryptedStorage extends AppPlace {
+        }
+
+    }
+
+    public static class Simulation extends AppPlace {
+
+        public static class CardServiceSimulation extends CrudAppPlace {
+        
+            public static class CardServiceSimulationCard extends CrudAppPlace {
+        
+            }
+        
+            public static class CardServiceSimulationTransaction extends CrudAppPlace {
+        
+            }
+        
+            public static class CardServiceSimulationMerchantAccount extends CrudAppPlace {
+        
+            }
+        }
+
+        public static class PadSimulation extends CrudAppPlace {
+        
+            @PlaceProperties(navigLabel = "Simulated PAD", caption = "Simulated PAD")
+            public static class PadSimFile extends CrudAppPlace {
+            }
+        
+            @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
+            public static class PadSimBatch extends CrudAppPlace {
+            }
+        
+        }
+
+        public static class SimulatedDataPreload extends CrudAppPlace {
+        
+            public SimulatedDataPreload() {
+                formViewerPlace(new Key(-1));
+            }
+        
         }
 
     }

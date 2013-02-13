@@ -27,7 +27,7 @@ public class PadBatchEditorViewImpl extends OperationsEditorViewImplBase<PadSimB
     private static final I18n i18n = I18n.get(PadBatchEditorViewImpl.class);
 
     public PadBatchEditorViewImpl() {
-        super(OperationsSiteMap.Administration.PadSimulation.PadSimBatch.class);
+        super(OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class);
         setForm(new PadBatchForm(this));
 
         Button calculateAction = new Button(i18n.tr("Calculate Fields"), new Command() {

@@ -27,7 +27,7 @@ public class PadFileListerViewImpl extends OperationsListerViewImplBase<PadSimFi
     private static final I18n i18n = I18n.get(PadFileListerViewImpl.class);
 
     public PadFileListerViewImpl() {
-        super(OperationsSiteMap.Administration.PadSimulation.PadSimFile.class);
+        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
         setLister(new PadFileLister());
 
         // Add actions:

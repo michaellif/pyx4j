@@ -180,10 +180,10 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Administration.SimulatedDataPreload) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.SimulatedDataPreload) {
                         activity = new SimulatedDataPreloadActivity();
 
-                    } else if (place instanceof OperationsSiteMap.Administration.PadSimulation.PadSimFile) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.PadSimulation.PadSimFile) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PadFileEditorActivity(crudPlace);
@@ -196,7 +196,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Administration.PadSimulation.PadSimBatch) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.PadSimulation.PadSimBatch) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PadBatchEditorActivity(crudPlace);
@@ -312,7 +312,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Simulation
-                    } else if (place instanceof OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
@@ -323,7 +323,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
@@ -334,7 +334,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
+                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
@@ -349,7 +349,7 @@ public class MainActivityMapper implements AppActivityMapper {
                 } else if (place instanceof OperationsSiteMap.Settings) {
                     activity = new SettingsActivity(place);
 
-                } else if (place instanceof OperationsSiteMap.Administration.EquifaxEncryptedStorage) {
+                } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
                     activity = new EquifaxEncryptedStorageActivity((AppPlace) place);
 
 // - Other:

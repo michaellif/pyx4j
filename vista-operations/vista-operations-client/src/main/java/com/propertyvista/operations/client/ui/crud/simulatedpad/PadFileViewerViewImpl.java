@@ -33,7 +33,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
     private final IListerView<PadSimBatch> batchLister;
 
     public PadFileViewerViewImpl() {
-        super(OperationsSiteMap.Administration.PadSimulation.PadSimFile.class);
+        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
 
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 

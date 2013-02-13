@@ -98,18 +98,18 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Administration.Maintenance());
         folder.addNavigItem(new OperationsSiteMap.Administration.Simulation());
         folder.addNavigItem(new OperationsSiteMap.Administration.AdminUsers());
-        folder.addNavigItem(new OperationsSiteMap.Administration.EquifaxEncryptedStorage());
+        folder.addNavigItem(new OperationsSiteMap.Administration.EncryptedStorage());
         list.add(folder);
 
         if (ApplicationMode.isDevelopment()) {
             folder = new NavigFolder("Dev Simulation");
 
-            folder.addNavigItem(new OperationsSiteMap.Administration.SimulatedDataPreload());
-            folder.addNavigItem(new OperationsSiteMap.Administration.PadSimulation.PadSimFile());
+            folder.addNavigItem(new OperationsSiteMap.Simulation.SimulatedDataPreload());
+            folder.addNavigItem(new OperationsSiteMap.Simulation.PadSimulation.PadSimFile());
 
-            folder.addNavigItem(new OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount());
-            folder.addNavigItem(new OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard());
-            folder.addNavigItem(new OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction());
+            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount());
+            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard());
+            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction());
 
             list.add(folder);
         }

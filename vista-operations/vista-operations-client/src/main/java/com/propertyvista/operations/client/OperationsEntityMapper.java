@@ -17,6 +17,8 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 
 import com.google.gwt.resources.client.ImageResource;
 
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
@@ -27,8 +29,6 @@ import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.TriggerDTO;
-import com.propertyvista.domain.security.OperationsUser;
-import com.propertyvista.domain.security.OnboardingUser;
 
 public class OperationsEntityMapper {
 
@@ -40,12 +40,12 @@ public class OperationsEntityMapper {
         register(PmcDTO.class, OperationsSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
         register(Run.class, OperationsSiteMap.Management.Run.class, DEFAULT_IMAGE);
-        register(PadSimFile.class, OperationsSiteMap.Administration.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
-        register(PadSimBatch.class, OperationsSiteMap.Administration.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
-        register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,
+        register(PadSimFile.class, OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
+        register(PadSimBatch.class, OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,
                 DEFAULT_IMAGE);
-        register(CardServiceSimulationCard.class, OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
-        register(CardServiceSimulationTransaction.class, OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationTransaction.class,
+        register(CardServiceSimulationCard.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
     }
 }

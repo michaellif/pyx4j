@@ -32,16 +32,17 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.misc.CreditCardNumberGenerator;
 
-public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationCard> implements CardServiceSimulationCardEditorView {
+public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationCard> implements
+        CardServiceSimulationCardEditorView {
 
     private static class CardServiceSimulationTokenTableFolder extends VistaTableFolder<CardServiceSimulationToken> {
 
@@ -134,7 +135,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
     }
 
     public CardServiceSimulationCardEditorViewImpl() {
-        super(OperationsSiteMap.Administration.CardServiceSimulation.class);
+        super(OperationsSiteMap.Simulation.CardServiceSimulation.class);
         setForm(new CardServiceSimulationForm(this));
     }
 

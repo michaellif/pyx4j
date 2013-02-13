@@ -20,7 +20,7 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 public class PadFileEditorViewImpl extends OperationsEditorViewImplBase<PadSimFile> implements PadFileEditorView {
 
     public PadFileEditorViewImpl() {
-        super(OperationsSiteMap.Administration.PadSimulation.PadSimFile.class);
+        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
         setForm(new PadFileForm(this));
     }
 

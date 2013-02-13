@@ -43,7 +43,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
     }
 
     public CardServiceSimulationMerchantAccountEditorViewImpl() {
-        super(OperationsSiteMap.Administration.CardServiceSimulation.CardServiceSimulationMerchantAccount.class);
+        super(OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount.class);
         setForm(new CardServiceSimulationMerchantAccountForm(this));
     }
 
