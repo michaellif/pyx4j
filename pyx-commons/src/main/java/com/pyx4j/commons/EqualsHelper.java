@@ -142,4 +142,22 @@ public abstract class EqualsHelper {
             return true;
         }
     }
+
+    public static boolean equals(byte[] value1, byte[] value2) {
+        if (value1 == null) {
+            return (value2 == null);
+        } else if (value2 == null) {
+            return false;
+        } else {
+            if (value1.length != value2.length) {
+                return false;
+            }
+            for (int i = 0; i < value1.length; i++) {
+                if (value1[i] != value2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 }
