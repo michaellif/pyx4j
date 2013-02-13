@@ -103,6 +103,7 @@ public class StepDriver extends Composite {
         if (stepNumber < steps.size() - 1) {
             nextStepButton.setTextLabel(steps.get(stepNumber + 1).getTitle());
             cancelButton.setVisible(true);
+            nextStepButton.setVisible(true);
         } else {
             nextStepButton.setVisible(false);
             cancelButton.setVisible(false);

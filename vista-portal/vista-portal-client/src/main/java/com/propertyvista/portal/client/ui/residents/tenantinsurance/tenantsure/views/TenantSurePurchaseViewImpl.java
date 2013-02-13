@@ -122,6 +122,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     public void init(TenantSureQuotationRequestParamsDTO quotationRequestParams, InsurancePaymentMethod paymentMethod) {
         tenantSureServiceUnavailable.setVisible(false);
 
+        acceptQuoteButton = null;
         stepDriver.setVisible(true);
         stepDriver.reset();
 
