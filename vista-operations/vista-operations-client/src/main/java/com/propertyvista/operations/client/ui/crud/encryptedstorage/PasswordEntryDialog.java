@@ -49,24 +49,29 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
 
     public static class PasswordEntryForm extends CEntityDecoratableForm<PasswordEntryDTO> {
 
-        public PasswordEntryForm() {
+        private final boolean requirePasswordConfirm;
+
+        public PasswordEntryForm(boolean requirePasswordConfirm) {
             super(PasswordEntryDTO.class);
+            this.requirePasswordConfirm = requirePasswordConfirm;
         }
 
         @Override
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
             contentPanel.add(new DecoratorBuilder(inject(proto().password())).build());
-            contentPanel.add(new DecoratorBuilder(inject(proto().passwordConfirm())).build());
-            get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
-                @Override
-                public ValidationError isValid(CComponent<String, ?> component, String value) {
-                    if (value != null && !value.equals(get(proto().password()).getValue())) {
-                        return new ValidationError(component, "Password and Password confirmation don't match");
+            if (requirePasswordConfirm) {
+                contentPanel.add(new DecoratorBuilder(inject(proto().passwordConfirm())).build());
+                get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+                    @Override
+                    public ValidationError isValid(CComponent<String, ?> component, String value) {
+                        if (value != null && !value.equals(get(proto().password()).getValue())) {
+                            return new ValidationError(component, "Password and Password confirmation don't match");
+                        }
+                        return null;
                     }
-                    return null;
-                }
-            });
+                });
+            }
 
             return contentPanel;
         }
@@ -74,9 +79,13 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
     }
 
     public PasswordEntryDialog() {
+        this(true);
+    }
+
+    public PasswordEntryDialog(boolean requirePasswordConfirm) {
         super("Enter New Password:");
 
-        form = new PasswordEntryForm();
+        form = new PasswordEntryForm(requirePasswordConfirm);
         form.initContent();
         form.populateNew();
 

@@ -109,7 +109,6 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     @Override
     public void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
