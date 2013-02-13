@@ -13,10 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -48,7 +54,33 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     @Override
     public IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
+        Widget statusPanel = makeStatusPanel();
+        statusPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+        statusPanel.getElement().getStyle().setFloat(Style.Float.LEFT);
+        statusPanel.getElement().getStyle().setWidth(40, Unit.EM);
 
+        Widget controlPanel = makeControlPanel();
+        controlPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        controlPanel.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        contentPanel.add(statusPanel);
+        contentPanel.add(controlPanel);
+
+        return contentPanel;
+    }
+
+    public void setPresenter(EncryptedStorageView.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        makeCurrent.setEnabled(!getValue().isCurrent().isBooleanTrue());
+        enableDecrypt.setEnabled(!getValue().decryptionEnabled().isBooleanTrue());
+        startKeyRotation.setEnabled(true);
+    }
+
+    private Widget makeStatusPanel() {
         FormFlexPanel statusPanel = new FormFlexPanel();
         int row = -1;
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isCurrent())).build());
@@ -57,18 +89,21 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recordsCount())).build());
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created(), new CDatePicker())).build());
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expired(), new CDatePicker())).build());
-        contentPanel.add(statusPanel);
+        return statusPanel;
+    }
 
+    private Widget makeControlPanel() {
         FlowPanel controlPanel = new FlowPanel();
+        controlPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        makeCurrent = new Button(i18n.tr("Make Current"), new Command() {
+        makeCurrent = new Button(i18n.tr("SET AS CURRENT"), new Command() {
             @Override
             public void execute() {
                 presenter.makeCurrentKey(EncryptedStorageKeyForm.this.getValue());
             }
 
         });
-        controlPanel.add(makeCurrent);
+        controlPanel.add(new SimplePanel(makeCurrent));
 
         enableDecrypt = new Button(i18n.tr("Enable Decryption"), new Command() {
             @Override
@@ -87,7 +122,7 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
             }
 
         });
-        controlPanel.add(enableDecrypt);
+        controlPanel.add(new SimplePanel(enableDecrypt));
 
         startKeyRotation = new Button(i18n.tr("Start Key Rotation"), new Command() {
             @Override
@@ -95,20 +130,8 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
                 presenter.startKeyRotation(EncryptedStorageKeyForm.this.getValue());
             }
         });
-        contentPanel.add(startKeyRotation);
+        controlPanel.add(new SimplePanel(startKeyRotation));
 
-        return statusPanel;
-    }
-
-    public void setPresenter(EncryptedStorageView.Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        makeCurrent.setVisible(!getValue().isCurrent().isBooleanTrue());
-        enableDecrypt.setVisible(!getValue().decryptionEnabled().isBooleanTrue());
-        startKeyRotation.setVisible(true);
+        return controlPanel;
     }
 }

@@ -29,10 +29,11 @@ public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedS
     private com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter presenter;
 
     public EncryptedStorageViewImpl() {
-
         form = new EnryptedStorageForm();
         form.initContent();
+
         setContentPane(form);
+        setSize("100%", "100%");
 
         newKeyButton = new Button("Add new Key Pair", new Command() {
 
