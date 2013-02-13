@@ -3,19 +3,6 @@
 	margin-right: auto;
 }
 
-.TextBox {
-	font: 12px Arial, Helvetica, sans-serif;
-	color: #666666;
-	background-color: #ffffff;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #c2c2c2;
-	padding: 2px 5px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-}
-
 .TextBox td {
 	padding: 0px;
 }
@@ -35,7 +22,7 @@
 	border-width: 1px;
 	border-style: solid;
 	border-color: #c2c2c2;
-	padding: 0 3px;
+	padding: 3px;
 	display: inline-block;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
 		endColorstr='#e0e0e0' );
@@ -49,18 +36,16 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-}
-
-.ButtonContent {
-	
+    height: 1.5em;
+    min-width: 7em;
+    white-space: nowrap;
 }
 
 .ButtonText {
-	vertical-align: middle;
 	whiteSpace: nowrap;
 	position: relative;
-	text-indent: 0;
 	height: 100%;
+	text-align: center;
 }
 
 .Button-hover {
@@ -142,17 +127,12 @@
 }
 
 .WidgetDecorator {
-	border-spacing: 0;
-	padding: 0.2em 0;
+	margin: 0.5em 0;
 }
 
-.WidgetDecorator-readOnly {
-	font-weight: bold;
-	color: #666666;
-}
-
-.WidgetDecoratorLabelHolder {
+.WidgetDecoratorLabelHolder, .BillingLineItem {
 	padding-right: 1em;
+	font-weight: bold;
 }
 
 .WidgetDecoratorLabel {
@@ -162,7 +142,6 @@
 }
 
 .WidgetDecorator-readOnly .WidgetDecoratorLabel {
-	color: #b3b3b3;
 }
 
 .WidgetDecoratorInfoImage {
@@ -181,16 +160,8 @@
 	display: none;
 }
 
-.WidgetDecoratorContentPanel {
-	
-}
-
 .WidgetDecoratorComponentHolder {
 	overflow: hidden;
-}
-
-.WidgetDecoratorComponent {
-	
 }
 
 .WidgetDecoratorComponent-invalid .TextBox {
@@ -223,25 +194,12 @@
 	border-color: #666666;
 }
 
-.WidgetDecorator {
-	margin: 6px 0;
-}
 
 .FormFlexPanel {
-	width: 100%;
-	border-spacing: 0;
-	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	padding: 6px;
-}
-
-.FormFlexPanel .FormFlexPanel {
-	padding: 0px;
-}
-
-.FormFlexPanel td {
-	padding: 0;
+    border-spacing: 0;
+    padding: 6px;
+    width: 100%;
 }
 
 .FormFlexPanelHR {
@@ -252,15 +210,12 @@
 
 .FormFlexPanelH1 {
 	background-color: #f0f0f0;
-	margin: 6px 0 4px 0;
 	width: 100%;
 }
 
 .FormFlexPanelH1Label {
-	text-shadow: 1px 2px 0 #ffffff;
-	color: #858585;
-	padding: 4px;
-	font-size: 1.3em;
+	font-weight: bold;
+	padding: 1em;
 }
 
 .FormFlexPanelH2 {
@@ -305,34 +260,7 @@
 
 .FormFlexPanelActionWidget {
 	float: right;
-	margin-right: 20px;
-}
-
-.FormFlexPanelH1 {
-	margin: 0;
-}
-
-.FormFlexPanelH1Label {
-	color: #3d2525;
-	padding: 20px;
-	font-size: 1.3em;
-}
-
-.FormFlexPanelActionWidget {
-	margin-top: 20px;
-}
-
-.FormFlexPanelActionWidget a {
-	color: #3d2525;
-	font-style: italic;
-}
-
-.FormFlexPanelH1 {
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0',
-		endColorstr='#e0e0e0' );
-	background: -moz-linear-gradient(top, #e0e0e0, #e0e0e0);
-	background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0),
-		to(#e0e0e0) );
+	padding: 1em;
 }
 
 .gwt-DatePicker {
@@ -884,11 +812,6 @@ td.DatePickerMonth {
 	color: red;
 }
 
-.NoteLabel {
-	font-weight: normal;
-	font-style: italic;
-}
-
 .NoteLabel-info {
 	color: #949494;
 }
@@ -917,10 +840,8 @@ td.DatePickerMonth {
 }
 
 .PaymentEditorForm {
-	border-radius: 5px;
 	border: solid 1px #666;
 	margin: 1em;
-	height: 180px;
 	width: 550px;
 }
 
@@ -968,14 +889,6 @@ td.DatePickerMonth {
 
 .EntityFolderBoxItem .EntityFolder {
 	width: 100%;
-}
-
-.EntityFolderBoxDecorator {
-	
-}
-
-.EntityFolderTableDecorator {
-	margin-top: 2px;
 }
 
 .EntityFolderBoxItem {
@@ -1033,11 +946,9 @@ td.DatePickerMonth {
 }
 
 .EntityFolderTableHeaderLabel {
-	color: #666666;
 	font-weight: bold;
 	margin-left: 3px;
 	margin-right: 3px;
-	float: left;
 }
 
 .EntityFolder-readOnly .EntityFolderTableHeaderLabel {
@@ -1065,29 +976,26 @@ td.DatePickerMonth {
 
 .TenantDashboardLeft {
 	height: 100%;
-	margin-bottom: 30px;
 }
 
 .TenantDashboardLeft>div {
-	min-height: 500px;
+	min-height: 35em;
 	border-right: solid 1px;
 	border-right-color: #c2c2c2;
 	height: 100%;
 }
 
 .TenantDashboardRight {
-	margin-bottom: 30px;
 	height: 100%;
 }
 
 .TenantDashboardTableHeader {
 	background-color: #f0f0f0;
-	line-height: 35px;
-	color: #949494;
+	line-height: 2.5em;
 }
 
 .TenantDashboardTableRow {
-	height: 45px;
+	height: 3.5em;
 	border-bottom: dotted 1px;
 	border-bottom-color: #949494;
 }
@@ -1097,9 +1005,8 @@ td.DatePickerMonth {
 }
 
 .TenantDashboardSection {
-	height: 15em;
-	padding-left: 0.5em;
-	padding-right: 0.5em;
+	height: 12em;
+	padding: 0.5em;
 }
 
 .Dialog {
@@ -1168,16 +1075,6 @@ td.DatePickerMonth {
 	color: #d9d1b8;
 }
 
-.PortalView {
-}
-
-.PortalViewDisplay {
-	
-}
-
-.PropertyCard {
-}
-
 .PropertyCardCardImage {
 	border-color: #cccccc !important;
 	border: solid 1px;
@@ -1240,14 +1137,6 @@ td.DatePickerMonth {
 	background-color: #d1d1d1;
 }
 
-.BillingLineItem {
-	color: #B3B3B3;
-	font-weight: bold;
-}
-
-.BillingLineItemTitle {
-	
-}
 
 .BillingLineItemAmount {
 	color: #666666;
@@ -1316,17 +1205,8 @@ td.DatePickerMonth {
 }
 
 .LandingCaption {
-	margin-top: 25px;
-	margin-bottom: 25px;
+	margin: 1.5em 0;
 	width: 100%;
-}
-
-.LandingCaptionText {
-	
-}
-
-.LandingCaptionTextEmph {
-	
 }
 
 .LandingOrLineSeparator {
@@ -1334,8 +1214,6 @@ td.DatePickerMonth {
 	top: 0%;
 	bottom: 0%;
 	left: 50%;
-	right: 50%;
-	border-color: gray;
 }
 
 .LandingGreetingPanel {
@@ -1354,17 +1232,16 @@ td.DatePickerMonth {
 }
 
 .LandingButtonHolder {
-	width: 20em;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 20px;
 }
 
 .LandingViewSectionHeader {
 	width: 50%;
 	display: inline-block;
 	vertical-align: bottom;
+	text-align: center;
 }
 
 .LandingViewSectionContent {
@@ -1386,7 +1263,7 @@ td.DatePickerMonth {
 }
 
 .LandingTermsAndConditionsBox {
-	margin-top: 20px;
+	margin: 1.5em;
 }
 
 .TenantInsuranceWarningText {
@@ -1401,11 +1278,9 @@ td.DatePickerMonth {
 
 .TenantInsuranceAnchor {
 	display: block;
-	margin-left: auto;
-	margin-right: auto;
 	width: 100%;
 	text-align: center;
-	padding-top: 0.5em;
+	padding-top: 1em;
 }
 
 .-vista-TenantSureStatusViewerTenantSureLogo {
@@ -1440,11 +1315,6 @@ td.DatePickerMonth {
 
 .ProvideTIBGetTenantSure {
 	margin-left: 20px;
-	width: 20em;
-	padding: 0.40em;
-	font-size: 18px;
-	text-align: center;
-	font-style: bold;
 }
 
 .ProvideTIUpdateExisitingInsurance {
@@ -1465,11 +1335,6 @@ td.DatePickerMonth {
 	margin-right: auto;
 	margin-left: auto;
 	text-align: center;
-}
-
-.TSPurchaseViewSection {
-	margin-right: 20px;
-	margin-left: 20px;
 }
 
 .TSPurchaseViewNextStepButton {
@@ -1512,53 +1377,11 @@ td.DatePickerMonth {
 }
 
 #siteAuthInsert .greeting {
-	color: ${object1_20
+	color: ${object1_20};
+font-weight:bold;
+padding-right:10px;
 }
 
-;
-font-weight
-
-
-
-
-:
-
-
- 
-
-
-bold
-
-
-
-
-;
-padding-right
-
-
-
-
-:
-
-
-
-
-10
-px
-
-
-;
-}
-#siteAuthInsert a {
-	color: #000000;
-}
-
-#siteAuthInsert a:hover {
-	color: ${object1_20
-}
-
-;
-}
 .navigation {
 	height: 60px;
 	position: absolute;
@@ -1832,22 +1655,6 @@ ul.footer_locations li {
 /*
  * Content
  */
-.vista-pmsite-main .caption { //
-	background-size: 100% 100%;
-	background: white;
-	height: 30px;
-	overflow: hidden;
-	padding: 5px 0 5px 0;
-	display: block;
-}
-
-.vista-pmsite-main .caption h1 {
-	font-family: monospace;
-	font-size: 14pt;
-	font-weight: normal;
-	color: black;
-}
-
 .caption2 {
 	border-top: 1px solid black;
 	height: 30px;
@@ -1856,61 +1663,19 @@ ul.footer_locations li {
 
 .vista-pmsite-main .caption2 h1 {
 	float: left;
-	font-family: monospace;
-	font-size: 14pt;
-	font-weight: normal;
 }
 
 .vista-pmsite-main .caption2 .rightControl {
 	height: 25px;
 	margin: 5px 0;
 	float: right;
-	color: ${object2_30
-}
-
-;
-font-weight
-
-
-
-
-:bold
-
-
-
-
-;
-text-transform
-
-
-
-
-:uppercase
-
-
-
-
-;
-cursor
-
-
-
-
-:pointer
-
-
-
-
-;
+	color: ${object2_30};
+	font-weight:bold;
+	text-transform:uppercase;
+	cursor:pointer;
 }
 .vista-pmsite-main .caption2 .rightControl:hover {
-	color: ${object2_10
-}
-
-;
-}
-.vista-pmsite-sidebarWrap {
-	background-color: #fff;
+	color: ${object2_10};
 }
 
 .vista-pmsite-content {
@@ -1919,146 +1684,44 @@ cursor
 
 .vista-pmsite-mainWrap {
 	width: 100%;
-	margin: 0 auto;
 	overflow: hidden;
-	background: #fff;
 }
 
 .caption {
-	border-top: 1px solid #000000;
-	border-bottom: 5px solid #000000;
 	overflow: hidden;
 }
 
 .secondaryNavig {
-	border-top: 1px solid #000000;
-	padding: 20px 0;
-	width: 211px;
+	padding: 1.5em 0;
+	width: 14em;
 	float: left;
-	min-height: 400px;
-	margin-right: 20px;
-}
-
-.secondaryNavig ul {
-	list-style: none outside none;
-	margin: 0;
-	padding: 0;
-	font-size: 16px;
-	font-weight: normal;
+	min-height: 30em;
+	margin-right: 1.5em;
 }
 
 .secondaryNavig ul li {
-	font-size: 16px;
-	font-weight: normal;
-	height: 28px;
+	height: 2em;
 	overflow: hidden;
-	padding: 0 10px 0 20px;
-}
-
-.secondaryNavig ul li.active {
-	background: url("images/menu_active.png") no-repeat scroll 0 50%
-		transparent;
+	padding-left: 1em;
+	width: 100%;
 }
 
 .secondaryNavig ul li:hover {
-	color: #CCCCCC;
 	outline: medium none;
 	text-decoration: none;
 	text-decoration: underline;
 }
 
 .vista-pmsite-main .content {
-	min-height: 200px;
-	line-height: 20px;
-	padding-top: 30px;
+	min-height: 15em;
+	line-height: 1.5em;
 	overflow: hidden;
 }
 
-.TenantDashboard .FormFlexPanelH1Label,.FormFlexPanel .FormFlexPanelH1Label,.LandingCaptionTextEmph
-	{
-	font-family: monospace;
-	font-size: 14pt;
-	font-weight: bold;
-	text-shadow: none;
-}
-
-.LandingViewSectionHeader {
-	text-align: center;
-	font-family: monospace;
-	font-size: 14pt;
-}
-
-a {
-	color: #999999;
-	white-space: nowrap;
-	padding: 10px 0;
-	font-size: 14px;
-}
-
-#gwt-debug-login,#gwt-debug-account {
+#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
 	white-space: nowrap;
 }
 
-.TenantDashboardSection {
-	padding-top: 20px;
-}
-
-.LandingButtonHolder {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	text-align: center;
-	width: 20em;
-}
-
-.FormFlexPanelH3Label {
-	color: black;
-	font-family: monospace;
-	font-size: 13pt;
-	font-weight: normal;
-	font-style: normal;
-}
-
-.Button {
-	background: none repeat scroll 0 0 #000000;
-	border: none;
-	color: #E6E6E6;
-	cursor: pointer;
-	float: right;
-	font-size: 16px;
-	padding: 10px;
-	width: auto;
-	min-width: 70px;
-	text-align: center;
-	opacity: 100;
-}
-
-.LandingButtonHolder .Button {
-	float: none;
-    height: 1.5em;
-    width: 7em;
-}
-
-.EntityFolderAddButton,.EntityFolderTableHeaderLabel {
-	color: #000000;
-	font-weight: bold;
-}
-
-.TextBox,.ListBox {
-	border: 1px solid #000000;
-}
-
-.LandingTermsAndConditionsBox {
-	margin-left: 60px;
-	margin-right: 60px;
-}
-
-.WidgetDecorator-readOnly .WidgetDecoratorLabel,.BillingLineItem,.WidgetDecoratorLabel
-	{
-	color: #000000;
-}
-
-.WidgetDecorator-readOnly,.BillingBillTotal .WidgetDecoratorComponent {
-	color: #000000;
-	font-weight: normal;
+.TenantSureTermsLink {
+    text-align: center;
 }
