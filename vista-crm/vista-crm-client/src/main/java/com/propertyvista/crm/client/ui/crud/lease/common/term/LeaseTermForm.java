@@ -88,6 +88,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
         get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
+        get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
 
         // disable some editing on signed lease:
         if (isEditable()) {
@@ -103,17 +104,11 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setMandatory(getValue().type().getValue() != Type.Periodic);
-
-            // hide initial balance for existing leases:
-            get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         } else {
             featuresHeader.setVisible(!getValue().version().leaseProducts().featureItems().isEmpty());
             if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
                 concessionsHeader.setVisible(!getValue().version().leaseProducts().concessions().isEmpty());
             }
-
-            // show initial balance for existing leases only:
-            get(proto().carryforwardBalance()).setVisible(getValue().lease().status().getValue() == Lease.Status.ExistingLease);
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
@@ -400,13 +395,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
-                    if (getValue().lease().status().getValue() == Lease.Status.Application) { // lease application:
+                    if (getValue().lease().status().getValue() == Lease.Status.Application) {
                         LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                                 .lease().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
-                    } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
+                    } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
                         return new PastDateValidator().isValid(component, value);
+                    } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
+                        return new FutureDateValidator().isValid(component, value);
                     }
                 }
                 return null;
@@ -419,12 +416,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                if (value != null) {
-                    if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
-                        return new FutureDateValidator().isValid(component, value);
-                    }
-                }
-                return null;
+                return new FutureDateValidator().isValid(component, value);
             }
         });
 

@@ -105,6 +105,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.service().retrieve(dto.lease());
 
+        dto.carryforwardBalance().setValue(dto.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
+
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }
