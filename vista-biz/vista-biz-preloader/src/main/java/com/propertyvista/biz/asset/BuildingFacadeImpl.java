@@ -26,6 +26,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
@@ -37,6 +38,7 @@ public class BuildingFacadeImpl implements BuildingFacade {
         boolean isNewBuilding = building.updated().isNull();
         if (building.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(building);
+            building.marketing().visibility().setValue(PublicVisibilityType.global);
         }
         Persistence.service().merge(building);
 
