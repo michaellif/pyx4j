@@ -39,6 +39,8 @@ public interface EncryptedStoragePublicKey extends IEntity {
 
     IPrimitive<Date> expired();
 
+    IPrimitive<String> name();
+
     @RpcTransient
     @ReadOnly
     @Length(16 * 1024)
@@ -47,4 +49,7 @@ public interface EncryptedStoragePublicKey extends IEntity {
     @ReadOnly
     @Length(16 * 1024)
     IPrimitive<byte[]> keyTestData();
+
+    @Length(16 * 1024)
+    IPrimitive<byte[]> encryptTestData();
 }

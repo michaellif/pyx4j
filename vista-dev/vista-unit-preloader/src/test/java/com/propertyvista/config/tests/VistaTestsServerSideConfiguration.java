@@ -29,6 +29,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 
 public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
@@ -110,6 +111,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public boolean isVistaDemo() {
+        return false;
+    }
+
+    @Override
+    public boolean isVistaQa() {
         return false;
     }
 
@@ -196,6 +202,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public String getCardServiceSimulatorUrl() {
         return null;
+    }
+
+    @Override
+    public EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
+        return new VistaTestsEncryptedStorageConfiguration();
     }
 
 }

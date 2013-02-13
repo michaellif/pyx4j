@@ -41,6 +41,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract boolean isVistaDemo();
 
+    public abstract boolean isVistaQa();
+
     public abstract boolean openDBReset();
 
     public abstract Set<DemoPmc> dbResetPreloadPmc();
@@ -106,5 +108,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public boolean enviromentTitleVisible() {
         return true;
     }
+
+    public abstract EncryptedStorageConfiguration getEncryptedStorageConfiguration();
 
 }

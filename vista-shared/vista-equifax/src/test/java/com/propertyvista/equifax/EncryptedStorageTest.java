@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -49,41 +50,61 @@ public class EncryptedStorageTest {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(2048);
 
-        KeyPair kp = kpg.genKeyPair();
+        KeyPair keyPair = kpg.genKeyPair();
 
         byte[] publicKeyBinary;
 
         {
-            PublicKey publicKey = kp.getPublic();
+            PublicKey publicKey = keyPair.getPublic();
             publicKeyBinary = publicKey.getEncoded();
             //System.out.println("publicKey format:" + publicKey.getFormat());
         }
 
         {
-            Key privateKey = kp.getPrivate();
+            Key privateKey = keyPair.getPrivate();
             //System.out.println("privateKey format:" + privateKey.getFormat());
 
             byte[] encryptedBytes = getBinaryEncryptor(keyPassword).encrypt(privateKey.getEncoded());
 
-            // Write the keyStore to disk.      
+            // Write the keyStore to disk.
             FileOutputStream fos = new FileOutputStream(keyStoreFileName);
             fos.write(encryptedBytes);
             fos.close();
 
         }
 
-        Cipher cipher = Cipher.getInstance("RSA");
+        byte[] data;
+        byte[] encryptedData;
+
+        // Create Data
+        SecureRandom random = new SecureRandom();
+        int len = 180;
+        data = new byte[len];
+        random.nextBytes(data);
+
+        // encrypt Data
         {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBinary);
-            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+            Cipher cipherRSA = Cipher.getInstance("RSA");
+            {
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBinary);
+                PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+                cipherRSA.init(Cipher.ENCRYPT_MODE, publicKey);
+            }
+
+            encryptedData = cipherRSA.doFinal(data);
+
+            //TODO
+            // Create AES Key  128/256
+            // make encryptedDataPart1
+            // encryptedDataPart1 = cipher.doFinal(AESKey);
+
+            // Use AES  to create encryptedDataPart2
+
+            //encryptedData = len Part1(byte[2]) + encryptedDataPart1 + encryptedDataPart2
+
         }
-
-        byte[] src = "Test".getBytes();
-
-        byte[] cipherData = cipher.doFinal(src);
         //System.out.println(Arrays.toString(cipherData));
 
         {
@@ -99,13 +120,17 @@ public class EncryptedStorageTest {
             EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
+            //decrypt
             {
-                Cipher cipher2 = Cipher.getInstance("RSA");
-                cipher2.init(Cipher.DECRYPT_MODE, privateKey);
+                Cipher ciphercipherRSA = Cipher.getInstance("RSA");
+                ciphercipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
 
-                byte[] decodedSrc = cipher2.doFinal(cipherData);
+                //TODO read AES from  encryptedData decript it using  RSA
+                // decrypt AES
+                // USe AES to decrypt the rest of data
+                byte[] decodedSrc = ciphercipherRSA.doFinal(encryptedData);
 
-                Assert.assertArrayEquals(src, decodedSrc);
+                Assert.assertArrayEquals(data, decodedSrc);
             }
         }
     }

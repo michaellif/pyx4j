@@ -22,6 +22,11 @@ import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 public class VistaServerSideConfiguration55 extends VistaServerSideConfigurationCustom {
 
     @Override
+    public boolean isVistaQa() {
+        return true;
+    }
+
+    @Override
     protected String getApplicationDeploymentProtocol() {
         return "https";
     }

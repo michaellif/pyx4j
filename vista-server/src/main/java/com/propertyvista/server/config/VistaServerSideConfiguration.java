@@ -38,12 +38,13 @@ import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.common.security.VistaAntiBot;
@@ -264,6 +265,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean isVistaQa() {
+        return false;
+    }
+
+    @Override
     public boolean isProductionBackend() {
         return VistaDeployment.isVistaProduction();
     }
@@ -373,6 +379,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         } else {
             return new File(vistaWorkDir(), "tenant-sure");
         }
+    }
+
+    @Override
+    public EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
+        return new VistaEncryptedStorageConfiguration(this);
     }
 
 }

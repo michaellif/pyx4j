@@ -13,21 +13,48 @@
  */
 package com.propertyvista.biz.system.encryption;
 
+import java.io.ByteArrayOutputStream;
+import java.security.GeneralSecurityException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+
+import org.jasypt.util.binary.BasicBinaryEncryptor;
+import org.jasypt.util.binary.BinaryEncryptor;
+import org.jasypt.util.binary.StrongBinaryEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.operations.domain.encryption.EncryptedStorageCurrentKey;
 import com.propertyvista.operations.domain.encryption.EncryptedStoragePublicKey;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
 public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(EncryptedStorageFacadeImpl.class);
 
     private static Map<Key, Boolean> activeKeys = new HashMap<Key, Boolean>();
 
@@ -43,8 +70,20 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     @Override
     public byte[] encrypt(Key publicKeyKey, byte[] data) {
-        // TODO Auto-generated method stub
-        return null;
+        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+        return encrypt(publicKey, data);
+    }
+
+    private byte[] encrypt(EncryptedStoragePublicKey publicKey, byte[] data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKey.keyData().getValue());
+            cipher.init(Cipher.ENCRYPT_MODE, keyFactory.generatePublic(publicKeySpec));
+            return cipher.doFinal(data);
+        } catch (GeneralSecurityException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
@@ -76,13 +115,9 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     @Override
     public byte[] createNewKeyPair(char[] password) {
-        // TODO Auto-generated method stub
-        EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
-
-        Persistence.service().persist(publicKey);
-        Persistence.service().commit();
-
-        return "TODO".getBytes();
+        ByteArrayOutputStream encryptedPrivateKeyBuffer = new ByteArrayOutputStream();
+        generateKey(password, encryptedPrivateKeyBuffer);
+        return encryptedPrivateKeyBuffer.toByteArray();
     }
 
     @Override
@@ -113,9 +148,16 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     @Override
     public void activateDecryption(Key publicKeyKey, char[] passwrord) {
-        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStoragePublicKey.class));
+        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
         // asset
         activeKeys.put(publicKeyKey, Boolean.TRUE);
+    }
+
+    private void automaticActivateDecryption() {
+        if (!ApplicationMode.isDevelopment()) {
+            return;
+        }
+        EncryptedStorageConfiguration config = getEncryptedStorageConfiguration();
     }
 
     @Override
@@ -126,6 +168,94 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     @Override
     public void deactivateDecryption() {
         activeKeys.clear();
+    }
+
+    private byte[] generateTestData(EncryptedStoragePublicKey publicKey) {
+        SecureRandom random = new SecureRandom();
+        int len = 128;//2 * 1024 + random.nextInt(5 * 1024);
+        byte bytes[] = new byte[len];
+        random.nextBytes(bytes);
+        return bytes;
+    }
+
+    private void testKeyDecryption(EncryptedStoragePublicKey publicKey, byte[] encryptedPrivateKeyBytes, char[] keyPassword) {
+        byte[] privateKeyBinary = getBinaryEncryptor(keyPassword).decrypt(encryptedPrivateKeyBytes);
+        byte[] decodedSrc;
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
+            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+            decodedSrc = cipher.doFinal(publicKey.encryptTestData().getValue());
+        } catch (GeneralSecurityException e) {
+            throw new Error(e);
+        }
+
+        if (!EqualsHelper.equals(decodedSrc, publicKey.keyTestData().getValue())) {
+            throw new Error("Decryption test failed");
+        }
+    }
+
+    private void generateKey(char[] keyPassword, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
+        EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
+        publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
+        try {
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+            generator.initialize(2048);
+
+            KeyPair keyPair = generator.genKeyPair();
+            publicKey.keyData().setValue(keyPair.getPublic().getEncoded());
+            publicKey.keyTestData().setValue(generateTestData(publicKey));
+            publicKey.encryptTestData().setValue(encrypt(publicKey, publicKey.keyTestData().getValue()));
+            {
+                PrivateKey privateKey = keyPair.getPrivate();
+                byte[] encryptedPrivateKeyBytes = getBinaryEncryptor(keyPassword).encrypt(privateKey.getEncoded());
+                testKeyDecryption(publicKey, encryptedPrivateKeyBytes, keyPassword);
+                getPrivateKeyStorage().savePrivateKey(publicKey.name().getValue(), encryptedPrivateKeyBytes);
+
+                encryptedPrivateKeyBuffer.write(encryptedPrivateKeyBytes, 0, encryptedPrivateKeyBytes.length);
+            }
+        } catch (GeneralSecurityException e) {
+            log.error("Error", e);
+            throw new Error(e.getMessage());
+        }
+
+        Persistence.service().persist(publicKey);
+        Persistence.service().commit();
+    }
+
+    static EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
+    }
+
+    private PrivateKeyStorage getPrivateKeyStorage() {
+        EncryptedStorageConfiguration config = getEncryptedStorageConfiguration();
+        switch (config.privateKeyStorageType()) {
+        case file:
+            return new PrivateKeyStorageFile();
+        case noStorage:
+            return new PrivateKeyStorageNop();
+        case sftp:
+            return new PrivateKeyStorageNop();
+        default:
+            throw new Error("Unsupported " + config.privateKeyStorageType());
+        }
+    }
+
+    private BinaryEncryptor getBinaryEncryptor(char[] password) {
+        if (ApplicationMode.isDevelopment()) {
+            BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
+            binaryEncryptor.setPasswordCharArray(password);
+            return binaryEncryptor;
+        } else {
+            StrongBinaryEncryptor binaryEncryptor = new StrongBinaryEncryptor();
+            binaryEncryptor.setPasswordCharArray(password);
+            return binaryEncryptor;
+
+        }
     }
 
 }
