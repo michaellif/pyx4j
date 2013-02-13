@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.bean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -30,6 +31,12 @@ public class Messages {
 
     public static boolean isMessageResponse(String s) {
         return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
+    }
+
+    public static Messages create(Message... messages) {
+        Messages msgs = new Messages();
+        msgs.getMessages().addAll(Arrays.asList(messages));
+        return msgs;
     }
 
     @Override

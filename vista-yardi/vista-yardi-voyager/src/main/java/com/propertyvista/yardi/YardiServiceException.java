@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi;
 
+import com.propertyvista.yardi.bean.Message.MessageType;
+
 /**
  * Signals about service operation failure during YARDI System api calls
  * 
@@ -21,6 +23,8 @@ package com.propertyvista.yardi;
  */
 @SuppressWarnings("serial")
 public class YardiServiceException extends Exception {
+
+    private MessageType messageType;
 
     public YardiServiceException() {
         super();
@@ -34,8 +38,17 @@ public class YardiServiceException extends Exception {
         super(message);
     }
 
+    public YardiServiceException(MessageType messageType, String message) {
+        super(message);
+        this.messageType = messageType;
+    }
+
     public YardiServiceException(Throwable cause) {
         super(cause);
+    }
+
+    public MessageType getMessageType() {
+        return messageType;
     }
 
 }

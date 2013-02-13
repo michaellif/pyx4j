@@ -24,6 +24,14 @@ public class Message {
         FYI, Error
     }
 
+    public Message() {
+    }
+
+    public Message(MessageType type, String value) {
+        this.type = type;
+        this.value = value;
+    }
+
     @XmlValue
     private String value;
 
