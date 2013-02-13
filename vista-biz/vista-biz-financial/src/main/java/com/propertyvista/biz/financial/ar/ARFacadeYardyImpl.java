@@ -162,7 +162,7 @@ public class ARFacadeYardyImpl implements ARFacade {
             total = total.add(item.amount().getValue());
         }
         for (InvoiceLineItem item : payments) {
-            total = total.subtract(item.amount().getValue());
+            total = total.add(item.amount().getValue());
         }
         return total;
     }
