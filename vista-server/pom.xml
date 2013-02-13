@@ -291,6 +291,24 @@
                             </target>
                         </configuration>
                     </execution>
+                    
+                    <execution>
+                        <id>wsdl-coping</id>
+                        <phase>package</phase>
+                        <goals>
+                          <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>Coping wsdl...</echo>
+                                <unzip src="${project.build.directory}/vista/WEB-INF/lib/vista-yardi-voyager-wsdl-${project.version}.jar" dest="${basedir}/src/main/webapp/WEB-INF/wsdl">
+                                    <patternset>
+                                        <include name="**/ScreeningService.wsdl"/>
+                                    </patternset>
+                                </unzip>
+                            </target>
+                        </configuration>
+                    </execution>
 
                 </executions>
             </plugin>

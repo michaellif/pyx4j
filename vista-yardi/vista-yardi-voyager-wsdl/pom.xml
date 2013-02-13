@@ -72,6 +72,10 @@
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ResidentTransactions20_SysBatch</uri>
                             <packageName>com.yardi.ws.operations</packageName>
                         </namespaceURI>
+                        <namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfApplicantScreening</uri>
+                            <packageName>com.yardi.ws.operations</packageName>
+                        </namespaceURI>
                     </namespaceURIs>
                 </configuration>
                 <executions>
@@ -94,6 +98,17 @@
                         </goals>
                         <configuration>
                             <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20_SysBatch.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsdl2code-client-yardi-as</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/ItfApplicantScreening20.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
@@ -124,7 +139,28 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
+            
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keep>true</keep>
+                    <verbose>true</verbose>
+                    <wsdlDirectory>${basedir}/src/main/resources/</wsdlDirectory>
+                    <wsdlFiles>
+                        <wsdlFile>ScreeningService.wsdl</wsdlFile>
+                    </wsdlFiles>
+                    <packageName>com.yardi.ws</packageName>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
