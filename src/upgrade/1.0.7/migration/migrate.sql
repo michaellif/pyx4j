@@ -14,6 +14,10 @@
 -- _admin_ schema migration 
 \i migrate_admin_schema.sql;
 
+
+-- _expiring_ schema changes
+\i migrate_expiring_schema.sql
+
 -- create migration function
 \i create_migrate_functions.sql;
 
