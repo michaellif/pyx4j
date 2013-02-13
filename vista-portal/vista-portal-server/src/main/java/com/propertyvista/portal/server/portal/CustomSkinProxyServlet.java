@@ -39,7 +39,7 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 /**
- * @see DeploymentConsts.portalInectionProxy
+ * @see DeploymentConsts#portalInectionProxy
  */
 @SuppressWarnings("serial")
 public class CustomSkinProxyServlet extends HttpServlet {
