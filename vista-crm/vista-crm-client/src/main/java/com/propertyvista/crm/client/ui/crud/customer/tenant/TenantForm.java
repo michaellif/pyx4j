@@ -69,10 +69,14 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
-                        .tr("Duplicate contacts specified"));
-            }
 
+                if (value.isEmpty()) {
+                    return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                }
+
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
+                        .tr("Duplicate Emergency Contacts specified"));
+            }
         });
 
         new PastDateValidation(get(proto().customer().person().birthDate()));

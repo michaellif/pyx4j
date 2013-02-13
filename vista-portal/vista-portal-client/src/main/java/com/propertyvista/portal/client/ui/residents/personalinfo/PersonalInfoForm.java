@@ -13,17 +13,24 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
+import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
 public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
@@ -57,9 +64,27 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
         //Emergency Contacts
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false)));
         container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
         return container;
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
+            @Override
+            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                if (value == null || getValue() == null) {
+                    return null;
+                }
+
+                if (value.isEmpty()) {
+                    return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                }
+
+                return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
+                        .tr("Duplicate Emergency Contacts specified"));
+            }
+        });
     }
 }

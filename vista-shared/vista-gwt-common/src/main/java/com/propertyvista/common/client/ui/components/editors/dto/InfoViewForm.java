@@ -193,15 +193,18 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
-
                 @Override
                 public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                     if (value == null || getValue() == null) {
                         return null;
                     }
 
+                    if (value.isEmpty()) {
+                        return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                    }
+
                     return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
-                            .tr("Duplicate contacts specified"));
+                            .tr("Duplicate Emergency Contacts specified"));
                 }
             });
         }

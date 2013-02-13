@@ -15,7 +15,6 @@ package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 
 import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -43,14 +42,6 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
         } else {
             return super.create(member);
         }
-    }
-
-    @Override
-    protected CEntityFolderItem<EmergencyContact> createItem(final boolean first) {
-        CEntityFolderItem<EmergencyContact> item = super.createItem(first);
-        item.setMovable(!first);
-        item.setRemovable(!first);
-        return item;
     }
 
     @Override
