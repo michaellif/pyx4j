@@ -42,7 +42,8 @@ public class FileUploadHyperlink extends CFile<File> {
                 getValue().fileSize().setValue(serverUploadResponse.fileSize);
                 getValue().timestamp().setValue(serverUploadResponse.timestamp);
                 getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
-                setNativeValue(getValue());
+
+                FileUploadHyperlink.this.setValue(getValue());
             }
 
             @Override

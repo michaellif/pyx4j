@@ -44,6 +44,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
                 break;
             }
         }
+
         return valid ? null : new ValidationError(component, i18n.tr("Media source cannot be empty!"));
     }
 }
