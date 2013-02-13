@@ -70,7 +70,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             dbo.lease().currentTerm().set(dbo);
 
             ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
-            dbo.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
+            if (dto.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
+                dbo.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
+            }
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
@@ -105,8 +107,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.service().retrieve(dto.lease());
 
-        dto.carryforwardBalance().setValue(dto.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
-
+        if (dto.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
+            dto.carryforwardBalance().setValue(dto.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
+        }
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }

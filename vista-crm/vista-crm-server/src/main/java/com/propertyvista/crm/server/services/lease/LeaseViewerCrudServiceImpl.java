@@ -63,7 +63,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         if (!dto.billingAccount().isNull()) {
             dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
-            dto.carryforwardBalance().setValue(dto.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
+            if (dto.billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
+                dto.carryforwardBalance().setValue(dto.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
+            }
         }
     }
 
