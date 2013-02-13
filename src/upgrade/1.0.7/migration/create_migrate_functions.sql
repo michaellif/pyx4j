@@ -118,9 +118,9 @@ BEGIN
         ALTER TABLE merchant_account ADD COLUMN status VARCHAR(50);
         
         
-        -- payment_method_selection_policy
+        -- payment_type_selection_policy
         
-        CREATE TABLE payment_method_selection_policy
+        CREATE TABLE payment_type_selection_policy
         (
                 id                              BIGINT                          NOT NULL,
                 updated                         TIMESTAMP WITHOUT TIME ZONE,
@@ -142,11 +142,11 @@ BEGIN
                 cash_equivalent_eft             BOOLEAN,
                 cash_equivalent_credit_card     BOOLEAN,
                 cash_equivalent_interac         BOOLEAN,
-                        CONSTRAINT      payment_method_selection_policy_pk PRIMARY KEY(id)
+                        CONSTRAINT      payment_type_selection_policy_pk PRIMARY KEY(id)
         );
         
         
-        ALTER TABLE payment_method_selection_policy OWNER TO vista;
+        ALTER TABLE payment_type_selection_policy OWNER TO vista;
                 
         
         
@@ -175,6 +175,21 @@ BEGIN
         
         ALTER TABLE resident_portal_settings$custom_html OWNER TO vista;
         
+        
+        -- resident_portal_settings$proxy_html
+        
+        CREATE TABLE resident_portal_settings$proxy_html
+        (
+                id                              BIGINT                          NOT NULL,
+                owner                           BIGINT,
+                value                           BIGINT,
+                seq                             INT,
+                        CONSTRAINT      resident_portal_settings$proxy_html_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE resident_portal_settings$proxy_html_pk OWNER TO vista;
+        
+        
         -- site_descriptor
         
         ALTER TABLE site_descriptor ADD COLUMN resident_portal_settings BIGINT;
@@ -200,6 +215,8 @@ BEGIN
                 REFERENCES insurance_tenant_sure_details(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_value_fk FOREIGN KEY(value) REFERENCES html_content(id);
+        ALTER TABLE resident_portal_settings$proxy_html ADD CONSTRAINT resident_portal_settings$proxy_html_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
+        ALTER TABLE resident_portal_settings$proxy_html ADD CONSTRAINT resident_portal_settings$proxy_html_value_fk FOREIGN KEY(value) REFERENCES html_content(id);
         ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_resident_portal_settings_fk FOREIGN KEY(resident_portal_settings) REFERENCES resident_portal_settings(id);
 
         
@@ -225,7 +242,7 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_details ADD CONSTRAINT insurance_tenant_sure_details_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
-        ALTER TABLE payment_method_selection_policy ADD CONSTRAINT payment_method_selection_policy_node_discriminator_d_ck 
+        ALTER TABLE payment_type_selection_policy ADD CONSTRAINT payment_type_selection_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome', 'InsuranceGeneric', 'InsuranceTenantSure'));
@@ -247,6 +264,7 @@ BEGIN
         
         CREATE INDEX customer_user_id_idx ON customer USING btree (user_id);
         CREATE INDEX resident_portal_settings$custom_html_owner_idx ON resident_portal_settings$custom_html USING btree (owner);
+        CREATE INDEX resident_portal_settings$proxy_html_owner_idx ON resident_portal_settings$proxy_html USING btree (owner);
         
         /**
         ***     =====================================================================================================

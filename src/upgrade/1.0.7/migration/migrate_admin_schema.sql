@@ -148,6 +148,33 @@ SET search_path = '_admin_';
         /** simulation done **/
                 
         
+        -- encrypted_storage_public_key
+        
+        CREATE TABLE encrypted_storage_public_key
+        (
+                id                              BIGINT                          NOT NULL,
+                created                         TIMESTAMP WITHOUT TIME ZONE     NOT NULL,
+                expired                         TIMESTAMP WITHOUT TIME ZONE,
+                key_data                        bytea,
+                key_test_data                   bytea,
+                        CONSTRAINT      encrypted_storage_public_key_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE encrypted_storage_public_key OWNER TO vista;
+        
+        
+        -- encrypted_storage_current_key
+        
+        CREATE TABLE encrypted_storage_current_key
+        (
+                id                              BIGINT                          NOT NULL,
+                current                         BIGINT,
+                        CONSTRAINT      encrypted_storage_current_key_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE encrypted_storage_current_key OWNER TO vista;
+                
+        
         -- legal_document
         
         -- ALTER TABLE legal_document ALTER COLUMN content TYPE VARCHAR(300000);
@@ -214,6 +241,7 @@ SET search_path = '_admin_';
                 REFERENCES dev_card_service_simulation_card(id);
         ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_card_fk FOREIGN KEY(card) 
                 REFERENCES dev_card_service_simulation_card(id);
+        ALTER TABLE encrypted_storage_current_key ADD CONSTRAINT encrypted_storage_current_key_current_fk FOREIGN KEY(current) REFERENCES encrypted_storage_public_key(id);
         ALTER TABLE operations_user_credential$behaviors ADD CONSTRAINT operations_user_credential$behaviors_owner_fk FOREIGN KEY(owner) 
                 REFERENCES operations_user_credential(id);
         ALTER TABLE operations_user_credential ADD CONSTRAINT operations_user_credential_usr_fk FOREIGN KEY(usr) REFERENCES operations_user(id);
