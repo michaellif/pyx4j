@@ -302,7 +302,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     @Override
-    public void cancelByTenant(Tenant tenantId) {
+    public void scheduleCancelByTenant(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         if (insuranceTenantSure == null) {
             throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
@@ -335,7 +335,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.expiryDate().setValue(expiryDate);
 
         Persistence.service().merge(insuranceTenantSure);
-        Persistence.service().commit();
     }
 
     @Override
@@ -345,7 +344,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
-        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(insuranceTenantSure);
 
         sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure));

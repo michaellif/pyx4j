@@ -43,13 +43,13 @@ public interface TenantSureFacade {
     void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone);
 
     /**
-     * Sends a cancellation request
+     * Sends a cancellation request (cancellation itself should happen on expiry date)
      * 
      * @param policyId
      * @param cancellationType
      * @param toAddress
      */
-    void cancelByTenant(Tenant tenantId);
+    void scheduleCancelByTenant(Tenant tenantId);
 
     void cancelByTenantSure(Tenant tenantId, String cancellationReason, LogicalDate expiryDate);
 

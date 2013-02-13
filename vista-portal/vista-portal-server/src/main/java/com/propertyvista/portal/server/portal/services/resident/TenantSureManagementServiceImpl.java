@@ -60,7 +60,7 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
             throw new TenantSureOnMaintenanceException();
         }
 
-        ServerSideFactory.create(TenantSureFacade.class).cancelByTenant(
+        ServerSideFactory.create(TenantSureFacade.class).scheduleCancelByTenant(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
