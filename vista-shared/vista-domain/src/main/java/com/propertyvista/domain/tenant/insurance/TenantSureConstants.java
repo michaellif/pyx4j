@@ -17,7 +17,7 @@ public class TenantSureConstants {
 
     public static final int TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS = 15;
 
-    public static final String TENANTSURE_LEGAL_NAME = "Highcourt Partners Limited";
+    public static final String TENANTSURE_LEGAL_NAME = "Tenant Sure / Highcourt Partners Limited";
 
     public static final String TENANTSURE_ADDRESS = "Suite 1200-372 Bay Street, Toronto ON CANADA M5H 2W9";
 
