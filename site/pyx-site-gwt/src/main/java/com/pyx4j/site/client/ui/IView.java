@@ -13,7 +13,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Created on 2011-06-09
  * @author Vlad
  * @version $Id$
@@ -31,8 +31,6 @@ public interface IView extends IsWidget {
 
         void populate();
 
-        @Deprecated
-        //TODO see if it is really needed for editor?
         void refresh();
     }
 
