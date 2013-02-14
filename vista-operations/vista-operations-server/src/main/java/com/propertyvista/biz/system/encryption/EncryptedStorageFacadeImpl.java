@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.crypto.Cipher;
 
@@ -48,10 +49,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.operations.domain.encryption.EncryptedStorageCurrentKey;
 import com.propertyvista.operations.domain.encryption.EncryptedStoragePublicKey;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
@@ -198,12 +201,27 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public void startKeyRotation(Key publicKeyKey) {
+    public String startKeyRotation(Key publicKeyKey) {
         if (publicKeyKey.equals(getCurrentPublicKey())) {
             throw new UserRuntimeException("Can't deactivate current key");
         }
         if (activeKeys.get(publicKeyKey) == null) {
-            throw new UserRuntimeException("Can't deactivate current with not activated decryption");
+            throw new UserRuntimeException("Can't deactivate key with not activated decryption");
+        }
+        Key fromPublicKeyKey = publicKeyKey;
+        Key toPublicKeyKey = getCurrentPublicKey();
+        if (activeKeys.get(toPublicKeyKey) == null) {
+            throw new UserRuntimeException("Can't deactivate key while current key has no activated decryption");
+        }
+
+        int total = countRecords(fromPublicKeyKey);
+        return DeferredProcessRegistry.fork(new KeyRotationDeferredProcess(total, fromPublicKeyKey, toPublicKeyKey), ThreadPoolNames.IMPORTS);
+    }
+
+    @Override
+    public void keyRotationProcess(AtomicInteger progress, Key fromPublicKeyKey, Key toPublicKeyKey) {
+        for (EncryptedStorageConsumer consumer : consumers) {
+            consumer.processKeyRotation(progress, fromPublicKeyKey, toPublicKeyKey);
         }
     }
 

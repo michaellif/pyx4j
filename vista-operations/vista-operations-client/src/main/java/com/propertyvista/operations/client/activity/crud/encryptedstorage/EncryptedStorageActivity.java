@@ -21,6 +21,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
 
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.PasswordSerializable;
@@ -139,13 +141,21 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
 
     @Override
     public void startKeyRotation(EncryptedStorageKeyDTO key) {
-        service.startKeyRotation(new DefaultAsyncCallback<VoidSerializable>() {
+
+        service.startKeyRotation(new DefaultAsyncCallback<String>() {
 
             @Override
-            public void onSuccess(VoidSerializable result) {
-                refresh();
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog("Key Rotation", "Re encrypting Data to current key...", false) {
+                    @Override
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        refresh();
+                    }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
             }
-
         }, key.getPrimaryKey());
     }
 

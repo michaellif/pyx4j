@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.system.encryption;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 
@@ -36,7 +38,9 @@ public interface EncryptedStorageFacade {
 
     void makeCurrent(Key publicKeyKey);
 
-    void startKeyRotation(Key publicKeyKey);
+    String startKeyRotation(Key publicKeyKey);
+
+    void keyRotationProcess(final AtomicInteger progress, Key fromPublicKeyKey, Key toPublicKeyKey);
 
     void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData, char[] password);
 

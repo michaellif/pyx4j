@@ -14,9 +14,13 @@
 package com.propertyvista.biz.system.encryption;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -48,9 +52,57 @@ public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer
     }
 
     @Override
-    public int processKeyRotation(Key fromPublicKeyKey, Key toPublicKeyKey) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int processKeyRotation(final AtomicInteger progress, final Key fromPublicKeyKey, final Key toPublicKeyKey) {
+        return TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                int count = 0;
+                {
+                    EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
+                    criteria.eq(criteria.proto().publicKey(), fromPublicKeyKey);
+                    ICursorIterator<CustomerCreditCheckReport> cursor = Persistence.service().query(null, criteria, AttachLevel.Attached);
+                    try {
+                        while (cursor.hasNext()) {
+                            CustomerCreditCheckReport report = cursor.next();
+                            byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey, report.data().getValue());
+                            byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
+
+                            report.publicKey().setValue(toPublicKeyKey);
+                            report.data().setValue(encryptedData);
+                            Persistence.service().persist(report);
+                            Persistence.service().commit();
+                            count++;
+                            progress.addAndGet(1);
+                        }
+                    } finally {
+                        cursor.completeRetrieval();
+                    }
+                }
+
+                {
+                    EntityQueryCriteria<CustomerCreditCheckReportNoBackup> criteria = EntityQueryCriteria.create(CustomerCreditCheckReportNoBackup.class);
+                    criteria.eq(criteria.proto().publicKey(), fromPublicKeyKey);
+                    ICursorIterator<CustomerCreditCheckReportNoBackup> cursor = Persistence.service().query(null, criteria, AttachLevel.Attached);
+                    try {
+                        while (cursor.hasNext()) {
+                            CustomerCreditCheckReportNoBackup report = cursor.next();
+                            byte[] decryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).decrypt(fromPublicKeyKey, report.data().getValue());
+                            byte[] encryptedData = ServerSideFactory.create(EncryptedStorageFacade.class).encrypt(toPublicKeyKey, decryptedData);
+
+                            report.publicKey().setValue(toPublicKeyKey);
+                            report.data().setValue(encryptedData);
+                            Persistence.service().persist(report);
+                            Persistence.service().commit();
+                            count++;
+                            progress.addAndGet(1);
+                        }
+                    } finally {
+                        cursor.completeRetrieval();
+                    }
+                }
+                return count;
+            }
+        });
     }
 
 }

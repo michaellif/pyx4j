@@ -38,6 +38,6 @@ public interface EncryptedStorageService extends IService {
 
     void deactivateDecryption(AsyncCallback<VoidSerializable> callback, Key publicKeyKey);
 
-    void startKeyRotation(AsyncCallback<VoidSerializable> callback, Key publicKeyKey);
+    void startKeyRotation(AsyncCallback<String> callback, Key publicKeyKey);
 
 }

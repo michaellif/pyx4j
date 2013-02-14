@@ -92,9 +92,8 @@ public class EncryptedStorageServiceImpl implements EncryptedStorageService {
     }
 
     @Override
-    public void startKeyRotation(AsyncCallback<VoidSerializable> callback, Key publicKeyKey) {
-        ServerSideFactory.create(EncryptedStorageFacade.class).startKeyRotation(publicKeyKey);
-        callback.onSuccess(null);
+    public void startKeyRotation(AsyncCallback<String> callback, Key publicKeyKey) {
+        callback.onSuccess(ServerSideFactory.create(EncryptedStorageFacade.class).startKeyRotation(publicKeyKey));
     }
 
     @Override

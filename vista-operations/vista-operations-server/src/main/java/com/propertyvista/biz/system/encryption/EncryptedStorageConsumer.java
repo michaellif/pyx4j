@@ -13,12 +13,14 @@
  */
 package com.propertyvista.biz.system.encryption;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.pyx4j.commons.Key;
 
 public interface EncryptedStorageConsumer {
 
     public int countRecords(Key publicKeyKey);
 
-    public int processKeyRotation(Key fromPublicKeyKey, Key toPublicKeyKey);
+    public int processKeyRotation(final AtomicInteger progress, final Key fromPublicKeyKey, final Key toPublicKeyKey);
 
 }
