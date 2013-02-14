@@ -48,7 +48,6 @@ import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.jasypt.util.binary.BinaryEncryptor;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.pyx4j.gwt.server.IOUtils;
@@ -62,19 +61,11 @@ public class EncryptedStorageTest {
         byte[] input = "Test 123 Test 123".getBytes();
         System.out.println("input text : " + new String(input));
 
-        KeyPair keyPair = createRSAKeyPair();
-
-        byte[] plainText;
-
-        if (true) {
-            byte[] cipher = encrypt(keyPair.getPublic(), input);
-            plainText = decrypt(keyPair.getPrivate(), cipher);
-        } else {
-            byte[] cipher = encrypt(null, input);
-            plainText = decrypt(null, cipher);
-        }
+        byte[] cipher = encrypt(null, input);
+        byte[] plainText = decrypt(null, cipher);
 
         System.out.println("plain text : " + new String(plainText));
+        Assert.assertArrayEquals(input, plainText);
     }
 
     @Test
@@ -93,7 +84,61 @@ public class EncryptedStorageTest {
 
         cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] plainText = cipherRSA.doFinal(cipher);
+
         System.out.println("plain key : " + new String(plainText));
+        Assert.assertArrayEquals(input, plainText);
+    }
+
+    @Test
+    public void testAll() throws Exception {
+        String keyStoreFileName = "./target/test.ks";
+        char[] keyPassword = "Test1".toCharArray();
+
+        byte[] input = "Test 123 Test 123".getBytes();
+        System.out.println("input text : " + new String(input));
+
+        byte[] cipher = null;
+        byte[] encryptedBytes = null;
+
+        // ============= Encrypt =============
+        {
+            KeyPair keyPair = createRSAKeyPair();
+            PublicKey publicKey = keyPair.getPublic();
+            byte[] publicKeyBinary = publicKey.getEncoded();
+            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBinary);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            publicKey = keyFactory.generatePublic(publicKeySpec);
+
+            Key privateKey = keyPair.getPrivate();
+            encryptedBytes = getBinaryEncryptor(keyPassword).encrypt(privateKey.getEncoded());
+
+            FileOutputStream fos = new FileOutputStream(keyStoreFileName);
+            fos.write(encryptedBytes);
+            fos.close();
+
+            cipher = encrypt(publicKey, input);
+        }
+
+        // ============= Decript =============
+        {
+
+            // Read privateKey
+            FileInputStream fis = new FileInputStream(keyStoreFileName);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            IOUtils.copyStream(fis, os, 1024);
+            IOUtils.closeQuietly(fis);
+
+            byte[] privateKeyBinary = getBinaryEncryptor(keyPassword).decrypt(os.toByteArray());
+
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
+            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+            byte[] plainText = decrypt(privateKey, cipher);
+
+            System.out.println("plain text : " + new String(plainText));
+            Assert.assertArrayEquals(input, plainText);
+        }
     }
 
     byte[] encrypt(PublicKey publicKey, byte[] message) throws Exception {
@@ -104,7 +149,7 @@ public class EncryptedStorageTest {
             sb.append(Integer.toHexString(random.nextInt()));
         }
 
-        SecretKey symmetricKey = createAESSecretKey(sb.toString(), false);
+        SecretKey symmetricKey = createAESSecretKey(sb.toString());
         Cipher symmetricCipher = createAESCipher();
         symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
 
@@ -157,10 +202,9 @@ public class EncryptedStorageTest {
         return plainText;
     }
 
-    SecretKey createAESSecretKey(String password, boolean use256) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException,
-            UnsupportedEncodingException {
+    SecretKey createAESSecretKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException, UnsupportedEncodingException {
         SecretKey secret;
-        if (use256) {
+        if (strong) {
             // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
             // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -171,13 +215,11 @@ public class EncryptedStorageTest {
             SecretKey tmp = factory.generateSecret(spec);
             secret = new SecretKeySpec(tmp.getEncoded(), "AES");
         } else {
-
             byte[] keyBytes = password.getBytes("UTF-8");
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
             keyBytes = sha.digest(keyBytes);
             keyBytes = Arrays.copyOf(keyBytes, 16); // use only first 128 bit
             secret = new SecretKeySpec(keyBytes, "AES");
-
         }
         return secret;
     }
@@ -195,101 +237,6 @@ public class EncryptedStorageTest {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(2048);
         return kpg.genKeyPair();
-    }
-
-    @Ignore
-    @Test
-    public void testKeyPair() throws Exception {
-        String keyStoreFileName = "./target/test.ks";
-
-        char[] keyPassword = "Test1".toCharArray();
-
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(2048);
-
-        KeyPair keyPair = kpg.genKeyPair();
-
-        byte[] publicKeyBinary;
-
-        {
-            PublicKey publicKey = keyPair.getPublic();
-            publicKeyBinary = publicKey.getEncoded();
-            //System.out.println("publicKey format:" + publicKey.getFormat());
-        }
-
-        {
-            Key privateKey = keyPair.getPrivate();
-            //System.out.println("privateKey format:" + privateKey.getFormat());
-
-            byte[] encryptedBytes = getBinaryEncryptor(keyPassword).encrypt(privateKey.getEncoded());
-
-            // Write the keyStore to disk.
-            FileOutputStream fos = new FileOutputStream(keyStoreFileName);
-            fos.write(encryptedBytes);
-            fos.close();
-
-        }
-
-        byte[] data;
-        byte[] encryptedData;
-
-        // Create Data
-        SecureRandom random = new SecureRandom();
-        int len = 180;
-        data = new byte[len];
-        random.nextBytes(data);
-
-        // encrypt Data
-        {
-            Cipher cipherRSA = Cipher.getInstance("RSA");
-            {
-                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-                EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBinary);
-                PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-
-                cipherRSA.init(Cipher.ENCRYPT_MODE, publicKey);
-            }
-
-            encryptedData = cipherRSA.doFinal(data);
-
-            //TODO
-            // Create AES Key  128/256
-            // make encryptedDataPart1
-            // encryptedDataPart1 = cipher.doFinal(AESKey);
-
-            // Use AES  to create encryptedDataPart2
-
-            //encryptedData = len Part1(byte[2]) + encryptedDataPart1 + encryptedDataPart2
-
-        }
-        //System.out.println(Arrays.toString(cipherData));
-
-        {
-            // Read privateKey
-            FileInputStream fis = new FileInputStream(keyStoreFileName);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            IOUtils.copyStream(fis, os, 1024);
-            IOUtils.closeQuietly(fis);
-
-            byte[] privateKeyBinary = getBinaryEncryptor(keyPassword).decrypt(os.toByteArray());
-
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
-            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
-
-            //decrypt
-            {
-                Cipher ciphercipherRSA = Cipher.getInstance("RSA");
-                ciphercipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
-
-                //TODO read AES from  encryptedData decript it using  RSA
-                // decrypt AES
-                // USe AES to decrypt the rest of data
-                byte[] decodedSrc = ciphercipherRSA.doFinal(encryptedData);
-
-                Assert.assertArrayEquals(data, decodedSrc);
-            }
-        }
     }
 
     private BinaryEncryptor getBinaryEncryptor(char[] password) {
