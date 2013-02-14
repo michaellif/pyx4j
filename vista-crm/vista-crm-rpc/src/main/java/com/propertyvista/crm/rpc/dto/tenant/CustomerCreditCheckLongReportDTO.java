@@ -25,6 +25,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.person.Name;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.person.Name;
 @Transient
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
+    @I18n
     public enum RatingLevel {
 
         excellent,
@@ -40,9 +43,15 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         fair,
 
-        poor
+        poor;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
+    @I18n
     public enum RiskLevel {
 
         veryLowRisk,
@@ -53,7 +62,12 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
         highRisk,
 
-        veryHighRisk
+        veryHighRisk;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @Caption(name = "Rent Covered")
