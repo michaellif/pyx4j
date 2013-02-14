@@ -133,6 +133,19 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         accounts.setWidget(0, ++col, new DecoratorBuilder(inject(proto().latePayments61_90days()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
 
+        FormFlexPanel equiifax = new FormFlexPanel();
+        col = -1;
+        equiifax.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Equifax:") + "</i>"));
+        equiifax.getWidget(0, col).setWidth("15em");
+        equiifax.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRiskLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build());
+
         FormFlexPanel raitings = new FormFlexPanel();
         col = -1;
         raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating1()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
@@ -154,20 +167,6 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         raitings.setWidget(0, ++col, new DecoratorBuilder(inject(proto().rating9()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
 
-        FormFlexPanel equiifax = new FormFlexPanel();
-        col = -1;
-        equiifax.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Equifax:") + "</i>"));
-        equiifax.getWidget(0, col).setWidth("15em");
-        equiifax.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxCheckScore()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
-                .componentAlignment(Alignment.center).build());
-//        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRatingLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
-//                .componentAlignment(Alignment.center).build());
-//        equiifax.setWidget(0, ++col, new DecoratorBuilder(inject(proto().equifaxRiskLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
-//                .componentAlignment(Alignment.center).build());
-        equiifax.setWidget(0, ++col, raitings);
-
         // put all together:
         FormFlexPanel main = new FormFlexPanel();
         row = -1;
@@ -177,8 +176,8 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         main.setWidget(++row, 0, accounts);
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, equiifax);
-//        main.setHR(++row, 0, 1);
-//        main.setWidget(++row, 0, raitings);
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, raitings);
 
         return main;
     }
