@@ -30,9 +30,11 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
 
     @Override
     public void populate(TenantDTO value) {
-        // correct Tenant legal naming: 
+        // tweak legal naming: 
         if (value.lease().status().getValue().isDraft()) {
             defaultCaption = i18n.tr("Applicant");
+        } else {
+            defaultCaption = i18n.tr("Tenant");
         }
 
         super.populate(value);
