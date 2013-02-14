@@ -89,7 +89,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         this.viewOnly = viewOnly;
 
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        setCaption(defaultCaption);
 
         // Notes button:
         addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
