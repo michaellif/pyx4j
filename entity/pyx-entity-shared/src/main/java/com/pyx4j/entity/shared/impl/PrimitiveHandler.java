@@ -38,6 +38,7 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.I18nContext;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.PasswordSerializable;
 
 public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<TYPE> implements IPrimitive<TYPE> {
 
@@ -180,6 +181,8 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
             return (value instanceof GeoPoint);
         } else if (valueClass.equals(Pair.class)) {
             return (value instanceof Pair);
+        } else if (valueClass.equals(PasswordSerializable.class)) {
+            return (value instanceof PasswordSerializable);
         } else {
             throw new RuntimeException("Unsupported type " + valueClass.getName());
         }
@@ -217,7 +220,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         if ((other == null) || (!(other instanceof IPrimitive<?>)) || (!this.getValueClass().equals(((IPrimitive<?>) other).getValueClass()))) {
             return false;
         } else if (isNull()) {
-            //Assert value is not detached, simple trick just to call the function and discard result  
+            //Assert value is not detached, simple trick just to call the function and discard result
             assert getValue() != this;
             return (((IPrimitive<?>) other).isNull());
         } else {

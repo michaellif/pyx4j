@@ -23,6 +23,7 @@ package com.pyx4j.gwt.client.upload;
 import java.util.Collection;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IFile;
@@ -40,11 +41,15 @@ public class FileUploadDialog<E extends IFile> extends VerticalPanel implements 
 
     private final UploadPanel<E, E> uploadPanel;
 
-    private final Dialog dialog;
+    protected final Dialog dialog;
 
-    public FileUploadDialog(String dialogTitle, final E uploadData, UploadService<E, E> service, FileUploadReciver<E> uploadReciver) {
+    protected E uploadData;
+
+    public FileUploadDialog(String dialogTitle, E uploadData, UploadService<E, E> service, FileUploadReciver<E> uploadReciver) {
 
         dialog = new Dialog(dialogTitle, this, null);
+
+        this.uploadData = uploadData;
 
         uploadPanel = new FileUploadPanel<E>(service, uploadReciver) {
 
@@ -68,7 +73,7 @@ public class FileUploadDialog<E extends IFile> extends VerticalPanel implements 
 
             @Override
             protected E getUploadData() {
-                return uploadData;
+                return FileUploadDialog.this.getUploadData();
             }
 
         };
@@ -77,7 +82,6 @@ public class FileUploadDialog<E extends IFile> extends VerticalPanel implements 
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        dialog.setBody(uploadPanel);
         dialog.setPixelSize(460, 150);
     }
 
@@ -85,12 +89,17 @@ public class FileUploadDialog<E extends IFile> extends VerticalPanel implements 
         uploadPanel.setSupportedExtensions(formats);
     }
 
-    public void show() {
-        dialog.show();
+    protected E getUploadData() {
+        return uploadData;
     }
 
-    protected void onUploadComplete(UploadResponse<E> serverUploadResponse) {
+    protected IsWidget createContent(UploadPanel<E, E> uploadPanel) {
+        return uploadPanel;
+    }
 
+    public void show() {
+        dialog.setBody(createContent(uploadPanel));
+        dialog.show();
     }
 
     @Override
