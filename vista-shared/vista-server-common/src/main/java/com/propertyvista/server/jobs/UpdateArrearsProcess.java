@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,6 +29,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {
 
@@ -47,33 +48,35 @@ public class UpdateArrearsProcess implements PmcProcess {
     }
 
     public void updateBillingAccountsArrears(PmcProcessContext context) {
-        log.info("Arrears Update for billing accounts started");
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            log.info("Arrears Update for billing accounts started");
 
-        EntityQueryCriteria<InternalBillingAccount> criteria = EntityQueryCriteria.create(InternalBillingAccount.class);
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
-        Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-        ARFacade facade = ServerSideFactory.create(ARFacade.class);
+            EntityQueryCriteria<InternalBillingAccount> criteria = EntityQueryCriteria.create(InternalBillingAccount.class);
+            criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
+            Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+            ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
-        long currentBillingAccount = 0L;
-        long failed = 0L;
+            long currentBillingAccount = 0L;
+            long failed = 0L;
 
-        while (billingAccounts.hasNext()) {
-            ++currentBillingAccount;
+            while (billingAccounts.hasNext()) {
+                ++currentBillingAccount;
 
-            try {
-                facade.updateArrearsHistory(billingAccounts.next());
-                Persistence.service().commit();
-                StatisticsUtils.addProcessed(context.getRunStats(), 1);
-            } catch (Throwable caught) {
-                log.error("failed to update arrears history: {}", caught.getMessage());
-                Persistence.service().rollback();
-                failed++;
-                StatisticsUtils.addFailed(context.getRunStats(), 1);
+                try {
+                    facade.updateArrearsHistory(billingAccounts.next());
+                    Persistence.service().commit();
+                    StatisticsUtils.addProcessed(context.getRunStats(), 1);
+                } catch (Throwable caught) {
+                    log.error("failed to update arrears history: {}", caught.getMessage());
+                    Persistence.service().rollback();
+                    failed++;
+                    StatisticsUtils.addFailed(context.getRunStats(), 1);
+                }
+
             }
-
+            log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED",
+                    currentBillingAccount, failed));
         }
-        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED", currentBillingAccount,
-                failed));
     }
 
     public void updateBuildingArrears(PmcProcessContext context) {

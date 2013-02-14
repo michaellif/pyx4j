@@ -22,6 +22,7 @@ public class DevYardiCredentials {
     public static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         if (true) {
+            cr.propertyCode().setValue("prvista2");
             cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
             cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx");
             cr.username().setValue("propertyvistaws");

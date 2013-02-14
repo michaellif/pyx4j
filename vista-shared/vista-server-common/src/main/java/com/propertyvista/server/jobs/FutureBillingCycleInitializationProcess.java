@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,7 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
@@ -26,7 +27,9 @@ public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(BillingFacade.class).initializeFutureBillingCycles();
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            ServerSideFactory.create(BillingFacade.class).initializeFutureBillingCycles();
+        }
     }
 
     @Override
