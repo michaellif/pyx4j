@@ -7,37 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-13
+ * Created on 2013-02-14
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.biz.system.encryption;
 
-import java.io.File;
+import com.pyx4j.commons.Key;
 
-import com.pyx4j.config.server.Credentials;
+public interface EncryptedStorageConsumer {
 
-public interface EncryptedStorageConfiguration {
+    public int countRecords(Key publicKeyKey);
 
-    public static enum PrivateKeyStorageType {
-
-        noStorage,
-
-        file,
-
-        sftp
-    }
-
-    int rsaKeysize();
-
-    File privateKeyDirectory();
-
-    String automaticActivateDecryptionKeyPassword();
-
-    PrivateKeyStorageType privateKeyStorageType();
-
-    String sftpHost();
-
-    Credentials sftpCredentials();
+    public int processKeyRotation(Key fromPublicKeyKey, Key toPublicKeyKey);
 
 }

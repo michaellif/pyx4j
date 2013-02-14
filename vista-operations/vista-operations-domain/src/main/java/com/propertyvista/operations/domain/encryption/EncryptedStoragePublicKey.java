@@ -41,6 +41,8 @@ public interface EncryptedStoragePublicKey extends IEntity {
 
     IPrimitive<String> name();
 
+    IPrimitive<Integer> algorithmsVersion();
+
     @RpcTransient
     @ReadOnly
     @Length(16 * 1024)

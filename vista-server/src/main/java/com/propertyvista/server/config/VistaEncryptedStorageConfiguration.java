@@ -31,6 +31,11 @@ public class VistaEncryptedStorageConfiguration implements EncryptedStorageConfi
     }
 
     @Override
+    public int rsaKeysize() {
+        return config.getConfigProperties().getIntegerValue("EncryptedStorage.rsaKeysize", 2048);
+    }
+
+    @Override
     public File privateKeyDirectory() {
         String dirName = config.getConfigProperties().getValue("EncryptedStorage.keystore.dir");
         if (CommonsStringUtils.isStringSet(dirName)) {

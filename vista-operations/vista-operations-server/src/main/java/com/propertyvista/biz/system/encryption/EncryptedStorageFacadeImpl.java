@@ -24,8 +24,10 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -62,6 +64,14 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     private static final I18n i18n = I18n.get(EncryptedStorageFacadeImpl.class);
 
     private static Map<Key, PrivateKey> activeKeys = new HashMap<Key, PrivateKey>();
+
+    private static List<EncryptedStorageConsumer> consumers = registerConsumers();
+
+    static List<EncryptedStorageConsumer> registerConsumers() {
+        List<EncryptedStorageConsumer> consumers = new ArrayList<EncryptedStorageConsumer>();
+        consumers.add(new EncryptedStorageConsumerEquifax());
+        return consumers;
+    }
 
     @Override
     public Key getCurrentPublicKey() {
@@ -152,10 +162,21 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
                 keyDto.isCurrent().setValue(Boolean.TRUE);
             }
             keyDto.decryptionEnabled().setValue(activeKeys.get(publicKey.getPrimaryKey()) != null);
+
+            keyDto.recordsCount().setValue(countRecords(publicKey.getPrimaryKey()));
+
             infoDto.keys().add(keyDto);
         }
 
         return infoDto;
+    }
+
+    private int countRecords(Key publicKeyKey) {
+        int count = 0;
+        for (EncryptedStorageConsumer consumer : consumers) {
+            consumer.countRecords(publicKeyKey);
+        }
+        return count;
     }
 
     @Override
@@ -266,9 +287,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     private void generateKey(char[] password, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
         final EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
         publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
+        publicKey.algorithmsVersion().setValue(1);
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(2048);
+            generator.initialize(getEncryptedStorageConfiguration().rsaKeysize());
 
             KeyPair keyPair = generator.genKeyPair();
             publicKey.keyData().setValue(keyPair.getPublic().getEncoded());

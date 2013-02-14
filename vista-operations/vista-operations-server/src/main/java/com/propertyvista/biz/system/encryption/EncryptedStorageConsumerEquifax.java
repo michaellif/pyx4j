@@ -1,0 +1,56 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-02-14
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.biz.system.encryption;
+
+import java.util.concurrent.Callable;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.server.domain.CustomerCreditCheckReport;
+import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
+import com.propertyvista.server.jobs.TaskRunner;
+
+public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer {
+
+    @Override
+    public int countRecords(final Key publicKeyKey) {
+        return TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                int count = 0;
+                {
+                    EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
+                    criteria.eq(criteria.proto().publicKey(), publicKeyKey);
+                    count += Persistence.service().count(criteria);
+                }
+                {
+                    EntityQueryCriteria<CustomerCreditCheckReportNoBackup> criteria = EntityQueryCriteria.create(CustomerCreditCheckReportNoBackup.class);
+                    criteria.eq(criteria.proto().publicKey(), publicKeyKey);
+                    count += Persistence.service().count(criteria);
+                }
+                return count;
+            }
+        });
+    }
+
+    @Override
+    public int processKeyRotation(Key fromPublicKeyKey, Key toPublicKeyKey) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+}
