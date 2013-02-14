@@ -32,6 +32,30 @@ import com.propertyvista.domain.person.Name;
 @Transient
 public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
+    public enum RatingLevel {
+
+        excellent,
+
+        good,
+
+        fair,
+
+        poor
+    }
+
+    public enum RiskLevel {
+
+        veryLowRisk,
+
+        lowRisk,
+
+        moderateRisk,
+
+        highRisk,
+
+        veryHighRisk
+    }
+
     @Caption(name = "Rent Covered")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentOfRentCovered();
@@ -85,11 +109,11 @@ public interface CustomerCreditCheckLongReportDTO extends IEntity {
 
     // where from?
     @Caption(name = "Rating Level")
-    IPrimitive<Double> equifaxRatingLevel();
+    IPrimitive<RatingLevel> equifaxRatingLevel();
 
     // where from?
     @Caption(name = "Risk Level")
-    IPrimitive<Double> equifaxRiskLevel();
+    IPrimitive<RiskLevel> equifaxRiskLevel();
 
     @Caption(name = "R1")
     IPrimitive<Integer> rating1();

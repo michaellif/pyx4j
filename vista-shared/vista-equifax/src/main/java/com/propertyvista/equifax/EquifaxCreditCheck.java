@@ -43,6 +43,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RiskLevel;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -69,6 +70,8 @@ public class EquifaxCreditCheck {
     private final static Map<String, CreditCheckResult> riskCodeMapping = new HashMap<String, CreditCheckResult>();
 
     final static Map<String, Integer> riskCodeAmountPrcMapping = new LinkedHashMap<String, Integer>();
+
+    final static Map<String, CustomerCreditCheckLongReportDTO.RiskLevel> riskLevelMapping = new HashMap<String, CustomerCreditCheckLongReportDTO.RiskLevel>();
 
     private final static Map<String, String> riskCodeOverrideDescription = new HashMap<String, String>();
 
@@ -108,6 +111,19 @@ public class EquifaxCreditCheck {
         riskCodeMapping.put("R8", CreditCheckResult.Decline);
 
         riskCodeOverrideDescription.put("11", i18n.ntr("Review - Decline Applicant received an unacceptably low score"));
+
+        riskLevelMapping.put("01", RiskLevel.veryLowRisk);
+        riskLevelMapping.put("02", RiskLevel.lowRisk);
+        riskLevelMapping.put("03", RiskLevel.lowRisk);
+        riskLevelMapping.put("04", RiskLevel.moderateRisk);
+        riskLevelMapping.put("05", RiskLevel.moderateRisk);
+        riskLevelMapping.put("06", RiskLevel.highRisk);
+        riskLevelMapping.put("07", RiskLevel.highRisk);
+        riskLevelMapping.put("08", RiskLevel.highRisk);
+        riskLevelMapping.put("09", RiskLevel.highRisk);
+        riskLevelMapping.put("10", RiskLevel.veryHighRisk);
+        riskLevelMapping.put("11", RiskLevel.veryHighRisk);
+
     }
 
     public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber,

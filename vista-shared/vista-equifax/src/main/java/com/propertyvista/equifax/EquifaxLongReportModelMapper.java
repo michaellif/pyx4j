@@ -42,6 +42,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RatingLevel;
+import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.RiskLevel;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.ref.Province;
@@ -60,6 +62,7 @@ public class EquifaxLongReportModelMapper {
             CNScoreType score = getCNScore(report.getCNScores().getCNScore(), "SCOR");
             if (score.getRejectCodes() != null && score.getRejectCodes().getRejectCode() != null && !score.getRejectCodes().getRejectCode().isEmpty()) {
                 dto.percentOfRentCovered().setValue(getRejectCode(score.getRejectCodes().getRejectCode().get(0).getCode()));
+                dto.equifaxRiskLevel().setValue(getRiskLevel(score.getRejectCodes().getRejectCode().get(0).getCode()));
             }
             if (report.getCNTrades() != null) {
                 List<CNTradeType> cnTrades = report.getCNTrades().getCNTrade();
@@ -96,6 +99,9 @@ public class EquifaxLongReportModelMapper {
             dto.equifaxCheckScore().setValue(
                     getCNScore(report.getCNScores().getCNScore(), "SCBS") != null ? getScoreResult(getCNScore(report.getCNScores().getCNScore(), "SCBS"))
                             : null);
+            if (dto.equifaxCheckScore().getValue() != null) {
+                dto.equifaxRatingLevel().setValue(getRatingLevel(dto.equifaxCheckScore().getValue()));
+            }
 
             // Identity
             CustomerCreditCheckLongReportDTO.IdentityDTO identity = EntityFactory.create(CustomerCreditCheckLongReportDTO.IdentityDTO.class);
@@ -240,6 +246,29 @@ public class EquifaxLongReportModelMapper {
 
             return dto;
         }
+        return null;
+    }
+
+    private static RiskLevel getRiskLevel(String codeString) {
+        if (EquifaxCreditCheck.riskCodeAmountPrcMapping.containsKey(codeString)) {
+            return EquifaxCreditCheck.riskLevelMapping.get(codeString);
+        } else {
+            log.debug("Risk Level Mapping does not contain the value ''{}'', returning null", codeString);
+            return null;
+        }
+    }
+
+    private static RatingLevel getRatingLevel(Double score) {
+        if (score >= 750 && score <= 800) {
+            return RatingLevel.excellent;
+        } else if (score >= 660 && score < 750) {
+            return RatingLevel.good;
+        } else if (score >= 620 && score < 660) {
+            return RatingLevel.fair;
+        } else if (score >= 359 && score < 620) {
+            return RatingLevel.poor;
+        }
+        log.debug("Rating Level score is out of limits of 359-800 does not contain the value ''{}'', returning null", score);
         return null;
     }
 
