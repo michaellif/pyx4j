@@ -110,6 +110,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         }
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        Persistence.service().commit();
         ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
         Persistence.service().commit();
     }
