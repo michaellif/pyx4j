@@ -96,7 +96,7 @@ public class CustomSkinProxyServlet extends HttpServlet {
             response.setStatus(status);
             OutputStream out = response.getOutputStream();
             try {
-                IOUtils.copyStream(method.getResponseBodyAsStream(), out, 1024);
+                IOUtils.copyStream(ResourceConverter.convert(method), out, 1024);
             } finally {
                 IOUtils.closeQuietly(out);
             }
