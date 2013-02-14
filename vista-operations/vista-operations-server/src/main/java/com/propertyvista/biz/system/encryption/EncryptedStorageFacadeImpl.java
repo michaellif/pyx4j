@@ -301,6 +301,15 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
+    public void preloaderTestKey() {
+        String password = getEncryptedStorageConfiguration().automaticActivateDecryptionKeyPassword();
+        if (password != null) {
+            Key publicKeyKey = generateKey(password.toCharArray(), null);
+            makeCurrent(publicKeyKey);
+        }
+    }
+
+    @Override
     public void makeCurrent(Key publicKeyKey) {
         EncryptedStorageCurrentKey current = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
         if (current == null) {
@@ -413,7 +422,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
     }
 
-    private void generateKey(char[] password, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
+    private Key generateKey(char[] password, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
         final EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
         publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
         publicKey.algorithmsVersion().setValue(1);
@@ -431,7 +440,9 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
                 testKeyDecryption(publicKey, encryptedPrivateKeyBytes, password);
                 getPrivateKeyStorage().savePrivateKey(publicKey.name().getValue(), encryptedPrivateKeyBytes);
 
-                encryptedPrivateKeyBuffer.write(encryptedPrivateKeyBytes, 0, encryptedPrivateKeyBytes.length);
+                if (encryptedPrivateKeyBuffer != null) {
+                    encryptedPrivateKeyBuffer.write(encryptedPrivateKeyBytes, 0, encryptedPrivateKeyBytes.length);
+                }
             }
         } catch (GeneralSecurityException e) {
             log.error("Error", e);
@@ -453,6 +464,8 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
 
         activateDecryption(publicKey.getPrimaryKey(), password);
+
+        return publicKey.getPrimaryKey();
     }
 
     static EncryptedStorageConfiguration getEncryptedStorageConfiguration() {

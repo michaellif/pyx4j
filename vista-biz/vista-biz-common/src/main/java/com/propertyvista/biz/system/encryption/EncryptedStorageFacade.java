@@ -34,6 +34,8 @@ public interface EncryptedStorageFacade {
 
     /* Administration API used in Vista Operations */
 
+    void preloaderTestKey();
+
     EncryptedStorageDTO getSystemState();
 
     byte[] createNewKeyPair(char[] password);

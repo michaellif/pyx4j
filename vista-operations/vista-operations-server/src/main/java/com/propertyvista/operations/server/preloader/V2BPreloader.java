@@ -15,14 +15,12 @@ package com.propertyvista.operations.server.preloader;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
@@ -77,11 +75,7 @@ public class V2BPreloader extends AbstractDataPreloader {
             Persistence.service().persist(limit);
         }
         {
-            String password = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration()
-                    .automaticActivateDecryptionKeyPassword();
-            if (password != null) {
-                ServerSideFactory.create(EncryptedStorageFacade.class).createNewKeyPair(password.toCharArray());
-            }
+            ServerSideFactory.create(EncryptedStorageFacade.class).preloaderTestKey();
         }
         return null;
     }
