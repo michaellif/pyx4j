@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
@@ -43,6 +44,7 @@ class KeyRotationDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
+        Persistence.service().startTransaction();
         ServerSideFactory.create(EncryptedStorageFacade.class).keyRotationProcess(progress, fromPublicKeyKey, toPublicKeyKey);
         completed = true;
     }
