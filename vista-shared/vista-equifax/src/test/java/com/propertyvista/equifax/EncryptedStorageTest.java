@@ -16,6 +16,8 @@ package com.propertyvista.equifax;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -32,6 +34,7 @@ import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -41,7 +44,6 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.jasypt.util.binary.BinaryEncryptor;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
@@ -58,27 +60,105 @@ public class EncryptedStorageTest {
     @Test
     public void testSymmetricEncryption() throws Exception {
         byte[] input = "Test 123 Test 123".getBytes();
-        String password = "123456";
-
         System.out.println("input text : " + new String(input));
 
-        SecretKey symmetricKey = createAESSecretKey(password, false);
-        Cipher symmetricCipher = createAESCipher();
+        KeyPair keyPair = createRSAKeyPair();
 
-        // encryption pass
+        byte[] plainText;
 
-        symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
-        byte[] cipherText = symmetricCipher.doFinal(input);
-        System.out.println("cipher text: " + new String(cipherText));
+        if (true) {
+            byte[] cipher = encrypt(keyPair.getPublic(), input);
+            plainText = decrypt(keyPair.getPrivate(), cipher);
+        } else {
+            byte[] cipher = encrypt(null, input);
+            plainText = decrypt(null, cipher);
+        }
 
-        // decryption pass
-
-        symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKey);
-        byte[] plainText = symmetricCipher.doFinal(cipherText);
         System.out.println("plain text : " + new String(plainText));
     }
 
-    SecretKey createAESSecretKey(String password, boolean use256) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+    @Test
+    public void testRSAEncryption() throws Exception {
+        byte[] input = "Key 123 Key 123".getBytes();
+        System.out.println("input key : " + new String(input));
+
+        KeyPair keyPair = createRSAKeyPair();
+
+        Key privateKey = keyPair.getPrivate();
+        Key publicKey = keyPair.getPublic();
+
+        Cipher cipherRSA = Cipher.getInstance("RSA");
+        cipherRSA.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] cipher = cipherRSA.doFinal(input);
+
+        cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
+        byte[] plainText = cipherRSA.doFinal(cipher);
+        System.out.println("plain key : " + new String(plainText));
+    }
+
+    byte[] encrypt(PublicKey publicKey, byte[] message) throws Exception {
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < 28) {
+            sb.append(Integer.toHexString(random.nextInt()));
+        }
+
+        SecretKey symmetricKey = createAESSecretKey(sb.toString(), false);
+        Cipher symmetricCipher = createAESCipher();
+        symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
+
+        byte[] encodedSymmetricKey = symmetricKey.getEncoded();
+
+        if (publicKey != null) {
+            Cipher cipherRSA = createRSACipher();
+            cipherRSA.init(Cipher.ENCRYPT_MODE, publicKey);
+            encodedSymmetricKey = cipherRSA.doFinal(encodedSymmetricKey);
+        }
+
+        byte[] encodedSymmetricKeyLength = ByteBuffer.allocate(4).putInt(encodedSymmetricKey.length).array();
+
+        byte[] cipherText = symmetricCipher.doFinal(message);
+
+        byte[] cipher = new byte[4 + encodedSymmetricKey.length + cipherText.length];
+        System.arraycopy(encodedSymmetricKeyLength, 0, cipher, 0, encodedSymmetricKeyLength.length);
+        System.arraycopy(encodedSymmetricKey, 0, cipher, 4, encodedSymmetricKey.length);
+        System.arraycopy(cipherText, 0, cipher, encodedSymmetricKey.length + 4, cipherText.length);
+
+        return cipher;
+    }
+
+    byte[] decrypt(Key privateKey, byte[] cipher) throws Exception {
+
+        byte[] encodedSymmetricKeyLength = new byte[4];
+
+        System.arraycopy(cipher, 0, encodedSymmetricKeyLength, 0, 4);
+
+        int keyLength = ByteBuffer.wrap(encodedSymmetricKeyLength).getInt();
+
+        byte[] encodedSymmetricKey = new byte[keyLength];
+        System.arraycopy(cipher, 4, encodedSymmetricKey, 0, keyLength);
+
+        byte[] cipherText = new byte[cipher.length - keyLength - 4];
+        System.arraycopy(cipher, keyLength + 4, cipherText, 0, cipher.length - keyLength - 4);
+
+        if (privateKey != null) {
+            Cipher cipherRSA = createRSACipher();
+            cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
+            encodedSymmetricKey = cipherRSA.doFinal(encodedSymmetricKey);
+        }
+
+        SecretKey decodedSmmetricKey = new SecretKeySpec(encodedSymmetricKey, "AES");
+
+        Cipher symmetricCipher = createAESCipher();
+        symmetricCipher.init(Cipher.DECRYPT_MODE, decodedSmmetricKey);
+        byte[] plainText = symmetricCipher.doFinal(cipherText);
+
+        return plainText;
+    }
+
+    SecretKey createAESSecretKey(String password, boolean use256) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException,
+            UnsupportedEncodingException {
         SecretKey secret;
         if (use256) {
             // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
@@ -91,11 +171,13 @@ public class EncryptedStorageTest {
             SecretKey tmp = factory.generateSecret(spec);
             secret = new SecretKeySpec(tmp.getEncoded(), "AES");
         } else {
-            byte[] keyBytes = Hex.decodeHex(password.toCharArray());
+
+            byte[] keyBytes = password.getBytes("UTF-8");
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
             keyBytes = sha.digest(keyBytes);
             keyBytes = Arrays.copyOf(keyBytes, 16); // use only first 128 bit
             secret = new SecretKeySpec(keyBytes, "AES");
+
         }
         return secret;
     }
@@ -103,6 +185,16 @@ public class EncryptedStorageTest {
     //Use ECB, it doesn't require IV
     Cipher createAESCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
         return Cipher.getInstance("AES/ECB/PKCS5Padding");
+    }
+
+    Cipher createRSACipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+        return Cipher.getInstance("RSA/ECB/PKCS1Padding");
+    }
+
+    KeyPair createRSAKeyPair() throws NoSuchAlgorithmException {
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+        kpg.initialize(2048);
+        return kpg.genKeyPair();
     }
 
     @Ignore
