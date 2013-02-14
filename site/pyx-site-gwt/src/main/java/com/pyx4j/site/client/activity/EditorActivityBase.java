@@ -116,10 +116,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         return service;
     }
 
-    public CrudAppPlace getPlace() {
-        return place;
-    }
-
     public Class<E> getEntityClass() {
         return entityClass;
     }
@@ -134,6 +130,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public final Key getParentId() {
         return parentId;
+    }
+
+    @Override
+    public CrudAppPlace getPlace() {
+        return place;
     }
 
     @Override

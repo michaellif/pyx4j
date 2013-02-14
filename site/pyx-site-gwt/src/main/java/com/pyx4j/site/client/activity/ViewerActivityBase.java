@@ -41,7 +41,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
-    private final Class<? extends CrudAppPlace> placeClass;
+    private final CrudAppPlace place;
 
     private Key entityId;
 
@@ -52,6 +52,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         assert (view != null);
         assert (service != null);
 
+        this.place = place;
         this.view = view;
         this.service = service;
 
@@ -59,8 +60,6 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         tabIndex = -1;
 
         view.getMemento().setCurrentPlace(place);
-
-        placeClass = place.getClass();
 
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
@@ -81,16 +80,17 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         return service;
     }
 
-    public Class<? extends CrudAppPlace> getPlaceClass() {
-        return placeClass;
-    }
-
     public Key getEntityId() {
         return entityId;
     }
 
     public Key setEntityIdAsCurrentKey() {
         return entityId = entityId.asCurrentKey();
+    }
+
+    @Override
+    public CrudAppPlace getPlace() {
+        return place;
     }
 
     @Override
@@ -179,10 +179,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void goToViewer(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formViewerPlace(entityID, view.getActiveTab()));
     }
 
     protected void goToEditor(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formEditorPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formEditorPlace(entityID, view.getActiveTab()));
     }
 }

@@ -39,10 +39,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class ListerActivityBase<E extends IEntity> extends ListerController<E> implements Activity {
 
+    private final AppPlace place;
+
     private List<Criterion> externalFilters;
 
     public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
         super(view, service, entityClass);
+
+        this.place = (AppPlace) place;
 
         getView().getMemento().setCurrentPlace(place);
 
@@ -60,6 +64,11 @@ public class ListerActivityBase<E extends IEntity> extends ListerController<E> i
             IEntity owner = (IEntity) filters.proto().getMember(ownerMemberName);
             filters.eq(owner, EntityFactory.createIdentityStub(owner.getValueClass(), new Key(val)));
         }
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

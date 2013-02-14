@@ -34,6 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -70,6 +71,11 @@ public class ListerController<E extends IEntity> implements IListerView.Presente
 
     public AbstractListService<E> getService() {
         return service;
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return null;
     }
 
     @Override

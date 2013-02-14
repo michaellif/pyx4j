@@ -21,11 +21,20 @@
 package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.FormViewImplBase;
 
 public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IViewerView<E> {
 
+    private static final I18n i18n = I18n.get(ViewerViewImplBase.class);
+
     private IViewerView.Presenter presenter;
+
+    protected String captionBase;
 
     public ViewerViewImplBase() {
         super();
@@ -34,10 +43,35 @@ public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     @Override
     public void setPresenter(IViewerView.Presenter presenter) {
         this.presenter = presenter;
+        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
     public IViewerView.Presenter getPresenter() {
         return presenter;
+    }
+
+    @Override
+    public void populate(E value) {
+        super.populate(value);
+
+        String caption = (captionBase + " " + value.getStringView());
+        if (value instanceof IVersionedEntity) {
+            IVersionData<?> version = ((IVersionedEntity<?>) value).version();
+
+            caption = caption + " (";
+            if (version.versionNumber().isNull()) { // draft case:
+                caption = caption + i18n.tr("Draft Version");
+            } else {
+                if (VersionedEntityUtils.isCurrent((IVersionedEntity<?>) value)) {
+                    caption = caption + i18n.tr("Current Version");
+                } else {
+                    caption = caption + i18n.tr("Version") + " #" + version.versionNumber().getStringView() + " - " + version.fromDate().getStringView();
+                }
+            }
+            caption = caption + ")";
+        }
+
+        setCaption(caption);
     }
 }

@@ -33,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.FormViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -45,7 +44,7 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     private IEditorView.Presenter presenter;
 
-    protected String defaultCaption;
+    protected String captionBase;
 
     protected final Button btnApply;
 
@@ -53,10 +52,8 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     protected EditMode mode;
 
-    public EditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public EditorViewImplBase() {
         super();
-
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
@@ -127,7 +124,10 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     @Override
     public void populate(E value) {
+        super.populate(value);
+
         enableButtons(false);
+
         if (value instanceof ILooseVersioning && value.getPrimaryKey() != null) {
             ButtonMenuBar menu = btnSave.createMenu();
             menu.addItem(i18n.tr("Save as New Version"), new Command() {
@@ -148,13 +148,11 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
         }
 
         if (EditMode.newItem.equals(mode)) {
-            setCaption(defaultCaption + " " + i18n.tr("New Item..."));
+            setCaption(captionBase + " " + i18n.tr("New Item..."));
             getForm().setActiveTab(0);
         } else {
-            setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
+            setCaption(captionBase + " " + value.getStringView());
         }
-
-        super.populate(value);
     }
 
     @Override
@@ -173,6 +171,7 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     @Override
     public void setPresenter(IEditorView.Presenter presenter) {
         this.presenter = presenter;
+        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
