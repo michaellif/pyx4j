@@ -130,9 +130,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             @Override
                             protected AppPlace getTargetPlace() {
                                 if (getValue().isInstanceOf(LeaseTermTenant.class)) {
-                                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+                                    return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().getPrimaryKey());
                                 } else if (getValue().isInstanceOf(LeaseTermGuarantor.class)) {
-                                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().getPrimaryKey());
+                                    return AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().getPrimaryKey());
                                 } else {
                                     throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
                                 }
