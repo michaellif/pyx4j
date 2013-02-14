@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.SecureRandom;
 
+import com.pyx4j.gwt.server.IOUtils;
+
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
     public static void forceMkdir(File directory) throws IOException {
@@ -49,17 +51,22 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         if (file.exists()) {
             long length = file.length();
             SecureRandom random = new SecureRandom();
-            RandomAccessFile raf = new RandomAccessFile(file, "rws");
-            raf.seek(0);
-            raf.getFilePointer();
-            byte[] data = new byte[64];
-            int pos = 0;
-            while (pos < length) {
-                random.nextBytes(data);
-                raf.write(data);
-                pos += data.length;
+            RandomAccessFile raf = null;
+            try {
+                raf = new RandomAccessFile(file, "rws");
+                raf.seek(0);
+                raf.getFilePointer();
+                byte[] data = new byte[64];
+                int pos = 0;
+                while (pos < length) {
+                    random.nextBytes(data);
+                    raf.write(data);
+                    pos += data.length;
+                }
+                raf.close();
+            } finally {
+                IOUtils.closeQuietly(raf);
             }
-            raf.close();
             file.delete();
         }
     }
