@@ -29,14 +29,14 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
-import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
-import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
+import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.PmcDTO;
 
 public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
@@ -202,6 +202,10 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, approvalLink);
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        content.setH1(++row, 0, 2, i18n.tr("Equifax Usage Limits"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().limit().dailyReports()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().limit().dailyRequests()), 15).build());
 
         return content;
     }

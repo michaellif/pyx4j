@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
@@ -37,6 +38,7 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
 
         dto.paymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
         dto.equifaxFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class)));
+        dto.equifaxLimit().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxLimit.class)));
         dto.vistaMerchantAccount().set(Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class)));
         dto.tenantSureMerchantAccount().set(Persistence.service().retrieve(EntityQueryCriteria.create(TenantSureMerchantAccount.class)));
 
@@ -47,6 +49,7 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
     public void save(AsyncCallback<Key> callback, VistaSystemDefaultsDTO dto) {
         Persistence.service().merge(dto.paymentFees());
         Persistence.service().merge(dto.equifaxFees());
+        Persistence.service().merge(dto.equifaxLimit());
         Persistence.service().merge(dto.vistaMerchantAccount());
         Persistence.service().merge(dto.tenantSureMerchantAccount());
         Persistence.service().commit();

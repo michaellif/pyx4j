@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @AbstractEntity
 public interface EquifaxLimit extends IEntity {
 
-    IPrimitive<Integer> daily_requests();
+    IPrimitive<Integer> dailyRequests();
 
-    IPrimitive<Integer> daily_reports();
+    IPrimitive<Integer> dailyReports();
 }

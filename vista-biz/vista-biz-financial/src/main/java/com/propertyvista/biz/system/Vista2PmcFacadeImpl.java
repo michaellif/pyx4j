@@ -23,16 +23,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
-import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceTenantSure;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceVista;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.pmc.fee.PmcEquifaxFee;
+import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
@@ -75,11 +76,11 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
     @Override
     public BigDecimal getPmcPerApplicantFee() {
         final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
-        TaskRunner.runInOperationsNamespace(new Callable<PmcEquifaxFee>() {
+        TaskRunner.runInOperationsNamespace(new Callable<PmcEquifaxInfo>() {
             @Override
-            public PmcEquifaxFee call() {
+            public PmcEquifaxInfo call() {
                 Persistence.service().retrieveMember(pmc.equifaxInfo());
-                return pmc.equifaxFee();
+                return pmc.equifaxInfo();
             }
         });
 

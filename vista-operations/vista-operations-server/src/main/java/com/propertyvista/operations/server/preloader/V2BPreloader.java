@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
+import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
@@ -64,6 +65,12 @@ public class V2BPreloader extends AbstractDataPreloader {
             fee.interacPaymentPadFee().setValue(new BigDecimal("19.99"));
             fee.interacVisaFee().setValue(new BigDecimal("0.75"));
             Persistence.service().persist(fee);
+        }
+        {
+            DefaultEquifaxLimit limit = EntityFactory.create(DefaultEquifaxLimit.class);
+            limit.dailyRequests().setValue(50);
+            limit.dailyReports().setValue(50);
+            Persistence.service().persist(limit);
         }
         return null;
     }

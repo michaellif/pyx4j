@@ -54,6 +54,10 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
         panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
 
+        panel.setH1(++row, 0, 1, i18n.tr("Default  Usage Limits"));
+        panel.setWidget(++row, 0, inject(proto().equifaxLimit().dailyReports()));
+        panel.setWidget(++row, 0, inject(proto().equifaxLimit().dailyRequests()));
+
         panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
         return panel;

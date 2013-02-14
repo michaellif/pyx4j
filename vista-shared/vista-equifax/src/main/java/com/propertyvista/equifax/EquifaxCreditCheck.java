@@ -134,6 +134,7 @@ public class EquifaxCreditCheck {
     /* simulation data parameters */
     Lease lease, LeaseTermParticipant<?> leaseParticipant) {
 
+        EquifaxEnforceLimit.assertLimit(AuditRecordEventType.EquifaxRequest);
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.EquifaxRequest, customer, "Run EquifaxRequest for customer {0}", customer);
 
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
@@ -229,6 +230,8 @@ public class EquifaxCreditCheck {
     }
 
     public static CustomerCreditCheckLongReportDTO createLongReport(CustomerCreditCheck ccc) {
+
+        EquifaxEnforceLimit.assertLimit(AuditRecordEventType.EquifaxReadReport);
 
         Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
         Persistence.ensureRetrieve(ccc.screening().screene(), AttachLevel.ToStringMembers);
