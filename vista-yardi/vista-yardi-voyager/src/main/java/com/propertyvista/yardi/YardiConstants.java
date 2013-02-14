@@ -23,6 +23,4 @@ public class YardiConstants {
 
     public static final String INTERFACE_ENTITY = "Property Vista";
 
-    public static final String YARDI_DEFAULT_COUNTRY = "canada";
-
 }
