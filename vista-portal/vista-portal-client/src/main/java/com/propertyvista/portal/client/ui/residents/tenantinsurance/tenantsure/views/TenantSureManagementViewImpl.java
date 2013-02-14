@@ -81,7 +81,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         protected final String getEmail() {
             form.revalidate();
             if (form.isValid()) {
-                return form.getValue().emailAddress().getValue();
+                return form.get(form.proto().emailAddress()).getValue();
             } else {
                 return null;
             }
@@ -184,7 +184,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         FlowPanel actionsPanel = new FlowPanel();
         actionsPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementActionsPanel.name());
 
-        sendDocumentationButton = new Button(i18n.tr("Send Documentation Email..."), new Command() {
+        sendDocumentationButton = new Button(i18n.tr("Resend Insurance Certificate..."), new Command() {
 
             @Override
             public void execute() {
