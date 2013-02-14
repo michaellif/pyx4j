@@ -44,6 +44,7 @@ import com.propertyvista.operations.rpc.services.AdminUserService;
 import com.propertyvista.operations.rpc.services.AuditRecordListerService;
 import com.propertyvista.operations.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.operations.rpc.services.EncryptedStorageService;
+import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
@@ -136,6 +137,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EncryptedStorageService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EncryptedStorageServicePrivateKeyUploadService.class));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));

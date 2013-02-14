@@ -16,11 +16,6 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -35,16 +30,6 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
     public PasswordEntryDialog(String caption) {
         super(caption);
         // TODO Auto-generated constructor stub
-    }
-
-    @Transient
-    public static interface PasswordEntryDTO extends IEntity {
-
-        @Editor(type = EditorType.password)
-        IPrimitive<String> password();
-
-        @Editor(type = EditorType.password)
-        IPrimitive<String> passwordConfirm();
     }
 
     public static class PasswordEntryForm extends CEntityDecoratableForm<PasswordEntryDTO> {

@@ -25,12 +25,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
+import com.propertyvista.operations.rpc.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
 public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedStorageKeyDTO> {
@@ -150,13 +152,23 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
 
             @Override
             public void execute() {
-                // TODO upload dialog...
-                MessageDialog.info("NOT IMPLEMENTED!!!");
+                upload();
             }
 
         });
         controlPanel.add(new SimplePanel(uploadEncryptedPrivateKey));
 
         return controlPanel;
+    }
+
+    private void upload() {
+        FileUploadReciver<PrivateKeyDTO> uploadReciver = new FileUploadReciver<PrivateKeyDTO>() {
+
+            @Override
+            public void onUploadComplete(PrivateKeyDTO uploadResponse) {
+                presenter.refresh();
+            }
+        };
+        new PrivateKeyFileUploadDialog(this.getValue(), uploadReciver).show();
     }
 }
