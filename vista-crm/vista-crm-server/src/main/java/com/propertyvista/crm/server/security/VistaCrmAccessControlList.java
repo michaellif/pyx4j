@@ -69,8 +69,8 @@ import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
-import com.propertyvista.crm.rpc.services.customer.PastTenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
@@ -314,13 +314,13 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(TenantCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveTenantCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastTenantCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FormerTenantCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectTenantListService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(GuarantorCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ActiveGuarantorCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PastGuarantorCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FormerGuarantorCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Customer.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTermTenant.class, EntityPermission.ALL));

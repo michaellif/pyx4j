@@ -24,14 +24,14 @@ import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerVi
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerView;
-import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerView;
-import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.FormerTenantListerView;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.FormerTenantListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
@@ -50,11 +50,11 @@ public class CustomerViewFactory extends ViewFactoryBase {
             } else if (TenantEditorView.class.equals(type)) {
                 map.put(type, new TenantEditorViewImpl());
 
-            } else if (PastTenantListerView.class.equals(type)) {
-                map.put(type, new PastTenantListerViewImpl());
+            } else if (FormerTenantListerView.class.equals(type)) {
+                map.put(type, new FormerTenantListerViewImpl());
 
-            } else if (PastGuarantorListerView.class.equals(type)) {
-                map.put(type, new PastGuarantorListerViewImpl());
+            } else if (FormerGuarantorListerView.class.equals(type)) {
+                map.put(type, new FormerGuarantorListerViewImpl());
 
             } else if (GuarantorListerView.class.equals(type)) {
                 map.put(type, new GuarantorListerViewImpl());

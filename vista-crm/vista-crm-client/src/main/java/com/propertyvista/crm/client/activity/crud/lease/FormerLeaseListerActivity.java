@@ -19,16 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.dto.LeaseDTO;
 
-public class PastLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
+public class FormerLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
 
     @SuppressWarnings("unchecked")
-    public PastLeaseListerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(PastLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
+    public FormerLeaseListerActivity(Place place) {
+        super(place, LeaseViewFactory.instance(FormerLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
                 LeaseDTO.class);
     }
 }

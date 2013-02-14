@@ -24,8 +24,8 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerView;
-import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
@@ -47,8 +47,8 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseListerViewImpl());
             } else if (LeaseViewerView.class.equals(type)) {
                 map.put(type, new LeaseViewerViewImpl());
-            } else if (PastLeaseListerView.class.equals(type)) {
-                map.put(type, new PastLeaseListerViewImpl());
+            } else if (FormerLeaseListerView.class.equals(type)) {
+                map.put(type, new FormerLeaseListerViewImpl());
 
             } else if (LeaseApplicationListerView.class.equals(type)) {
                 map.put(type, new LeaseApplicationListerViewImpl());

@@ -11,16 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.customer.tenant;
+package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class FutureTenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> implements FutureTenantListerView {
+public class FormerGuarantorListerViewImpl extends CrmListerViewImplBase<GuarantorDTO> implements GuarantorListerView {
 
-    public FutureTenantListerViewImpl() {
-        super(CrmSiteMap.Marketing.FutureTenant.class);
-        setLister(new FutureTenantLister());
+    public FormerGuarantorListerViewImpl() {
+        super(CrmSiteMap.Tenants.FormerGuarantor.class);
+        setLister(new GuarantorLister());
     }
 }

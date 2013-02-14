@@ -11,11 +11,16 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.customer.tenant;
+package com.propertyvista.crm.client.ui.crud.lease;
 
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.dto.LeaseDTO;
 
-public class PastTenantLister extends TenantLister {
+public class FormerLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements LeaseListerView {
 
-    public PastTenantLister() {
+    public FormerLeaseListerViewImpl() {
+        super(CrmSiteMap.Tenants.Lease.class);
+        setLister(new FormerLeaseLister());
     }
 }

@@ -51,7 +51,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private BreadcrumbsService breadcumbsService;
 
-    protected final String defaultCaption;
+    protected String defaultCaption;
 
     private Button notesButton;
 

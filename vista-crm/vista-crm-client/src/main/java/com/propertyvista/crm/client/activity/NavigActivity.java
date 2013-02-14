@@ -109,9 +109,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
             folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
             folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
-            folder.addNavigItem(new CrmSiteMap.Tenants.PastTenant());
-            folder.addNavigItem(new CrmSiteMap.Tenants.PastGuarantor());
-            folder.addNavigItem(new CrmSiteMap.Tenants.PastLease());
+            folder.addNavigItem(new CrmSiteMap.Tenants.FormerTenant());
+            folder.addNavigItem(new CrmSiteMap.Tenants.FormerGuarantor());
+            folder.addNavigItem(new CrmSiteMap.Tenants.FormerLease());
             list.add(folder);
         }
 
@@ -121,7 +121,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Marketing.Lead());
         if (VistaFeatures.instance().leases()) {
             folder.addNavigItem(new CrmSiteMap.Tenants.LeaseApplication());
-            folder.addNavigItem(new CrmSiteMap.Marketing.FutureTenant());
+            folder.addNavigItem(new CrmSiteMap.Marketing.PotentialTenant());
         }
         list.add(folder);
 

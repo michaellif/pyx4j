@@ -11,26 +11,29 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.customer.tenant;
+package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.customer.tenant.PastTenantListerView;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
-import com.propertyvista.crm.rpc.services.customer.PastTenantCrudService;
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class PastTenantListerActivity extends ListerActivityBase<TenantDTO> {
+public class FormerGuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
 
-    public PastTenantListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(PastTenantListerView.class), GWT.<PastTenantCrudService> create(PastTenantCrudService.class), TenantDTO.class);
+    @SuppressWarnings("unchecked")
+    public FormerGuarantorListerActivity(Place place) {
+        super(place, CustomerViewFactory.instance(FormerGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
+                .create(FormerGuarantorCrudService.class), GuarantorDTO.class);
     }
 
     @Override
     public boolean canCreateNewItem() {
-        return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
+        return false; // disable creation of the new stand-alone Guarantor - just from within the Lease!..
     }
 }

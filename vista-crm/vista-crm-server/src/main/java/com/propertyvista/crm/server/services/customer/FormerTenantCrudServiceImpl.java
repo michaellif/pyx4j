@@ -17,15 +17,15 @@ import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 
-import com.propertyvista.crm.rpc.services.customer.PastGuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.TenantDTO;
 
-public class PastGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl implements PastGuarantorCrudService {
+public class FormerTenantCrudServiceImpl extends TenantCrudServiceImpl implements FormerTenantCrudService {
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<Guarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<Tenant> dbCriteria, EntityListCriteria<TenantDTO> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just former tenants:

@@ -17,15 +17,15 @@ import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 
-import com.propertyvista.crm.rpc.services.customer.PastTenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.GuarantorDTO;
 
-public class PastTenantCrudServiceImpl extends TenantCrudServiceImpl implements PastTenantCrudService {
+public class FormerGuarantorCrudServiceImpl extends GuarantorCrudServiceImpl implements FormerGuarantorCrudService {
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<Tenant> dbCriteria, EntityListCriteria<TenantDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<Guarantor> dbCriteria, EntityListCriteria<GuarantorDTO> dtoCriteria) {
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
 
         // filter out just former tenants:
@@ -42,5 +42,4 @@ public class PastTenantCrudServiceImpl extends TenantCrudServiceImpl implements 
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.Application);
         or.right().ne(dbCriteria.proto().lease().status(), Lease.Status.ExistingLease);
     }
-
 }

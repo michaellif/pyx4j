@@ -175,15 +175,15 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Former Tenants")
-        public static class PastTenant extends CrmCrudAppPlace {
+        public static class FormerTenant extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Former Leases")
-        public static class PastLease extends CrmCrudAppPlace {
+        public static class FormerLease extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Former Guarantors")
-        public static class PastGuarantor extends CrmCrudAppPlace {
+        public static class FormerGuarantor extends CrmCrudAppPlace {
         }
 
         public static class CustomerCreditCheckLongReport extends CrmCrudAppPlace {
@@ -213,7 +213,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Potential Tenants")
-        public static class FutureTenant extends CrmCrudAppPlace {
+        public static class PotentialTenant extends CrmCrudAppPlace {
         }
     }
 

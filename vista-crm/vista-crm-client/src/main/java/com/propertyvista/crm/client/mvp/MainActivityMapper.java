@@ -72,7 +72,7 @@ import com.propertyvista.crm.client.activity.crud.customer.creditcheck.CustomerC
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.guarantor.PastGuarantorListerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.guarantor.FormerGuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.LeadEditorActivity;
@@ -82,8 +82,8 @@ import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingEditorAct
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.tenant.FutureTenantListerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.tenant.PastTenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.tenant.PotentialTenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.tenant.FormerTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
@@ -91,7 +91,7 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActiv
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.PastLeaseListerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.FormerLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
@@ -468,10 +468,10 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Marketing.FutureTenant) {
+                    } else if (crudPlace instanceof CrmSiteMap.Marketing.PotentialTenant) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new FutureTenantListerActivity(crudPlace);
+                            activity = new PotentialTenantListerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -504,10 +504,10 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastGuarantor) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.FormerGuarantor) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PastGuarantorListerActivity(crudPlace);
+                            activity = new FormerGuarantorListerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -574,19 +574,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastTenant) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.FormerTenant) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PastTenantListerActivity(crudPlace);
+                            activity = new FormerTenantListerActivity(crudPlace);
                             break;
                         default:
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Tenants.PastLease) {
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.FormerLease) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new PastLeaseListerActivity(crudPlace);
+                            activity = new FormerLeaseListerActivity(crudPlace);
                             break;
                         default:
                             break;

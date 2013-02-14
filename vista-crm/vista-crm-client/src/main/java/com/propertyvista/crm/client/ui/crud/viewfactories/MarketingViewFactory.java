@@ -42,8 +42,8 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorV
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerView;
-import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.PotentialTenantListerView;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.PotentialTenantListerViewImpl;
 
 public class MarketingViewFactory extends ViewFactoryBase {
 
@@ -79,8 +79,8 @@ public class MarketingViewFactory extends ViewFactoryBase {
             } else if (ShowingEditorView.class.equals(type)) {
                 map.put(type, new ShowingEditorViewImpl());
 
-            } else if (FutureTenantListerView.class.equals(type)) {
-                map.put(type, new FutureTenantListerViewImpl());
+            } else if (PotentialTenantListerView.class.equals(type)) {
+                map.put(type, new PotentialTenantListerViewImpl());
             }
 
         }

@@ -26,11 +26,11 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
-public class PastLeaseLister extends ListerBase<LeaseDTO> {
+public class FormerLeaseLister extends ListerBase<LeaseDTO> {
 
-    private final static I18n i18n = I18n.get(PastLeaseLister.class);
+    private final static I18n i18n = I18n.get(FormerLeaseLister.class);
 
-    public PastLeaseLister() {
+    public FormerLeaseLister() {
         super(LeaseDTO.class, false);
 
         setColumnDescriptors(//@formatter:off

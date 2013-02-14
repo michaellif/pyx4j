@@ -11,12 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.customer.guarantor;
+package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.dto.TenantDTO;
 
-public interface PastGuarantorListerView extends IListerView<GuarantorDTO> {
+public interface FormerTenantListerView extends IListerView<TenantDTO> {
 
 }
