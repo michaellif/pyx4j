@@ -20,19 +20,33 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.jasypt.util.binary.BinaryEncryptor;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.pyx4j.gwt.server.IOUtils;
@@ -41,6 +55,57 @@ public class EncryptedStorageTest {
 
     private static boolean strong = false;
 
+    @Test
+    public void testSymmetricEncryption() throws Exception {
+        byte[] input = "Test 123 Test 123".getBytes();
+        String password = "123456";
+
+        System.out.println("input text : " + new String(input));
+
+        SecretKey symmetricKey = createAESSecretKey(password, false);
+        Cipher symmetricCipher = createAESCipher();
+
+        // encryption pass
+
+        symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
+        byte[] cipherText = symmetricCipher.doFinal(input);
+        System.out.println("cipher text: " + new String(cipherText));
+
+        // decryption pass
+
+        symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKey);
+        byte[] plainText = symmetricCipher.doFinal(cipherText);
+        System.out.println("plain text : " + new String(plainText));
+    }
+
+    SecretKey createAESSecretKey(String password, boolean use256) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+        SecretKey secret;
+        if (use256) {
+            // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
+            // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[8];
+            random.nextBytes(salt);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        } else {
+            byte[] keyBytes = Hex.decodeHex(password.toCharArray());
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            keyBytes = sha.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16); // use only first 128 bit
+            secret = new SecretKeySpec(keyBytes, "AES");
+        }
+        return secret;
+    }
+
+    //Use ECB, it doesn't require IV
+    Cipher createAESCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+        return Cipher.getInstance("AES/ECB/PKCS5Padding");
+    }
+
+    @Ignore
     @Test
     public void testKeyPair() throws Exception {
         String keyStoreFileName = "./target/test.ks";
