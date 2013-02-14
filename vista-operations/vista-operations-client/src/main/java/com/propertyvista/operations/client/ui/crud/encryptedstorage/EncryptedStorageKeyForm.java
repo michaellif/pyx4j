@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.i18n.shared.I18n;
@@ -81,19 +80,20 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
         super.onValueSet(populate);
         makeCurrent.setEnabled(!getValue().isCurrent().isBooleanTrue());
         decryptOnOff.setCaption(!getValue().decryptionEnabled().isBooleanTrue() ? i18n.tr("Activate Decryption") : i18n.tr("Disable Decryption"));
-        startKeyRotation.setEnabled(true);
+        startKeyRotation.setEnabled(!getValue().isCurrent().isBooleanTrue() && getValue().decryptionEnabled().isBooleanTrue());
     }
 
     private Widget makeStatusPanel() {
         FormFlexPanel statusPanel = new FormFlexPanel();
         int row = -1;
+        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).componentWidth(15).build());
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isCurrent())).componentWidth(5).build());
         statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decryptionEnabled())).componentWidth(5).build());
 
         row = -1;
         statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().recordsCount())).build());
-        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().created(), new CDatePicker())).build());
-        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expired(), new CDatePicker())).build());
+        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().created())).build());
+        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expired())).build());
         return statusPanel;
     }
 

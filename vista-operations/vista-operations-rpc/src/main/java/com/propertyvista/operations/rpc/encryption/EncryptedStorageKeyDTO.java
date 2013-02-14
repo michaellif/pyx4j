@@ -15,6 +15,7 @@ package com.propertyvista.operations.rpc.encryption;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,14 +25,18 @@ import com.pyx4j.i18n.annotations.I18n;
 @Transient
 public interface EncryptedStorageKeyDTO extends IEntity {
 
+    IPrimitive<String> name();
+
     IPrimitive<Boolean> isCurrent();
 
     IPrimitive<Boolean> decryptionEnabled();
 
     IPrimitive<Integer> recordsCount();
 
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> created();
 
+    @Format("yyyy-MM-dd HH:mm")
     IPrimitive<Date> expired();
 
 }

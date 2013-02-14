@@ -144,6 +144,9 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         for (EncryptedStoragePublicKey publicKey : Persistence.service().query(criteria)) {
             EncryptedStorageKeyDTO keyDto = EntityFactory.create(EncryptedStorageKeyDTO.class);
             keyDto.setPrimaryKey(publicKey.getPrimaryKey());
+            keyDto.name().set(publicKey.name());
+            keyDto.created().set(publicKey.created());
+            keyDto.expired().set(publicKey.expired());
 
             if ((current != null) && publicKey.getPrimaryKey().equals(current.current().getPrimaryKey())) {
                 keyDto.isCurrent().setValue(Boolean.TRUE);
