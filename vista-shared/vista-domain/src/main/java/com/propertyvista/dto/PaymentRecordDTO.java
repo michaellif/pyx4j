@@ -18,12 +18,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -58,6 +60,8 @@ public interface PaymentRecordDTO extends PaymentRecord {
     IPrimitive<Boolean> electronicPaymentsAllowed();
 
     IPrimitive<BillingAccount.PaymentAccepted> paymentAccepted();
+
+    IPrimitiveSet<PaymentType> allowedPaymentTypes();
 
     // UI-only (control organization) members:
 

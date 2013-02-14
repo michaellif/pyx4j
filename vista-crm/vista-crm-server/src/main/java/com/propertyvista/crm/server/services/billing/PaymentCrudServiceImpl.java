@@ -39,6 +39,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -66,6 +67,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         dto.paymentAccepted().setValue(dto.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
 
         dto.participants().addAll(retrievePayableUsers(dto.billingAccount().lease()));
     }
@@ -129,6 +132,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.billingAccount().set(billingAccount);
         dto.paymentAccepted().setValue(billingAccount.paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
 
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());

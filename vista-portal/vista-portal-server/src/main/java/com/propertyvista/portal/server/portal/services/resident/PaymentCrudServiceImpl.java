@@ -61,6 +61,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         dto.paymentAccepted().setValue(dto.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
     }
 
     @Override
@@ -130,6 +132,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.billingAccount().set(lease.billingAccount());
         dto.paymentAccepted().setValue(lease.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
 
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
