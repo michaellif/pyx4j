@@ -31,8 +31,10 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.EntityFileLogger;
@@ -40,6 +42,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
@@ -48,6 +51,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -129,6 +133,8 @@ public class EquifaxCreditCheck {
     public static CustomerCreditCheck runCreditCheck(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber,
     /* simulation data parameters */
     Lease lease, LeaseTermParticipant<?> leaseParticipant) {
+
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.EquifaxRequest, customer, "Run EquifaxRequest for customer {0}", customer);
 
         CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
 
@@ -223,6 +229,13 @@ public class EquifaxCreditCheck {
     }
 
     public static CustomerCreditCheckLongReportDTO createLongReport(CustomerCreditCheck ccc) {
+
+        Persistence.ensureRetrieve(ccc.screening(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(ccc.screening().screene(), AttachLevel.ToStringMembers);
+
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.EquifaxReadReport, ccc.screening().screene(),
+                "Read Equifax LongReport for customer {0}", ccc.screening().screene());
+
         Pmc pmc = VistaDeployment.getCurrentPmc();
 
         final EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
