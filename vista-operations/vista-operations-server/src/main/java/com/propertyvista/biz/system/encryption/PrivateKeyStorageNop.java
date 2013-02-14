@@ -24,4 +24,9 @@ public class PrivateKeyStorageNop implements PrivateKeyStorage {
         return null;
     }
 
+    @Override
+    public void removePrivateKey(String name) {
+
+    }
+
 }

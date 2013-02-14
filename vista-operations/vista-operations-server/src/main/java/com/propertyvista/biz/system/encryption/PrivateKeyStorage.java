@@ -19,4 +19,6 @@ interface PrivateKeyStorage {
 
     byte[] loadPrivateKey(String name);
 
+    void removePrivateKey(String name);
+
 }

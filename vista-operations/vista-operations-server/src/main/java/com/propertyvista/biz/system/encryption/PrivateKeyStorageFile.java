@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.essentials.j2se.util.FileUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -27,17 +28,22 @@ import com.propertyvista.config.EncryptedStorageConfiguration;
 
 class PrivateKeyStorageFile implements PrivateKeyStorage {
 
+    public File getFile(String name) {
+        EncryptedStorageConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
+        return new File(config.privateKeyDirectory(), name);
+    }
+
     @Override
     public void savePrivateKey(String name, byte[] encryptedPrivateKeyBytes) {
-        EncryptedStorageConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
-        if (!config.privateKeyDirectory().isDirectory()) {
-            if (!config.privateKeyDirectory().mkdirs()) {
-                throw new Error("Unable to create directory '" + config.privateKeyDirectory().getAbsolutePath() + "'");
+        File file = getFile(name);
+        if (!file.getParentFile().isDirectory()) {
+            if (!file.getParentFile().mkdirs()) {
+                throw new Error("Unable to create directory '" + file.getParentFile().getAbsolutePath() + "'");
             }
         }
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(new File(config.privateKeyDirectory(), name));
+            fos = new FileOutputStream(file);
             fos.write(encryptedPrivateKeyBytes);
         } catch (IOException e) {
             throw new Error(e);
@@ -48,11 +54,14 @@ class PrivateKeyStorageFile implements PrivateKeyStorage {
 
     @Override
     public byte[] loadPrivateKey(String name) {
-        EncryptedStorageConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
+        File file = getFile(name);
+        if (!file.exists()) {
+            return null;
+        }
         FileInputStream fis = null;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            fis = new FileInputStream(new File(config.privateKeyDirectory(), name));
+            fis = new FileInputStream(file);
             IOUtils.copyStream(fis, os, 1024);
         } catch (IOException e) {
             throw new Error(e);
@@ -60,6 +69,18 @@ class PrivateKeyStorageFile implements PrivateKeyStorage {
             IOUtils.closeQuietly(fis);
         }
         return os.toByteArray();
+    }
+
+    @Override
+    public void removePrivateKey(String name) {
+        File file = getFile(name);
+        if (file.exists()) {
+            try {
+                FileUtils.secureDelete(file);
+            } catch (IOException e) {
+                throw new Error(e);
+            }
+        }
     }
 
 }

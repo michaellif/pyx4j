@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.crypto.Cipher;
 
@@ -42,6 +43,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
@@ -78,10 +80,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public byte[] decrypt(Key publicKeyKey, byte[] data) {
+    public byte[] decrypt(Key publicKeyKey, byte[] data) throws UserRuntimeException {
         PrivateKey privateKey = activeKeys.get(publicKeyKey);
         if (privateKey == null) {
-            throw new UserRuntimeException(i18n.tr("Data Decryption not posible, Contact support to activate decryption"));
+            throw new UserRuntimeException(i18n.tr("Data Decryption not possible, Contact support to activate decryption"));
         }
         return decrypt(privateKey, data);
     }
@@ -182,8 +184,24 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData) {
-        // TODO Auto-generated method stub
+    public void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData, char[] password) {
+        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+        if (publicKey == null) {
+            throw new UserRuntimeException("PublicKey not found");
+        }
+        testKeyDecryption(publicKey, encryptedPrivateKeyData, password);
+        getPrivateKeyStorage().savePrivateKey(publicKey.name().getValue(), encryptedPrivateKeyData);
+        activateDecryption(publicKey.getPrimaryKey(), password);
+    }
+
+    @Override
+    public void removePrivateKey(Key publicKeyKey) {
+        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+        if (publicKey == null) {
+            throw new UserRuntimeException("PublicKey not found");
+        }
+        deactivateDecryption(publicKeyKey);
+        getPrivateKeyStorage().removePrivateKey(publicKey.name().getValue());
     }
 
     @Override
@@ -242,8 +260,8 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
     }
 
-    private void generateKey(char[] keyPassword, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
-        EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
+    private void generateKey(char[] password, ByteArrayOutputStream encryptedPrivateKeyBuffer) {
+        final EncryptedStoragePublicKey publicKey = EntityFactory.create(EncryptedStoragePublicKey.class);
         publicKey.name().setValue(new SimpleDateFormat("yyyy-MM-dd_HHmm").format(new Date()));
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
@@ -255,8 +273,8 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             publicKey.encryptTestData().setValue(encrypt(publicKey, publicKey.keyTestData().getValue()));
             {
                 PrivateKey privateKey = keyPair.getPrivate();
-                byte[] encryptedPrivateKeyBytes = getBinaryEncryptor(keyPassword).encrypt(privateKey.getEncoded());
-                testKeyDecryption(publicKey, encryptedPrivateKeyBytes, keyPassword);
+                byte[] encryptedPrivateKeyBytes = getBinaryEncryptor(password).encrypt(privateKey.getEncoded());
+                testKeyDecryption(publicKey, encryptedPrivateKeyBytes, password);
                 getPrivateKeyStorage().savePrivateKey(publicKey.name().getValue(), encryptedPrivateKeyBytes);
 
                 encryptedPrivateKeyBuffer.write(encryptedPrivateKeyBytes, 0, encryptedPrivateKeyBytes.length);
@@ -266,9 +284,21 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             throw new Error(e.getMessage());
         }
 
-        Persistence.service().persist(publicKey);
-        Persistence.service().commit();
-        activateDecryption(publicKey.getPrimaryKey(), keyPassword);
+        try {
+            UnitOfWork.execute(new Callable<Void>() {
+
+                @Override
+                public Void call() {
+                    Persistence.service().persist(publicKey);
+                    return null;
+                }
+
+            });
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+
+        activateDecryption(publicKey.getPrimaryKey(), password);
     }
 
     static EncryptedStorageConfiguration getEncryptedStorageConfiguration() {

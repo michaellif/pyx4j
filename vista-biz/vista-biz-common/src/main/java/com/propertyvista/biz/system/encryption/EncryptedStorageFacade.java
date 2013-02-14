@@ -14,6 +14,7 @@
 package com.propertyvista.biz.system.encryption;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
@@ -25,7 +26,7 @@ public interface EncryptedStorageFacade {
 
     public byte[] encrypt(Key publicKeyKey, byte[] data);
 
-    public byte[] decrypt(Key publicKeyKey, byte[] data);
+    public byte[] decrypt(Key publicKeyKey, byte[] data) throws UserRuntimeException;
 
     /* Administration API used in Vista Operations */
 
@@ -37,7 +38,9 @@ public interface EncryptedStorageFacade {
 
     void startKeyRotation(Key publicKeyKey);
 
-    void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData);
+    void uploadPrivateKey(Key publicKeyKey, byte[] encryptedPrivateKeyData, char[] password);
+
+    void removePrivateKey(Key publicKeyKey);
 
     /**
      * Read Private Key from FS and decrypt it to memory.
