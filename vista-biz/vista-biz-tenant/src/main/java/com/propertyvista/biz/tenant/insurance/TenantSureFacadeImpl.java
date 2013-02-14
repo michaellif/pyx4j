@@ -206,7 +206,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
             List<String> emails = new ArrayList<String>();
             emails.add(getTenantsEmail(tenantId));
-
             ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
 
         }
