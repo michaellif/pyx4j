@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
@@ -296,9 +294,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         revisionsButton = new Button(i18n.tr("Revisions"));
         addHeaderToolbarItem(revisionsButton);
 
-        revisionsButton.addClickHandler(new ClickHandler() {
+        revisionsButton.setCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
                     public boolean onClickOk() {
