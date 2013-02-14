@@ -44,13 +44,13 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         InsuranceCertificate insuranceCertificate = null;
         EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
         ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().tenant(), tenantId);
-        ownInsuranceCriteira.or(PropertyCriterion.ge(ownInsuranceCriteira.proto().expiryDate(), today),
+        ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
         insuranceCertificate = Persistence.service().retrieve(ownInsuranceCriteira);
         if (insuranceCertificate == null) {
             EntityQueryCriteria<InsuranceCertificate> anyNonExpiredInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
             anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().tenant().lease().leaseParticipants(), tenantId);
-            anyNonExpiredInsuranceCriteria.or(PropertyCriterion.ge(anyNonExpiredInsuranceCriteria.proto().expiryDate(), today),
+            anyNonExpiredInsuranceCriteria.or(PropertyCriterion.gt(anyNonExpiredInsuranceCriteria.proto().expiryDate(), today),
                     PropertyCriterion.isNull(anyNonExpiredInsuranceCriteria.proto().expiryDate()));
             insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
         }
