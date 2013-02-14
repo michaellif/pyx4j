@@ -229,6 +229,35 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wsdl-coping</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.propertyvista</groupId>
+                                    <artifactId>vista-yardi-voyager-wsdl</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/webapp/WEB-INF/wsdl</outputDirectory>
+                                    <includes>**/ScreeningService.wsdl</includes>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <archive>
@@ -288,24 +317,6 @@
                                 <property name="crm.rpc.full-path" refid="crm.rpc.path" />
                                 <pathconvert property="crm.rpc.name" pathsep=""><path refid="crm.rpc.path"/><flattenmapper/></pathconvert>
                                 <copy file="${crm.rpc.full-path}" tofile="${project.build.directory}/site/rpc/crm/${project.version}/${buildLabel}-${crm.rpc.name}"/>
-                            </target>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>wsdl-coping</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                          <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <echo>Coping wsdl...</echo>
-                                <unzip src="${project.build.directory}/vista/WEB-INF/lib/vista-yardi-voyager-wsdl-${project.version}.jar" dest="${basedir}/src/main/webapp/WEB-INF/wsdl">
-                                    <patternset>
-                                        <include name="**/ScreeningService.wsdl"/>
-                                    </patternset>
-                                </unzip>
                             </target>
                         </configuration>
                     </execution>
