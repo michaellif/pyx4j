@@ -24,6 +24,8 @@ public interface EncryptedStorageFacade {
 
     /* User API used in EquifaxEncryptedStorage */
 
+    public boolean isStorageAvalable();
+
     public Key getCurrentPublicKey();
 
     public byte[] encrypt(Key publicKeyKey, byte[] data);

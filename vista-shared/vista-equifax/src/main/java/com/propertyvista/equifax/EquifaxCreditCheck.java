@@ -31,6 +31,7 @@ import ca.equifax.uat.from.EfxTransmit;
 import ca.equifax.uat.to.CNConsAndCommRequestType;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -43,6 +44,7 @@ import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
@@ -134,6 +136,12 @@ public class EquifaxCreditCheck {
     /* simulation data parameters */
     Lease lease, LeaseTermParticipant<?> leaseParticipant) {
 
+        if (equifaxInfo.reportType().getValue() == CreditCheckReportType.FullCreditReport) {
+            if (!ServerSideFactory.create(EncryptedStorageFacade.class).isStorageAvalable()) {
+                throw new UserRuntimeException(i18n.tr("Credit Check is not available at this time"));
+            }
+        }
+
         EquifaxEnforceLimit.assertLimit(AuditRecordEventType.EquifaxRequest);
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.EquifaxRequest, customer, "Run EquifaxRequest for customer {0}", customer);
 
@@ -168,7 +176,7 @@ public class EquifaxCreditCheck {
             final CustomerCreditCheckReport report = EntityFactory.create(CustomerCreditCheckReport.class);
             report.pmc().setValue(equifaxInfo.pmc().getPrimaryKey());
             report.customer().setValue(customer.getPrimaryKey());
-            report.data().setValue(EquifaxEncryptedStorage.encrypt(XmlCreator.toStorageXMl(efxResponse)));
+            EquifaxEncryptedStorage.encrypt(report, XmlCreator.toStorageXMl(efxResponse));
 
             TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<Void>() {
                 @Override
@@ -249,9 +257,9 @@ public class EquifaxCreditCheck {
         criteria2.eq(criteria2.proto().id(), ccc.creditCheckReport());
         criteria2.eq(criteria2.proto().pmc(), pmc);
 
-        byte[] xmlData = TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<byte[]>() {
+        CustomerCreditCheckReport report = TaskRunner.runInTargetNamespace(VistaNamespace.expiringNamespace, new Callable<CustomerCreditCheckReport>() {
             @Override
-            public byte[] call() {
+            public CustomerCreditCheckReport call() {
                 CustomerCreditCheckReport cr = Persistence.service().retrieve(criteria);
                 if (cr == null) {
                     cr = Persistence.service().retrieve(criteria2);
@@ -259,18 +267,18 @@ public class EquifaxCreditCheck {
                 if (cr == null) {
                     return null;
                 } else {
-                    return cr.data().getValue();
+                    return cr;
                 }
             }
         });
 
-        if (xmlData == null) {
+        if (report == null) {
             return null;
         }
 
         EfxTransmit efxResponse;
         try {
-            efxResponse = XmlCreator.fromStorageXMl(EquifaxEncryptedStorage.decrypt(xmlData));
+            efxResponse = XmlCreator.fromStorageXMl(EquifaxEncryptedStorage.decrypt(report));
         } catch (Exception e) {
             log.error("data error", e);
             if (ApplicationMode.isDevelopment()) {

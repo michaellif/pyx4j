@@ -51,7 +51,7 @@ public class VistaEncryptedStorageConfiguration implements EncryptedStorageConfi
             if (config.isVistaQa()) {
                 return null;
             } else {
-                return "Test1234";
+                return "test";
             }
         } else {
             return null;

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -37,7 +37,6 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.equifax.EquifaxEncryptedStorage;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.bean.Message;
@@ -110,7 +109,7 @@ public class WSScreeningServiceImpl implements WSScreeningService {
     private ServiceResponse createResponse(ApplicantScreening screeningRequest, CustomerCreditCheckReport report) throws JAXBException {
         screeningRequest.setResponse(new Response());
         screeningRequest.getResponse().setReportDate(report.created().getValue());
-        screeningRequest.getResponse().setBackgroundReport(EquifaxEncryptedStorage.decrypt(report.data().getValue()));
+        //screeningRequest.getResponse().setBackgroundReport(EquifaxEncryptedStorage.decrypt(report.data().getValue()));
         screeningRequest.getResponse().setStatus("Complete");
 
         String screeningResponse = MarshallUtil.marshall(screeningRequest);

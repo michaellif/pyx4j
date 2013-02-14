@@ -39,7 +39,7 @@ public class EncryptedStorageFacadeTest {
 
     private byte[] generateTestData() {
         SecureRandom random = new SecureRandom();
-        int len = 128;//2 * 1024 + random.nextInt(5 * 1024);
+        int len = 2 * 1024 + random.nextInt(5 * 1024);
         byte data[] = new byte[len];
         random.nextBytes(data);
         return data;

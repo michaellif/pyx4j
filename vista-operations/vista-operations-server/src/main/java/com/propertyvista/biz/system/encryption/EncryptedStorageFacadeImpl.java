@@ -14,17 +14,25 @@
 package com.propertyvista.biz.system.encryption;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +41,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.jasypt.util.binary.BinaryEncryptor;
@@ -59,6 +72,7 @@ import com.propertyvista.operations.domain.encryption.EncryptedStorageCurrentKey
 import com.propertyvista.operations.domain.encryption.EncryptedStoragePublicKey;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
@@ -70,15 +84,27 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private static List<EncryptedStorageConsumer> consumers = registerConsumers();
 
-    static List<EncryptedStorageConsumer> registerConsumers() {
+    private static final int SYMMETRIC_KEY_PASSWORD_LENGTH = 28;
+
+    private static List<EncryptedStorageConsumer> registerConsumers() {
         List<EncryptedStorageConsumer> consumers = new ArrayList<EncryptedStorageConsumer>();
         consumers.add(new EncryptedStorageConsumerEquifax());
         return consumers;
     }
 
     @Override
+    public boolean isStorageAvalable() {
+        return (getCurrentPublicKey() != null);
+    }
+
+    @Override
     public Key getCurrentPublicKey() {
-        EncryptedStorageCurrentKey current = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
+        EncryptedStorageCurrentKey current = TaskRunner.runInOperationsNamespace(new Callable<EncryptedStorageCurrentKey>() {
+            @Override
+            public EncryptedStorageCurrentKey call() {
+                return Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
+            }
+        });
         if (current != null) {
             return current.current().getPrimaryKey();
         } else {
@@ -87,8 +113,16 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public byte[] encrypt(Key publicKeyKey, byte[] data) {
-        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+    public byte[] encrypt(final Key publicKeyKey, byte[] data) {
+        EncryptedStoragePublicKey publicKey = TaskRunner.runInOperationsNamespace(new Callable<EncryptedStoragePublicKey>() {
+            @Override
+            public EncryptedStoragePublicKey call() {
+                return Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+            }
+        });
+        if (publicKey == null) {
+            throw new UserRuntimeException(i18n.tr("Data Encryption not possible, Contact support to activate encryption"));
+        }
         return encrypt(publicKey, data);
     }
 
@@ -103,11 +137,33 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private byte[] encrypt(EncryptedStoragePublicKey publicKey, byte[] data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipherRSA = createRSACipher();
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKey.keyData().getValue());
-            cipher.init(Cipher.ENCRYPT_MODE, keyFactory.generatePublic(publicKeySpec));
-            return cipher.doFinal(data);
+            cipherRSA.init(Cipher.ENCRYPT_MODE, keyFactory.generatePublic(publicKeySpec));
+
+            // Create createAESCipher and encrypt data using this AES
+            SecureRandom random = new SecureRandom();
+            StringBuilder password = new StringBuilder();
+            while (password.length() < SYMMETRIC_KEY_PASSWORD_LENGTH) {
+                password.append(Integer.toHexString(random.nextInt()));
+            }
+
+            SecretKey symmetricKey = createAESSecretKey(password.toString());
+            Cipher symmetricCipher = createAESCipher();
+            symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
+
+            // Attach encrypted with RSA AESKey to data
+            byte[] encodedSymmetricKey = cipherRSA.doFinal(symmetricKey.getEncoded());
+            byte[] encodedSymmetricKeyLength = ByteBuffer.allocate(4).putInt(encodedSymmetricKey.length).array();
+            byte[] cipherText = symmetricCipher.doFinal(data);
+
+            byte[] encryptedData = new byte[4 + encodedSymmetricKey.length + cipherText.length];
+            System.arraycopy(encodedSymmetricKeyLength, 0, encryptedData, 0, encodedSymmetricKeyLength.length);
+            System.arraycopy(encodedSymmetricKey, 0, encryptedData, 4, encodedSymmetricKey.length);
+            System.arraycopy(cipherText, 0, encryptedData, encodedSymmetricKey.length + 4, cipherText.length);
+            return encryptedData;
+
         } catch (GeneralSecurityException e) {
             throw new Error(e);
         }
@@ -115,12 +171,67 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private byte[] decrypt(PrivateKey privateKey, byte[] data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            return cipher.doFinal(data);
+            byte[] encodedSymmetricKeyLength = new byte[4];
+
+            System.arraycopy(data, 0, encodedSymmetricKeyLength, 0, 4);
+
+            int keyLength = ByteBuffer.wrap(encodedSymmetricKeyLength).getInt();
+
+            byte[] encodedSymmetricKey = new byte[keyLength];
+            System.arraycopy(data, 4, encodedSymmetricKey, 0, keyLength);
+
+            byte[] cipherText = new byte[data.length - keyLength - 4];
+            System.arraycopy(data, keyLength + 4, cipherText, 0, data.length - keyLength - 4);
+
+            Cipher cipherRSA = createRSACipher();
+            cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
+            encodedSymmetricKey = cipherRSA.doFinal(encodedSymmetricKey);
+
+            SecretKey decodedSmmetricKey = new SecretKeySpec(encodedSymmetricKey, "AES");
+
+            Cipher symmetricCipher = createAESCipher();
+            symmetricCipher.init(Cipher.DECRYPT_MODE, decodedSmmetricKey);
+
+            return symmetricCipher.doFinal(cipherText);
+
         } catch (GeneralSecurityException e) {
             throw new Error(e);
         }
+    }
+
+    private static Cipher createAESCipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+        return Cipher.getInstance("AES/ECB/PKCS5Padding");
+    }
+
+    Cipher createRSACipher() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
+        return Cipher.getInstance("RSA/ECB/PKCS1Padding");
+    }
+
+    private static SecretKey createAESSecretKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        SecretKey secret;
+        if (getEncryptedStorageConfiguration().rsaKeysize() > 2048) {
+            // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
+            // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[8];
+            random.nextBytes(salt);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+        } else {
+            byte[] keyBytes;
+            try {
+                keyBytes = password.getBytes("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            keyBytes = sha.digest(keyBytes);
+            keyBytes = Arrays.copyOf(keyBytes, 16); // use only first 128 bit
+            secret = new SecretKeySpec(keyBytes, "AES");
+        }
+        return secret;
     }
 
     private PrivateKey createPrivateKey(byte[] encryptedPrivateKeyBytes, char[] password) {
@@ -284,7 +395,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private byte[] generateTestData(EncryptedStoragePublicKey publicKey) {
         SecureRandom random = new SecureRandom();
-        int len = 128;//2 * 1024 + random.nextInt(5 * 1024);
+        int len = 2 * 1024 + random.nextInt(5 * 1024);
         byte bytes[] = new byte[len];
         random.nextBytes(bytes);
         return bytes;

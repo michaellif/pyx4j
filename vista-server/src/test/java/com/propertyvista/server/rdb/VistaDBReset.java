@@ -27,6 +27,7 @@ import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -59,6 +60,7 @@ public class VistaDBReset {
             log.info("Use MySQL");
             conf = new VistaServerSideConfigurationDev();
         }
+        LoggerConfig.setContextName("vista");
         ServerSideConfiguration.setInstance(conf);
         Persistence.service().startBackgroundProcessTransaction();
         try {

@@ -40,7 +40,7 @@ public interface CustomerCreditCheckReport extends IEntity {
     @MemberColumn(notNull = true)
     IPrimitive<Key> pmc();
 
-    //@MemberColumn(notNull = true)
+    @MemberColumn(notNull = true)
     IPrimitive<Key> publicKey();
 
     @Timestamp(Timestamp.Update.Created)
