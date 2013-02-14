@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,6 +27,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -42,6 +43,7 @@ import com.pyx4j.entity.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.payment.CreditCardPaymentInstrumentIO;
 import com.propertyvista.onboarding.payment.PaymentRequestIO;
@@ -49,6 +51,11 @@ import com.propertyvista.onboarding.payment.PaymentRequestIO;
 public class OnboardingExample {
 
     private final static Logger log = LoggerFactory.getLogger(OnboardingExample.class);
+
+    @Before
+    public void setUp() {
+        VistaTestDBSetup.init();
+    }
 
     public static void main(String[] args) throws Exception {
         System.setProperty("com.pyx4j.EclipseDeveloperEnviroment", "true");

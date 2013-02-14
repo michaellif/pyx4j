@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +30,20 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 
+import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.operations.server.onboarding.rh.OnboardingRequestHandlerFactory;
 import com.propertyvista.operations.server.onboarding.rhf.RequestHandler;
-import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 
 public class OnboardingXMLBindingTest {
 
     private final static Logger log = LoggerFactory.getLogger(OnboardingXMLBindingTest.class);
+
+    @Before
+    public void setUp() {
+        VistaTestDBSetup.init();
+    }
 
     @Test
     public void testRequestsParsing() {
