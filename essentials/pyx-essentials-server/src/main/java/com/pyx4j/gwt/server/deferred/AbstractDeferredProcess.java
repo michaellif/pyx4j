@@ -20,6 +20,8 @@
  */
 package com.pyx4j.gwt.server.deferred;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 
 public abstract class AbstractDeferredProcess implements IDeferredProcess {
@@ -28,7 +30,11 @@ public abstract class AbstractDeferredProcess implements IDeferredProcess {
 
     protected boolean completed = false;
 
+    //TODO use AtomicBoolean
     protected volatile boolean canceled;
+
+    //TODO Use,this
+    protected AtomicInteger progress;
 
     @Override
     public void cancel() {
