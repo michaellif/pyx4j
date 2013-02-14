@@ -41,6 +41,8 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PmcAccountCreationRequestActivity extends AbstractActivity implements PmcAccountCreationRequestView.Presenter {
 
+    private final AppPlace place;
+
     private final PmcAccountCreationRequestView view;
 
     private final OnboardingPublicActivationService onboardingPublicActivationService;
@@ -48,9 +50,15 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     private final PmcRegistrationService pmcRegistrationService;
 
     public PmcAccountCreationRequestActivity(AppPlace place) {
+        this.place = place;
         view = OnboardingViewFactory.instance(PmcAccountCreationRequestView.class);
         onboardingPublicActivationService = GWT.<OnboardingPublicActivationService> create(OnboardingPublicActivationService.class);
         pmcRegistrationService = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

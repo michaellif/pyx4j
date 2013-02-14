@@ -38,9 +38,17 @@ public class DashboardActivity extends AbstractActivity implements DashboardView
 
     private final Key dashboardId;
 
+    private final AppPlace place;
+
     public DashboardActivity(AppPlace place) {
+        this.place = place;
         view = DashboardViewFactory.instance(DashboardView.class);
         dashboardId = getIdFromPlace(place);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -34,6 +34,8 @@ import com.propertyvista.domain.property.asset.Utility;
 
 public class ProductDictionaryViewActivity extends AbstractActivity implements ProductDictionaryView.Presenter {
 
+    private final AppPlace place;
+
     protected final ProductDictionaryView view;
 
     IListerView.Presenter<ServiceItemType> serviceLister;
@@ -42,7 +44,8 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
 
     IListerView.Presenter<Utility> utilityLister;
 
-    public ProductDictionaryViewActivity(Place place) {
+    public ProductDictionaryViewActivity(AppPlace place) {
+        this.place = place;
         this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
 
         serviceLister = new ListerController<ServiceItemType>(view.getServiceListerView(),
@@ -50,6 +53,11 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
         featureLister = new ListerController<FeatureItemType>(view.getFeatureListerView(),
                 GWT.<FeatureItemTypeCrudService> create(FeatureItemTypeCrudService.class), FeatureItemType.class);
         utilityLister = new ListerController<Utility>(view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class), Utility.class);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

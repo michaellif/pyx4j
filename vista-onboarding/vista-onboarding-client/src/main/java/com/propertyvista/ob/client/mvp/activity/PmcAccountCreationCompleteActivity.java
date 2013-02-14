@@ -28,13 +28,21 @@ import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 
 public class PmcAccountCreationCompleteActivity extends AbstractActivity implements PmcAccountCreationCompleteView.Presenter {
 
+    private final AppPlace place;
+
     private final PmcAccountCreationCompleteView view;
 
     private final PmcRegistrationService service;
 
     public PmcAccountCreationCompleteActivity(AppPlace place) {
+        this.place = place;
         view = OnboardingViewFactory.instance(PmcAccountCreationCompleteView.class);
         service = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

@@ -61,6 +61,8 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private String defferedCorrelationId;
 
+    private final AppPlace place;
+
     private final PmcAccountCreationProgressView view;
 
     private final DeferredProcessService deferredProcessStatusService;
@@ -80,11 +82,17 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     private static final String SIM_ID = "sim";
 
     public PmcAccountCreationProgressActivity(AppPlace place) {
+        this.place = place;
         this.view = OnboardingViewFactory.instance(PmcAccountCreationProgressView.class);
         this.deferredProcessStatusService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
         this.pmcRegService = GWT.<PmcRegistrationService> create(PmcRegistrationService.class);
         this.currentStep = PROGRESS_STEPS.get(0);
         this.currentStepStatus = StepStatus.INCOMPLETE;
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override

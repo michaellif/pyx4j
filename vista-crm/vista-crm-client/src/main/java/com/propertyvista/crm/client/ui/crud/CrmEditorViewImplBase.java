@@ -20,7 +20,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(placeClass);
+        super();
     }
-
 }

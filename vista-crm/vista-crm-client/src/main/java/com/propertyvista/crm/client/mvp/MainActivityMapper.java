@@ -69,10 +69,10 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorAcitvity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.guarantor.FormerGuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.guarantor.FormerGuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.LeadEditorActivity;
@@ -82,16 +82,16 @@ import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingEditorAct
 import com.propertyvista.crm.client.activity.crud.customer.lead.ShowingViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.screening.CustomerScreeningViewerActivity;
-import com.propertyvista.crm.client.activity.crud.customer.tenant.PotentialTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.FormerTenantListerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.tenant.PotentialTenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.FormerLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.FormerLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
@@ -768,7 +768,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         }
 
                     } else if (crudPlace instanceof Financial.ProductDictionary) {
-                        activity = new ProductDictionaryViewActivity(place);
+                        activity = new ProductDictionaryViewActivity(crudPlace);
 
                     } else if (crudPlace instanceof Administration.Content) {
                         switch (crudPlace.getType()) {

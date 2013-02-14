@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 public class OperationsEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
     public OperationsEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(placeClass);
+        super();
     }
 
 }

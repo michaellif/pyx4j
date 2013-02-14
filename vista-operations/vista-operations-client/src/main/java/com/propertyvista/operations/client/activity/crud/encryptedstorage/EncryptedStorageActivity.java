@@ -36,13 +36,21 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class EncryptedStorageActivity extends AbstractActivity implements EncryptedStorageView.Presenter {
 
+    private final AppPlace place;
+
     private final EncryptedStorageView view;
 
     private final EncryptedStorageService service;
 
     public EncryptedStorageActivity(AppPlace place) {
+        this.place = place;
         view = ManagementVeiwFactory.instance(EncryptedStorageView.class);
         service = GWT.<EncryptedStorageService> create(EncryptedStorageService.class);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override
@@ -160,5 +168,4 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
             }
         });
     }
-
 }

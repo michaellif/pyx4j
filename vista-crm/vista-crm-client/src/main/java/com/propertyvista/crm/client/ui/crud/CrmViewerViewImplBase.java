@@ -27,10 +27,8 @@ import com.pyx4j.entity.rpc.AbstractVersionDataListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
-import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
@@ -50,8 +48,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     private BreadcrumbsBar breadcrumbsBar;
 
     private BreadcrumbsService breadcumbsService;
-
-    protected String defaultCaption;
 
     private Button notesButton;
 
@@ -87,8 +83,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
         this.viewOnly = viewOnly;
-
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
         // Notes button:
         addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
@@ -226,25 +220,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     public void populate(E value) {
         super.populate(value);
 
-        String caption = (defaultCaption + " " + value.getStringView());
         if (value instanceof IVersionedEntity) {
-            IVersionData<?> version = ((IVersionedEntity<?>) value).version();
-
-            caption = caption + " (";
-            if (version.versionNumber().isNull()) { // draft case:
-                setFinalizationVisible(true);
-                caption = caption + i18n.tr("Draft Version");
-            } else {
-                setFinalizationVisible(false);
-                if (VersionedEntityUtils.isCurrent((IVersionedEntity<?>) value)) {
-                    caption = caption + i18n.tr("Current Version");
-                } else {
-                    caption = caption + i18n.tr("Version") + " #" + version.versionNumber().getStringView() + " - " + version.fromDate().getStringView();
-                }
-            }
-            caption = caption + ")";
+            setFinalizationVisible(((IVersionedEntity<?>) value).version().versionNumber().isNull());
         }
-        setCaption(caption); // update caption
 
         setEditingEnabled(super.getPresenter().canEdit());
 
