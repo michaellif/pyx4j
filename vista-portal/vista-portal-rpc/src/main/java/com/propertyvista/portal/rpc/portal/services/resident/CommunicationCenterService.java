@@ -30,4 +30,6 @@ public interface CommunicationCenterService extends AbstractCrudService<Communic
     void createAndSendMessage(AsyncCallback<VoidSerializable> callback, String topic, String messageContent, boolean isHighImportance,
             AbstractUser[] destinations);
 
+    void sendReply(AsyncCallback<VoidSerializable> callback, String topic, String messageContent, boolean isHighImportance, CommunicationCenterDTO parentMessage);
+
 }

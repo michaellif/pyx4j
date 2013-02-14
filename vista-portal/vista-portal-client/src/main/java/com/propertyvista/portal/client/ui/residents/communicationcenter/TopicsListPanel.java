@@ -18,23 +18,58 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.CheckBox;
 
 import com.propertyvista.dto.CommunicationCenterDTO;
+import com.propertyvista.portal.client.themes.CommunicationCenterTheme;
 
 public class TopicsListPanel extends FormFlexPanel {
+
+    private static final I18n i18n = I18n.get(TopicsListPanel.class);
 
     private final LinkedHashMap<String, ArrayList<CommunicationCenterDTO>> topicMessages;
 
     private final ArrayList<String> topics;
 
-    public TopicsListPanel() {
+    private boolean highRemoveHighImportance;
+
+    private String stringFilter;
+
+    private final CommunicationCenterView parentPanel;
+
+    private final VerticalPanel verticalPanel;
+
+    private final Button btReply;
+
+    private CommunicationCenterDTO onlyOneTopicStarterMessage = null;
+
+    public TopicsListPanel(CommunicationCenterView parentPanel) {
+        this.parentPanel = parentPanel;
+        if (parentPanel instanceof VerticalPanel) {
+            verticalPanel = (VerticalPanel) parentPanel;
+        } else {
+            throw new IllegalArgumentException("CommunicationCenterView must be a VerticalPanel");
+        }
+
         topicMessages = new LinkedHashMap<String, ArrayList<CommunicationCenterDTO>>();
         topics = new ArrayList<String>();
+
+        btReply = new Button(i18n.tr("Reply"));
+        btReply.setCommand(new ReplyCommand());
+        btReply.getElement().getStyle().setFloat(Style.Float.LEFT);
+
     }
 
     public void populateMyMessages(Vector<CommunicationCenterDTO> myMessages) {
-        // rem: the myMessages are sorted by creation date: the new one is first
+        // remark: the myMessages are sorted by creation date: the new one is first
         addHeader();
 
         topicMessages.clear();
@@ -52,9 +87,7 @@ public class TopicsListPanel extends FormFlexPanel {
             messages.add(msg);
             topicMessages.put(curTopic, messages);
         }
-
-        addData(false);
-
+        addData(false, null);
     }
 
     private void addHeader() {
@@ -64,43 +97,116 @@ public class TopicsListPanel extends FormFlexPanel {
         setHTML(0, 3, "Important");
     }
 
-    private void addData(boolean filterHighImportance) {
+    private void addData(boolean filterHighImportance, String filter) {
+        highRemoveHighImportance = filterHighImportance;
+        stringFilter = filter;
+        verticalPanel.remove(btReply);
+
         // add all
         Date now = new Date();
-
+        HTMLTable.RowFormatter rf = getRowFormatter();
+        HTMLTable.CellFormatter cf = getCellFormatter();
         int row = 0;
+        onlyOneTopicStarterMessage = null;
         for (String curTopic : topics) {
+            if (curTopic == null) {// database error
+                continue;
+            }
             ArrayList<CommunicationCenterDTO> messages = topicMessages.get(curTopic);
             if (messages != null && messages.size() > 0) {
                 CommunicationCenterDTO mostRecentMessageInTopic = messages.get(0);
                 CommunicationCenterDTO firstMessageInTopic = messages.get(messages.size() - 1);
+                // filter by High Importance:
                 if (filterHighImportance && firstMessageInTopic.isHighImportance().getValue().booleanValue() != filterHighImportance) {
                     continue;
                 }
+                //filter by message content:
+                if ((stringFilter != null) && (stringFilter.length() > 0)) {
+
+                    if (!curTopic.toLowerCase().contains(stringFilter.toLowerCase())) {
+                        boolean foundInMessages = false;
+                        for (CommunicationCenterDTO msg : messages) {
+                            if (msg.content().getValue().toLowerCase().contains(stringFilter.toLowerCase())) {
+                                foundInMessages = true;
+                                break;
+                            }
+                        }
+                        if (!foundInMessages) {
+                            continue;
+                        }
+                    }
+                }
+
+                onlyOneTopicStarterMessage = firstMessageInTopic;
+
                 long diffMillisec = now.getTime() - mostRecentMessageInTopic.created().getValue().getTime();
+
+                if (row == 0) {
+                    rf.addStyleName(row, CommunicationCenterTheme.StyleName.CommunicationTableHeaderRowBg.name());
+                    cf.addStyleName(row, 1, CommunicationCenterTheme.StyleName.CommunicationTableHeaderVB.name());
+                    cf.addStyleName(row, 2, CommunicationCenterTheme.StyleName.CommunicationTableHeaderVB.name());
+                    cf.addStyleName(row, 3, CommunicationCenterTheme.StyleName.CommunicationTableHeaderVB.name());
+                }
+
                 setHTML(++row, 0, firstMessageInTopic.topic().getValue());
                 setHTML(row, 1, "" + firstMessageInTopic.sender().userId().getValue());
-                setHTML(row, 2, "" + (diffMillisec / 1000) + " seconds ago");//difference it is in seconds         
-                setHTML(row, 3, "" + firstMessageInTopic.isHighImportance().getValue());
+                cf.addStyleName(row, 1, CommunicationCenterTheme.StyleName.CommunicationTableVerticalBorder.name());
+                setHTML(row, 2, "" + (diffMillisec / 1000) + " seconds ago");//difference it is in seconds
+                CheckBox ch = new CheckBox();
+                ch.setEditable(false);
+                ch.setValue(firstMessageInTopic.isHighImportance().getValue());
+                cf.addStyleName(row, 3, CommunicationCenterTheme.StyleName.CommunicationTableChechBox.name());
+                setWidget(row, 3, ch);
+
+                if ((row % 2) == 0) {
+                    rf.addStyleName(row, CommunicationCenterTheme.StyleName.CommunicationTableSecondRowBg.name());
+                } else {
+                    rf.addStyleName(row, CommunicationCenterTheme.StyleName.CommunicationTableFirstRowBg.name());
+                }
             }
         }
-    }
 
-    @SuppressWarnings("unused")
-    private void displayMessagesAsIs(Vector<CommunicationCenterDTO> myMessages) {
-        addHeader();
-        int row = 0;
-
-        for (CommunicationCenterDTO msg : myMessages) {
-            setHTML(++row, 0, msg.topic().getValue());
-            setHTML(row, 1, "" + msg.sender().userId().getValue());
-            setHTML(row, 2, msg.created().getValue().toString());//TODO format date
-            setHTML(row, 3, "" + msg.isHighImportance().getValue());
+        if (row == 1) {
+            if (getParent() != null) {
+                verticalPanel.add(btReply);
+            }
+        } else {
+            onlyOneTopicStarterMessage = null;
         }
     }
 
     public void setOrRemoveHighImportanceFilter(boolean filterValue) {
         addHeader();
-        addData(filterValue);
+        addData(filterValue, stringFilter);
+    }
+
+    @Override
+    protected void onAttach() {//it will be removed this reply button
+        super.onAttach();
+        if (getRowCount() == 2 && this.isVisible()) {// header + 1 row
+            verticalPanel.add(btReply);
+        }
+    }
+
+    @Override
+    protected void onDetach() {//it will be removed the reply button
+        verticalPanel.remove(btReply);
+        super.onDetach();
+    }
+
+    public void setOrRemoveStringFilter(String filterValue) {
+        stringFilter = filterValue;
+        if (stringFilter != null) {
+            stringFilter = stringFilter.trim();
+        }
+        addHeader();
+        addData(highRemoveHighImportance, stringFilter);
+    }
+
+    private class ReplyCommand implements Command {
+        @Override
+        public void execute() {
+            parentPanel.viewReplyToMessage(onlyOneTopicStarterMessage);
+        }
     }
 }

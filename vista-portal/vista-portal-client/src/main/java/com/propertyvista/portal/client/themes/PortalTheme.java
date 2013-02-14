@@ -156,6 +156,8 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new TenantDashboardTheme());
 
+        addTheme(new CommunicationCenterTheme());
+
         addTheme(new DefaultDialogTheme());
 
         initCellListStyle();

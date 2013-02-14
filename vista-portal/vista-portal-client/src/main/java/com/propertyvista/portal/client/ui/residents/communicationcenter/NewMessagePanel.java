@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -28,6 +29,7 @@ import com.pyx4j.widgets.client.TextArea;
 import com.pyx4j.widgets.client.TextBox;
 
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.portal.client.themes.CommunicationCenterTheme;
 import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterView.Presenter;
 
 public class NewMessagePanel extends FormFlexPanel {
@@ -52,6 +54,8 @@ public class NewMessagePanel extends FormFlexPanel {
 
         sendCommand = new SendCommand();
         cancelCommand = new CancelCommand();
+
+        getElement().addClassName(CommunicationCenterTheme.StyleName.NewMessagePanelBorder.name());
 
         int row = -1;// for optimization: ++row is faster than row++
 
@@ -90,12 +94,12 @@ public class NewMessagePanel extends FormFlexPanel {
 
         Label lblDestination = new Label();
         lblDestination.setText(i18n.tr("Destination") + ":");
-        lblDestination.setSize("122px", "22px");
+        lblDestination.setSize("110px", "22px");
         this.setWidget(row, 2, lblDestination);
         lblDestination.getElement().getStyle().setMarginLeft(20, Unit.PX);
 
         taDestination = new TextArea();
-        taDestination.setSize("152px", "62px");
+        taDestination.setSize("100px", "62px");
         this.setWidget(++row, 1, taDestination);
         taDestination.getElement().getStyle().setMarginLeft(20, Unit.PX);
 
@@ -103,16 +107,17 @@ public class NewMessagePanel extends FormFlexPanel {
         this.setWidget(++row, 1, buttonsHolder);
 
         Button btnSend = new Button("Send");
-        //btnSend.setSize("60px", "30px");
         buttonsHolder.add(btnSend);
         btnSend.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         btnSend.getElement().getStyle().setFloat(Style.Float.LEFT);
+        btnSend.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
         Button btnCancel = new Button("Cancel");
         buttonsHolder.add(btnCancel);
         btnCancel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         btnCancel.getElement().getStyle().setMarginLeft(20, Unit.PX);
         btnCancel.getElement().getStyle().setFloat(Style.Float.LEFT);
+        btnCancel.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
         btnSend.setCommand(sendCommand);
 
@@ -130,10 +135,19 @@ public class NewMessagePanel extends FormFlexPanel {
 
         @Override
         public void execute() {
+            //TODO: do a verification and a message: copy-paste from system, somewhere else.
             String topic = tbTopic.getText();
+            if (topic == null || topic.length() == 0) {
+                Window.alert("Topic must be completed");
+                return;
+            }
             String messageContent = taMessage.getText();
+            if (messageContent == null || messageContent.length() == 0) {
+                Window.alert("Message must be completed");
+                return;
+            }
+
             boolean isHighImportance = chckbxHighImportance.getValue();
-            //String destinations = taDestination.getText();//TODO it should be User IDs from system and the type of the users: CRM or 
 
             if (presenter != null) {
                 //CrmUser[] destinationsCrm = new CrmUser[0];
@@ -141,6 +155,7 @@ public class NewMessagePanel extends FormFlexPanel {
                 AbstractUser[] destinations = new AbstractUser[0];
 
                 presenter.sendNewMessage(topic, messageContent, isHighImportance, null);
+
             }
         }
     }
@@ -152,8 +167,13 @@ public class NewMessagePanel extends FormFlexPanel {
             tbTopic.setText("");
             taMessage.setText("");
             chckbxHighImportance.setValue(Boolean.FALSE);
-            taDestination.setText("");//TODO will need to clear the model to
+            taDestination.setText("");
         }
+    }
+
+    public void cleanFields() {
+        tbTopic.setText("");
+        taMessage.setText("");
     }
 
 }

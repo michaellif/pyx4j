@@ -23,10 +23,48 @@ import com.propertyvista.dto.CommunicationCenterDTO;
 public interface CommunicationCenterView extends IsWidget {
 
     interface Presenter {
+        /**
+         * Send a new message
+         * 
+         * @param topic
+         * @param messageContent
+         * @param isHighImportance
+         * @param destinations
+         *            if null, than the destination will be the logined user
+         */
         void sendNewMessage(String topic, String messageContent, boolean isHighImportance, AbstractUser[] destinations);
+
+        /**
+         * Send a reply to a message
+         * 
+         * @param topic
+         * @param messageContent
+         * @param isHighImportance
+         * @param parentMessage
+         */
+        void sendReply(String topic, String messageContent, boolean isHighImportance, CommunicationCenterDTO parentMessage);
+
     }
 
     void setPresenter(Presenter presenter);
 
+    /**
+     * Data is coming from server side, the viewers should display and cache it
+     * 
+     * @param myMessages
+     */
     void populateMyMessages(Vector<CommunicationCenterDTO> myMessages);
+
+    /**
+     * View new massage and the list of massages and topics
+     */
+    void viewDefault();
+
+    /**
+     * Display a component where the user will see the original message and is able to reply it
+     * 
+     * @param msg
+     */
+    void viewReplyToMessage(CommunicationCenterDTO msg);
+
 }

@@ -187,4 +187,26 @@ public class CommunicationCenterServiceImpl extends AbstractCrudServiceDtoImpl<C
         return msg;
     }
 
+    @Override
+    public void sendReply(AsyncCallback<VoidSerializable> callback, String topic, String messageContent, boolean isHighImportance,
+            CommunicationCenterDTO parentMessage) {
+
+        AbstractUser loginedUser = VistaContext.getCurrentUser();// can throw UnRecoverableRuntimeException, if no logined user
+
+        CommunicationPerson loginedPerson = getPersonForUser(loginedUser);// this will be the sender of the message
+        if (loginedPerson == null) {
+            loginedPerson = createPersonForUser(loginedUser);//shouldn't be this case, ever
+        }
+
+        CommunicationPerson personTo = loginedPerson;// a not null value
+        if (parentMessage != null) {
+            personTo = parentMessage.sender();
+        }
+        createMessage(loginedPerson, personTo, parentMessage, topic, messageContent, isHighImportance, false);
+
+        PersistenceServicesFactory.getPersistenceService().commit();
+
+        callback.onSuccess(null);
+    }
+
 }

@@ -79,4 +79,16 @@ public class CommunicationCenterActivity extends SecurityAwareActivity implement
         }, topic, messageContent, isHighImportance, destinations);
 
     }
+
+    @Override
+    public void sendReply(String topic, String messageContent, boolean isHighImportance, CommunicationCenterDTO parentMessage) {
+        srv.sendReply(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                getMyMessages();
+                view.viewDefault();
+            }
+        }, topic, messageContent, isHighImportance, parentMessage);
+
+    }
 }

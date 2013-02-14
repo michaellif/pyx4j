@@ -33,33 +33,52 @@ public class CommunicationCenterViewImpl extends VerticalPanel implements Commun
 
     private final NewMessagePanel newMessagePanel;
 
-    //private final FormFlexPanel messageListPanel;
-
     private final MessagesListControlPanel messagesListControlPanel;
 
-    public CommunicationCenterViewImpl() {
+    private final ReplyPanel replyPanel;
 
+    public CommunicationCenterViewImpl() {
         newMessagePanel = new NewMessagePanel();
 
         messagesListControlPanel = new MessagesListControlPanel(this);
 
-        newMessagePanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
-        messagesListControlPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
+        newMessagePanel.getElement().getStyle().setMarginBottom(-6, Unit.PX);
+        messagesListControlPanel.getElement().getStyle().setMarginBottom(30, Unit.PX);
+        messagesListControlPanel.getElement().getStyle().setMarginTop(-8, Unit.PX);
 
+        replyPanel = new ReplyPanel(this);
+
+        viewDefault();
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        newMessagePanel.setPresenter(presenter);
+        replyPanel.setPresenter(presenter);
+    }
+
+    @Override
+    public void populateMyMessages(Vector<CommunicationCenterDTO> myMessages) {
+        messagesListControlPanel.populateMyMessages(myMessages);
+    }
+
+    @Override
+    public void viewDefault() {
+        this.clear();
+
+        newMessagePanel.cleanFields();
+        messagesListControlPanel.cleanFields();
         add(newMessagePanel);
         add(messagesListControlPanel);
         add(messagesListControlPanel.getMessagesListPanel());
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        newMessagePanel.setPresenter(presenter);
-    }
+    public void viewReplyToMessage(CommunicationCenterDTO msg) {
+        this.clear();
 
-    @Override
-    public void populateMyMessages(Vector<CommunicationCenterDTO> myMessages) {
-
-        messagesListControlPanel.populateMyMessages(myMessages);
+        replyPanel.setParentMessage(msg);
+        this.add(replyPanel);
 
     }
 }
