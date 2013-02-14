@@ -54,7 +54,9 @@ import com.pyx4j.gwt.server.IOUtils;
 
 public class EncryptedStorageTest {
 
-    private static boolean strong = false;
+    private static boolean STRONG = false;
+
+    private static final int SYMMETRIC_KEY_PASSWORD_LENGTH = 28;
 
     @Test
     public void testSymmetricEncryption() throws Exception {
@@ -145,7 +147,7 @@ public class EncryptedStorageTest {
 
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
-        while (sb.length() < 28) {
+        while (sb.length() < SYMMETRIC_KEY_PASSWORD_LENGTH) {
             sb.append(Integer.toHexString(random.nextInt()));
         }
 
@@ -204,7 +206,7 @@ public class EncryptedStorageTest {
 
     SecretKey createAESSecretKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException, UnsupportedEncodingException {
         SecretKey secret;
-        if (strong) {
+        if (STRONG) {
             // A java.security.InvalidKeyException with the message "Illegal key size or default parameters" means that the cryptography strength is limited;
             // the unlimited strength jurisdiction policy files are not in the correct location. In a JDK, they should be placed under ${jdk}/jre/lib/security
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -240,7 +242,7 @@ public class EncryptedStorageTest {
     }
 
     private BinaryEncryptor getBinaryEncryptor(char[] password) {
-        if (strong) {
+        if (STRONG) {
             StrongBinaryEncryptor binaryEncryptor = new StrongBinaryEncryptor();
             binaryEncryptor.setPasswordCharArray(password);
             return binaryEncryptor;
