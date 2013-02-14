@@ -205,13 +205,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             Persistence.service().commit();
 
             List<String> emails = new ArrayList<String>();
-            SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-            if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-                emails.add(mailConfig.getForwardAllTo());
-            } else {
-                Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-                emails.add(tenant.customer().user().email().getValue());
-            }
+            emails.add(getTenantsEmail(tenantId));
+
             ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
 
         }
