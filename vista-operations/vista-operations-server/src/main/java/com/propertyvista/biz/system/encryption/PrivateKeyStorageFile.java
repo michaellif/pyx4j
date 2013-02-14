@@ -13,7 +13,9 @@
  */
 package com.propertyvista.biz.system.encryption;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -42,6 +44,22 @@ class PrivateKeyStorageFile implements PrivateKeyStorage {
         } finally {
             IOUtils.closeQuietly(fos);
         }
+    }
+
+    @Override
+    public byte[] loadPrivateKey(String name) {
+        EncryptedStorageConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getEncryptedStorageConfiguration();
+        FileInputStream fis = null;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            fis = new FileInputStream(new File(config.privateKeyDirectory(), name));
+            IOUtils.copyStream(fis, os, 1024);
+        } catch (IOException e) {
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(fis);
+        }
+        return os.toByteArray();
     }
 
 }

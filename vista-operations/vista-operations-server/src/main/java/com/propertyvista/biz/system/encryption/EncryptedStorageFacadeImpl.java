@@ -44,6 +44,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
@@ -56,7 +57,9 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     private static final Logger log = LoggerFactory.getLogger(EncryptedStorageFacadeImpl.class);
 
-    private static Map<Key, Boolean> activeKeys = new HashMap<Key, Boolean>();
+    private static final I18n i18n = I18n.get(EncryptedStorageFacadeImpl.class);
+
+    private static Map<Key, PrivateKey> activeKeys = new HashMap<Key, PrivateKey>();
 
     @Override
     public Key getCurrentPublicKey() {
@@ -74,6 +77,15 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         return encrypt(publicKey, data);
     }
 
+    @Override
+    public byte[] decrypt(Key publicKeyKey, byte[] data) {
+        PrivateKey privateKey = activeKeys.get(publicKeyKey);
+        if (privateKey == null) {
+            throw new UserRuntimeException(i18n.tr("Data Decryption not posible, Contact support to activate decryption"));
+        }
+        return decrypt(privateKey, data);
+    }
+
     private byte[] encrypt(EncryptedStoragePublicKey publicKey, byte[] data) {
         try {
             Cipher cipher = Cipher.getInstance("RSA");
@@ -86,10 +98,38 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
     }
 
-    @Override
-    public byte[] decrypt(Key publicKeyKey, byte[] data) {
-        // TODO Auto-generated method stub
-        return null;
+    private byte[] decrypt(PrivateKey privateKey, byte[] data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            return cipher.doFinal(data);
+        } catch (GeneralSecurityException e) {
+            throw new Error(e);
+        }
+    }
+
+    private PrivateKey createPrivateKey(byte[] encryptedPrivateKeyBytes, char[] password) {
+        byte[] privateKeyBinary = getBinaryEncryptor(password).decrypt(encryptedPrivateKeyBytes);
+        PrivateKey privateKey;
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
+            privateKey = keyFactory.generatePrivate(privateKeySpec);
+        } catch (GeneralSecurityException e) {
+            throw new Error(e);
+        } finally {
+            destroy(privateKeyBinary);
+        }
+        return privateKey;
+    }
+
+    private void destroy(byte[] binary) {
+        if (binary != null) {
+            for (int i = 0; i < binary.length; i++) {
+                binary[i] = 0;
+            }
+            binary = null;
+        }
     }
 
     @Override
@@ -136,7 +176,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         if (publicKeyKey.equals(getCurrentPublicKey())) {
             throw new UserRuntimeException("Can't deactivate current key");
         }
-        if (activeKeys.get(publicKeyKey == null)) {
+        if (activeKeys.get(publicKeyKey) == null) {
             throw new UserRuntimeException("Can't deactivate current with not activated decryption");
         }
     }
@@ -147,10 +187,22 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public void activateDecryption(Key publicKeyKey, char[] passwrord) {
+    public void activateDecryption(Key publicKeyKey, char[] password) {
         EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
-        // asset
-        activeKeys.put(publicKeyKey, Boolean.TRUE);
+        if (publicKey == null) {
+            throw new UserRuntimeException("PublicKey not found");
+        }
+        PrivateKey privateKey = loadPrivateKey(publicKey, password);
+        testKeyDecryption(publicKey, privateKey);
+        activeKeys.put(publicKeyKey, privateKey);
+    }
+
+    private PrivateKey loadPrivateKey(EncryptedStoragePublicKey publicKey, char[] password) {
+        byte[] encryptedPrivateKeyBytes = getPrivateKeyStorage().loadPrivateKey(publicKey.name().getValue());
+        if (encryptedPrivateKeyBytes == null) {
+            throw new UserRuntimeException("PrivateKey not found");
+        }
+        return createPrivateKey(encryptedPrivateKeyBytes, password);
     }
 
     private void automaticActivateDecryption() {
@@ -178,22 +230,13 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         return bytes;
     }
 
-    private void testKeyDecryption(EncryptedStoragePublicKey publicKey, byte[] encryptedPrivateKeyBytes, char[] keyPassword) {
-        byte[] privateKeyBinary = getBinaryEncryptor(keyPassword).decrypt(encryptedPrivateKeyBytes);
-        byte[] decodedSrc;
-        try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBinary);
-            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+    private void testKeyDecryption(EncryptedStoragePublicKey publicKey, byte[] encryptedPrivateKeyBytes, char[] password) {
+        PrivateKey privateKey = createPrivateKey(encryptedPrivateKeyBytes, password);
+        testKeyDecryption(publicKey, privateKey);
+    }
 
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-
-            decodedSrc = cipher.doFinal(publicKey.encryptTestData().getValue());
-        } catch (GeneralSecurityException e) {
-            throw new Error(e);
-        }
-
+    private void testKeyDecryption(EncryptedStoragePublicKey publicKey, PrivateKey privateKey) {
+        byte[] decodedSrc = decrypt(privateKey, publicKey.encryptTestData().getValue());
         if (!EqualsHelper.equals(decodedSrc, publicKey.keyTestData().getValue())) {
             throw new Error("Decryption test failed");
         }
@@ -225,6 +268,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
         Persistence.service().persist(publicKey);
         Persistence.service().commit();
+        activateDecryption(publicKey.getPrimaryKey(), keyPassword);
     }
 
     static EncryptedStorageConfiguration getEncryptedStorageConfiguration() {

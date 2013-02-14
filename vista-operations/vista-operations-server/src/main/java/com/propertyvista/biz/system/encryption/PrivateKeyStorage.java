@@ -17,4 +17,6 @@ interface PrivateKeyStorage {
 
     void savePrivateKey(String name, byte[] encryptedPrivateKeyBytes);
 
+    byte[] loadPrivateKey(String name);
+
 }

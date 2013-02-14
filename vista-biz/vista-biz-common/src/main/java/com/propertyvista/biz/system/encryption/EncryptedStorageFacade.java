@@ -44,9 +44,9 @@ public interface EncryptedStorageFacade {
      * After this call key can be used for decrypt operation.
      * 
      * @param publicKeyKey
-     * @param passwrord
+     * @param password
      */
-    void activateDecryption(Key publicKeyKey, char[] passwrord);
+    void activateDecryption(Key publicKeyKey, char[] password);
 
     void deactivateDecryption(Key publicKeyKey);
 

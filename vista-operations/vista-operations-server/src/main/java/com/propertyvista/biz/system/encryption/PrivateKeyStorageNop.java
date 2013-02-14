@@ -19,4 +19,9 @@ public class PrivateKeyStorageNop implements PrivateKeyStorage {
     public void savePrivateKey(String name, byte[] encryptedBytes) {
     }
 
+    @Override
+    public byte[] loadPrivateKey(String name) {
+        return null;
+    }
+
 }
