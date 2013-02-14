@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,8 +29,11 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -49,8 +52,11 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
     private static final I18n i18n = I18n.get(LeaseParticipanApprovalFolder.class);
 
-    public LeaseParticipanApprovalFolder(boolean modifyable) {
+    private final LeaseApplicationViewerView view;
+
+    public LeaseParticipanApprovalFolder(boolean modifyable, LeaseApplicationViewerView view) {
         super(LeaseParticipanApprovalDTO.class, modifyable);
+        this.view = view;
     }
 
     @Override
@@ -186,9 +192,16 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 setCommand(new Command() {
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(
-                                new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this.getValue()
-                                        .leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
+                        ((LeaseApplicationViewerView.Presenter) ((IViewerView<?>) view).getPresenter())
+                                .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
+
+                                    @Override
+                                    public void onSuccess(VoidSerializable result) {
+                                        AppSite.getPlaceController().goTo(
+                                                new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this
+                                                        .getValue().leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
+                                    }
+                                });
                     }
                 });
 

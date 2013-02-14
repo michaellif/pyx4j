@@ -34,13 +34,45 @@ import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.server.jobs.TaskRunner;
 
-class EquifaxEnforceLimit {
+public class EquifaxEnforceLimit {
 
     private static final I18n i18n = I18n.get(EquifaxEnforceLimit.class);
 
-    static void assertLimit(final AuditRecordEventType eventType) {
+    public static void assertLimit(final AuditRecordEventType eventType) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
+        Integer currentCount = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
+            @Override
+            public Integer call() {
+                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+                criteria.eq(criteria.proto().event(), eventType);
+                criteria.eq(criteria.proto().namespace(), pmc.namespace());
+                Date dayStart = DateUtils.dayStart(new Date());
+                criteria.ge(criteria.proto().created(), dayStart);
+                return Persistence.service().count(criteria);
+            }
+        });
+
+        EquifaxLimit limit = getLimit();
+
+        switch (eventType) {
+        case EquifaxReadReport:
+            if (currentCount >= limit.dailyReports().getValue()) {
+                throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
+            }
+            break;
+        case EquifaxRequest:
+            if (currentCount >= limit.dailyRequests().getValue()) {
+                throw new UserRuntimeException(i18n.tr("Request Daily limit exceeded"));
+            }
+            break;
+        default:
+            throw new IllegalArgumentException("Unsupported limit");
+        }
+    }
+
+    private static EquifaxLimit getLimit() {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
         EquifaxLimit pmcLimit = TaskRunner.runInOperationsNamespace(new Callable<EquifaxLimit>() {
             @Override
             public EquifaxLimit call() {
@@ -61,32 +93,7 @@ class EquifaxEnforceLimit {
         setNonNullMember(limit.dailyRequests(), pmcLimit, defaultEquifaxLimit);
         setNonNullMember(limit.dailyReports(), pmcLimit, defaultEquifaxLimit);
 
-        Integer currentCount = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
-            @Override
-            public Integer call() {
-                EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
-                criteria.eq(criteria.proto().event(), eventType);
-                criteria.eq(criteria.proto().namespace(), pmc.namespace());
-                Date dayStart = DateUtils.dayStart(new Date());
-                criteria.ge(criteria.proto().created(), dayStart);
-                return Persistence.service().count(criteria);
-            }
-        });
-
-        switch (eventType) {
-        case EquifaxReadReport:
-            if (currentCount >= limit.dailyRequests().getValue()) {
-                throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
-            }
-            break;
-        case EquifaxRequest:
-            if (currentCount >= limit.dailyRequests().getValue()) {
-                throw new UserRuntimeException(i18n.tr("Request Daily limit exceeded"));
-            }
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported limit");
-        }
+        return limit;
     }
 
     @SuppressWarnings("unchecked")

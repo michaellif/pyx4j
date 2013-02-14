@@ -38,6 +38,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -46,6 +47,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.equifax.EquifaxEnforceLimit;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.server.common.util.TenantConverter;
 
@@ -243,5 +245,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     @Override
     public void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback) {
         callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).getCreditCheckServiceStatus());
+    }
+
+    @Override
+    public void isCreditCheckViewAllowed(AsyncCallback<VoidSerializable> callback) {
+        EquifaxEnforceLimit.assertLimit(AuditRecordEventType.EquifaxReadReport);
+        callback.onSuccess(null);
     }
 }

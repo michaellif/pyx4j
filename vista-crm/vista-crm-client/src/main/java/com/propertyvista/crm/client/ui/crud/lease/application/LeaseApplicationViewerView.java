@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
@@ -38,6 +39,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
         void applicationAction(LeaseApplicationActionDTO action);
 
         void getCreditCheckServiceStatus(AsyncCallback<PmcEquifaxStatus> callback);
+
+        void isCreditCheckViewAllowed(AsyncCallback<VoidSerializable> callback);
     }
 
     void reportStartOnlineApplicationSuccess();

@@ -124,4 +124,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
             }
         });
     }
+
+    @Override
+    public void isCreditCheckViewAllowed(final AsyncCallback<VoidSerializable> callback) {
+        ((LeaseApplicationViewerCrudService) getService()).isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                callback.onSuccess(result);
+            }
+        });
+    }
 }
