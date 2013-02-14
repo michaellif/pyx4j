@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 
 public class LegalDocumentationPolicyEditorViewImpl extends CrmEditorViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyEditorView {
 
     public LegalDocumentationPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.LegalDocumentation.class);
         setForm(new LegalDocumentationPolicyForm(this));
     }
 }

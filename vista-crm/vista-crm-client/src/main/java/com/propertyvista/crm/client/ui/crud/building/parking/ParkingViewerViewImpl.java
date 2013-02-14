@@ -17,7 +17,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.dto.ParkingDTO;
 
@@ -26,9 +25,7 @@ public class ParkingViewerViewImpl extends CrmViewerViewImplBase<ParkingDTO> imp
     private final IListerView<ParkingSpot> spotLister;
 
     public ParkingViewerViewImpl() {
-        super(CrmSiteMap.Properties.Parking.class);
-
-        spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister(/* readOnly */));
+        spotLister = new ListerInternalViewImplBase<ParkingSpot>(new ParkingSpotLister());
 
         // set main form here:
         setForm(new ParkingForm(this));

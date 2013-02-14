@@ -20,7 +20,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
@@ -34,9 +33,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     private final MenuItem maintenanceAction;
 
     public TenantViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
-
-        //set main form here:
         setForm(new TenantForm(this));
 
         addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {

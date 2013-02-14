@@ -27,7 +27,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -46,7 +45,6 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     private final MenuItem cancelAction;
 
     public MaintenanceRequestViewerViewImpl() {
-        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
         setForm(new MaintenanceRequestForm(this));
 
         scheduleAction = new MenuItem(i18n.tr("Schedule..."), new Command() {

@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustmentReason> implements LeaseAdjustmentReasonEditorView {
     public LeaseAdjustmentReasonEditorViewImpl() {
-        super(Financial.LeaseAdjustmentReason.class);
         setForm(new LeaseAdjustmentReasonForm(this));
     }
 }

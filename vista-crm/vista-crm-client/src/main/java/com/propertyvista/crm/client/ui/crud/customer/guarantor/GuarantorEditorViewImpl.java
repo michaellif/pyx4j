@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorEditorViewImpl extends CrmEditorViewImplBase<GuarantorDTO> implements GuarantorEditorView {
 
     public GuarantorEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Guarantor.class);
         setForm(new GuarantorForm(this));
     }
 }

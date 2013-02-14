@@ -29,7 +29,6 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -71,8 +70,6 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     public UnitViewerViewImpl() {
-        super(CrmSiteMap.Properties.Unit.class);
-
         unitItemsLister = new ListerInternalViewImplBase<AptUnitItem>(new UnitItemLister());
         occupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancySegment>(new UnitOccupancyLister());
 

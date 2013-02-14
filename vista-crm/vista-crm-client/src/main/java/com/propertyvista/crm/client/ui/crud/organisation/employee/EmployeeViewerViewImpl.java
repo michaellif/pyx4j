@@ -21,7 +21,6 @@ import com.pyx4j.widgets.client.PasswordTextBox;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
@@ -35,7 +34,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final MenuItem accountRecoveryOptionsAction;
 
     public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class);
         setForm(new EmployeeForm(this));
 
         // Add actions:        

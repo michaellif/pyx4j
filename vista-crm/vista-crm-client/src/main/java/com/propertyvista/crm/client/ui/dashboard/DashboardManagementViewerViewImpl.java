@@ -30,7 +30,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectCrmUserListService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.CrmUser;
@@ -86,7 +85,6 @@ public class DashboardManagementViewerViewImpl extends CrmViewerViewImplBase<Das
     private Button changeOwnershipButton;
 
     public DashboardManagementViewerViewImpl() {
-        super(CrmSiteMap.Dashboard.Manage.class);
         setForm(new DashboardManagementForm(this));
 
         addHeaderToolbarItem(takeOwnershipButton = new Button(i18n.tr("Take Ownership"), new Command() {

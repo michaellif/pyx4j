@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioEditorViewImpl extends CrmEditorViewImplBase<Portfolio> implements PortfolioEditorView {
 
     public PortfolioEditorViewImpl() {
-        super(CrmSiteMap.Organization.Portfolio.class);
         setForm(new PortfolioForm(this));
     }
 }

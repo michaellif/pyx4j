@@ -24,7 +24,6 @@ import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerViewImpl;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -37,8 +36,6 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     private final MenuItem closeAction;
 
     public AppointmentViewerViewImpl() {
-        super(Marketing.Appointment.class);
-
         showingsLister = new ShowingListerViewImpl();
 
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {

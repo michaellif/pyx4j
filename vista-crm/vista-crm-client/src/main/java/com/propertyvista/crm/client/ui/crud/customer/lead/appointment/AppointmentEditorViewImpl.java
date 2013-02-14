@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentEditorViewImpl extends CrmEditorViewImplBase<Appointment> implements AppointmentEditorView {
 
     public AppointmentEditorViewImpl() {
-        super(Marketing.Appointment.class);
         setForm(new AppointmentForm(this));
     }
 }

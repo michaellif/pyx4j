@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.complex;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorViewImpl extends CrmEditorViewImplBase<ComplexDTO> implements ComplexEditorView {
 
     public ComplexEditorViewImpl() {
-        super(CrmSiteMap.Properties.Complex.class);
         setForm(new ComplexForm(this));
     }
 

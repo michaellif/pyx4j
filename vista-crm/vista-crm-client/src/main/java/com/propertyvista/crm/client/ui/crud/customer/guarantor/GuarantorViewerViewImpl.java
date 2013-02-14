@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO> implements GuarantorViewerView {
@@ -31,9 +30,6 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
     private final MenuItem screeningAction;
 
     public GuarantorViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Guarantor.class);
-
-        //set main form here:
         setForm(new GuarantorForm(this));
 
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {

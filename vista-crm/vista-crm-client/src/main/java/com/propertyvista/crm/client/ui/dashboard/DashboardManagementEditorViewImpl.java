@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.dashboard;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementEditorViewImpl extends CrmEditorViewImplBase<DashboardMetadata> implements DashboardManagementEditorView {
 
     public DashboardManagementEditorViewImpl() {
-        super(CrmSiteMap.Dashboard.Manage.class);
         setForm(new DashboardManagementForm(this));
     }
 

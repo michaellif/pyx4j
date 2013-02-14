@@ -17,7 +17,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.Locker;
 import com.propertyvista.dto.LockerAreaDTO;
 
@@ -26,9 +25,7 @@ public class LockerAreaViewerViewImpl extends CrmViewerViewImplBase<LockerAreaDT
     private final IListerView<Locker> lockerLister;
 
     public LockerAreaViewerViewImpl() {
-        super(CrmSiteMap.Properties.LockerArea.class);
-
-        lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister(/* readOnly */));
+        lockerLister = new ListerInternalViewImplBase<Locker>(new LockerLister());
 
         // set main form here:
         setForm(new LockerAreaForm(this));

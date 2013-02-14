@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
 public class TenantInsurancePolicyViewerViewImpl extends CrmViewerViewImplBase<TenantInsurancePolicyDTO> {
 
     public TenantInsurancePolicyViewerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.TenantInsurance.class);
         setForm(new TenantInsurancePolicyForm(this));
     }
 

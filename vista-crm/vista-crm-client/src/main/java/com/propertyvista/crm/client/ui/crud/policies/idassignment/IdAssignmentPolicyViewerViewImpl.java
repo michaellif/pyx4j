@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
 public class IdAssignmentPolicyViewerViewImpl extends CrmViewerViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyViewerView {
 
     public IdAssignmentPolicyViewerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.IdAssignment.class);
         setForm(new IdAssignmentPolicyForm(this));
     }
 }

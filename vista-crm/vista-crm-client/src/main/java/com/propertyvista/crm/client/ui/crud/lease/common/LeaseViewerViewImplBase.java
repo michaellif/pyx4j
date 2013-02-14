@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
@@ -35,8 +34,8 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final MenuItem viewFutureTerm;
 
-    public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super(placeClass, true);
+    public LeaseViewerViewImplBase() {
+        super(true);
 
         termsButton = new Button(i18n.tr("Terms"));
         Button.ButtonMenuBar viewsMenu = termsButton.createMenu();

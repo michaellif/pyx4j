@@ -16,13 +16,11 @@ package com.propertyvista.crm.client.ui.crud.settings.content.gadgets;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetViewerImpl extends CrmViewerViewImplBase<HomePageGadget> implements HomePageGadgetViewer {
 
     public HomePageGadgetViewerImpl() {
-        super(Content.HomePageGadgets.class);
         setForm(new HomePageGadgetForm(this));
     }
 

@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.site;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements SiteEditor {
     public SiteEditorImpl() {
-        super(CrmSiteMap.Administration.Content.class);
         setForm(new SiteForm(this));
     }
 }

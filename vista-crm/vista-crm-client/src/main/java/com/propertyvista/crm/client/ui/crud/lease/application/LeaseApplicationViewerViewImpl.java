@@ -79,9 +79,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
     private static final String CANCEL = i18n.tr("Cancel");
 
     public LeaseApplicationViewerViewImpl() {
-        super(CrmSiteMap.Tenants.LeaseApplication.class);
-
-        //set main form here:
         setForm(new LeaseApplicationForm(this));
 
         // Buttons:

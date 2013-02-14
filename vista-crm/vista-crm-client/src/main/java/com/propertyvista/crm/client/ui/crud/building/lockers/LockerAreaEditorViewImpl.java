@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorViewImpl extends CrmEditorViewImplBase<LockerAreaDTO> implements LockerAreaEditorView {
 
     public LockerAreaEditorViewImpl() {
-        super(CrmSiteMap.Properties.LockerArea.class);
         setForm(new LockerAreaForm(this));
     }
 }

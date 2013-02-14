@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustment> implements LeaseAdjustmentEditorView {
     public LeaseAdjustmentEditorViewImpl() {
-        super(CrmSiteMap.Finance.LeaseAdjustment.class);
         setForm(new LeaseAdjustmentForm(this));
     }
 }

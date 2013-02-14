@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorViewerViewImpl extends CrmViewerViewImplBase<Vendor> implements VendorViewerView {
 
     public VendorViewerViewImpl() {
-        super(CrmSiteMap.Organization.Vendor.class);
         setForm(new VendorForm(this));
     }
 }

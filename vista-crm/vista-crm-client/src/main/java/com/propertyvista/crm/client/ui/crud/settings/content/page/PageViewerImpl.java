@@ -20,7 +20,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implements PageViewer {
@@ -28,7 +27,6 @@ public class PageViewerImpl extends CrmViewerViewImplBase<PageDescriptor> implem
     private static final I18n i18n = I18n.get(PageViewerImpl.class);
 
     public PageViewerImpl() {
-        super(Content.Page.class);
         setForm(new PageForm(this));
 
         // Add actions:

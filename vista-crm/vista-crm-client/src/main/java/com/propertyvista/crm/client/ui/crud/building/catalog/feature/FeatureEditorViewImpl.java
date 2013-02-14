@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureEditorViewImpl extends CrmEditorViewImplBase<Feature> implements FeatureEditorView {
 
     public FeatureEditorViewImpl() {
-        super(CrmSiteMap.Properties.Feature.class);
         setForm(new FeatureForm(this));
     }
 

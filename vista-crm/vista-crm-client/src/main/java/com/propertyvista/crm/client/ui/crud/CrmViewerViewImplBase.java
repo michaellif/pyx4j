@@ -32,7 +32,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
@@ -67,21 +66,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
 
     private Button.ButtonMenuBar actionsMenu;
 
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        this(placeClass, false);
+    public CrmViewerViewImplBase() {
+        this(false);
     }
 
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
-        this(placeClass);
-        setForm(form);
-    }
-
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form, boolean viewOnly) {
-        this(placeClass, viewOnly);
-        setForm(form);
-    }
-
-    public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
+    public CrmViewerViewImplBase(boolean viewOnly) {
         this.viewOnly = viewOnly;
 
         // Notes button:
@@ -117,6 +106,16 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
         breadcrumbsBar = new BreadcrumbsBar();
         setBreadcrumbsBar(breadcrumbsBar);
+    }
+
+    public CrmViewerViewImplBase(CrmEntityForm<E> form) {
+        this(false);
+        setForm(form);
+    }
+
+    public CrmViewerViewImplBase(CrmEntityForm<E> form, boolean viewOnly) {
+        this(viewOnly);
+        setForm(form);
     }
 
     public MenuItemSeparator addActionSeparator() {

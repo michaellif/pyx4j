@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanViewerViewImpl extends CrmViewerViewImplBase<FloorplanDTO> implements FloorplanViewerView {
 
     public FloorplanViewerViewImpl() {
-        super(CrmSiteMap.Properties.Floorplan.class);
         setForm(new FloorplanForm(this));
     }
 }

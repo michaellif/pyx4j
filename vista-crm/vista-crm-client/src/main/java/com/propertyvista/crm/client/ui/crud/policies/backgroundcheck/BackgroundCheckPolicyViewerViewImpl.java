@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
 public class BackgroundCheckPolicyViewerViewImpl extends CrmViewerViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyViewerView {
 
     public BackgroundCheckPolicyViewerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.BackgroundCheck.class);
         setForm(new BackgroundCheckPolicyForm(this));
     }
 }

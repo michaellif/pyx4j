@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.emailtemplates;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
 public class EmailTemplatesPolicyEditorViewImpl extends CrmEditorViewImplBase<EmailTemplatesPolicyDTO> implements EmailTemplatesPolicyEditorView {
 
     public EmailTemplatesPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.EmailTemplates.class);
         setForm(new EmailTemplatesPolicyForm(this));
     }
 

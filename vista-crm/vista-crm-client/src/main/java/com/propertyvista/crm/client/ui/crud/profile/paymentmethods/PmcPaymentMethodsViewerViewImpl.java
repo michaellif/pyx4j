@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 
 public class PmcPaymentMethodsViewerViewImpl extends CrmViewerViewImplBase<PmcPaymentMethodsDTO> implements PmcPaymentMethodsViewerView {
 
     public PmcPaymentMethodsViewerViewImpl() {
-        super(CrmSiteMap.Administration.Profile.PaymentMethods.class);
         setNotesVisible(false);
         setForm(new PmcPaymentMethodsForm(this));
     }

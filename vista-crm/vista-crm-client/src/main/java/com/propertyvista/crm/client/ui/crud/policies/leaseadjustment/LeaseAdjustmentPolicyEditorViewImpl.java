@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
 public class LeaseAdjustmentPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustmentPolicyDTO> implements LeaseAdjustmentPolicyEditorView {
 
     public LeaseAdjustmentPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.LeaseAdjustment.class);
         setForm(new LeaseAdjustmentPolicyForm(this));
     }
 }

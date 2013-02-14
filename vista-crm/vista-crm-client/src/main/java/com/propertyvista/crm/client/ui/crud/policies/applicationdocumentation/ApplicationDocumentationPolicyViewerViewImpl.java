@@ -14,14 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyViewerViewImpl extends CrmViewerViewImplBase<ApplicationDocumentationPolicyDTO> implements
         ApplicationDocumentationPolicyViewerView {
 
     public ApplicationDocumentationPolicyViewerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.ApplicationDocumentation.class);
         setForm(new ApplicationDocumentationPolicyForm(this));
     }
 

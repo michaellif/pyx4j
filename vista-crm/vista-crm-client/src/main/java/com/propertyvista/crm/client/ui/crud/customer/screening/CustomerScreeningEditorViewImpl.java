@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class CustomerScreeningEditorViewImpl extends CrmEditorViewImplBase<CustomerScreening> implements CustomerScreeningEditorView {
     public CustomerScreeningEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Screening.class);
         setForm(new CustomerScreeningForm(this));
     }
 

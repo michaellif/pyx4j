@@ -14,14 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ShowingEditorViewImpl extends CrmEditorViewImplBase<ShowingDTO> implements ShowingEditorView {
 
     public ShowingEditorViewImpl() {
-        super(Marketing.Showing.class);
         setForm(new ShowingForm(this));
     }
 

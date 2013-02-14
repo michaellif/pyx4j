@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionEditorViewImpl extends CrmEditorViewImplBase<Concession> implements ConcessionEditorView {
 
     public ConcessionEditorViewImpl() {
-        super(CrmSiteMap.Properties.Concession.class);
         setForm(new ConcessionForm(this));
     }
 }

@@ -22,7 +22,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.dto.ComplexDTO;
 
@@ -33,8 +32,6 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     private final ButtonMenuBar dashboardsMenu;
 
     public ComplexViewerViewImpl() {
-        super(CrmSiteMap.Properties.Complex.class);
-
         Button dashboardButton = new Button(i18n.tr("Dashboard"));
         dashboardsMenu = dashboardButton.createMenu();
         dashboardButton.setMenu(dashboardsMenu);

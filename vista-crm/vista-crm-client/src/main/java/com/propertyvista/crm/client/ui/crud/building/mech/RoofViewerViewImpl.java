@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofViewerViewImpl extends CrmViewerViewImplBase<RoofDTO> implements RoofViewerView {
 
     public RoofViewerViewImpl() {
-        super(CrmSiteMap.Properties.Roof.class);
         setForm(new RoofForm(this));
     }
 }

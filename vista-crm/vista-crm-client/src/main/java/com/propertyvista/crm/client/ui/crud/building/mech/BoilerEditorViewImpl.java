@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorViewImpl extends CrmEditorViewImplBase<BoilerDTO> implements BoilerEditorView {
     public BoilerEditorViewImpl() {
-        super(CrmSiteMap.Properties.Boiler.class);
         setForm(new BoilerForm(this));
     }
 

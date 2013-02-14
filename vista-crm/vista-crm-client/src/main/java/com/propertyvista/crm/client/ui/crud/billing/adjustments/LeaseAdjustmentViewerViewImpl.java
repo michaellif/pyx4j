@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 
@@ -30,7 +29,6 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
     private final MenuItem submitAction;
 
     public LeaseAdjustmentViewerViewImpl() {
-        super(CrmSiteMap.Finance.LeaseAdjustment.class);
         setForm(new LeaseAdjustmentForm(this));
 
         submitAction = new MenuItem(i18n.tr("Submit"), new Command() {

@@ -14,14 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements LeadEditorView {
 
     public LeadEditorViewImpl() {
-        super(Marketing.Lead.class);
         setForm(new LeadForm(this));
     }
 

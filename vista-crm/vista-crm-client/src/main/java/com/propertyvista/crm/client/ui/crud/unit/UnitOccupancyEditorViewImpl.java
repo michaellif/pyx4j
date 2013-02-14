@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class UnitOccupancyEditorViewImpl extends CrmEditorViewImplBase<AptUnitOccupancySegment> implements UnitOccupancyEditorView {
 
     public UnitOccupancyEditorViewImpl() {
-        super(CrmSiteMap.Properties.UnitOccupancy.class);
         setForm(new UnitOccupancyForm(this));
     }
 }

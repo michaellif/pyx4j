@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 
 public class FeatureTypeViewerViewImpl extends CrmViewerViewImplBase<FeatureItemType> implements FeatureTypeViewerView {
 
     public FeatureTypeViewerViewImpl() {
-        super(Financial.ProductDictionary.FeatureItemType.class);
         setForm(new FeatureTypeForm(this));
     }
 }

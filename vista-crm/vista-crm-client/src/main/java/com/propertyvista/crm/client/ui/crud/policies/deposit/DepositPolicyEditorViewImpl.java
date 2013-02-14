@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
 public class DepositPolicyEditorViewImpl extends CrmEditorViewImplBase<DepositPolicyDTO> implements DepositPolicyEditorView {
 
     public DepositPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Deposits.class);
         setForm(new DepositPolicyForm(this));
     }
 

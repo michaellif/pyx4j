@@ -132,8 +132,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     private final MenuItem yardiImportAction;
 
     public LeaseViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
-
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
         paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());

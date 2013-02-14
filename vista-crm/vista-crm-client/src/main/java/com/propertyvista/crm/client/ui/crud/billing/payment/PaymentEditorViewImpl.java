@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentEditorViewImpl extends CrmEditorViewImplBase<PaymentRecordDTO> implements PaymentEditorView {
     public PaymentEditorViewImpl() {
-        super(CrmSiteMap.Finance.Payment.class);
         setForm(new PaymentForm(this));
     }
 }

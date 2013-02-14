@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -22,7 +21,6 @@ import com.propertyvista.misc.VistaTODO;
 public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO> implements LeaseTermEditorView {
 
     public LeaseTermEditorViewImpl() {
-        super(CrmSiteMap.Tenants.LeaseTerm.class);
         setForm(new LeaseTermForm(this));
     }
 

@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> implements TenantEditorView {
@@ -24,7 +23,6 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
     private final static I18n i18n = I18n.get(TenantEditorViewImpl.class);
 
     public TenantEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class);
         setForm(new TenantForm(this));
     }
 

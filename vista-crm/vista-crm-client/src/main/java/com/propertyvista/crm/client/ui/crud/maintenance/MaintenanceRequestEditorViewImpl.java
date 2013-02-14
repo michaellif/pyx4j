@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView {
 
     public MaintenanceRequestEditorViewImpl() {
-        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
         setForm(new MaintenanceRequestForm(this));
     }
 

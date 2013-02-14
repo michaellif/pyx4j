@@ -22,7 +22,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
@@ -43,7 +42,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
     private final MenuItem printAction;
 
     public BillViewerViewImpl() {
-        super(CrmSiteMap.Finance.Bill.class, true);
+        super(true);
         setForm(new BillDataForm(this, false));
         // Add actions:
 

@@ -14,14 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.customer.creditcheck;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 
 public class CustomerCreditCheckLongReportViewerViewImpl extends CrmViewerViewImplBase<CustomerCreditCheckLongReportDTO> implements
         CustomerCreditCheckLongReportViewerView {
 
     public CustomerCreditCheckLongReportViewerViewImpl() {
-        super(CrmSiteMap.Tenants.CustomerCreditCheckLongReport.class, true);
+        super(true);
         setForm(new CustomerCreditCheckLongReportForm(this));
     }
 

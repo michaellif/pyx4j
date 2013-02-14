@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryEditorViewImpl extends CrmEditorViewImplBase<GlCodeCategory> implements GlCodeCategoryEditorView {
     public GlCodeCategoryEditorViewImpl() {
-        super(Financial.GlCodeCategory.class);
         setForm(new GlCodeCategoryForm(this));
     }
 }

@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.pet;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
 public class PetPolicyViewerViewImpl extends CrmViewerViewImplBase<PetPolicyDTO> implements PetPolicyViewerView {
 
     public PetPolicyViewerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Pet.class);
         setForm(new PetPolicyForm(this));
     }
 }

@@ -29,7 +29,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerViewImpl;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
@@ -47,8 +46,6 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     private final AppointmentListerView appointmentLister = new AppointmentListerViewImpl();
 
     public LeadViewerViewImpl() {
-        super(Marketing.Lead.class);
-
         convertAction = new MenuItem(i18n.tr("Convert to Lease"), new Command() {
             @Override
             public void execute() {

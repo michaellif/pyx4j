@@ -14,13 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
 public class BillingCycleViewImpl extends CrmViewerViewImplBase<BillingCycleDTO> implements BillingCycleView {
 
     public BillingCycleViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.class, true);
+        super(true);
         setForm(new BillingCycleForm(this));
     }
 }

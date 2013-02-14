@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorViewerViewImpl extends CrmViewerViewImplBase<ElevatorDTO> implements ElevatorViewerView {
 
     public ElevatorViewerViewImpl() {
-        super(CrmSiteMap.Properties.Elevator.class);
         setForm(new ElevatorForm(this));
     }
 }

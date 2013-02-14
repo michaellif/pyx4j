@@ -16,14 +16,12 @@ package com.propertyvista.crm.client.ui.crud.customer.screening;
 import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningVersionService;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class CustomerScreeningViewerViewImpl extends CrmViewerViewImplBase<CustomerScreening> implements CustomerScreeningViewerView {
 
     public CustomerScreeningViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Screening.class);
         setForm(new CustomerScreeningForm(this));
         enableVersioning(CustomerScreening.CustomerScreeningV.class, GWT.<CustomerScreeningVersionService> create(CustomerScreeningVersionService.class));
     }

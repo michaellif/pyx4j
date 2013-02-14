@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
 public class DatesPolicyEditorViewImpl extends CrmEditorViewImplBase<DatesPolicyDTO> implements DatesPolicyEditorView {
 
     public DatesPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Dates.class);
         setForm(new DatesPolicyForm(this));
     }
 

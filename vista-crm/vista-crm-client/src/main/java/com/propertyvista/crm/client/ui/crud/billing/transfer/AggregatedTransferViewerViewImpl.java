@@ -22,7 +22,6 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -40,7 +39,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     private final MenuItem cancelAction;
 
     public AggregatedTransferViewerViewImpl() {
-        super(CrmSiteMap.Finance.AggregatedTransfer.class, true);
+        super(true);
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
         returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());

@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -41,7 +40,6 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     private final MenuItem cancelAction;
 
     public PaymentViewerViewImpl() {
-        super(CrmSiteMap.Finance.Payment.class);
         setForm(new PaymentForm(this));
 
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {

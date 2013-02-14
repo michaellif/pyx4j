@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
 public class DepositLifecycleViewerViewImpl extends CrmViewerViewImplBase<DepositLifecycleDTO> implements DepositLifecycleViewerView {
 
     public DepositLifecycleViewerViewImpl() {
-        super(CrmSiteMap.Finance.LeaseDeposit.class);
         setForm(new DepositLifecycleForm(this));
     }
 }

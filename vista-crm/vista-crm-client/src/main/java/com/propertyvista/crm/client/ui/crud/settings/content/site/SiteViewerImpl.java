@@ -21,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -30,7 +29,6 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
     private static final I18n i18n = I18n.get(SiteViewerImpl.class);
 
     public SiteViewerImpl() {
-        super(CrmSiteMap.Administration.Content.class);
         setForm(new SiteForm(this));
 
         // Add actions:

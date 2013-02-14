@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
 public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> implements EmployeeEditorView {
 
     public EmployeeEditorViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class);
         setForm(new EmployeeForm(this));
     }
 

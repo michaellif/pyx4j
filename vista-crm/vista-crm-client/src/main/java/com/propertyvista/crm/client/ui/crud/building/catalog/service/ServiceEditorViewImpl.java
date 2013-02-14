@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorViewImpl extends CrmEditorViewImplBase<Service> implements ServiceEditorView {
 
     public ServiceEditorViewImpl() {
-        super(CrmSiteMap.Properties.Service.class);
         setForm(new ServiceForm(this));
     }
 

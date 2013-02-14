@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
 public class ServiceTypeEditorViewImpl extends CrmEditorViewImplBase<ServiceItemType> implements ServiceTypeEditorView {
 
     public ServiceTypeEditorViewImpl() {
-        super(Financial.ProductDictionary.ServiceItemType.class);
         setForm(new ServiceTypeForm(this));
     }
 

@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -86,7 +85,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     private final ButtonMenuBar dashboardsMenu;
 
     public BuildingViewerViewImpl() {
-        super(CrmSiteMap.Properties.Building.class);
 
         floorplanLister = new ListerInternalViewImplBase<FloorplanDTO>(new FloorplanLister());
 

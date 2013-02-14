@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 
 public class RestrictionsPolicyEditorViewImpl extends CrmEditorViewImplBase<RestrictionsPolicyDTO> implements RestrictionsPolicyEditorView {
 
     public RestrictionsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Restrictions.class);
         setForm(new RestrictionsPolicyForm(this));
     }
 
