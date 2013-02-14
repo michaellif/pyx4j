@@ -288,7 +288,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     private int countRecords(Key publicKeyKey) {
         int count = 0;
         for (EncryptedStorageConsumer consumer : consumers) {
-            consumer.countRecords(publicKeyKey);
+            count += consumer.countRecords(publicKeyKey);
         }
         return count;
     }
