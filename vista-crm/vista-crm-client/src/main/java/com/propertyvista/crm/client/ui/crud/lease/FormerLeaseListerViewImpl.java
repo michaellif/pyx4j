@@ -20,7 +20,7 @@ import com.propertyvista.dto.LeaseDTO;
 public class FormerLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements LeaseListerView {
 
     public FormerLeaseListerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
+        super(CrmSiteMap.Tenants.FormerLease.class);
         setLister(new FormerLeaseLister());
     }
 }
