@@ -55,8 +55,8 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     public EditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super();
+
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        setCaption(defaultCaption);
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
