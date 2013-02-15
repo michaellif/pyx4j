@@ -169,6 +169,21 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         TenantSureReports.completeReport(formater, date);
     }
 
+    @Override
+    public void processTransactionsReport(RunStats runtStats, Date date, ReportTableFormatter formatter) {
+        TenantSureReports.processTransactionsReport(runtStats, date, formatter);
+    }
+
+    @Override
+    public ReportTableFormatter startTransactionsReport() {
+        return TenantSureReports.startTransactionsReport();
+    }
+
+    @Override
+    public void completeTransactionsReport(ReportTableFormatter formatter, Date date) {
+        TenantSureReports.completeTransactionsReport(formatter, date);
+    }
+
     private LogicalDate gracePeriodEnd(InsuranceTenantSure insuranceTenantSure) {
         GregorianCalendar gracePeriodEnd = new GregorianCalendar();
         gracePeriodEnd.setTime(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));

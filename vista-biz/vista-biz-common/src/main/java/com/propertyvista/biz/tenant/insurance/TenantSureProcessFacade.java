@@ -37,4 +37,10 @@ public interface TenantSureProcessFacade {
 
     void completeReport(ReportTableFormatter formater, Date date);
 
+    ReportTableFormatter startTransactionsReport();
+
+    void processTransactionsReport(RunStats runtStats, Date date, ReportTableFormatter formatter);
+
+    void completeTransactionsReport(ReportTableFormatter formatter, Date date);
+
 }

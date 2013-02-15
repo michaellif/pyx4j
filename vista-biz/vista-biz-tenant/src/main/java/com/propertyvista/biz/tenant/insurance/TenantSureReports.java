@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +41,14 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.rpc.TenantSureCcTaransactionsReportLineDTO;
 import com.propertyvista.server.jobs.StatisticsUtils;
 
 class TenantSureReports {
@@ -113,6 +117,127 @@ class TenantSureReports {
         Persistence.service().commit();
     }
 
+    static void completeReport(ReportTableFormatter formatter, Date date) {
+        // create the file actually
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
+        String baseFileName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date);
+        File file = createUniqueFile(dirReports, baseFileName, ".csv");
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            out.write(formatter.getBinaryData());
+        } catch (Throwable e) {
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    static ReportTableFormatter startTransactionsReport() {
+        ReportTableFormatter formatter = new ReportTableCSVFormatter();
+        EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO> er = new EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO>(
+                TenantSureCcTaransactionsReportLineDTO.class);
+        er.createHeader(formatter);
+
+        return formatter;
+    }
+
+    static void processTransactionsReport(RunStats runStats, Date date, ReportTableFormatter formatter) {
+        EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+
+        GregorianCalendar lowerBound = new GregorianCalendar();
+        lowerBound.setTime(date);
+        lowerBound.set(GregorianCalendar.HOUR_OF_DAY, lowerBound.getActualMinimum(GregorianCalendar.HOUR_OF_DAY));
+        lowerBound.set(GregorianCalendar.MINUTE, lowerBound.getActualMinimum(GregorianCalendar.MINUTE));
+        lowerBound.set(GregorianCalendar.SECOND, lowerBound.getActualMinimum(GregorianCalendar.SECOND));
+        lowerBound.set(GregorianCalendar.MILLISECOND, lowerBound.getActualMinimum(GregorianCalendar.MILLISECOND));
+
+        GregorianCalendar upperBound = new GregorianCalendar();
+        upperBound.setTime(date);
+        upperBound.set(GregorianCalendar.HOUR_OF_DAY, upperBound.getActualMaximum(GregorianCalendar.HOUR_OF_DAY));
+        upperBound.set(GregorianCalendar.MINUTE, upperBound.getActualMaximum(GregorianCalendar.MINUTE));
+        upperBound.set(GregorianCalendar.SECOND, upperBound.getActualMaximum(GregorianCalendar.SECOND));
+        upperBound.set(GregorianCalendar.MILLISECOND, upperBound.getActualMaximum(GregorianCalendar.MILLISECOND));
+
+        criteria.ge(criteria.proto().transactionDate(), lowerBound.getTime());
+        criteria.le(criteria.proto().transactionDate(), upperBound.getTime());
+        criteria.le(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Cleared);
+
+        ICursorIterator<InsuranceTenantSureTransaction> transactions = Persistence.service().query(null, criteria, AttachLevel.Attached);
+
+        EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO> reportGenerator = new EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO>(
+                TenantSureCcTaransactionsReportLineDTO.class);
+        long numOfTransactions = 0l;
+        long numOfWrongPaymentMethods = 0l;
+        try {
+
+            while (transactions.hasNext()) {
+                InsuranceTenantSureTransaction transaction = transactions.next();
+
+                TenantSureCcTaransactionsReportLineDTO transactionReportLine = EntityFactory.create(TenantSureCcTaransactionsReportLineDTO.class);
+                transactionReportLine.date().setValue(transaction.transactionDate().getValue());
+                transactionReportLine.tenant().setValue(transaction.insurance().tenant().customer().person().name().getStringView());
+                transactionReportLine.insuranceCertificateNumber().setValue(transaction.insurance().insuranceCertificateNumber().getValue());
+                if (transaction.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
+                    CreditCardInfo ccInfo = transaction.paymentMethod().details().duplicate(CreditCardInfo.class);
+                    transactionReportLine.creditCardType().setValue(ccInfo.cardType().getValue().toString());
+                    transactionReportLine.creditCardNumber().setValue(ccInfo.card().obfuscatedNumber().getValue());
+                } else {
+                    log.error("Unknown payment method details {} for TenantSure transaction {}", transaction.paymentMethod().details().getInstanceValueClass()
+                            .getSimpleName(), transaction.getPrimaryKey());
+                    ++numOfWrongPaymentMethods;
+                    transactionReportLine.creditCardType().setValue("N / A");
+                    transactionReportLine.creditCardNumber().setValue("N / A");
+                }
+                transactionReportLine.amount().setValue(transaction.amount().getValue());
+                transactionReportLine.transactionReferenceNumber().setValue(transaction.transactionAuthorizationNumber().getValue());
+
+                reportGenerator.reportEntity(formatter, transactionReportLine);
+                ++numOfTransactions;
+            }
+
+        } finally {
+            transactions.completeRetrieval();
+        }
+        runStats.processed().setValue(numOfTransactions);
+        runStats.erred().setValue(numOfWrongPaymentMethods);
+
+    }
+
+    static void completeTransactionsReport(ReportTableFormatter formatter, Date date) {
+        // create the file actually
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        if (!dirReports.exists()) {
+            if (!dirReports.mkdirs()) {
+                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
+            }
+        }
+
+        String reportFileName = "transactions-" + new SimpleDateFormat("yyyyMMdd").format(date) + ".csv";
+        File file = new File(dirReports, reportFileName);
+        OutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            out.write(formatter.getBinaryData());
+        } catch (Throwable e) {
+            log.error("Unable write to file {}", file.getAbsolutePath(), e);
+            throw new Error(e);
+        } finally {
+            IOUtils.closeQuietly(out);
+        }
+    }
+
     /**
      * @param reportedStatusHolder
      * @return updated reported status
@@ -165,31 +290,6 @@ class TenantSureReports {
         }
 
         return reportedStatusHolder;
-    }
-
-    static void completeReport(ReportTableFormatter formatter, Date date) {
-        // create the file actually
-        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
-        File dirReports = new File(sftpDir, "reports");
-        if (!dirReports.exists()) {
-            if (!dirReports.mkdirs()) {
-                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
-            }
-        }
-
-        String baseFileName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date);
-        File file = createUniqueFile(dirReports, baseFileName, ".csv");
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            out.write(formatter.getBinaryData());
-        } catch (Throwable e) {
-            log.error("Unable write to file {}", file.getAbsolutePath(), e);
-            throw new Error(e);
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
     }
 
     static private File createUniqueFile(File dir, String baseFileName, String extension) {
