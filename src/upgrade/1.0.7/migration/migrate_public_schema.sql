@@ -23,6 +23,7 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE admin_user_credential$behaviors_seq RENAME TO operations_user_credential$behaviors_seq;
   
  -- New sequences
+ CREATE SEQUENCE default_equifax_limit_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_card_service_simulation_card_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_card_service_simulation_merchant_account_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_card_service_simulation_token_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -43,6 +44,7 @@ BEGIN TRANSACTION;
 
   
   -- Change owner to vista
+ ALTER SEQUENCE default_equifax_limit_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_card_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_merchant_account_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_token_seq OWNER TO vista ;

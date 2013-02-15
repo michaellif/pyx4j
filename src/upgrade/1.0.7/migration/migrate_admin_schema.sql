@@ -37,6 +37,7 @@ SET search_path = '_admin_';
         -- Check constraints to drop
         
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
+        ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
        
@@ -55,9 +56,27 @@ SET search_path = '_admin_';
         ALTER TABLE admin_user_credential RENAME TO operations_user_credential;
         ALTER TABLE admin_user_credential$behaviors RENAME TO operations_user_credential$behaviors; 
         
+        -- admin_pmc_equifax_info
+        
+        ALTER TABLE admin_pmc_equifax_info      ADD COLUMN limit_daily_reports INT,
+                                                ADD COLUMN limit_daily_requests INT;
+        
         -- admin_pmc_vista_features
         
         ALTER TABLE admin_pmc_vista_features ADD COLUMN tenant_sure_integration BOOLEAN;
+        
+        
+        -- default_equifax_limit
+        
+        CREATE TABLE default_equifax_limit
+        (
+                id                              BIGINT                  NOT NULL,
+                daily_reports                   INT,
+                daily_requests                  INT,
+                        CONSTRAINT      default_equifax_limit_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE default_equifax_limit OWNER TO vista;
         
         /** simulation tables - not really needed for production **/
         
@@ -155,8 +174,11 @@ SET search_path = '_admin_';
                 id                              BIGINT                          NOT NULL,
                 created                         TIMESTAMP WITHOUT TIME ZONE     NOT NULL,
                 expired                         TIMESTAMP WITHOUT TIME ZONE,
-                key_data                        bytea,
-                key_test_data                   bytea,
+                name                            VARCHAR(500),
+                algorithms_version              INT,
+                key_data                        BYTEA,
+                key_test_data                   BYTEA,
+                encrypt_test_data               BYTEA,
                         CONSTRAINT      encrypted_storage_public_key_pk PRIMARY KEY(id)
         );
         
@@ -253,6 +275,9 @@ SET search_path = '_admin_';
         -- Check constraint to create
         
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'operations', 'prospect', 'resident'));
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
+                CHECK ((event) IN ('Create', 'CredentialUpdate', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
+                'LoginFailed', 'PermitionsUpdate', 'Read', 'Update'));
         ALTER TABLE dev_card_service_simulation_card ADD CONSTRAINT dev_card_service_simulation_card_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa'));
         ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_transaction_type_e_ck 
                 CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'sale'));
