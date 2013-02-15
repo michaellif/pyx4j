@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 
 public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTerminationPolicyDTO> {
 
     public LeaseTerminationPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.LeaseTermination.class);
         setLister(new LeaseTerminationPolicyLister());
     }
 

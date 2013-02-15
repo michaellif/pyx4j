@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements LeaseListerView {
 
     public LeaseListerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
         setLister(new LeaseLister());
     }
 }

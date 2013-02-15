@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorListerViewImpl extends CrmListerViewImplBase<GuarantorDTO> implements GuarantorListerView {
 
     public GuarantorListerViewImpl() {
-        super(CrmSiteMap.Tenants.Guarantor.class);
         setLister(new GuarantorLister());
     }
 }

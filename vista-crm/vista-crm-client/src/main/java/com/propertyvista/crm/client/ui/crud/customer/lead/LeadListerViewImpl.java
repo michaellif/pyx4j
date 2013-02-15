@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadListerViewImpl extends CrmListerViewImplBase<Lead> implements LeadListerView {
 
     public LeadListerViewImpl() {
-        super(Marketing.Lead.class);
         setLister(new LeadLister());
     }
 }

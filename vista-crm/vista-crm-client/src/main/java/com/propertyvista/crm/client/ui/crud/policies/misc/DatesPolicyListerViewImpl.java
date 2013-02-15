@@ -17,13 +17,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
 public class DatesPolicyListerViewImpl extends CrmListerViewImplBase<DatesPolicyDTO> implements DatesPolicyListerView {
 
     public DatesPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Dates.class);
         setLister(new DatesPolicyLister());
     }
 

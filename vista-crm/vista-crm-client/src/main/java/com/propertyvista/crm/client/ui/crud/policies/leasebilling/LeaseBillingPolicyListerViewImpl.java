@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
 public class LeaseBillingPolicyListerViewImpl extends CrmListerViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyListerView {
 
     public LeaseBillingPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Billing.class);
         setLister(new LateFeePolicyLister());
     }
 

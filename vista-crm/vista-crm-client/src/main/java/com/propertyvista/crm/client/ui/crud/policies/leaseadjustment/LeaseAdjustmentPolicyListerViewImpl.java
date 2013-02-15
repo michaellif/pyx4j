@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseadjustment;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
 public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<LeaseAdjustmentPolicyDTO> implements LeaseAdjustmentPolicyListerView {
 
     public LeaseAdjustmentPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.LeaseAdjustment.class);
         setLister(new ChargePolicyLister());
     }
 

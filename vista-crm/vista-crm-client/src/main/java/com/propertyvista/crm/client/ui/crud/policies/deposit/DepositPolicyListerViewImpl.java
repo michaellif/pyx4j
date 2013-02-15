@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
 public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPolicyDTO> implements DepositPolicyListerView {
 
     public DepositPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Deposits.class);
         setLister(new DepositPolicyLister());
     }
 

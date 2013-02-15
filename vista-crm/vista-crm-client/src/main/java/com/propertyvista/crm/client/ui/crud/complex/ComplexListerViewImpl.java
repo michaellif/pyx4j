@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.complex;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexListerViewImpl extends CrmListerViewImplBase<ComplexDTO> implements ComplexListerView {
 
     public ComplexListerViewImpl() {
-        super(CrmSiteMap.Properties.Complex.class);
         setLister(new ComplexLister());
     }
 }

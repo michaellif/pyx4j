@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
 public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyListerView {
 
     public ProductTaxPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.ProductTax.class);
         setLister(new ChargePolicyLister());
     }
 

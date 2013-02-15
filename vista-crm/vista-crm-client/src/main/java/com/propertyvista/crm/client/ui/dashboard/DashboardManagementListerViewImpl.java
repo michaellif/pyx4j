@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.dashboard;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementListerViewImpl extends CrmListerViewImplBase<DashboardMetadata> implements DashboardManagementListerView {
     public DashboardManagementListerViewImpl() {
-        super(CrmSiteMap.Dashboard.Manage.class);
         setLister(new DashboardLister());
     }
 }

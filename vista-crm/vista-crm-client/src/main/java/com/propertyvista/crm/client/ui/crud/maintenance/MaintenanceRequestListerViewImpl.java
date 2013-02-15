@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestListerViewImpl extends CrmListerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestListerView {
 
     public MaintenanceRequestListerViewImpl() {
-        super(CrmSiteMap.Tenants.MaintenanceRequest.class);
         setLister(new MaintenanceRequestLister());
     }
 }

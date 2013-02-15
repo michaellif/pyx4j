@@ -15,14 +15,12 @@ package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
 public class PaymentTypeSelectionPolicyListerViewImpl extends CrmListerViewImplBase<PaymentTypeSelectionPolicyDTO> implements
         PaymentTypeSelectionPolicyListerView {
 
     public PaymentTypeSelectionPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.PaymentTypeSelection.class);
         setLister(new PaymentTypeSelectionPolicyLister());
     }
 

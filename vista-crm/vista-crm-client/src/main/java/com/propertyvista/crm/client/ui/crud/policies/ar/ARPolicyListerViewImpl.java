@@ -17,13 +17,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
 public class ARPolicyListerViewImpl extends CrmListerViewImplBase<ARPolicyDTO> implements ARPolicyListerView {
 
     public ARPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.AR.class);
         setLister(new ARPolicyLister());
     }
 

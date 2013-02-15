@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.TenantDTO;
 
 public class FormerTenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> implements FormerTenantListerView {
 
     public FormerTenantListerViewImpl() {
-        super(CrmSiteMap.Tenants.FormerTenant.class);
         setLister(new FormerTenantLister());
     }
 }

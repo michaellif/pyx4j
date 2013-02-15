@@ -21,7 +21,6 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.components.boxes.UpdateUploadDialog;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -33,7 +32,6 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
     private Button upload;
 
     public BuildingListerViewImpl() {
-        super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
 
         if ((!VistaFeatures.instance().leases() && SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement))

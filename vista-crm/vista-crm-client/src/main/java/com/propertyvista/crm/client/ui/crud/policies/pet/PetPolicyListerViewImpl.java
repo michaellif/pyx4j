@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.pet;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
 public class PetPolicyListerViewImpl extends CrmListerViewImplBase<PetPolicyDTO> implements PetPolicyListerView {
 
     public PetPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.Pet.class);
         setLister(new PolicyListerBase<PetPolicyDTO>(PetPolicyDTO.class) {
         });
     }

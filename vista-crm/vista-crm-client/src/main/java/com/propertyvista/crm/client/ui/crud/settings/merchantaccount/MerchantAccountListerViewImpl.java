@@ -17,13 +17,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.MerchantAccount;
 
 public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<MerchantAccount> implements MerchantAccountListerView {
 
     public MerchantAccountListerViewImpl() {
-        super(Financial.MerchantAccount.class);
         setLister(new MerchantAccountLister());
     }
 

@@ -22,7 +22,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDataDTO> implements BillingCycleBillListerView {
@@ -36,7 +35,6 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
     private final Button print;
 
     public BillingCycleBillListerViewImpl() {
-        super(CrmSiteMap.Finance.Bill.class);
         setLister(new BillingCycleBillLister());
 
         // Add actions:

@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LeaseDTO;
 
 public class BillingCycleLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements BillingCycleLeaseListerView {
 
     public BillingCycleLeaseListerViewImpl() {
-        super(CrmSiteMap.Tenants.Lease.class);
         setLister(new BillingCycleLeaseLister());
     }
 }

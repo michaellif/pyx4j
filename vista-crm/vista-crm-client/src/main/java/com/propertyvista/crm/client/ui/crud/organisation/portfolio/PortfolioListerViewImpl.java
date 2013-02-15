@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.company.Portfolio;
 
 public class PortfolioListerViewImpl extends CrmListerViewImplBase<Portfolio> implements PortfolioListerView {
 
     public PortfolioListerViewImpl() {
-        super(CrmSiteMap.Organization.Portfolio.class);
         setLister(new PortfolioLister());
     }
 }

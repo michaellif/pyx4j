@@ -15,13 +15,11 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 
 public class LegalDocumentationPolicyListerViewImpl extends CrmListerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyListerView {
 
     public LegalDocumentationPolicyListerViewImpl() {
-        super(CrmSiteMap.Administration.Policies.LegalDocumentation.class);
         setLister(new LegalDocumentationPolicyLister());
     }
 

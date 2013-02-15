@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.auditrecord;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.AuditRecordDTO;
 
 public class CrmAuditRecordListerViewImpl extends CrmListerViewImplBase<AuditRecordDTO> {
 
     public CrmAuditRecordListerViewImpl() {
-        super(CrmSiteMap.Administration.Security.AuditRecords.class);
         setLister(new CrmAuditRecordsLister());
     }
 }

@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
 public class AggregatedTransferListerViewImpl extends CrmListerViewImplBase<AggregatedTransfer> implements AggregatedTransferListerView {
 
     public AggregatedTransferListerViewImpl() {
-        super(CrmSiteMap.Finance.AggregatedTransfer.class);
         setLister(new AggregatedTransferLister());
     }
 }

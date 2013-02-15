@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryListerViewImpl extends CrmListerViewImplBase<GlCodeCategory> implements GlCodeCategoryListerView {
 
     public GlCodeCategoryListerViewImpl() {
-        super(Financial.GlCodeCategory.class);
         setLister(new GlCodeCategoryLister());
     }
 }
