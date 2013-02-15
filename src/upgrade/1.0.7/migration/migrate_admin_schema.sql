@@ -277,7 +277,7 @@ SET search_path = '_admin_';
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'operations', 'prospect', 'resident'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
                 CHECK ((event) IN ('Create', 'CredentialUpdate', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
-                'LoginFailed', 'PermitionsUpdate', 'Read', 'Update'));
+                'LoginFailed', 'PermitionsUpdate', 'Read', 'System', 'Update'));
         ALTER TABLE dev_card_service_simulation_card ADD CONSTRAINT dev_card_service_simulation_card_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa'));
         ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_transaction_type_e_ck 
                 CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'sale'));

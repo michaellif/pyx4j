@@ -79,7 +79,8 @@ BEGIN
                                                 ADD COLUMN payment_day INT,
                                                 ADD COLUMN cancellation_date DATE,
                                                 ADD COLUMN monthly_payable NUMERIC(18,2),
-                                                ADD COLUMN is_managed_by_tenant BOOLEAN;
+                                                ADD COLUMN is_managed_by_tenant BOOLEAN,
+                                                ADD COLUMN is_deleted BOOLEAN;
         -- insurance_tenant_sure_details 
         
         ALTER TABLE insurance_tenant_sure_details ADD COLUMN insurance_discriminator VARCHAR(50);  
@@ -176,18 +177,17 @@ BEGIN
         ALTER TABLE resident_portal_settings$custom_html OWNER TO vista;
         
         
-        -- resident_portal_settings$proxy_html
+        -- resident_portal_settings$proxy_whitelist
         
-        CREATE TABLE resident_portal_settings$proxy_html
+        CREATE TABLE resident_portal_settings$proxy_whitelist
         (
                 id                              BIGINT                          NOT NULL,
                 owner                           BIGINT,
-                value                           BIGINT,
-                seq                             INT,
-                        CONSTRAINT      resident_portal_settings$proxy_html_pk PRIMARY KEY(id)
+                value                           VARCHAR(500),
+                        CONSTRAINT      resident_portal_settings$proxy_whitelist_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE resident_portal_settings$proxy_html_pk OWNER TO vista;
+        ALTER TABLE resident_portal_settings$proxy_whitelist OWNER TO vista;
         
         
         -- site_descriptor
@@ -215,8 +215,7 @@ BEGIN
                 REFERENCES insurance_tenant_sure_details(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
         ALTER TABLE resident_portal_settings$custom_html ADD CONSTRAINT resident_portal_settings$custom_html_value_fk FOREIGN KEY(value) REFERENCES html_content(id);
-        ALTER TABLE resident_portal_settings$proxy_html ADD CONSTRAINT resident_portal_settings$proxy_html_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
-        ALTER TABLE resident_portal_settings$proxy_html ADD CONSTRAINT resident_portal_settings$proxy_html_value_fk FOREIGN KEY(value) REFERENCES html_content(id);
+        ALTER TABLE resident_portal_settings$proxy_whitelist ADD CONSTRAINT resident_portal_settings$proxy_whitelist_owner_fk FOREIGN KEY(owner) REFERENCES resident_portal_settings(id);
         ALTER TABLE site_descriptor ADD CONSTRAINT site_descriptor_resident_portal_settings_fk FOREIGN KEY(resident_portal_settings) REFERENCES resident_portal_settings(id);
 
         
@@ -264,7 +263,7 @@ BEGIN
         
         CREATE INDEX customer_user_id_idx ON customer USING btree (user_id);
         CREATE INDEX resident_portal_settings$custom_html_owner_idx ON resident_portal_settings$custom_html USING btree (owner);
-        CREATE INDEX resident_portal_settings$proxy_html_owner_idx ON resident_portal_settings$proxy_html USING btree (owner);
+        CREATE INDEX resident_portal_settings$proxy_whitelist_owner_idx ON resident_portal_settings$proxy_whitelist USING btree (owner);
         
         /**
         ***     =====================================================================================================
