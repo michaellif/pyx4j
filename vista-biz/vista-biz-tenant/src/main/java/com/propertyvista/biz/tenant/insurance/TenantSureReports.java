@@ -178,8 +178,8 @@ class TenantSureReports {
             }
         }
 
-        String reportName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date) + ".csv";
-        File file = new File(dirReports, reportName);
+        String baseFileName = "subscribers-" + new SimpleDateFormat("yyyyMMdd").format(date);
+        File file = createUniqueFile(dirReports, baseFileName, ".csv");
         OutputStream out = null;
         try {
             out = new FileOutputStream(file);
@@ -190,6 +190,20 @@ class TenantSureReports {
         } finally {
             IOUtils.closeQuietly(out);
         }
+    }
+
+    static private File createUniqueFile(File dir, String baseFileName, String extension) {
+        File dst = new File(dir, baseFileName + extension);
+        int attemptCount = 0;
+        while (dst.exists()) {
+            attemptCount++;
+            if (attemptCount > 1000) {
+                log.warn("File {} already exists", dst.getAbsolutePath());
+                return new File(dir, baseFileName + "." + System.currentTimeMillis() + extension);
+            }
+            dst = new File(dir, baseFileName + "." + attemptCount + extension);
+        }
+        return dst;
     }
 
 }
