@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
@@ -149,6 +150,14 @@ public abstract class AppSite implements EntryPoint {
             AppDevStartTimeMonitor.start();
         }
         log.debug("{}", BrowserType.getCompiledType());
+        if (ApplicationMode.isDevelopment()) {
+            log.debug("GWT.getPermutationStrongName       {}", GWT.getPermutationStrongName());
+            log.debug("GWT.getModuleName                  {}", GWT.getModuleName());
+            log.debug("GWT.getModuleBaseURL               {}", GWT.getModuleBaseURL());
+            log.debug("GWT.getHostPageBaseURL             {}", GWT.getHostPageBaseURL());
+            log.debug("GWT.getModuleBaseForStaticFiles    {}", GWT.getModuleBaseForStaticFiles());
+            log.debug("NavigationUri.getDeploymentBaseURL {}", NavigationUri.getDeploymentBaseURL());
+        }
         onSiteLoad();
     }
 
