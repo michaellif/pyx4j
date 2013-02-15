@@ -96,7 +96,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    public void cancelTicket(AsyncCallback<Vector<MaintenanceRequestDTO>> callback, MaintenanceRequestDTO dto) {
+    public void cancelTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
         List<MaintenanceRequest> rs = Persistence.service().query(criteria);
@@ -106,7 +106,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
             req.updated().setValue(new LogicalDate(SysDateManager.getSysDate()));
             Persistence.service().merge(req);
             Persistence.service().commit();
-            listOpenIssues(callback);
+            callback.onSuccess(null);
         } else {
             callback.onFailure(new Throwable("Ticket not found."));
         }

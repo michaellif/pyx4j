@@ -79,10 +79,21 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void cancelRequest(MaintenanceRequestDTO request) {
-        srv.cancelTicket(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
+        srv.cancelTicket(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(Vector<MaintenanceRequestDTO> result) {
-                view.populateOpenRequests(result);
+            public void onSuccess(VoidSerializable result) {
+                srv.listOpenIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
+                    @Override
+                    public void onSuccess(Vector<MaintenanceRequestDTO> result) {
+                        view.populateOpenRequests(result);
+                    }
+                });
+                srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
+                    @Override
+                    public void onSuccess(Vector<MaintenanceRequestDTO> result) {
+                        view.populateHistoryRequests(result);
+                    }
+                });
             }
         }, request);
     }
