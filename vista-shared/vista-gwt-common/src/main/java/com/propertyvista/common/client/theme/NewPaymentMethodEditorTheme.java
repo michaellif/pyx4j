@@ -34,34 +34,6 @@ public class NewPaymentMethodEditorTheme extends Theme {
         Style style = new Style(".", StyleName.PaymentEditor);
         addStyle(style);
 
-        style = new Style(".", StyleName.PaymentEditorButtons);
-        style.addProperty("width", "100px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.PaymentEditorButtons, " .", DefaultWidgetsTheme.StyleName.RadioGroupItem);
-        style.addProperty("width", "100%");
-        style.addProperty("padding-top", "3px");
-        style.addProperty("height", "30px");
-//        style.addProperty("border-top", "1px solid #F7F7F7");
-//        style.addProperty("border-bottom", "1px solid #F7F7F7");
-        style.addProperty("white-space", "nowrap");
-
-        addStyle(style);
-
-        style = new Style(".", StyleName.PaymentEditorButtons, ".", DefaultWidgetsTheme.StyleName.RadioGroupItem, "-",
-                DefaultWidgetsTheme.StyleDependent.pushed);
-//        style.addProperty("border-top", "1px solid #bbb");
-//        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("width", "100px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.PaymentEditorForm);
-        style.addProperty("border-radius", "5px");
-        style.addProperty("border", "solid 1px #666");
-        style.addProperty("margin", "1em");
-        style.addProperty("padding", "1em");
-        addStyle(style);
-
         style = new Style(".", StyleName.PaymentEditorImages);
         style.addProperty("width", "70px");
         addStyle(style);
@@ -84,6 +56,34 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style = new Style(".", StyleName.PaymentEditorImages, " div img");
         style.addProperty("padding-left", "10px");
         style.addProperty("height", "30px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorButtons);
+        style.addProperty("width", "100px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorButtons, " .", DefaultWidgetsTheme.StyleName.RadioGroupItem);
+        style.addProperty("width", "100%");
+        style.addProperty("padding-top", "3px");
+        style.addProperty("height", "30px");
+//        style.addProperty("border-top", "1px solid #F7F7F7");
+//        style.addProperty("border-bottom", "1px solid #F7F7F7");
+        style.addProperty("white-space", "nowrap");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorButtons, ".", DefaultWidgetsTheme.StyleName.RadioGroupItem, "-",
+                DefaultWidgetsTheme.StyleDependent.pushed);
+//        style.addProperty("border-top", "1px solid #bbb");
+//        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("width", "100px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorForm);
+        style.addProperty("margin", "10px");
+        style.addProperty("margin-right", "0");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("border", "solid 1px #666");
+        style.addProperty("padding", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorLegalTerms);
