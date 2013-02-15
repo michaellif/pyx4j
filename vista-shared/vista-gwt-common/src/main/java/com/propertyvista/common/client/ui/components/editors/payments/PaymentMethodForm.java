@@ -91,7 +91,8 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         }
 
         container.setWidget(++row, 0, paymentTypeImagesPanel);
-        container.setWidget(row, 1, inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
+        container.setWidget(row, 1,
+                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
@@ -109,8 +110,6 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         container.setBR(++row, 0, 3);
         container.setWidget(++row, 0, createLegalTermsPanel());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
-
-        container.setWidth("100%");
 
         // tweaks:
         get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
