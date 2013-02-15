@@ -124,9 +124,6 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OnboardingMerchantAccount.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
-
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
 
@@ -136,29 +133,32 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EncryptedStorageService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EncryptedStorageServicePrivateKeyUploadService.class));
+        grant(VistaOperationsBehavior.SecurityAdmin, VistaOperationsBehavior.SystemAdmin);
+        grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
+        grant(VistaOperationsBehavior.SecurityAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
+
+        grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(EncryptedStorageService.class));
+        grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(EncryptedStorageServicePrivateKeyUploadService.class));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
         }
 
-        // let Onboarding API change their own user info and own password
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(AdminUserService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
-        grant(VistaOperationsBehavior.OnboardingApi, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
+        // let Onboarding change their own user info and own password
+        grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(AdminUserService.class));
+        grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
+        grant(VistaOperationsBehavior.Onboarding, new OperationsUserAccountAccesRule(), OperationsUserCredential.class);
+        grant(VistaOperationsBehavior.Onboarding, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
 
-        // let Onboarding API manage onboarding users
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserCrudService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
+        // let Onboarding manage onboarding users
+        grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(OnboardingUserCrudService.class));
+        grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
+        grant(VistaOperationsBehavior.Onboarding, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(PmcCrudService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new EntityPermission(Pmc.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.Onboarding, new IServiceExecutePermission(PmcCrudService.class));
+        grant(VistaOperationsBehavior.Onboarding, new EntityPermission(Pmc.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(EquifaxApprovalCrudService.class));
-        grant(VistaOperationsBehavior.OnboardingApi, new IServiceExecutePermission(EquifaxApprovalCrudService.class));
 
     }
 }

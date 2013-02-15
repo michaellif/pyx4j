@@ -53,7 +53,7 @@ public class OnboardingSecurity {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     // Our wicket session authentication simply returns true, so this call will just create wicket session
-                    rc.set(SecurityController.checkBehavior(VistaOperationsBehavior.OnboardingApi));
+                    rc.set(SecurityController.checkBehavior(VistaOperationsBehavior.Onboarding));
                 }
             }, new ClientSystemInfo(), request);
 

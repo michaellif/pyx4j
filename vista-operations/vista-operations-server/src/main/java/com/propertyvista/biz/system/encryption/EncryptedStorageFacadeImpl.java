@@ -57,6 +57,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -65,9 +66,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.ThreadPoolNames;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.operations.domain.encryption.EncryptedStorageCurrentKey;
 import com.propertyvista.operations.domain.encryption.EncryptedStoragePublicKey;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
@@ -311,6 +314,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     @Override
     public void makeCurrent(Key publicKeyKey) {
+        EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
+        if (publicKey == null) {
+            throw new UserRuntimeException("PublicKey not found");
+        }
         EncryptedStorageCurrentKey current = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
         if (current == null) {
             current = EntityFactory.create(EncryptedStorageCurrentKey.class);
@@ -318,6 +325,11 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         current.current().setPrimaryKey(publicKeyKey);
         Persistence.service().persist(current);
         Persistence.service().commit();
+
+        log.warn("Key {} id#{} made current", publicKey.name(), publicKey.getPrimaryKey());
+
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "Key {0} id#{1} made current", publicKey.name(),
+                publicKey.getPrimaryKey());
     }
 
     @Override
@@ -333,6 +345,19 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         if (activeKeys.get(toPublicKeyKey) == null) {
             throw new UserRuntimeException("Can't deactivate key while current key has no activated decryption");
         }
+        EncryptedStoragePublicKey fromPublicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, fromPublicKeyKey);
+        if (fromPublicKey == null) {
+            throw new UserRuntimeException("PublicKey 'From' not found");
+        }
+        EncryptedStoragePublicKey toPublicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, toPublicKeyKey);
+        if (toPublicKey == null) {
+            throw new UserRuntimeException("PublicKey 'To' not found");
+        }
+        log.warn("Starting Key Rotation from {} id#{} to {} id#{}", fromPublicKey.name(), fromPublicKey.getPrimaryKey(), toPublicKey.name(),
+                toPublicKey.getPrimaryKey());
+
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, fromPublicKey, "Starting Key Rotation from {0} id#{1} to {2} id#{3}",
+                fromPublicKey.name(), fromPublicKey.getPrimaryKey(), toPublicKey.name(), toPublicKey.getPrimaryKey());
 
         int total = countRecords(fromPublicKeyKey);
         return DeferredProcessRegistry.fork(new KeyRotationDeferredProcess(total, fromPublicKeyKey, toPublicKeyKey), ThreadPoolNames.IMPORTS);
@@ -364,6 +389,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
         deactivateDecryption(publicKeyKey);
         getPrivateKeyStorage().removePrivateKey(publicKey.name().getValue());
+
+        log.warn("PrivateKey {} id#{} removed", publicKey.name(), publicKey.getPrimaryKey());
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "PrivateKey {0} id#{1} removed", publicKey.name(),
+                publicKey.getPrimaryKey());
     }
 
     @Override
@@ -375,6 +404,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         PrivateKey privateKey = loadPrivateKey(publicKey, password);
         testKeyDecryption(publicKey, privateKey);
         activeKeys.put(publicKeyKey, privateKey);
+
+        log.warn("PublicKey {} id#{} Decryption activated", publicKey.name(), publicKey.getPrimaryKey());
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "PublicKey {0} id#{1} Decryption activated",
+                publicKey.name(), publicKey.getPrimaryKey());
     }
 
     private PrivateKey loadPrivateKey(EncryptedStoragePublicKey publicKey, char[] password) {
@@ -462,6 +495,10 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         } catch (Exception e) {
             throw new Error(e);
         }
+
+        log.warn("New KeyPair {} id#{} created", publicKey.name(), publicKey.getPrimaryKey());
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "New KeyPair {0} id#{1} created", publicKey.name(),
+                publicKey.getPrimaryKey());
 
         activateDecryption(publicKey.getPrimaryKey(), password);
 

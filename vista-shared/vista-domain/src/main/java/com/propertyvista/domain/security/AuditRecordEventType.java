@@ -35,6 +35,8 @@ public enum AuditRecordEventType {
 
     Info,
 
+    System,
+
     EquifaxRequest,
 
     EquifaxReadReport;

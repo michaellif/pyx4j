@@ -15,6 +15,7 @@ package com.propertyvista.domain;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class DemoData {
@@ -42,7 +43,7 @@ public class DemoData {
 
         EMP("e", 10),
 
-        ADMIN("a", 2),
+        ADMIN("a", VistaOperationsBehavior.values().length),
 
         ONB("o", 2);
 

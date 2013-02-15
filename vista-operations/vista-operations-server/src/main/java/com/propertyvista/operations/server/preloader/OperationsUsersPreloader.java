@@ -21,10 +21,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -54,20 +54,21 @@ class OperationsUsersPreloader extends AbstractDataPreloader {
 
         int cnt = 0;
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
-            for (int i = 1; i <= DemoData.UserType.ADMIN.getDefaultMax(); i++) {
-                String email = DemoData.UserType.ADMIN.getEmail(i);
-                createAdminUser(email, email, email, VistaOperationsBehavior.SystemAdmin);
+            int a = 1;
+            for (VistaOperationsBehavior behavior : VistaOperationsBehavior.values()) {
+                String email = DemoData.UserType.ADMIN.getEmail(a);
+                createAdminUser(email + "(" + behavior + ")", email, email, behavior);
+                a++;
                 cnt++;
             }
         }
         cnt += 4;
         if (!VistaDemo.isDemo()) {
             createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
-            createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
+            createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaOperationsBehavior.SecurityAdmin);
             createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
             createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
             createAdminUser("YuriyL", "yuriyl@propertyvista.com", rnd4prod("yuriyl@propertyvista.com"), VistaOperationsBehavior.SystemAdmin);
-            createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaOperationsBehavior.OnboardingApi);
         }
 
         return "Created " + cnt + " Admin Users";
