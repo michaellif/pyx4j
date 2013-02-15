@@ -52,6 +52,22 @@ import org.junit.Test;
 
 import com.pyx4j.gwt.server.IOUtils;
 
+/**
+ * The steps you should take encrypt are:
+ * 
+ * Generate RSA key pair (or retrieve public key from a key store)
+ * Generate Symmetric key (AES)
+ * Encrypt data with AES key
+ * Encrypt AES key with public RSA key
+ * Store (or send to person with private key) the encrypted AES key, and the AES Encrypted Data
+ * 
+ * To decrypt:
+ * 
+ * Get private key associated with that key pair used to encrypt
+ * Decrypt AES key with private key
+ * Decrypt data with AES key
+ * Use data
+ */
 public class EncryptedStorageTest {
 
     private static boolean STRONG = false;
