@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.TriggerDTO;
 
 public class TriggerListerViewImpl extends OperationsListerViewImplBase<TriggerDTO> implements TriggerListerView {
 
     public TriggerListerViewImpl() {
-        super(OperationsSiteMap.Management.Trigger.class);
         setLister(new TriggerLister());
     }
 }

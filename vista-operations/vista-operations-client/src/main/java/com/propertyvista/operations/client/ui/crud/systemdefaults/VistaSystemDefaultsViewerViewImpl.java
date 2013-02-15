@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 
 public class VistaSystemDefaultsViewerViewImpl extends OperationsViewerViewImplBase<VistaSystemDefaultsDTO> implements VistaSystemDefaultsViewerView {
 
     public VistaSystemDefaultsViewerViewImpl() {
-        super(OperationsSiteMap.Management.BillingSetup.class);
         setForm(new VistaSystemDefaultsForm(this));
     }
 

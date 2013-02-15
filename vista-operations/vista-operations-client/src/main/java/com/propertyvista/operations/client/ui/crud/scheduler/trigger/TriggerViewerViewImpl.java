@@ -25,13 +25,12 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunLister;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.TriggerDTO;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
 public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerDTO> implements TriggerViewerView {
 
@@ -44,8 +43,6 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     private final Button runForDate;
 
     public TriggerViewerViewImpl() {
-        super(OperationsSiteMap.Management.Trigger.class);
-
         runLister = new ListerInternalViewImplBase<Run>(new RunLister());
 
         setForm(new TriggerForm(this));

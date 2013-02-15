@@ -25,12 +25,11 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcExportDownloadDTO;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> implements PmcViewerView {
@@ -42,7 +41,6 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     private final Button cancelBtn;
 
     public PmcViewerViewImpl() {
-        super(OperationsSiteMap.Management.PMC.class);
         setForm(new PmcForm(this));
 
         Button upload = new Button("Upload import", new Command() {

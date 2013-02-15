@@ -20,7 +20,6 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 
 public class MaintenanceViewerViewImpl extends OperationsViewerViewImplBase<VistaSystemMaintenanceState> implements MaintenanceViewerView {
@@ -30,7 +29,6 @@ public class MaintenanceViewerViewImpl extends OperationsViewerViewImplBase<Vist
     private final Button btnResetCache;
 
     public MaintenanceViewerViewImpl() {
-        super(OperationsSiteMap.Administration.Maintenance.class);
         setForm(new MaintenanceForm(this));
 
         // Add actions:

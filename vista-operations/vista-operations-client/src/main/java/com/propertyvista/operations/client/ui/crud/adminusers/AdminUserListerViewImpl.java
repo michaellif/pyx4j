@@ -21,13 +21,11 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 
 public class AdminUserListerViewImpl extends OperationsListerViewImplBase<OperationsUserDTO> implements AdminUserListerView {
 
     public AdminUserListerViewImpl() {
-        super(OperationsSiteMap.Administration.AdminUsers.class);
         setLister(new AdminUserLister());
     }
 

@@ -18,10 +18,9 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.OnboardingUserDTO;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
+import com.propertyvista.operations.rpc.OnboardingUserDTO;
 
 public class OnboardingUserViewerViewImpl extends OperationsViewerViewImplBase<OnboardingUserDTO> implements OnboardingUserViewerView {
 
@@ -32,7 +31,6 @@ public class OnboardingUserViewerViewImpl extends OperationsViewerViewImplBase<O
     private final Button createPmcAction;
 
     public OnboardingUserViewerViewImpl() {
-        super(OperationsSiteMap.Management.OnboardingUser.class);
         setForm(new OnboardingUserForm(this));
 
         passwordAction = new Button(i18n.tr("Change Password"), new Command() {

@@ -25,7 +25,6 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
@@ -34,7 +33,6 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class PmcListerViewImpl extends OperationsListerViewImplBase<PmcDTO> implements PmcListerView {
 
     public PmcListerViewImpl() {
-        super(OperationsSiteMap.Management.PMC.class);
         setLister(new PmcLister());
 
         {

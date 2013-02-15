@@ -21,9 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
@@ -32,23 +30,17 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends ViewerViewI
 
     private static final I18n i18n = I18n.get(OperationsViewerViewImplBase.class);
 
-    protected final String defaultCaption;
-
     private Button editButton;
 
     private Button selectVersion;
 
     private Button finalizeButton;
 
-    public OperationsViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        this(placeClass, false);
+    public OperationsViewerViewImplBase() {
+        this(false);
     }
 
-    public OperationsViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, boolean viewOnly) {
-        super();
-
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        setCaption(defaultCaption);
+    public OperationsViewerViewImplBase(boolean viewOnly) {
 
         if (!viewOnly) {
             editButton = new Button(i18n.tr("Edit"), new Command() {
@@ -60,16 +52,6 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends ViewerViewI
 
             addHeaderToolbarItem(editButton);
         }
-    }
-
-    public OperationsViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, OperationsEntityForm<E> form) {
-        this(placeClass);
-        setForm(form);
-    }
-
-    public OperationsViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, OperationsEntityForm<E> form, boolean viewOnly) {
-        this(placeClass, viewOnly);
-        setForm(form);
     }
 
     public Button getEditButton() {
@@ -95,17 +77,6 @@ public class OperationsViewerViewImplBase<E extends IEntity> extends ViewerViewI
     @Override
     public void populate(E value) {
         super.populate(value);
-
-        String caption = (defaultCaption + " " + value.getStringView());
-        if (selectVersion != null) {
-            if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
-                caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
-            } else {
-                caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
-                        + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
-            }
-        }
-        setCaption(caption);
 
         if (editButton != null) {
             editButton.setEnabled(super.getPresenter().canEdit());

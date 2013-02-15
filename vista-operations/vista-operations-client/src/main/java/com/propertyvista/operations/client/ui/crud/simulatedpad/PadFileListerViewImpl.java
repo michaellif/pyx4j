@@ -20,14 +20,12 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class PadFileListerViewImpl extends OperationsListerViewImplBase<PadSimFile> implements PadFileListerView {
 
     private static final I18n i18n = I18n.get(PadFileListerViewImpl.class);
 
     public PadFileListerViewImpl() {
-        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
         setLister(new PadFileLister());
 
         // Add actions:

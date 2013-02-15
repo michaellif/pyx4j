@@ -19,7 +19,6 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
 
 public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> implements RunViewerView {
@@ -27,7 +26,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     private final IListerView<RunData> runDataLister;
 
     public RunViewerViewImpl() {
-        super(OperationsSiteMap.Management.Run.class, true);
+        super(true);
 
         runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister());
 

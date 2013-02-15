@@ -22,7 +22,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
 
 public class EquifaxApprovalViewImpl extends OperationsViewerViewImplBase<EquifaxSetupRequestDTO> implements EquifaxApprovalView {
@@ -34,7 +33,6 @@ public class EquifaxApprovalViewImpl extends OperationsViewerViewImplBase<Equifa
     private final Button reject;
 
     public EquifaxApprovalViewImpl() {
-        super(OperationsSiteMap.Management.EquifaxApproval.class);
         getEditButton().setVisible(false);
         setForm(new EquifaxApprovalForm(this));
 

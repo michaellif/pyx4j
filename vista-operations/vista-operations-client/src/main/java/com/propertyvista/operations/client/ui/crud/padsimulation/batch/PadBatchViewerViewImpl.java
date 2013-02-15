@@ -15,12 +15,10 @@ package com.propertyvista.operations.client.ui.crud.padsimulation.batch;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class PadBatchViewerViewImpl extends OperationsViewerViewImplBase<PadSimBatch> implements PadBatchViewerView {
 
     public PadBatchViewerViewImpl() {
-        super(OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class);
         setForm(new PadBatchForm(this));
     }
 }

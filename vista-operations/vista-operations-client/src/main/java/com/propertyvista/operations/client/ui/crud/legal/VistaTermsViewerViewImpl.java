@@ -17,13 +17,11 @@ import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.version.VistaTermsVersionService;
 
 public class VistaTermsViewerViewImpl extends OperationsViewerViewImplBase<VistaTerms> implements VistaTermsViewerView {
 
     public VistaTermsViewerViewImpl() {
-        super(OperationsSiteMap.Legal.PortalTerms.class);
         enableVersioning(VistaTerms.VistaTermsV.class, GWT.<VistaTermsVersionService> create(VistaTermsVersionService.class));
         setForm(new VistaTermsForm(this));
     }

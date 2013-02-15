@@ -14,14 +14,10 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class OperationsListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
-    public OperationsListerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
-        super();
-        setCaption(AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption());
+    public OperationsListerViewImplBase() {
     }
 }

@@ -15,12 +15,10 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class RunListerViewImpl extends OperationsListerViewImplBase<Run> implements RunListerView {
 
     public RunListerViewImpl() {
-        super(OperationsSiteMap.Management.Trigger.class);
         setLister(new RunLister());
     }
 }

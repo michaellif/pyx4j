@@ -13,14 +13,12 @@
  */
 package com.propertyvista.operations.client.ui.crud.auditrecords;
 
-import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.dto.AuditRecordDTO;
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 
 public class AuditRecordListerViewImpl extends OperationsListerViewImplBase<AuditRecordDTO> {
 
     public AuditRecordListerViewImpl() {
-        super(OperationsSiteMap.Security.AuditRecord.class);
         setLister(new AuditRecordsLister());
     }
 

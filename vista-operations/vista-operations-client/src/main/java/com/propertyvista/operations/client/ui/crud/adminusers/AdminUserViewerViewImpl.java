@@ -19,7 +19,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 
 public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<OperationsUserDTO> implements AdminUserViewerView {
@@ -29,7 +28,6 @@ public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<Operat
     private final Button passwordAction;
 
     public AdminUserViewerViewImpl() {
-        super(OperationsSiteMap.Administration.AdminUsers.class);
         setForm(new AdminUserForm(this));
 
         passwordAction = new Button(i18n.tr("Change Password"), new Command() {

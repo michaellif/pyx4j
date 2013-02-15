@@ -14,14 +14,12 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
 
 public class OnboardingMerchantAccountViewerViewImpl extends OperationsViewerViewImplBase<OnboardingMerchantAccountDTO> implements
         OnboardingMerchantAccountViewerView {
 
     public OnboardingMerchantAccountViewerViewImpl() {
-        super(OperationsSiteMap.Management.OnboardingMerchantAccounts.class);
         setForm(new OnboardingMerchantAccountForm(this));
     }
 

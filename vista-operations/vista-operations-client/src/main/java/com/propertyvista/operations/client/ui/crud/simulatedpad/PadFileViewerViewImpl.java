@@ -24,7 +24,6 @@ import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.padsimulation.batch.PadBatchLister;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFile> implements PadFileViewerView {
 
@@ -33,8 +32,6 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
     private final IListerView<PadSimBatch> batchLister;
 
     public PadFileViewerViewImpl() {
-        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
-
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 
         setForm(new PadFileForm(this));
