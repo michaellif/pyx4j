@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
@@ -152,7 +153,19 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setEnabled(true);
-                        paymentMethodEditor.initNew(PaymentType.Echeck);
+
+                        if (getValue().allowedPaymentTypes().isEmpty()) {
+                            paymentMethodEditor.initNew(null);
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
+                        } else {
+                            // set preferred value:
+                            if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                                paymentMethodEditor.initNew(PaymentType.Echeck);
+                            } else {
+                                paymentMethodEditor.initNew(null);
+                            }
+                        }
+
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 

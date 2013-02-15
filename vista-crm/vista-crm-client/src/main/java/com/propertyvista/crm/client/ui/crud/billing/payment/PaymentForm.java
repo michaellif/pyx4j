@@ -207,14 +207,21 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
-                        if (getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE) && getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
-                            paymentMethodEditor.initNew(PaymentType.Echeck);
-                        } else if (getValue().allowedPaymentTypes().contains(PaymentType.Cash)) {
-                            paymentMethodEditor.initNew(PaymentType.Cash);
-                        } else {
+
+                        if (getValue().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
+                        } else {
+                            // set preferred value:
+                            if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                                paymentMethodEditor.initNew(PaymentType.Echeck);
+                            } else if (getValue().allowedPaymentTypes().contains(PaymentType.Cash)) {
+                                paymentMethodEditor.initNew(PaymentType.Cash);
+                            } else {
+                                paymentMethodEditor.initNew(null);
+                            }
                         }
+
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 
