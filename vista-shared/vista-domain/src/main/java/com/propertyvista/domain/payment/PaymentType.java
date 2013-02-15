@@ -70,12 +70,6 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
-    //TODO use PaymentFacade#getAllowedPaymentTypes
-    @Deprecated
-    public static EnumSet<PaymentType> cashEquivalentPayments() {
-        return EnumSet.of(Cash, Interac);
-    }
-
     public static EnumSet<PaymentType> schedulable() {
         return EnumSet.of(Echeck, CreditCard);
     }

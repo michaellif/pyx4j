@@ -13,9 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -41,6 +39,7 @@ import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
@@ -214,6 +213,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             paymentMethodEditor.initNew(PaymentType.Cash);
                         } else {
                             paymentMethodEditor.initNew(null);
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         }
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
@@ -341,29 +341,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
                     @Override
                     public void onSuccess(List<LeasePaymentMethod> result) {
-                        switch (PaymentForm.this.getValue().paymentAccepted().getValue()) {
-                        case Any:
-                            break;
-
-                        case CashEquivalent:
-                            ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>(PaymentType.avalableInCrm());
-                            allowedTypes.retainAll(PaymentType.cashEquivalentPayments());
-
-                            Iterator<LeasePaymentMethod> it = result.iterator();
-                            while (it.hasNext()) {
-                                if (allowedTypes.contains(it.next().type().getValue())) {
-                                    it.remove();
-                                }
-                            }
-
-                        case DoNotAccept:
-                            result.clear();
-                            break;
-
-                        default:
-                            break;
-                        }
-
                         profiledPaymentMethodsCombo.setOptions(result);
                         if (callback != null) {
                             callback.onSuccess(null);

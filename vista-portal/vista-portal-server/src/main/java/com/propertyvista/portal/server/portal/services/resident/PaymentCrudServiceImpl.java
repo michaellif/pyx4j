@@ -15,6 +15,8 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.commons.lang.Validate;
@@ -25,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.SysDateManager;
@@ -59,7 +62,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         super.enhanceRetrieved(entity, dto, retrieveTraget);
         enhanceListRetrieved(entity, dto);
 
-        dto.paymentAccepted().setValue(dto.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
@@ -130,7 +132,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
-        dto.paymentAccepted().setValue(lease.billingAccount().paymentAccepted().getValue());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
@@ -160,7 +161,20 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                TenantAppContext.getCurrentUserTenantInLease())));
+        LeaseTermTenant payer = TenantAppContext.getCurrentUserTenantInLease();
+        Persistence.ensureRetrieve(payer.leaseParticipant().lease(), AttachLevel.Attached);
+        Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
+                payer.leaseParticipant().lease().billingAccount(), VistaApplication.crm);
+        // get payer's payment methods and remove non-allowed ones: 
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer);
+        Iterator<LeasePaymentMethod> it = methods.iterator();
+        while (it.hasNext()) {
+            if (!allowedTypes.contains(it.next().type().getValue())) {
+                it.remove();
+            }
+        }
+
+        callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
+
     }
 }

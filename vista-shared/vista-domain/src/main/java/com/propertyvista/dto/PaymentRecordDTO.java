@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -58,8 +57,6 @@ public interface PaymentRecordDTO extends PaymentRecord {
     IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
-
-    IPrimitive<BillingAccount.PaymentAccepted> paymentAccepted();
 
     IPrimitiveSet<PaymentType> allowedPaymentTypes();
 
