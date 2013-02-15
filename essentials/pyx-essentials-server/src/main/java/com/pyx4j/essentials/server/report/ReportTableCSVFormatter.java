@@ -38,6 +38,8 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
 
     protected SimpleDateFormat dateTimeFormat;
 
+    private int rowCount = 0;
+
     public ReportTableCSVFormatter() {
         dataBuilder = new DataBuilder();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -106,6 +108,12 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
     @Override
     public void newRow() {
         dataBuilder.append("\r\n");
+        rowCount++;
+    }
+
+    @Override
+    public int getRowCount() {
+        return rowCount;
     }
 
 }

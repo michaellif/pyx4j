@@ -39,6 +39,8 @@ public interface ReportTableFormatter extends Serializable {
      */
     public void newRow();
 
+    public int getRowCount();
+
     /**
      * Write binary data to the output
      */

@@ -75,6 +75,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     private boolean autosize = true;
 
+    private int rowCount = 0;
+
     public ReportTableXLSXFormatter() {
         workbook = new XSSFWorkbook();
 
@@ -165,6 +167,12 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             columnsCount = this.cellIdx;
         }
         this.cellIdx = 0;
+        rowCount++;
+    }
+
+    @Override
+    public int getRowCount() {
+        return rowCount;
     }
 
     public void cellEmpty() {
