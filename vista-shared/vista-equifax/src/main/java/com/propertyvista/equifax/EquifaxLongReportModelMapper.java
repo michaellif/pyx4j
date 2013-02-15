@@ -189,11 +189,11 @@ public class EquifaxLongReportModelMapper {
                     CustomerCreditCheckLongReportDTO.ProposalDTO proposal = EntityFactory.create(CustomerCreditCheckLongReportDTO.ProposalDTO.class);
                     proposal.customerNumber().setValue(cnAct.getCourtId().getCustomerNumber());
                     proposal.customerName().setValue(cnAct.getCourtId().getName());
-                    proposal.dispositionDate().setValue(
-                            cnAct.getIntentOrDisposition() != null ? new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime())
-                                    : null);
+                    if (cnAct.getIntentOrDisposition() != null && cnAct.getIntentOrDisposition().getDate() != null) {
+                        proposal.dispositionDate().setValue(new LogicalDate(cnAct.getIntentOrDisposition().getDate().toGregorianCalendar().getTime()));
+                    }
                     proposal.liabilityAmount().setValue(cnAct.getLiabilityAmount().getValue());
-                    proposal.assetAmount().setValue(cnAct.getAssetAmount().getValue());
+                    proposal.assetAmount().setValue(cnAct.getAssetAmount() != null ? cnAct.getAssetAmount().getValue() : null);
                     proposal.caseNumberAndTrustee().setValue(cnAct.getCaseNumberAndTrustee());
                     proposal.intentOrDisposition().setValue(cnAct.getIntentOrDisposition().getDescription());
                     dto.proposals().add(proposal);
