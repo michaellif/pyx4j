@@ -72,19 +72,17 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
         }
     }
 
-    private HtmlContent generateProxyHtml(HtmlContent customHtml) {
-        HtmlContent injectedCustomHtml = customHtml.duplicate();
-        injectedCustomHtml.setPrimaryKey(null);
-        injectedCustomHtml.html().setValue(HttpsProxyInjection.injectionPortalHttps(customHtml.html().getValue()));
-        return injectedCustomHtml;
-    }
-
     @Override
     protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
-        // persist proxy content
-        in.residentPortalSettings().proxyHtml().clear();
-        for (HtmlContent customHtml : in.residentPortalSettings().customHtml()) {
-            in.residentPortalSettings().proxyHtml().add(generateProxyHtml(customHtml));
+        // generate proxy white list
+        if (in.residentPortalSettings().useCustomHtml().isBooleanTrue()) {
+            in.residentPortalSettings().proxyWhitelist().clear();
+            for (HtmlContent customHtml : in.residentPortalSettings().customHtml()) {
+                if (customHtml.isEmpty() || customHtml.html().isNull()) {
+                    continue;
+                }
+                in.residentPortalSettings().proxyWhitelist().addAll(HttpsProxyInjection.generateWhitelist(customHtml.html().getValue()));
+            }
         }
         // keep the sort order
         for (int idx = 0; idx < in.locales().size(); idx++) {

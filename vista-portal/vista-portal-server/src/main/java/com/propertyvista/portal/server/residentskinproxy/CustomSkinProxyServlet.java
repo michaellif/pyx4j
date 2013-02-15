@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.proxy;
+package com.propertyvista.portal.server.residentskinproxy;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,7 +36,9 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.server.portal.services.SiteThemeServicesImpl;
 
 /**
  * @see DeploymentConsts#portalInectionProxy
@@ -78,12 +80,28 @@ public class CustomSkinProxyServlet extends HttpServlet {
         String path = request.getPathInfo();
         int hostEnd = path.indexOf('/', 1);
         String host = path.substring(1, hostEnd);
+        ensureWhitelisted(host);
         String servicePath = path.substring(hostEnd);
         String url = new URL("http", host, 80, servicePath).toExternalForm();
 //        if (request.getQueryString() != null) {
 //            url += "?" + request.getQueryString();
 //        }
         return url;
+    }
+
+    private void ensureWhitelisted(String host) {
+        // match host against white list
+        SiteDescriptor site = SiteThemeServicesImpl.getSiteDescriptorFromCache();
+        try {
+            for (String entry : site.residentPortalSettings().proxyWhitelist()) {
+                if (host.equalsIgnoreCase(entry)) {
+                    return;
+                }
+            }
+        } catch (Exception ignore) {
+        }
+        log.warn("Unknown host: {}", host);
+        throw new RuntimeException("Unknown host: " + host);
     }
 
     private void execute(HttpMethodBase method, HttpServletRequest request, HttpServletResponse response, String debugContext, int id) throws IOException {

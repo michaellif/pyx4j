@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public interface ResidentPortalSettings extends IEntity {
     @Owner
@@ -42,5 +43,5 @@ public interface ResidentPortalSettings extends IEntity {
     IList<HtmlContent> customHtml();
 
     @Owned
-    IList<HtmlContent> proxyHtml();
+    IPrimitiveSet<String> proxyWhitelist();
 }

@@ -256,11 +256,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 content.html().setValue(contentText);
                 settings.customHtml().add(content);
 
-                HtmlContent injectedCustomHtml = EntityFactory.create(HtmlContent.class);
-                injectedCustomHtml.locale().set(li.aLocale);
-                injectedCustomHtml.html().setValue(HttpsProxyInjection.injectionPortalHttps(contentText));
-
-                settings.proxyHtml().add(injectedCustomHtml);
+                settings.proxyWhitelist().addAll(HttpsProxyInjection.generateWhitelist(contentText));
             } catch (IOException ignore) {
             }
         }

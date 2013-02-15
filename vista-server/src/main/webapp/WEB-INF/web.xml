@@ -411,7 +411,7 @@
 
     <servlet>
         <servlet-name>CustomSkinProxyServlet</servlet-name>
-        <servlet-class>com.propertyvista.server.proxy.CustomSkinProxyServlet</servlet-class>
+        <servlet-class>com.propertyvista.portal.server.residentskinproxy.CustomSkinProxyServlet</servlet-class>
     </servlet>
 
     <!-- development URL mapping -->

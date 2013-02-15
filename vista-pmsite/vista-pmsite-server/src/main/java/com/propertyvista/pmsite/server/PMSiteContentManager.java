@@ -63,6 +63,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 import com.propertyvista.portal.server.portal.PropertyFinder;
+import com.propertyvista.server.proxy.HttpsProxyInjection;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
@@ -96,6 +97,8 @@ public class PMSiteContentManager implements Serializable {
 
     private Map<AvailableLocale, List<Testimonial>> testimonials;
 
+    private boolean siteUpdated = false;
+
     public PMSiteContentManager() {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor foundSiteDescriptor;
@@ -112,6 +115,14 @@ public class PMSiteContentManager implements Serializable {
         for (PageDescriptor descriptor : siteDescriptor.childPages()) {
             createPath(descriptor);
         }
+    }
+
+    protected void setUpdated(boolean updated) {
+        siteUpdated = updated;
+    }
+
+    public boolean isSiteUpdated() {
+        return siteUpdated;
     }
 
     public boolean refreshRequired() {
@@ -553,7 +564,7 @@ public class PMSiteContentManager implements Serializable {
     public String getCustomResidentsContent(AvailableLocale locale) {
         String html = null;
         String lang = locale.lang().getValue().name();
-        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().proxyHtml();
+        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().customHtml();
         for (HtmlContent contentRc : contents) {
             if (contentRc.locale().lang().getValue().name().equals(lang)) {
                 html = contentRc.html().getValue();
@@ -562,6 +573,7 @@ public class PMSiteContentManager implements Serializable {
         if (html == null && contents.size() > 0) {
             html = contents.get(0).html().getValue();
         }
-        return html;
+
+        return HttpsProxyInjection.injectionPortalHttps(html);
     }
 }

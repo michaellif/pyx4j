@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.server.proxy;
+package com.propertyvista.portal.server.residentskinproxy;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,7 +37,9 @@ public class ResourceConverter {
         String encoding = Encoding;
         if (typeAndEncoding.length > 1) {
             contentType = typeAndEncoding[0];
-            encoding = typeAndEncoding[1];
+            if (typeAndEncoding[1].startsWith("charset=")) {
+                encoding = typeAndEncoding[1].substring(8);
+            }
         }
 
         InputStream in = null;
@@ -45,7 +47,7 @@ public class ResourceConverter {
             String host = method.getURI().getHost();
             in = method.getResponseBodyAsStream();
 
-            if (contentType.equals("text/css")) {
+            if (contentType.equalsIgnoreCase("text/css")) {
                 return convertCSS(in, encoding, host);
             }
         } catch (IOException ex) {
