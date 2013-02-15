@@ -28,6 +28,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -50,34 +51,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setNavig(createNavigationItems());
         panel.setWidget(view);
-        List<AppPlace> items = new ArrayList<AppPlace>();
-        items.add(new Residents());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            items.add(new Residents.Financial.BillSummary());
-            items.add(new Residents.Financial.BillingHistory());
-        } else {
-            items.add(new Residents.Financial.FinancialSummary());
-        }
-        items.add(new Residents.Maintenance());
-        items.add(new Residents.CommunicationCenter());
-
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
-                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
-            items.add(new Residents.PaymentMethods());
-        }
-        items.add(new Residents.PersonalInformation());
-
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            items.add(new Residents.TenantInsurance());
-        }
-
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-            items.add(new PortalSiteMap.LeaseContextSelection());
-        }
-
-        view.setNavig(items);
-
     }
 
     @Override
@@ -90,4 +65,39 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         return AppSite.getPlaceController().getWhere();
     }
 
+    private List<AppPlace> createNavigationItems() {
+        List<AppPlace> items = new ArrayList<AppPlace>();
+
+        items.add(new Residents());
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            items.add(new Residents.Financial.BillSummary());
+            items.add(new Residents.Financial.BillingHistory());
+        } else {
+            items.add(new Residents.Financial.FinancialSummary());
+        }
+
+        items.add(new Residents.Maintenance());
+
+        if (!VistaTODO.removedForProduction) {
+            items.add(new Residents.CommunicationCenter());
+        }
+
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
+                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
+            items.add(new Residents.PaymentMethods());
+        }
+
+        items.add(new Residents.PersonalInformation());
+
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            items.add(new Residents.TenantInsurance());
+        }
+
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
+            items.add(new PortalSiteMap.LeaseContextSelection());
+        }
+
+        return items;
+    }
 }
