@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.adminusers;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 
 public class AdminUserEditorViewImpl extends OperationsEditorViewImplBase<OperationsUserDTO> implements AdminUserEditorView {
 
     public AdminUserEditorViewImpl() {
-        super(OperationsSiteMap.Administration.AdminUsers.class);
         setForm(new AdminUserForm(this));
     }
 

@@ -15,11 +15,10 @@ package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class OperationsEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
 
-    public OperationsEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
+    public OperationsEditorViewImplBase() {
         super();
     }
 

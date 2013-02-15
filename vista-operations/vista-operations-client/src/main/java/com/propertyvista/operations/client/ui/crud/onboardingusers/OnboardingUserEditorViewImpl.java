@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.onboardingusers;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 
 public class OnboardingUserEditorViewImpl extends OperationsEditorViewImplBase<OnboardingUserDTO> implements OnboardingUserEditorView {
 
     public OnboardingUserEditorViewImpl() {
-        super(OperationsSiteMap.Management.OnboardingUser.class);
         setForm(new OnboardingUserForm(this));
     }
 

@@ -16,7 +16,6 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 
 public class PmcEditorViewImpl extends OperationsEditorViewImplBase<PmcDTO> implements PmcEditorView {
@@ -26,7 +25,6 @@ public class PmcEditorViewImpl extends OperationsEditorViewImplBase<PmcDTO> impl
     private final CrudEntityForm<PmcDTO> newItemForm = new PmcFormNewItem(this);
 
     public PmcEditorViewImpl() {
-        super(OperationsSiteMap.Management.PMC.class);
     }
 
     @Override

@@ -21,7 +21,6 @@ import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionEditorView {
@@ -51,7 +50,6 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
     }
 
     public CardServiceSimulationTransactionEditorViewImpl() {
-        super(OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction.class);
         setForm(new CardServiceSimulationTransactionForm(this));
     }
 

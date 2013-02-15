@@ -15,12 +15,10 @@ package com.propertyvista.operations.client.ui.crud.legal;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class VistaTermsEditorViewImpl extends OperationsEditorViewImplBase<VistaTerms> implements VistaTermsEditorView {
 
     public VistaTermsEditorViewImpl() {
-        super(OperationsSiteMap.Legal.PortalTerms.class);
         setForm(new VistaTermsForm(this));
     }
 

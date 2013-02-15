@@ -39,7 +39,6 @@ import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationCard> implements
         CardServiceSimulationCardEditorView {
@@ -135,7 +134,6 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
     }
 
     public CardServiceSimulationCardEditorViewImpl() {
-        super(OperationsSiteMap.Simulation.CardServiceSimulation.class);
         setForm(new CardServiceSimulationForm(this));
     }
 

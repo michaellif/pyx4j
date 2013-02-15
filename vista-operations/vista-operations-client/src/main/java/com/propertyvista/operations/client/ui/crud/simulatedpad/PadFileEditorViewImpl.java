@@ -15,12 +15,10 @@ package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class PadFileEditorViewImpl extends OperationsEditorViewImplBase<PadSimFile> implements PadFileEditorView {
 
     public PadFileEditorViewImpl() {
-        super(OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class);
         setForm(new PadFileForm(this));
     }
 

@@ -19,7 +19,6 @@ import com.pyx4j.site.client.ui.crud.IFormView;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class CardServiceSimulationMerchantAccountEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountEditorView {
@@ -43,7 +42,6 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
     }
 
     public CardServiceSimulationMerchantAccountEditorViewImpl() {
-        super(OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount.class);
         setForm(new CardServiceSimulationMerchantAccountForm(this));
     }
 

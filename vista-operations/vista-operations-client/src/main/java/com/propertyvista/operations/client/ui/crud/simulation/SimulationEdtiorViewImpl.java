@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.simulation;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.SimulationDTO;
 
 public class SimulationEdtiorViewImpl extends OperationsEditorViewImplBase<SimulationDTO> implements SimulationEditorView {
 
     public SimulationEdtiorViewImpl() {
-        super(OperationsSiteMap.Administration.Simulation.class);
         setForm(new SimulationForm(this));
     }
 }

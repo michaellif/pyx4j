@@ -20,14 +20,12 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class PadBatchEditorViewImpl extends OperationsEditorViewImplBase<PadSimBatch> implements PadBatchEditorView {
 
     private static final I18n i18n = I18n.get(PadBatchEditorViewImpl.class);
 
     public PadBatchEditorViewImpl() {
-        super(OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class);
         setForm(new PadBatchForm(this));
 
         Button calculateAction = new Button(i18n.tr("Calculate Fields"), new Command() {

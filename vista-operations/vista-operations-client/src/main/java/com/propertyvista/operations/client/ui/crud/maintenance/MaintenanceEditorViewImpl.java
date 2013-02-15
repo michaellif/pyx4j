@@ -14,13 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.maintenance;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 
 public class MaintenanceEditorViewImpl extends OperationsEditorViewImplBase<VistaSystemMaintenanceState> implements MaintenanceEditorView {
 
     public MaintenanceEditorViewImpl() {
-        super(OperationsSiteMap.Administration.Maintenance.class);
         setForm(new MaintenanceForm(this));
     }
 }
