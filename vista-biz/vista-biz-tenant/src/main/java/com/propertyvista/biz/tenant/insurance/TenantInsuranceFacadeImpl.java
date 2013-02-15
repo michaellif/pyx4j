@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -40,16 +40,18 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
         LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate 
+        // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
         InsuranceCertificate insuranceCertificate = null;
         EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
         ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().tenant(), tenantId);
+        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().isDeleted(), Boolean.FALSE);
         ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
         insuranceCertificate = Persistence.service().retrieve(ownInsuranceCriteira);
         if (insuranceCertificate == null) {
             EntityQueryCriteria<InsuranceCertificate> anyNonExpiredInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
             anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().tenant().lease().leaseParticipants(), tenantId);
+            anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().isDeleted(), Boolean.FALSE);
             anyNonExpiredInsuranceCriteria.or(PropertyCriterion.gt(anyNonExpiredInsuranceCriteria.proto().expiryDate(), today),
                     PropertyCriterion.isNull(anyNonExpiredInsuranceCriteria.proto().expiryDate()));
             insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
