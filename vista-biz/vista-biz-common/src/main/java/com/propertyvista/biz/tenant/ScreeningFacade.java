@@ -30,6 +30,8 @@ public interface ScreeningFacade {
 
     boolean isCreditCheckActivated();
 
+    boolean isReadReportLimitReached();
+
     PmcEquifaxStatus getCreditCheckServiceStatus();
 
     void calculateSuggestedDecision(BigDecimal rentAmount, LeaseApprovalDTO leaseApproval);

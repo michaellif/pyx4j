@@ -38,7 +38,7 @@ public class EquifaxEnforceLimit {
 
     private static final I18n i18n = I18n.get(EquifaxEnforceLimit.class);
 
-    public static void assertLimit(final AuditRecordEventType eventType) {
+    public static boolean isLimitReached(final AuditRecordEventType eventType) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         Integer currentCount = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
@@ -58,16 +58,30 @@ public class EquifaxEnforceLimit {
         switch (eventType) {
         case EquifaxReadReport:
             if (currentCount >= limit.dailyReports().getValue()) {
-                throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
+                return true;
             }
             break;
         case EquifaxRequest:
             if (currentCount >= limit.dailyRequests().getValue()) {
-                throw new UserRuntimeException(i18n.tr("Request Daily limit exceeded"));
+                return true;
             }
             break;
         default:
             throw new IllegalArgumentException("Unsupported limit");
+        }
+        return false;
+    }
+
+    public static void assertLimit(final AuditRecordEventType eventType) {
+        if (isLimitReached(eventType)) {
+            switch (eventType) {
+            case EquifaxReadReport:
+                throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
+            case EquifaxRequest:
+                throw new UserRuntimeException(i18n.tr("Request Daily limit exceeded"));
+            default:
+                throw new IllegalArgumentException("Unsupported limit");
+            }
         }
     }
 

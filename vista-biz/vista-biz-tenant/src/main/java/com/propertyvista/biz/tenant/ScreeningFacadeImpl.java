@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.system.EquifaxFacade;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -64,6 +66,11 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     @Override
     public boolean isCreditCheckActivated() {
         return isCreditCheckActivated(getCurrentPmcEquifaxInfo());
+    }
+
+    @Override
+    public boolean isReadReportLimitReached() {
+        return ServerSideFactory.create(EquifaxFacade.class).isLimitReached(AuditRecordEventType.EquifaxReadReport);
     }
 
     @Override
@@ -296,4 +303,5 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
 
         return report;
     }
+
 }
