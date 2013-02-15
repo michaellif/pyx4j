@@ -16,6 +16,7 @@ package com.propertyvista.server.proxy;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.jsoup.Jsoup;
@@ -106,7 +107,7 @@ public class HttpsProxyInjection {
             try {
                 URL url = new URL(href);
                 if (url != null && url.getHost() != null && !isSecureHost(url.getHost())) {
-                    list.add(url.getHost());
+                    list.add(url.getHost().toLowerCase(Locale.ENGLISH));
                 }
             } catch (Exception ignore) {
             }

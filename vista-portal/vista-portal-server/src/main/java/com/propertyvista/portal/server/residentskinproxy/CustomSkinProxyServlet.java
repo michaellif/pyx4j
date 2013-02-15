@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -93,10 +94,8 @@ public class CustomSkinProxyServlet extends HttpServlet {
         // match host against white list
         SiteDescriptor site = SiteThemeServicesImpl.getSiteDescriptorFromCache();
         try {
-            for (String entry : site.residentPortalSettings().proxyWhitelist()) {
-                if (host.equalsIgnoreCase(entry)) {
-                    return;
-                }
+            if (site.residentPortalSettings().proxyWhitelist().contains(host.toLowerCase(Locale.ENGLISH))) {
+                return;
             }
         } catch (Exception ignore) {
         }
