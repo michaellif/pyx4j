@@ -75,6 +75,7 @@ public class ListerActivityBase<E extends IEntity> extends ListerController<E> i
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
         getView().discard();
         getView().getLister().setExternalFilters(externalFilters);
+        getView().setPresenter(this);
         populate();
         containerWidget.setWidget(getView());
     }
