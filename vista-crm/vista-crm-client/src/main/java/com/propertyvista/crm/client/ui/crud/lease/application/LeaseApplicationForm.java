@@ -26,6 +26,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.ApplicationStatusFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -116,14 +117,16 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().decisionReason()), 40).build());
 
-        main.setBR(++row, 0, 1);
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            main.setBR(++row, 0, 1);
 
-        main.setH1(++row, 0, 1, i18n.tr("Credit Check"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().percenrtageApproved()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().totalAmountApproved()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().rentAmount()), 10).build());
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 40).build());
+            main.setH1(++row, 0, 1, i18n.tr("Credit Check"));
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().percenrtageApproved()), 5).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().totalAmountApproved()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().rentAmount()), 10).build());
+            main.setBR(++row, 0, 1);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 40).build());
+        }
 
         main.setBR(++row, 0, 1);
 

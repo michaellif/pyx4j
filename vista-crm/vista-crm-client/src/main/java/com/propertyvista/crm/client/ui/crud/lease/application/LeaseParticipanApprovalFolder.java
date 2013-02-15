@@ -39,6 +39,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -47,6 +48,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseParticipanApprovalDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipanApprovalDTO> {
 
@@ -119,7 +121,9 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             FormFlexPanel main = new FormFlexPanel();
 
             main.setWidget(0, 0, left);
-            main.setWidget(0, 1, creditCheckResultPanel);
+            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+                main.setWidget(0, 1, creditCheckResultPanel);
+            }
 
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
