@@ -38,6 +38,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
@@ -270,7 +271,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
-        setActionVisible(checkAction, status.isDraft());
+        setActionVisible(checkAction, status.isDraft() && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada);
         setActionVisible(approveAction, status.isDraft());
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());
