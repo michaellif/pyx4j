@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -40,6 +41,8 @@ import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.financial.payment.CreditCardFacade;
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
@@ -199,7 +202,9 @@ class TenantSureReports {
                     transactionReportLine.creditCardNumber().setValue("N / A");
                 }
                 transactionReportLine.amount().setValue(transaction.amount().getValue());
-                transactionReportLine.transactionReferenceNumber().setValue(transaction.transactionAuthorizationNumber().getValue());
+                transactionReportLine.transactionReferenceNumber().setValue(
+                        ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(ReferenceNumberPrefix.TenantSure,
+                                transaction.id().getStringView()));
 
                 reportGenerator.reportEntity(formatter, transactionReportLine);
                 ++numOfTransactions;
