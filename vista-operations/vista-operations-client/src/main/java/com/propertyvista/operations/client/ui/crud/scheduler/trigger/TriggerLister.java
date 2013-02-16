@@ -31,6 +31,7 @@ public class TriggerLister extends ListerBase<TriggerDTO> {
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on
     }

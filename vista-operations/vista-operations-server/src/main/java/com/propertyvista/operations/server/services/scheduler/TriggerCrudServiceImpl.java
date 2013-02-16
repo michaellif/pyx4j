@@ -62,6 +62,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
                 b.append(triggerSchedule.repeatType().getStringView()).append(' ').append(triggerSchedule.time().getStringView());
             }
             dto.schedule().setValue(b.toString());
+            JobUtils.getScheduleDetails(dto);
         }
     }
 
