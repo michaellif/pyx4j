@@ -168,7 +168,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        if (!VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Short_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             addAction(checkAction);
         }
 
@@ -271,7 +271,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         }
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
-        setActionVisible(checkAction, status.isDraft() && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada);
+        setActionVisible(checkAction, status.isDraft());
         setActionVisible(approveAction, status.isDraft());
         setActionVisible(moreInfoAction, status.isDraft() && status != Status.Created);
         setActionVisible(declineAction, status.isDraft());

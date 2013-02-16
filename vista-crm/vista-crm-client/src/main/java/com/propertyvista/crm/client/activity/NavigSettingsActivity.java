@@ -31,8 +31,10 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigSettingsActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
     private static final I18n i18n = I18n.get(NavigSettingsActivity.class);
@@ -98,7 +100,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
-        if (!VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Short_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.Billing());
