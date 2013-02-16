@@ -182,7 +182,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).startBilling();
             }
         });
-        addAction(runBillAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(runBillAction);
+        }
 
         addActionSeparator();
 
