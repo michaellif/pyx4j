@@ -45,35 +45,36 @@ public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
     public void updateLeases(ResidentTransactions transaction) {
-        Property property = transaction.getProperty().get(0);
-        for (RTCustomer rtCustomer : property.getRTCustomer()) {
-            String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
-            if (isSkipped(rtCustomer)) {
-                log.info("Lease {} skipped, did not meet criteria.", rtCustomer.getCustomerID());
-                continue;
-            }
-
-            {
-                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-                criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
-                if (!Persistence.service().query(criteria).isEmpty()) {
-                    Lease lease = Persistence.service().query(criteria).get(0);
-                    Persistence.service().retrieve(lease.currentTerm().version().tenants());
-                    updateLease(rtCustomer, lease);
+        for (Property property : transaction.getProperty()) {
+            for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
+                if (isSkipped(rtCustomer)) {
+                    log.info("Lease {} skipped, did not meet criteria.", rtCustomer.getCustomerID());
                     continue;
                 }
-            }
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-            criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
-            AptUnit unit = Persistence.service().query(criteria).get(0);
 
-            try {
-                createLease(rtCustomer, unit, propertyCode);
-            } catch (Throwable t) {
-                log.info("ERROR - lease not created: ", t);
+                {
+                    EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                    criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
+                    if (!Persistence.service().query(criteria).isEmpty()) {
+                        Lease lease = Persistence.service().query(criteria).get(0);
+                        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+                        updateLease(rtCustomer, lease);
+                        continue;
+                    }
+                }
+                EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+                criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+                criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
+                AptUnit unit = Persistence.service().query(criteria).get(0);
+
+                try {
+                    createLease(rtCustomer, unit, propertyCode);
+                } catch (Throwable t) {
+                    log.info("ERROR - lease not created: ", t);
+                }
+                Persistence.service().commit();
             }
-            Persistence.service().commit();
         }
     }
 

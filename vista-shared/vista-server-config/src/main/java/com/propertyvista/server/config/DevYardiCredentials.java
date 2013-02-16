@@ -37,7 +37,7 @@ public class DevYardiCredentials {
             cr.serverName().setValue("aspdb06\\sql2k5");
             cr.database().setValue("afqoml_qa6008");
         } else if (false) {
-            cr.propertyCode().setValue("gran0002");
+            cr.propertyCode().setValue(".pvberk");
             cr.residentTransactionsServiceURL().setValue("https://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20.asmx");
             cr.sysBatchServiceURL().setValue("https://yardi.starlightinvest.com/voyager6008sp17/webservices/itfResidentTransactions20_SysBatch.asmx");
             cr.username().setValue("propvist");

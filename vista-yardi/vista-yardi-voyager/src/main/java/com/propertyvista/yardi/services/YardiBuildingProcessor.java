@@ -48,13 +48,18 @@ public class YardiBuildingProcessor {
 
     public void updateBuildings(ResidentTransactions transaction) throws YardiServiceException {
 
-        Building importedBuilding = getBuilding(transaction);
-        String propertyCode = importedBuilding.propertyCode().getValue();
+        List<Property> properties = getProperties(transaction);
+        for (Property property : properties) {
+            Building building = getBuildingFromProperty(property);
+            String propertyCode = building.propertyCode().getValue();
 
-        merge(importedBuilding, getBuilding(propertyCode));
+            merge(building, getBuilding(propertyCode));
 
-        List<AptUnit> importedUnit = getUnits(transaction);
-        updateUnitsForBuilding(importedUnit, getBuilding(propertyCode));
+            building = getBuilding(propertyCode);
+
+            List<AptUnit> importedUnit = getUnits(transaction, property);
+            updateUnitsForBuilding(importedUnit, building);
+        }
     }
 
     private void merge(Building imported, Building existing) {
@@ -124,9 +129,9 @@ public class YardiBuildingProcessor {
         return !buildings.isEmpty() ? buildings.get(0) : null;
     }
 
-    public Building getBuilding(ResidentTransactions transaction) {
+    public Building getBuildingFromProperty(Property property) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(getProvinces(), getProperty(transaction));
+        return mapper.map(getProvinces(), property);
     }
 
     public List<Province> getProvinces() {
@@ -135,17 +140,22 @@ public class YardiBuildingProcessor {
         return Persistence.service().query(criteria);
     }
 
-    public List<AptUnit> getUnits(ResidentTransactions transaction) {
-        List<RTUnit> imported = getYardiUnits(transaction);
+    public List<AptUnit> getUnits(ResidentTransactions transaction, Property property) {
+        List<RTUnit> imported = getYardiUnits(transaction, property);
+        String akjshdkajhsgd = property.getPropertyID().get(0).getIdentification().getPrimaryID() + " - " + imported.size();
         return new UnitsMapper().map(imported);
+
     }
 
-    private Property getProperty(ResidentTransactions transaction) {
-        return transaction.getProperty().get(0);
+    public List<Property> getProperties(ResidentTransactions transaction) {
+        List<Property> properties = new ArrayList<Property>();
+        for (Property property : transaction.getProperty()) {
+            properties.add(property);
+        }
+        return properties;
     }
 
-    private List<RTUnit> getYardiUnits(ResidentTransactions transaction) {
-        Property property = transaction.getProperty().get(0);
+    private List<RTUnit> getYardiUnits(ResidentTransactions transaction, Property property) {
 
         Map<String, RTUnit> map = new HashMap<String, RTUnit>();
 
