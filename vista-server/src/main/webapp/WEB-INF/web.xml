@@ -76,7 +76,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/robots.txt,/favicon.ico,/residents/\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc</param-value>
+            <param-value>/robots.txt,/favicon.ico,/residents/\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc,/debug/*</param-value>
         </init-param>
     </filter>
 
