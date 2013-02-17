@@ -115,3 +115,8 @@
 .vista-pmsite-residentPage .ValidationLabel ul {
 	padding-left: 10px;
 }
+
+#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
+	{
+	width: 90px !important;
+}
