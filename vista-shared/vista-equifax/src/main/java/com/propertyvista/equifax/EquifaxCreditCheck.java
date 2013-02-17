@@ -284,7 +284,7 @@ public class EquifaxCreditCheck {
             if (ApplicationMode.isDevelopment()) {
                 throw new DevInfoUnRecoverableRuntimeException(e);
             } else {
-                throw new UnRecoverableRuntimeException(i18n.tr("Equifax data strage error"));
+                throw new UnRecoverableRuntimeException(i18n.tr("Equifax data storage error"));
             }
         }
         return EquifaxLongReportModelMapper.createLongReport(efxResponse, ccc);
