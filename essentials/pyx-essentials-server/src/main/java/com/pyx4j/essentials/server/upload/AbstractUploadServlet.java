@@ -108,10 +108,25 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 return;
             }
             String uploadPath = request.getPathInfo();
-            int cIdEnd = uploadPath.lastIndexOf('/');
-            String moduleBaseURL = uploadPath.substring(0, cIdEnd + 1);
-            String serviceInterfaceId = uploadPath.substring(cIdEnd + 1);
-            ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleBaseURL);
+            String[] uploadPathFragments = uploadPath.split("/");
+            if (uploadPathFragments.length != 3) {
+                log.error("invalid upload path {}", uploadPath);
+                out.println(i18n.tr("Invalid Request"));
+                return;
+            }
+            // The one before last in GWT.getModuleName()
+            String gwtModuleName = uploadPathFragments[1];
+            // Last path fragment is serviceInterfaceId; @see UploadPanel#setServletPath(String)
+            String serviceInterfaceId = uploadPathFragments[2];
+
+            String moduleRelativePath = request.getServletPath().substring(0, request.getServletPath().lastIndexOf("/"));
+            if (!moduleRelativePath.endsWith(gwtModuleName)) {
+                log.error("invalid upload module {}", uploadPath);
+                out.println(i18n.tr("Invalid Request"));
+                return;
+            }
+            ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleRelativePath + "/");
+
             String serviceClassName = ServicePolicy.decodeServiceInterfaceClassName(serviceInterfaceId);
             Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassName);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
