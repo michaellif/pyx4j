@@ -118,3 +118,7 @@
 .vista-pmsite-residentPage .ValidationLabel ul {
 	padding-left: 10px;
 }
+
+#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel, #gwt-debug-InsuranceGeneric-expiryDate-triggerPanel {
+	width: 100px !important;
+}
