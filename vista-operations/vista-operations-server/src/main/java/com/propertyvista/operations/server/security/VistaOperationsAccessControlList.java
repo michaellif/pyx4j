@@ -87,6 +87,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DBIntegrityCheckService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExportDownloadService.class));
 
+        //TODO review and grant to VistaOperationsBehavior.SecurityAdmin
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserService.class));
@@ -94,6 +95,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
 
+        //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUserCredential.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
 
@@ -106,6 +108,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
+        //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUser.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadSimFileCrudService.class));
@@ -133,10 +136,10 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SecurityAdmin, VistaOperationsBehavior.SystemAdmin);
-        grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
-        grant(VistaOperationsBehavior.SecurityAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
+        grant(VistaOperationsBehavior.SecurityAdmin, VistaOperationsBehavior.SystemAdmin);
         grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(EncryptedStorageService.class));
         grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(EncryptedStorageServicePrivateKeyUploadService.class));
 

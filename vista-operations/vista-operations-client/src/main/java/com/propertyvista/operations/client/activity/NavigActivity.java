@@ -22,9 +22,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.client.ui.NavigView;
 import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
@@ -98,7 +100,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Administration.Maintenance());
         folder.addNavigItem(new OperationsSiteMap.Administration.Simulation());
         folder.addNavigItem(new OperationsSiteMap.Administration.AdminUsers());
-        folder.addNavigItem(new OperationsSiteMap.Administration.EncryptedStorage());
+        if (SecurityController.checkBehavior(VistaOperationsBehavior.SecurityAdmin)) {
+            folder.addNavigItem(new OperationsSiteMap.Administration.EncryptedStorage());
+        }
         list.add(folder);
 
         if (ApplicationMode.isDevelopment()) {
