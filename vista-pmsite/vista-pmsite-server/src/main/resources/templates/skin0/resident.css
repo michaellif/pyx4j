@@ -115,7 +115,7 @@
 	bottom: -7px;;
 }
 
-#gwt-debug-login,#gwt-debug-account,#gwt-debug-logout {
+.SiteViewAction .Anchor {
 	white-space: nowrap;
 	float: right;
 }
@@ -124,11 +124,11 @@
 	padding-left: 10px;
 }
 
-#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
-	{
+.TriggerPannel .TextBox	{
 	width: 90px !important;
 }
 
 .ProvideTIBGetTenantSure {
-	padding: 0;
+	padding: 0 0.4em !important;
+	width: auto;
 }
