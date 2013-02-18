@@ -21,6 +21,7 @@ BEGIN TRANSACTION;
  -- Alter sequences
  ALTER SEQUENCE admin_user_seq RENAME TO operations_user_seq;
  ALTER SEQUENCE admin_user_credential$behaviors_seq RENAME TO operations_user_credential$behaviors_seq;
+ ALTER SEQUENCE admin_onboarding_merchant_account_seq RENAME TO admin_pmc_merchant_account_index_seq;
   
  -- New sequences
  CREATE SEQUENCE default_equifax_limit_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -44,6 +45,7 @@ BEGIN TRANSACTION;
 
   
   -- Change owner to vista
+ ALTER SEQUENCE admin_pmc_merchant_account_index_seq OWNER TO vista;
  ALTER SEQUENCE default_equifax_limit_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_card_seq OWNER TO vista ;
  ALTER SEQUENCE dev_card_service_simulation_merchant_account_seq OWNER TO vista ;

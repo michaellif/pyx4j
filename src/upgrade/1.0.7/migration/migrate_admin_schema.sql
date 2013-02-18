@@ -27,12 +27,15 @@ SET search_path = '_admin_';
         ALTER TABLE admin_user_credential$behaviors DROP CONSTRAINT admin_user_credential$behaviors_owner_fk;
         ALTER TABLE admin_user_credential DROP CONSTRAINT admin_user_credential_usr_fk;
         ALTER TABLE scheduler_trigger_notification DROP CONSTRAINT scheduler_trigger_notification_usr_fk;
+        ALTER TABLE admin_onboarding_merchant_account DROP CONSTRAINT admin_onboarding_merchant_account_pmc_fk;
+        ALTER TABLE pad_reconciliation_summary DROP CONSTRAINT pad_reconciliation_summary_merchant_account_fk;
         
         -- Primary keys to drop
         
         ALTER TABLE admin_user_credential$behaviors DROP CONSTRAINT admin_user_credential$behaviors_pk;
         ALTER TABLE admin_user_credential DROP CONSTRAINT admin_user_credential_pk;
         ALTER TABLE admin_user DROP CONSTRAINT admin_user_pk;
+        ALTER TABLE admin_onboarding_merchant_account DROP CONSTRAINT admin_onboarding_merchant_account_pk;
         
         -- Check constraints to drop
         
@@ -55,6 +58,16 @@ SET search_path = '_admin_';
         ALTER TABLE admin_user RENAME TO operations_user;
         ALTER TABLE admin_user_credential RENAME TO operations_user_credential;
         ALTER TABLE admin_user_credential$behaviors RENAME TO operations_user_credential$behaviors; 
+        
+        -- admin_onboarding_merchant_account
+        
+        ALTER TABLE admin_onboarding_merchant_account   DROP COLUMN account_number,
+                                                        DROP COLUMN bank_id,
+                                                        DROP COLUMN branch_transit_number,
+                                                        DROP COLUMN charge_description,
+                                                        DROP COLUMN onboarding_bank_account_id;
+                                                        
+        ALTER TABLE admin_onboarding_merchant_account RENAME TO admin_pmc_merchant_account_index;
         
         -- admin_pmc_equifax_info
         
@@ -254,6 +267,7 @@ SET search_path = '_admin_';
         ALTER TABLE operations_user_credential$behaviors ADD CONSTRAINT operations_user_credential$behaviors_pk PRIMARY KEY(id);
         ALTER TABLE operations_user_credential ADD CONSTRAINT operations_user_credential_pk PRIMARY KEY(id);
         ALTER TABLE operations_user ADD CONSTRAINT operations_user_pk PRIMARY KEY(id);
+        ALTER TABLE admin_pmc_merchant_account_index ADD CONSTRAINT admin_pmc_merchant_account_index_pk PRIMARY KEY(id);
 
         
         -- Foreign keys to create
@@ -270,6 +284,10 @@ SET search_path = '_admin_';
         ALTER TABLE scheduler_trigger_notification ADD CONSTRAINT scheduler_trigger_notification_usr_fk FOREIGN KEY(usr) REFERENCES operations_user(id);
         ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_file_fk FOREIGN KEY(file) REFERENCES tenant_sure_hqupdate_file(id);
         ALTER TABLE tenant_sure_subscribers ADD CONSTRAINT tenant_sure_subscribers_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id);
+        ALTER TABLE admin_pmc_merchant_account_index ADD CONSTRAINT admin_pmc_merchant_account_index_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id);
+        ALTER TABLE pad_reconciliation_summary ADD CONSTRAINT pad_reconciliation_summary_merchant_account_fk FOREIGN KEY(merchant_account) 
+                REFERENCES admin_pmc_merchant_account_index(id);
+
 
                 
         -- Check constraint to create
@@ -287,7 +305,7 @@ SET search_path = '_admin_';
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
                 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 
                 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 
-                'tenantSureHQUpdate', 'tenantSureReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
+                'tenantSureHQUpdate', 'tenantSureReports', 'test', 'tenantSureTransactionReports', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
                 'yardiBatchProcess', 'yardiImportProcess'));
         ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_status_e_ck CHECK (status = 'Cancel');
         ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
@@ -307,7 +325,9 @@ SET search_path = '_admin_';
         DROP INDEX admin_user_credential$behaviors_owner_idx;
         DROP INDEX admin_user_name_idx;
         DROP INDEX admin_user_email_idx;
+        DROP INDEX admin_onboarding_merchant_account_merchant_terminal_id_idx;
         
+        CREATE UNIQUE INDEX admin_pmc_merchant_account_index_merchant_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (merchant_terminal_id);
         CREATE INDEX operations_user_credential$behaviors_owner_idx ON operations_user_credential$behaviors USING btree (owner);
         CREATE INDEX operations_user_name_idx ON operations_user USING btree (name);
         CREATE UNIQUE INDEX operations_user_email_idx ON operations_user USING btree (LOWER(email));

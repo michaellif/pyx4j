@@ -116,7 +116,9 @@ BEGIN
         
         -- merchant_account 
         
-        ALTER TABLE merchant_account ADD COLUMN status VARCHAR(50);
+        ALTER TABLE merchant_account    ADD COLUMN status VARCHAR(50),
+                                        ADD COLUMN created TIMESTAMP,
+                                        ADD COLUMN updated TIMESTAMP;
         
         
         -- payment_type_selection_policy
