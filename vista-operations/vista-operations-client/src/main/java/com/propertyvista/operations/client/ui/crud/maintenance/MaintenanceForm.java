@@ -56,7 +56,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
         selectTab(addTab(content));
 
-        FormFlexPanel tenantSureMaintenanceTab = new FormFlexPanel(i18n.tr("TenantSure"));
+        FormFlexPanel tenantSureMaintenanceTab = new FormFlexPanel(i18n.tr("Vista Interfaces"));
         row = -1;
         tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
         addTab(tenantSureMaintenanceTab);
