@@ -23,7 +23,7 @@
 	width: 211px;
 	float: left;
 	min-height: 400px;
-	border-right: 1px solid${foreground_20};
+	border-right: 1px solid ${foreground_20};
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul {
