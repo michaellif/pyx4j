@@ -28,7 +28,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
 
-public class ResidentsPage extends BasePage {
+public class ResidentsPage extends CustomizablePage {
 
     private static final long serialVersionUID = 1L;
 

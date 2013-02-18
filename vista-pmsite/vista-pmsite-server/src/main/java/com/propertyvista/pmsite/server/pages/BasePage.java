@@ -20,17 +20,8 @@ import js.JSResources;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.markup.ContainerInfo;
-import org.apache.wicket.markup.DefaultMarkupCacheKeyProvider;
-import org.apache.wicket.markup.DefaultMarkupResourceStreamProvider;
-import org.apache.wicket.markup.IMarkupCache;
-import org.apache.wicket.markup.IMarkupResourceStreamProvider;
-import org.apache.wicket.markup.Markup;
-import org.apache.wicket.markup.MarkupFactory;
-import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -40,8 +31,6 @@ import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -56,10 +45,9 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
-public abstract class BasePage extends WebPage implements IMarkupResourceStreamProvider {
+public abstract class BasePage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -189,30 +177,6 @@ public abstract class BasePage extends WebPage implements IMarkupResourceStreamP
          */
         setStatelessHint(true);
         super.onDetach();
-    }
-
-    @Override
-    public Markup getAssociatedMarkup() {
-        if (getCM().isSiteUpdated()) {
-            // remove old markup from cache
-            IMarkupCache cache = MarkupFactory.get().getMarkupCache();
-            String cacheKey = new DefaultMarkupCacheKeyProvider().getCacheKey(this, getClass());
-            cache.removeMarkup(cacheKey);
-        }
-        return super.getAssociatedMarkup();
-    }
-
-    @Override
-    public IResourceStream getMarkupResourceStream(final MarkupContainer container, Class<?> containerClass) {
-        PMSiteContentManager cm = getCM();
-        if (this instanceof ResidentsPage && cm != null && cm.isCustomResidentsContentEnabled()) {
-            String content = cm.getCustomResidentsContent(((PMSiteWebRequest) getRequest()).getSiteLocale());
-            content = content.replaceFirst(DeploymentConsts.RESIDENT_CONTENT_ID, "wicket:id=\"" + RESIDENT_CUSTOM_CONTENT_PANEL + "\"");
-            content = content.replaceFirst(DeploymentConsts.RESIDENT_LOGIN_ID, "wicket:id=\"" + RESIDENT_LOGIN_PANEL + "\"");
-            return new MarkupResourceStream(new StringResourceStream(content), new ContainerInfo(this), getClass());
-        } else {
-            return new DefaultMarkupResourceStreamProvider().getMarkupResourceStream(container, containerClass);
-        }
     }
 
     private void checkIfPageStateless(Page p) {
