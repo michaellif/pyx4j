@@ -22,7 +22,7 @@
 	float:left;
 	vertical-align: top;
 	padding:20px;
-	width: 260px;
+	width: 280px;
 	overflow: hidden;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
@@ -37,11 +37,23 @@
     
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-	border-bottom: 5px solid black;
+	border-bottom: 4px solid #1F1B1C;
+}
+.apartmentDetailsWrap {
+    border-top-color: #484243;
+    border-top-width: 1px;
+    border-top-style: solid;
+    position: relative;
+    top: -1px;
 }
 
 .apartmentDetailsWrap .detailBox {
     padding-bottom: 20px;
+    /*border-top-color: #484243;
+    border-top-width: 1px;
+    border-top-style: solid;
+    position: relative;
+    /*top: -1px;*/
 }
 .apartmentDetailsWrap .detailBox .detailBoxTitle {
 	font-size:12pt;
@@ -57,11 +69,11 @@
 	zoom: 1;
 	*display: inline;
 	padding: 10px 0;
-	border-bottom: 1px solid #000000;
+	border-bottom: 3px solid #000000;
 }
 
 .apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
-    border-top: 1px solid #000000;
+    /*border-top: 1px solid #000000;*/
 }
 
 .apartmentDetailsWrap .detailBox .detailBoxEntry.amenities {
@@ -123,7 +135,10 @@
 } 
 .apartmentDetailsWrap .unitDetails .unitEntry {
 	padding:2px 0;
-} 
+}
+.apartmentDetailsWrap .detailBox .detailBoxEntry.units .unitEntryText:hover {
+	color:#1f1b1c;
+}
 .apartmentDetailsWrap .unitDetails .unitEntry .unitEntryCaption {
 	display: inline-block;
 	zoom: 1;
@@ -176,32 +191,36 @@
 	height:25px;
 	padding-top:5px;
 	padding-left:30px;
-	font-weight:bold;
+	font-weight:normal;
+	font-size: 14pt;
 	cursor:pointer;
 }
 a.listingCtlButton {
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
-	color:${foreground_100} !important;
+	background-image: url("images/aptListIcons.png");
+	color:#1f1b1c;
+	/*color:${foreground_100} !important;*/
 }
 #btnViewDetails {
 	background-position:0px -30px;
 }
 .apartmentDetailsWrap .requestBtn {
-	background: ${object1_100};
+	/*background: ${object1_100};
 	border: 2px solid ${object1_100};
 	//background: none repeat scroll 0 0 #000000;
 	//border: 2px solid #000000;
-	color: ${object1_10};
+	color: ${object1_10};*/
+	color: #d7ac3f;
     display:inline-block;
     line-height: 32px;
     padding:0 8px;
     margin-left:40px;
     margin-top: 20px;
-    margin-bottom:20px;
-    font-size: 16px;
+    margin-bottom:75px;
+    font-weight: bold;
+    font-size: 14pt;
     text-transform: uppercase;
     text-decoration:none;
 }

@@ -73,7 +73,8 @@ td {
 }
 
 a {
-	color: #E8E8E8;
+	/*color: #E8E8E8;*/
+	color: #d7ac3f;
 	outline: medium none;
 	text-decoration: none;
 }
@@ -389,18 +390,29 @@ ul.footer_locations li {
 	color: #FFFFFF;
     font-size: 15pt;
     font-weight: normal;
+    position: relative;
+    top:20px;
+    padding-right: 10px;
+    background-color: #30292b;
+    z-index: 1;
 }
 .vista-pmsite-main .caption2 .rightControl {
 	height:25px;
-	margin:5px 0;
+	margin:3px 0;
 	float:right;
 	color: #d7ac3f;
 	font-size: 13pt;
 	text-transform:uppercase;
 	cursor:pointer;
+	position: relative;
+    top:20px;
+    padding-left: 10px;
+    background-color: #30292b;
+    z-index: 1;
 }
 .vista-pmsite-main .caption2 .rightControl:hover {
-	color:${object2_10};
+	color: #fa8d0c;
+	/*color:${object2_10};*/
 }
 
 .vista-pmsite-sidebarWrap {
