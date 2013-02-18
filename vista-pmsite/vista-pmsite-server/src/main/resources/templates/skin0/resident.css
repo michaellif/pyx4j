@@ -1,17 +1,17 @@
 .vista-pmsite-residentPage {
-	background: url("images/inner_content_bg.png") repeat-x scroll
-		0 0 #37393F;
+	background: url("images/inner_content_bg.png") repeat-x scroll 0 0
+		#37393F;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-content {
 	background: url("images/inner_bg.png") no-repeat scroll 50% 0
 		transparent;
-		min-height: 546px;
+	min-height: 546px;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-contentWrap {
-	background: url("images/inner_content_bg.png") repeat-x scroll
-		0 0 #37393F;
+	background: url("images/inner_content_bg.png") repeat-x scroll 0 0
+		#37393F;
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
@@ -42,8 +42,8 @@
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li.active {
-	background: url("images/menu_active.png") no-repeat scroll 0
-		50% transparent;
+	background: url("images/menu_active.png") no-repeat scroll 0 50%
+		transparent;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li a {
@@ -68,10 +68,11 @@
 	font-size: 18px;
 }
 
-.vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaptionTextEmph  {
-    font-size: 18px;
-    font-weight: bold;
-    text-shadow: none;
+.vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label,.FormFlexPanel .FormFlexPanelH1Label,.LandingCaptionTextEmph
+	{
+	font-size: 18px;
+	font-weight: bold;
+	text-shadow: none;
 }
 
 .vista-pmsite-residentPage .LandingTermsAndConditionsBox {
@@ -79,40 +80,42 @@
 	margin-right: 80px;
 }
 
-.vista-pmsite-residentPage .Button, .gwt-Button {
-   background: url("images/btn.png") no-repeat scroll 0 0 transparent;
-    border: medium none;
-    color: #000000;
-    cursor: pointer;
-    font-size: 16px;
-    height: 32px;
-    text-shadow: 0 1px 0 #CCCCCC;
-    text-transform: uppercase;
-    width: 128px;
-    text-align: center;
-    white-space: nowrap;
-    filter: false; /*for IE9*/
+.vista-pmsite-residentPage .Button,.gwt-Button {
+	background: url("images/btn.png") no-repeat scroll 0 0 transparent;
+	background-size: 100% 64px;
+	border: medium none;
+	color: #000000;
+	cursor: pointer;
+	font-size: 16px;
+	height: 32px;
+	text-shadow: 0 1px 0 #CCCCCC;
+	text-transform: uppercase;
+	min-width: 128px;
+	text-align: center;
+	white-space: nowrap;
+	filter: false; /*for IE9*/
 }
 
 .vista-pmsite-residentPage .Button:hover {
-	background-position:0 -32px;
+	background-position: 0 -32px;
 }
 
-.vista-pmsite-residentPage .Button.TSPurchaseViewNextStepButton.Button-disabled, .Button.TSPurchaseViewNextStepButton {
+.vista-pmsite-residentPage .Button.TSPurchaseViewNextStepButton.Button-disabled,.Button.TSPurchaseViewNextStepButton
+	{
 	float: right;
 	margin: 0 20px 20px 20px;
 	width: auto;
 }
 
-.vista-pmsite-residentPage .Button-disabled{
+.vista-pmsite-residentPage .Button-disabled {
 	cursor: default;
 }
 
-.vista-pmsite-residentPage .ButtonText  {
-    bottom: -7px;;
+.vista-pmsite-residentPage .ButtonText {
+	bottom: -7px;;
 }
 
-#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
+#gwt-debug-login,#gwt-debug-account,#gwt-debug-logout {
 	white-space: nowrap;
 	float: right;
 }
@@ -124,4 +127,10 @@
 #gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
 	{
 	width: 90px !important;
+}
+
+.ProvideTIBGetTenantSure {
+	padding: 0; //
+	text-align: center; //
+	width: 20em;
 }
