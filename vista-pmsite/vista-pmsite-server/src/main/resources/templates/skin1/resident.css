@@ -30,7 +30,7 @@
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
-	font-size: 17px;
+	font-size: 16px;
 	font-weight: bold;
 	line-height: 38px;
 }
@@ -114,7 +114,7 @@
 	bottom: -7px;;
 }
 
-#gwt-debug-login,#gwt-debug-account,#gwt-debug-logout {
+.SiteViewAction .Anchor {
 	white-space: nowrap;
 	float: right;
 }
@@ -123,7 +123,15 @@
 	padding-left: 10px;
 }
 
-#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
-	{
+.TriggerPannel .TextBox	{
 	width: 90px !important;
+}
+
+.Dialog {
+    background-color: #0458B3;
+}
+
+.DialogCaption {
+    background: none repeat scroll 0 0 #0458B3;
+    color: #fff;
 }
