@@ -26,6 +26,7 @@ import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePrelo
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
 import com.propertyvista.portal.server.preloader.site.star.StarlightSitePreloader;
 import com.propertyvista.portal.server.preloader.site.vista.VistaSitePreloader;
+import com.propertyvista.preloader.MerchantAccountPreloader;
 
 public class VistaDataPreloaders extends DataPreloaderCollection {
 
@@ -83,6 +84,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         } else {
 
             add(new UserPreloader());
+            add(new MerchantAccountPreloader());
             add(new CampaignPreloader());
 
             PmcDataPreloader pmcDataPreloader = new PmcDataPreloader();

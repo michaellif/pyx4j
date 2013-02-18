@@ -11,14 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader.ido;
+package com.propertyvista.preloader.ido;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
-public interface OnboardingMerchantAccountImport extends AbstractMerchantAccount {
+public interface MerchantAccountImport extends AbstractMerchantAccount {
 
     IPrimitive<String> companyId();
 

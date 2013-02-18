@@ -44,8 +44,6 @@ import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorA
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
-import com.propertyvista.operations.client.activity.crud.onboardingmerchantaccount.OnboardingMerchantAccountEditorActivity;
-import com.propertyvista.operations.client.activity.crud.onboardingmerchantaccount.OnboardingMerchantAccountViewerActivity;
 import com.propertyvista.operations.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.operations.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.operations.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
@@ -53,6 +51,8 @@ import com.propertyvista.operations.client.activity.crud.pmc.EquifaxApprovalView
 import com.propertyvista.operations.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcViewerActivity;
+import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountEditorActivity;
+import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerEditorActivity;
@@ -302,13 +302,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.OnboardingMerchantAccounts) {
+                    } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccounts) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new OnboardingMerchantAccountEditorActivity((CrudAppPlace) place);
+                            activity = new MerchantAccountEditorActivity((CrudAppPlace) place);
                             break;
                         case viewer:
-                            activity = new OnboardingMerchantAccountViewerActivity((CrudAppPlace) place);
+                            activity = new MerchantAccountViewerActivity((CrudAppPlace) place);
                             break;
                         }
 // - Simulation

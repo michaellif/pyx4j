@@ -61,7 +61,7 @@ public class OperationsSiteMap implements SiteMap {
         public static class OnboardingUser extends CrudAppPlace {
         }
 
-        public static class OnboardingMerchantAccounts extends CrudAppPlace {
+        public static class PmcMerchantAccounts extends CrudAppPlace {
 
         }
 

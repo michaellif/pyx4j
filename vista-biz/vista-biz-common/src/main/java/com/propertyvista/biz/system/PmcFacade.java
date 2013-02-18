@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 
 /**
@@ -35,5 +36,7 @@ public interface PmcFacade {
     public boolean checkDNSAvailability(String dnsName);
 
     public boolean reservedDnsName(String dnsName, String onboardingAccountId);
+
+    public MerchantAccount persistMerchantAccount(Pmc pmc, MerchantAccount requestAcc);
 
 }

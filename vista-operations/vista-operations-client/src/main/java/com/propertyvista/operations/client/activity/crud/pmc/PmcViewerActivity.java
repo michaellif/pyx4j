@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,10 +29,10 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
 import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.services.OnboardingMerchantAccountCrudService;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
 public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements PmcViewerView.Presenter {
 
@@ -77,33 +77,29 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void suspend() {
-        ((PmcCrudService) getService()).suspend(new DefaultAsyncCallback<PmcDTO>() {
+        ((PmcCrudService) getService()).suspend(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
-            public void onSuccess(PmcDTO result) {
-                populateView(result);
+            public void onSuccess(VoidSerializable result) {
+                refresh();
             }
         }, getEntityId());
     }
 
     @Override
     public void cancelPmc() {
-        ((PmcCrudService) getService()).cancelPmc(new DefaultAsyncCallback<PmcDTO>() {
+        ((PmcCrudService) getService()).cancelPmc(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
-            public void onSuccess(PmcDTO result) {
-                if (result == null) {
-                    cancel();
-                } else {
-                    populateView(result);
-                }
+            public void onSuccess(VoidSerializable result) {
+                refresh();
             }
         }, getEntityId());
     }
 
     @Override
-    public ListerDataSource<OnboardingMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
-        return new ListerDataSource<OnboardingMerchantAccountDTO>(OnboardingMerchantAccountDTO.class,
-                GWT.<AbstractListService<OnboardingMerchantAccountDTO>> create(OnboardingMerchantAccountCrudService.class));
+    public ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
+        return new ListerDataSource<PmcMerchantAccountDTO>(PmcMerchantAccountDTO.class,
+                GWT.<AbstractListService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
     }
 }

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,10 +15,12 @@ package com.propertyvista.crm.server.services.admin;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
 
@@ -43,14 +45,10 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
         dbo.chargeDescription().setValue(dto.chargeDescription().getValue());
     }
 
-    public static void setCalulatedFileds(MerchantAccount entity, MerchantAccount dto) {
-        if (entity.merchantTerminalId().isNull()) {
-            dto.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.NoElectronicPaymentsAllowed);
-        } else if (entity.invalid().getValue(Boolean.TRUE)) {
-            dto.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.Invalid);
-        } else {
-            dto.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.ElectronicPaymentsAllowed);
-        }
+    private void setCalulatedFileds(MerchantAccount entity, MerchantAccount dto) {
+        ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(entity);
+        dto.merchantTerminalId().setValue(null);
+        dto.paymentsStatus().setValue(entity.paymentsStatus().getValue());
     }
 
     @Override

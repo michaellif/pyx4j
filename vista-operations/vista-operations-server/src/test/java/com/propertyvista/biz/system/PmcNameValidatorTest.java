@@ -11,12 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.server.onboarding;
+package com.propertyvista.biz.system;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.propertyvista.biz.system.PmcNameValidator;
 
 public class PmcNameValidatorTest {
 

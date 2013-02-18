@@ -7,29 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-02
+ * Created on 2012-09-14
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.operations.rpc;
 
-import java.math.BigDecimal;
+import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
-import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 
-public interface Vista2PmcFacade {
+@Transient
+public interface PmcMerchantAccountDTO extends PmcMerchantAccountIndex {
 
-    AbstractEquifaxFee getEquifaxFee();
+    MerchantAccount merchantAccount();
 
-    BigDecimal getPmcPerApplicantFee();
-
-    AbstractPaymentFees getPaymentFees();
-
-    String getTenantSureMerchantTerminalId();
-
-    String getVistaMerchantTerminalId();
-
-    MerchantAccount calulateMerchantAccountStatus(MerchantAccount merchantAccount);
 }

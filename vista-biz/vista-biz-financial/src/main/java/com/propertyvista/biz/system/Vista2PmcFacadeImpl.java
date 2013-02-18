@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceTenantSure;
 import com.propertyvista.biz.financial.payment.MerchantTerminalSourceVista;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
@@ -128,6 +129,18 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
     @Override
     public String getVistaMerchantTerminalId() {
         return new MerchantTerminalSourceVista().getMerchantTerminalId();
+    }
+
+    @Override
+    public MerchantAccount calulateMerchantAccountStatus(MerchantAccount merchantAccount) {
+        if (merchantAccount.merchantTerminalId().isNull()) {
+            merchantAccount.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.NoElectronicPaymentsAllowed);
+        } else if (merchantAccount.invalid().getValue(Boolean.TRUE)) {
+            merchantAccount.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.Invalid);
+        } else {
+            merchantAccount.paymentsStatus().setValue(MerchantAccount.MerchantAccountPaymentsStatus.ElectronicPaymentsAllowed);
+        }
+        return merchantAccount;
     }
 
 }

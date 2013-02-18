@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
@@ -28,20 +29,21 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.domain.pmc.PmcAccountNumbers;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.pmc.ReservedPmcNames;
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.PmcNameValidator;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
-import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
-import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.pmc.PmcAccountNumbers;
-import com.propertyvista.domain.pmc.ReservedPmcNames;
-import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.PmcCreator;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -137,11 +139,7 @@ public class PmcFacadeImpl implements PmcFacade {
         Persistence.service().persist(pmc);
 
         Persistence.service().retrieveMember(pmc.merchantAccounts());
-        for (OnboardingMerchantAccount merchantAccount : pmc.merchantAccounts()) {
-            merchantAccount.bankId().setValue(null);
-            merchantAccount.branchTransitNumber().setValue(null);
-            merchantAccount.accountNumber().setValue(null);
-            merchantAccount.chargeDescription().setValue(null);
+        for (PmcMerchantAccountIndex merchantAccount : pmc.merchantAccounts()) {
             merchantAccount.merchantTerminalId().setValue(null);
             Persistence.service().persist(merchantAccount);
         }
@@ -195,17 +193,13 @@ public class PmcFacadeImpl implements PmcFacade {
 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
-            EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-            onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
-            List<OnboardingMerchantAccount> onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
             try {
                 Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred, onbMrchAccs);
+                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
                 pmc.status().setValue(PmcStatus.Active);
                 Persistence.service().persist(pmc);
                 onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
                 Persistence.service().persist(onbUserCred);
-                Persistence.service().persist(onbMrchAccs);
 
                 Persistence.service().commit();
             } finally {
@@ -219,5 +213,37 @@ public class PmcFacadeImpl implements PmcFacade {
             Persistence.service().commit();
         }
         CacheService.reset();
+    }
+
+    @Override
+    public MerchantAccount persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
+        PmcMerchantAccountIndex pmcMerchantAccountIndex = null;
+        if (!merchantAccount.id().isNull()) {
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey()));
+            pmcMerchantAccountIndex = Persistence.service().retrieve(criteria);
+            if (pmcMerchantAccountIndex == null) {
+                throw new Error("MerchantAccount integrity broken");
+            }
+        }
+        if (pmcMerchantAccountIndex == null) {
+            pmcMerchantAccountIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
+            pmcMerchantAccountIndex.pmc().set(pmc);
+        }
+
+        TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+            @Override
+            public Void call() {
+                Persistence.service().persist(merchantAccount);
+                return null;
+            }
+        });
+
+        pmcMerchantAccountIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
+        pmcMerchantAccountIndex.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
+        Persistence.service().persist(pmcMerchantAccountIndex);
+        return merchantAccount;
+
     }
 }

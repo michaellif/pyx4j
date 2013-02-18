@@ -26,10 +26,10 @@ import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUse
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserViewerViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalView;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalViewImpl;
-import com.propertyvista.operations.client.ui.crud.pmc.OnboardingMerchantAccountEditorView;
-import com.propertyvista.operations.client.ui.crud.pmc.OnboardingMerchantAccountEditorViewImpl;
-import com.propertyvista.operations.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;
-import com.propertyvista.operations.client.ui.crud.pmc.OnboardingMerchantAccountViewerViewImpl;
+import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
+import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorViewImpl;
+import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountViewerView;
+import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountViewerViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcEditorViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
@@ -80,10 +80,10 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
             } else if (RunListerView.class.equals(type)) {
                 map.put(type, new RunListerViewImpl());
 
-            } else if (OnboardingMerchantAccountEditorView.class.equals(type)) {
-                map.put(type, new OnboardingMerchantAccountEditorViewImpl());
-            } else if (OnboardingMerchantAccountViewerView.class.equals(type)) {
-                map.put(type, new OnboardingMerchantAccountViewerViewImpl());
+            } else if (MerchantAccountEditorView.class.equals(type)) {
+                map.put(type, new MerchantAccountEditorViewImpl());
+            } else if (MerchantAccountViewerView.class.equals(type)) {
+                map.put(type, new MerchantAccountViewerViewImpl());
 
             } else if (EncryptedStorageView.class.equals(type)) {
                 map.put(type, new EncryptedStorageViewImpl());

@@ -14,22 +14,15 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.biz.system.PmcFacade;
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.CreditCheckReportType;
-import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -37,16 +30,12 @@ import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
-import com.propertyvista.generator.PreloadData;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
-
-    static List<OnboardingMerchantAccountImport> accountImport;
 
     public static Pmc createPmc(String pmcName, boolean mini) {
         Pmc pmc = EntityFactory.create(Pmc.class);
@@ -106,174 +95,25 @@ public class PmcCreatorDev {
         pmc.status().setValue(PmcStatus.Active);
         Persistence.service().persist(pmc);
 
-        if (accountImport == null) {
-            EntityCSVReciver<OnboardingMerchantAccountImport> rcv = EntityCSVReciver.create(OnboardingMerchantAccountImport.class);
-            rcv.setHeaderIgnoreCase(true);
-            accountImport = rcv.loadResourceFile("OnboardingMerchantAccounts.csv");
-        }
-        // Use data provided by Caledon
-        if (true) {
-            int ordinal = -1;
-            try {
-                DemoPmc pmcId = DemoData.DemoPmc.valueOf(pmcName);
-                ordinal = pmcId.ordinal();
-            } catch (IllegalArgumentException ignore) {
-                if (VistaDemo.isDemo()) {
-                    ordinal = 0;
-                }
-            }
-            if (ordinal >= 0) {
-                PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
-                fees.pmc().set(pmc);
-                fees.ccVisaPaymentAvailable().setValue(Boolean.TRUE);
-                fees.ccVisaFee().setValue(new BigDecimal("2.50"));
+        PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
+        fees.pmc().set(pmc);
+        fees.ccVisaPaymentAvailable().setValue(Boolean.FALSE);
+        fees.ccVisaFee().setValue(new BigDecimal("2.50"));
 
-                fees.eCheckPaymentAvailable().setValue(Boolean.TRUE);
-                fees.eChequeFee().setValue(new BigDecimal("0.20"));
+        fees.eCheckPaymentAvailable().setValue(Boolean.FALSE);
+        fees.eChequeFee().setValue(new BigDecimal("0.20"));
 
-                fees.eftPaymentAvailable().setValue(Boolean.FALSE);
-                fees.eftFee().setValue(new BigDecimal("0.40"));
+        fees.eftPaymentAvailable().setValue(Boolean.FALSE);
+        fees.eftFee().setValue(new BigDecimal("0.40"));
 
-                fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
-                fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
+        fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
+        fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
 
-                fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
-                fees.interacVisaFee().setValue(new BigDecimal("1.50"));
-
-                String caledonCompanyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
-                List<OnboardingMerchantAccountImport> companyImport = new ArrayList<OnboardingMerchantAccountImport>();
-                for (OnboardingMerchantAccountImport imp : accountImport) {
-                    if (caledonCompanyId.equals(imp.companyId().getValue())) {
-                        companyImport.add(imp);
-                        fees.eChequeFee().setValue(new BigDecimal(stripDollars(imp.transactionFee().getValue())));
-                    }
-                }
-
-                // Add one or two (for vista) working accounts.
-                int nWorkingAccounts = 1;
-                if (ordinal == 0) {
-                    nWorkingAccounts = 2;
-                }
-                for (int n = 0; n < nWorkingAccounts; n++) {
-                    int lineN = ordinal + n;
-                    if (ordinal != 0) {
-                        lineN += 1;
-                    }
-                    if (companyImport.size() > lineN) {
-                        OnboardingMerchantAccountImport imp = companyImport.get(lineN);
-                        OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
-                        merchantAccount.pmc().set(pmc);
-                        merchantAccount.merchantTerminalId().setValue(imp.merchantTerminalId().getValue());
-                        merchantAccount.bankId().setValue(imp.bankId().getValue());
-                        merchantAccount.branchTransitNumber().setValue(imp.branchTransitNumber().getValue());
-                        merchantAccount.accountNumber().setValue(imp.accountNumber().getValue());
-                        merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
-                        merchantAccount.onboardingBankAccountId().setValue("onb_" + pmcName + merchantAccount.bankId().getValue());
-
-                        Persistence.service().persist(merchantAccount);
-                    }
-                }
-
-                int internalAccounts = 3;
-
-                for (int n = 0; n <= internalAccounts; n++) {
-                    OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
-                    merchantAccount.pmc().set(pmc);
-                    merchantAccount.merchantTerminalId().setValue("EBIRCH" + ordinal + n);
-                    merchantAccount.bankId().setValue(ordinal + "00");
-                    merchantAccount.branchTransitNumber().setValue("0100" + n);
-
-                    // Make one ElectronicPaymentsAllowed FALSE
-                    if (n == internalAccounts) {
-                        merchantAccount.accountNumber().setValue(PreloadData.ElectronicPaymentsNotAllowedAccountPrefix + "876543");
-                    } else {
-                        merchantAccount.accountNumber().setValue("01234567");
-                    }
-
-                    merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " er " + n);
-                    merchantAccount.onboardingBankAccountId().setValue("onb_" + pmcName + "e" + n);
-                    Persistence.service().persist(merchantAccount);
-                }
-
-                Persistence.service().persist(fees);
-            } else {
-                PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
-                fees.pmc().set(pmc);
-                fees.ccVisaPaymentAvailable().setValue(Boolean.FALSE);
-                fees.ccVisaFee().setValue(new BigDecimal("2.50"));
-
-                fees.eCheckPaymentAvailable().setValue(Boolean.FALSE);
-                fees.eChequeFee().setValue(new BigDecimal("0.20"));
-
-                fees.eftPaymentAvailable().setValue(Boolean.FALSE);
-                fees.eftFee().setValue(new BigDecimal("0.40"));
-
-                fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
-                fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
-
-                fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
-                fees.interacVisaFee().setValue(new BigDecimal("1.50"));
-                Persistence.service().persist(fees);
-            }
-
-        } else {
-            if (pmcName.equals(DemoData.DemoPmc.vista.name())) {
-                {
-                    OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
-                    merchantAccount.pmc().set(pmc);
-                    merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
-                    merchantAccount.bankId().setValue("001");
-                    merchantAccount.branchTransitNumber().setValue("00550");
-                    merchantAccount.accountNumber().setValue("12345678");
-                    merchantAccount.chargeDescription().setValue("Pay for VistaT");
-                    merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
-                    Persistence.service().persist(merchantAccount);
-                }
-                {
-                    OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
-                    merchantAccount.pmc().set(pmc);
-                    merchantAccount.merchantTerminalId().setValue("BIRCHWT1");
-                    merchantAccount.bankId().setValue("002");
-                    merchantAccount.branchTransitNumber().setValue("00750");
-                    merchantAccount.accountNumber().setValue("01234567");
-
-                    merchantAccount.chargeDescription().setValue("Pay for Vista1");
-                    merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
-                    Persistence.service().persist(merchantAccount);
-                }
-            } else {
-                int ordinal = 0;
-                try {
-                    DemoPmc pmcId = DemoData.DemoPmc.valueOf(pmcName);
-                    ordinal = pmcId.ordinal();
-                } catch (IllegalArgumentException ignore) {
-                }
-                if (ordinal != 0) {
-                    for (int n = 0; n <= 3; n++) {
-                        OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
-                        merchantAccount.pmc().set(pmc);
-                        merchantAccount.merchantTerminalId().setValue("BIRCHW" + ordinal + n);
-                        merchantAccount.bankId().setValue(ordinal + "02");
-                        merchantAccount.branchTransitNumber().setValue("0100" + n);
-                        merchantAccount.accountNumber().setValue("01234567");
-
-                        merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
-                        merchantAccount.onboardingBankAccountId().setValue("onb_" + merchantAccount.bankId().getValue());
-                        Persistence.service().persist(merchantAccount);
-                    }
-                }
-
-            }
-        }
+        fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
+        fees.interacVisaFee().setValue(new BigDecimal("1.50"));
+        Persistence.service().persist(fees);
 
         return pmc;
     }
 
-    private static String stripDollars(String value) {
-        if (value.startsWith("$")) {
-            return value.substring(1);
-        } else {
-            return value;
-        }
-    }
 }

@@ -11,23 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.activity.crud.onboardingmerchantaccount;
+package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.activity.ViewerActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.operations.client.ui.crud.pmc.OnboardingMerchantAccountViewerView;
+import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
-import com.propertyvista.operations.rpc.services.OnboardingMerchantAccountCrudService;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class OnboardingMerchantAccountViewerActivity extends ViewerActivityBase<OnboardingMerchantAccountDTO> {
+public class MerchantAccountViewerActivity extends ViewerActivityBase<PmcMerchantAccountDTO> {
 
-    public OnboardingMerchantAccountViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(OnboardingMerchantAccountViewerView.class), GWT
-                .<OnboardingMerchantAccountCrudService> create(OnboardingMerchantAccountCrudService.class));
+    public MerchantAccountViewerActivity(CrudAppPlace place) {
+        super(place, ManagementVeiwFactory.instance(MerchantAccountViewerView.class), GWT
+                .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class));
     }
 
 }

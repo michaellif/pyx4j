@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.PmcDTO;
 
 public interface PmcViewerView extends IViewerView<PmcDTO> {
@@ -31,7 +31,7 @@ public interface PmcViewerView extends IViewerView<PmcDTO> {
 
         void cancelPmc();
 
-        ListerDataSource<OnboardingMerchantAccountDTO> getOnboardingMerchantAccountsSource();
+        ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource();
     }
 
 }

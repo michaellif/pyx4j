@@ -13,8 +13,13 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -68,9 +73,17 @@ public interface MerchantAccount extends AbstractMerchantAccount {
      * Calculated base on terminal_id before sending it to GWT
      */
     @Transient
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<MerchantAccountPaymentsStatus> paymentsStatus();
 
     IPrimitive<Boolean> invalid();
+
+    @Timestamp(Timestamp.Update.Created)
+    @ReadOnly
+    IPrimitive<Date> created();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 
     @JoinTable(value = BuildingMerchantAccount.class)
     @Detached(level = AttachLevel.Detached)

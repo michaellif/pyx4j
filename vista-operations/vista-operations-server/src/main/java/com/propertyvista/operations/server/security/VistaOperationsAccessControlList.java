@@ -18,7 +18,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
@@ -49,7 +49,7 @@ import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
-import com.propertyvista.operations.rpc.services.OnboardingMerchantAccountCrudService;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.operations.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
@@ -124,8 +124,8 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(VistaTerms.VistaTermsV.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingMerchantAccountCrudService.class));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OnboardingMerchantAccount.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcMerchantAccountCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PmcMerchantAccountIndex.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));

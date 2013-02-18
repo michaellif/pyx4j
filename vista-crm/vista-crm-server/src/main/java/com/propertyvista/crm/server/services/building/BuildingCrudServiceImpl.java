@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
-import com.propertyvista.crm.server.services.admin.MerchantAccountCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
@@ -103,8 +103,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieveMember(in.merchantAccounts());
         if (!in.merchantAccounts().isEmpty()) {
             MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
-            MerchantAccountCrudServiceImpl.setCalulatedFileds(oneAccount, oneAccount);
-            dto.merchantAccount().set(oneAccount);
+            dto.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
         }
     }
 

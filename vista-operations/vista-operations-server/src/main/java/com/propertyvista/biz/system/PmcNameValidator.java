@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.server.onboarding;
+package com.propertyvista.biz.system;
 
 import java.util.HashSet;
 import java.util.Set;

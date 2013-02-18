@@ -13,14 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-public class OnboardingMerchantAccountViewerViewImpl extends OperationsViewerViewImplBase<OnboardingMerchantAccountDTO> implements
-        OnboardingMerchantAccountViewerView {
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 
-    public OnboardingMerchantAccountViewerViewImpl() {
-        setForm(new OnboardingMerchantAccountForm(this));
-    }
+public interface MerchantAccountEditorView extends IEditorView<PmcMerchantAccountDTO> {
 
 }

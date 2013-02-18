@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.payment.pad.CaledonPadReconciliationParser;
 
 class PadCaledonReconciliation {
@@ -31,9 +31,9 @@ class PadCaledonReconciliation {
 
         // Match merchantAccounts.
         for (PadReconciliationSummary summary : reconciliationFile.batches()) {
-            EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
-            OnboardingMerchantAccount macc = Persistence.service().retrieve(criteria);
+            PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
             if (macc == null) {
                 throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + file.getName());
             }

@@ -14,7 +14,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +23,12 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -39,7 +36,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -67,7 +63,6 @@ import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.FileImageThumbnailBlob;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
@@ -105,7 +100,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(managements);
 
-        MerchantAccount merchantAccount = createMerchantAccount();
+        MerchantAccount merchantAccount = getMerchantAccount();
 
         // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
@@ -292,49 +287,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         return sb.toString();
     }
 
-    private MerchantAccount createMerchantAccount() {
-        final EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), VistaDeployment.getCurrentPmc()));
-        final List<OnboardingMerchantAccount> accs = TaskRunner.runInOperationsNamespace(new Callable<List<OnboardingMerchantAccount>>() {
-            @Override
-            public List<OnboardingMerchantAccount> call() {
-                return Persistence.service().query(criteria);
-            }
-        });
-
-        MerchantAccount singleAccount = null;
-
-        for (OnboardingMerchantAccount acc : accs) {
-            MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
-            merchantAccount.bankId().setValue(acc.bankId().getValue());
-            merchantAccount.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
-            merchantAccount.accountNumber().setValue(acc.accountNumber().getValue());
-            merchantAccount.chargeDescription().setValue(acc.chargeDescription().getValue());
-            merchantAccount.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
-
-            if (merchantAccount.accountNumber().getValue().startsWith(PreloadData.ElectronicPaymentsNotAllowedAccountPrefix)) {
-                merchantAccount.invalid().setValue(Boolean.TRUE);
-            } else {
-                merchantAccount.invalid().setValue(Boolean.FALSE);
-            }
-            Persistence.service().persist(merchantAccount);
-            if (singleAccount == null) {
-                singleAccount = merchantAccount;
-            }
-            // join accounts
-            acc.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-        }
-
-        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
-            @Override
-            public Void call() {
-                Persistence.service().persist(accs);
-                return null;
-            }
-        });
-
-        return singleAccount;
-
+    private MerchantAccount getMerchantAccount() {
+        return Persistence.service().retrieve(EntityQueryCriteria.create(MerchantAccount.class));
     }
 
     @Override

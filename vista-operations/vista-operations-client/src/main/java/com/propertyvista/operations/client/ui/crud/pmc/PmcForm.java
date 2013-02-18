@@ -34,7 +34,7 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.OnboardingMerchantAccountDTO;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 
@@ -42,9 +42,9 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcForm.class);
 
-    private OnboardingMerchantAccountsLister onboardingMerchantAccountsLister;
+    private MerchantAccountsLister onboardingMerchantAccountsLister;
 
-    private ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource;
+    private ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource;
 
     private Anchor approvalLink;
 
@@ -57,7 +57,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         addTab(createYardiTab());
     }
 
-    public void setOnboardingMerchantAccountsSource(ListerDataSource<OnboardingMerchantAccountDTO> onboardingMerchantAccountsSource) {
+    public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
         this.onboardingMerchantAccountsSource = onboardingMerchantAccountsSource;
         this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
     }
@@ -159,7 +159,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private FormFlexPanel createOnboardingMerchantAccountsTab() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Merchant Accounts"));
-        panel.setWidget(0, 0, onboardingMerchantAccountsLister = new OnboardingMerchantAccountsLister());
+        panel.setWidget(0, 0, onboardingMerchantAccountsLister = new MerchantAccountsLister());
         return panel;
     }
 

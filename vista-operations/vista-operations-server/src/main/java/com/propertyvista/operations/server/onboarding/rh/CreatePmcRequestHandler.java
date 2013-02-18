@@ -26,10 +26,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.PmcNameValidator;
 import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.ReservedPmcNames;

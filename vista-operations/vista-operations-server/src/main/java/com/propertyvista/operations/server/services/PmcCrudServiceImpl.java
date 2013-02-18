@@ -34,12 +34,9 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.services.PmcCrudService;
-import com.propertyvista.operations.server.onboarding.PmcNameValidator;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
@@ -49,6 +46,9 @@ import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.services.PmcCrudService;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
 
@@ -159,7 +159,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void suspend(AsyncCallback<PmcDTO> callback, Key entityId) {
+    public void suspend(AsyncCallback<VoidSerializable> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
 
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
@@ -168,15 +168,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().commit();
         CacheService.reset();
 
-        PmcDTO dto = createDTO(pmc);
-        enhanceRetrieved(pmc, dto, null);
-
-        callback.onSuccess(dto);
+        callback.onSuccess(null);
 
     }
 
     @Override
-    public void cancelPmc(AsyncCallback<PmcDTO> callback, Key entityId) {
+    public void cancelPmc(AsyncCallback<VoidSerializable> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
 
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
@@ -188,13 +185,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
 
         pmc = Persistence.service().retrieve(entityClass, entityId);
-
-        if (pmc != null) {
-            PmcDTO dto = createDTO(pmc);
-            enhanceRetrieved(pmc, dto, null);
-            callback.onSuccess(dto);
-        } else {
-            callback.onSuccess(null);
-        }
+        callback.onSuccess(null);
     }
 }
