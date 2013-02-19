@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import java.util.Iterator;
+
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<IdAssignmentPolicy, IdAssignmentPolicyDTO> implements
         IdAssignmentPolicyCrudService {
@@ -25,4 +29,34 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
         super(IdAssignmentPolicy.class, IdAssignmentPolicyDTO.class);
     }
 
+    @Override
+    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTraget retrieveTraget) {
+
+        // tune up UI items in case of YardyInegration mode:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            Iterator<IdAssignmentItem> it = dto.items().iterator();
+            while (it.hasNext()) {
+                switch (it.next().target().getValue()) {
+                case propertyCode:
+                case lease:
+                case application:
+                case tenant:
+                case guarantor:
+                case lead:
+                    it.remove(); // filter out these IDs!..
+                    break;
+
+                // leave the rest:
+                case accountNumber:
+                    break;
+                case customer:
+                    break;
+                case employee:
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+    }
 }

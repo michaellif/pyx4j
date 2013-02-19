@@ -16,6 +16,7 @@ package com.propertyvista.biz.policy;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +27,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -33,6 +37,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class PolicyManager {
 
@@ -67,8 +72,8 @@ class PolicyManager {
             EntityQueryCriteria<POLICY> criteria = EntityQueryCriteria.create(policyClass);
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), currentNode));
             policy = Persistence.service().retrieve(criteria);
-
             if (policy != null) {
+                policy = correctAccordingToVistaFeatures(policy);
                 break;
             }
             currentNode = parentOf(currentNode);
@@ -188,7 +193,7 @@ class PolicyManager {
                 children.add(building.complex());
             }
 
-            // now add 'orphan' buidlings that have no parent complex
+            // now add 'orphan' buildings that have no parent complex
 
             criteria = new EntityQueryCriteria<Building>(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().info().address().province(), node));
@@ -209,4 +214,35 @@ class PolicyManager {
         }
     }
 
+    private static <POLICY extends Policy> POLICY correctAccordingToVistaFeatures(POLICY policy) {
+        if (policy instanceof IdAssignmentPolicy) {
+            // tune up items in case of YardyInegration mode:
+            if (VistaFeatures.instance().yardiIntegration()) {
+                Iterator<IdAssignmentItem> it = ((IdAssignmentPolicy) policy).items().iterator();
+                while (it.hasNext()) {
+                    IdAssignmentItem item = it.next();
+                    switch (item.target().getValue()) {
+                    case propertyCode:
+                    case lease:
+                    case application:
+                    case tenant:
+                    case guarantor:
+                    case lead:
+                        // set these ones to userAssigned type:
+                        item.type().setValue(IdAssignmentType.userAssigned);
+                        break;
+
+                    // leave the rest as is:
+                    case accountNumber:
+                    case customer:
+                    case employee:
+                    default:
+                        break;
+                    }
+                }
+            }
+        }
+
+        return policy;
+    }
 }
