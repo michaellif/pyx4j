@@ -14,7 +14,7 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	/*background-color:${object2_10};*/
 	background: #000;
-	margin-top: 10px;
+	margin-top: 30px;
 	margin-right: 20px;
 	display: inline-block;
 	zoom: 1;
@@ -60,7 +60,7 @@
 	font-weight:bold;
 	text-transform:uppercase;
 	color: #d7ac3f;
-	padding: 30px 0;
+	padding: 30px 0 20px 0;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	width: 100%;
@@ -119,7 +119,6 @@
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
 	background-color:#735f34;
-	color:#1f1b1c;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .picture{
 	border:#1F1B1C 2px solid;
@@ -199,7 +198,7 @@
     width: 80px;
 }
 .listingCtlButton {
-	background-image: url("images/aptListIcons.png");
+	background-image: url("images/aptListIcons_gold.png");
 	background-repeat: no-repeat;
 	display: inline-block;
 	zoom: 1;
@@ -216,12 +215,12 @@ a.listingCtlButton {
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
-	background-image: url("images/aptListIcons.png");
+	background-image: url("images/aptListIcons_bl.png");
 	color:#1f1b1c;
 	/*color:${foreground_100} !important;*/
 }
 #btnViewDetails {
-	background-position:0px -30px;
+	/*background-position:0px -30px;*/
 }
 .apartmentDetailsWrap .requestBtn {
 	/*background: ${object1_100};
@@ -229,15 +228,17 @@ a.listingCtlButton {
 	//background: none repeat scroll 0 0 #000000;
 	//border: 2px solid #000000;
 	color: ${object1_10};*/
+	width:600px;
 	color: #d7ac3f;
     display:inline-block;
     line-height: 32px;
-    padding:0 8px;
-    margin-left:40px;
-    margin-top: 20px;
+    padding:20px 0 0 0;
+    margin-left:0;
+    margin-top: 0;
     margin-bottom:75px;
     font-weight: bold;
     font-size: 14pt;
     text-transform: uppercase;
     text-decoration:none;
+    border-top: 1px solid #484243;
 }

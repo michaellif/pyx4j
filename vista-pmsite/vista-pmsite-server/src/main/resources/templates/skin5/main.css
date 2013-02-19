@@ -81,6 +81,7 @@ a {
 
 a:hover {
 	text-decoration: underline;
+	color:#FA8D0C !important;
 }
 
 select {
@@ -307,7 +308,7 @@ ul.footer_locations li {
 .footer_copyright {
 	text-align: center;
 	line-height: 60px;
-	color: #E8E8E8;
+	color: #D7AC3F;
 }
 .footer_social {
 	display:inline-block;
@@ -348,7 +349,7 @@ ul.footer_locations li {
 .legal_poweredby {
 	text-align: center;
 	line-height: 20px;
-	color: #E8E8E8;
+	color: #D7AC3F;
 }
 .powered_product {
 }
