@@ -29,8 +29,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
+// TODO maybe this dispatching should be done on navig activity level: i.e. put the place that corresponds to current status in the navig bar 
 public class TenantInsuranceActivity extends AbstractActivity {
 
     private final TenantInsuranceService service;
@@ -46,17 +46,13 @@ public class TenantInsuranceActivity extends AbstractActivity {
             @Override
             public void onSuccess(TenantInsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
-                    if (VistaFeatures.instance().tenantSure()) { // if the PMC has TenantSure enabled
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
-                    } else {
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
-                    }
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
                 } else {
                     if (status.isOwner().isBooleanTrue()) {
                         if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management());
                         } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
                         } else {
                             throw new Error("got unknown insurance status");
                         }

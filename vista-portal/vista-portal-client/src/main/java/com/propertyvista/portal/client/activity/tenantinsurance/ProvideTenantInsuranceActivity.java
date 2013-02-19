@@ -25,8 +25,8 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.Provid
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProvideTenantInsuranceActivity extends AbstractActivity implements ProvideTenantInsuranceView.Presenter {
 
@@ -41,15 +41,15 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
         service.getTenantInsuranceStatus(new DefaultAsyncCallback<TenantInsuranceStatusDTO>() {
             @Override
             public void onSuccess(TenantInsuranceStatusDTO status) {
-                view.populate(status instanceof NoInsuranceTenantInsuranceStatusDTO ? (NoInsuranceTenantInsuranceStatusDTO) status : null);
+                view.setPresenter(ProvideTenantInsuranceActivity.this);
+                view.setTenantSureInvitationEnabled(VistaFeatures.instance().tenantSure());
+                view.populate(status);
                 panel.setWidget(view);
             }
         });
-
     }
 
     @Override

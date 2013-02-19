@@ -314,8 +314,20 @@ public class PortalTheme extends VistaTheme {
             style.addProperty("font-style", "normal");
             style.addProperty("margin-left", "auto");
             style.addProperty("margin-right", "auto");
-            style.addProperty("margin-bottom", "40px");
             style.addProperty("margin-top", "30px");
+            style.addProperty("margin-bottom", "40px");
+            addStyle(style);
+        }
+
+        {
+            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIInsuranceStatus.name());
+            style.addProperty("text-align", "center");
+            style.addProperty("font-weight", "bold");
+            style.addProperty("font-style", "normal");
+            style.addProperty("margin-left", "auto");
+            style.addProperty("margin-right", "auto");
+            style.addProperty("margin-top", "10px");
+            style.addProperty("margin-bottom", "50px");
             addStyle(style);
         }
 

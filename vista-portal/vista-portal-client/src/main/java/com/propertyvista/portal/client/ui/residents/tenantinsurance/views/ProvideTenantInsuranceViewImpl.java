@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -27,13 +25,38 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.OtherProviderTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
 
     public enum Styles implements IStyleName {
-        ProvideTIRequirements, ProvideTIBGetTenantSure, ProvideTIUpdateExisitingInsurance, ProvideTITenantSureLogo;
+        ProvideTIRequirements, ProvideTIInsuranceStatus, ProvideTIBGetTenantSure, ProvideTIUpdateExisitingInsurance, ProvideTITenantSureLogo;
+    }
+
+    private static class TenantSureInvitationPanel extends Composite {
+
+        public TenantSureInvitationPanel(Command acceptInvitation) {
+            HorizontalPanel getTenantSurePanel = new HorizontalPanel();
+            getTenantSurePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            getTenantSurePanel.getElement().getStyle().setProperty("marginLeft", "auto");
+            getTenantSurePanel.getElement().getStyle().setProperty("marginRight", "auto");
+
+            TenantSureLogo tenantSureLogo = new TenantSureLogo();
+            tenantSureLogo.addStyleName(Styles.ProvideTITenantSureLogo.name());
+            getTenantSurePanel.add(tenantSureLogo);
+
+            Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"), acceptInvitation);
+            getTenantSureButton.addStyleName(Styles.ProvideTIBGetTenantSure.name());
+            getTenantSurePanel.add(getTenantSureButton);
+
+            initWidget(getTenantSurePanel);
+        }
+
     }
 
     private static final I18n i18n = I18n.get(ProvideTenantInsuranceViewImpl.class);
@@ -42,7 +65,11 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     private final Label tenantInsuranceRequirementsMessage;
 
-    private final TenantSureLogo tenantSureLogo;
+    private final TenantSureInvitationPanel tenantSureInvitationPanel;
+
+    private final OtherProviderTenantInsuranceStatusViewer insuranceStatusViewer;
+
+    private final Anchor provideInsuranceByOtherProvider;
 
     public ProvideTenantInsuranceViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
@@ -51,28 +78,19 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         tenantInsuranceRequirementsMessage.setStyleName(Styles.ProvideTIRequirements.name());
         viewPanel.add(tenantInsuranceRequirementsMessage);
 
-        HorizontalPanel getTenantSurePanel = new HorizontalPanel();
-        getTenantSurePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        getTenantSurePanel.getElement().getStyle().setProperty("marginLeft", "auto");
-        getTenantSurePanel.getElement().getStyle().setProperty("marginRight", "auto");
+        insuranceStatusViewer = new OtherProviderTenantInsuranceStatusViewer();
+        insuranceStatusViewer.initContent();
+        insuranceStatusViewer.asWidget().setStyleName(Styles.ProvideTIInsuranceStatus.name());
+        viewPanel.add(insuranceStatusViewer);
 
-        tenantSureLogo = new TenantSureLogo();
-        tenantSureLogo.addStyleName(Styles.ProvideTITenantSureLogo.name());
-        getTenantSurePanel.add(tenantSureLogo);
-
-        Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"));
-        getTenantSureButton.addClickHandler(new ClickHandler() {
+        viewPanel.add(tenantSureInvitationPanel = new TenantSureInvitationPanel(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.onPurchaseTenantSure();
             }
-        });
-        getTenantSureButton.addStyleName(Styles.ProvideTIBGetTenantSure.name());
-        getTenantSurePanel.add(getTenantSureButton);
-        viewPanel.add(getTenantSurePanel);
+        }));
 
-        Anchor provideInsuranceByOtherProvider = new Anchor(i18n.tr("I (we) already have Tenant Insurance"), new Command() {
-
+        provideInsuranceByOtherProvider = new Anchor("", new Command() {
             @Override
             public void execute() {
                 presenter.onUpdateInsuranceByOtherProvider();
@@ -90,12 +108,33 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
     }
 
     @Override
-    public void populate(NoInsuranceTenantInsuranceStatusDTO noInsuranceStatus) {
-        boolean noInsurance = noInsuranceStatus != null && !noInsuranceStatus.isNull();
+    public void setTenantSureInvitationEnabled(boolean tenantSureInvitationEnabled) {
+        tenantSureInvitationPanel.setVisible(false);
+    }
 
-        tenantInsuranceRequirementsMessage.setVisible(noInsurance);
-        tenantInsuranceRequirementsMessage.setVisible(noInsurance);
-        tenantInsuranceRequirementsMessage.setHTML(noInsuranceStatus.tenantInsuranceInvitation().getValue());
+    @Override
+    public void populate(TenantInsuranceStatusDTO insuranceStatus) {
+        tenantInsuranceRequirementsMessage.setVisible(false);
+        tenantInsuranceRequirementsMessage.setHTML("");
+
+        insuranceStatusViewer.setVisible(false);
+
+        if (insuranceStatus != null) {
+            if (insuranceStatus.isInstanceOf(NoInsuranceTenantInsuranceStatusDTO.class)) {
+                NoInsuranceTenantInsuranceStatusDTO insuranceStatusNoInsurance = insuranceStatus.duplicate(NoInsuranceTenantInsuranceStatusDTO.class);
+                tenantInsuranceRequirementsMessage.setVisible(true);
+                tenantInsuranceRequirementsMessage.setHTML(insuranceStatusNoInsurance.tenantInsuranceInvitation().getValue());
+                provideInsuranceByOtherProvider.setText(i18n.tr("I (we) already have Tenant Insurance"));
+            } else if (insuranceStatus.isInstanceOf(OtherProviderTenantInsuranceStatusDTO.class)) {
+                insuranceStatusViewer.setVisible(true);
+                insuranceStatusViewer.populate(insuranceStatus.duplicate(OtherProviderTenantInsuranceStatusDTO.class));
+                provideInsuranceByOtherProvider.setText(i18n.tr("Update Insurance"));
+            } else if (insuranceStatus.isInstanceOf(TenantSureTenantInsuranceStatusShortDTO.class)) {
+                assert false : "this place shouldn't be used when tenantsure is active";
+            } else {
+                assert false : "unknown insurance status: " + insuranceStatus.getInstanceValueClass().getName();
+            }
+        }
     }
 
 }
