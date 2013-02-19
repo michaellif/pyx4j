@@ -109,7 +109,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     @Override
     public void setTenantSureInvitationEnabled(boolean tenantSureInvitationEnabled) {
-        tenantSureInvitationPanel.setVisible(false);
+        tenantSureInvitationPanel.setVisible(tenantSureInvitationEnabled);
     }
 
     @Override
