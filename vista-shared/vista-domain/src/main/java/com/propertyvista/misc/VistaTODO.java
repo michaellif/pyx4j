@@ -34,6 +34,11 @@ public interface VistaTODO {
     public static boolean removedForProduction = true;
 
     /**
+     * TODO: Do not forget to turn it on/off during/after production release !!!
+     */
+    public static final boolean ENABLE_COMMUNCATION_CENTER = false;
+
+    /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */
     public static final boolean enableWelcomeWizardDemoMode = true;
