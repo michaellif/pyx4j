@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiBatchProcess implements PmcProcess {
@@ -33,9 +34,12 @@ public class YardiBatchProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
+        StatisticsRecord dynamicStatisticsRecord = context.getRunStats();
         if (VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(YardiProcessFacade.class).postReceiptBatch(context.getRunStats());
-            ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversalBatch(context.getRunStats());
+            ServerSideFactory.create(YardiProcessFacade.class).postReceiptBatch(dynamicStatisticsRecord);
+            ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversalBatch(dynamicStatisticsRecord);
+        } else {
+            dynamicStatisticsRecord.message().setValue("PMC does not meet criteria");
         }
     }
 
