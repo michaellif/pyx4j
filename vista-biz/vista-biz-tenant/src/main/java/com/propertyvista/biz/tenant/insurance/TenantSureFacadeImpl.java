@@ -216,7 +216,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             try {
                 List<String> emails = new ArrayList<String>();
                 emails.add(getTenantsEmail(tenantId));
-                ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+                ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
             } catch (Throwable e) {
                 log.error("Error sending TenantSure document", e);
             }
@@ -457,7 +457,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         } else {
             emails.add(email);
         }
-        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.quoteId().getValue(), emails);
+        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
     }
 
     private String getTenantsEmail(Tenant tenantId) {
