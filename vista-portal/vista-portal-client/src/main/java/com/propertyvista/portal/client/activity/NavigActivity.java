@@ -79,7 +79,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
         items.add(new Residents.Maintenance());
 
-        if (!VistaTODO.removedForProduction) {
+        if (!VistaTODO.ENABLE_COMMUNCATION_CENTER) {
             items.add(new Residents.CommunicationCenter());
         }
 
