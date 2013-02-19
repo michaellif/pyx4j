@@ -32,7 +32,6 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.ThreadPoolNames;
@@ -50,6 +49,7 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.ob.server.PmcActivationUserDeferredProcess;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -92,7 +92,13 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
                 pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
                 pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
-                pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
+
+                //TODO remove this IF when tenantSure Is Ok to go Live!
+                if (VistaDeployment.isVistaProduction() && VistaTODO.tenantSureDisabledForProduction) {
+                    pmc.features().tenantSureIntegration().setValue(Boolean.FALSE);
+                } else {
+                    pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
+                }
 
                 ServerSideFactory.create(PmcFacade.class).create(pmc);
 

@@ -16,17 +16,18 @@ package com.propertyvista.operations.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
-import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.misc.VistaTODO;
 
 public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
 
@@ -55,7 +56,13 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
         entity.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
-        entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
+
+        //TODO remove this IF when tenantSure Is Ok to go Live!
+        if (ApplicationBackend.isProductionBackend() && VistaTODO.tenantSureDisabledForProduction) {
+            entity.features().tenantSureIntegration().setValue(Boolean.FALSE);
+        } else {
+            entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
+        }
 
         callback.onSuccess(entity);
 
