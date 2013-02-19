@@ -168,6 +168,15 @@
         <url-pattern>/public/status</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DeployVerificationServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.admin.DeployVerificationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DeployVerificationServlet</servlet-name>
+        <url-pattern>/public/verify</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>ApplicationVersionServlet</servlet-name>
