@@ -27,15 +27,13 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType.Type;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.yardi.YardiServiceException;
-import com.propertyvista.yardi.bean.Message.MessageType;
-import com.propertyvista.yardi.mapper.AddressMapper;
 
 public class ApplicantScreeningMapper {
 
@@ -71,7 +69,7 @@ public class ApplicantScreeningMapper {
         //sin
         String sin = applicant.getASInformation().getSocSecNumber();
         if (StringUtils.isEmpty(sin)) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: SocSecNumber is not specified"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: SocSecNumber is not specified"));
         }
 
         IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
@@ -97,7 +95,7 @@ public class ApplicantScreeningMapper {
 
         //amount to check
         if (applicant.getOther() == null || applicant.getOther().getCurrentRent() == null) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: CurrentRent is not specified"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: CurrentRent is not specified"));
         }
         creditCheck.amountChecked().setValue(applicant.getOther().getCurrentRent());
 

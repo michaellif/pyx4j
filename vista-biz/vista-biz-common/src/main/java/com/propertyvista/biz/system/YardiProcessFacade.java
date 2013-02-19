@@ -28,7 +28,7 @@ public interface YardiProcessFacade {
 
     void updateLease(Lease lease);
 
-    void postReceipt(YardiReceipt receipt);
+    void postReceipt(YardiReceipt receipt) throws YardiServiceException;
 
     void postReceiptReversal(YardiReceiptReversal reversal);
 

@@ -36,9 +36,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
-import com.propertyvista.yardi.YardiServiceException;
 import com.propertyvista.yardi.bean.Message;
 import com.propertyvista.yardi.bean.Message.MessageType;
 import com.propertyvista.yardi.bean.Messages;
@@ -87,7 +87,7 @@ public class WSScreeningServiceImpl implements WSScreeningService {
             log.info("GetScreeningReport returned new report.");
         } catch (YardiServiceException ye) {
             log.error("Errors during operation processing", ye);
-            response = createMessageResponse(ye.getMessageType(), ye.getMessage());
+            response = createMessageResponse(MessageType.Error, ye.getMessage());
         } catch (Throwable e) {
             log.error("Errors during operation processing", e);
             response = createMessageResponse(MessageType.Error, i18n.tr("Internal processing error."));
@@ -101,7 +101,7 @@ public class WSScreeningServiceImpl implements WSScreeningService {
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer.getPrimaryKey()));
         List<CustomerCreditCheckReport> reports = Persistence.service().query(criteria);
         if (reports.isEmpty()) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("No reports found for reportID {0}", reportId));
+            throw new YardiServiceException(i18n.tr("No reports found for reportID {0}", reportId));
         }
         return reports.get(0);
     }
@@ -136,29 +136,29 @@ public class WSScreeningServiceImpl implements WSScreeningService {
     private void validateRequest(ApplicantScreening screeningRequest) throws YardiServiceException {
         Request request = screeningRequest.getRequest();
         if (request == null) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: Request section missing"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: Request section missing"));
         }
         if (!ORIGINATOR_ID.equals(request.getOriginatorID())) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: OriginatorID"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: OriginatorID"));
         }
         if (!USER_ACCOUNT.equals(request.getUserAccount())) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: UserAccount"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: UserAccount"));
         }
         if (StringUtils.isBlank(request.getRequestType())) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: RequestType is not specified"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: RequestType is not specified"));
         }
         if (!isValidRequestType(request.getRequestType())) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: RequestType is not specified"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: RequestType is not specified"));
         }
         if (screeningRequest.getApplicant().isEmpty()) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: no applicants specified"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: no applicants specified"));
         }
         Applicant applicant = screeningRequest.getApplicant().get(0);
         if (applicant.getASInformation() == null) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: ASInformation section missing"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: ASInformation section missing"));
         }
         if (applicant.getIncome() == null) {
-            throw new YardiServiceException(MessageType.Error, i18n.tr("Invalid request parameters: Income section missing"));
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: Income section missing"));
         }
     }
 

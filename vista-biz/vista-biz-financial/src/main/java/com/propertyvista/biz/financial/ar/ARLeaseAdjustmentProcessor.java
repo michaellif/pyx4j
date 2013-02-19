@@ -20,14 +20,13 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.portal.rpc.shared.ARException;
 
 public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
 
     void postImmediateAdjustment(LeaseAdjustment adjustment) {
 
         if (!LeaseAdjustment.ExecutionType.immediate.equals(adjustment.executionType().getValue())) {
-            throw new ARException("Not an immediate adjustment");
+            throw new IllegalArgumentException("Not an immediate adjustment");
         } else {
             InvoiceLineItem lineItem = null;
             if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
@@ -37,7 +36,7 @@ public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
             } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
                 lineItem = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
             } else {
-                throw new ARException("ActionType is unknown");
+                throw new IllegalArgumentException("ActionType is unknown");
             }
 
             lineItem.billingAccount().set(adjustment.billingAccount());

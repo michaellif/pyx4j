@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared;
+package com.propertyvista.biz.financial.ar;
 
 import com.pyx4j.commons.UserRuntimeException;
 
