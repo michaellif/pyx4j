@@ -35,7 +35,6 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -127,7 +126,15 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                 return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());
             }
         }));
-        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().card())));
+        get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<CreditCardType> event) {
+                // imitate user input and revalidate
+                get(proto().card()).reset();
+                get(proto().card()).onEditingStop();
+                get(proto().card()).revalidate();
+            }
+        });
 
         get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
 
