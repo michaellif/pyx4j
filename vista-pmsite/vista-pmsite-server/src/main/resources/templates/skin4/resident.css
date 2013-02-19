@@ -84,13 +84,6 @@
 	font-size: 14px;
 }
 
-#gwt-debug-login, #siteAuthInsert #gwt-debug-account, #siteAuthInsert #gwt-debug-logout {
-	color: #999999;
-	white-space: nowrap;
-	float: right;
-}
-
-
 .vista-pmsite-residentPage .TenantDashboardSection {
 	padding-top: 20px;
 }
@@ -178,7 +171,20 @@
 	overflow: hidden;
 }
 
-#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
-	{
+.TriggerPannel .TextBox	{
 	width: 90px !important;
+}
+
+.SiteViewAction .Anchor {
+	white-space: nowrap;
+	float: right;
+}
+
+.Dialog {
+    background-color: #999999 !important;
+}
+
+.DialogCaption {
+    background: none repeat scroll 0 0 #CCCCCC !important;
+    color: #fff!important;
 }

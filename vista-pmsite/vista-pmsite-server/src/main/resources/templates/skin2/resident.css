@@ -3,7 +3,9 @@
 }
 
 .vista-pmsite-residentPage .vista-pmsite-content {
-		min-height: 500px;
+	min-height: 500px;
+	padding-bottom: 20px;
+	background-color: #fff;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-mainWrap {
@@ -107,7 +109,7 @@
     bottom: -7px;;
 }
 
-#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
+.SiteViewAction .Anchor {
 	white-space: nowrap;
 	float: right;
 }
@@ -116,7 +118,6 @@
 	padding-left: 10px;
 }
 
-#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
-	{
+.TriggerPannel .TextBox	{
 	width: 90px !important;
 }

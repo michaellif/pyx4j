@@ -59,7 +59,11 @@
 	overflow: hidden;
 }
 
-#gwt-debug-InsuranceGeneric-inceptionDate-triggerPanel,#gwt-debug-InsuranceGeneric-expiryDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-0-EmergencyContact-birthDate-triggerPanel,#gwt-debug-ResidentDTO-emergencyContacts-row-1-EmergencyContact-birthDate-triggerPanel
-	{
+.TriggerPannel .TextBox	{
 	width: 90px !important;
+}
+
+.SiteViewAction .Anchor {
+	white-space: nowrap;
+	float: right;
 }
