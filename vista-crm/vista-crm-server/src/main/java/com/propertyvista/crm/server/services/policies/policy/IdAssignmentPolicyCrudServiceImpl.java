@@ -20,6 +20,7 @@ import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<IdAssignmentPolicy, IdAssignmentPolicyDTO> implements
@@ -36,25 +37,8 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
         if (VistaFeatures.instance().yardiIntegration()) {
             Iterator<IdAssignmentItem> it = dto.items().iterator();
             while (it.hasNext()) {
-                switch (it.next().target().getValue()) {
-                case propertyCode:
-                case lease:
-                case application:
-                case tenant:
-                case guarantor:
-                case lead:
+                if (IdTarget.nonEditableWhenYardyIntergation().contains(it.next().target().getValue())) {
                     it.remove(); // filter out these IDs!..
-                    break;
-
-                // leave the rest:
-                case accountNumber:
-                    break;
-                case customer:
-                    break;
-                case employee:
-                    break;
-                default:
-                    break;
                 }
             }
         }

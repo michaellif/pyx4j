@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import java.util.EnumSet;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -55,6 +57,14 @@ public interface IdAssignmentItem extends IEntity {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public static EnumSet<IdTarget> userAssignedWhenYardyIntergation() {
+            return EnumSet.of(propertyCode, lease, tenant);
+        }
+
+        public static EnumSet<IdTarget> nonEditableWhenYardyIntergation() {
+            return EnumSet.of(propertyCode, lease, application, customer, tenant, guarantor, lead);
         }
     }
 

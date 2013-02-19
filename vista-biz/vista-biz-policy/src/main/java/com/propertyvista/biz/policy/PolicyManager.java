@@ -16,7 +16,6 @@ package com.propertyvista.biz.policy;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +29,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -218,26 +218,9 @@ class PolicyManager {
         if (policy instanceof IdAssignmentPolicy) {
             // tune up items in case of YardyInegration mode:
             if (VistaFeatures.instance().yardiIntegration()) {
-                Iterator<IdAssignmentItem> it = ((IdAssignmentPolicy) policy).items().iterator();
-                while (it.hasNext()) {
-                    IdAssignmentItem item = it.next();
-                    switch (item.target().getValue()) {
-                    case propertyCode:
-                    case lease:
-                    case application:
-                    case tenant:
-                    case guarantor:
-                    case lead:
-                        // set these ones to userAssigned type:
+                for (IdAssignmentItem item : ((IdAssignmentPolicy) policy).items()) {
+                    if (IdTarget.userAssignedWhenYardyIntergation().contains(item.target().getValue())) {
                         item.type().setValue(IdAssignmentType.userAssigned);
-                        break;
-
-                    // leave the rest as is:
-                    case accountNumber:
-                    case customer:
-                    case employee:
-                    default:
-                        break;
                     }
                 }
             }
