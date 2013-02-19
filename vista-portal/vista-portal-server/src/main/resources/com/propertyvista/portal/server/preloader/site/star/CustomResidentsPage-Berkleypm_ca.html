@@ -78,9 +78,10 @@ div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.Wid
 	width: 85% !important;
 }
 
-div.Button {
+div.Button, button.gwt-Button {
 	background-color: #AA3C00;
 	background-image: linear-gradient(#DD4E00, #DD4E00 25%, #AA3C00);
+	background-image: -webkit-linear-gradient(#DD4E00, #DD4E00 25%, #AA3C00);	
 	background-repeat: no-repeat;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 4px 4px 4px 4px;
@@ -88,15 +89,18 @@ div.Button {
 		rgba(0, 0, 0, 0.05);
 }
 
-div.Button:hover {
+div.Button:hover, button.gwt-Button {
 	background-position: 0 -15px;
 }
 
-div.ButtonText {
+div.ButtonText, button.gwt-Button {
 	color: #ffffff;
 	font-size: 13px;
 	line-height: 18px;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+
+button.gwt-Button {
 }
 
 div.WidgetDecoratorLabel {
@@ -158,6 +162,15 @@ table {
     width: auto !important;
 }
 
+div.LandingButtonHolder, div.gwt-Label {
+	text-align: center !important;
+}
+
+.Dialog {
+}
+
+.DialogCaption {
+}
 </style>
 
 </head>

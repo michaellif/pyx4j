@@ -56,72 +56,99 @@
 	rel='stylesheet' type='text/css'>
 
 <style>
-	div.FormFlexPanelH1Label {
-	font: bold 16px 'Droid Sans',helvetica,arial,sans-serif; 
+div.FormFlexPanelH1Label {
+	font: bold 16px 'Droid Sans', helvetica, arial, sans-serif;
 	color: #117140;
 }
-	div.Button {
-	background: linear-gradient(to bottom, #5E7FBE 0%, #4F6DA9 100%) repeat scroll 0 0 transparent; 
+
+div.Button,button.gwt-Button {
+	background: #5E7FBE;
 	border: 5px double #FFFFFF;
 }
-	div.Button:hover {
-	background: linear-gradient(to bottom, #4962A1 0%, #3A4F87 100%) repeat scroll 0 0 transparent; 
+
+div.Button:hover,button.gwt-Button:hover {
+	background: #4F6DA9;
 	border: 5px double #FFFFFF;
-}	
-	div.ButtonText {
-	color:#FFFFFF; 
-	text-transform: lowercase; 
+}
+
+div.ButtonText,button.gwt-Button {
+	color: #FFFFFF;
+	text-transform: lowercase;
 	text-shadow: 0 2px 4px #000000;
 }
-	div.secondaryNavig ul li:hover {
-	color: #05572D;
-}	
-	.EntityFolderAddButton  {
-    color: #93AAC2 !important ;
-    cursor: pointer;
-    font-style: italic !important ;
-    font-weight: normal;
+
+button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
+	padding: 3px;
 }
-	
-	div.LandingCaption {
-	font: 16px 'Droid Sans',helvetica,arial,sans-serif;
+
+div.secondaryNavig ul li:hover {
+	color: #05572D;
+}
+
+.EntityFolderAddButton {
+	color: #93AAC2 !important;
+	cursor: pointer;
+	font-style: italic !important;
+	font-weight: normal;
+}
+
+div.LandingCaption {
+	font: 16px 'Droid Sans', helvetica, arial, sans-serif;
 	color: #117140;
 }
-	
-	span.LandingCaptionTextEmph {
+
+span.LandingCaptionTextEmph {
 	font-weight: bold;
 }
-	div#siteAuthInsert {
+
+div#siteAuthInsert {
 	bottom: 0 !important;
 }
 
-	div.WidgetDecoratorComponent input, div.WidgetDecoratorComponent textarea, div.WidgetDecoratorComponent select  {
+div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
+	{
 	border: 1px solid #AAAAAA;
 	width: 95% !important;
 }
 
 ol li {
-    line-height: 1.5em;
-    padding-bottom: 10px;
-    position: relative;
-    text-align: justify;
+	line-height: 1.5em;
+	padding-bottom: 10px;
+	position: relative;
+	text-align: justify;
 }
 
 div#body_inside {
-    box-shadow: 0 0 2px #888888 !important;
+	box-shadow: 0 0 2px #888888 !important;
 }
 
 div.LandingOrLineSeparator div {
-    border-color: #117140; 
+	border-color: #117140;
 }
-	
+
+div.LandingButtonHolder, div.gwt-Label {
+	text-align: center !important;
+}
+
+.Dialog {
+	background: none repeat scroll 0 0 #AAAAAA !important;
+}
+
+.DialogCaption {
+	background: #e2e0e0 !important;
+	color: #626057 !important;
+	padding-top: 0.4em;
+	padding-left: 0.5em;
+}
 </style>
-	
+
 </head>
 
 <body>
 
-<style>
+	<style>
 </style>
 
 	<div class="wrapper_outside">
@@ -137,11 +164,11 @@ div.LandingOrLineSeparator div {
 				<div id="logo">
 					<a href="http://www.greenwin.ca"><img
 						src="http://www.greenwin.ca/images/logo4.gif" /></a><br /> Creating
-					Value<br />
-					<br />
+					Value<br /> <br />
 				</div>
 
-				<div style="float:right;position:relative;bottom:30px" id="resident_login"/>
+				<div style="float: right; position: relative; bottom: 30px"
+					id="resident_login" />
 
 
 			</div>
@@ -263,7 +290,7 @@ div.LandingOrLineSeparator div {
 
 		<div class="wrapper" id="body_inside"
 			style="border: 1px solid #888; min-height: 360px; box-shadow: 0 0 5px #888">
-			<div id="resident_content"/>
+			<div id="resident_content" />
 		</div>
 
 	</div>
@@ -297,7 +324,8 @@ div.LandingOrLineSeparator div {
 			<div class="policy">
 				<a href="http://www.greenwin.ca#accessibility-policy-modal"
 					id="policy-link"> Accessibility for<br> Ontarians with
-						Disabilities </a>
+					Disabilities
+				</a>
 			</div>
 
 			<div class="social-buttons">
@@ -347,7 +375,8 @@ div.LandingOrLineSeparator div {
 					accessibility@greenwin.ca</p>
 
 				<p>
-					<br><a href="javascript:;" onclick="$.fancybox.close();">Close</a>
+					<br>
+					<a href="javascript:;" onclick="$.fancybox.close();">Close</a>
 				</p>
 			</div>
 		</div>

@@ -75,17 +75,23 @@ span.LandingCaptionTextEmph {
 	color: #0C4D9C;
 }
 
-div.Button {
+div.Button,button.gwt-Button {
 	background: #2980e9;
 	border: 5px double #FFFFFF;
 	border-radius: 7px;
 }
 
-div.ButtonText {
+div.ButtonText,button.gwt-Button {
 	color: #FFFFFF;
 	text-transform: lowercase;
 	text-shadow: 0 2px 4px #000000;
 	font-size: 14px;
+}
+
+button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
+	padding: 3px;
 }
 
 div.page_div label {
@@ -136,6 +142,25 @@ input[type="text"],input[type="password"],textarea,select {
 ol li {
 	padding-bottom: 10px;
 	text-align: justify;
+}
+
+div.LandingButtonHolder, div.gwt-Label {
+	text-align: center !important;
+}
+
+.Dialog {
+	background: none repeat scroll 0 0 #2980E9 !important;
+}
+
+.DialogCaption {
+	background: #85b9f8 !important;
+	color: #fff !important;
+	padding-top: 0.4em;
+	padding-left: 0.5em;
+}
+
+div.vista-pmsite-main .content {
+    padding-bottom: 20px;
 }
 </style>
 

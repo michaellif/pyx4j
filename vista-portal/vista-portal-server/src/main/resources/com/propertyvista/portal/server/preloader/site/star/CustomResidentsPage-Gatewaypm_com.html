@@ -36,7 +36,7 @@ span.LandingCaptionTextEmph {
 	font-weight: bold;
 }
 
-div.Button {
+div.Button,button.gwt-Button  {
 	text-align: center;
 	-moz-border-colors: none;
 	-moz-font-feature-settings: normal;
@@ -80,18 +80,23 @@ div.Button {
 	cursor: pointer;
 	line-height: normal;
 	margin-right: 10px;
-	margin-top: 20px;
+	margin-top: 0;
 	padding: 3px;
 }
 
-div.Button:hover {
+div.Button:hover,button.gwt-Button:hover  {
 	background: linear-gradient(to bottom, #FFFFFF 0%, #336633 100%) repeat
 		scroll 0 0 transparent;
 }
 
-div.ButtonText {
+div.ButtonText,button.gwt-Button  {
 	font-size: 11px;
 	height: auto !important;
+}
+
+button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
 }
 
 div.gwt-HTML h1 {
@@ -214,6 +219,22 @@ ol li {
 	padding-bottom: 10px;
 	text-align: justify;
 }
+
+div.LandingButtonHolder, div.gwt-Label {
+	text-align: center !important;
+}
+
+.Dialog {
+	background: none repeat scroll 0 0 #445544 !important;
+}
+
+.DialogCaption {
+	background: #445544 !important;
+	color: #fff !important;
+	padding-top: 0.4em;
+	padding-left: 0.5em;
+}
+
 </style>
 </head>
 
