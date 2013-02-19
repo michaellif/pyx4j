@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Pro;perty Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -68,8 +68,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 return VistaNamespace.operationsNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
-                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/status") || servletPath.startsWith("/o/")
-                    || servletPath.equals("/index.html") || servletPath.startsWith("/" + DeploymentConsts.ONBOARDING_URL)) {
+                    || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/verify") || servletPath.startsWith("/public/status")
+                    || servletPath.startsWith("/o/") || servletPath.equals("/index.html") || servletPath.startsWith("/" + DeploymentConsts.ONBOARDING_URL)) {
                 return VistaNamespace.noNamespace;
             }
         }
@@ -83,7 +83,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         // vista-portal-22.birchwoodsoftwaregroup.com
 
         // Prod: Get the 3rd part of URL.
-        // www.ABC.propertyvista.com 
+        // www.ABC.propertyvista.com
 
         String serverName = httprequest.getServerName();
         if ("localhost".equals(serverName) || httprequest.getLocalAddr().equals(serverName)) {
