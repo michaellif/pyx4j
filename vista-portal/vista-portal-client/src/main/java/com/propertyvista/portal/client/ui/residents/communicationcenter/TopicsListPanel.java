@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CheckBox;
 
@@ -51,8 +52,11 @@ public class TopicsListPanel extends FormFlexPanel {
 
     private CommunicationCenterDTO onlyOneTopicStarterMessage = null;
 
-    public TopicsListPanel(CommunicationCenterView parentPanel) {
+    private final MessagesListControlPanel messagesListControlPanel;
+
+    public TopicsListPanel(CommunicationCenterView parentPanel, MessagesListControlPanel messagesListControlPanel) {
         this.parentPanel = parentPanel;
+        this.messagesListControlPanel = messagesListControlPanel;
         if (parentPanel instanceof VerticalPanel) {
             verticalPanel = (VerticalPanel) parentPanel;
         } else {
@@ -92,7 +96,7 @@ public class TopicsListPanel extends FormFlexPanel {
 
     private void addHeader() {
         setHTML(0, 0, "Topic");
-        setHTML(0, 1, "Started By(ID*)");
+        setHTML(0, 1, "Started By");
         setHTML(0, 2, "Last post*");
         setHTML(0, 3, "Important");
     }
@@ -148,13 +152,19 @@ public class TopicsListPanel extends FormFlexPanel {
                     cf.addStyleName(row, 3, CommunicationCenterTheme.StyleName.CommunicationTableHeaderVB.name());
                 }
 
-                setHTML(++row, 0, firstMessageInTopic.topic().getValue());
-                setHTML(row, 1, "" + firstMessageInTopic.sender().userId().getValue());
+                //setHTML(++row, 0, firstMessageInTopic.topic().getValue());
+                String text = firstMessageInTopic.topic().getValue();
+                Anchor anchor = new Anchor(text, new TopicClickedCommand(firstMessageInTopic));
+                setWidget(++row, 0, anchor);
+
+                setHTML(row, 1, "" + firstMessageInTopic.senderName().getValue());
                 cf.addStyleName(row, 1, CommunicationCenterTheme.StyleName.CommunicationTableVerticalBorder.name());
+
                 setHTML(row, 2, "" + (diffMillisec / 1000) + " seconds ago");//difference it is in seconds
                 CheckBox ch = new CheckBox();
                 ch.setEditable(false);
                 ch.setValue(firstMessageInTopic.isHighImportance().getValue());
+
                 cf.addStyleName(row, 3, CommunicationCenterTheme.StyleName.CommunicationTableChechBox.name());
                 setWidget(row, 3, ch);
 
@@ -208,5 +218,26 @@ public class TopicsListPanel extends FormFlexPanel {
         public void execute() {
             parentPanel.viewReplyToMessage(onlyOneTopicStarterMessage);
         }
+    }
+
+    private class TopicClickedCommand implements Command {
+        private final CommunicationCenterDTO dto;
+
+        public TopicClickedCommand(CommunicationCenterDTO dto) {
+            this.dto = dto;
+        }
+
+        @Override
+        public void execute() {
+            //Window.alert("Clicked topic is:" + topic);
+            if (messagesListControlPanel != null) {
+                messagesListControlPanel.filterByTopic(dto);
+            }
+        }
+    }
+
+    public void setOrRemoveTopicFilter(CommunicationCenterDTO dto) {
+        // TODO Auto-generated method stub
+
     }
 }
