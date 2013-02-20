@@ -36,7 +36,7 @@ public class VistaFeatures {
 
                 // Fail safe on to terminate session on Feature changes
                 Visit visit = Context.getVisit();
-                if (visit != null) {
+                if ((visit != null) && (visit.isUserLoggedIn())) {
                     Object hashCode = visit.getAttribute(PmcVistaFeatures.class.getName());
                     if (hashCode == null) {
                         visit.setAttribute(PmcVistaFeatures.class.getName(), Integer.valueOf(pmc.features().valueHashCode()));
