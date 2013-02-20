@@ -345,6 +345,9 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        EXECUTE 'UPDATE _admin_.admin_pmc_vista_features '
+        ||'SET  tenant_sure_integration = FALSE ';
+        
         UPDATE  admin_pmc_vista_features
         SET     tenant_sure_integration = TRUE;
 
