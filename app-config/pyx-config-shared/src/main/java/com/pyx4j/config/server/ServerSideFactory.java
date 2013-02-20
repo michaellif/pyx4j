@@ -20,6 +20,8 @@
  */
 package com.pyx4j.config.server;
 
+import com.pyx4j.commons.RuntimeExceptionSerializable;
+
 public class ServerSideFactory {
 
     /**
@@ -40,7 +42,11 @@ public class ServerSideFactory {
         } catch (ClassNotFoundException ignore) {
 
         } catch (Throwable e) {
-            throw new RuntimeException("Can't create " + factoryClassName, e);
+            if (e instanceof RuntimeExceptionSerializable) {
+                throw (RuntimeExceptionSerializable) e;
+            } else {
+                throw new RuntimeException("Can't create " + factoryClassName, e);
+            }
         }
 
         if (interfaceCalss.getSimpleName().startsWith("I") && Character.isUpperCase(interfaceCalss.getSimpleName().charAt(1))) {
