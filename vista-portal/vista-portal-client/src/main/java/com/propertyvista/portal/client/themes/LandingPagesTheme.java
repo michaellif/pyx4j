@@ -23,8 +23,26 @@ import com.pyx4j.commons.css.Theme;
 public class LandingPagesTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-
-        LandingViewPanel, LandingViewSectionContent, LandingButton, LandingCaption, LandingCaptionText, LandingCaptionTextEmph, LandingGreetingPanel, LandingGreetingText, LandingOrLineSeparator, LandingButtonHolder, LandingViewSectionHeader, LandingViewSectionFooter, LandingInputField, LandingTermsAndConditionsBox
+        //@formatter:off
+        LandingViewPanel,
+        LandingViewSectionContent,
+        LandingButton,
+        LandingCaption,
+        LandingCaptionText,
+        LandingCaptionTextEmph,
+        LandingGreetingPanel,
+        LandingGreetingText,
+        LandingOrLineSeparator,
+        LandingButtonHolder,
+        LandingViewSectionHeader,
+        LandingViewSectionFooter,
+        LandingInputField, 
+        LandingTermsAndConditionsBox,
+        
+        LoginImageDecoration,
+        LoginImageDecorationImage,
+        LoginImageDecorationLabel
+        //@formatter:on
 
     }
 
@@ -107,6 +125,22 @@ public class LandingPagesTheme extends Theme {
 
         style = new Style(".", StyleName.LandingTermsAndConditionsBox.name()); // TODO should be same as width of component set by WatermarkDecoratorBuilder        
         style.addProperty("margin-top", "20px");
+        addStyle(style);
+
+        //  login image decorator styles
+        style = new Style(".", StyleName.LoginImageDecoration.name());
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LoginImageDecorationImage.name());
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LoginImageDecorationLabel.name());
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("display", "inline");
+        style.addProperty("margin-left", "20px");
         addStyle(style);
 
     }

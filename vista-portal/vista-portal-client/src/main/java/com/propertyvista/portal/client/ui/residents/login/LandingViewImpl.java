@@ -380,9 +380,14 @@ public class LandingViewImpl extends Composite implements LandingView {
         signUpGreeting = new Label();
         signUpGreeting.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
 
-        SimplePanel signUpGreetingPanel = new SimplePanel();
+        FlowPanel signUpGreetingPanel = new FlowPanel();
         signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
-        signUpGreetingPanel.setWidget(signUpGreeting);
+        // TODO customizable sign up greeting is not implemented and images are used instead        
+        // signUpGreetingPanel.setWidget(signUpGreeting);
+        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.home(), i18n.tr("For a place to call home")));
+        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.secure(), i18n.tr("Safe and secure")));
+        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.easy(), i18n.tr("Easy Access")));
+
         sideLayout.getContent().add(signUpGreetingPanel);
 
         signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
