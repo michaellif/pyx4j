@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
 public class VistaServerSideConfiguration66 extends VistaServerSideConfiguration {
@@ -68,8 +67,4 @@ public class VistaServerSideConfiguration66 extends VistaServerSideConfiguration
         return "\"Property Vista Support66\" <support.www22@birchwoodsoftwaregroup.com>";
     }
 
-    @Override
-    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig(this);
-    }
 }

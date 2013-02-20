@@ -16,7 +16,6 @@ package com.propertyvista.server.config;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -69,11 +68,6 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista\" <no-reply@propertyvista.com>";
-    }
-
-    @Override
-    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig(this);
     }
 
     @Override

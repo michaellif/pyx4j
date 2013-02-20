@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
@@ -96,6 +97,10 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract int interfaceSSHDPort();
 
     public abstract File getTenantSureInterfaceSftpDirectory();
+
+    public abstract String getTenantSureEmailSender();
+
+    public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;

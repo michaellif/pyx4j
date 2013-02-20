@@ -234,6 +234,18 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public String getTenantSureEmailSender() {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
+        //TODO
+        return null;
+    }
+
+    @Override
     public ThrottleConfig getThrottleConfig() {
         return new ThrottleConfig() {
 

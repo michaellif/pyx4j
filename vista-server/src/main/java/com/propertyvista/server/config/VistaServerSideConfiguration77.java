@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
@@ -46,8 +45,4 @@ public class VistaServerSideConfiguration77 extends VistaServerSideConfiguration
         return "\"Property Vista Support77\" <support.www33@birchwoodsoftwaregroup.com>";
     }
 
-    @Override
-    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig(this);
-    }
 }

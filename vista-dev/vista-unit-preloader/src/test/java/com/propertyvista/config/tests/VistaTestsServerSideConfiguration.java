@@ -19,6 +19,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -202,6 +203,16 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public String getCardServiceSimulatorUrl() {
         return null;
+    }
+
+    @Override
+    public String getTenantSureEmailSender() {
+        return getApplicationEmailSender();
+    }
+
+    @Override
+    public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
+        return getMailServiceConfigConfiguration();
     }
 
     @Override
