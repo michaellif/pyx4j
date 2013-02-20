@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -82,8 +84,27 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         // Description
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
+
+        get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+            }
+        });
+
+        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
+        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
 
         return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
     }
 
     @Override

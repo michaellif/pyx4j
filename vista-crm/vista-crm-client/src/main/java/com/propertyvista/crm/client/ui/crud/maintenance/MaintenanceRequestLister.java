@@ -62,6 +62,8 @@ public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> 
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name().firstName(), false).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name().lastName(), false).build(),
+                new MemberColumnDescriptor.Builder(proto.permissionToEnter()).build(),
+                new MemberColumnDescriptor.Builder(proto.petInstructions()).build(),
                 new MemberColumnDescriptor.Builder(proto.submitted()).build(),
                 new MemberColumnDescriptor.Builder(proto.status()).build(),
                 new MemberColumnDescriptor.Builder(proto.updated()).build(),

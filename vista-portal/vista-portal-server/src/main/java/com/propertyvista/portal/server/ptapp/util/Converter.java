@@ -180,6 +180,8 @@ public class Converter {
         to.scheduledTime().set(from.scheduledTime());
         to.surveyResponse().set(from.surveyResponse());
         to.issueClassification().set(from.issueClassification());
+        to.permissionToEnter().set(from.permissionToEnter());
+        to.petInstructions().set(from.petInstructions());
         return to;
     }
 

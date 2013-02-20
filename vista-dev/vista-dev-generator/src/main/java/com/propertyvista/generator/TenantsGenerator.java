@@ -193,6 +193,7 @@ public class TenantsGenerator {
         // add 10 min to 10 days
         cal.setTimeInMillis(cal.getTimeInMillis() + 600000 * (1 + RandomUtil.randomInt(24 * 60)));
         req.updated().setValue(new LogicalDate(cal.getTime()));
+        req.permissionToEnter().setValue(true);
         return req;
     }
 }

@@ -59,6 +59,8 @@ public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
         maintenanceRequest.updated().setValue(when);
         maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
+        maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
+        maintenanceRequest.petInstructions().setValue(RandomUtil.randomLetters(50));
 
         Persistence.service().retrieveMember(lease.leaseParticipants());
         maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());

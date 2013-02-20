@@ -34,13 +34,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
-import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.generator.util.RandomUtil;
+import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
 
@@ -150,6 +150,8 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         maintenanceRequest.updated().setValue(when);
         maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
+        maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
+        maintenanceRequest.petInstructions().setValue(RandomUtil.randomLetters(50));
 
         Persistence.service().retrieveMember(lease.leaseParticipants());
         maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());

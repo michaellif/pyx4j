@@ -67,6 +67,12 @@ public interface MaintenanceRequest extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    IPrimitive<Boolean> permissionToEnter();
+
+    @Length(250)
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> petInstructions();
+
     @EmbeddedEntity
     SurveyResponse surveyResponse();
 }

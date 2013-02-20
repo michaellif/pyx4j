@@ -13,6 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -132,10 +137,26 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             comp3 = new CEntityLabel();
             comp4 = new CEntityLabel();
         }
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification(), comp4), 20).build());
+        VerticalPanel subjPanel = new VerticalPanel();
+        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
+        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
+        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());
+        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification(), comp4), 20).build());
+        panel.setWidget(row + 1, 0, subjPanel);
+        panel.getCellFormatter().setVerticalAlignment(row + 1, 0, HasVerticalAlignment.ALIGN_TOP);
+
+        VerticalPanel permPanel = new VerticalPanel();
+        permPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 20).build());
+        permPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 20).build());
+        panel.setWidget(++row, 1, permPanel);
+        get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+            }
+        });
+        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
+        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
 
         statusPanel = new FormFlexPanel();
         panel.getFlexCellFormatter().setColSpan(++row, 0, 2);
@@ -196,5 +217,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         if (isEditable()) {
             get(proto().leaseParticipant()).setEditable(getValue().leaseParticipant().isNull());
         }
+
+        get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
     }
 }
