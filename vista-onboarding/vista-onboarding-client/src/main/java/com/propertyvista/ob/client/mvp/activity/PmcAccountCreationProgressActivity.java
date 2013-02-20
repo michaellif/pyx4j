@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -75,6 +75,11 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
     private Timer progressTimer;
 
+    // Avoid timer delayed fire
+    private boolean timerProgressComplete = false;
+
+    private int gracefulErrorCount = 0;
+
     private static final int REAL_POLL_INTERVAL = 1000;
 
     private static final int SIM_POLL_INTERVAL = 200;
@@ -112,6 +117,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
             @Override
             public void onSuccess(DeferredProcessProgressResponse progress) {
+                gracefulErrorCount = 0;
                 if (progress.isCompleted()) {
                     progressTimer.cancel();
                     if (progress.isError()) {
@@ -140,6 +146,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                         view.setStepStatus(currentStep, currentStepStatus);
                     } else {
                         // here we got to the final step. so:
+                        timerProgressComplete = true;
                         progressTimer.cancel();
                         onStepsProgressComplete();
                     }
@@ -149,8 +156,12 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
 
             @Override
             public void onFailure(Throwable caught) {
-                progressTimer.cancel();
-                super.onFailure(caught);
+                // Avoid getting to error state at all cost
+                gracefulErrorCount++;
+                if ((gracefulErrorCount > 4) && (!timerProgressComplete)) {
+                    progressTimer.cancel();
+                    super.onFailure(caught);
+                }
             }
 
         };
@@ -165,7 +176,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
                         response.setCompleted();
                     }
                     callback.onSuccess(response);
-                } else {
+                } else if (!timerProgressComplete) {
                     deferredProcessStatusService.getStatus(callback, PmcAccountCreationProgressActivity.this.defferedCorrelationId, false);
                 }
             }
@@ -175,9 +186,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     }
 
     @Override
-    @Deprecated
     public void refresh() {
-        // TODO Auto-generated method stub
     }
 
     private void onStepsProgressComplete() {
