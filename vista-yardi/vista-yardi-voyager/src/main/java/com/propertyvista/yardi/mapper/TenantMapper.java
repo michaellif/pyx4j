@@ -35,6 +35,7 @@ public class TenantMapper {
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
         tenantInLease.leaseParticipant().customer().set(customer);
+        tenantInLease.leaseParticipant().participantId().setValue(yardiCustomer.getCustomerID());
         if (yardiCustomer.getLease().isResponsibleForLease() && !applicantExists(tenants)) {
             tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
             tenantInLease.percentage().setValue(new BigDecimal(1));
