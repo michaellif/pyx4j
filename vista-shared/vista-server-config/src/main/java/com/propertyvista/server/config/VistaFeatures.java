@@ -13,7 +13,11 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.config.shared.ClientVersionMismatchError;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -29,6 +33,19 @@ public class VistaFeatures {
             //TODO This is wrong!  Move to UnitTests Mock
             Pmc pmc = VistaDeployment.getCurrentPmc();
             if (pmc != null) {
+
+                // Fail safe on to terminate session on Feature changes
+                Visit visit = Context.getVisit();
+                if (visit != null) {
+                    Object hashCode = visit.getAttribute(PmcVistaFeatures.class.getName());
+                    if (hashCode == null) {
+                        visit.setAttribute(PmcVistaFeatures.class.getName(), Integer.valueOf(pmc.features().valueHashCode()));
+                    } else if (!Integer.valueOf(pmc.features().valueHashCode()).equals(hashCode)) {
+                        Lifecycle.endSession();
+                        throw new ClientVersionMismatchError("Vista Features for your Company changed, please login again");
+                    }
+                }
+
                 return pmc.features();
             } else {
                 return EntityFactory.create(PmcVistaFeatures.class);
