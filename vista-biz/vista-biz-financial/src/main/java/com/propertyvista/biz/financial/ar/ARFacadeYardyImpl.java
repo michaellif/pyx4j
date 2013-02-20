@@ -235,6 +235,7 @@ public class ARFacadeYardyImpl implements ARFacade {
         EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.gt(criteria.proto().postDate(), dateFrom));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().paymentRecord()));
         return new ArrayList<InvoiceLineItem>(Persistence.service().query(criteria));
     }
 
