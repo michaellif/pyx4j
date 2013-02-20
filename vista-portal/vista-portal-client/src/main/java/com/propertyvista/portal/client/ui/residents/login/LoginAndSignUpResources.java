@@ -36,7 +36,7 @@ public interface LoginAndSignUpResources extends ClientBundleWithLookup {
     @Source("res_home.png")
     ImageResource home();
 
-    @Source("res_key.jpg")
+    @Source("res_key.png")
     ImageResource key();
 
     @Source("res_sec.png")
