@@ -114,6 +114,11 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction ADD COLUMN payment_due DATE,
                                                         ADD COLUMN insurance_discriminator VARCHAR(50);
         
+        -- maintenance_request
+        
+        ALTER TABLE maintenance_request ADD COLUMN permission_to_enter BOOLEAN,
+                                        ADD COLUMN pet_instructions VARCHAR(250);
+        
         -- merchant_account 
         
         ALTER TABLE merchant_account    ADD COLUMN status VARCHAR(50),
