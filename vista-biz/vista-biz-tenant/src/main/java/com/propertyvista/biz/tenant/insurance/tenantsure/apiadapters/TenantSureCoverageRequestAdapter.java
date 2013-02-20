@@ -120,7 +120,7 @@ public class TenantSureCoverageRequestAdapter {
 
     static BigDecimal countNumberOfTenants(com.propertyvista.domain.tenant.lease.LeaseTerm term) {
         EntityQueryCriteria<LeaseTermTenant> numOfTenantsCriteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        numOfTenantsCriteria.add(PropertyCriterion.eq(numOfTenantsCriteria.proto().leaseTermV(), term));
+        numOfTenantsCriteria.add(PropertyCriterion.eq(numOfTenantsCriteria.proto().leaseTermV().holder(), term));
         int numOfTenants = Persistence.service().count(numOfTenantsCriteria);
         return new BigDecimal(numOfTenants);
     }
