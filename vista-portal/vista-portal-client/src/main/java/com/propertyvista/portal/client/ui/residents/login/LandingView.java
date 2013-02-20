@@ -32,6 +32,8 @@ public interface LandingView extends LoginView {
     @Override
     void reset(String email, boolean rememberUser);
 
+    // TODO this is not used: a jolly static images from resources are displayed instead  
+    @Deprecated
     void setSignupGreetingHtml(String html);
 
 }
