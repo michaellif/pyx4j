@@ -1000,32 +1000,40 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private <E extends LeaseParticipant<?>, P extends LeaseTermParticipant<?>> void persistLeaseCustomer(LeaseTerm leaseTerm, P leaseParticipant,
             Class<E> leaseCustomerClass) {
         boolean newCustomer = leaseParticipant.leaseParticipant().customer().id().isNull();
+
         if (!leaseParticipant.leaseParticipant().customer().isValueDetached()) {
             ServerSideFactory.create(CustomerFacade.class).persistCustomer(leaseParticipant.leaseParticipant().customer());
         }
+
         // Is new LeaseCustomer find or create new
         if (leaseParticipant.leaseParticipant().id().isNull()) {
             E leaseCustomer = null;
+
             if (!newCustomer) {
                 EntityQueryCriteria<E> criteria = EntityQueryCriteria.create(leaseCustomerClass);
                 criteria.add(PropertyCriterion.eq(criteria.proto().lease(), leaseTerm.lease()));
                 criteria.add(PropertyCriterion.eq(criteria.proto().customer(), leaseParticipant.leaseParticipant().customer()));
                 leaseCustomer = Persistence.service().retrieve(criteria);
             }
+
             if (leaseCustomer == null) {
                 Customer customer = leaseParticipant.leaseParticipant().customer();
                 leaseCustomer = EntityFactory.create(leaseCustomerClass);
                 leaseCustomer.lease().set(leaseTerm.lease());
                 leaseCustomer.customer().set(customer);
                 ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseCustomer);
+                // case of user-assignable ID:
+                if (leaseCustomer.participantId().getValue().isEmpty() && !leaseParticipant.leaseParticipant().participantId().isNull()) {
+                    leaseCustomer.participantId().set(leaseParticipant.leaseParticipant().participantId());
+                }
+
                 Persistence.service().persist(leaseCustomer);
             }
+
             // Copy value to member and update other references in graph
             leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
             leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
-            if (!leaseCustomer.participantId().getValue().isEmpty()) {
-                leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
-            }
+            leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
         }
     }
 
