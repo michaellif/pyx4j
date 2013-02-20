@@ -23,17 +23,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.xml.XMLEntityParser;
-import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.model.ImportInformation;
@@ -48,8 +43,6 @@ import com.propertyvista.interfaces.importer.processor.ImportProcessorUpdateUnit
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class ImportUtils {
-
-    private static final I18n i18n = I18n.get(ImportUtils.class);
 
     public static ImportIO parse(ImportDataFormatType importAdapterType, byte[] data, DownloadFormat format) {
         switch (importAdapterType) {
@@ -80,7 +73,7 @@ public class ImportUtils {
         }
     }
 
-    public static boolean createValidationErrorResponse(IEntity entity, DeferredProcessProgressResponse status, UploadResponse<ImportUploadResponseDTO> response) {
+    public static ProcessingResponseReport createValidationErrorReport(IEntity entity) {
         final ProcessingResponseReport report = new ProcessingResponseReport();
         EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
             @Override
@@ -93,20 +86,13 @@ public class ImportUtils {
         });
 
         if (report.getMessagesCount() > 0) {
-            if (response.message == null) {
-                response.message = i18n.tr("There are validation {0} errors in uploaded file", report.getMessagesCount());
-            }
-            response.data.success().setValue(Boolean.FALSE);
-            String fileName = "validationError.xlsx";
-            response.data.resultUrl().setValue(fileName);
-            report.createDownloadable(fileName);
-            return true;
+            return report;
         } else {
-            return false;
+            return null;
         }
     }
 
-    public static void createProcessingResponse(IEntity entity, DeferredProcessProgressResponse status, UploadResponse<ImportUploadResponseDTO> response) {
+    public static ProcessingResponseReport createProcessingResponse(IEntity entity) {
         final ProcessingResponseReport report = new ProcessingResponseReport();
         EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
             @Override
@@ -119,10 +105,9 @@ public class ImportUtils {
         });
 
         if (report.getMessagesCount() > 0) {
-            response.data = EntityFactory.create(ImportUploadResponseDTO.class);
-            String fileName = "processingResults.xlsx";
-            response.data.resultUrl().setValue(fileName);
-            report.createDownloadable(fileName);
+            return report;
+        } else {
+            return null;
         }
     }
 

@@ -15,6 +15,7 @@ package com.propertyvista.interfaces.importer;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.upload.UploadData;
@@ -35,6 +36,10 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
     private byte[] binaryData;
 
     private UploadResponse<ImportUploadResponseDTO> response;
+
+    private ProcessingResponseReport errorReport;
+
+    private ProcessingResponseReport processingReport;
 
     public ImportUploadDeferredProcess(ImportUploadDTO data) {
         super(data);
@@ -66,28 +71,43 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
                 Persistence.service().rollback();
             }
             Persistence.service().endTransaction();
-            Lifecycle.endContext();
+            Lifecycle.endElevatedUserContext();
         }
+
+        // Store reports in user session
+        if (errorReport != null) {
+            if (response.message == null) {
+                response.message = SimpleMessageFormat.format("There are validation {0} errors in uploaded file", errorReport.getMessagesCount());
+            }
+            response.data.success().setValue(Boolean.FALSE);
+            String fileName = "validationError.xlsx";
+            response.data.resultUrl().setValue(fileName);
+            errorReport.createDownloadable(fileName);
+        } else if (processingReport != null) {
+            this.response.data.success().setValue(Boolean.TRUE);
+            String fileName = "processingResults.xlsx";
+            response.data.resultUrl().setValue(fileName);
+            processingReport.createDownloadable(fileName);
+        }
+        status().setCompleted();
     }
 
     private void executeImport() {
         ImportIO importIO = ImportUtils.parse(getData().dataFormat().getValue(), binaryData,
                 DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
-        if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
-            status().setCompleted();
+        errorReport = ImportUtils.createValidationErrorReport(importIO);
+        if (errorReport != null) {
             return;
         }
         ImportProcessor importProcessor = ImportUtils.createImportProcessor(getData(), importIO);
         boolean valid = importProcessor.validate(importIO, status(), getData(), response);
-        if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
-            status().setCompleted();
+        errorReport = ImportUtils.createValidationErrorReport(importIO);
+        if (errorReport != null) {
             return;
         }
         if (valid) {
             importProcessor.persist(importIO, status(), getData(), response);
-            ImportUtils.createProcessingResponse(importIO, status(), response);
-            this.response.data.success().setValue(Boolean.TRUE);
+            processingReport = ImportUtils.createProcessingResponse(importIO);
         }
-        status().setCompleted();
     }
 }
