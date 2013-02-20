@@ -71,19 +71,22 @@ class SMTPMailServiceImpl implements IMailService {
 
     @Override
     public MailDeliveryStatus send(MailMessage mailMessage) {
+        return send(mailMessage, ServerSideConfiguration.instance().getMailServiceConfigConfiguration());
+    }
+
+    @Override
+    public MailDeliveryStatus send(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
         if (disabled) {
             return MailDeliveryStatus.Success;
         }
 
-        Properties mailProperties = new Properties();
-
-        IMailServiceConfigConfiguration mailConfig = ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
         if ((mailConfig == null) || (!(mailConfig instanceof SMTPMailServiceConfig))) {
             log.error("E-mail delivery SMTP not configured");
             return MailDeliveryStatus.ConfigurationError;
         }
         SMTPMailServiceConfig config = (SMTPMailServiceConfig) mailConfig;
 
+        Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.host", config.getHost());
         mailProperties.put("mail.smtp.port", String.valueOf(config.getPort()));
 
@@ -136,7 +139,7 @@ class SMTPMailServiceImpl implements IMailService {
             }
 
             if (isEmptyList(address) && SMTPMailUtils.isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {
-                log.error("No destination E-Mail addreses found");
+                log.error("No destination E-Mail addresses found");
                 return MailDeliveryStatus.MessageDataError;
             }
 

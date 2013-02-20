@@ -20,8 +20,11 @@
  */
 package com.pyx4j.server.mail;
 
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 
 public interface IMailService {
+
+    public MailDeliveryStatus send(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig);
 
     public MailDeliveryStatus send(MailMessage mailMessage);
 

@@ -20,9 +20,15 @@
  */
 package com.pyx4j.server.mail;
 
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+
 public class Mail {
 
     public static MailDeliveryStatus send(MailMessage mailMessage) {
+        return getMailService().send(mailMessage);
+    }
+
+    public static MailDeliveryStatus send(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
         return getMailService().send(mailMessage);
     }
 
