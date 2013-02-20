@@ -482,11 +482,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     private void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
-        ServerSideFactory.create(CommunicationFacade.class).sendPaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate);
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate);
     }
 
     private void sendPaymentsResumedEmail(String tenantEmail) {
-        ServerSideFactory.create(CommunicationFacade.class).sendPaymentsResumedEmail(tenantEmail);
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentsResumedEmail(tenantEmail);
     }
 
 }

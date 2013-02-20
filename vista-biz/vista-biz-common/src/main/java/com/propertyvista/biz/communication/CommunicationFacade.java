@@ -59,9 +59,9 @@ public interface CommunicationFacade {
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 
-    void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate);
+    void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate);
 
-    void sendPaymentsResumedEmail(String tenantEmail);
+    void sendTenantSurePaymentsResumedEmail(String tenantEmail);
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 

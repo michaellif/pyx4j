@@ -272,9 +272,9 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createPaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
+    public static MailMessage createTenantSurePaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
 
-        EmailTemplate emailTemplate = emailTemplatePaymentNotProcessed(gracePeriodEndDate);
+        EmailTemplate emailTemplate = emailTemplateTenantSurePaymentNotProcessed(gracePeriodEndDate);
         MailMessage email = new MailMessage();
         email.setSender(getSender());
         buildSimpleEmail(email, emailTemplate);
@@ -282,9 +282,9 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createPaymentsResumedEmail() {
+    public static MailMessage createTenantSurePaymentsResumedEmail() {
 
-        EmailTemplate emailTemplate = emailTemplatePaymentsResumed();
+        EmailTemplate emailTemplate = emailTemplateTenantSurePaymentsResumed();
         MailMessage email = new MailMessage();
         email.setSender(getSender());
         buildSimpleEmail(email, emailTemplate);
@@ -419,7 +419,7 @@ public class MessageTemplates {
         return resetUrl.toString();
     }
 
-    private static EmailTemplate emailTemplatePaymentNotProcessed(LogicalDate gracePeriodEndDate) {
+    private static EmailTemplate emailTemplateTenantSurePaymentNotProcessed(LogicalDate gracePeriodEndDate) {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.subject().setValue(i18n.tr("15 Day Notice of Cancellation for Non-payment of Premium"));
         try {
@@ -438,7 +438,7 @@ public class MessageTemplates {
         }
     }
 
-    public static EmailTemplate emailTemplatePaymentsResumed() {
+    public static EmailTemplate emailTemplateTenantSurePaymentsResumed() {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.subject().setValue(i18n.tr("Payment Processing Resumed"));
         try {

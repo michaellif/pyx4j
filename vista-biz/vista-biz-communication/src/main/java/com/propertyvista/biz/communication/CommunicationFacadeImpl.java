@@ -251,12 +251,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
+    public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
         if (disabled) {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createPaymentNotProcessedEmail(gracePeriodEndDate);
+        final MailMessage m = MessageTemplates.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate);
 
         m.setTo(tenantEmail);
 
@@ -267,12 +267,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPaymentsResumedEmail(String tenantEmail) {
+    public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
         if (disabled) {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createPaymentsResumedEmail();
+        final MailMessage m = MessageTemplates.createTenantSurePaymentsResumedEmail();
 
         m.setTo(tenantEmail);
 
