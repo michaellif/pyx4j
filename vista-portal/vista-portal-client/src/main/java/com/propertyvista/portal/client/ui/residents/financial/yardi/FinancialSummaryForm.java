@@ -13,13 +13,21 @@
  */
 package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,6 +43,17 @@ import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialSummaryDTO> {
 
     private static final I18n i18n = I18n.get(FinancialSummaryForm.class);
+
+    private static final List<EntityFolderColumnDescriptor> COLUMNS;
+    static {
+        InvoiceLineItem proto = EntityFactory.getEntityPrototype(InvoiceLineItem.class);
+        COLUMNS = Arrays.asList(//@formatter:off
+                new EntityFolderColumnDescriptor(proto.postDate(), "10em"),
+                new EntityFolderColumnDescriptor(proto.description(), "20em"),
+                new EntityFolderColumnDescriptor(proto.amount(), "10em")                                        
+        ); // formatter:on 
+    }
+
 
     private final Command payNowCommand;
 
@@ -77,8 +96,46 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
         payButton.setVisible(visible);
     }
 
+    private static class InvoiceLineItemFormat implements IFormat<BigDecimal> {
+
+        private final IFormat<BigDecimal> currencyFormat;
+
+        public InvoiceLineItemFormat(IFormat<BigDecimal> currencyFormat) {
+            this.currencyFormat = currencyFormat;
+        }
+
+        @Override
+        public String format(BigDecimal value) {
+            return currencyFormat.format(value.abs());
+        }
+
+        @Override
+        public BigDecimal parse(String string) throws ParseException {
+            return currencyFormat.parse(string); // actually shouldn't be used in this context
+        }
+
+    }
+
+    public static class InvoiceLineItemRowForm extends CEntityFolderRowEditor<InvoiceLineItem> {
+
+        public InvoiceLineItemRowForm() {
+            super(InvoiceLineItem.class, COLUMNS);
+        }
+        
+        @Override
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            if (column.getObject() == proto().amount()) {
+                CTextFieldBase<BigDecimal, ?> amountField = (CTextFieldBase<BigDecimal, ?>) super.createCell(column);                
+                amountField.setFormat(new InvoiceLineItemFormat(amountField.getFormat()));
+                return amountField;
+            } else {
+                return super.createCell(column);
+            }
+        }        
+    }
+    
     // TODO - duplicate of BillSummaryForm.InvoiceLineItemFolder
-    class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {
+    public static class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {
 
         public InvoiceLineItemFolder() {
             super(InvoiceLineItem.class, false);
@@ -86,11 +143,16 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(// @formatter:off
-                    new EntityFolderColumnDescriptor(proto().amount(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().postDate(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().description(), "20em")
-            ); // formatter:on
+            return COLUMNS;
+        }
+        
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof InvoiceLineItem) {
+                return new InvoiceLineItemRowForm();
+            } else { 
+                return super.create(member);
+            }
         }
     }
 }
