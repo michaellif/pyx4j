@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -62,10 +61,6 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
                     public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
                         view.setPresenter(TenantRegistrationActivity.this);
                         view.populate(result.getData());
-                        if (ApplicationMode.isDevelopment()) {
-                            view.setGreeting(i18n.tr("Why Choose Us?"), i18n.tr("Our service is unprecedented in the industry."
-                                    + " Our team of individuals will respond quickly to any of your needs and make your RedRidge Experience better"));
-                        }
                         panel.setWidget(view);
                     }
                 });

@@ -44,10 +44,6 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
 
     private Presenter presenter;
 
-    private HTML greetingCaption;
-
-    private HTML greetingTextHtml;
-
     public TenantRegistrationViewImpl() {
         LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
         bindResitrationPanel(viewPanel.getLeft());
@@ -65,12 +61,6 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public void setGreeting(String caption, String textHtml) {
-        this.greetingCaption.setHTML(formatCaption(caption, ""));
-        this.greetingTextHtml.setHTML(textHtml);
     }
 
     @Override
@@ -117,15 +107,12 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     }
 
     private void bindGreetingPanel(Side layout) {
-        greetingCaption = new HTML();
+        HTML greetingCaption = new HTML();
+        greetingCaption.setHTML(formatCaption(i18n.tr("Why choose Us?"), ""));
         layout.getHeader().add(greetingCaption);
-
-        greetingTextHtml = new HTML();
-        greetingTextHtml.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
 
         SimplePanel signUpGreetingPanel = new SimplePanel();
         signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
-        signUpGreetingPanel.setWidget(greetingTextHtml);
 
         layout.getContent().add(signUpGreetingPanel);
     }

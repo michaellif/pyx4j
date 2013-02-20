@@ -38,6 +38,4 @@ public interface TenantRegistrationView extends IsWidget {
 
     void showError(String message);
 
-    void setGreeting(String caption, String textHtml);
-
 }
