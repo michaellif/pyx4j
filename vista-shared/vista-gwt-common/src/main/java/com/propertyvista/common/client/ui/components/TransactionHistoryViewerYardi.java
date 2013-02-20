@@ -49,7 +49,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
     }
 
     public TransactionHistoryViewerYardi() {
-        this(NumberFormat.getFormat(i18n.tr("#,##0.00")));
+        this(NumberFormat.getFormat(i18n.tr("$#,##0.00")));
     }
 
     @Override
