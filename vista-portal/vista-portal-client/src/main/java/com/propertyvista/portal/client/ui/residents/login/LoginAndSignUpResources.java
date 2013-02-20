@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.residents.login;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
 
 public interface LoginAndSignUpResources extends ClientBundleWithLookup {
@@ -28,5 +29,17 @@ public interface LoginAndSignUpResources extends ClientBundleWithLookup {
 
     @Source("signup-page-terms-agreement-text.html")
     TextResource signUpViewTermsAgreementText();
+
+    @Source("res_easy.png")
+    ImageResource easy();
+
+    @Source("res_home.png")
+    ImageResource home();
+
+    @Source("res_key.jpg")
+    ImageResource key();
+
+    @Source("res_sec.png")
+    ImageResource secure();
 
 }
