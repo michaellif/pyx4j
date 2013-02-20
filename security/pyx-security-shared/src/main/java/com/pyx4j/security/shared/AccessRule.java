@@ -20,6 +20,8 @@
  */
 package com.pyx4j.security.shared;
 
-public interface AccessRule {
+import java.io.Serializable;
+
+public interface AccessRule extends Serializable {
 
 }
