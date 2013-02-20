@@ -1023,7 +1023,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
             // Copy value to member and update other references in graph
             leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
             leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
-            leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
+            if (!leaseCustomer.participantId().getValue().isEmpty()) {
+                leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
+            }
         }
     }
 
