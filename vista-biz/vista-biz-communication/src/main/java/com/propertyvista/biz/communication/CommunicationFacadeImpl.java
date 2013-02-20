@@ -17,25 +17,28 @@ import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -250,6 +253,10 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
     }
 
+    private static IMailServiceConfigConfiguration getTenantSureConfig() {
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureMailServiceConfigConfiguration();
+    }
+
     @Override
     public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
         if (disabled) {
@@ -260,7 +267,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
         m.setTo(tenantEmail);
 
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
+        if (MailDeliveryStatus.Success != Mail.send(m, getTenantSureConfig())) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
 
@@ -276,7 +283,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
         m.setTo(tenantEmail);
 
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
+        if (MailDeliveryStatus.Success != Mail.send(m, getTenantSureConfig())) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
 

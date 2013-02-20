@@ -29,9 +29,9 @@ import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.shared.config.VistaDemo;
 
-public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
+class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
-    public static VistaSMTPMailServiceConfig getGmailConfig(VistaServerSideConfiguration sideConfiguration) {
+    static VistaSMTPMailServiceConfig getGmailConfig(VistaServerSideConfiguration sideConfiguration) {
 
         VistaSMTPMailServiceConfig config = new VistaSMTPMailServiceConfig();
 
@@ -64,16 +64,14 @@ public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
     }
 
     static IMailServiceConfigConfiguration getCustomConfig(String prefix, VistaServerSideConfiguration serverSideConfiguration) {
-        VistaSMTPMailServiceConfig config = new VistaSMTPMailServiceConfig();
-        config.readProperties("mail", serverSideConfiguration.getConfigProperties().getProperties());
-
-        File mailCredentialsFile = new File(serverSideConfiguration.getConfigDirectory(), "mail-credentials.properties");
+        VistaSMTPMailServiceConfig config = getGmailConfig(serverSideConfiguration);
+        config.readProperties(prefix, serverSideConfiguration.getConfigProperties().getProperties());
+        File mailCredentialsFile = new File(serverSideConfiguration.getConfigDirectory(), prefix.replace('.', '-') + "-credentials.properties");
         if (mailCredentialsFile.canRead()) {
             Credentials credentials = CredentialsFileStorage.getCredentials(mailCredentialsFile);
             config.user = credentials.userName;
             config.password = credentials.password;
         }
-
         return config;
     }
 

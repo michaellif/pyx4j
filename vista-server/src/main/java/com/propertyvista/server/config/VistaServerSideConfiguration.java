@@ -235,14 +235,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getTenantSureEmailSender() {
-        //TODO
-        return null;
+        return getConfigProperties().getValue("mail.tenantsure.sender", getApplicationEmailSender());
     }
 
     @Override
     public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
-        //TODO
-        return null;
+        return VistaSMTPMailServiceConfig.getCustomConfig("mail.tenantsure", this);
     }
 
     @Override

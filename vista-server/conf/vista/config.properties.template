@@ -23,6 +23,16 @@ db.minPoolSize=3
 db.maxPoolSize=100
 
 
+## TenantSure Mail server configuration
+#mail.tenantsure.sender="TenantSure" <no-reply@tenantsure.ca>
+#mail.tenantsure.host=smtp.amdocs.com
+#mail.tenantsure.port=465
+#mail.tenantsure.starttls=true
+#mail.tenantsure.forwardAllTo=
+#mail.tenantsure.user=no-reply@tenantsure.ca
+#mail.tenantsure.password=secret2
+#optionally you may have mail-TenantSure-credentials.properties in additional file that may be encrypted
+
 ## TODO Mail server configuration
 
 mail.host=smtp.amdocs.com

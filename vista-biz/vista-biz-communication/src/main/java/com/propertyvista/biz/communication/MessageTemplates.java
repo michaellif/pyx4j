@@ -41,6 +41,7 @@ import com.propertyvista.biz.communication.mail.template.EmailTemplateRootObject
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestAdminT;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -272,11 +273,15 @@ public class MessageTemplates {
         return email;
     }
 
+    private static String getTenantSureSender() {
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureEmailSender();
+    }
+
     public static MailMessage createTenantSurePaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
 
         EmailTemplate emailTemplate = emailTemplateTenantSurePaymentNotProcessed(gracePeriodEndDate);
         MailMessage email = new MailMessage();
-        email.setSender(getSender());
+        email.setSender(getTenantSureSender());
         buildSimpleEmail(email, emailTemplate);
 
         return email;
@@ -286,7 +291,7 @@ public class MessageTemplates {
 
         EmailTemplate emailTemplate = emailTemplateTenantSurePaymentsResumed();
         MailMessage email = new MailMessage();
-        email.setSender(getSender());
+        email.setSender(getTenantSureSender());
         buildSimpleEmail(email, emailTemplate);
 
         return email;
