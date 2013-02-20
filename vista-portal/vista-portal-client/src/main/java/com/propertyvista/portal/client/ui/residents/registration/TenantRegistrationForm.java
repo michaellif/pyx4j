@@ -104,10 +104,20 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         definePasswordLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         definePasswordLabel.setText(i18n.tr("Set up your password:"));
         definePasswordPanel.add(definePasswordLabel);
-        definePasswordPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("")
+
+        // TODO the following ugly top margin setup via 'w' is temporary since these labels are here to stay only until watermark for password has been implemented
+        Widget w = null;
+        definePasswordPanel.add(center(w = new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("")
                 .build()));
-        definePasswordPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm())).watermark(
-                "").build()));
+        w.getElement().getStyle().setMarginTop(0, Unit.PX);
+
+        Label confirmPasswordLabel = new Label();
+        confirmPasswordLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        confirmPasswordLabel.setText(proto().passwordConfirm().getMeta().getCaption() + ":");
+        definePasswordPanel.add(confirmPasswordLabel);
+        definePasswordPanel.add(center(w = new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm()))
+                .watermark("").build()));
+        w.getElement().getStyle().setMarginTop(0, Unit.PX);
 
         contentPanel.add(center(definePasswordPanel));
 
