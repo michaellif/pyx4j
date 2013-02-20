@@ -19,8 +19,10 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -111,8 +113,20 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         greetingCaption.setHTML(formatCaption(i18n.tr("Why choose Us?"), ""));
         layout.getHeader().add(greetingCaption);
 
-        SimplePanel signUpGreetingPanel = new SimplePanel();
+        FlowPanel signUpGreetingPanel = new FlowPanel();
         signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
+        HTML row1 = new HTML(i18n.tr("Place To Call Home..."));
+        row1.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow1.name());
+        signUpGreetingPanel.add(row1);
+
+        HTML row2 = new HTML(i18n.tr("...is just a click away!"));
+        row2.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow2.name());
+        signUpGreetingPanel.add(row2);
+
+        SimplePanel imageHolder = new SimplePanel();
+        imageHolder.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingImageHolder.name());
+        imageHolder.setWidget(new Image(LoginAndSignUpResources.INSTANCE.key()));
+        signUpGreetingPanel.add(imageHolder);
 
         layout.getContent().add(signUpGreetingPanel);
     }

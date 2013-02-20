@@ -41,7 +41,11 @@ public class LandingPagesTheme extends Theme {
         
         LoginImageDecoration,
         LoginImageDecorationImage,
-        LoginImageDecorationLabel
+        LoginImageDecorationLabel,
+        
+        SignUpGreetingRow1,
+        SignUpGreetingRow2,
+        SignUpGreetingImageHolder
         //@formatter:on
 
     }
@@ -141,6 +145,23 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         style.addProperty("display", "inline");
         style.addProperty("margin-left", "20px");
+        addStyle(style);
+
+        // sign up greeting styles:
+        style = new Style(".", StyleName.SignUpGreetingRow1.name());
+        style.addProperty("text-align", "left");
+        style.addProperty("font-size", "20px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SignUpGreetingRow2.name());
+        style.addProperty("text-align", "right");
+        style.addProperty("font-size", "20px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SignUpGreetingImageHolder.name());
+        style.addProperty("text-align", "right");
         addStyle(style);
 
     }
