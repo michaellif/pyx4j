@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.essentials.server.dev.NumberInFile;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -29,8 +30,25 @@ public class TransactionLog {
 
     private final static Logger log = LoggerFactory.getLogger(TransactionLog.class);
 
+    private static NumberInFile transactionsCountId = new NumberInFile(logsDir());
+
+    public static long getNextNumber() {
+        return transactionsCountId.getNextNumber();
+    }
+
     public static void log(Long transactionId, String contextName, String context) {
         log(transactionId, contextName, context, "log");
+    }
+
+    private static File logsDir() {
+        File dir;
+        if (LoggerConfig.getContextName() != null) {
+            dir = new File("logs", LoggerConfig.getContextName());
+        } else {
+            dir = new File("logs");
+        }
+        return new File(dir, "yardi-transactions");
+
     }
 
     public static void log(Long transactionId, String contextName, String context, String fileExt) {
@@ -39,13 +57,7 @@ public class TransactionLog {
         }
         FileWriter writer = null;
         try {
-            File dir;
-            if (LoggerConfig.getContextName() != null) {
-                dir = new File("logs", LoggerConfig.getContextName());
-            } else {
-                dir = new File("logs");
-            }
-            dir = new File(dir, "yardi-transactions");
+            File dir = logsDir();
             long transactionGroup = transactionId / 1000;
             NumberFormat gnf = new DecimalFormat("0000");
             dir = new File(dir, gnf.format(transactionGroup) + "000-" + gnf.format(transactionGroup) + "999");

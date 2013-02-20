@@ -52,7 +52,7 @@ public class YardiAbstarctService {
      * @throws AxisFault
      */
     public static void ping(YardiClient c) throws AxisFault, RemoteException {
-        c.transactionId++;
+        c.transactionIdStart();
         c.setCurrentAction(Action.ping);
 
         Ping ping = new Ping();
@@ -87,7 +87,7 @@ public class YardiAbstarctService {
     protected Properties getPropertyConfigurations(YardiClient c, PmcYardiCredential yc) throws YardiServiceException {
 
         try {
-            c.transactionId++;
+            c.transactionIdStart();
             c.setCurrentAction(Action.GetPropertyConfigurations);
 
             GetPropertyConfigurations l = new GetPropertyConfigurations();

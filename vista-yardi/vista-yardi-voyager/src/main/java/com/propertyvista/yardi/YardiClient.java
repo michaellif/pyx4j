@@ -49,10 +49,14 @@ public class YardiClient {
 
     private int requestCount = 0;
 
-    public Long transactionId = 0l;
+    private Long transactionId = 0l;
 
     public YardiClient(String serviceURL) {
         this.serviceURL = serviceURL;
+    }
+
+    public void transactionIdStart() {
+        transactionId = TransactionLog.getNextNumber();
     }
 
     public ItfResidentTransactions2_0 getResidentTransactionsService() throws AxisFault {

@@ -219,7 +219,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     private ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
 
-            c.transactionId++;
+            c.transactionIdStart();
             c.setCurrentAction(Action.GetResidentTransactions);
 
             GetResidentTransactions_Login l = new GetResidentTransactions_Login();
@@ -257,7 +257,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private ResidentTransactions getResidentTransaction(YardiClient c, PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
         try {
-            c.transactionId++;
+            c.transactionIdStart();
             c.setCurrentAction(Action.GetResidentTransaction);
 
             GetResidentTransaction_Login l = new GetResidentTransaction_Login();
@@ -294,7 +294,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private void importResidentTransactions(YardiClient c, PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException {
         try {
-            c.transactionId++;
+            c.transactionIdStart();
             c.setCurrentAction(Action.ImportResidentTransactions);
 
             ImportResidentTransactions_Login l = new ImportResidentTransactions_Login();
