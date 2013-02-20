@@ -305,7 +305,7 @@ SET search_path = '_admin_';
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
                 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 
                 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'tenantSureCancellation', 
-                'tenantSureHQUpdate', 'tenantSureReports', 'test', 'tenantSureTransactionReports', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
+                'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
                 'yardiBatchProcess', 'yardiImportProcess'));
         ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_status_e_ck CHECK (status = 'Cancel');
         ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
