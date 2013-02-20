@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -30,7 +29,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -50,6 +49,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         @Editor(type = EditorType.email)
         IPrimitive<String> emailAddress();
+
     }
 
     private abstract static class EmailInputDialog extends OkCancelDialog {
@@ -94,15 +94,15 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     private TenantSureStatusForm statusForm;
 
-    private Button cancelTenantSureButton;
+    private Anchor cancelTenantSureButton;
 
-    private Button updateCCButton;
+    private Anchor updateCCButton;
 
-    private Button updateCCAndPay;
+    private Anchor updateCCAndPay;
 
-    private Button sendDocumentationButton;
+    private Anchor sendDocumentationButton;
 
-    private Button reinstateTenantSureButton;
+    private Anchor reinstateTenantSureButton;
 
     public TenantSureManagementViewImpl() {
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
@@ -110,10 +110,14 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
 
         FlowPanel viewPanel = new FlowPanel();
-
         viewPanel.add(makeGreetingPanel());
-        viewPanel.add(makeStatusDetailsPanel());
-        viewPanel.add(makeActionsPanel());
+
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementContentPanel.name());
+        contentPanel.add(makeStatusDetailsPanel());
+        contentPanel.add(makeActionsPanel());
+
+        viewPanel.add(contentPanel);
 
         viewDecorator.setContent(viewPanel);
         initWidget(viewDecorator);
@@ -173,7 +177,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     private Widget makeStatusDetailsPanel() {
         FlowPanel statusPanel = new FlowPanel();
-        statusPanel.getElement().getStyle().setPadding(10, Unit.PX);
+        statusPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementStatusDetailsPanel.name());
         statusForm = new TenantSureStatusForm();
         statusForm.initContent();
         statusPanel.add(statusForm);
@@ -184,8 +188,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         FlowPanel actionsPanel = new FlowPanel();
         actionsPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementActionsPanel.name());
 
-        sendDocumentationButton = new Button(i18n.tr("Resend Insurance Certificate..."), new Command() {
-
+        sendDocumentationButton = new Anchor(i18n.tr("Resend Insurance Certificate..."), new Command() {
             @Override
             public void execute() {
                 new EmailInputDialog("") {
@@ -204,14 +207,14 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         });
 
-        updateCCButton = new Button(i18n.tr("Update Credit Card Details"), new Command() {
+        updateCCButton = new Anchor(i18n.tr("Update Credit Card Details"), new Command() {
             @Override
             public void execute() {
                 presenter.updateCreditCardDetails();
             }
         });
 
-        updateCCAndPay = new Button(i18n.tr("Update Credid Card and Pay"), new Command() {
+        updateCCAndPay = new Anchor(i18n.tr("Update Credid Card and Pay"), new Command() {
 
             @Override
             public void execute() {
@@ -219,35 +222,35 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
             }
         });
 
-        cancelTenantSureButton = new Button(i18n.tr("Cancel TenantSure"), new Command() {
+        cancelTenantSureButton = new Anchor(i18n.tr("Cancel TenantSure"), new Command() {
             @Override
             public void execute() {
                 TenantSureManagementViewImpl.this.onCancelTenantSure();
             }
         });
 
-        reinstateTenantSureButton = new Button(i18n.tr("Reinstate"), new Command() {
+        reinstateTenantSureButton = new Anchor(i18n.tr("Reinstate"), new Command() {
             @Override
             public void execute() {
                 onReinstateTenantSure();
             }
         });
 
-        Button viewFaq = new Button(i18n.tr("FAQ"), new Command() {
+        Anchor viewFaq = new Anchor(i18n.tr("FAQ"), new Command() {
             @Override
             public void execute() {
                 presenter.viewFaq();
             }
         });
 
-        Button aboutTenantSure = new Button(i18n.tr("About TenantSure / Contact Us"), new Command() {
+        Anchor aboutTenantSure = new Anchor(i18n.tr("About TenantSure / Contact Us"), new Command() {
             @Override
             public void execute() {
                 presenter.viewAboutTenantSure();
             }
         });
 
-        Button makeAClaim = new Button(i18n.tr("Make a Claim"), new Command() {
+        Anchor makeAClaim = new Anchor(i18n.tr("Make a Claim"), new Command() {
             @Override
             public void execute() {
                 TenantSureManagementViewImpl.this.onMakeAClaim();
@@ -263,7 +266,6 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         actionsPanel.add(new HTML("&nbsp;")); // add separator 
 
-        // informations
         actionsPanel.add(viewFaq);
         actionsPanel.add(aboutTenantSure);
 

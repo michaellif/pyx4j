@@ -21,7 +21,15 @@ import com.pyx4j.commons.css.Theme;
 public class TenantInsuranceTheme extends Theme {
 
     public enum StyleName implements IStyleName {
-        TenantSureLogo, TenantSureLogoPhone, TenantSureManagementGreetingPanel, TenantSureManagementGreeting, TenantSureManagementActionsPanel;
+        //@formatter:off
+        TenantSureLogo,
+        TenantSureLogoPhone,
+        TenantSureManagementGreetingPanel,
+        TenantSureManagementGreeting,
+        TenantSureManagementContentPanel,
+        TenantSureManagementStatusDetailsPanel,
+        TenantSureManagementActionsPanel;
+        //@formatter:on
     }
 
     public TenantInsuranceTheme() {
@@ -63,19 +71,31 @@ public class TenantInsuranceTheme extends Theme {
         style.addProperty("display", "inline-block");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name());
+        style = new Style(".", StyleName.TenantSureManagementContentPanel.name());
         style.addProperty("margin-top", "50px");
         style.addProperty("margin-bottom", "50px");
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
-        style.addProperty("width", "300px");
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name(), " ", ".Button");
+        style = new Style(".", StyleName.TenantSureManagementStatusDetailsPanel.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "50%");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "50%");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name(), " ", ".Anchor");
         style.addProperty("display", "block");
         style.addProperty("float", "none");
-        style.addProperty("margin-top", "5px");
-        style.addProperty("margin-bottom", "5px");
+        style.addProperty("margin", "0px");
+        style.addProperty("padding", "0px");
         addStyle(style);
 
     }
