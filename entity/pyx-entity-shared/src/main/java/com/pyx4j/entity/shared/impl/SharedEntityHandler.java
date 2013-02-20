@@ -492,6 +492,20 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     }
 
     @Override
+    public int valueHashCode() {
+        if (isPrototypeEntity) {
+            return super.hashCode();
+        } else {
+            Map<String, Serializable> thisValue = this.getValue(false);
+            if (thisValue == null) {
+                return super.hashCode();
+            } else {
+                return ((EntityValueMap) thisValue).valueHashCode();
+            }
+        }
+    }
+
+    @Override
     public boolean isNull() {
         Map<String, Serializable> thisValue = this.getValue(false);
         if ((thisValue == null) || (thisValue.isEmpty())) {

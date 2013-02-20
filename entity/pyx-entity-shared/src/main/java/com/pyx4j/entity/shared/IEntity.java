@@ -207,4 +207,6 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
     public String getStringView();
 
     public String getDebugExceptionInfoString();
+
+    public int valueHashCode();
 }
