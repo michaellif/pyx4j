@@ -21,20 +21,12 @@
 package com.pyx4j.essentials.server.dev;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -44,14 +36,11 @@ import com.pyx4j.commons.IHaveServiceCallMarker;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
 public class EntityFileLogger {
 
     private final static Logger log = LoggerFactory.getLogger(EntityFileLogger.class);
-
-    private final static Map<File, Properties> fileNumbers = new Hashtable<File, Properties>();
 
     private static class DumpXMLEntityWriter extends XMLEntityWriter {
 
@@ -116,7 +105,7 @@ public class EntityFileLogger {
             return;
         }
 
-        long id = getNextNumber(dir);
+        long id = new NumberInFile(dir).getNextNumber();
         NumberFormat nf = new DecimalFormat("0000");
         StringBuffer name = new StringBuffer(nf.format(id));
         name.append('-').append(type);
@@ -191,45 +180,4 @@ public class EntityFileLogger {
         }
     }
 
-    private static long getNextNumber(File dir) {
-        File file = new File(dir, "log_number.properties");
-        Properties props = fileNumbers.get(dir);
-
-        if (props == null) {
-            props = new Properties();
-            if (file.canRead()) {
-                InputStream in = null;
-                try {
-                    props.load(in = new FileInputStream(file));
-                } catch (FileNotFoundException e) {
-                    log.error("File Not Found", e);
-                } catch (IOException e) {
-                    log.error("IO Exception", e);
-                } finally {
-                    IOUtils.closeQuietly(in);
-                }
-            }
-            fileNumbers.put(dir, props);
-        }
-
-        String result = props.getProperty("number");
-        if (result == null) {
-            result = "0";
-        }
-        Long number = Long.valueOf(result);
-        number += 1;
-        props.put("number", number.toString());
-
-        OutputStream out = null;
-        try {
-            props.store(out = new FileOutputStream(file), null);
-        } catch (IOException e) {
-            log.error("Error while saving  number", e);
-            throw new Error(e.getLocalizedMessage());
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
-
-        return number;
-    }
 }
