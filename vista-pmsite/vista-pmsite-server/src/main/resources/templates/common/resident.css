@@ -110,18 +110,6 @@
 	border: 2px solid #ccc;
 }
 
-.RadioGroup {
-	
-}
-
-.RadioGroupItem {
-	
-}
-
-.RadioGroupItem-pushed {
-	
-}
-
 .RadioGroupItem-disabled {
 	color: #d1d1d1;
 }
@@ -806,6 +794,10 @@ td.DatePickerMonth {
 	border: none;
 	padding: 0;
 	height: 19px;
+}
+
+.TriggerPannel .TextBox {
+    width: 6em !important;
 }
 
 .ValidationLabel {
@@ -1726,4 +1718,14 @@ ul.footer_locations li {
 
 .TenantSureTermsLink {
     text-align: center;
+}
+
+.pyx4j_GlassPanel_SemiTransparent_Label, .pyx4j_GlassPanel_Transparent_Label { 
+	color: #652c02 !important;
+	background-color: #edd3ae !important;
+	border: 1px solid #db5f03;
+	border-radius: 5px 5px 5px 5px;
+	padding: 1px 7px;
+	margin-top: 3px;
+	top: 0 !important;
 }

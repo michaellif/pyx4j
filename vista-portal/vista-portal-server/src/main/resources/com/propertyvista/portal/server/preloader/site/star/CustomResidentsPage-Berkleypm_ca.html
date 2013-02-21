@@ -39,23 +39,23 @@ Our VISION is">
 	type="image/x-icon">
 
 <style>
-.PortalViewDisplay table,.PortalView table {
+.PortalViewDisplay table,.PortalView table, .Dialog table {
 	border: none;
 }
 
-.PortalViewDisplay table td,.PortalView table td {
+.PortalViewDisplay table td,.PortalView table td, .Dialog table td{
 	border-top: none;
 }
 
-.PortalViewDisplay table th,.PortalView table th {
+.PortalViewDisplay table th,.PortalView table th, .Dialog table th {
 	border-top: none;
 }
 
-.PortalViewDisplay table th+th,.PortalView table th+th {
+.PortalViewDisplay table th+th,.PortalView table th+th, .Dialog table th+th {
 	border-left: none;
 }
 
-.PortalViewDisplay table td+td,.PortalView table td+td {
+.PortalViewDisplay table td+td,.PortalView table td+td, .Dialog table td+td {
 	border-left: none;
 }
 
@@ -89,7 +89,7 @@ div.Button, button.gwt-Button {
 		rgba(0, 0, 0, 0.05);
 }
 
-div.Button:hover, button.gwt-Button {
+div.Button:hover, button.gwt-Button:hover {
 	background-position: 0 -15px;
 }
 
@@ -100,8 +100,10 @@ div.ButtonText, button.gwt-Button {
 }
 
 button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
+	padding: 3px;
 }
-
 div.WidgetDecoratorLabel {
 	margin-left: 0.5em;
 }
@@ -166,23 +168,20 @@ div.LandingButtonHolder, div.gwt-Label {
 }
 
 .Dialog {
+	background: none repeat scroll 0 0 #01589b !important;
 }
 
 .DialogCaption {
+	background: #0384e2 !important;
+	color: #fff !important;
+	padding-top: 0.4em;
+	padding-left: 0.5em;
 }
 
-.pyx4j_GlassPanel_SemiTransparent_Label, .pyx4j_GlassPanel_Transparent_Label { 
-	color: #652c02 !important;
-	background-color: #edd3ae !important;
-	border: 1px solid #db5f03;
-	border-radius: 5px 5px 5px 5px;
-	padding: 1px 7px;
-	margin-top: 3px;
+.Dialog table {
+    margin-bottom: 0;
 }
 
-.TriggerPannel .TextBox {
-    width: 6em !important;
-}
 </style>
 
 </head>
