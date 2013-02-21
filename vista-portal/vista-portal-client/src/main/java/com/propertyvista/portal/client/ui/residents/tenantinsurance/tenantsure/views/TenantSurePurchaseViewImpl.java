@@ -41,13 +41,13 @@ import com.propertyvista.portal.client.themes.TenantSureTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePersonalDisclaimerForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuotationRequestForm;
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureQuoteViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteResponseDTO;
 
 // TODO refactor this one 
 public class TenantSurePurchaseViewImpl extends Composite implements TenantSurePurchaseView {
@@ -66,9 +66,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private TenantSureQuotationRequestForm quoteRequestForm;
 
-    private TenantSureQuoteViewer quoteViewer;
+    private TenantSureQuoteResponseViewer quoteResponseViewer;
 
-    private TenantSureQuoteViewer paymentStepQuoteViewer;
+    private TenantSureQuoteResponseViewer paymentStepQuoteResponseViewer;
 
     private TenantSurePaymentMethodForm paymentMethodForm;
 
@@ -158,14 +158,14 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public void setQuote(TenantSureQuoteDTO quote) {
+    public void setQuote(TenantSureQuoteResponseDTO quoteResponse) {
         retrievingQuoteMessage.setVisible(false);
-        quoteViewer.setValue(quote);
-        paymentStepQuoteViewer.setValue(quote);
+        quoteResponseViewer.setValue(quoteResponse);
+        paymentStepQuoteResponseViewer.setValue(quoteResponse);
 
-        quoteViewer.setVisible(quote != null);
+        quoteResponseViewer.setVisible(quoteResponse != null);
 
-        boolean canAcceptQuote = quote != null && !quote.isNull() && quote.specialQuote().isNull();
+        boolean canAcceptQuote = quoteResponse != null && !quoteResponse.isNull() && quoteResponse.quote().specialQuote().isNull();
         if (acceptQuoteButton != null) {
             acceptQuoteButton.setEnabled(canAcceptQuote);
         }
@@ -191,7 +191,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public TenantSureQuoteDTO getAcceptedQuote() {
-        return quoteViewer.getValue();
+        return quoteResponseViewer.getValue().quote().duplicate(TenantSureQuoteDTO.class);
     }
 
     @Override
@@ -209,7 +209,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     public void waitForQuote() {
         setQuote(null);
         retrievingQuoteMessage.setVisible(true);
-        quoteViewer.setVisible(false);
+        quoteResponseViewer.setVisible(false);
     }
 
     @Override
@@ -286,9 +286,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
-        quoteViewer = new TenantSureQuoteViewer(true);
-        quoteViewer.initContent();
-        quoteSection.add(quoteViewer);
+        quoteResponseViewer = new TenantSureQuoteResponseViewer();
+        quoteResponseViewer.initContent();
+        quoteSection.add(quoteResponseViewer);
 
         retrievingQuoteMessage = new Label();
         retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
@@ -325,8 +325,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             public void reset() {
                 quoteRequestForm.setVisited(false);
                 pleaseFillOutTheFormMessage.setVisible(true);
-                quoteViewer.setValue(null);
-                quoteViewer.setVisible(false);
+                quoteResponseViewer.setValue(null);
+                quoteResponseViewer.setVisible(false);
                 retrievingQuoteMessage.setVisible(false);
             }
 
@@ -358,9 +358,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     private Step makePaymentStep() {
         int row = -1;
         paymentStepPanel = new FormFlexPanel();
-        paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
+        paymentStepQuoteResponseViewer = new TenantSureQuoteResponseViewer();
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
-        paymentStepPanel.setWidget(++row, 0, paymentStepQuoteViewer);
+        paymentStepPanel.setWidget(++row, 0, paymentStepQuoteResponseViewer);
 
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
         paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
@@ -396,7 +396,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 processingPaymentMessage.setVisible(false);
                 paymentProcessingErrorMessage.setVisible(false);
                 paymentMethodForm.setVisited(false);
-                paymentStepQuoteViewer.setValue(null);
+                paymentStepQuoteResponseViewer.setValue(null);
             }
 
             @Override

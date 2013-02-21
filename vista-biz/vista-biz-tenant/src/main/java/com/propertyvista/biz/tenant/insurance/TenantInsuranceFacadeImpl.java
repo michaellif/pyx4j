@@ -73,7 +73,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                 TenantSureTenantInsuranceStatusDetailedDTO tsStatusDetailed = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
 
                 TenantSureTenantInsuranceStatusShortDTO tsStatusShort = EntityFactory.create(TenantSureTenantInsuranceStatusShortDTO.class);
-                tsStatusShort.monthlyPremiumPayment().setValue(tsStatusDetailed.quote().totalPayable().getValue());
+                tsStatusShort.monthlyPremiumPayment().setValue(tsStatusDetailed.nextPaymentDetails().total().getValue());
                 tsStatusShort.messages().addAll(tsStatusDetailed.messages());
                 tsStatusShort.nextPaymentDate().setValue(tsStatusDetailed.nextPaymentDetails().paymentDate().getValue());
 

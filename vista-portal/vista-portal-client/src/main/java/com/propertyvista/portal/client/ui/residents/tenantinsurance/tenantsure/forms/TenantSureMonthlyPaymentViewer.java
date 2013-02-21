@@ -65,12 +65,16 @@ public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaym
                 addTotalRecord(paymentBreakdownPanel, ++row, payment.total().getMeta().getCaption(), payment.total().getValue());
                 contentPanel.add(paymentBreakdownPanel);
             }
+
+            if (!payment.paymentDate().isNull()) {
+                Label nextPaymentDateLabel = new Label();
+                nextPaymentDateLabel.getElement().getStyle().setWidth(100, Unit.PCT);
+                nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+                nextPaymentDateLabel.setText(i18n.tr("Next Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
+                contentPanel.add(nextPaymentDateLabel);
+            }
+
         }
-        Label nextPaymentDateLabel = new Label();
-        nextPaymentDateLabel.getElement().getStyle().setWidth(100, Unit.PCT);
-        nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        nextPaymentDateLabel.setText(i18n.tr("Next Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
-        contentPanel.add(nextPaymentDateLabel);
 
         return contentPanel;
     }
