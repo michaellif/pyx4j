@@ -98,9 +98,11 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     /** a date when cancellation command has been issued */
     IPrimitive<LogicalDate> cancellationDate();
 
+    /** this is an amount that gets charged every month (i.e. monthly premium + the taxes */
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> monthlyPayable();
+    IPrimitive<BigDecimal> totalMonthlyPayable();
 
+    /** details that we keep to display the user */
     @Owned
     InsuranceTenantSureDetails details();
 

@@ -65,15 +65,18 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().personalLiabilityCoverage())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().contentsCoverage())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().inceptionDate())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).componentWidth(10).build());
 
-        panel.setH3(++row, 0, 1, i18n.tr("Payment Details"));
-        // TODO refactor: next payment should be part of some monthly payment DTO and handled by the following viewer
-        panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureMonthlyPaymentViewer()));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextPaymentDate())).componentWidth(10).build());
+        // TODO maybe create a separate coverage viewer?
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().personalLiabilityCoverage())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().contentsCoverage())).componentWidth(10).build());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Gross Payment"));
+        panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureQuoteViewer(false)));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Next Payment Details"));
+        panel.setWidget(++row, 0, inject(proto().nextPaymentDetails(), new TenantSureMonthlyPaymentViewer()));
 
         panel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
 
@@ -87,6 +90,5 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
                 !getValue().quote().coverage().contentsCoverage().isNull()
                         && !getValue().quote().coverage().contentsCoverage().getValue().equals(new BigDecimal("0.00")));
         get(proto().expiryDate()).setVisible(!getValue().expiryDate().isNull());
-        get(proto().nextPaymentDate()).setVisible(!getValue().nextPaymentDate().isNull());
     }
 }

@@ -15,20 +15,17 @@ package com.propertyvista.domain.tenant.insurance;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.ColumnId;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.OrderColumn;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
+@AbstractEntity
 public interface InsuranceTenantSureTax extends IEntity {
-
-    @Owner
-    @JoinColumn
-    @MemberColumn(notNull = true)
-    InsuranceTenantSureDetails tenantSureDetails();
 
     interface OrderInOwner extends ColumnId {
     }

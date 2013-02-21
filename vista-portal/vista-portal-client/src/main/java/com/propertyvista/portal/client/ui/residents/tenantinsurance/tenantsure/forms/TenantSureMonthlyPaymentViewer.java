@@ -15,51 +15,62 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import java.math.BigDecimal;
 
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 
-// TODO needs refactoring see a TODO in TenantSureStatusFrom
-public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSureQuoteDTO> {
+public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaymentDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureMonthlyPaymentViewer.class);
 
     private final NumberFormat currencyFormat;
 
-    public TenantSureMonthlyPaymentViewer(NumberFormat currencyFormat) {
+    private final DateTimeFormat dateFormat;
+
+    public TenantSureMonthlyPaymentViewer(NumberFormat currencyFormat, DateTimeFormat dateFormat) {
         this.currencyFormat = currencyFormat;
+        this.dateFormat = dateFormat;
     }
 
     public TenantSureMonthlyPaymentViewer() {
-        this(NumberFormat.getFormat(i18n.tr("CAD #,##0.00")));
+        this(NumberFormat.getFormat(i18n.tr("CAD #,##0.00")), DateTimeFormat.getFormat(CDatePicker.defaultDateFormat));
     }
 
     @Override
-    public IsWidget createContent(TenantSureQuoteDTO quote) {
+    public IsWidget createContent(TenantSurePaymentDTO payment) {
         FlowPanel contentPanel = new FlowPanel();
-        FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
-        if (quote != null) {
-            if (quote.specialQuote().isNull()) {
-                int row = 0;
-                addDetailRecord(paymentBreakdownPanel, ++row, quote.premium().getMeta().getCaption(), quote.premium().getValue());
-
-                for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
-                    addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
+        if (payment != null) {
+            for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
+                int row = -1;
+                FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
+                addDetailRecord(paymentBreakdownPanel, ++row, paymentItem.description().getValue(), paymentItem.amount().getValue());
+                for (TenantSurePaymentItemTaxDTO tax : paymentItem.taxBreakdown()) {
+                    addDetailRecord(paymentBreakdownPanel, ++row, tax.tax().getValue(), tax.amount().getValue());
                 }
-                addTotalRecord(paymentBreakdownPanel, ++row, quote.totalMonthlyPayable().getMeta().getCaption(), quote.totalMonthlyPayable().getValue());
-
+                addTotalRecord(paymentBreakdownPanel, ++row, payment.total().getMeta().getCaption(), payment.total().getValue());
                 contentPanel.add(paymentBreakdownPanel);
             }
         }
+        Label nextPaymentDateLabel = new Label();
+        nextPaymentDateLabel.getElement().getStyle().setWidth(100, Unit.PCT);
+        nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        nextPaymentDateLabel.setText(i18n.tr("Next Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
+        contentPanel.add(nextPaymentDateLabel);
 
         return contentPanel;
     }

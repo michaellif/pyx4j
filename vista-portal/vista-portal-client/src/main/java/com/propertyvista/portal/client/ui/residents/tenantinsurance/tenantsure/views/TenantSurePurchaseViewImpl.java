@@ -286,7 +286,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
-        quoteViewer = new TenantSureQuoteViewer();
+        quoteViewer = new TenantSureQuoteViewer(true);
         quoteViewer.initContent();
         quoteSection.add(quoteViewer);
 
@@ -358,7 +358,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     private Step makePaymentStep() {
         int row = -1;
         paymentStepPanel = new FormFlexPanel();
-        paymentStepQuoteViewer = new TenantSureQuoteViewer();
+        paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
         paymentStepPanel.setWidget(++row, 0, paymentStepQuoteViewer);
 

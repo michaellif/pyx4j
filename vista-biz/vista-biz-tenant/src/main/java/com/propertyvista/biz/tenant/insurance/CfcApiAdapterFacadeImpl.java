@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant.insurance;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -55,6 +54,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -162,25 +162,23 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
             tenantSureQuote.quoteId().setValue(quoteResponse.getQuoteData().getQuoteId());
         }
 
-        tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
-        tenantSureQuote.premium().setValue(
-                TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()).divide(new BigDecimal(12), RoundingMode.HALF_UP));
-
-        // parse taxes
+        tenantSureQuote.grossPremium().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()));
         for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
-            InsuranceTenantSureTax tenantSureTax = EntityFactory.create(InsuranceTenantSureTax.class);
-            tenantSureTax.absoluteAmount().setValue(tax.getAbsoluteAmount().divide(new BigDecimal(12), RoundingMode.HALF_UP));
-            tenantSureTax.description().setValue(tax.getDescription());
-            tenantSureTax.buinessLine().setValue(tax.getBusinessLine());
-            tenantSureQuote.taxBreakdown().add(tenantSureTax);
+            InsuranceTenantSureTaxGrossPremium tenantSureTaxGrossPremium = EntityFactory.create(InsuranceTenantSureTaxGrossPremium.class);
+            tenantSureTaxGrossPremium.absoluteAmount().setValue(TenantSureCfcMoneyAdapter.adoptMoney(tax.getAbsoluteAmount()));
+            tenantSureTaxGrossPremium.description().setValue(tax.getDescription());
+            tenantSureTaxGrossPremium.buinessLine().setValue(tax.getBusinessLine());
+            tenantSureQuote.taxBreakdown().add(tenantSureTaxGrossPremium);
         }
+        tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
+        // TODO process fee taxes
 
-        BigDecimal total = tenantSureQuote.premium().getValue();
+        BigDecimal total = tenantSureQuote.grossPremium().getValue();
         for (InsuranceTenantSureTax tenantSureTax : tenantSureQuote.taxBreakdown()) {
             total = total.add(tenantSureTax.absoluteAmount().getValue());
         }
-        // WARNING: quoteResponse.getTotalPayable() hold a value that should be ignored
-        tenantSureQuote.totalMonthlyPayable().setValue(total);
+        // WARNING: quoteResponse.getTotalPayable() holds a value that should be ignored (for more details refer to Katrina from CFC) 
+        tenantSureQuote.totalPayable().setValue(total);
 
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
         return tenantSureQuote;

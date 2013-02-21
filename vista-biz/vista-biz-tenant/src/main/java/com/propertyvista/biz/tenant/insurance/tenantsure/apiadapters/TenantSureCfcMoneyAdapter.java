@@ -16,13 +16,25 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/** Some money values from CFC come as Strings, this class provides methods to handle that situation and convert them to BigDecimal's */
+/**
+ * Some money values from CFC come as Strings, this class provides methods to handle that situation and convert them to BigDecimal's.
+ * Also sets up a general policy on how to handle money values
+ */
+// TODO maybe shouldn't be static and should be a facade?
 public class TenantSureCfcMoneyAdapter {
+
+    public static RoundingMode getRoundingMode() {
+        return RoundingMode.HALF_UP;
+    }
 
     public static BigDecimal parseMoney(String moneyAmountRepr) throws NumberFormatException {
         BigDecimal moneyAmount = null;
         moneyAmount = new BigDecimal(moneyAmountRepr);
-        return moneyAmount.setScale(2, RoundingMode.HALF_UP);
+        return adoptMoney(moneyAmount);
+    }
+
+    public static BigDecimal adoptMoney(BigDecimal amount) {
+        return amount.setScale(2, getRoundingMode());
     }
 
 }

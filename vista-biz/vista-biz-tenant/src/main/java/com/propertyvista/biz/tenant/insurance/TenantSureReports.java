@@ -94,7 +94,7 @@ class TenantSureReports {
                 data.firstName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
                 data.lastName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
                 data.insuranceCertificateNumber().setValue(reportedStatusHolder.insurance().insuranceCertificateNumber().getStringView());
-                data.monthlyPayable().setValue(reportedStatusHolder.insurance().monthlyPayable().getValue().toString());
+                data.monthlyPayable().setValue(reportedStatusHolder.insurance().totalMonthlyPayable().getValue().toString());
                 data.status().setValue(reportedStatusHolder.reportedStatus().getValue().name());
                 data.statusFrom().setValue(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));
 
@@ -111,7 +111,7 @@ class TenantSureReports {
 
                 er.reportEntity(formatter, data);
 
-                StatisticsUtils.addProcessed(runStats, 1, reportedStatusHolder.insurance().monthlyPayable().getValue());
+                StatisticsUtils.addProcessed(runStats, 1, reportedStatusHolder.insurance().totalMonthlyPayable().getValue());
             }
         } finally {
             iterator.completeRetrieval();

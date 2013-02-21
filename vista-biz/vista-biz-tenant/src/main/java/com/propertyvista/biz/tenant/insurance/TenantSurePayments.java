@@ -181,11 +181,11 @@ class TenantSurePayments {
                     });
 
                     if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.Cleared) {
-                        StatisticsUtils.addProcessed(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
+                        StatisticsUtils.addProcessed(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
                     } else if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
-                        StatisticsUtils.addFailed(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
+                        StatisticsUtils.addFailed(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
                     } else {
-                        StatisticsUtils.addErred(runStats, 1, insuranceTenantSure.monthlyPayable().getValue());
+                        StatisticsUtils.addErred(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
                     }
 
                 }
@@ -210,7 +210,7 @@ class TenantSurePayments {
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(getPaymentMethod(insuranceTenantSure.client().tenant()));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        transaction.amount().setValue(insuranceTenantSure.monthlyPayable().getValue());
+        transaction.amount().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
         transaction.paymentDue().setValue(dueDate);
         Persistence.service().persist(transaction);
 

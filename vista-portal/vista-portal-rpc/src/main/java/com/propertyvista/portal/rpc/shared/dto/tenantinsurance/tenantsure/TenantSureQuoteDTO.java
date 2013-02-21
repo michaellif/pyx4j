@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
 
 /**
  * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
@@ -33,19 +33,24 @@ public interface TenantSureQuoteDTO extends IEntity {
 
     IPrimitive<String> quoteId();
 
+    /** holds the requested parameters that have been used to create this quote */
     TenantSureCoverageDTO coverage();
 
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> premium();
+    IPrimitive<BigDecimal> grossPremium();
+
+    IList<InsuranceTenantSureTaxGrossPremium> taxBreakdown();
+
+    /** this is gross premium plus gross premium tax (doesn't include underwriter fee) */
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalPayable();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> underwriterFee();
 
-    IList<InsuranceTenantSureTax> taxBreakdown();
+    // TODO here must be taxes that apply to underwriter's fee too
 
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> totalMonthlyPayable();
-
-    /** if this field is not <code>null</code> then automatic quote is not available through the CFC system */
+    /** if this field is not <code>null</code> then automatic quote is not available through the CFC system, and it will hold a message that should be displayed */
     IPrimitive<String> specialQuote();
+
 }
