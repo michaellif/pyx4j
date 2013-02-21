@@ -80,8 +80,9 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
         protected final String getEmail() {
             form.revalidate();
+            form.setUnconditionalValidationErrorRendering(true);
             if (form.isValid()) {
-                return form.get(form.proto().emailAddress()).getValue();
+                return form.getValue().emailAddress().getValue();
             } else {
                 return null;
             }
