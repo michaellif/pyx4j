@@ -40,7 +40,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
 
         setDate("17-Mar-2011");
 

@@ -41,7 +41,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
         createLease("01-Apr-2011", "31-Dec-2011");
 
         //==================== First Bill ======================//

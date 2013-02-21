@@ -43,7 +43,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
     }
 
-    public void testCarryForwardOwingScenario() {
+    public void testCarryForwardOwingScenario() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();
@@ -127,7 +127,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         closeLease();
     }
 
-    public void testCarryForwardOwedScenario() {
+    public void testCarryForwardOwedScenario() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();

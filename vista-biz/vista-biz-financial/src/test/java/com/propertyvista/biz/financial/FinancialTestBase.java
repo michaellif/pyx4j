@@ -38,7 +38,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -75,6 +75,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.generator.util.RandomUtil;
+import com.propertyvista.operations.domain.scheduler.RunStats;
 import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
@@ -124,7 +125,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected Lease lease;
 
     public interface Task {
-        void execute();
+        void execute() throws Exception;
     }
 
     public class Schedule {
@@ -681,16 +682,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return paymentRecord;
     }
 
-    protected void postPayment(PaymentRecord paymentRecord) {
+    protected void postPayment(PaymentRecord paymentRecord) throws ARException {
         ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
         Persistence.service().commit();
     }
 
-    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) {
+    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) throws ARException {
         return receiveAndPostPayment(receivedDate, amount, PaymentType.Cash);
     }
 
-    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount, PaymentType type) {
+    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount, PaymentType type) throws ARException {
         PaymentRecord paymentRecord = receivePayment(receivedDate, amount, type);
         postPayment(paymentRecord);
         return paymentRecord;
@@ -790,7 +791,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void schedulePmcProcess(final PmcProcess pmcProcess, Schedule entry) {
         taskSchedule.put(entry, new Task() {
             @Override
-            public void execute() {
+            public void execute() throws Exception {
                 RunStats runStats = EntityFactory.create(RunStats.class);
                 Date runDate = SysDateManager.getSysDate();
                 PmcProcessContext sharedContext = new PmcProcessContext(runStats, runDate);
@@ -808,7 +809,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         SysDateManager.setSysDate(dateStr);
     }
 
-    protected void advanceDate(String dateStr) {
+    protected void advanceDate(String dateStr) throws Exception {
         Date curDate = SysDateManager.getSysDate();
         Date setDate = DateUtils.detectDateformat(dateStr);
         if (setDate.before(curDate)) {

@@ -50,7 +50,7 @@ public interface PaymentFacade {
      * EFT: automatically -> Received (AR. Posted)
      * 
      */
-    PaymentRecord processPayment(PaymentRecord paymentId);
+    PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException;
 
     PaymentRecord cancel(PaymentRecord paymentId);
 

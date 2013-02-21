@@ -39,7 +39,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testTerminateGracefully() {
+    public void testTerminateGracefully() throws Exception {
 
         setDate("17-Mar-2011");
 
@@ -147,7 +147,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
     }
 
-    public void testTerminateNow() {
+    public void testTerminateNow() throws Exception {
 
         setDate("17-Mar-2011");
 

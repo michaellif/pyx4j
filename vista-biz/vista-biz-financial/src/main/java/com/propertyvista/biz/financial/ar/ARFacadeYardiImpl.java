@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -37,6 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -55,14 +57,14 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class ARFacadeYardyImpl implements ARFacade {
+public class ARFacadeYardiImpl implements ARFacade {
 
-    private static final I18n i18n = I18n.get(ARFacadeYardyImpl.class);
+    private static final I18n i18n = I18n.get(ARFacadeYardiImpl.class);
 
-    private static final Logger log = LoggerFactory.getLogger(ARFacadeYardyImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ARFacadeYardiImpl.class);
 
     @Override
-    public void postPayment(PaymentRecord paymentRecord) {
+    public void postPayment(PaymentRecord paymentRecord) throws ARException {
         YardiReceipt receipt = EntityFactory.create(YardiReceipt.class);
         receipt.paymentRecord().set(paymentRecord);
         receipt.amount().setValue(paymentRecord.amount().getValue().negate());
@@ -73,21 +75,19 @@ public class ARFacadeYardyImpl implements ARFacade {
 
         Persistence.service().persist(receipt);
 
+        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+
         try {
             ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
-        } catch (Throwable e) {
-            log.debug("handling Yardi.postReceipt error", e);
+        } catch (RemoteException e) {
+            log.warn("Yardi interface communication failure", e);
             Validate.isTrue(!receipt.claimed().getValue(), "postReceipt is schedule to nightly process");
+        } catch (YardiServiceException e) {
+            throw new ARException("Posting receipt to Yardi is failed", e);
         }
 
         Persistence.service().commit();
-
-        try {
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
-        } catch (Throwable ignoreDataRetrivalFromYardy) {
-            log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
-        }
 
     }
 

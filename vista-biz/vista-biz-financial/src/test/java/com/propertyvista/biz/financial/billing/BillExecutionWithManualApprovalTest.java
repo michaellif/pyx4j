@@ -37,7 +37,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testNewLease() {
+    public void testNewLease() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();
@@ -121,7 +121,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         closeLease();
     }
 
-    public void testExistingLeaseApprovedAfterBillRun() {
+    public void testExistingLeaseApprovedAfterBillRun() throws Exception {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
@@ -202,7 +202,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         closeLease();
     }
 
-    public void testExistingLeaseApprovedBeforeBillRun() {
+    public void testExistingLeaseApprovedBeforeBillRun() throws Exception {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 

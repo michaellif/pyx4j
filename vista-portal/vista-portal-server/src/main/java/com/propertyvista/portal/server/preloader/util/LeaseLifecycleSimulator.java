@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -389,7 +390,11 @@ public class LeaseLifecycleSimulator {
                 }
                 PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
-                    ServerSideFactory.create(ARFacade.class).postPayment(payment);
+                    try {
+                        ServerSideFactory.create(ARFacade.class).postPayment(payment);
+                    } catch (ARException e) {
+                        throw new Error(e);
+                    }
                 }
             }
         }

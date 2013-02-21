@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.system;
 
+import java.rmi.RemoteException;
+
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -28,7 +30,7 @@ public interface YardiProcessFacade {
 
     void updateLease(Lease lease);
 
-    void postReceipt(YardiReceipt receipt) throws YardiServiceException;
+    void postReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 
     void postReceiptReversal(YardiReceiptReversal reversal);
 

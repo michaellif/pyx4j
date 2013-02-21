@@ -11,25 +11,25 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.payment;
 
-public class ARException extends Exception {
+public class PaymentException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public ARException() {
+    public PaymentException() {
         super();
     }
 
-    public ARException(String message, Throwable cause) {
+    public PaymentException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ARException(String message) {
+    public PaymentException(String message) {
         super(message);
     }
 
-    public ARException(Throwable cause) {
+    public PaymentException(Throwable cause) {
         super(cause);
     }
 

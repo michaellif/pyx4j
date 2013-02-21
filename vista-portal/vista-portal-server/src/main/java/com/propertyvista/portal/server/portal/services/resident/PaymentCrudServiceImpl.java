@@ -24,14 +24,17 @@ import org.apache.commons.lang.Validate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -47,6 +50,8 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
+
+    private static final I18n i18n = I18n.get(PaymentCrudServiceImpl.class);
 
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
@@ -115,7 +120,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
         Persistence.service().commit();
-        ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
+
+        try {
+            ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
+        } catch (PaymentException e) {
+            throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
+        }
         Persistence.service().commit();
     }
 

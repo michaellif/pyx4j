@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -24,12 +23,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.server.UnitOfWork.CompensationHandler;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -46,7 +45,6 @@ import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
-import com.propertyvista.server.jobs.TaskRunner;
 
 class CreditCardProcessor {
 
@@ -155,17 +153,6 @@ class CreditCardProcessor {
 
     }
 
-    static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
-        return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
-            @Override
-            public PaymentRecord call() {
-                Persistence.service().merge(paymentRecord);
-                doRealTimeSale(paymentRecord);
-                return paymentRecord;
-            }
-        });
-    }
-
     private static PaymentInstrument createPaymentInstrument(CreditCardInfo cc) {
         if (!cc.token().isNull()) {
             Token token = EntityFactory.create(Token.class);
@@ -186,7 +173,7 @@ class CreditCardProcessor {
         }
     }
 
-    private static void doRealTimeSale(PaymentRecord paymentRecord) {
+    public static void realTimeSale(PaymentRecord paymentRecord) {
         MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
 
         Merchant merchant = EntityFactory.create(Merchant.class);
@@ -208,19 +195,23 @@ class CreditCardProcessor {
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
-            Persistence.service().merge(paymentRecord);
-            Persistence.service().commit();
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
-            Persistence.service().commit();
         } else {
             log.debug("ccTransaction rejected {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
-            Persistence.service().merge(paymentRecord);
-            Persistence.service().commit();
         }
+
+        UnitOfWork.setCompensationHandler(new CompensationHandler() {
+
+            @Override
+            public Void execute() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        });
+
     }
 
     static CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {

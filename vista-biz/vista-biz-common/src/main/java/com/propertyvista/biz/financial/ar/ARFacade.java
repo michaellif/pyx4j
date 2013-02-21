@@ -39,7 +39,7 @@ public interface ARFacade {
 
     void postInvoiceLineItem(InvoiceLineItem invoiceLineItem);
 
-    void postPayment(PaymentRecord payment);
+    void postPayment(PaymentRecord payment) throws ARException;
 
     DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount);
 

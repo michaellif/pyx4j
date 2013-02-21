@@ -40,7 +40,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         preloadData();
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();

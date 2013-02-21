@@ -20,7 +20,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.experimental.categories.Category;
@@ -35,7 +34,7 @@ import com.propertyvista.test.preloader.PreloadConfig;
 @Category(FunctionalTests.class)
 public class BillingPeriodsTest extends FinancialTestBase {
 
-    public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws ParseException {
+    public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws Exception {
         preloadData();
 
         setDate("01-Jan-2012");
@@ -248,7 +247,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         }
     }
 
-    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws Exception {
         SysDateManager.setSysDate((Date) null);
 
         PreloadConfig config = new PreloadConfig();
@@ -410,19 +409,19 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     }
 
-    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws Exception {
         testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(29);
     }
 
-    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn30() throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn30() throws Exception {
         testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(30);
     }
 
-    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn31() throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn31() throws Exception {
         testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(31);
     }
 
-    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws Exception {
 
         PreloadConfig config = new PreloadConfig();
         config.defaultBillingCycleSartDay = null;

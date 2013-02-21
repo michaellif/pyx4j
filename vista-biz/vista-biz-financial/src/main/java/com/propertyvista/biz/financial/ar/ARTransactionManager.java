@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -46,14 +48,11 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 class ARTransactionManager {
 
     static void processBackOutPayment(InvoicePaymentBackOut backOut) {
-
         ARCreditDebitLinkManager.declinePayment(backOut);
     }
 
     static void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
-        if (!invoiceLineItem.postDate().isNull()) {
-            throw new ARException("The LineItem is already posted");
-        }
+        Validate.isTrue(invoiceLineItem.postDate().isNull(), "The LineItem is already posted");
 
         if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
             // ignore free items

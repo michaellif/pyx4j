@@ -20,24 +20,22 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.StatisticsRecord;
@@ -49,10 +47,19 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentProcessFacadeImpl.class);
 
     @Override
     public PadFile preparePadFile() {
@@ -289,51 +296,65 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
         try {
             while (billIterator.hasNext()) {
-                Bill bill = billIterator.next();
-                //Check this bill is latest
-                if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
-                    continue;
-                }
-                Persistence.service().retrieve(bill.billingAccount());
-                Persistence.service().retrieve(bill.billingAccount().lease());
-
-                // call AR facade to get current balance for dueDate
-                BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
-                if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
-                    continue;
-                }
-
-                Lease lease = bill.billingAccount().lease();
-                Persistence.service().retrieve(lease.currentTerm().version().tenants());
-
-                tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                    // do pre-authorized payments for main applicant for now
-                    switch (tenant.role().getValue()) {
-                    case Applicant:
-                        LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
-                        if (method != null) {
-                            createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
-                            StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
-                        }
-                        break tanantLoop;
-                    case CoApplicant:
-                        //TODO Payment split
-                        break;
-                    default:
-                        break;
-                    }
-
-                }
-
+                createPreauthorisedPayment(billIterator.next(), dynamicStatisticsRecord);
             }
         } finally {
             billIterator.completeRetrieval();
         }
 
-        Persistence.service().commit();
     }
 
-    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, InternalBillingAccount billingAccount, LeasePaymentMethod method) {
+    private void createPreauthorisedPayment(final Bill bill, final StatisticsRecord dynamicStatisticsRecord) {
+        try {
+            UnitOfWork.execute(new Executable<Void, PaymentException>() {
+
+                @Override
+                public Void execute() throws PaymentException {
+                    //Check this bill is latest
+                    if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
+                        return null;
+                    }
+                    Persistence.service().retrieve(bill.billingAccount());
+                    Persistence.service().retrieve(bill.billingAccount().lease());
+
+                    // call AR facade to get current balance for dueDate
+                    BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
+                    if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
+                        return null;
+                    }
+
+                    Lease lease = bill.billingAccount().lease();
+                    Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+                    tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                        // do pre-authorized payments for main applicant for now
+                        switch (tenant.role().getValue()) {
+                        case Applicant:
+                            LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
+                            if (method != null) {
+                                createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
+                                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
+                            }
+                            break tanantLoop;
+                        case CoApplicant:
+                            //TODO Payment split
+                            break;
+                        default:
+                            break;
+                        }
+
+                    }
+                    return null;
+                }
+            });
+        } catch (PaymentException e) {
+            log.error("Preauthorised payment creation failed", e);
+            StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+        }
+    }
+
+    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, InternalBillingAccount billingAccount,
+            LeasePaymentMethod method) throws PaymentException {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
         paymentRecord.leaseTermParticipant().set(leaseParticipant);
@@ -365,19 +386,33 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (paymentRecordIterator.hasNext()) {
-                PaymentRecord paymentRecord = paymentRecordIterator.next();
-                paymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
-
-                if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
-                } else {
-                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
-                }
+                processScheduledPayment(paymentRecordIterator.next(), dynamicStatisticsRecord);
             }
         } finally {
             paymentRecordIterator.completeRetrieval();
         }
-        Persistence.service().commit();
+    }
+
+    private void processScheduledPayment(final PaymentRecord paymentRecord, final StatisticsRecord dynamicStatisticsRecord) {
+        try {
+            UnitOfWork.execute(new Executable<Void, PaymentException>() {
+
+                @Override
+                public Void execute() throws PaymentException {
+                    PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+
+                    if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
+                        StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, processedPaymentRecord.amount().getValue());
+                    } else {
+                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, processedPaymentRecord.amount().getValue());
+                    }
+                    return null;
+                }
+            });
+        } catch (PaymentException e) {
+            log.error("Preauthorised payment creation failed", e);
+            StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+        }
     }
 
 }

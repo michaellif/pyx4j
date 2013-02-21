@@ -41,7 +41,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         createLease("01-Feb-2012", "31-Dec-2012");
     }
 
-    private void testPersistPaymentMethod(PaymentType type) {
+    private void testPersistPaymentMethod(PaymentType type) throws PaymentException {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
         LeasePaymentMethod paymentMethod = createPaymentMethod(type);
@@ -71,15 +71,15 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods().size());
     }
 
-    public void testPersistPaymentMethodEcheck() {
+    public void testPersistPaymentMethodEcheck() throws PaymentException {
         testPersistPaymentMethod(PaymentType.Echeck);
     }
 
-    public void testPersistPaymentMethodCreditCard() {
+    public void testPersistPaymentMethodCreditCard() throws PaymentException {
         testPersistPaymentMethod(PaymentType.CreditCard);
     }
 
-    public void testUpdatePaymentMethod(PaymentType type) {
+    public void testUpdatePaymentMethod(PaymentType type) throws PaymentException {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
         {
@@ -197,11 +197,11 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods().size());
     }
 
-    public void testUpdatePaymentMethodEcheck() {
+    public void testUpdatePaymentMethodEcheck() throws PaymentException {
         testUpdatePaymentMethod(PaymentType.Echeck);
     }
 
-    public void testUpdatePaymentMethodCreditCard() {
+    public void testUpdatePaymentMethodCreditCard() throws PaymentException {
         testUpdatePaymentMethod(PaymentType.CreditCard);
     }
 }

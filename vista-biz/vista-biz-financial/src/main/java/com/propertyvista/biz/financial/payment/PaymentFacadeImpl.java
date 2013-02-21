@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
@@ -107,7 +108,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord processPayment(PaymentRecord paymentId) {
+    public PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
@@ -126,14 +127,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case Check:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case CreditCard:
             // The credit card processing is done in new transaction and committed regardless of results
@@ -141,19 +138,24 @@ public class PaymentFacadeImpl implements PaymentFacade {
             break;
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
-            Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case EFT:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case Interac:
             throw new IllegalArgumentException("Not implemented");
         default:
             throw new IllegalArgumentException("paymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        }
+
+        Persistence.service().merge(paymentRecord);
+        if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
+            try {
+                ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+            } catch (ARException e) {
+                throw new PaymentException("Failed to post payment to AR while processing payment", e);
+            }
         }
 
         return paymentRecord;

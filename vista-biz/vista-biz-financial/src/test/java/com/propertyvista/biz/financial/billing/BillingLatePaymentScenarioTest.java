@@ -39,7 +39,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
 
         createLease("01-Apr-2011", "31-Oct-2011");
 

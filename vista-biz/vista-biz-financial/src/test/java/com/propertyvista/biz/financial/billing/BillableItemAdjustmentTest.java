@@ -41,7 +41,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         preloadData();
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
 
         setDate("17-Feb-2011");
 

@@ -42,7 +42,7 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         preloadData(config);
     }
 
-    public void testScenario() {
+    public void testScenario() throws Exception {
 
         createLease("28-Jan-2012", "16-Feb-2013");
 

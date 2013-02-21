@@ -13,8 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.rmi.RemoteException;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.StatisticsRecord;
@@ -26,8 +25,6 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
-
-    private static final Logger log = LoggerFactory.getLogger(YardiProcessFacadeImpl.class);
 
     @Override
     public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
@@ -70,15 +67,9 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceipt(YardiReceipt receipt) throws YardiServiceException {
+    public void postReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
-        } catch (YardiServiceException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        YardiSystemBatchesService.getInstance().postReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
     }
 
     @Override

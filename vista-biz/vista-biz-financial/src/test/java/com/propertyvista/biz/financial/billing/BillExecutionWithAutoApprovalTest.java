@@ -41,7 +41,7 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         preloadData(config);
     }
 
-    public void testNewLease() {
+    public void testNewLease() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();
@@ -121,7 +121,7 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
 
     }
 
-    public void testExistingLease() {
+    public void testExistingLease() throws Exception {
 
         setLeaseBatchProcess();
         setBillingBatchProcess();

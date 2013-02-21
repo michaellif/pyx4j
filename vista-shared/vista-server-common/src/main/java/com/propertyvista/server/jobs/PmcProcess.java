@@ -23,7 +23,7 @@ public interface PmcProcess {
      * 
      * @return false if this job needs to sleep and rerun again when data is ready.
      */
-    boolean start(PmcProcessContext context);
+    boolean start(PmcProcessContext context) throws Exception;
 
     /**
      * This is executed in each selected PMC context to to the work.
@@ -34,7 +34,7 @@ public interface PmcProcess {
      * @param context
      *            RunData statistics and forDate
      */
-    void executePmcJob(PmcProcessContext context);
+    void executePmcJob(PmcProcessContext context) throws Exception;
 
     /**
      * This is executed in shared context to finalize the process.
@@ -42,6 +42,6 @@ public interface PmcProcess {
      * @param context
      *            Run statistics and forDate
      */
-    void complete(PmcProcessContext context);
+    void complete(PmcProcessContext context) throws Exception;
 
 }
