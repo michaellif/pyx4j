@@ -59,6 +59,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -482,19 +483,14 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             throw new Error(e.getMessage());
         }
 
-        try {
-            UnitOfWork.execute(new Callable<Void>() {
+        UnitOfWork.execute(new Executable<Void, RuntimeException>() {
 
-                @Override
-                public Void call() {
-                    Persistence.service().persist(publicKey);
-                    return null;
-                }
-
-            });
-        } catch (Exception e) {
-            throw new Error(e);
-        }
+            @Override
+            public Void execute() {
+                Persistence.service().persist(publicKey);
+                return null;
+            }
+        });
 
         log.warn("New KeyPair {} id#{} created", publicKey.name(), publicKey.getPrimaryKey());
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "New KeyPair {0} id#{1} created", publicKey.name(),
