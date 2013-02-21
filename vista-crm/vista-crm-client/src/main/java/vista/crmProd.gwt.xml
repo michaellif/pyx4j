@@ -3,6 +3,7 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="crm">
     <inherits name='com.propertyvista.crm.Client'/>
+    <inherits name='com.propertyvista.common.VistaLocaleAll'/>
 
     <replace-with class="com.pyx4j.config.shared.ApplicationMode.ProductionMode">
         <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
