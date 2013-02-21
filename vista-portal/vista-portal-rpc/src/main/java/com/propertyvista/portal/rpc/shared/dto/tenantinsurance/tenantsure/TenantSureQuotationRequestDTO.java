@@ -15,18 +15,12 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
 public interface TenantSureQuotationRequestDTO extends IEntity {
 
     TenantSureCoverageDTO coverage();
 
-    IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
-
-    IList<DigitalSignature> digitalSignatures();
+    // TODO theoretically (in perfect world) it should hold digitally singed personal disclaimer terms as well
 
 }
