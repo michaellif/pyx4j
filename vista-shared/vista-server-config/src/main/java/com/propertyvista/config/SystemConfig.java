@@ -62,7 +62,7 @@ public class SystemConfig extends HostConfig {
     }
 
     private void setVistaCaledonProxy() {
-        setCaledonProxy("dev.birchwoodsoftwaregroup.com", 8888, "sys-dev-env", "PrASWuc4");
+        setCaledonProxy("dev.birchwoodsoftwaregroup.com", 8888, "sys-dev-env", "he8rEcr9");
         log.info("caledon proxy defined {}:{} ", this.getCaledonProxy().getHost(), this.getCaledonProxy().getPort());
     }
 
