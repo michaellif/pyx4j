@@ -242,8 +242,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return get(proto().type()).isVisible();
     }
 
-    public void setPaymentTypeSelectionEnabled(boolean visible) {
-        get(proto().type()).setEnabled(visible);
+    public void setPaymentTypeSelectionEnabled(boolean enabled) {
+        get(proto().type()).setEnabled(enabled);
     }
 
     public boolean isPaymentTypeSelectionEnabled() {

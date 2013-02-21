@@ -136,6 +136,8 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        setPaymentTypeSelectionEnabled(getValue().id().isNull());
+
         if (!getValue().type().isNull()) {
             loadLegalTerms(getValue().type().getValue());
         }
