@@ -34,47 +34,35 @@ public interface TenantSureCoverageDTO extends IEntity {
     @I18n
     public enum PreviousClaims {
 
-        None {
-            @Override
-            public int numericValue() {
-                return 0;
-            }
-        },
+        None(0),
 
         @Translate("1")
-        One {
-            @Override
-            public int numericValue() {
-                // TODO Auto-generated method stub
-                return 1;
-            }
-        },
+        One(1),
 
         @Translate("2")
-        Two {
-            @Override
-            public int numericValue() {
-                return 2;
-            }
-
-        },
+        Two(2),
 
         @Translate("More")
-        MoreThanTwo {
+        MoreThanTwo(-1);
 
-            @Override
-            public int numericValue() {
-                throw new Error("doesn't have a value");
-            }
-
-        };
+        private final int numericValue;
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
 
-        public abstract int numericValue();
+        PreviousClaims(int numericValue) {
+            this.numericValue = numericValue;
+        }
+
+        public final int numericValue() {
+            if (numericValue >= 0) {
+                return this.numericValue;
+            } else {
+                throw new Error("doesn't have a value");
+            }
+        }
     }
 
     @NotNull
@@ -100,6 +88,8 @@ public interface TenantSureCoverageDTO extends IEntity {
     @NotNull
     IPrimitive<BigDecimal> deductible();
 
+    IPrimitive<LogicalDate> inceptionDate();
+
     // these are statement of fact questions
     @NotNull
     @Caption(name = "Number of previous claims made by tenanats")
@@ -108,7 +98,5 @@ public interface TenantSureCoverageDTO extends IEntity {
     @Caption(name = "Is any one of the tenants a smoker?")
     @NotNull
     IPrimitive<Boolean> smoker();
-
-    IPrimitive<LogicalDate> inceptionDate();
 
 }
