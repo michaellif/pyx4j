@@ -29,12 +29,36 @@ public class UnitOfWork {
 
     private static final Logger log = LoggerFactory.getLogger(UnitOfWork.class);
 
+    @Deprecated
     public static <T> T execute(final Callable<T> task) throws Exception {
         boolean success = false;
         try {
             Persistence.service().startTransaction();
             try {
                 T rv = task.call();
+                Persistence.service().commit();
+                success = true;
+                return rv;
+            } finally {
+                if (!success) {
+                    try {
+                        Persistence.service().rollback();
+                    } catch (Throwable e) {
+                        log.error("error during UnitOfWork {} rollback", task, e);
+                    }
+                }
+            }
+        } finally {
+            Persistence.service().endTransaction();
+        }
+    }
+
+    public static <R, E extends Throwable> R execute(final Executable<R, E> task) throws E {
+        boolean success = false;
+        try {
+            Persistence.service().startTransaction();
+            try {
+                R rv = task.execute();
                 Persistence.service().commit();
                 success = true;
                 return rv;
