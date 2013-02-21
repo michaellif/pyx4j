@@ -144,7 +144,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         log.info("Updating buildings and units...");
         for (ResidentTransactions transaction : allTransactions) {
             try {
-                new YardiBuildingProcessor().updateBuildings(transaction);
+                new YardiBuildingProcessor().updateBuildings(transaction, dynamicStatisticsRecord);
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
                 StatisticsUtils.addErred(dynamicStatisticsRecord, 1);

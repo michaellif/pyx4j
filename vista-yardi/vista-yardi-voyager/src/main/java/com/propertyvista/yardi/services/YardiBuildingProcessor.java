@@ -34,6 +34,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
@@ -46,11 +49,19 @@ public class YardiBuildingProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);
 
-    public void updateBuildings(ResidentTransactions transaction) throws YardiServiceException {
+    public void updateBuildings(ResidentTransactions transaction, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
 
         List<Property> properties = getProperties(transaction);
         for (Property property : properties) {
             Building building = getBuildingFromProperty(property);
+            Pmc pmc = VistaDeployment.getCurrentPmc();
+            String yardiCountry = building.info().address().country().name().getValue();
+            String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
+            if (!yardiCountry.equals(countryOfOperation)) {
+                dynamicStatisticsRecord.message().setValue(
+                        "PMC country ''" + countryOfOperation + "'' does not match Yardi, ''" + yardiCountry + "'', import skipped.");
+                return;
+            }
             String propertyCode = building.propertyCode().getValue();
 
             merge(building, getBuilding(propertyCode));
@@ -142,7 +153,6 @@ public class YardiBuildingProcessor {
 
     public List<AptUnit> getUnits(ResidentTransactions transaction, Property property) {
         List<RTUnit> imported = getYardiUnits(transaction, property);
-        String akjshdkajhsgd = property.getPropertyID().get(0).getIdentification().getPrimaryID() + " - " + imported.size();
         return new UnitsMapper().map(imported);
 
     }
