@@ -29,7 +29,7 @@ public class Mail {
     }
 
     public static MailDeliveryStatus send(MailMessage mailMessage, IMailServiceConfigConfiguration mailConfig) {
-        return getMailService().send(mailMessage);
+        return getMailService().send(mailMessage, mailConfig);
     }
 
     public static IMailService getMailService() {
