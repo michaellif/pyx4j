@@ -40,6 +40,11 @@ public class DeploymentContextHttpServletRequestWrapper extends HttpServletReque
     }
 
     @Override
+    public boolean isSecure() {
+        return "https".equals(getScheme());
+    }
+
+    @Override
     public String getServerName() {
         return ServletUtils.getRequestServerName(request);
     }
