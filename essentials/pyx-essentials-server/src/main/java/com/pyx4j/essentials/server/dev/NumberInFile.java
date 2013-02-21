@@ -82,6 +82,7 @@ public class NumberInFile {
 
         OutputStream out = null;
         try {
+            file.getParentFile().mkdirs();
             props.store(out = new FileOutputStream(file), null);
         } catch (IOException e) {
             log.error("Error while saving  number", e);
