@@ -168,13 +168,13 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
             tenantSureTaxGrossPremium.absoluteAmount().setValue(TenantSureCfcMoneyAdapter.adoptMoney(tax.getAbsoluteAmount()));
             tenantSureTaxGrossPremium.description().setValue(tax.getDescription());
             tenantSureTaxGrossPremium.buinessLine().setValue(tax.getBusinessLine());
-            tenantSureQuote.taxBreakdown().add(tenantSureTaxGrossPremium);
+            tenantSureQuote.grossPremiumTaxBreakdown().add(tenantSureTaxGrossPremium);
         }
         tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
         // TODO process fee taxes
 
         BigDecimal total = tenantSureQuote.grossPremium().getValue();
-        for (InsuranceTenantSureTax tenantSureTax : tenantSureQuote.taxBreakdown()) {
+        for (InsuranceTenantSureTax tenantSureTax : tenantSureQuote.grossPremiumTaxBreakdown()) {
             total = total.add(tenantSureTax.absoluteAmount().getValue());
         }
         // WARNING: quoteResponse.getTotalPayable() holds a value that should be ignored (for more details refer to Katrina from CFC) 

@@ -58,7 +58,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
                 addDetailRecord(paymentBreakdownPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
-                for (InsuranceTenantSureTax tax : quote.taxBreakdown()) {
+                for (InsuranceTenantSureTax tax : quote.grossPremiumTaxBreakdown()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
                 }
                 if (!underwirterFeeAsFootnote) {

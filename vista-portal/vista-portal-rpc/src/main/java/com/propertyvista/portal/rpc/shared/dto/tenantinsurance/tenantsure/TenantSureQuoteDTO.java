@@ -36,10 +36,11 @@ public interface TenantSureQuoteDTO extends IEntity {
     /** holds the requested parameters that have been used to create this quote */
     TenantSureCoverageDTO coverage();
 
+    /** annual gross premium */
     @Format("#,##0.00")
     IPrimitive<BigDecimal> grossPremium();
 
-    IList<InsuranceTenantSureTaxGrossPremium> taxBreakdown();
+    IList<InsuranceTenantSureTaxGrossPremium> grossPremiumTaxBreakdown();
 
     /** this is gross premium plus gross premium tax (doesn't include underwriter fee) */
     @Format("#,##0.00")

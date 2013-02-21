@@ -141,7 +141,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
 
         insuranceTenantSure.details().grossPremium().setValue(quote.grossPremium().getValue());
-        for (InsuranceTenantSureTaxGrossPremium tax : quote.taxBreakdown()) {
+        for (InsuranceTenantSureTaxGrossPremium tax : quote.grossPremiumTaxBreakdown()) {
             insuranceTenantSure.details().taxes().add(tax);
         }
         insuranceTenantSure.details().underwriterFee().setValue(quote.underwriterFee().getValue());
@@ -151,7 +151,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         // calculate monthly payment details
         insuranceTenantSure.details().monthlyPremium()
                 .setValue(quote.grossPremium().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-        for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.taxBreakdown()) {
+        for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
             InsuranceTenantSureTaxMonthlyPremium monthlyPremiumTax = EntityFactory.create(InsuranceTenantSureTaxMonthlyPremium.class);
             monthlyPremiumTax.description().setValue(grossPremiumTax.description().getValue());
             monthlyPremiumTax.buinessLine().setValue(grossPremiumTax.buinessLine().getValue());
@@ -304,7 +304,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         status.quote().grossPremium().setValue(insuranceTenantSure.details().grossPremium().getValue());
         status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
-        status.quote().taxBreakdown().addAll(insuranceTenantSure.details().taxes());
+        status.quote().grossPremiumTaxBreakdown().addAll(insuranceTenantSure.details().taxes());
         status.quote().totalPayable().setValue(insuranceTenantSure.details().totalPayable().getValue());
 
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
