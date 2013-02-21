@@ -43,7 +43,7 @@ import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantInsuranceCertificateDTO;
 import com.propertyvista.server.common.security.VistaContext;
 
-public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<LeaseTermTenant, Tenant, TenantDTO> implements TenantCrudService {
+public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<Tenant, TenantDTO> implements TenantCrudService {
 
     private static final Logger log = LoggerFactory.getLogger(TenantCrudServiceImpl.class);
 

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.activity.crud.customer.common;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -24,11 +27,12 @@ import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEdit
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 
-public abstract class LeaseParticipantEditorActivity<E extends LeaseTermParticipant<?>, DTO extends LeaseParticipantDTO<E>, CS extends LeaseParticipantCrudServiceBase<E, DTO>>
-        extends CrmEditorActivity<DTO> implements LeaseParticipantEditorPresenter {
+public abstract class LeaseParticipantEditorActivity<DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>, CS extends LeaseParticipantCrudServiceBase<DTO>>
+        extends CrmEditorActivity<DTO> implements LeaseParticipantEditorPresenter<DTO> {
 
     public LeaseParticipantEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);
@@ -46,12 +50,23 @@ public abstract class LeaseParticipantEditorActivity<E extends LeaseTermParticip
 
     @SuppressWarnings("unchecked")
     @Override
+    public void getAllowedPaymentTypes(final AsyncCallback<Vector<PaymentType>> callback) {
+        ((CS) getService()).getAllowedPaymentTypes(new DefaultAsyncCallback<Vector<PaymentType>>() {
+            @Override
+            public void onSuccess(Vector<PaymentType> result) {
+                callback.onSuccess(result);
+            }
+        }, EntityFactory.createIdentityStub(getEntityClass(), getEntityId()));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
         ((CS) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, getEntityId());
+        }, EntityFactory.createIdentityStub(getEntityClass(), getEntityId()));
     }
 }

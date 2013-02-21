@@ -15,10 +15,9 @@ package com.propertyvista.crm.server.services.customer;
 
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Guarantor;
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<LeaseTermGuarantor, Guarantor, GuarantorDTO> implements GuarantorCrudService {
+public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<Guarantor, GuarantorDTO> implements GuarantorCrudService {
 
     public GuarantorCrudServiceImpl() {
         super(Guarantor.class, GuarantorDTO.class);

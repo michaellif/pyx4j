@@ -13,6 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
+import java.util.EnumSet;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -25,12 +30,13 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
+import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.GuarantorDTO;
@@ -94,10 +100,11 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable(), false) {
+            @SuppressWarnings("unchecked")
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {
-                    ((LeaseParticipantEditorPresenter) ((GuarantorEditorView) getParentView()).getPresenter())
+                    ((LeaseParticipantEditorPresenter<GuarantorDTO>) ((GuarantorEditorView) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                                 @Override
                                 public void onSuccess(AddressStructured result) {
@@ -107,6 +114,18 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void getAllowedPaymentTypes(final AsyncCallback<EnumSet<PaymentType>> callback) {
+                ((LeaseParticipantEditorPresenter<GuarantorDTO>) ((TenantEditorView) getParentView()).getPresenter()).getAllowedPaymentTypes(
+                        new DefaultAsyncCallback<Vector<PaymentType>>() {
+                            @Override
+                            public void onSuccess(Vector<PaymentType> result) {
+                                callback.onSuccess(EnumSet.copyOf(result));
+                            }
+                        });
             }
 
             @Override
@@ -120,10 +139,5 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         }));
 
         return main;
-    }
-
-    @Override
-    public void addValidations() {
-        new PastDateValidation(get(proto().customer().person().birthDate()));
     }
 }

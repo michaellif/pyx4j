@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
-public interface GuarantorCrudService extends LeaseParticipantCrudServiceBase<LeaseTermGuarantor, GuarantorDTO> {
+public interface GuarantorCrudService extends LeaseParticipantCrudServiceBase<GuarantorDTO> {
 }

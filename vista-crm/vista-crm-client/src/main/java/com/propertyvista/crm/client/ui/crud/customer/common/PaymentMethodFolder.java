@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
+import java.util.EnumSet;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
@@ -42,20 +46,25 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 
     @Override
     protected void addItem() {
-        new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Method Type"), PaymentType.avalableInProfile()) {
+        getAllowedPaymentTypes(new DefaultAsyncCallback<EnumSet<PaymentType>>() {
             @Override
-            public boolean onClickOk() {
-                LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
-                pm.type().setValue(getSelectedType());
-                addItem(pm);
-                return true;
-            }
+            public void onSuccess(EnumSet<PaymentType> result) {
+                new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Method Type"), result) {
+                    @Override
+                    public boolean onClickOk() {
+                        LeasePaymentMethod pm = EntityFactory.create(LeasePaymentMethod.class);
+                        pm.type().setValue(getSelectedType());
+                        addItem(pm);
+                        return true;
+                    }
 
-            @Override
-            public String defineWidth() {
-                return "20em";
+                    @Override
+                    public String defineWidth() {
+                        return "20em";
+                    }
+                }.show();
             }
-        }.show();
+        });
     }
 
     @Override
@@ -111,6 +120,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
     }
 
     protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
+
+    protected abstract void getAllowedPaymentTypes(AsyncCallback<EnumSet<PaymentType>> callback);
 
 //    @Override
 //    public void addValidations() {

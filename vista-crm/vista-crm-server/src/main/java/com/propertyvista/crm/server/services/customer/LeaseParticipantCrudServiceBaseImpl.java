@@ -13,9 +13,10 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -31,7 +32,9 @@ import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -40,8 +43,8 @@ import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermParticipant<?>, DBO extends LeaseParticipant<E>, DTO extends LeaseParticipantDTO<E>>
-        extends AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseParticipantCrudServiceBase<E, DTO> {
+public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParticipant<? extends LeaseTermParticipant<?>>, DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>>
+        extends AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseParticipantCrudServiceBase<DTO> {
 
     public LeaseParticipantCrudServiceBaseImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
         super(dboClass, dtoClass);
@@ -109,28 +112,36 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
-        AddressRetriever.getLeaseParticipantCurrentAddress(callback, EntityFactory.createIdentityStub(entityClass, entityId));
+    public void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId) {
+        DBO leaseParticipant = Persistence.service().retrieve(dboClass, participantId.getPrimaryKey());
+        Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);
+        callback.onSuccess(new Vector<PaymentType>(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
+                leaseParticipant.lease().billingAccount(), VistaApplication.crm)));
     }
 
-    private LeaseTerm.LeaseTermV retrieveLeaseTerm(LeaseParticipant<E> leaseCustomer) {
+    @Override
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, DTO participantId) {
+        AddressRetriever.getLeaseParticipantCurrentAddress(callback, EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey()));
+    }
+
+    private LeaseTerm.LeaseTermV retrieveLeaseTerm(DBO leaseParticipant) {
         LeaseTerm.LeaseTermV term = null;
 
         // case of 'current' Tenants for applications: 
-        if (leaseCustomer.lease().status().getValue().isDraft()) {
+        if (leaseParticipant.lease().status().getValue().isDraft()) {
             EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseParticipant.lease().currentTerm().id()));
             criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
             term = Persistence.service().retrieve(criteria).version();
         } else {
             // case of 'current' Tenants: 
             {
                 EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseCustomer.lease().currentTerm().id()));
-                if (leaseCustomer instanceof Tenant) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseParticipant(), leaseCustomer));
+                criteria.add(PropertyCriterion.eq(criteria.proto().id(), leaseParticipant.lease().currentTerm().id()));
+                if (leaseParticipant instanceof Tenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().tenants().$().leaseParticipant(), leaseParticipant));
                 } else {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().leaseParticipant(), leaseCustomer));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().version().guarantors().$().leaseParticipant(), leaseParticipant));
                 }
                 criteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
                 LeaseTerm leaseTerm = Persistence.service().retrieve(criteria);
@@ -141,11 +152,11 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<E extends LeaseTermPar
             // case of 'Former' Tenants: 
             if (term == null) {
                 EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseCustomer.lease()));
-                if (leaseCustomer instanceof Tenant) {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseParticipant(), leaseCustomer));
+                criteria.add(PropertyCriterion.eq(criteria.proto().holder().lease(), leaseParticipant.lease()));
+                if (leaseParticipant instanceof Tenant) {
+                    criteria.add(PropertyCriterion.eq(criteria.proto().tenants().$().leaseParticipant(), leaseParticipant));
                 } else {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().guarantors().$().leaseParticipant(), leaseCustomer));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().guarantors().$().leaseParticipant(), leaseParticipant));
                 }
                 criteria.desc(criteria.proto().id());
                 term = Persistence.service().retrieve(criteria);

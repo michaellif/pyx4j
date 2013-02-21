@@ -21,12 +21,12 @@ import com.propertyvista.crm.client.activity.crud.customer.common.LeaseParticipa
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
-import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorEditorActivity extends LeaseParticipantEditorActivity<LeaseTermGuarantor, GuarantorDTO, GuarantorCrudService> {
+public class GuarantorEditorActivity extends LeaseParticipantEditorActivity<GuarantorDTO, GuarantorCrudService> {
 
     public GuarantorEditorActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(GuarantorEditorView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class), GuarantorDTO.class);
     }
+
 }

@@ -13,16 +13,22 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public interface LeaseParticipantEditorPresenter extends IEditorView.Presenter {
+public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> extends IEditorView.Presenter {
 
     void deletePaymentMethod(LeasePaymentMethod paymentMethod);
+
+    void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback);
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 }

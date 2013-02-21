@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class AddressRetriever {
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant participant) {
+    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<?> participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
@@ -43,7 +43,7 @@ public class AddressRetriever {
         callback.onSuccess(address);
     }
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
+    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant<?> participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,13 +36,13 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -62,6 +65,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     @Override
     public void addValidations() {
+        super.addValidations();
+
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
             @Override
@@ -78,8 +83,6 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });
-
-        new PastDateValidation(get(proto().customer().person().birthDate()));
     }
 
     @Override
@@ -140,10 +143,11 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable(), true) {
+            @SuppressWarnings("unchecked")
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {
-                    ((LeaseParticipantEditorPresenter) ((TenantEditorView) getParentView()).getPresenter())
+                    ((LeaseParticipantEditorPresenter<TenantDTO>) ((TenantEditorView) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                                 @Override
                                 public void onSuccess(AddressStructured result) {
@@ -153,6 +157,18 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void getAllowedPaymentTypes(final AsyncCallback<EnumSet<PaymentType>> callback) {
+                ((LeaseParticipantEditorPresenter<TenantDTO>) ((TenantEditorView) getParentView()).getPresenter())
+                        .getAllowedPaymentTypes(new DefaultAsyncCallback<Vector<PaymentType>>() {
+                            @Override
+                            public void onSuccess(Vector<PaymentType> result) {
+                                callback.onSuccess(EnumSet.copyOf(result));
+                            }
+                        });
             }
 
             @Override
