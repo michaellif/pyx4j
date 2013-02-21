@@ -97,7 +97,7 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.addSubmitCompleteHandler(this);
         uploadForm.addSubmitHandler(this);
-        setServletPath(ClientDeploymentConfig.getUploadServletMapping());
+        setServletPath(GWT.getModuleBaseURL() + ClientDeploymentConfig.getUploadServletMapping());
 
         this.setWidget(uploadForm);
         FlowPanel content = new FlowPanel();

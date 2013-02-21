@@ -121,7 +121,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
 
             String moduleRelativePath = request.getServletPath().substring(0, request.getServletPath().lastIndexOf("/"));
             if (!moduleRelativePath.endsWith(gwtModuleName)) {
-                log.error("invalid upload module {}", uploadPath);
+                log.error("invalid upload module '{}' '{}' '{}'", gwtModuleName, moduleRelativePath, uploadPath);
                 out.println(i18n.tr("Invalid Request"));
                 return;
             }
