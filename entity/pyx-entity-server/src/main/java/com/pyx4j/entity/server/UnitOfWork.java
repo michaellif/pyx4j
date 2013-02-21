@@ -69,10 +69,21 @@ public class UnitOfWork {
                     } catch (Throwable e) {
                         log.error("error during UnitOfWork {} rollback", task, e);
                     }
+                    //TODO run compensation handlers
                 }
             }
         } finally {
             Persistence.service().endTransaction();
         }
+    }
+
+    //TODO implement
+    public static void setCompensationHandler(CompensationHandler handler) {
+
+    }
+
+    //TODO implement
+    public interface CompensationHandler extends Executable<Void, RuntimeException> {
+
     }
 }

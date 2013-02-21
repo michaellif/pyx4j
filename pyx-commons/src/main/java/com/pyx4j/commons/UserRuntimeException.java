@@ -27,11 +27,23 @@ public class UserRuntimeException extends RuntimeExceptionSerializable {
 
     private static final long serialVersionUID = 1L;
 
+    private transient Throwable cause;
+
     protected UserRuntimeException() {
         super();
     }
 
     public UserRuntimeException(String message) {
         super(message);
+    }
+
+    public UserRuntimeException(String message, Throwable cause) {
+        super(message);
+        this.cause = cause;
+    }
+
+    @Override
+    public Throwable getCause() {
+        return cause;
     }
 }
