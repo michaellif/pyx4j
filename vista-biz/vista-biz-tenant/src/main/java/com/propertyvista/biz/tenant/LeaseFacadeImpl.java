@@ -1023,7 +1023,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 leaseCustomer.customer().set(customer);
                 ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseCustomer);
                 // case of user-assignable ID:
-                if (leaseCustomer.participantId().getValue().isEmpty() && !leaseParticipant.leaseParticipant().participantId().isNull()) {
+                if (leaseCustomer.participantId().isNull() && !leaseParticipant.leaseParticipant().participantId().isNull()) {
                     leaseCustomer.participantId().set(leaseParticipant.leaseParticipant().participantId());
                 }
 
