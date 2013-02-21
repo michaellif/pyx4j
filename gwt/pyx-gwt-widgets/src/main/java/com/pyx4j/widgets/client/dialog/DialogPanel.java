@@ -116,7 +116,7 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         super(autoHide, modal);
         setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
 
-        getElement().getStyle().setProperty("zIndex", "20");
+        getElement().getStyle().setProperty("zIndex", "1000");
 
         getElement().getStyle().setProperty("padding", DRAG_ZONE_WIDTH + "px");
 
