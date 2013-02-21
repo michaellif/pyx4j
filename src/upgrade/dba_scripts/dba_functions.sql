@@ -964,4 +964,16 @@ $$
 $$
 LANGUAGE SQL IMMUTABLE;
 
-
+CREATE OR REPLACE FUNCTION _dba_.update_crm_user_credential(v_schema_name VARCHAR(64),v_user_email VARCHAR(80),v_new_credential TEXT)
+RETURNS VOID AS
+$$
+BEGIN
+        EXECUTE 'UPDATE '||v_schema_name||'.crm_user_credential AS a '
+                ||'SET          credential = '''||v_new_credential||''' '
+                ||'FROM         '||v_schema_name||'.crm_user AS b '
+                ||'WHERE        a.usr = b.id '
+                ||'AND          b.email = '''||v_user_email||''' ';
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+                
