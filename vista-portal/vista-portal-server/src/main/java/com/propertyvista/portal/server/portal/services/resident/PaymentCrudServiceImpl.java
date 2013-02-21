@@ -164,7 +164,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         LeaseTermTenant payer = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.ensureRetrieve(payer.leaseParticipant().lease(), AttachLevel.Attached);
         Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                payer.leaseParticipant().lease().billingAccount(), VistaApplication.crm);
+                payer.leaseParticipant().lease().billingAccount(), VistaApplication.resident);
         // get payer's payment methods and remove non-allowed ones: 
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer);
         Iterator<LeasePaymentMethod> it = methods.iterator();
