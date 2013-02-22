@@ -154,7 +154,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
             InsuranceTenantSureTaxMonthlyPremium monthlyPremiumTax = EntityFactory.create(InsuranceTenantSureTaxMonthlyPremium.class);
             monthlyPremiumTax.description().setValue(grossPremiumTax.description().getValue());
-            monthlyPremiumTax.buinessLine().setValue(grossPremiumTax.buinessLine().getValue());
+            monthlyPremiumTax.businessLine().setValue(grossPremiumTax.businessLine().getValue());
             monthlyPremiumTax.absoluteAmount().setValue(
                     grossPremiumTax.absoluteAmount().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
             insuranceTenantSure.details().monthlyPremiumTaxes().add(monthlyPremiumTax);

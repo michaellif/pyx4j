@@ -38,13 +38,16 @@ public interface InsuranceTenantSureDetails extends IEntity {
     /** gross premium for the whole policy period */
     IPrimitive<BigDecimal> grossPremium();
 
+    // TODO rename to grossPremiumTaxes
     @Owned
     @OrderBy(InsuranceTenantSureTax.OrderInOwner.class)
     IList<InsuranceTenantSureTaxGrossPremium> taxes();
 
     IPrimitive<BigDecimal> underwriterFee();
 
-    // TODO underwriter fee taxes???
+    @Owned
+    @OrderBy(InsuranceTenantSureTax.OrderInOwner.class)
+    IList<InsuranceTenantSureTaxGrossPremium> underwriterFeeTaxes();
 
     // TODO although right now this value is computed on our side it would be nicer to get it via CFC-API
     IPrimitive<BigDecimal> totalPayable();

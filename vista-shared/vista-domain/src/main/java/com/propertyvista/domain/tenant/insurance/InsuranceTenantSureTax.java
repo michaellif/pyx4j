@@ -37,5 +37,5 @@ public interface InsuranceTenantSureTax extends IEntity {
 
     IPrimitive<String> description();
 
-    IPrimitive<String> buinessLine();
+    IPrimitive<String> businessLine();
 }

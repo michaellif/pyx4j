@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-21
+ * Created on 2013-02-22
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,8 +18,8 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 
-@DiscriminatorValue("InsuranceTenantSureTaxMonthlyPremium")
-public interface InsuranceTenantSureTaxMonthlyPremium extends InsuranceTenantSureTax {
+@DiscriminatorValue("InsuranceTenantSureTaxUnderwriterFee")
+public interface InsuranceTenantSureTaxUnderwriterFee extends InsuranceTenantSureTax {
 
     @Owner
     @JoinColumn

@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxUnderwriterFee;
 
 /**
  * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
@@ -48,6 +49,8 @@ public interface TenantSureQuoteDTO extends IEntity {
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> underwriterFee();
+
+    IList<InsuranceTenantSureTaxUnderwriterFee> underwriterFeeTaxBreakdown();
 
     // TODO here must be taxes that apply to underwriter's fee too
 

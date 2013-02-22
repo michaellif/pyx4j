@@ -34,13 +34,16 @@ import javax.xml.ws.handler.PortInfo;
 import com.cfcprograms.api.ArrayOfString;
 import com.cfcprograms.api.CFCAPI;
 import com.cfcprograms.api.CFCAPISoap;
+import com.cfcprograms.api.DownloadResult;
 import com.cfcprograms.api.ObjectFactory;
 import com.cfcprograms.api.OptionQuote;
 import com.cfcprograms.api.OutputTax;
 import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
+import com.cfcprograms.api.Tax;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -55,6 +58,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxUnderwriterFee;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -163,21 +167,42 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         }
 
         tenantSureQuote.grossPremium().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getGrossPremium()));
-        for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
-            InsuranceTenantSureTaxGrossPremium tenantSureTaxGrossPremium = EntityFactory.create(InsuranceTenantSureTaxGrossPremium.class);
-            tenantSureTaxGrossPremium.absoluteAmount().setValue(TenantSureCfcMoneyAdapter.adoptMoney(tax.getAbsoluteAmount()));
-            tenantSureTaxGrossPremium.description().setValue(tax.getDescription());
-            tenantSureTaxGrossPremium.buinessLine().setValue(tax.getBusinessLine());
-            tenantSureQuote.grossPremiumTaxBreakdown().add(tenantSureTaxGrossPremium);
-        }
         tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
-        // TODO process fee taxes
+
+        // now do this hack to download taxes:
+        if (false) {
+            DownloadResult quoteDownloadResult = api.quoteDownload(tenantSureQuote.quoteId().getValue(), sessionId);
+            for (Tax tax : quoteDownloadResult.getQuoteData().getApplicableTaxes().getTax()) {
+                InsuranceTenantSureTax convertedTax = null;
+                if (tax.isAppliesToPremium()) {
+                    InsuranceTenantSureTaxGrossPremium grossPremiumTax = tenantSureQuote.grossPremiumTaxBreakdown().$();
+                    tenantSureQuote.grossPremiumTaxBreakdown().add(grossPremiumTax);
+                    convertedTax = grossPremiumTax;
+                }
+                if (CommonsStringUtils.isStringSet(tax.getAppliesToFee())) { // yes, yes, this is an exceptionally ugly API, deal with it...
+                    InsuranceTenantSureTaxUnderwriterFee underwirterFeeTax = tenantSureQuote.underwriterFeeTaxBreakdown().$();
+                    tenantSureQuote.underwriterFeeTaxBreakdown().add(underwirterFeeTax);
+                    convertedTax = underwirterFeeTax;
+                }
+                convertedTax.absoluteAmount().setValue(TenantSureCfcMoneyAdapter.adoptMoney(tax.getAbsoluteAmount()));
+                convertedTax.description().setValue(tax.getDescription());
+                convertedTax.businessLine().setValue(tax.getBusinessLine().name());
+            }
+        } else {
+            for (OutputTax tax : quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax()) {
+                InsuranceTenantSureTaxGrossPremium tenantSureTaxGrossPremium = EntityFactory.create(InsuranceTenantSureTaxGrossPremium.class);
+                tenantSureTaxGrossPremium.absoluteAmount().setValue(TenantSureCfcMoneyAdapter.adoptMoney(tax.getAbsoluteAmount()));
+                tenantSureTaxGrossPremium.description().setValue(tax.getDescription());
+                tenantSureTaxGrossPremium.businessLine().setValue(tax.getBusinessLine());
+                tenantSureQuote.grossPremiumTaxBreakdown().add(tenantSureTaxGrossPremium);
+            }
+        }
 
         BigDecimal total = tenantSureQuote.grossPremium().getValue();
         for (InsuranceTenantSureTax tenantSureTax : tenantSureQuote.grossPremiumTaxBreakdown()) {
             total = total.add(tenantSureTax.absoluteAmount().getValue());
         }
-        // WARNING: quoteResponse.getTotalPayable() holds a value that should be ignored (for more details refer to Katrina from CFC) 
+        // WARNING: quoteResponse.getTotalPayable() holds a value that should be ignored (for more details refer to Katrina from CFC)        
         tenantSureQuote.totalPayable().setValue(total);
 
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));

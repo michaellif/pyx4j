@@ -283,7 +283,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         pleaseFillOutTheFormMessage = new Label();
         pleaseFillOutTheFormMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
-        pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote"));
+        pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote from Highcourt Partners Limited"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
         quoteResponseViewer = new TenantSureQuoteResponseViewer();
