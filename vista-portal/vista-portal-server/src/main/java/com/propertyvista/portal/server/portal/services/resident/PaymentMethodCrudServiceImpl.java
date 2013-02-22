@@ -52,6 +52,16 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isOneTimePayment(), Boolean.FALSE));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
+
+        // filter out not allowed payment types:
+        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+
+        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
+                tenantInLease.leaseTermV().holder().lease().billingAccount(), VistaApplication.resident);
+
+        dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().type(), allowedPaymentTypes));
     }
 
     @Override

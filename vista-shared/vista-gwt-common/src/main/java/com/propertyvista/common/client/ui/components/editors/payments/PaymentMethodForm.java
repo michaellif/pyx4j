@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -136,11 +137,19 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setPaymentTypeSelectionEnabled(getValue().id().isNull());
+        // set single-available option preselected for new items: 
+        @SuppressWarnings("unchecked")
+        CRadioGroup<PaymentType> type = ((CRadioGroup<PaymentType>) get(proto().type()));
+        if (getValue().id().isNull() && type.getOptions().size() == 1) {
+            type.setValue(type.getOptions().get(0));
+        }
 
         if (!getValue().type().isNull()) {
             loadLegalTerms(getValue().type().getValue());
         }
+
+        setPaymentTypeSelectionEnabled(getValue().id().isNull());
+
         iAgreeBox.setValue(false);
     }
 
