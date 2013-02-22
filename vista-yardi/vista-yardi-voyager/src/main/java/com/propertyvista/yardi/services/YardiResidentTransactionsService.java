@@ -39,8 +39,9 @@ import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.asset.BuildingFacade;
@@ -149,31 +150,46 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
-    private void importTransaction(ResidentTransactions transaction, StatisticsRecord dynamicStatisticsRecord) {
+    private void importTransaction(ResidentTransactions transaction, final StatisticsRecord dynamicStatisticsRecord) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("Updating buildings and units...");
 
         List<Property> properties = getProperties(transaction);
-        for (Property property : properties) {
-            Building building = EntityFactory.create(Building.class);
+
+        for (final Property property : properties) {
             try {
-                building = new YardiBuildingProcessor().updateBuilding(property, dynamicStatisticsRecord);
-                ServerSideFactory.create(BuildingFacade.class).persist(building);
-                Persistence.service().commit();
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-            } catch (Exception e) {
+                final Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
+
+                    @Override
+                    public Building execute() throws YardiServiceException {
+                        Building building = new YardiBuildingProcessor().updateBuilding(property, dynamicStatisticsRecord);
+                        ServerSideFactory.create(BuildingFacade.class).persist(building);
+                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                        return building;
+                    }
+                });
+
+                for (final RTUnit importedUnit : new YardiBuildingProcessor().getYardiUnits(property)) {
+                    try {
+                        AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
+
+                            @Override
+                            public AptUnit execute() throws YardiServiceException {
+                                AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), importedUnit);
+                                ServerSideFactory.create(BuildingFacade.class).persist(unit);
+                                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                                return unit;
+                            }
+                        });
+
+                    } catch (YardiServiceException e) {
+                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                    }
+                }
+            } catch (YardiServiceException e) {
                 StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
-            for (RTUnit importedUnit : new YardiBuildingProcessor().getYardiUnits(property)) {
-                try {
-                    AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), importedUnit);
-                    ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                    Persistence.service().commit();
-                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-                } catch (Exception e) {
-                    StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
-                }
-            }
+
         }
         log.info("All buildings, units updated.");
     }

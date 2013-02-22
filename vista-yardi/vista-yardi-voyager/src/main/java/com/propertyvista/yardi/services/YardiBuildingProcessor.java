@@ -198,14 +198,14 @@ public class YardiBuildingProcessor {
         return new ArrayList<RTUnit>(map.values());
     }
 
-    private boolean isSameCountry(Building building, StatisticsRecord dynamicStatisticsRecord) {
+    private boolean isSameCountry(Building building, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
         Pmc pmc = VistaDeployment.getCurrentPmc();
         String yardiCountry = building.info().address().country().name().getValue();
         String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
         if (!yardiCountry.equals(countryOfOperation)) {
             dynamicStatisticsRecord.message().setValue(
                     "PMC country ''" + countryOfOperation + "'' does not match Yardi, ''" + yardiCountry + "'', import skipped.");
-            throw new Error("Country mismatch");
+            throw new YardiServiceException("Country mismatch");
         }
         return true;
     }
