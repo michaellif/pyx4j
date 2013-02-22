@@ -256,7 +256,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (!cr.enabled().isBooleanTrue()) {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
-            if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+            if (!checkPassword(user, cr, email, request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
@@ -291,6 +291,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             behaviors.add(getApplicationBehavior());
             return beginSession(user, cr, behaviors, null);
         }
+    }
+
+    protected boolean checkPassword(U user, E credentials, String email, String inputPassword, String encryptedPassword) {
+        return PasswordEncryptor.checkPassword(inputPassword, encryptedPassword);
     }
 
     @Override

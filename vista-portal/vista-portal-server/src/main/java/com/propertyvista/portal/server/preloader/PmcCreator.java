@@ -91,7 +91,7 @@ public class PmcCreator {
     }
 
     public static void createVistaSupportUsers() {
-        createCrmEmployee("Support", "PropertyVista", "support@propertyvista.com", "Vista2012", null, CrmRolesPreloader.getDefaultRole(),
+        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole(),
                 CrmRolesPreloader.getSupportRole());
     }
 
@@ -133,7 +133,7 @@ public class PmcCreator {
             credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());
             credential.credential().setValue(onbUserCred.credential().getValue());
             credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
-        } else {
+        } else if (password != null) {
             credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         }
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {

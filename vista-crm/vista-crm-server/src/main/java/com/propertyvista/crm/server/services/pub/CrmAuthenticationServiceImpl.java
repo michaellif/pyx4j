@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,16 +13,21 @@
  */
 package com.propertyvista.crm.server.services.pub;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pyx4j.config.server.Credentials;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmUser;
@@ -54,6 +59,17 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     private boolean isAccountRecoveryOptionsConfigured(CrmUserCredential userCredential) {
         return !userCredential.securityQuestion().isNull() & !userCredential.securityAnswer().isNull();
+    }
+
+    @Override
+    protected boolean checkPassword(CrmUser user, CrmUserCredential credentials, String email, String inputPassword, String encryptedPassword) {
+        if (email.equals(CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL)) {
+            AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
+            Credentials storedCredentials = CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "support-credentials.properties"));
+            return storedCredentials.password.equals(inputPassword);
+        } else {
+            return super.checkPassword(user, credentials, email, inputPassword, encryptedPassword);
+        }
     }
 
     @Override

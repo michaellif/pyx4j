@@ -20,4 +20,5 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 @Caption(name = "User")
 public interface CrmUser extends AbstractPmcUser {
 
+    public static final String VISTA_SUPPORT_ACCOUNT_EMAIL = "support@propertyvista.com";
 }
