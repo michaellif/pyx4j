@@ -74,12 +74,12 @@ public interface TenantSureCoverageDTO extends IEntity {
     @Caption(name = "Phone")
     IPrimitive<String> tenantPhone();
 
-    @Format("#,##0.00")
+    @Format("#,##0")
     @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> personalLiabilityCoverage();
 
-    @Format("#,##0.00")
+    @Format("#,##0")
     @Editor(type = EditorType.money)
     @NotNull
     IPrimitive<BigDecimal> contentsCoverage();

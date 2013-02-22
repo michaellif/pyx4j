@@ -25,23 +25,24 @@ public class MoneyComboBox extends FormattableCombo<BigDecimal> {
 
     private static final I18n i18n = I18n.get(MoneyComboBox.class);
 
+    public static class MoneyComboBoxFormat implements IFormat<BigDecimal> {
+        @Override
+        public String format(BigDecimal value) {
+            if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {
+                return i18n.tr("None");
+            } else {
+                return NumberFormat.getFormat(i18n.tr("CAD #,##0")).format(value);
+            }
+        }
+
+        @Override
+        public BigDecimal parse(String string) throws ParseException {
+            throw new Error("this should never happen");
+        }
+    }
+
     public MoneyComboBox() {
-        super(new IFormat<BigDecimal>() {
-
-            @Override
-            public String format(BigDecimal value) {
-                if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {
-                    return i18n.tr("None");
-                } else {
-                    return NumberFormat.getFormat(i18n.tr("CAD #,##0")).format(value);
-                }
-            }
-
-            @Override
-            public BigDecimal parse(String string) throws ParseException {
-                throw new Error("this should never happen");
-            }
-        });
+        super(new MoneyComboBoxFormat());
     }
 
 }
