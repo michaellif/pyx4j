@@ -10,13 +10,13 @@ BEGIN
         /* Make all floorplan names standard */
         
         UPDATE  starlight.floorplan 
-                SET name = CASE WHEN name ~* '^1 Bedroom' THEN '1bdrm'
-                WHEN name ~* '^2 Bedroom' THEN '2bdrm'
-                WHEN name ~* '^3 Bedroom' THEN '3bdrm'
+                SET name = CASE WHEN name ~* '^(1 Bedroom|1Bdrm)' THEN '1bdrm'
+                WHEN name ~* '^(2 Bedroom|2Bdrm)' THEN '2bdrm'
+                WHEN name ~* '^(3 Bedroom|3Bdrm)' THEN '3bdrm'
                 WHEN name ~* '^4 Bedroom' THEN  '4bdrm' 
                 WHEN name ~* '^5 Bedroom' THEN  '5bdrm'
                 WHEN name ~* '^7 Bedroom' THEN  '7bdrm'
-                WHEN name ~* 'Bachelor' THEN 'bach'
+                WHEN name ~* '^(Bachelor|Bachleor|Bach)' THEN 'bach'
                 WHEN name ~* '^Junior (1 Bedroom|1bdrm)' THEN  'j1bdrm'
                 WHEN name ~* '^Junior 2bdrm' THEN 'j2bdrm'
                 WHEN name ~* '^Junior 3bdrm' THEN 'j3bdrm'
@@ -29,17 +29,28 @@ BEGIN
         FROM    starlight.floorplan
         WHERE   id IN (SELECT DISTINCT COALESCE(floorplan,0) FROM starlight.apt_unit)
         LOOP
-                WITH t AS (SELECT a.id, COUNT(b.id) AS units
+                WITH t AS (SELECT a.id, c.owner, COUNT(b.id) AS units
                         FROM    starlight.floorplan A
                         JOIN    starlight.apt_unit b ON (a.id = b.floorplan)
+                        LEFT JOIN starlight.floorplan$media c ON (a.id = c.owner)
                         WHERE   a.building = v_building
                         AND     a.name = v_floorplan_name
-                        GROUP BY a.id)
-                SELECT  id
+                        GROUP BY a.id, c.owner)
+                SELECT  a.id
                 INTO    v_floorplan_id
-                FROM    t 
-                WHERE   units = (SELECT MAX(units) FROM t)
+                FROM    ((SELECT id FROM t 
+                        WHERE  owner IS NOT NULL
+                        LIMIT 1)
+                        UNION ALL
+                        (SELECT id FROM t 
+                        WHERE   owner IS NULL
+                        LIMIT 1)) AS a
                 LIMIT 1;
+                
+                IF v_floorplan_id IS NULL
+                THEN
+                        RAISE NOTICE 'Building %,floorplan % is null',v_building,v_floorplan_name;
+                END IF;
                 
                 /*
                 IF NOT EXISTS ( SELECT 'x' FROM starlight.floorplan_amenity
