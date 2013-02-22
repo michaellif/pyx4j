@@ -81,7 +81,7 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
         optionQuote.setPolicyPeriod("12M");
-        optionQuote.setOptionalExtras(getOptionalExtras(coverageRequest, tenantSureClient.tenant().lease().unit().building()));
+        optionQuote.setOptionalExtras(formatOptionalExtras(coverageRequest, tenantSureClient.tenant().lease().unit().building()));
 
         // quote from the CFC-API doc:
         // Pass a blank string.
@@ -90,18 +90,17 @@ public class TenantSureCoverageRequestAdapter {
 
     }
 
-    static String getOptionalExtras(TenantSureCoverageDTO coverageRequest, Building building) {
+    static String formatOptionalExtras(TenantSureCoverageDTO coverageRequest, Building building) {
         StringBuilder optionalExtras = new StringBuilder();
+        // use the enum to assert the existance of the option
+        optionalExtras.append("Deductible=").append(TenantSureDeductibleOption.deductibleOf(coverageRequest.deductible().getValue()).amount()).append(";");
 
         if (coverageRequest.smoker().isBooleanTrue()) {
             optionalExtras.append("Smoker=true;");
         }
-
         if (coverageRequest.numberOfPreviousClaims().getValue().numericValue() > 0) {
             optionalExtras.append("Claims=").append(coverageRequest.numberOfPreviousClaims().getValue().numericValue()).append(";");
         }
-
-        optionalExtras.append(asDeductibleOptionalExtra(coverageRequest.deductible().getValue()));
 
         if (building.info().hasFireAlarm().isBooleanTrue()) {
             optionalExtras.append("Alarm=true;");
@@ -133,16 +132,6 @@ public class TenantSureCoverageRequestAdapter {
             throw new UserRuntimeException(i18n.tr("There a pre-defined quote that matches the requrested coverage amounts was not found."));
         }
         return optionCode;
-    }
-
-    private static String asDeductibleOptionalExtra(BigDecimal value) {
-        TenantSureDeductibleOption option;
-        try {
-            option = TenantSureDeductibleOption.deductibleOf(value);
-        } catch (IllegalArgumentException ex) {
-            throw new UserRuntimeException(i18n.tr("The deductible option \"{0}\" is not defined", value));
-        }
-        return !option.isDefault() ? "Deductible:" + option.amount().toString() : "";
     }
 
 }
