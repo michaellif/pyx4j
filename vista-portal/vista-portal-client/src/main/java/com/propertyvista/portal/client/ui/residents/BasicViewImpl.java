@@ -45,12 +45,12 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     private final Anchor cancelAnchor;
 
-    public BasicViewImpl() {
+    public BasicViewImpl(String submitButtonCaption, CEntityForm<E> viewForm) {
         add(messagePanel = new UserMessagePanel());
 
         add(formHolder = new SimplePanel());
 
-        submitButton = new Button(i18n.tr("Save"));
+        submitButton = new Button(submitButtonCaption);
         submitButton.getElement().getStyle().setMargin(10, Unit.PX);
         submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         submitButton.setCommand(new Command() {
@@ -70,11 +70,19 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         cancelAnchor.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
         cancelAnchor.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(cancelAnchor);
+
+        if (viewForm != null) {
+            setForm(viewForm);
+        }
+    }
+
+    public BasicViewImpl() {
+        this(i18n.tr("Save"), null);
     }
 
     public BasicViewImpl(CEntityForm<E> viewForm) {
-        this();
-        setForm(viewForm);
+        this(i18n.tr("Save"), viewForm);
+
     }
 
     protected void setForm(CEntityForm<E> viewForm) {

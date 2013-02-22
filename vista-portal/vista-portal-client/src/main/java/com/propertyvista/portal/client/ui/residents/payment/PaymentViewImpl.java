@@ -13,13 +13,18 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 import com.propertyvista.portal.client.ui.residents.View;
 
 public class PaymentViewImpl extends BasicViewImpl<PaymentRecordDTO> implements PaymentView {
 
+    private static final I18n i18n = I18n.get(PaymentViewImpl.class);
+
     public PaymentViewImpl() {
+        super(i18n.tr("Submit"), null);
         setForm(new PaymentForm() {
             @Override
             protected void onIAgree(boolean set) {
