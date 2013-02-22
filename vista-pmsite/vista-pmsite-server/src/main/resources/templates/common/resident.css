@@ -1729,3 +1729,27 @@ ul.footer_locations li {
 	margin-top: 3px;
 	top: 0 !important;
 }
+
+.LoginImageDecoration {
+    text-align: left;
+}
+
+.LoginImageDecorationLabel {
+    display: inline;
+    margin-left: 20px;
+    vertical-align: 100%;
+}
+
+
+.SignUpGreetingRow1 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+
+.SignUpGreetingRow2 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+}
