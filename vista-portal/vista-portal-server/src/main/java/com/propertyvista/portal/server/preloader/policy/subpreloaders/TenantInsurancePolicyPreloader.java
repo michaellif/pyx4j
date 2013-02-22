@@ -52,7 +52,7 @@ public class TenantInsurancePolicyPreloader extends AbstractPolicyPreloader<Tena
                 "<div style=\"text-align: justify;\">" +
                 "<span>" +
                 "As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. " +
-                "We have teamed up with TenantSure, a licensed broker, to assist you in obtaining your tenant insurance." +
+                "We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance." +
                 "</span>" +
                 "</div>" +
                 "</div>" 
