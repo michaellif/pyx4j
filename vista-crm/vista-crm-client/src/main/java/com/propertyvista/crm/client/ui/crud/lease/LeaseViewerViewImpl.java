@@ -458,7 +458,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         setActionVisible(moveOutAction, status.isOperative() && completion != null && value.actualMoveOut().isNull());
         setActionHighlighted(moveOutAction, status.isOperative() && completion != null && value.actualMoveOut().isNull());
 
-        setActionVisible(activateAction, EnumSet.of(Status.NewLease, Status.ExistingLease).contains(status));
+        boolean isTimeOver = (!value.leaseTo().isNull() && value.leaseTo().getValue().before(new LogicalDate(ClientContext.getServerDate())));
+        setActionVisible(activateAction, EnumSet.of(Status.NewLease, Status.ExistingLease).contains(status) && !isTimeOver);
         setActionHighlighted(activateAction, activateAction.isVisible());
 
         setActionVisible(closeAction, status == Status.Completed);
