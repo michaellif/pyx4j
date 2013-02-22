@@ -45,11 +45,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTraget retrieveTraget) {
         enhanceRetrievedCommon(in, dto);
 
-        // TODO I think we don't need this
-//        // load detached entities:
-//        Persistence.service().retrieve(dto.billingAccount().adjustments());
-//        Persistence.service().retrieve(dto.billingAccount().deposits());
-
         loadDetachedProducts(dto);
 
         for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {

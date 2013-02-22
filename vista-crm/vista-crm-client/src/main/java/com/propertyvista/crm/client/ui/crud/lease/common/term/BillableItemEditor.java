@@ -271,11 +271,11 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         }
     }
 
-    private boolean isMandatoryFeature(Product.ProductV product) {
+    private boolean isMandatoryFeature(Product.ProductV<?> product) {
         return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
     }
 
-    private boolean isRecurringFeature(Product.ProductV product) {
+    private boolean isRecurringFeature(Product.ProductV<?> product) {
         return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }
 

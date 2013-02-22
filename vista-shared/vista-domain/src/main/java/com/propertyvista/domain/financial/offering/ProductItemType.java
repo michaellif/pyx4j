@@ -25,8 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.GlCode;
 
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface ProductItemType extends IEntity {
 
     enum Type {
