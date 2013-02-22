@@ -7,6 +7,7 @@
     <source path="domain/customizations"/>
     <source path="domain/security/common"/>
     <source path="shared/i18n"/>
+    <source path="shared/config"/>
 
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.common.AbstractUserCredential" />
 
