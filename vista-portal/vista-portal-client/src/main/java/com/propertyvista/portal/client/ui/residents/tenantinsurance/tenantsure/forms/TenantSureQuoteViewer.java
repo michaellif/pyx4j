@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
@@ -47,7 +48,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
     }
 
     public TenantSureQuoteViewer(boolean underwriterFeeAsFootnote) {
-        this(NumberFormat.getFormat(i18n.tr("CAD #,##0.00")), underwriterFeeAsFootnote);
+        this(MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT, underwriterFeeAsFootnote);
     }
 
     @Override

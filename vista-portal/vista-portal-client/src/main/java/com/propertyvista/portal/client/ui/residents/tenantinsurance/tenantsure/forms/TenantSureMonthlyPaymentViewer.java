@@ -30,10 +30,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 
+// TODO this is actually generic payment viewer and must be renamed to represent this (however now it's used only for monthly payments (it must be used instead of TenantSureQuoteViewer)
 public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaymentDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureMonthlyPaymentViewer.class);
@@ -48,7 +50,7 @@ public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaym
     }
 
     public TenantSureMonthlyPaymentViewer() {
-        this(NumberFormat.getFormat(i18n.tr("CAD #,##0.00")), DateTimeFormat.getFormat(CDatePicker.defaultDateFormat));
+        this(MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT, DateTimeFormat.getFormat(CDatePicker.defaultDateFormat));
     }
 
     @Override

@@ -25,13 +25,17 @@ public class MoneyComboBox extends FormattableCombo<BigDecimal> {
 
     private static final I18n i18n = I18n.get(MoneyComboBox.class);
 
+    public static final NumberFormat CANADIAN_CURRENCY_DETAILED_FORMAT = NumberFormat.getFormat(i18n.tr("CAD #,##0.00"));
+
+    public static final NumberFormat CANADIAN_CURRENCY_FORMAT = NumberFormat.getFormat(i18n.tr("CAD #,##0"));
+
     public static class MoneyComboBoxFormat implements IFormat<BigDecimal> {
         @Override
         public String format(BigDecimal value) {
             if (value == null || value.compareTo(BigDecimal.ZERO) == 0) {
                 return i18n.tr("None");
             } else {
-                return NumberFormat.getFormat(i18n.tr("CAD #,##0")).format(value);
+                return CANADIAN_CURRENCY_FORMAT.format(value);
             }
         }
 
