@@ -121,3 +121,22 @@
 .TriggerPannel .TextBox	{
 	width: 90px !important;
 }
+
+.TenantSureManagementStatusDetailsPanel {
+    width: 65% !important;
+}
+
+
+.TenantSureManagementActionsPanel {
+    width: 35% !important;
+}
+
+.TenantSureManagementActionsPanel .Anchor-disabled {
+	color: #666666 !important;
+    text-decoration: none;
+    cursor: default;
+}
+
+.EntityFolderRowItemDecorator table td:FIRST-CHILD{
+	width: 683px;
+}

@@ -133,3 +133,22 @@
 	padding: 0 0.4em !important;
 	width: auto;
 }
+
+.TenantSureManagementStatusDetailsPanel {
+    width: 65% !important;
+}
+
+
+.TenantSureManagementActionsPanel {
+    width: 35% !important;
+}
+
+.TenantSureManagementActionsPanel .Anchor-disabled {
+	color: #666666 !important;
+    text-decoration: none;
+    cursor: default;
+}
+
+.EntityFolderRowItemDecorator table td:FIRST-CHILD{
+	width: 683px;
+}

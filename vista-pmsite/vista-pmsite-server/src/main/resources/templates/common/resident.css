@@ -1754,3 +1754,41 @@ ul.footer_locations li {
     font-weight: bold;
     text-align: right;
 }
+
+.TenantSureManagementContentPanel {
+    height: auto;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    width: 100%;
+}
+
+
+.TenantSureManagementStatusDetailsPanel {
+    display: inline-block;
+    vertical-align: middle;
+    width: 65%;
+}
+
+
+.TenantSureManagementActionsPanel {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 35%;
+}
+
+
+.TenantSureManagementActionsPanel .Anchor {
+    display: block;
+    float: none;
+    margin: 0;
+    padding: 0;
+    font-size: 110%;
+}
+
+.TenantSureManagementActionsPanel .Anchor-disabled {
+	color: #666666 !important;
+    text-decoration: none;
+    cursor: default;
+	font-size: 110%;
+}
