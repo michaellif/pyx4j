@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -45,25 +46,8 @@ public class UnitsMerger {
                 AptUnit merged;
                 // merge unit data
                 AptUnit existing = existingUnitsByNumber.get(imported.info().number().getValue());
-                if (existing != null) {
-                    merged = merge(imported, existing);
-                } else {
-                    merged = imported;
-                    merged.building().set(building);
-                }
-                // merge floorplan
-                Floorplan floorplanExisting = getExistingFloorplan(building, imported.floorplan());
-                if (floorplanExisting != null) {
-                    merged.floorplan().set(floorplanExisting);
-                } else {
-                    //set floorplan for new unit
-                    imported.floorplan().building().set(building);
-                    Persistence.service().persist(imported.floorplan());
+                merged = merge(building, imported, existing);
 
-                    building.floorplans().add(imported.floorplan());
-
-                    merged.floorplan().set(imported.floorplan());
-                }
                 mergedList.add(merged);
                 sucsess = true;
             } finally {
@@ -80,6 +64,8 @@ public class UnitsMerger {
         Iterator<Floorplan> floorplanIterator = building.floorplans().iterator();
         while (floorplanIterator.hasNext()) {
             Floorplan existing = floorplanIterator.next();
+            Persistence.service().retrieve(existing);
+            Persistence.service().retrieve(imported);
             if (StringUtils.equals(existing.name().getValue(), imported.name().getValue())) {
                 return existing;
             }
@@ -95,20 +81,41 @@ public class UnitsMerger {
         return unitsByNumber;
     }
 
-    private AptUnit merge(AptUnit imported, AptUnit existing) {
+    public AptUnit merge(Building building, AptUnit imported, AptUnit existing) {
+        AptUnit merged = EntityFactory.create(AptUnit.class);
+        if (existing == null) {
+            merged = imported;
+        } else {
 
-        //info
-        merge(imported.info(), existing.info());
+            //info
+            merge(imported.info(), existing.info());
 
-        // marketing
-        Persistence.service().retrieve(existing.marketing());
-        existing.marketing().name().setValue(imported.marketing().name().getValue());
+            // marketing
+            Persistence.service().retrieve(existing.marketing());
+            existing.marketing().name().setValue(imported.marketing().name().getValue());
 
-        // financial
-        existing.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
-        existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+            // financial
+            existing.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
+            existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+            merged = existing;
+        }
+        merged.building().set(building);
 
-        return existing;
+        // merge floorplan
+        Floorplan floorplanExisting = getExistingFloorplan(building, merged.floorplan());
+        if (floorplanExisting != null) {
+            merged.floorplan().set(floorplanExisting);
+        } else {
+            //set floorplan for new unit
+            imported.floorplan().building().set(building);
+            Persistence.service().persist(imported.floorplan());
+
+            building.floorplans().add(imported.floorplan());
+
+            merged.floorplan().set(imported.floorplan());
+        }
+
+        return merged;
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {

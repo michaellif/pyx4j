@@ -27,6 +27,8 @@ import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.ws.operations.GetResidentTransaction_Login;
 import com.yardi.ws.operations.GetResidentTransaction_LoginResponse;
@@ -36,12 +38,17 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.jobs.StatisticsUtils;
@@ -92,7 +99,9 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
         }
 
-        updateBuildings(allTransactions, dynamicStatisticsRecord);
+        for (ResidentTransactions transaction : allTransactions) {
+            importTransaction(transaction, dynamicStatisticsRecord);
+        }
 
         updateLeases(allTransactions, dynamicStatisticsRecord);
 
@@ -140,14 +149,30 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
-    private void updateBuildings(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {
+    private void importTransaction(ResidentTransactions transaction, StatisticsRecord dynamicStatisticsRecord) {
+        // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("Updating buildings and units...");
-        for (ResidentTransactions transaction : allTransactions) {
+
+        List<Property> properties = getProperties(transaction);
+        for (Property property : properties) {
+            Building building = EntityFactory.create(Building.class);
             try {
-                new YardiBuildingProcessor().updateBuildings(transaction, dynamicStatisticsRecord);
+                building = new YardiBuildingProcessor().updateBuilding(property, dynamicStatisticsRecord);
+                ServerSideFactory.create(BuildingFacade.class).persist(building);
+                Persistence.service().commit();
                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
             } catch (Exception e) {
                 StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+            }
+            for (RTUnit importedUnit : new YardiBuildingProcessor().getYardiUnits(property)) {
+                try {
+                    AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), importedUnit);
+                    ServerSideFactory.create(BuildingFacade.class).persist(unit);
+                    Persistence.service().commit();
+                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                } catch (Exception e) {
+                    StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                }
             }
         }
         log.info("All buildings, units updated.");
@@ -330,6 +355,14 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         } catch (XMLStreamException e) {
             throw new Error(e);
         }
+    }
+
+    public List<Property> getProperties(ResidentTransactions transaction) {
+        List<Property> properties = new ArrayList<Property>();
+        for (Property property : transaction.getProperty()) {
+            properties.add(property);
+        }
+        return properties;
     }
 
 }

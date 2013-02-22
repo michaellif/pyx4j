@@ -44,6 +44,7 @@ import com.propertyvista.yardi.merger.TenantMerger;
 public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
+    @Deprecated
     public void updateLeases(ResidentTransactions transaction) {
         for (Property property : transaction.getProperty()) {
             for (RTCustomer rtCustomer : property.getRTCustomer()) {

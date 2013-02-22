@@ -49,36 +49,27 @@ public class YardiBuildingProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);
 
-    public void updateBuildings(ResidentTransactions transaction, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
-
-        List<Property> properties = getProperties(transaction);
-        for (Property property : properties) {
-            Building building = getBuildingFromProperty(property);
-            Pmc pmc = VistaDeployment.getCurrentPmc();
-            String yardiCountry = building.info().address().country().name().getValue();
-            String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
-            if (!yardiCountry.equals(countryOfOperation)) {
-                dynamicStatisticsRecord.message().setValue(
-                        "PMC country ''" + countryOfOperation + "'' does not match Yardi, ''" + yardiCountry + "'', import skipped.");
-                return;
-            }
-            String propertyCode = building.propertyCode().getValue();
-
-            merge(building, getBuilding(propertyCode));
-
-            building = getBuilding(propertyCode);
-
-            List<AptUnit> importedUnit = getUnits(transaction, property);
-            updateUnitsForBuilding(importedUnit, building);
-        }
+    public Building updateBuilding(Property property, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
+        Building building = getBuildingFromProperty(property);
+        isSameCountry(building, dynamicStatisticsRecord);
+        String propertyCode = building.propertyCode().getValue();
+        return merge(building, getBuilding(propertyCode));
     }
 
-    private void merge(Building imported, Building existing) {
+    public AptUnit updateUnit(String propertyCode, RTUnit unit) throws YardiServiceException {
+        Building building = getBuilding(propertyCode);
+        AptUnit importedUnit = new UnitsMapper().map(unit);
+        return updateUnitForBuilding(importedUnit, building);
+
+    }
+
+    private Building merge(Building imported, Building existing) {
         Building merged = new BuildingsMerger().merge(imported, existing);
-        update(merged);
-        Persistence.service().commit();
+//        update(merged);
+        return merged;
     }
 
+    @Deprecated
     private void updateUnitsForBuilding(List<AptUnit> importedUnits, Building building) throws YardiServiceException {
         if (building == null) {
             throw new YardiServiceException("Unable to update units for building: null");
@@ -89,6 +80,31 @@ public class YardiBuildingProcessor {
         Persistence.service().commit();
     }
 
+    private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
+        if (building == null) {
+            throw new YardiServiceException("Unable to update units for building: null");
+        }
+        return mergeUnit(building, importedUnit, getUnit(building.propertyCode().getValue(), importedUnit.info().number().getValue()));
+    }
+
+    private AptUnit mergeUnit(Building building, AptUnit importedUnit, AptUnit existingUnit) {
+        AptUnit merged = new UnitsMerger().merge(building, importedUnit, existingUnit);
+//        update(merged);
+        return merged;
+    }
+
+    private AptUnit getUnit(String propertyCode, String unitNumber) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
+        criteria.eq(criteria.proto().info().number(), unitNumber);
+        List<AptUnit> units = Persistence.service().query(criteria);
+        if (units.size() == 0) {
+            return null;
+        }
+        return units.get(0);
+    }
+
+    @Deprecated
     private List<AptUnit> getUnits(String propertyCode) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
@@ -96,6 +112,7 @@ public class YardiBuildingProcessor {
         return units;
     }
 
+    @Deprecated
     private void mergeUnits(Building building, List<AptUnit> imported, List<AptUnit> existing) {
         Persistence.service().retrieve(building.floorplans());
 
@@ -105,6 +122,7 @@ public class YardiBuildingProcessor {
         }
     }
 
+    @Deprecated
     private void update(Building building) {
         boolean ok = false;
         try {
@@ -119,6 +137,7 @@ public class YardiBuildingProcessor {
         }
     }
 
+    @Deprecated
     private void update(AptUnit unit) {
         boolean ok = false;
         try {
@@ -151,8 +170,8 @@ public class YardiBuildingProcessor {
         return Persistence.service().query(criteria);
     }
 
-    public List<AptUnit> getUnits(ResidentTransactions transaction, Property property) {
-        List<RTUnit> imported = getYardiUnits(transaction, property);
+    public List<AptUnit> getUnits(Property property) {
+        List<RTUnit> imported = getYardiUnits(property);
         return new UnitsMapper().map(imported);
 
     }
@@ -165,7 +184,7 @@ public class YardiBuildingProcessor {
         return properties;
     }
 
-    private List<RTUnit> getYardiUnits(ResidentTransactions transaction, Property property) {
+    public List<RTUnit> getYardiUnits(Property property) {
 
         Map<String, RTUnit> map = new HashMap<String, RTUnit>();
 
@@ -177,6 +196,18 @@ public class YardiBuildingProcessor {
         }
 
         return new ArrayList<RTUnit>(map.values());
+    }
+
+    private boolean isSameCountry(Building building, StatisticsRecord dynamicStatisticsRecord) {
+        Pmc pmc = VistaDeployment.getCurrentPmc();
+        String yardiCountry = building.info().address().country().name().getValue();
+        String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
+        if (!yardiCountry.equals(countryOfOperation)) {
+            dynamicStatisticsRecord.message().setValue(
+                    "PMC country ''" + countryOfOperation + "'' does not match Yardi, ''" + yardiCountry + "'', import skipped.");
+            throw new Error("Country mismatch");
+        }
+        return true;
     }
 
 }

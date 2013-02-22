@@ -114,7 +114,7 @@ public class XmlBeanTest {
             Assert.assertFalse(building.info().address().city().isNull());
             Assert.assertFalse(building.info().address().postalCode().isNull());
 
-            List<AptUnit> units = buildingProcessor.getUnits(transactions, property);
+            List<AptUnit> units = buildingProcessor.getUnits(property);
             Assert.assertTrue("Has units", !units.isEmpty());
 
             for (AptUnit aptUnit : units) {
