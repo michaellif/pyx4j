@@ -889,6 +889,13 @@ td.DatePickerMonth {
 
 .EntityFolderRowItemDecorator {
 	margin: 6px;
+	height: 35px;
+	border-bottom: dotted 1px;
+	border-bottom-color: #949494;
+}
+
+.EntityFolderRowItemDecorator table td:FIRST-CHILD{
+	width: 683px;
 }
 
 .EntityFolderActionsBar {
@@ -955,12 +962,6 @@ td.DatePickerMonth {
 	line-height: 35px;
 	color: #949494;
 	border: none;
-}
-
-.EntityFolderRowItemDecorator {
-	height: 35px;
-	border-bottom: dotted 1px;
-	border-bottom-color: #949494;
 }
 
 .TenantDashboard {
