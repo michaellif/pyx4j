@@ -170,6 +170,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         tenantSureQuote.underwriterFee().setValue(TenantSureCfcMoneyAdapter.parseMoney(quoteResponse.getFee()));
 
         // now do this hack to download taxes:
+        // TODO this was a way proposed by Katrina but it didn't work
         if (false) {
             DownloadResult quoteDownloadResult = api.quoteDownload(tenantSureQuote.quoteId().getValue(), sessionId);
             for (Tax tax : quoteDownloadResult.getQuoteData().getApplicableTaxes().getTax()) {
@@ -195,6 +196,15 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
                 tenantSureTaxGrossPremium.description().setValue(tax.getDescription());
                 tenantSureTaxGrossPremium.businessLine().setValue(tax.getBusinessLine());
                 tenantSureQuote.grossPremiumTaxBreakdown().add(tenantSureTaxGrossPremium);
+            }
+
+            // TODO these are MOCKUP underwriter fee taxes:
+            if (false) {
+
+                InsuranceTenantSureTaxUnderwriterFee underwirterFeeTax = tenantSureQuote.underwriterFeeTaxBreakdown().$();
+                underwirterFeeTax.absoluteAmount().setValue(new BigDecimal("33.33"));
+                underwirterFeeTax.description().setValue("Mockup TAX");
+                tenantSureQuote.underwriterFeeTaxBreakdown().add(underwirterFeeTax);
             }
         }
 

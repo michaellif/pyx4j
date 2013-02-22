@@ -58,29 +58,32 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
+                BigDecimal total = null;
                 addDetailRecord(paymentBreakdownPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
                 for (InsuranceTenantSureTax tax : quote.grossPremiumTaxBreakdown()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
                 }
-                if (!underwirterFeeAsFootnote) {
-                    addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee"), quote.underwriterFee().getValue());
-                    // TODO underwriter fee taxes (don't forget to add to total as well)
-                    addTotalRecord(paymentBreakdownPanel, ++row, i18n.tr("Total"), quote.totalPayable().getValue().add(quote.underwriterFee().getValue()));
-                } else {
-                    addTotalRecord(paymentBreakdownPanel, ++row, i18n.tr("Total"), quote.totalPayable().getValue());
-                }
+                total = quote.totalPayable().getValue();
 
-                contentPanel.add(paymentBreakdownPanel);
+                if (!quote.underwriterFee().isNull()) {
+                    addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee*"), quote.underwriterFee().getValue());
+                    total = total.add(quote.underwriterFee().getValue());
+                    for (InsuranceTenantSureTax tax : quote.underwriterFeeTaxBreakdown()) {
+                        addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
+                        total = total.add(tax.absoluteAmount().getValue());
+                    }
 
-                if (!quote.underwriterFee().isNull() & underwirterFeeAsFootnote) {
-                    Label underwriterFeeLabel = new Label();
-                    underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
-                    underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-                    underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
-                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee of {0} will be charged upon enrollment.",
-                            currencyFormat.format(quote.underwriterFee().getValue())));
-                    // TODO underwriter fee tax
-                    contentPanel.add(underwriterFeeLabel);
+                    addTotalRecord(paymentBreakdownPanel, ++row, i18n.tr("Total"), total);
+                    contentPanel.add(paymentBreakdownPanel);
+
+                    if (underwirterFeeAsFootnote) {
+                        Label underwriterFeeLabel = new Label();
+                        underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
+                        underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
+                        underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
+                        underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee (plus applicable taxes) will be charged upon enrollment."));
+                        contentPanel.add(underwriterFeeLabel);
+                    }
                 }
 
             } else {
