@@ -31,6 +31,7 @@ public class TenantSureTheme extends Theme {
         TenantSurePrivacyPolicyLink,
         TenantSureBillingAndCancellationsPolicyLink,        
         
+        TenantSurePresonalDisclaimer,        
         TSPurchaseViewSection,
         TSPurchaseViewNextStepButton,
         TSPurchaseViewCancelButton,
@@ -68,6 +69,20 @@ public class TenantSureTheme extends Theme {
     }
 
     public void initTenantSurePurchaseViewStyles() {
+        {
+            Style style = new Style(".", TenantSureTheme.StyleName.TenantSurePresonalDisclaimer.name());
+            style.addProperty("text-align", "justify");
+            style.addProperty("padding-left", "20px");
+            style.addProperty("padding-right", "20px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style(".", TenantSureTheme.StyleName.TenantSurePresonalDisclaimer.name(), " ", "li");
+            style.addProperty("text-align", "justify");
+            style.addProperty("margin-left", "50px");
+            style.addProperty("margin-right", "50px");
+            addStyle(style);
+        }
         {
             Style style = new Style(".", TenantSureTheme.StyleName.TSUnavailableMessage.name());
             style.addProperty("text-align", "center");
