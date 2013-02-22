@@ -1,20 +1,22 @@
 .vista-pmsite-aptListPage {
 }
 .vista-pmsite-aptListPage .vista-pmsite-mainWrap {
-	width: 920px;
-	margin: 0 auto;
+	width: 960px;
+	margin: 20px auto 0 auto;
 	overflow: hidden;
-    background: #fff;
-    padding: 0 20px 20px 20px;
+    background: #2F292A;
+    padding: 0 50px 0 0;
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
+	position: relative;
+	top: 20px;
 	display: inline-block;
 	width: 280px;
 	color: #fff;
 	vertical-align: top;
 	margin-right: 20px;
-	background: #fff;
-	border-top: 1px solid #000000;
+	background: #2F292A;
+	border-top: 4px solid #1F1B1C;
 	float: left;
 }
 
@@ -24,33 +26,47 @@
 }
 
 .vista-pmsite-aptListPage .secondaryNavig {
-	color: ${object2_100};
+	/*color: ${object2_100};*/
+	border-top-color: #484243;
+	border-top-style: solid;
+	border-top-width: 1px;
 }
 .vista-pmsite-aptListPage .secondaryNavig h3 {
-	width:100%;
-	font-size:14pt;
-	padding: 5px 0;
+	width:190px;
+	position: relative;
+	top: -20px;
+	font-size:15pt;
+	padding: 0 5px 5px 0;
 	height:30px;
-	font-family: monospace;
+	/*font-family: monospace;*/
 	font-weight: normal;
+	text-transform: uppercase;
+	background: #2F292A;
 }
 
 .advancedSearchNarrowWrap {
 	width: 280px;
-	height: 520px;
-	border-top: 5px solid #000000;
-	background: #999999;
+	height: 555px;
+	background: #FA8D0C;
+	position: relative;
+	top: -15px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
-	background: ${object1_100};
+	color: #D7AC3F;
+	background-color: #302A2C;
+	text-transform: uppercase;
+	border: none;
+	font-family: Calibri;
+	/*background: ${object1_100};
 	border: 2px solid ${object1_100};
-	color: ${object1_10};
+	color: ${object1_10};*/
 	cursor: pointer;
     float: right;
-    font-size: 16px;
+    font-size: 14pt;
+    font-weight: bold;
     margin: 20px 0;
     width: auto;
-    padding: 10px;
+    padding: 10px 0 10px 10px;
 }
 
 .advancedSearchNarrowWrap label {
@@ -72,7 +88,7 @@
 	float: left;
 	width: 90px;
 	font-size: 14px;
-	background-color: #CCCCCC;
+	background-color: #FF9900;
 	padding: 3px 0;
 	text-align: center;
 	margin-left: 30px;
@@ -192,34 +208,45 @@
 
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	position: relative;
+	top: -22px;
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
-	width: 620px;
+	width: 660px;
 	vertical-align: top;
 	float: right;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
-	background: #fff;
 	overflow: hidden;
+	border-top: 4px solid #1F1B1C;
+	position: relative;
+	top: 3px;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	min-height:600px;
-	border-top: 4px solid black;
+	border-bottom: 1px solid #484243;
 }
 
 #aptListModeSwitch {
-	background-image: url("images/aptListIcons.png");
+	background-image: url("images/map_gold.png");
 	background-repeat: no-repeat;
+	background-color: #302a2c;
+	background-position: 25% center;
+	position: relative;
+	z-index: 1;
+	top: 18px;
 	width:auto;
 	height:25px;
 	padding-top:7px;
-	padding-left:30px;
+	padding-left:50px;
+	padding-right: 0px;
 	margin-top:0px;
 	float:right;
-	color:${object2_30};
-	font-weight:bold;
+	/*color:${object2_30};*/
+	color: #D7AC3F;
+	font-weight:normal;
+	font-size: 12pt;
 	text-transform:uppercase;
 	cursor:pointer;
 }
@@ -236,40 +263,47 @@
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_mapview {
 	width:744px;
 	height:650px;
+	padding-top: 20px;
+	border-top: 1px solid #484243;
 }
 .apartmentListingWrap .listingEntry {
 	padding:20px 0;
-	border-top: 1px solid #000000;
+	border-top: 1px solid #484243;
+	border-bottom: 3px solid #1F1B1C;
 	*float: left;
 	zoom: 1;
 	*display: inline;
 }
 .apartmentListingWrap .listingEntry:hover {
-	background-color:#CCCCCC;
+	background-color:#745f34;
 }
 .apartmentListingWrap .listingEntry:first-child {
 }
 .apartmentListingWrap .listingEntry .pictureBox {
 	display: inline-block;
 	vertical-align: top;
-	width:80px;
+	width:150px;
 	min-height:75px;
 	text-align:center;
 	zoom: 1;
 	*display: inline;
 	*float:left;
+	border: 2px solid #D7AC3F;
+	padding: 10px 5px 5px;
 } 
 .apartmentListingWrap .listingEntry .pictureBox .picture {
-	width:100%;
+	width:140px;
 }
 .apartmentListingWrap .listingEntry .infoBox {
 	display: inline-block;
 	vertical-align: top;
-	width:430px;
+	width:400px;
 	*width:auto;
 	zoom: 1;
 	*display: inline;
 	*float:left;
+	color: #FFFFFF;
+	font-size: 11pt;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry {
 	padding:4px 0;
@@ -283,13 +317,15 @@
 	text-align:right;
 	padding-right:8px;
 	font-weight:normal;
+	color: #D7AC3F;
+	text-transform: uppercase;
 }
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText {
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
 	vertical-align: top;
-	width:330px;
+	width:300px;
 	font-weight:bold;
 }
 .apartmentListingWrap .listingEntry .infoBoxEntry .infoBoxText .typeInfo {
@@ -318,6 +354,17 @@
 	margin-left: 0;
 	*margin-left: 0;
 }
+.apartmentListingWrap .listingEntry:hover .infoBoxEntry .infoBoxText {
+	color:#1F1B1C;
+}
+
+.apartmentListingWrap .listingEntry:hover .pictureBox {
+	border-color: #1F1B1C;
+}
+.apartmentListingWrap .listingEntry:hover .controlButton{
+	border-bottom-color: #1F1B1C;
+}
+
 .apartmentListingWrap .listingEntry .controlBox {
 	position:relative;
 	display: inline-block;
@@ -332,7 +379,7 @@
 	width: 80px;
 	float:right;
 	padding:6px 0;
-	border-bottom: 1px solid #999999;
+	border-bottom: 1px solid #d7ac3f;
 }
 .apartmentListingWrap .notFoundNote {
 	font-size:18px;
@@ -340,30 +387,37 @@
 	padding:40px 20px;
 }
 .listingCtlButton {
-	background-image: url("images/aptListIcons.png");
+	background-image: url("images/map_gold.png");
 	background-repeat: no-repeat;
 	display:block;
 	width:70px;
 	height:25px;
 	padding-top:5px;
 	padding-left:30px;
-	font-weight:bold;
+	font-weight:normal;
+	font-size: 12pt;
 	cursor:pointer;
 	color:${foreground_50};
 }
 a.listingCtlButton {
-	color:#CCCCCC !important;
+	color:#d7ac3f;
 	text-decoration:none;
 }
 .apartmentListingWrap .listingEntry:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
-	color:${foreground_80} !important;
+	background-image: url("images/map_bl.png");
+	color: #1F1B1C;
+	/*color:${foreground_80} !important;*/
 }
+.apartmentListingWrap .listingEntry:hover .listingCtlButton.btnViewDetails {
+	background-image: url("images/aptListIcons_bl.png");
+}
+
 .btnShowOnMap {
 	background-position:0px 0px;
 }
 .btnViewDetails {
-	background-position:0px -30px;
+	background-image: url("images/aptListIcons_gold.png");
+	/*background-position:0px -30px;*/
 }
 /*
  * Map style
