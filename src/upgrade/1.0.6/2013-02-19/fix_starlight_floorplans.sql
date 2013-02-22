@@ -27,14 +27,21 @@ BEGIN
         FOR v_building,v_floorplan_name IN
         SELECT  DISTINCT building,name 
         FROM    starlight.floorplan
-        WHERE   id IN (SELECT DISTINCT floorplan FROM starlight.apt_unit)
+        WHERE   id IN (SELECT DISTINCT COALESCE(floorplan,0) FROM starlight.apt_unit)
         LOOP
-                SELECT  MAX(id)
+                WITH t AS (SELECT a.id, COUNT(b.id) AS units
+                        FROM    starlight.floorplan A
+                        JOIN    starlight.apt_unit b ON (a.id = b.floorplan)
+                        WHERE   a.building = v_building
+                        AND     a.name = v_floorplan_name
+                        GROUP BY a.id)
+                SELECT  id
                 INTO    v_floorplan_id
-                FROM    starlight.floorplan
-                WHERE   building = v_building
-                AND     name = v_floorplan_name;
+                FROM    t 
+                WHERE   units = (SELECT MAX(units) FROM t)
+                LIMIT 1;
                 
+                /*
                 IF NOT EXISTS ( SELECT 'x' FROM starlight.floorplan_amenity
                                 WHERE floorplan = v_floorplan_id) 
                 THEN
@@ -43,50 +50,42 @@ BEGIN
                         FROM starlight.floorplan_amenity
                         WHERE floorplan = (SELECT MIN(id) FROM starlight.floorplan WHERE building = v_building AND name = v_floorplan_name));
                 END IF;
-                           
+                
+                */         
                 
                 UPDATE  starlight.apt_unit
                 SET     floorplan = v_floorplan_id
                 WHERE   floorplan IN    (SELECT id FROM starlight.floorplan 
                                         WHERE   building = v_building
                                         AND     name = v_floorplan_name);
+                                        
+                UPDATE  starlight.floorplan_counters AS a
+                SET     _marketing_unit_count = b.units,
+                        _unit_count = b.units
+                FROM    (SELECT COUNT(a.id) AS units,b.counters 
+                        FROM    starlight.apt_unit a 
+                        JOIN    starlight.floorplan b ON (a.floorplan = b.id)
+                        WHERE   a.floorplan = v_floorplan_id
+                        GROUP BY b.counters) AS b
+                WHERE   id = b.counters;  
+                
         END LOOP;       
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-CREATE OR REPLACE FUNCTION _dba_.remove_extra_starlight_media() RETURNS VOID AS
-$$
-DECLARE 
-        v_min_id        BIGINT;
-        v_md5           VARCHAR(32);
-BEGIN
-        FOR v_min_id,v_md5 IN
-        SELECT  MIN(id),md5(content)
-        FROM    starlight.file_blob
-        GROUP BY md5(content)
-        HAVING COUNT(id) > 1
-        LOOP
-                UPDATE  starlight.media
-                SET     media_file_blob_key = v_min_id
-                WHERE   media_file_blob_key IN 
-                (SELECT id FROM starlight.file_blob WHERE md5(content) = v_md5);
-        END LOOP; 
-       
-        DELETE FROM starlight.file_blob
-        WHERE id NOT IN (SELECT DISTINCT media_file_blob_key FROM starlight.media);
-END;
-$$
-LANGUAGE plpgsql VOLATILE;
 
 BEGIN TRANSACTION;
 
 SELECT * FROM _dba_.fix_starlight_floorplans();
 
-DELETE FROM starlight.floorplan_amenity WHERE floorplan NOT IN (SELECT DISTINCT floorplan FROM starlight.apt_unit);
+DELETE FROM starlight.floorplan_amenity WHERE floorplan NOT IN (SELECT DISTINCT COALESCE(floorplan,0) FROM starlight.apt_unit);
+DELETE FROM starlight.floorplan$media WHERE owner NOT IN (SELECT DISTINCT COALESCE(floorplan,0) FROM starlight.apt_unit);
+DELETE FROM starlight.media WHERE id NOT IN (SELECT DISTINCT COALESCE(value,0) FROM starlight.floorplan$media UNION SELECT DISTINCT COALESCE(value,0) FROM starlight.building$media);
+DELETE FROM starlight.file_blob WHERE id NOT IN (SELECT DISTINCT COALESCE(media_file_blob_key,0) FROM starlight.media);
+DELETE FROM starlight.file_image_thumbnail_blob WHERE blob_key NOT IN (SELECT DISTINCT id FROM starlight.file_blob);
+DELETE FROM starlight.floorplan WHERE id NOT IN (SELECT DISTINCT COALESCE(floorplan,0) FROM starlight.apt_unit);
+DELETE FROM starlight.floorplan_counters WHERE id NOT IN (SELECT DISTINCT COALESCE(counters,0) FROM starlight.floorplan);
 
-
-DELETE FROM starlight.floorplan WHERE id NOT IN (SELECT DISTINCT floorplan FROM starlight.apt_unit);
-
--- ROLLBACK;
+COMMIT;
         
