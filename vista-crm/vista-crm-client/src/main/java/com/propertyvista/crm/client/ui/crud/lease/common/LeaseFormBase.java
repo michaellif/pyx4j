@@ -62,7 +62,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(chargesTab, !getValue().billingPreview().isNull());
+        setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
 
         get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
 
