@@ -19,6 +19,7 @@ import com.propertyvista.portal.domain.dto.ResidentDTO;
 public interface PersonalInfoView extends View<ResidentDTO> {
 
     interface Presenter extends View.Presenter<ResidentDTO> {
-    }
 
+        void resetPassword();
+    }
 }

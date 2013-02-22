@@ -13,6 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.widgets.client.Anchor;
+
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
@@ -21,5 +26,16 @@ public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm());
         getCancelAnchor().setVisible(false);
+
+        Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
+            @Override
+            public void execute() {
+                ((PersonalInfoView.Presenter) getPresenter()).resetPassword();
+            }
+        });
+        resetPassword.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        resetPassword.asWidget().getElement().getStyle().setMarginRight(50, Unit.PX);
+        resetPassword.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(resetPassword);
     }
 }

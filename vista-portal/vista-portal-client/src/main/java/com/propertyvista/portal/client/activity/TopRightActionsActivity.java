@@ -79,7 +79,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showAccount() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PersonalInformation());
     }
-
 }

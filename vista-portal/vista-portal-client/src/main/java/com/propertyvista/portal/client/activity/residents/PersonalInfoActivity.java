@@ -22,11 +22,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 
 public class PersonalInfoActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
@@ -83,4 +85,10 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
     public void cancel() {
         History.back();
     }
+
+    @Override
+    public void resetPassword() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
+    }
+
 }
