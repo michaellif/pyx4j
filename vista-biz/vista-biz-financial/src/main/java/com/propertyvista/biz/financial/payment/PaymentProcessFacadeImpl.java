@@ -38,7 +38,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -54,8 +53,9 @@ import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmen
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.server.jobs.StatisticsUtils;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 

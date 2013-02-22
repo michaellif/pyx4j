@@ -43,17 +43,17 @@ public class RunForm extends OperationsEntityForm<Run> {
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().total()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().processed()), 10).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountProcessed()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountFailed()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().erred()), 10).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountErred()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().total()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().processed()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().executionReport().amountProcessed()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().failed()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().executionReport().amountFailed()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().erred()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().executionReport().amountErred()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().averageDuration()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().totalDuration()), 10).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().message()), 40).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().message()), 40).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Data"));

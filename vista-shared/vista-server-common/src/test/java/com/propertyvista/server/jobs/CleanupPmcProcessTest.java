@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,15 +21,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
 
     public void testCleanupOrphanApplicationDocuments() {
 
-        // SET UP        
-        // 5 orphan blobs inside the target cleanup date range, 3 outside the target range 
+        // SET UP
+        // 5 orphan blobs inside the target cleanup date range, 3 outside the target range
         // 2 not orphan inside the cleanup range
         mockupConfig.setCleanupOrphanApplicationDocumentsDateRangeMin("01-May-1999");
         mockupConfig.setCleanupOrphanApplicationDocumentsDateRangeMax("05-May-1999");
@@ -50,7 +50,7 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
         );//@formatter:on
 
         // RUN CLEANUP
-        PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
+        PmcProcessContext context = new PmcProcessContext(EntityFactory.create(StatisticsRecord.class), new Date());
         cleanupProcessInstance.executePmcJob(context);
 
         // TEST
@@ -90,7 +90,7 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
 
             List<ApplicationDocumentBlob> blobs = Persistence.service().query(criteria);
 
-            // assert orphans that should have been deleted are still alive  
+            // assert orphans that should have been deleted are still alive
             assertEquals("number of expected orphan documents does not match", 3, blobs.size());
         }
 

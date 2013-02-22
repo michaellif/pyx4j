@@ -13,34 +13,45 @@
  */
 package com.propertyvista.operations.domain.scheduler;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.VistaNamespace;
 
 @ToStringFormat("Total {0}, Processed {1}, Failed {2}, Erred {3}, Avg {4}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.operationsNamespace)
-public interface RunStats extends StatisticsRecord {
+public interface ExecutionReport extends IEntity {
 
-    @Override
     @ToString(index = 0)
     IPrimitive<Long> total();
 
-    @Override
     @ToString(index = 1)
     IPrimitive<Long> processed();
 
-    @Override
     @ToString(index = 2)
     IPrimitive<Long> failed();
 
-    @Override
     @ToString(index = 3)
     IPrimitive<Long> erred();
+
+    @Deprecated
+    IPrimitive<Double> amountProcessed();
+
+    @Deprecated
+    IPrimitive<Double> amountFailed();
+
+    @Deprecated
+    IPrimitive<Double> amountErred();
+
+    IPrimitive<String> message();
 
     @ToString(index = 4)
     @Format(value = "{0,duration}", messageFormat = true)
@@ -48,5 +59,9 @@ public interface RunStats extends StatisticsRecord {
 
     /** This used for avg calculation **/
     IPrimitive<Long> totalDuration();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<ExecutionReportSection> details();
 
 }

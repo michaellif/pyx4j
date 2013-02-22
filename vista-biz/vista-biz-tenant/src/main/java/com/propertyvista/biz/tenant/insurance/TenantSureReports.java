@@ -50,9 +50,9 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureS
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.rpc.TenantSureCcTaransactionsReportLineDTO;
-import com.propertyvista.server.jobs.StatisticsUtils;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 class TenantSureReports {
 
@@ -68,7 +68,7 @@ class TenantSureReports {
         return formatter;
     }
 
-    static void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formatter) {
+    static void processReportPmc(StatisticsRecord runStats, Date date, ReportTableFormatter formatter) {
         EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
 
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
@@ -154,7 +154,7 @@ class TenantSureReports {
         return formatter;
     }
 
-    static void processTransactionsReport(RunStats runStats, Date date, ReportTableFormatter formatter) {
+    static void processTransactionsReport(StatisticsRecord runStats, Date date, ReportTableFormatter formatter) {
         EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
 
         GregorianCalendar lowerBound = new GregorianCalendar();

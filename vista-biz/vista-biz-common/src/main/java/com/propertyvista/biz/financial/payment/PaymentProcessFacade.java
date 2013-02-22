@@ -15,10 +15,10 @@ package com.propertyvista.biz.financial.payment;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 
 public interface PaymentProcessFacade {
 

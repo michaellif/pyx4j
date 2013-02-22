@@ -11,13 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.jobs;
+package com.propertyvista.server.jobs.report;
 
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+
 
 public class StatisticsUtils {
 

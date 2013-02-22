@@ -41,11 +41,11 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     @Override
     public void populateExecutionState(ExecutionStatusUpdateDTO result) {
         getForm().get(getForm().proto().status()).setValue(result.status().getValue());
-        getForm().get(getForm().proto().stats().total()).setValue(result.stats().total().getValue());
-        getForm().get(getForm().proto().stats().processed()).setValue(result.stats().processed().getValue());
-        getForm().get(getForm().proto().stats().failed()).setValue(result.stats().failed().getValue());
-        getForm().get(getForm().proto().stats().erred()).setValue(result.stats().erred().getValue());
-        getForm().get(getForm().proto().stats().averageDuration()).setValue(result.stats().averageDuration().getValue());
-        getForm().get(getForm().proto().stats().totalDuration()).setValue(result.stats().totalDuration().getValue());
+        getForm().get(getForm().proto().executionReport().total()).setValue(result.stats().total().getValue());
+        getForm().get(getForm().proto().executionReport().processed()).setValue(result.stats().processed().getValue());
+        getForm().get(getForm().proto().executionReport().failed()).setValue(result.stats().failed().getValue());
+        getForm().get(getForm().proto().executionReport().erred()).setValue(result.stats().erred().getValue());
+        getForm().get(getForm().proto().executionReport().averageDuration()).setValue(result.stats().averageDuration().getValue());
+        getForm().get(getForm().proto().executionReport().totalDuration()).setValue(result.stats().totalDuration().getValue());
     }
 }

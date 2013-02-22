@@ -19,8 +19,8 @@ import org.junit.Test;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 @Ignore

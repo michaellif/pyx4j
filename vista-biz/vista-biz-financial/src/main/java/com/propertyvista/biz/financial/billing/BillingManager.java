@@ -48,7 +48,6 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
@@ -65,9 +64,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.portal.rpc.shared.BillingException;
-import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class BillingManager {
 

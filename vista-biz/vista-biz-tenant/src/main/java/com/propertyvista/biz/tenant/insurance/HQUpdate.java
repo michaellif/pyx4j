@@ -17,9 +17,9 @@ import java.io.File;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
-import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 class HQUpdate {
 
@@ -29,7 +29,7 @@ class HQUpdate {
         return null;
     }
 
-    static void processHQUpdate(RunStats runStats, TenantSureHQUpdateFile fileId) {
+    static void processHQUpdate(StatisticsRecord runStats, TenantSureHQUpdateFile fileId) {
         // Process data for single PMC.
         // TODO Auto-generated method stub
 

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.YardiProcessFacade;
-import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiBatchProcess implements PmcProcess {

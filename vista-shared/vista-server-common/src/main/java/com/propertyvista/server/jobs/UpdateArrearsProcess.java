@@ -29,6 +29,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {

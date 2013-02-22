@@ -27,12 +27,12 @@ public class RunLister extends ListerBase<Run> {
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().started()).build(),
                 new MemberColumnDescriptor.Builder(proto().forDate()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().erred()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().averageDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().averageDuration()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
                 new MemberColumnDescriptor.Builder(proto().created()).build(),
                 new MemberColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on

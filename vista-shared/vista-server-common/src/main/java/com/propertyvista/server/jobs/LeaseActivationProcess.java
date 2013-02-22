@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseActivationProcess implements PmcProcess {

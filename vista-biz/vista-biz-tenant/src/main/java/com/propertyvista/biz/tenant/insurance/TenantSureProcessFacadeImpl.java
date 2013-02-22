@@ -35,7 +35,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Cancellatio
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
@@ -78,7 +78,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processCancellations(RunStats runStats, LogicalDate dueDate) {
+    public void processCancellations(StatisticsRecord runStats, LogicalDate dueDate) {
 
         long cancelledCounter = 0l;
         long failedCounter = 0l;
@@ -140,7 +140,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processPayments(RunStats runStats, LogicalDate dueDate) {
+    public void processPayments(StatisticsRecord runStats, LogicalDate dueDate) {
         TenantSurePayments.processPayments(runStats, dueDate);
     }
 
@@ -150,7 +150,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processHQUpdate(RunStats runStats, TenantSureHQUpdateFile fileId) {
+    public void processHQUpdate(StatisticsRecord runStats, TenantSureHQUpdateFile fileId) {
         HQUpdate.processHQUpdate(runStats, fileId);
     }
 
@@ -160,7 +160,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater) {
+    public void processReportPmc(StatisticsRecord runStats, Date date, ReportTableFormatter formater) {
         TenantSureReports.processReportPmc(runStats, date, formater);
     }
 
@@ -170,7 +170,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processTransactionsReport(RunStats runtStats, Date date, ReportTableFormatter formatter) {
+    public void processTransactionsReport(StatisticsRecord runtStats, Date date, ReportTableFormatter formatter) {
         TenantSureReports.processTransactionsReport(runtStats, date, formatter);
     }
 

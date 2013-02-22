@@ -43,20 +43,21 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.domain.scheduler.RunData;
-import com.propertyvista.operations.domain.scheduler.RunDataStatus;
-import com.propertyvista.operations.domain.scheduler.RunStats;
-import com.propertyvista.operations.domain.scheduler.RunStatus;
-import com.propertyvista.operations.domain.scheduler.Trigger;
-import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.operations.domain.scheduler.ExecutionReport;
+import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.scheduler.RunDataStatus;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+import com.propertyvista.operations.domain.scheduler.Trigger;
+import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
-import com.propertyvista.server.jobs.StatisticsUtils;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class PmcProcessDispatcherJob implements Job {
 
@@ -143,7 +144,8 @@ public class PmcProcessDispatcherJob implements Job {
 
     private PmcProcess startProcess(Run run) {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
-        PmcProcessContext context = new PmcProcessContext(run.stats(), run.forDate().getValue());
+        StatisticsRecord runStats = StatisticsConversionUtils.createStatisticsRecord(run.executionReport());
+        PmcProcessContext context = new PmcProcessContext(runStats, run.forDate().getValue());
         try {
             if (!pmcProcess.start(context)) {
                 run.status().setValue(RunStatus.Sleeping);
@@ -155,7 +157,8 @@ public class PmcProcessDispatcherJob implements Job {
             run.status().setValue(RunStatus.Failed);
             return null;
         }
-        Persistence.service().persist(run.stats());
+        StatisticsConversionUtils.updateExecutionReport(runStats, run.executionReport());
+        Persistence.service().persist(run.executionReport());
         createPopulation(run);
         return pmcProcess;
     }
@@ -204,7 +207,8 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeRun(Run run, PmcProcess pmcProcess) {
         long startTimeNano = System.nanoTime();
-        PmcProcessContext context = new PmcProcessContext(run.stats(), run.forDate().getValue());
+        StatisticsRecord runStats = StatisticsConversionUtils.createStatisticsRecord(run.executionReport());
+        PmcProcessContext context = new PmcProcessContext(runStats, run.forDate().getValue());
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
@@ -224,7 +228,7 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().commit();
                 executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
 
-                updateRunStats(run.stats(), startTimeNano, runData);
+                addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
 
                 Persistence.service().persist(runData);
                 Persistence.service().commit();
@@ -232,14 +236,15 @@ public class PmcProcessDispatcherJob implements Job {
                 if (runData.status().getValue() != RunDataStatus.Processed) {
                     runStatus = RunStatus.PartiallyCompleted;
                 }
-                if (runData.stats().erred().getValue(0L) > 0) {
+                if (runData.executionReport().erred().getValue(0L) > 0) {
                     runStatus = RunStatus.PartiallyCompleted;
                 }
             }
 
             try {
                 pmcProcess.complete(context);
-                Persistence.service().persist(run.stats());
+                StatisticsConversionUtils.updateExecutionReport(runStats, run.executionReport());
+                Persistence.service().persist(run.executionReport());
             } catch (Throwable e) {
                 log.error("pmcProcess execution error", e);
                 run.errorMessage().setValue(e.getMessage());
@@ -253,14 +258,15 @@ public class PmcProcessDispatcherJob implements Job {
 
     }
 
-    private void updateRunStats(RunStats stats, long startTimeNano, RunData runData) {
+    private void addRunDataStatsToRunStats(ExecutionReport stats, long startTimeNano, RunData runData) {
         long durationNano = System.nanoTime() - startTimeNano;
 
-        StatisticsUtils.nvlAddLong(stats.total(), runData.stats().total());
-        StatisticsUtils.nvlAddLong(stats.processed(), runData.stats().processed());
-        StatisticsUtils.nvlAddDouble(stats.amountProcessed(), runData.stats().amountProcessed());
-        StatisticsUtils.nvlAddLong(stats.failed(), runData.stats().failed());
-        StatisticsUtils.nvlAddDouble(stats.amountFailed(), runData.stats().amountFailed());
+        StatisticsUtils.nvlAddLong(stats.total(), runData.executionReport().total());
+        StatisticsUtils.nvlAddLong(stats.processed(), runData.executionReport().processed());
+        StatisticsUtils.nvlAddDouble(stats.amountProcessed(), runData.executionReport().amountProcessed());
+        StatisticsUtils.nvlAddLong(stats.failed(), runData.executionReport().failed());
+        StatisticsUtils.nvlAddLong(stats.erred(), runData.executionReport().erred());
+        StatisticsUtils.nvlAddDouble(stats.amountFailed(), runData.executionReport().amountFailed());
 
         stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
@@ -271,7 +277,10 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {
         long startTimeNano = System.nanoTime();
-        RunStats savedStats = runData.stats().duplicate();
+        StatisticsRecord runDataStats = StatisticsConversionUtils.createStatisticsRecord(runData.executionReport());
+        StatisticsRecord savedRunDataStats = runDataStats.duplicate();
+        final PmcProcessContext context = new PmcProcessContext(runDataStats, forDate);
+
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
             @Override
@@ -282,7 +291,6 @@ public class PmcProcessDispatcherJob implements Job {
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
                     Persistence.service().startBackgroundProcessTransaction();
 
-                    PmcProcessContext context = new PmcProcessContext(runData.stats(), forDate);
                     pmcProcess.executePmcJob(context);
                     success = true;
                     return Boolean.TRUE;
@@ -308,10 +316,11 @@ public class PmcProcessDispatcherJob implements Job {
                 compleated = true;
             }
 
-            // Update Statistics
-            if (!EntityGraph.fullyEqualValues(savedStats, runData.stats())) {
-                savedStats = runData.stats().duplicate();
-                Persistence.service().persist(runData.stats());
+            // Update Statistics in UI
+            if (!EntityGraph.fullyEqualValues(savedRunDataStats, runDataStats)) {
+                savedRunDataStats = runDataStats.duplicate();
+                StatisticsConversionUtils.updateExecutionReportMajorStats(savedRunDataStats, runData.executionReport());
+                Persistence.service().persist(runData.executionReport());
                 Persistence.service().commit();
             }
 
@@ -330,12 +339,13 @@ public class PmcProcessDispatcherJob implements Job {
 
         long durationNano = System.nanoTime() - startTimeNano;
 
-        runData.stats().totalDuration().setValue(durationNano / Consts.MSEC2NANO);
-        if ((!runData.stats().total().isNull()) && (runData.stats().total().getValue() != 0)) {
-            runData.stats().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.stats().total().getValue()));
+        runData.executionReport().totalDuration().setValue(durationNano / Consts.MSEC2NANO);
+        if ((!runData.executionReport().total().isNull()) && (runData.executionReport().total().getValue() != 0)) {
+            runData.executionReport().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.executionReport().total().getValue()));
         }
 
-        Persistence.service().persist(runData.stats());
+        StatisticsConversionUtils.updateExecutionReport(runDataStats, runData.executionReport());
+        Persistence.service().persist(runData.executionReport());
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
             runData.errorMessage().setValue(executionException.getMessage());

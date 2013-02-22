@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-10
+ * Created on 2013-02-22
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.operations.business;
+package com.propertyvista.operations.domain.scheduler;
 
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import java.io.Serializable;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+public enum CompletionType implements Serializable {
 
-public interface VistaBusinessFacade {
+    error,
 
-    ReportTableFormatter startStatsReport();
+    failed,
 
-    void processStatsReportsPmc(StatisticsRecord runStats, ReportTableFormatter formater);
+    processed
 
-    void completeStatsReport(ReportTableFormatter formater);
 }

@@ -16,3 +16,7 @@ VISTA-2216 vlads TenantSure
 
   New in PMC Customer.created, Building.created  (set to updated during migration)
   Customer.registeredInPortal boolean set null in migration
+
+22/02/2013 13:37:45
+  _Admin_.scheduler_RunStats -> scheduler_ExecutionReport
+  new tables ExecutionReportSection and ExecutionReportMessage

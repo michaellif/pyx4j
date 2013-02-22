@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class CleanupPmcProcess implements PmcProcess {
 

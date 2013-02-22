@@ -44,9 +44,9 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.operations.domain.scheduler.RunStats;
-import com.propertyvista.server.jobs.StatisticsUtils;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 class TenantSurePayments {
 
@@ -143,7 +143,7 @@ class TenantSurePayments {
         }
     }
 
-    static void processPayments(RunStats runStats, final LogicalDate dueDate) {
+    static void processPayments(StatisticsRecord runStats, final LogicalDate dueDate) {
         Collection<Integer> paymentDays = new ArrayList<Integer>();
         // Calculate all payment days for end of month
         {

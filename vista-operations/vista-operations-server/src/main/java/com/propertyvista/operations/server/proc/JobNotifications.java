@@ -58,7 +58,7 @@ public class JobNotifications {
         String message = "<html><body>";
         message += SimpleMessageFormat.format("Execution of process {0} is {1},<br/>\n", trigger.name(), run.status());
         message += SimpleMessageFormat.format("For Date: {0}<br/>\n", run.forDate());
-        message += SimpleMessageFormat.format("Statistics: {0}<br/>\n", run.stats().getStringView());
+        message += SimpleMessageFormat.format("Statistics: {0}<br/>\n", run.executionReport().getStringView());
         if (!run.errorMessage().isNull()) {
             message += SimpleMessageFormat.format("Error Message: {0}<br/>\n", run.errorMessage());
         }

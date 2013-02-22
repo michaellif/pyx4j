@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,7 +39,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
@@ -169,7 +169,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                 Persistence.service().startBackgroundProcessTransaction();
 
                 UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-                PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
+                PmcProcessContext context = new PmcProcessContext(EntityFactory.create(StatisticsRecord.class), new Date());
                 GregorianCalendar cal = new GregorianCalendar();
                 int numOfYearsBack = 3;
                 cal.add(Calendar.YEAR, -numOfYearsBack);

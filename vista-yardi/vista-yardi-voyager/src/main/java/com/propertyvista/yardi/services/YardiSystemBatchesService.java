@@ -37,9 +37,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;

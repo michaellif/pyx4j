@@ -18,28 +18,28 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
-import com.propertyvista.operations.domain.scheduler.RunStats;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 public interface TenantSureProcessFacade {
 
     TenantSureHQUpdateFile reciveHQUpdatesFile();
 
-    void processHQUpdate(RunStats runStats, TenantSureHQUpdateFile fileId);
+    void processHQUpdate(StatisticsRecord runStats, TenantSureHQUpdateFile fileId);
 
-    void processPayments(RunStats runStats, LogicalDate dueDate);
+    void processPayments(StatisticsRecord runStats, LogicalDate dueDate);
 
-    void processCancellations(RunStats runStats, LogicalDate dueDate);
+    void processCancellations(StatisticsRecord runStats, LogicalDate dueDate);
 
     ReportTableFormatter startReport();
 
-    void processReportPmc(RunStats runStats, Date date, ReportTableFormatter formater);
+    void processReportPmc(StatisticsRecord runStats, Date date, ReportTableFormatter formater);
 
     void completeReport(ReportTableFormatter formater, Date date);
 
     ReportTableFormatter startTransactionsReport();
 
-    void processTransactionsReport(RunStats runtStats, Date date, ReportTableFormatter formatter);
+    void processTransactionsReport(StatisticsRecord runtStats, Date date, ReportTableFormatter formatter);
 
     void completeTransactionsReport(ReportTableFormatter formatter, Date date);
 

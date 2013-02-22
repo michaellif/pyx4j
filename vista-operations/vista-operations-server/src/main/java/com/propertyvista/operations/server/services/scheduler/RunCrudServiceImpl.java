@@ -39,7 +39,7 @@ public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements 
         Run run = Persistence.service().retrieve(Run.class, runStub.getPrimaryKey());
         ExecutionStatusUpdateDTO dto = EntityFactory.create(ExecutionStatusUpdateDTO.class);
         dto.status().setValue(run.status().getValue());
-        dto.stats().set(run.stats());
+        dto.stats().set(run.executionReport());
         callback.onSuccess(dto);
     }
 

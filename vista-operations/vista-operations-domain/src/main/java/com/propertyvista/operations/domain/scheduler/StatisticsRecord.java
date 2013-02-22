@@ -11,29 +11,37 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.operations.domain.scheduler;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
+//TODO Make it POJO  ExecutionReportModel
 public interface StatisticsRecord extends IEntity {
 
     IPrimitive<Long> total();
 
     IPrimitive<Long> processed();
 
+    @Deprecated
     IPrimitive<Double> amountProcessed();
 
     IPrimitive<Long> failed();
 
+    @Deprecated
     IPrimitive<Double> amountFailed();
 
     IPrimitive<Long> erred();
 
+    @Deprecated
     IPrimitive<Double> amountErred();
 
     IPrimitive<String> message();
+
+    // TODO add Map<of messages>
+
+    // TODO Add duplicate()  should duplicate major counter.  Not messages, Used in executeOneRunData 'Update Statistics in UI'
 
 }

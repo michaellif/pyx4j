@@ -23,8 +23,8 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 

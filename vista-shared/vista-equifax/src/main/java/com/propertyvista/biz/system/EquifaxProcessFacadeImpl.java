@@ -23,8 +23,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
 

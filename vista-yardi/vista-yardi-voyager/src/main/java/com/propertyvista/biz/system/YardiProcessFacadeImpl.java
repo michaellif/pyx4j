@@ -16,10 +16,10 @@ package com.propertyvista.biz.system;
 import java.rmi.RemoteException;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
