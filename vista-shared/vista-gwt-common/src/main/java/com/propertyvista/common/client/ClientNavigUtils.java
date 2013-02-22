@@ -14,6 +14,7 @@
 package com.propertyvista.common.client;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.http.client.UrlBuilder;
@@ -24,7 +25,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -44,16 +44,16 @@ public class ClientNavigUtils {
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.UK) {
             locales.add(CompiledLocale.en_GB);
         } else {
+            EnumSet<CompiledLocale> SupportedLocales = CompiledLocale.getSupportedLocales();
             for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
                 if (localeName.equals("default")) {
                     localeName = "en_US";
                 }
                 CompiledLocale cl = CompiledLocale.valueOf(localeName);
-                if (DemoData.vistaDemo && cl == CompiledLocale.ru) {
-                    continue;
-                }
-                if (!locales.contains(cl)) {
-                    locales.add(cl);
+                if (SupportedLocales.contains(cl)) {
+                    if (!locales.contains(cl)) {
+                        locales.add(cl);
+                    }
                 }
             }
 

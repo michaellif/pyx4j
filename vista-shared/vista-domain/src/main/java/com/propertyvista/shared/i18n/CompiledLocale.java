@@ -20,6 +20,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.shared.config.VistaDemo;
+
 //TODO Use compiler do define available in compiled GWT locales
 // Use http://www.cylog.org/tools/utf8_converter.jsp to avoid UTF-8 format in this file
 public enum CompiledLocale implements Serializable {
@@ -62,7 +64,7 @@ public enum CompiledLocale implements Serializable {
 
     public static EnumSet<CompiledLocale> getSupportedLocales() {
         EnumSet<CompiledLocale> l = EnumSet.of(en, fr, es, zh_CN, zh_TW);
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() && !VistaDemo.isDemo()) {
             l.add(ru);
         }
         return l;
