@@ -105,12 +105,6 @@ public class TenantSureTheme extends Theme {
             addStyle(style);
         }
 
-        {
-            Style style = new Style("." + TenantSureResources.PrivacyPolicyStyles.TenantSurePrivacyPolicySection.name());
-            style.addProperty("margin-bottom", "20px");
-            addStyle(style);
-        }
-
     }
 
     public void initTenantSureAboutViewStyles() {

@@ -34,18 +34,12 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("faq.html")
     TextResource faq();
 
+    /** this is id of the anchor that should hold a link to privacy policy which is injected dynamicall to the page upon population */
     public static final String PRIVACY_POLICY_ANCHOR_ID = "PrivacyPolicy";
 
     // TODO this should be fetched as terms
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
-
-    public enum PrivacyPolicyStyles implements IStyleName {
-        TenantSurePrivacyPolicySection
-    }
-
-    @Source("privacy-policy.html")
-    TextResource privacyPolicy();
 
     @Source("contact-info.html")
     TextResource contactInfo();

@@ -13,17 +13,14 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
@@ -33,30 +30,6 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<TenantSurePersonalDisclaimerHolderDTO> {
 
     private static final I18n i18n = I18n.get(TenantSurePersonalDisclaimerForm.class);
-
-    private static class PrivacyPolicyTermsDialog extends OkDialog {
-
-        public PrivacyPolicyTermsDialog() {
-            super(i18n.tr("Privacy Policy"));
-            String weight = "500px";
-            String height = "300px";
-
-            HTML privacyPolicy = new HTML();
-            privacyPolicy.setHTML(TenantSureResources.INSTANCE.privacyPolicy().getText());
-
-            setSize(weight, height);
-            ScrollPanel privacyPolicyHolder = new ScrollPanel(privacyPolicy);
-            privacyPolicyHolder.setSize(weight, height);
-            setBody(privacyPolicyHolder);
-
-        }
-
-        @Override
-        public boolean onClickOk() {
-            return true;
-        }
-
-    }
 
     private SimplePanel personalDisclaimerHolder;
 
