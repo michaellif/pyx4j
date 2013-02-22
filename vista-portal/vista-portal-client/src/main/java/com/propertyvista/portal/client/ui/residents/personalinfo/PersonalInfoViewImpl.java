@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 
@@ -34,8 +35,11 @@ public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements 
             }
         });
         resetPassword.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        resetPassword.asWidget().getElement().getStyle().setMarginRight(50, Unit.PX);
+        resetPassword.asWidget().getElement().getStyle().setMarginRight(30, Unit.PX);
         resetPassword.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        resetPassword.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        resetPassword.asWidget().getElement().getStyle().setColor("#F3931F");
+
         add(resetPassword);
     }
 }
