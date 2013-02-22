@@ -748,6 +748,7 @@
       </s:complexType>
       <s:simpleType name="LimitDescription">
         <s:restriction base="s:string">
+          <s:enumeration value="Null" />
           <s:enumeration value="PrivacyLiabiltiy" />
           <s:enumeration value="MediaLiability" />
           <s:enumeration value="CyberLiability" />
@@ -943,6 +944,28 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetLinesFromQuote">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sessionId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="reference" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLinesFromQuoteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLinesFromQuoteResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
       <s:simpleType name="char">
@@ -1130,6 +1153,12 @@
   <wsdl:message name="MTAReinstatePolicySoapOut">
     <wsdl:part name="parameters" element="tns:MTAReinstatePolicyResponse" />
   </wsdl:message>
+  <wsdl:message name="GetLinesFromQuoteSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLinesFromQuote" />
+  </wsdl:message>
+  <wsdl:message name="GetLinesFromQuoteSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLinesFromQuoteResponse" />
+  </wsdl:message>
   <wsdl:portType name="CFC_APISoap">
     <wsdl:operation name="runClientUpdate">
       <wsdl:input name="ComplexClientUpdate" message="tns:ComplexClientUpdateSoapIn" />
@@ -1250,6 +1279,10 @@
     <wsdl:operation name="MTAReinstatePolicy">
       <wsdl:input message="tns:MTAReinstatePolicySoapIn" />
       <wsdl:output message="tns:MTAReinstatePolicySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLinesFromQuote">
+      <wsdl:input message="tns:GetLinesFromQuoteSoapIn" />
+      <wsdl:output message="tns:GetLinesFromQuoteSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="CFC_APISoap" type="tns:CFC_APISoap">
@@ -1524,6 +1557,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetLinesFromQuote">
+      <soap:operation soapAction="http://api.cfcprograms.com/GetLinesFromQuote" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="CFC_APISoap12" type="tns:CFC_APISoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -1790,6 +1832,15 @@
     </wsdl:operation>
     <wsdl:operation name="MTAReinstatePolicy">
       <soap12:operation soapAction="http://api.cfcprograms.com/MTAReinstatePolicy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLinesFromQuote">
+      <soap12:operation soapAction="http://api.cfcprograms.com/GetLinesFromQuote" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
