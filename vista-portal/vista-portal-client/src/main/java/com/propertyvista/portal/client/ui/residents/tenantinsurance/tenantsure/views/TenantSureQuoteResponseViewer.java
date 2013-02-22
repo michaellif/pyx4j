@@ -30,12 +30,16 @@ public class TenantSureQuoteResponseViewer extends CEntityViewer<TenantSureQuote
     public IsWidget createContent(TenantSureQuoteResponseDTO value) {
         FormFlexPanel panel = new FormFlexPanel();
         if (value != null) {
-            int row = -1;
-            panel.setH2(++row, 0, 1, i18n.tr("Annual Payment"));
-            panel.setWidget(++row, 0, new TenantSureQuoteViewer(true).createContent(value.quote()));
+            if (value.quote().specialQuote().isNull()) {
+                int row = -1;
+                panel.setH2(++row, 0, 1, i18n.tr("Annual Payment"));
+                panel.setWidget(++row, 0, new TenantSureQuoteViewer(true).createContent(value.quote()));
 
-            panel.setH2(++row, 0, 1, i18n.tr("Monthly Payment"));
-            panel.setWidget(++row, 0, new TenantSureMonthlyPaymentViewer().createContent(value.monthlyPayment()));
+                panel.setH2(++row, 0, 1, i18n.tr("Monthly Payment"));
+                panel.setWidget(++row, 0, new TenantSureMonthlyPaymentViewer().createContent(value.monthlyPayment()));
+            } else {
+                panel.setWidget(0, 1, new TenantSureQuoteViewer(true).createContent(value.quote()));
+            }
         }
         return panel;
     }

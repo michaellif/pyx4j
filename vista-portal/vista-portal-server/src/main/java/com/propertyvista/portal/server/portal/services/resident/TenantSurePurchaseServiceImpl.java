@@ -127,22 +127,23 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
         quoteResponse.quote().set(quote);
 
-        TenantSurePaymentDTO monthlyPayment = EntityFactory.create(TenantSurePaymentDTO.class);
-        TenantSurePaymentItemDTO monthlyPremium = monthlyPayment.paymentBreakdown().$();
-        monthlyPremium.amount().setValue(quote.grossPremium().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-        monthlyPremium.description().setValue(i18n.tr("Premium"));
-        for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
-            TenantSurePaymentItemTaxDTO monthlyPremiumTax = monthlyPremium.taxBreakdown().$();
-            monthlyPremiumTax.tax().setValue(grossPremiumTax.description().getValue());
-            monthlyPremiumTax.amount().setValue(
-                    grossPremiumTax.absoluteAmount().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-            monthlyPremium.taxBreakdown().add(monthlyPremiumTax);
+        if (quote.specialQuote().isNull()) {
+            TenantSurePaymentDTO monthlyPayment = EntityFactory.create(TenantSurePaymentDTO.class);
+            TenantSurePaymentItemDTO monthlyPremium = monthlyPayment.paymentBreakdown().$();
+            monthlyPremium.amount().setValue(quote.grossPremium().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
+            monthlyPremium.description().setValue(i18n.tr("Premium"));
+            for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
+                TenantSurePaymentItemTaxDTO monthlyPremiumTax = monthlyPremium.taxBreakdown().$();
+                monthlyPremiumTax.tax().setValue(grossPremiumTax.description().getValue());
+                monthlyPremiumTax.amount().setValue(
+                        grossPremiumTax.absoluteAmount().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
+                monthlyPremium.taxBreakdown().add(monthlyPremiumTax);
+            }
+            monthlyPayment.paymentBreakdown().add(monthlyPremium);
+            monthlyPayment.total().setValue(quote.totalPayable().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
+
+            quoteResponse.monthlyPayment().set(monthlyPayment);
         }
-        monthlyPayment.paymentBreakdown().add(monthlyPremium);
-        monthlyPayment.total().setValue(quote.totalPayable().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-
-        quoteResponse.monthlyPayment().set(monthlyPayment);
-
         callback.onSuccess(quoteResponse);
     }
 
