@@ -152,12 +152,14 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("text-align", "left");
         style.addProperty("font-size", "20px");
         style.addProperty("font-weight", "bold");
+        style.addProperty("display", "block");
         addStyle(style);
 
         style = new Style(".", StyleName.SignUpGreetingRow2.name());
         style.addProperty("text-align", "right");
         style.addProperty("font-size", "20px");
         style.addProperty("font-weight", "bold");
+        style.addProperty("display", "block");
         addStyle(style);
 
         style = new Style(".", StyleName.SignUpGreetingImageHolder.name());

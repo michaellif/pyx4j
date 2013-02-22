@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
@@ -33,7 +34,8 @@ public class LoginImageDecoration extends Composite {
         panel.add(image);
 
         Label label = new Label();
-        label.setStyleName(LandingPagesTheme.StyleName.LoginImageDecorationLabel.name());
+        label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        label.addStyleName(LandingPagesTheme.StyleName.LoginImageDecorationLabel.name());
         label.setText(caption);
         panel.add(label);
 

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -116,11 +117,14 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         FlowPanel signUpGreetingPanel = new FlowPanel();
         signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
         HTML row1 = new HTML(i18n.tr("Place To Call Home..."));
-        row1.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow1.name());
+        row1.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        row1.addStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow1.name());
+
         signUpGreetingPanel.add(row1);
 
         HTML row2 = new HTML(i18n.tr("...is just a click away!"));
-        row2.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow2.name());
+        row2.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
+        row2.addStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow2.name());
         signUpGreetingPanel.add(row2);
 
         SimplePanel imageHolder = new SimplePanel();
