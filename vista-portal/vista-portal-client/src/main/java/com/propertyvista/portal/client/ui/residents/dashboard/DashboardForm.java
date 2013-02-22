@@ -100,7 +100,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
         get(proto().general()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
-        leftPanel.setH1(++row, 0, 1, i18n.tr("FINANCIAL SUMMARY"));
+        leftPanel.setH1(++row, 0, 1, i18n.tr("RENT BALANCE"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
         get(proto().billSummary()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
 
