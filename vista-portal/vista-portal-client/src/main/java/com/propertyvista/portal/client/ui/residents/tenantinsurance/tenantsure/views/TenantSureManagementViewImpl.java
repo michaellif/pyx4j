@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.annotations.Editor;
@@ -38,6 +37,7 @@ import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.themes.TenantInsuranceTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
@@ -166,12 +166,9 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         FlowPanel tenantSureGreetingPanel = new FlowPanel();
         tenantSureGreetingPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementGreetingPanel.name());
 
-        // TODO put this in a resource
-        Label greeting = new Label(//@formatter:off
-                i18n.tr("TenantSure is a Licensed Broker. Below please find your TenantSure insurance details. If you have any claims, you can reach TenantSure''s claim department at {0}.",
-                 TenantSureConstants.TENANTSURE_PHONE_NUMBER)
-          );//@formatter:on
+        HTML greeting = new HTML(TenantSureResources.INSTANCE.managementPanelGreeting().getText());
         greeting.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementGreeting.name());
+
         tenantSureGreetingPanel.add(greeting);
         return tenantSureGreetingPanel;
     }

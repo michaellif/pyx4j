@@ -30,11 +30,13 @@ public interface TenantSureResources extends ClientBundleWithLookup {
 
     }
 
+    // TODO this should be fetched as terms
     @Source("faq.html")
     TextResource faq();
 
     public static final String PRIVACY_POLICY_ANCHOR_ID = "PrivacyPolicy";
 
+    // TODO this should be fetched as terms
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
 
