@@ -46,6 +46,14 @@ public class CommonsStringUtils {
         }
     }
 
+    public static String nvl(String value, String replaceWith) {
+        if (isEmpty(value)) {
+            return replaceWith;
+        } else {
+            return value;
+        }
+    }
+
     public static String nvl(Object value) {
         if (value == null) {
             return "";
