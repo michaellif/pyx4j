@@ -987,47 +987,4 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-/**
-***     ===========================================================================================
-***     
-***             Deduplicate file_blob table for specified schema
-***     
-***     ===========================================================================================
-**/
-CREATE OR REPLACE FUNCTION _dba_.deduplicate_file_blob(v_schema_name VARCHAR(64)) RETURNS VOID AS
-$$
-DECLARE
-        v_min_id        BIGINT;
-        v_md5           VARCHAR(32);
-BEGIN
-        DROP TABLE IF EXISTS _dba_.tmp_file_blob;
-        
-        EXECUTE 'CREATE TABLE _dba_.tmp_file_blob AS '
-                ||'SELECT       id,md5(content) AS md5 '
-                ||'FROM         '||v_schema_name||'.file_blob';
-                
-        FOR v_min_id,v_md5 IN
-        SELECT MIN(id),md5 
-        FROM _dba_.tmp_file_blob
-        GROUP BY md5
-        HAVING COUNT(*) > 1
-        LOOP
-                EXECUTE         'UPDATE '||v_schema_name||'.media '
-                                ||'SET  media_file_blob_key = '||v_min_id||' '
-                                ||'WHERE media_file_blob_key IN '
-                                ||'     (SELECT id FROM _dba_.tmp_file_blob '
-                                ||'     WHERE md5 = '''||v_md5||''' )';
-                                
-                EXECUTE         'DELETE FROM '||v_schema_name||'.file_blob '
-                                ||'WHERE (id IN (SELECT id FROM _dba_.tmp_file_blob '
-                                ||'             WHERE md5 = '''||v_md5||''' ) '
-                                ||'AND  id != '||v_min_id||')';
-        END LOOP;
-        
-        DROP TABLE _dba_.tmp_file_blob;
-                
-END;
-$$
-LANGUAGE plpgsql VOLATILE;
 
-                
