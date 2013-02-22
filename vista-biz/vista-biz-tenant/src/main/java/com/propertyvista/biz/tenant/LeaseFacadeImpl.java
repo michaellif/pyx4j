@@ -953,6 +953,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
+        // update possible changes of initial balance (carryforwardBalance() field of billing account):
+        if (lease.status().getValue() == Status.ExistingLease && lease.billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
+            Persistence.service().merge(lease.billingAccount());
+        }
+
         // update reservation if necessary:
         if (doUnreserve) {
             switch (lease.status().getValue()) {
