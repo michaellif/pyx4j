@@ -46,7 +46,10 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     @Override
     protected void execute() {
-        createCharges();
+        // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
+        if (!getBillingManager().getNextPeriodBill().billingPeriodStartDate().isNull()) {
+            createCharges();
+        }
     }
 
     private void createCharges() {

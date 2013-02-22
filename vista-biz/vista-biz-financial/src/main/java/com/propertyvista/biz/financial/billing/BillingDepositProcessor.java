@@ -47,8 +47,11 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     @Override
     protected void execute() {
-        createInvoiceDeposits();
-        crateDepositRefunds();
+        // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
+        if (!getBillingManager().getNextPeriodBill().billingPeriodStartDate().isNull()) {
+            createInvoiceDeposits();
+        }
+        createDepositRefunds();
         attachDepositRefunds();
     }
 
@@ -92,11 +95,11 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
-    private void crateDepositRefunds() {
+    private void createDepositRefunds() {
         // LastMonthDeposit - if this is the last month bill, or final bill, post the refund
         Bill nextBill = getBillingManager().getNextPeriodBill();
         if (nextBill.billType().getValue().equals(BillType.Final)
-                || !nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
+                || !nextBill.billingCycle().billingCycleEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
             Map<Deposit, ProductTerm> deposits = ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease());

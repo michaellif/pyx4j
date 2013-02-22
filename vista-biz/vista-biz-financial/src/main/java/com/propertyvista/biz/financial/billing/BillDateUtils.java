@@ -22,11 +22,13 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
@@ -170,8 +172,23 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingPeriodStartDate(Bill bill) {
+    public static DateRange calculateBillingPeriodRange(Bill bill) {
+        LogicalDate start = calculateBillingPeriodStartDate(bill);
+        LogicalDate end = calculateBillingPeriodEndDate(bill);
+
+        // check interdependency:
+        if (start == null) {
+            end = null;
+        } else if (end == null) {
+            start = null;
+        }
+
+        return new DateRange(start, end);
+    }
+
+    private static LogicalDate calculateBillingPeriodStartDate(Bill bill) {
         LogicalDate date = null;
+
         if (Bill.BillType.First == bill.billType().getValue()) {
             date = bill.billingAccount().lease().currentTerm().termFrom().getValue();
         } else if (Bill.BillType.ZeroCycle == bill.billType().getValue()) {
@@ -189,26 +206,45 @@ public class BillDateUtils {
                 date = bill.billingAccount().lease().currentTerm().termFrom().getValue();
             }
         }
+
+        // see if lease has been terminated
+        if (date != null && !bill.billingAccount().lease().terminationLeaseTo().isNull()) {
+            if (date.compareTo(bill.billingAccount().lease().terminationLeaseTo().getValue()) > 0) {
+                date = null;
+            }
+        }
+
         return date;
     }
 
-    public static LogicalDate calculateBillingPeriodEndDate(Bill bill) {
+    /**
+     * Returns BillingPeriodEndDate:
+     * - if lease ends after billingCycleEndDate - billingCycleEndDate;
+     * - if lease ends during billingCycle period - lease end date;
+     * - if lease ends before billingCycleEndDate - null
+     * then:
+     * - if lease has been terminated and termination date is before calculated BillingPeriodEndDate - the latter set to leaseTermination date.
+     */
+    private static LogicalDate calculateBillingPeriodEndDate(Lease lease, BillingCycle cycle) {
         LogicalDate date = null;
-        if (Bill.BillType.Final != bill.billType().getValue()) {
-            if (bill.billingAccount().lease().currentTerm().termTo().isNull()
-                    || (bill.billingAccount().lease().currentTerm().termTo().getValue().compareTo(bill.billingCycle().billingCycleEndDate().getValue()) >= 0)) {
-                date = bill.billingCycle().billingCycleEndDate().getValue();
-            } else if (bill.billingAccount().lease().currentTerm().termTo().getValue().compareTo(bill.billingCycle().billingCycleStartDate().getValue()) >= 0) {
-                date = bill.billingAccount().lease().currentTerm().termTo().getValue();
-            } else {
-                throw new BillingException(i18n.tr("Lease already ended"));
-            }
-            // see if lease has been terminated
-            if (date.compareTo(bill.billingAccount().lease().leaseTo().getValue()) > 0) {
-                date = bill.billingAccount().lease().leaseTo().getValue();
+
+        if (lease.currentTerm().termTo().isNull() || (lease.currentTerm().termTo().getValue().compareTo(cycle.billingCycleEndDate().getValue()) >= 0)) {
+            date = cycle.billingCycleEndDate().getValue();
+        } else if (lease.currentTerm().termTo().getValue().compareTo(cycle.billingCycleStartDate().getValue()) >= 0) {
+            date = lease.currentTerm().termTo().getValue();
+        }
+        // see if lease has been terminated
+        if (date != null && !lease.terminationLeaseTo().isNull()) {
+            if (date.compareTo(lease.terminationLeaseTo().getValue()) > 0) {
+                date = lease.terminationLeaseTo().getValue();
             }
         }
+
         return date;
+    }
+
+    private static LogicalDate calculateBillingPeriodEndDate(Bill bill) {
+        return calculateBillingPeriodEndDate(bill.billingAccount().lease(), bill.billingCycle());
     }
 
     public static LogicalDate calculateBillDueDate(Bill bill) {

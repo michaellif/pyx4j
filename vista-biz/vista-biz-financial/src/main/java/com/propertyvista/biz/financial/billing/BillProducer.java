@@ -107,8 +107,9 @@ class BillProducer {
             Bill.BillType billType = findBillType();
             bill.billType().setValue(billType);
 
-            bill.billingPeriodStartDate().setValue(BillDateUtils.calculateBillingPeriodStartDate(bill));
-            bill.billingPeriodEndDate().setValue(BillDateUtils.calculateBillingPeriodEndDate(bill));
+            DateRange billingPeriodRange = BillDateUtils.calculateBillingPeriodRange(bill);
+            bill.billingPeriodStartDate().setValue(billingPeriodRange.getFromDate());
+            bill.billingPeriodEndDate().setValue(billingPeriodRange.getToDate());
             bill.dueDate().setValue(BillDateUtils.calculateBillDueDate(bill));
 
             nextPeriodBill = bill;
@@ -227,6 +228,7 @@ class BillProducer {
         case Final:
             // @formatter:off
             return Arrays.asList(new AbstractBillingProcessor[] {
+                    
                     new BillingProductChargeProcessor(this),
                     new BillingDepositProcessor(this),
                     new BillingLeaseAdjustmentProcessor(this),

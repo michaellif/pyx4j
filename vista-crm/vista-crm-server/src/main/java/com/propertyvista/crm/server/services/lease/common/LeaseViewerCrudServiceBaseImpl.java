@@ -18,7 +18,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -51,7 +50,7 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
         // create bill preview for draft leases/applications:
-        if (in.status().getValue().isDraft() && !in.currentTerm().termTo().getValue().before(new LogicalDate())) {
+        if (in.status().getValue().isDraft()) {
             dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
         }
 

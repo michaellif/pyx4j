@@ -161,7 +161,6 @@ public class BillingManager {
 
         Bill previousConfirmedBill = getLatestConfirmedBill(lease);
         if (previousConfirmedBill != null) {
-
             Persistence.service().retrieve(previousConfirmedBill.billingAccount());
 
             //check if previous confirmed Bill is the last cycle bill and only final bill should run after
