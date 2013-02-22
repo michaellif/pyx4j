@@ -35,6 +35,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseViewerCrudServiceBase<DTO> {
 
@@ -49,9 +50,11 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTraget retrieveTraget) {
         super.enhanceRetrieved(in, dto, retrieveTraget);
 
-        // create bill preview for draft leases/applications:
-        if (in.status().getValue().isDraft()) {
-            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            // create bill preview for draft leases/applications:
+            if (in.status().getValue().isDraft()) {
+                dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
+            }
         }
 
         if (!dto.unit().isNull()) {

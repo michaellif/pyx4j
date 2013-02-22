@@ -83,6 +83,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
 
+        if (in.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
+            dbo.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(in.carryforwardBalance().getValue());
+        }
+
         if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
             dbo.lease().currentTerm().set(dbo);
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());

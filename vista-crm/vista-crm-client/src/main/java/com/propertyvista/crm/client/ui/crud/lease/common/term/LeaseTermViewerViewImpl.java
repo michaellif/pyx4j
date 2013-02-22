@@ -27,6 +27,7 @@ import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionSer
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Status;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO> implements LeaseTermViewerView {
 
@@ -38,14 +39,16 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         setForm(new LeaseTermForm(this));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Charges"), new Command() {
-            @Override
-            public void execute() {
-                if (!isVisorShown()) {
-                    ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addHeaderToolbarItem(new Button(i18n.tr("Charges"), new Command() {
+                @Override
+                public void execute() {
+                    if (!isVisorShown()) {
+                        ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+                    }
                 }
-            }
-        }));
+            }));
+        }
 
         if (false) {
             addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
@@ -53,7 +56,6 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
                 public void execute() {
 //              Print.it(getForm().toStringForPrint());
                     Print.preview(getForm().toStringForPrint());
-
                 }
             }));
         }

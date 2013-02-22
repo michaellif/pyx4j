@@ -40,6 +40,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<DTO> {
 
@@ -55,14 +56,18 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected void createCommonContent() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+        }
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            setTabVisible(chargesTab, getValue().status().getValue().isDraft() && !getValue().billingPreview().isNull());
+        }
 
         get(proto().carryforwardBalance()).setVisible(!getValue().carryforwardBalance().isNull());
 
