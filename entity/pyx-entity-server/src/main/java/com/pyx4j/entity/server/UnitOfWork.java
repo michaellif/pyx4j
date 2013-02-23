@@ -57,6 +57,7 @@ public class UnitOfWork {
         boolean success = false;
         try {
             Persistence.service().startTransaction();
+            Persistence.service().setAssertTransactionManangementCallOrigin();
             try {
                 R rv = task.execute();
                 Persistence.service().commit();
@@ -69,7 +70,6 @@ public class UnitOfWork {
                     } catch (Throwable e) {
                         log.error("error during UnitOfWork {} rollback", task, e);
                     }
-                    //TODO run compensation handlers
                 }
             }
         } finally {
@@ -77,13 +77,7 @@ public class UnitOfWork {
         }
     }
 
-    //TODO implement
-    public static void setCompensationHandler(CompensationHandler handler) {
-
-    }
-
-    //TODO implement
-    public interface CompensationHandler extends Executable<Void, RuntimeException> {
-
+    public static void addTransactionCompensationHandler(CompensationHandler handler) {
+        Persistence.service().addTransactionCompensationHandler(handler);
     }
 }

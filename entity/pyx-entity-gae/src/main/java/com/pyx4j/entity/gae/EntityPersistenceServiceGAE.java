@@ -68,6 +68,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.server.AdapterFactory;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -225,6 +226,21 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public void startBackgroundProcessTransaction() {
+        //TODO
+    }
+
+    @Override
+    public void enableNestedTransactions() {
+        // TODO
+    }
+
+    @Override
+    public void setAssertTransactionManangementCallOrigin() {
+        //TODO
+    }
+
+    @Override
+    public void addTransactionCompensationHandler(CompensationHandler handler) {
         //TODO
     }
 

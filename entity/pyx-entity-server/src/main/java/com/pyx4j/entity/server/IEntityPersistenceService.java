@@ -41,7 +41,11 @@ public interface IEntityPersistenceService {
      */
     public void startTransaction();
 
+    public void enableNestedTransactions();
+
     public void startBackgroundProcessTransaction();
+
+    public void setAssertTransactionManangementCallOrigin();
 
     /**
      * Validate that Transaction is explicitly committed or rolled back and then close it.
@@ -53,6 +57,11 @@ public interface IEntityPersistenceService {
     public void commit();
 
     public void rollback();
+
+    /**
+     * CompensationHandler is fired after rollback is executed in separate unit of work.
+     */
+    public void addTransactionCompensationHandler(CompensationHandler handler);
 
     public void setTransactionUserKey(Key currentUserKey);
 

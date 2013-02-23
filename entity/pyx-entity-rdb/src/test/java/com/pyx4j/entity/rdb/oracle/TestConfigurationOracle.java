@@ -71,7 +71,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("EMPLOYEE", "EMP");
         shortWords.add("DEPARTMENT", "DEPT");
         shortWords.add("DEPARTMENTS", "DEPTS");
-        shortWords.add("DISCRIMINATOR", "DSCR");
+        shortWords.add("DISCRIMINATOR", "DC");
         shortWords.add("REFERENCE", "RF");
         shortWords.add("REFERENCES", "RFS");
         shortWords.add("ARCHIVE", "ARC");
@@ -85,9 +85,12 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("STRING", "STR");
         shortWords.add("DETD", "D");
         shortWords.add("DETACHED", "DET");
+        shortWords.add("DIFERENT", "DIF");
         shortWords.add("READ", "R");
         shortWords.add("OWNED", "OW");
         shortWords.add("OWNER", "O");
+        shortWords.add("ONE", "1");
+        shortWords.add("POLY", "PL");
         shortWords.add("POLYMORPHIC", "PL");
         shortWords.add("MAIN", "M");
         shortWords.add("MEMBER", "MBR");
@@ -102,10 +105,12 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("UNIDIRECTIONAL", "UD");
         shortWords.add("BIDIRECTIONAL", "BD");
         shortWords.add("PARENT", "PA");
+        shortWords.add("CPARENT", "CPA");
         shortWords.add("STPARENT", "STPA");
         shortWords.add("CHILD", "C1");
+        shortWords.add("CCHILD", "C2");
         shortWords.add("STCHILD", "SCL");
-        shortWords.add("CHILDREN", "C2");
+        shortWords.add("CHILDREN", "C3");
         shortWords.add("AUTO", "A");
         shortWords.add("INVERSED", "R");
         shortWords.add("INVER", "R");
@@ -114,6 +119,9 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("LIST", "LS");
         shortWords.add("VALUE", "VL");
         shortWords.add("AMOUNT", "AMT");
+
+        shortWords.add("T_BD_1_TO_1_PLM_STP2_CPA_CHILD_DISCRIMINATOR_D_CK", "t_bd_1_to_1_plm_1234_dc_d_ck");
+
         return new NamingConventionOracle(30, shortWords);
     }
 

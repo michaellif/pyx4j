@@ -70,6 +70,7 @@ import com.pyx4j.entity.rdb.mapping.TableModelCollections;
 import com.pyx4j.entity.rdb.mapping.TableModleVersioned;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -251,6 +252,24 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         }
         threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.BackgroundProcess));
+    }
+
+    @Override
+    public void enableNestedTransactions() {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
+        getPersistenceContext().enableNestedTransactions();
+    }
+
+    @Override
+    public void setAssertTransactionManangementCallOrigin() {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
+        getPersistenceContext().setAssertTransactionManangementCallOrigin();
+    }
+
+    @Override
+    public void addTransactionCompensationHandler(CompensationHandler handler) {
+        assert getPersistenceContext() != null : "Transaction Context was not started";
+        getPersistenceContext().addTransactionCompensationHandler(handler);
     }
 
     @Override

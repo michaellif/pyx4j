@@ -25,7 +25,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.ListIterator;
 import java.util.Set;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
@@ -48,12 +51,6 @@ public class PersistenceContext {
 
     private Connection connection = null;
 
-    private String connectionNamespace;
-
-    private boolean uncommittedChanges;
-
-    private String uncommittedChangesFrom;
-
     private Date timeNow;
 
     private Key currentUserKey;
@@ -61,6 +58,10 @@ public class PersistenceContext {
     private int savepoints = 0;
 
     private long transactionStart = -1;
+
+    private final Stack<TransactionContext> transactionContexts = new Stack<TransactionContext>();
+
+    private boolean nestedTransactionsEnabled = false;
 
     public static final boolean traceOpenSession = false;
 
@@ -89,6 +90,7 @@ public class PersistenceContext {
         } else {
             this.contextOpenFrom = "n/a";
         }
+        transactionContexts.push(new TransactionContext(null, savepoints));
     }
 
     String getContextOpenFrom() {
@@ -132,7 +134,6 @@ public class PersistenceContext {
             } else {
                 connection = connectionProvider.getConnection();
             }
-            uncommittedChanges = false;
             transactionStart = -1;
             if (isExplicitTransaction()) {
                 try {
@@ -156,18 +157,35 @@ public class PersistenceContext {
         return connection;
     }
 
+    public void setAssertTransactionManangementCallOrigin() {
+        // TODO Auto-generated method stub
+    }
+
     public boolean isUncommittedChanges() {
-        return this.uncommittedChanges;
+        for (TransactionContext tc : transactionContexts) {
+            if (tc.isUncommittedChanges()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String getUncommittedChangesFrom() {
+        ListIterator<TransactionContext> li = transactionContexts.listIterator(transactionContexts.size());
+        while (li.hasPrevious()) {
+            TransactionContext tc = li.previous();
+            if (tc.isUncommittedChanges()) {
+                return tc.getUncommittedChangesFrom();
+            }
+        }
+        return null;
     }
 
     public void setUncommittedChanges() {
-        this.uncommittedChanges = true;
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            this.uncommittedChangesFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
-        } else {
-            this.uncommittedChangesFrom = "n/a";
+        if (this.transactionStart <= 0) {
+            this.transactionStart = System.currentTimeMillis();
         }
-        this.transactionStart = System.currentTimeMillis();
+        transactionContexts.peek().setUncommittedChanges();
     }
 
     public Dialect getDialect() {
@@ -180,26 +198,44 @@ public class PersistenceContext {
         }
     }
 
+    public void enableNestedTransactions() {
+        nestedTransactionsEnabled = true;
+    }
+
     void savepointCreate() {
         savepoints++;
-        //TODO
+        if (nestedTransactionsEnabled) {
+            transactionContexts.push(new TransactionContext(getConnection(), savepoints));
+        }
     }
 
     void savepointRelease() {
         assert (savepoints > 0) : " Inconsistent Transaction end";
         savepoints--;
-        // TODO
+        if (nestedTransactionsEnabled) {
+            TransactionContext tc = transactionContexts.pop();
+            tc.merge(transactionContexts.peek());
+            tc.releaseSavepoint(connection, getDialect());
+        }
     }
 
     public boolean savepointActive() {
         return (savepoints > 0);
     }
 
+    private boolean isDirectTransactionControl() {
+        return !nestedTransactionsEnabled || !savepointActive();
+    }
+
+    void addTransactionCompensationHandler(CompensationHandler handler) {
+        transactionContexts.peek().addTransactionCompensationHandler(handler);
+    }
+
     void commit() {
-        if (connection != null) {
+        transactionContexts.peek().commit(connection, getDialect());
+        if (isDirectTransactionControl() && connection != null) {
             try {
                 connection.commit();
-                uncommittedChanges = false;
                 transactionStart = -1;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -208,22 +244,24 @@ public class PersistenceContext {
     }
 
     void rollback() {
-        if (connection != null) {
+        transactionContexts.peek().rollback(connection);
+        if (isDirectTransactionControl() && connection != null) {
             try {
                 log.warn("rollback transaction changes since {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(new Date(transactionStart)));
                 connection.rollback();
-                uncommittedChanges = false;
                 transactionStart = -1;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
+        transactionContexts.peek().fireCompensationHandlers();
     }
 
     void close() {
         if (connection != null) {
+            boolean uncommittedChanges = isUncommittedChanges();
             if (isExplicitTransaction() && uncommittedChanges) {
-                log.error("There are uncommitted changes in Database. {}", uncommittedChangesFrom);
+                log.error("There are uncommitted changes in Database. {}", getUncommittedChangesFrom());
             }
             SQLUtils.closeQuietly(connection);
             if (traceOpenSession) {
