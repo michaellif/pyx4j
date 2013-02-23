@@ -27,12 +27,10 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -69,17 +67,6 @@ public class YardiBuildingProcessor {
         return merged;
     }
 
-    @Deprecated
-    private void updateUnitsForBuilding(List<AptUnit> importedUnits, Building building) throws YardiServiceException {
-        if (building == null) {
-            throw new YardiServiceException("Unable to update units for building: null");
-        }
-
-        String propertyCode = building.propertyCode().getValue();
-        mergeUnits(building, importedUnits, getUnits(propertyCode));
-        Persistence.service().commit();
-    }
-
     private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
         if (building == null) {
             throw new YardiServiceException("Unable to update units for building: null");
@@ -112,46 +99,6 @@ public class YardiBuildingProcessor {
         return units;
     }
 
-    @Deprecated
-    private void mergeUnits(Building building, List<AptUnit> imported, List<AptUnit> existing) {
-        Persistence.service().retrieve(building.floorplans());
-
-        List<AptUnit> merged = new UnitsMerger().merge(building, imported, existing);
-        for (AptUnit unit : merged) {
-            update(unit);
-        }
-    }
-
-    @Deprecated
-    private void update(Building building) {
-        boolean ok = false;
-        try {
-            ServerSideFactory.create(BuildingFacade.class).persist(building);
-
-            log.info("Building with property code {} successfully updated", building.propertyCode().getValue());
-            ok = true;
-        } finally {
-            if (!ok) {
-                log.error("Errors during updating building {}", building.propertyCode().getValue());
-            }
-        }
-    }
-
-    @Deprecated
-    private void update(AptUnit unit) {
-        boolean ok = false;
-        try {
-            ServerSideFactory.create(BuildingFacade.class).persist(unit);
-            Persistence.service().retrieve(unit.building());
-            log.info("Unit {} for building {} successfully updated", unit.info().number().getValue(), unit.building().propertyCode().getValue());
-            ok = true;
-        } finally {
-            if (!ok) {
-                log.error("Errors during updating unit {} for building {}", unit.info().number().getValue(), unit.building().propertyCode().getValue());
-            }
-        }
-    }
-
     private Building getBuilding(String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), propertyCode));
@@ -170,6 +117,7 @@ public class YardiBuildingProcessor {
         return Persistence.service().query(criteria);
     }
 
+    @Deprecated
     public List<AptUnit> getUnits(Property property) {
         List<RTUnit> imported = getYardiUnits(property);
         return new UnitsMapper().map(imported);
@@ -184,6 +132,7 @@ public class YardiBuildingProcessor {
         return properties;
     }
 
+    @Deprecated
     public List<RTUnit> getYardiUnits(Property property) {
 
         Map<String, RTUnit> map = new HashMap<String, RTUnit>();

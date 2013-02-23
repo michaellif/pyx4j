@@ -38,6 +38,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
+    @Deprecated
     public void updatePayments(ResidentTransactions rt) {
         for (Property prop : rt.getProperty()) {
             for (RTCustomer cust : prop.getRTCustomer()) {
@@ -74,6 +75,13 @@ public class YardiPaymentProcessor {
             }
         }
 
+    }
+
+    void removeOldPayments(YardiBillingAccount account) {
+        EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
+        oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));
+        oldPayments.add(PropertyCriterion.isNull(oldPayments.proto().paymentRecord()));
+        Persistence.service().delete(oldPayments);
     }
 
     public List<YardiReceipt> getPaymentReceiptsForProperty(String propertyCode) {

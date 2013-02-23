@@ -25,12 +25,14 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 
 public class YardiChargeProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiChargeProcessor.class);
 
+    @Deprecated
     public void updateCharges(ResidentTransactions rt) {
 
         for (Property prop : rt.getProperty()) {
@@ -68,4 +70,17 @@ public class YardiChargeProcessor {
         }
     }
 
+    YardiBillingAccount getAccount(RTCustomer cust) throws YardiServiceException {
+        YardiBillingAccount account = YardiProcessorUtils.getYardiBillingAccount(cust);
+        if (account == null) {
+            throw new YardiServiceException("YardiBillingAccount is null for RTCustomer");
+        }
+        return account;
+    }
+
+    void removeOldCharges(YardiBillingAccount account) {
+        EntityQueryCriteria<YardiCharge> oldCharges = EntityQueryCriteria.create(YardiCharge.class);
+        oldCharges.add(PropertyCriterion.eq(oldCharges.proto().billingAccount(), account));
+        Persistence.service().delete(oldCharges);
+    }
 }

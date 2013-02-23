@@ -28,8 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.RTUnit;
+import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
+import com.yardi.entity.resident.Transactions;
 import com.yardi.ws.operations.GetResidentTransaction_Login;
 import com.yardi.ws.operations.GetResidentTransaction_LoginResponse;
 import com.yardi.ws.operations.GetResidentTransactions_Login;
@@ -38,6 +39,7 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -46,6 +48,10 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
+import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -104,17 +110,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             importTransaction(transaction, dynamicStatisticsRecord);
         }
 
-        updateLeases(allTransactions, dynamicStatisticsRecord);
-
-        updateCharges(allTransactions, dynamicStatisticsRecord);
-
-        updatePayments(allTransactions, dynamicStatisticsRecord);
-
-        Persistence.service().commit();
-
         log.info("Update completed.");
     }
 
+    @Deprecated
     public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.service().retrieve(lease.unit().building());
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
@@ -152,11 +151,12 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private void importTransaction(ResidentTransactions transaction, final StatisticsRecord dynamicStatisticsRecord) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
-        log.info("Updating buildings and units...");
+        log.info("Import started...");
 
         List<Property> properties = getProperties(transaction);
 
         for (final Property property : properties) {
+            log.info("Updating building " + property.getPropertyID().get(0).getIdentification().getPrimaryID());
             try {
                 final Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
 
@@ -169,13 +169,15 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     }
                 });
 
-                for (final RTUnit importedUnit : new YardiBuildingProcessor().getYardiUnits(property)) {
+                for (final RTCustomer rtCustomer : property.getRTCustomer()) {
+                    log.info("  for " + rtCustomer.getCustomerID());
+                    log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
                     try {
                         AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
 
                             @Override
                             public AptUnit execute() throws YardiServiceException {
-                                AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), importedUnit);
+                                AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), rtCustomer.getRTUnit());
                                 ServerSideFactory.create(BuildingFacade.class).persist(unit);
                                 StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
                                 return unit;
@@ -185,52 +187,73 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     } catch (YardiServiceException e) {
                         StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
                     }
+
+                    if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
+                        log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
+                        // TODO skipping logic
+                        continue;
+                    }
+
+                    log.info("      Updating lease");
+
+                    try {
+                        UnitOfWork.execute(new Executable<Void, YardiServiceException>() {
+
+                            @Override
+                            public Void execute() throws YardiServiceException {
+                                // update lease
+                                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                                Lease lease = new YardiLeaseProcessor().processLease(rtCustomer, building.propertyCode().getValue());
+
+                                if (lease != null) {
+                                    //TODO lease information was unchanged
+                                    lease = leaseFacade.persist(lease);
+
+                                    // activate:
+                                    leaseFacade.approve(lease, null, null);
+                                    leaseFacade.activate(lease);
+                                } else {
+                                    log.info("          Lease information unchanged");
+                                }
+
+                                // update charges and payments
+
+                                final YardiBillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
+                                new YardiChargeProcessor().removeOldCharges(account);
+                                new YardiPaymentProcessor().removeOldPayments(account);
+
+                                for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
+                                    if (tr != null) {
+                                        if (tr.getCharge() != null) {
+                                            log.info("          Updating charge");
+                                            YardiCharge charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
+                                            Persistence.service().persist(charge);
+                                        }
+                                        if (tr.getPayment() != null) {
+                                            log.info("          Updating payment");
+                                            YardiPayment payment = YardiProcessorUtils.createPayment(account, tr.getPayment());
+                                            Persistence.service().persist(payment);
+                                        }
+                                    }
+                                }
+
+                                return null;
+                            }
+                        });
+
+                    } catch (YardiServiceException e) {
+                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                    } catch (UserRuntimeException t) {
+                        // TODO change. Currently here because it catches null pointer exceptions for starlight leases that have no first/last name.
+                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                    }
                 }
             } catch (YardiServiceException e) {
                 StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
             }
 
         }
-        log.info("All buildings, units updated.");
-    }
-
-    private void updateLeases(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {
-        log.info("Updating leases...");
-        for (ResidentTransactions transaction : allTransactions) {
-            try {
-                new YardiLeaseProcessor().updateLeases(transaction);
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-            } catch (Exception e) {
-                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
-            }
-        }
-        log.info("All leases updated.");
-    }
-
-    private void updateCharges(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {
-        log.info("updateCharges: started...");
-        for (ResidentTransactions transaction : allTransactions) {
-            try {
-                new YardiChargeProcessor().updateCharges(transaction);
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-            } catch (Exception e) {
-                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
-            }
-        }
-        log.info("All charges updated.");
-    }
-
-    private void updatePayments(List<ResidentTransactions> allTransactions, StatisticsRecord dynamicStatisticsRecord) {
-        log.info("updatePayments: started...");
-        for (ResidentTransactions transaction : allTransactions) {
-            try {
-                new YardiPaymentProcessor().updatePayments(transaction);
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-            } catch (Exception e) {
-                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
-            }
-        }
-        log.info("All payments updated.");
+        log.info("Import complete.");
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {

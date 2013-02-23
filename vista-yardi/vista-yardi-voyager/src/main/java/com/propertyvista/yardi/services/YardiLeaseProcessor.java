@@ -79,7 +79,27 @@ public class YardiLeaseProcessor {
         }
     }
 
-    private void updateLease(RTCustomer rtCustomer, Lease lease) {
+    public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
+
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
+            if (!Persistence.service().query(criteria).isEmpty()) {
+                Lease existingLease = Persistence.service().query(criteria).get(0);
+                Persistence.service().retrieve(existingLease.currentTerm().version().tenants());
+                return updateLease(rtCustomer, existingLease);
+            }
+        }
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
+        AptUnit unit = Persistence.service().query(criteria).get(0);
+
+        return createLease(rtCustomer, unit, propertyCode);
+
+    }
+
+    private Lease updateLease(RTCustomer rtCustomer, Lease lease) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
@@ -93,21 +113,18 @@ public class YardiLeaseProcessor {
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
             lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            log.info("Lease {} successfully updated (term)", rtCustomer.getCustomerID());
         } else if (new LeaseMerger().validateLeaseChanges(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
             ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
-            log.info("Lease {} successfully updated", rtCustomer.getCustomerID());
         } else {
-            log.info("Lease {} was unchanged", rtCustomer.getCustomerID());
+            return null;
         }
+        return lease;
     }
 
-    private void createLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {
+    private Lease createLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
-
-        log.info("Lease {} in building {} is updating...", rtCustomer.getCustomerID(), propertyCode);
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
@@ -141,14 +158,7 @@ public class YardiLeaseProcessor {
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
-        // almost done:
-        lease = leaseFacade.persist(lease);
-
-        // activate:
-        leaseFacade.approve(lease, null, null);
-        leaseFacade.activate(lease);
-
-        log.info("Lease {} in building {} successfully created", rtCustomer.getCustomerID(), propertyCode);
+        return lease;
     }
 
     public boolean isSkipped(RTCustomer rtCustomer) {
