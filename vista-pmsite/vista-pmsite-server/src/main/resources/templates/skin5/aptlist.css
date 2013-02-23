@@ -92,9 +92,11 @@
 	padding: 3px 0;
 	text-align: center;
 	margin-left: 30px;
+	box-shadow: inset rgba(255,255,255,0.3) 2px 2px 2px 1px;
 }
 .advancedSearchNarrowWrap .searchTypeSelButton label {
-	color:${foreground_100};
+	/*color:${foreground_100};*/
+	color: #000000;
 }
 
 .advancedSearchNarrowWrap .searchTypeSelButton:first-child {
@@ -120,6 +122,7 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive {
 	background-color:${object1_100};
+	box-shadow: inset rgba(255,255,255,0.3) 2px 2px 2px 1px;
 	
 }
 .advancedSearchNarrowWrap .searchTypeSelButton.typeselActive label {
