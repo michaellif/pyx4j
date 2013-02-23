@@ -144,11 +144,11 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             type.setValue(type.getOptions().get(0));
         }
 
+        setPaymentTypeSelectionEnabled(getValue().id().isNull());
+
         if (!getValue().type().isNull()) {
             loadLegalTerms(getValue().type().getValue());
         }
-
-        setPaymentTypeSelectionEnabled(getValue().id().isNull());
 
         iAgreeBox.setValue(false);
     }
