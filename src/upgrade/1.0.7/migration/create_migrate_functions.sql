@@ -78,12 +78,15 @@ BEGIN
                                                 ADD COLUMN cancellation_description_reason_from_tenant_sure VARCHAR(500),
                                                 ADD COLUMN payment_day INT,
                                                 ADD COLUMN cancellation_date DATE,
-                                                ADD COLUMN monthly_payable NUMERIC(18,2),
+                                                ADD COLUMN total_monthly_payable NUMERIC(18,2),
                                                 ADD COLUMN is_managed_by_tenant BOOLEAN,
                                                 ADD COLUMN is_deleted BOOLEAN;
         -- insurance_tenant_sure_details 
         
-        ALTER TABLE insurance_tenant_sure_details ADD COLUMN insurance_discriminator VARCHAR(50);  
+        ALTER TABLE insurance_tenant_sure_details       ADD COLUMN insurance_discriminator VARCHAR(50),
+                                                        ADD COLUMN monthly_premium NUMERIC(18,2),
+                                                        ADD COLUMN total_payable NUMERIC(18,2);
+                                                        
         ALTER TABLE insurance_tenant_sure_details DROP COLUMN liability_coverage;          
         
         -- insurance_tenant_sure_report
@@ -104,14 +107,15 @@ BEGIN
         -- insurance_tenant_sure_tax
         
         ALTER TABLE insurance_tenant_sure_tax   ADD COLUMN order_in_owner INT,
-                                                ADD COLUMN tenant_sure_details BIGINT;
+                                                ADD COLUMN tenant_sure_details BIGINT,
+                                                ADD COLUMN id_discriminator VARCHAR(64);
                                                 
-        ALTER TABLE insurance_tenant_sure_tax ALTER COLUMN tenant_sure_details SET NOT NULL;
-        
+        ALTER TABLE insurance_tenant_sure_tax RENAME COLUMN buiness_line TO business_line;
+        ALTER TABLE insurance_tenant_sure_tax ALTER COLUMN id_discriminator SET NOT NULL;
         
         -- insurance_tenant_sure_transaction
         
-        ALTER TABLE insurance_tenant_sure_transaction ADD COLUMN payment_due DATE,
+        ALTER TABLE insurance_tenant_sure_transaction   ADD COLUMN payment_due DATE,
                                                         ADD COLUMN insurance_discriminator VARCHAR(50);
         
         -- maintenance_request
@@ -247,6 +251,11 @@ BEGIN
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_status_e_ck CHECK ((status) IN ('Active', 'Cancelled', 'Draft', 'Failed', 'Pending', 'PendingCancellation'));
         ALTER TABLE insurance_tenant_sure_details ADD CONSTRAINT insurance_tenant_sure_details_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE insurance_tenant_sure_report ADD CONSTRAINT insurance_tenant_sure_report_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
+        ALTER TABLE insurance_tenant_sure_tax ADD CONSTRAINT insurance_tenant_sure_tax_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('InsuranceTenantSureTaxGrossPremium', 'InsuranceTenantSureTaxMonthlyPremium', 'InsuranceTenantSureTaxUnderwriterFee'));
+        ALTER TABLE insurance_tenant_sure_tax ADD CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_ck 
+                CHECK ((id_discriminator = 'InsuranceTenantSureTaxMonthlyPremium' AND tenant_sure_details IS NOT NULL) 
+                OR (id_discriminator != 'InsuranceTenantSureTaxMonthlyPremium' AND tenant_sure_details IS NULL));
         ALTER TABLE insurance_tenant_sure_transaction ADD CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'InsuranceTenantSure');
         ALTER TABLE payment_type_selection_policy ADD CONSTRAINT payment_type_selection_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));

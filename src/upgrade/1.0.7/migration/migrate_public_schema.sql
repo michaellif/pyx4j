@@ -15,13 +15,16 @@ BEGIN TRANSACTION;
 
 
  -- Sequences to drop
+ DROP SEQUENCE admin_pmc$credit_check_transaction_seq;
  DROP SEQUENCE insurance_tenant_sure_seq;
  DROP SEQUENCE insurance_tenant_sure_details$taxes_seq;
  
  -- Alter sequences
+ ALTER SEQUENCE admin_onboarding_merchant_account_seq RENAME TO admin_pmc_merchant_account_index_seq;
+ ALTER SEQUENCE scheduler_run_stats_seq RENAME TO scheduler_execution_report_seq;
  ALTER SEQUENCE admin_user_seq RENAME TO operations_user_seq;
  ALTER SEQUENCE admin_user_credential$behaviors_seq RENAME TO operations_user_credential$behaviors_seq;
- ALTER SEQUENCE admin_onboarding_merchant_account_seq RENAME TO admin_pmc_merchant_account_index_seq;
+ 
   
  -- New sequences
  CREATE SEQUENCE default_equifax_limit_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -38,6 +41,8 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE resident_portal_settings$custom_html_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE resident_portal_settings_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE resident_portal_settings$proxy_whitelist_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE scheduler_execution_report_message_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE scheduler_execution_report_section_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE tenant_sure_hqupdate_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE tenant_sure_hqupdate_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE tenant_sure_subscribers_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -62,6 +67,8 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE resident_portal_settings$custom_html_seq OWNER TO vista ;
  ALTER SEQUENCE resident_portal_settings_seq OWNER TO vista ;
  ALTER SEQUENCE resident_portal_settings$proxy_whitelist_seq OWNER TO vista ;
+ ALTER SEQUENCE scheduler_execution_report_message_seq OWNER TO vista ;
+ ALTER SEQUENCE scheduler_execution_report_section_seq OWNER TO vista ;
  ALTER SEQUENCE tenant_sure_hqupdate_file_seq OWNER TO vista ;
  ALTER SEQUENCE tenant_sure_hqupdate_record_seq OWNER TO vista ;
  ALTER SEQUENCE tenant_sure_subscribers_seq OWNER TO vista ;

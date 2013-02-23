@@ -14,6 +14,16 @@ BEGIN TRANSACTION;
 
 SET search_path = '_admin_';
 
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             DROP TABLE SECTION
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        DROP TABLE admin_pmc$credit_check_transaction;
+
         
         /**
         ***     ======================================================================================================
@@ -24,11 +34,14 @@ SET search_path = '_admin_';
         **/
         
         -- Foreign keys to drop
+        ALTER TABLE admin_onboarding_merchant_account DROP CONSTRAINT admin_onboarding_merchant_account_pmc_fk;
         ALTER TABLE admin_user_credential$behaviors DROP CONSTRAINT admin_user_credential$behaviors_owner_fk;
         ALTER TABLE admin_user_credential DROP CONSTRAINT admin_user_credential_usr_fk;
-        ALTER TABLE scheduler_trigger_notification DROP CONSTRAINT scheduler_trigger_notification_usr_fk;
-        ALTER TABLE admin_onboarding_merchant_account DROP CONSTRAINT admin_onboarding_merchant_account_pmc_fk;
         ALTER TABLE pad_reconciliation_summary DROP CONSTRAINT pad_reconciliation_summary_merchant_account_fk;
+        ALTER TABLE scheduler_run_data DROP CONSTRAINT scheduler_run_data_stats_fk;
+        ALTER TABLE scheduler_run DROP CONSTRAINT scheduler_run_stats_fk;
+        ALTER TABLE scheduler_trigger_notification DROP CONSTRAINT scheduler_trigger_notification_usr_fk;
+
         
         -- Primary keys to drop
         
@@ -36,6 +49,7 @@ SET search_path = '_admin_';
         ALTER TABLE admin_user_credential DROP CONSTRAINT admin_user_credential_pk;
         ALTER TABLE admin_user DROP CONSTRAINT admin_user_pk;
         ALTER TABLE admin_onboarding_merchant_account DROP CONSTRAINT admin_onboarding_merchant_account_pk;
+        ALTER TABLE scheduler_run_stats DROP CONSTRAINT scheduler_run_stats_pk;
         
         -- Check constraints to drop
         
@@ -78,6 +92,11 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_vista_features ADD COLUMN tenant_sure_integration BOOLEAN;
         
+        
+        -- customer_credit_check_transaction
+        
+        ALTER TABLE customer_credit_check_transaction ADD COLUMN pmc BIGINT;
+        ALTER TABLE customer_credit_check_transaction ALTER COLUMN pmc SET NOT NULL;
         
         -- default_equifax_limit
         
@@ -216,8 +235,46 @@ SET search_path = '_admin_';
         
         -- scheduler_run_stats
         
-        ALTER TABLE scheduler_run_stats ADD COLUMN erred BIGINT,
-                                        ADD COLUMN amount_erred DOUBLE PRECISION;
+        ALTER TABLE scheduler_run_stats RENAME TO scheduler_execution_report;
+        
+        ALTER TABLE scheduler_execution_report  ADD COLUMN erred BIGINT,
+                                                ADD COLUMN amount_erred DOUBLE PRECISION;
+        
+        
+        -- scheduler_execution_report_section
+        
+        CREATE TABLE scheduler_execution_report_section
+        (
+                id                              BIGINT                  NOT NULL,
+                execution_report                BIGINT,
+                name                            VARCHAR(500),
+                tp                              VARCHAR(50),
+                value                           NUMERIC(18,2),
+                        CONSTRAINT      scheduler_execution_report_section_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE scheduler_execution_report_section OWNER TO vista;
+                                        
+        -- scheduler_execution_report_message
+        
+        CREATE TABLE scheduler_execution_report_message
+        (
+                id                              BIGINT                  NOT NULL,
+                execution_report_section        BIGINT,
+                event_time                      TIMESTAMP,
+                message                         VARCHAR(4000),
+                        CONSTRAINT      scheduler_execution_report_message_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE scheduler_execution_report_message OWNER TO vista;
+        
+        -- scheduler_run
+        
+        ALTER TABLE scheduler_run RENAME COLUMN stats TO execution_report;
+        
+        -- scheduler_run_data
+        
+        ALTER TABLE scheduler_run_data RENAME COLUMN stats TO execution_report;
         
         -- tenant_sure_hqupdate_file
         
@@ -268,9 +325,11 @@ SET search_path = '_admin_';
         ALTER TABLE operations_user_credential ADD CONSTRAINT operations_user_credential_pk PRIMARY KEY(id);
         ALTER TABLE operations_user ADD CONSTRAINT operations_user_pk PRIMARY KEY(id);
         ALTER TABLE admin_pmc_merchant_account_index ADD CONSTRAINT admin_pmc_merchant_account_index_pk PRIMARY KEY(id);
+        ALTER TABLE scheduler_execution_report ADD CONSTRAINT scheduler_execution_report_pk PRIMARY KEY(id);
 
         
         -- Foreign keys to create
+        ALTER TABLE customer_credit_check_transaction ADD CONSTRAINT customer_credit_check_transaction_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id);
         ALTER TABLE dev_card_service_simulation_card ADD CONSTRAINT dev_card_service_simulation_card_merchant_fk FOREIGN KEY(merchant) 
                 REFERENCES dev_card_service_simulation_merchant_account(id);
         ALTER TABLE dev_card_service_simulation_token ADD CONSTRAINT dev_card_service_simulation_token_card_fk FOREIGN KEY(card) 
@@ -281,6 +340,13 @@ SET search_path = '_admin_';
         ALTER TABLE operations_user_credential$behaviors ADD CONSTRAINT operations_user_credential$behaviors_owner_fk FOREIGN KEY(owner) 
                 REFERENCES operations_user_credential(id);
         ALTER TABLE operations_user_credential ADD CONSTRAINT operations_user_credential_usr_fk FOREIGN KEY(usr) REFERENCES operations_user(id);
+        ALTER TABLE scheduler_execution_report_message ADD CONSTRAINT scheduler_execution_report_message_execution_report_section_fk FOREIGN KEY(execution_report_section) 
+                REFERENCES scheduler_execution_report_section(id);
+        ALTER TABLE scheduler_execution_report_section ADD CONSTRAINT scheduler_execution_report_section_execution_report_fk FOREIGN KEY(execution_report) 
+                REFERENCES scheduler_execution_report(id);
+        ALTER TABLE scheduler_run_data ADD CONSTRAINT scheduler_run_data_execution_report_fk FOREIGN KEY(execution_report) 
+                REFERENCES scheduler_execution_report(id);
+        ALTER TABLE scheduler_run ADD CONSTRAINT scheduler_run_execution_report_fk FOREIGN KEY(execution_report) REFERENCES scheduler_execution_report(id);
         ALTER TABLE scheduler_trigger_notification ADD CONSTRAINT scheduler_trigger_notification_usr_fk FOREIGN KEY(usr) REFERENCES operations_user(id);
         ALTER TABLE tenant_sure_hqupdate_record ADD CONSTRAINT tenant_sure_hqupdate_record_file_fk FOREIGN KEY(file) REFERENCES tenant_sure_hqupdate_file(id);
         ALTER TABLE tenant_sure_subscribers ADD CONSTRAINT tenant_sure_subscribers_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id);
@@ -301,6 +367,7 @@ SET search_path = '_admin_';
                 CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'sale'));
         ALTER TABLE dev_card_service_simulator_config ADD CONSTRAINT dev_card_service_simulator_config_response_type_e_ck 
                 CHECK ((response_type) IN ('DropConnection', 'RespondWithCode', 'RespondWithHttpCode', 'RespondWithText', 'SimulateTransations'));
+        ALTER TABLE scheduler_execution_report_section ADD CONSTRAINT scheduler_execution_report_section_tp_e_ck CHECK ((tp) IN ('error', 'failed', 'processed'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
                 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 
@@ -328,11 +395,14 @@ SET search_path = '_admin_';
         DROP INDEX admin_onboarding_merchant_account_merchant_terminal_id_idx;
         
         CREATE UNIQUE INDEX admin_pmc_merchant_account_index_merchant_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (merchant_terminal_id);
+        CREATE INDEX customer_credit_check_transaction_pmc_idx ON customer_credit_check_transaction USING btree (pmc);
         CREATE INDEX operations_user_credential$behaviors_owner_idx ON operations_user_credential$behaviors USING btree (owner);
         CREATE INDEX operations_user_name_idx ON operations_user USING btree (name);
         CREATE UNIQUE INDEX operations_user_email_idx ON operations_user USING btree (LOWER(email));
         CREATE UNIQUE INDEX dev_card_service_simulation_merchant_account_terminal_id_idx ON dev_card_service_simulation_merchant_account USING btree (terminal_id);
         CREATE UNIQUE INDEX dev_card_service_simulation_token_token_idx ON dev_card_service_simulation_token USING btree (token);
+        CREATE INDEX scheduler_execution_report_message_execution_report_section_idx ON scheduler_execution_report_message USING btree (execution_report_section);
+        CREATE UNIQUE INDEX scheduler_execution_report_section_execution_report_name_tp_idx ON scheduler_execution_report_section USING btree (execution_report, name, tp);
         CREATE INDEX tenant_sure_hqupdate_record_file_idx ON tenant_sure_hqupdate_record USING btree (file);
         CREATE INDEX tenant_sure_subscribers_certificate_number_idx ON tenant_sure_subscribers USING btree (certificate_number);
         
@@ -345,11 +415,9 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
-        UPDATE _admin_.admin_pmc_vista_features 
+        UPDATE admin_pmc_vista_features 
         SET  tenant_sure_integration = FALSE ;
         
-        UPDATE  admin_pmc_vista_features
-        SET     tenant_sure_integration = TRUE;
 
 COMMIT;
 
