@@ -165,3 +165,4 @@ editable
 vladlouk
 decrypt
 decryption
+rollback
