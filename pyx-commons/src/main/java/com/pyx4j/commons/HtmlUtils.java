@@ -25,6 +25,10 @@ import java.util.Map;
 
 public class HtmlUtils {
 
+    public static final String NO_BREAK_SPACE_HTML = "&nbsp;";
+
+    public static final char NO_BREAK_SPACE_UTF8 = '\u00A0';
+
     private final static String[] HTML_ENTITIES = {
 
     ">", "&gt;",
@@ -100,7 +104,7 @@ public class HtmlUtils {
         return "&#" + Integer.valueOf(ch) + ";";
     }
 
-    // HTML header decoration: 
+    // HTML header decoration:
 
     public static String h1(String text) {
         return "<h1>" + text + "</h1>";

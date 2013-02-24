@@ -26,9 +26,9 @@ import java.util.Date;
  */
 public class CommonsStringUtils {
 
-    public static final String NO_BREAK_SPACE_HTML = "&nbsp;";
+    public static final String NO_BREAK_SPACE_HTML = HtmlUtils.NO_BREAK_SPACE_HTML;
 
-    public static final char NO_BREAK_SPACE_UTF8 = '\u00A0';
+    public static final char NO_BREAK_SPACE_UTF8 = HtmlUtils.NO_BREAK_SPACE_UTF8;
 
     public static boolean isStringSet(String str) {
         return ((str != null) && (str.length() > 0));
