@@ -19,4 +19,10 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 
 public interface CardServiceSimulationCardEditorView extends IEditorView<CardServiceSimulationCard> {
 
+    interface Presenter extends IEditorView.Presenter {
+
+        void addTransaction();
+
+    }
+
 }
