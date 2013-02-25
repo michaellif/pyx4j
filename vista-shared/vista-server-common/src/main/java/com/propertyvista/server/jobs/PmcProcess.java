@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,7 +23,7 @@ public interface PmcProcess {
      * 
      * @return false if this job needs to sleep and rerun again when data is ready.
      */
-    boolean start(PmcProcessContext context) throws Exception;
+    boolean start(PmcProcessContext context);
 
     /**
      * This is executed in each selected PMC context to to the work.
@@ -34,7 +34,7 @@ public interface PmcProcess {
      * @param context
      *            RunData statistics and forDate
      */
-    void executePmcJob(PmcProcessContext context) throws Exception;
+    void executePmcJob(PmcProcessContext context);
 
     /**
      * This is executed in shared context to finalize the process.
@@ -42,6 +42,6 @@ public interface PmcProcess {
      * @param context
      *            Run statistics and forDate
      */
-    void complete(PmcProcessContext context) throws Exception;
+    void complete(PmcProcessContext context);
 
 }

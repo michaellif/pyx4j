@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,20 +13,20 @@
  */
 package com.propertyvista.operations.server.upgrade;
 
-import java.util.concurrent.Callable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class VistaUpgrade {
 
@@ -62,19 +62,20 @@ public class VistaUpgrade {
     }
 
     private static void runOneStepInTransaction(final Pmc pmc, final UpgradeProcedure procedure, final int step) {
-        TaskRunner.runAutonomousTransation(pmc.namespace().getValue(), new Callable<Void>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<Void, RuntimeException>() {
+
             @Override
-            public Void call() {
-                Persistence.service().startBackgroundProcessTransaction();
+            public Void execute() {
                 log.info("Execute upgrade Step #{}", step);
                 Lifecycle.startElevatedUserContext();
                 procedure.runUpgradeStep(step);
                 NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 pmc.schemaDataUpgradeSteps().setValue(step);
                 Persistence.service().persist(pmc);
-                Persistence.service().commit();
                 return null;
             }
+
         });
+
     }
 }

@@ -32,8 +32,11 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -78,7 +81,7 @@ public class PmcProcessDispatcherJob implements Job {
         try {
             Lifecycle.startElevatedUserContext();
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            Persistence.service().startBackgroundProcessTransaction();
+            Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
 
             Date scheduledFireTime = context.getScheduledFireTime();
@@ -116,7 +119,6 @@ public class PmcProcessDispatcherJob implements Job {
         }
 
         Persistence.service().persist(run);
-        Persistence.service().commit();
 
         run.runData().setAttachLevel(AttachLevel.Detached);
 
@@ -132,7 +134,6 @@ public class PmcProcessDispatcherJob implements Job {
         }
 
         Persistence.service().persist(run);
-        Persistence.service().commit();
 
         if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {
             // Reschedule run automatically
@@ -202,7 +203,6 @@ public class PmcProcessDispatcherJob implements Job {
             }
             break;
         }
-        Persistence.service().commit();
     }
 
     private void executeRun(Run run, PmcProcess pmcProcess) {
@@ -224,13 +224,12 @@ public class PmcProcessDispatcherJob implements Job {
                 runData.started().setValue(new Date());
                 runData.status().setValue(RunDataStatus.Running);
                 Persistence.service().persist(runData);
-                Persistence.service().commit();
+
                 executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
 
                 addRunDataStatsToRunStats(run.executionReport(), startTimeNano, runData);
 
                 Persistence.service().persist(runData);
-                Persistence.service().commit();
 
                 if (runData.status().getValue() != RunDataStatus.Processed) {
                     runStatus = RunStatus.PartiallyCompleted;
@@ -283,24 +282,22 @@ public class PmcProcessDispatcherJob implements Job {
 
             @Override
             public Boolean call() throws Exception {
-                boolean success = false;
                 try {
                     Lifecycle.startElevatedUserContext();
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
-                    Persistence.service().startBackgroundProcessTransaction();
+                    new UnitOfWork(TransactionScopeOption.Suppress, true).execute(new Executable<Void, RuntimeException>() {
 
-                    pmcProcess.executePmcJob(context);
-                    success = true;
+                        @Override
+                        public Void execute() {
+                            pmcProcess.executePmcJob(context);
+                            return null;
+                        }
+
+                    });
+
                     return Boolean.TRUE;
                 } finally {
-                    try {
-                        if (!success) {
-                            Persistence.service().rollback();
-                        }
-                        Persistence.service().endTransaction();
-                    } finally {
-                        Lifecycle.endContext();
-                    }
+                    Lifecycle.endContext();
                 }
             }
         });
@@ -319,7 +316,6 @@ public class PmcProcessDispatcherJob implements Job {
                 monitor.updateExecutionReportMajorStats(runData.executionReport());
                 Persistence.service().persist(runData.executionReport());
                 monitor.markClean();
-                Persistence.service().commit();
             }
 
             try {

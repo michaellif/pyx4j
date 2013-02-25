@@ -186,7 +186,6 @@ public class PmcFacadeImpl implements PmcFacade {
         if (pmc.status().getValue() == PmcStatus.Created) {
             pmc.status().setValue(PmcStatus.Activating);
             Persistence.service().persist(pmc);
-            Persistence.service().commit();
 
             EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
             credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
@@ -200,24 +199,17 @@ public class PmcFacadeImpl implements PmcFacade {
 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
-            try {
-                Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
-                pmc.status().setValue(PmcStatus.Active);
-                Persistence.service().persist(pmc);
-                onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
-                Persistence.service().persist(onbUserCred);
+            PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
+            pmc.status().setValue(PmcStatus.Active);
+            Persistence.service().persist(pmc);
+            onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
+            Persistence.service().persist(onbUserCred);
 
-                Persistence.service().commit();
-            } finally {
-                Persistence.service().endTransaction();
-            }
         } else if (EnumSet.of(PmcStatus.Activating, PmcStatus.Terminated).contains(pmc.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid transition {0}", pmc.status().getValue()));
         } else {
             pmc.status().setValue(PmcStatus.Active);
             Persistence.service().persist(pmc);
-            Persistence.service().commit();
         }
         CacheService.reset();
     }

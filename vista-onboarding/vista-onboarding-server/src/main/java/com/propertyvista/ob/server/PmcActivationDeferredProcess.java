@@ -14,7 +14,9 @@
 package com.propertyvista.ob.server;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.pyx4j.server.contexts.Lifecycle;
 
@@ -33,19 +35,22 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
-        boolean success = false;
         try {
-            Persistence.service().startBackgroundProcessTransaction();
             Lifecycle.startElevatedUserContext();
-            ServerSideFactory.create(PmcFacade.class).activatePmc(pmcId);
-            Persistence.service().commit();
-            success = true;
+
+            new UnitOfWork(TransactionScopeOption.Required, true).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    ServerSideFactory.create(PmcFacade.class).activatePmc(pmcId);
+                    return null;
+                }
+
+            });
+
             onPmcCreated();
         } finally {
-            if (!success) {
-                Persistence.service().rollback();
-            }
-            Persistence.service().endTransaction();
+            Lifecycle.endContext();
         }
         completed = true;
     }

@@ -24,8 +24,11 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -35,9 +38,9 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 
 public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 
@@ -54,18 +57,16 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     @Override
     public void execute() {
-        boolean success = false;
-        try {
-            Persistence.service().startBackgroundProcessTransaction();
-            super.execute();
-            Persistence.service().commit();
-            success = true;
-        } finally {
-            if (!success) {
-                Persistence.service().rollback();
+        new UnitOfWork(TransactionScopeOption.Suppress, true).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                DBIntegrityCheckDeferredProcess.super.execute();
+                return null;
             }
-            Persistence.service().endTransaction();
-        }
+
+        });
+
     }
 
     @Override
@@ -83,8 +84,8 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
-//            RDBUtils.initAllEntityTables();
-//            commonNamespaceIntegrityCheck();
+            RDBUtils.initAllEntityTables();
+            commonNamespaceIntegrityCheck();
             VistaUpgrade.upgradePmcData(entity);
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
