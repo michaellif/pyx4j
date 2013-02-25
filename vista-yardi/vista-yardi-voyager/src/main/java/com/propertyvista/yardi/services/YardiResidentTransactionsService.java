@@ -42,6 +42,7 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -189,7 +190,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     private Building importProperty(final Property property) throws YardiServiceException {
         log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
 
-        Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
+        Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
 
             @Override
             public Building execute() throws YardiServiceException {
@@ -204,7 +205,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
 
-        AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
+        AptUnit unit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
 
             @Override
             public AptUnit execute() throws YardiServiceException {
@@ -223,7 +224,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             // TODO skipping logic
             return;
         }
-        UnitOfWork.execute(new Executable<Void, YardiServiceException>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
             @Override
             public Void execute() throws YardiServiceException {

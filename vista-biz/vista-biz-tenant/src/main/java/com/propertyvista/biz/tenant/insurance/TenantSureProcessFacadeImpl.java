@@ -15,20 +15,19 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
@@ -42,7 +41,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureProcessFacadeImpl.class);
 
-    private static class TenantSureCancellator implements Callable<VoidSerializable> {
+    private static class TenantSureCancellator implements Executable<Void, RuntimeException> {
 
         private final InsuranceTenantSure ts;
 
@@ -51,7 +50,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         }
 
         @Override
-        public VoidSerializable call() throws Exception {
+        public Void execute() {
             ts.status().setValue(TenantSureStatus.Cancelled);
             log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.insuranceCertificateNumber().getValue(), ts.expiryDate().getValue());
             Persistence.service().persist(ts);
@@ -60,7 +59,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     }
 
-    private static class TenantSureSkippedPaymentCancellator implements Callable<VoidSerializable> {
+    private static class TenantSureSkippedPaymentCancellator implements Executable<Void, RuntimeException> {
 
         private final InsuranceTenantSure ts;
 
@@ -70,7 +69,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         }
 
         @Override
-        public VoidSerializable call() throws Exception {
+        public Void execute() {
             ServerSideFactory.create(TenantSureFacade.class).cancelDueToSkippedPayment(ts.tenant().<Tenant> createIdentityStub());
             return null;
         }
@@ -95,7 +94,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 InsuranceTenantSure ts = iterator.next();
                 String certificateNumber = ts.insuranceCertificateNumber().getValue();
                 try {
-                    UnitOfWork.execute(new TenantSureCancellator(ts));
+                    new UnitOfWork().execute(new TenantSureCancellator(ts));
                     ++cancelledCounter;
                 } catch (Throwable cancellationError) {
                     ++failedCounter;
@@ -121,7 +120,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 if (gracePeriodEnd(ts).compareTo(today) < 0) {
                     String certificateNumber = ts.insuranceCertificateNumber().getValue();
                     try {
-                        UnitOfWork.execute(new TenantSureSkippedPaymentCancellator(ts));
+                        new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
                         ++cancelledCounter;
                     } catch (Throwable cancellationError) {
                         ++failedCounter;

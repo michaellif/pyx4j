@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -29,6 +29,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -278,7 +279,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate runDate) {
-        // Find Bills 
+        // Find Bills
         //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
         Calendar c = new GregorianCalendar();
         c.setTime(runDate);
@@ -306,7 +307,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     private void createPreauthorisedPayment(final Bill bill, final StatisticsRecord dynamicStatisticsRecord) {
         try {
-            UnitOfWork.execute(new Executable<Void, PaymentException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
 
                 @Override
                 public Void execute() throws PaymentException {
@@ -395,7 +396,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     private void processScheduledPayment(final PaymentRecord paymentRecord, final StatisticsRecord dynamicStatisticsRecord) {
         try {
-            UnitOfWork.execute(new Executable<Void, PaymentException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
 
                 @Override
                 public Void execute() throws PaymentException {

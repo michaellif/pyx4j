@@ -61,6 +61,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -483,7 +484,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             throw new Error(e.getMessage());
         }
 
-        UnitOfWork.execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() {
