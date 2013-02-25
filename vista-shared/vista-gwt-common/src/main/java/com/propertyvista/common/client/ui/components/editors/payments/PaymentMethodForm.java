@@ -144,7 +144,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             type.setValue(type.getOptions().get(0));
         }
 
-        setPaymentTypeSelectionEnabled(getValue().id().isNull());
+        setPaymentTypeSelectionEditable(getValue().id().isNull());
 
         if (!getValue().type().isNull()) {
             loadLegalTerms(getValue().type().getValue());

@@ -186,8 +186,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().finalizeDate()).setViewable(true);
         get(proto().lastStatusChangeDate()).setViewable(true);
 
-        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
-
         CComponent<?, ?> comp = get(proto().leaseTermParticipant());
         ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp)
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
@@ -229,13 +227,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
+
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorSeparator.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
-                        profiledPaymentMethodsCombo.setMandatory(true);
                         setProfiledPaymentMethodsVisible(true);
                         break;
                     }
@@ -272,8 +270,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().selectPaymentMethod()).setVisible(false);
-
         boolean isNew = getValue().id().isNull();
         // hide some non-relevant fields:
         get(proto().id()).setVisible(!isNew);
@@ -282,40 +278,55 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
 
-        if (isNew) {
-            // Allow edit all values
-            get(proto().leaseTermParticipant()).setEditable(true);
-        } else {
-            // Disable most of modifications
-            get(proto().leaseTermParticipant()).setEditable(false);
-
-            // Allow to change profiled Method, but do not edit its values.
-            boolean allowtoChangeProfiledMethod = !isViewable() && (!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
-            profiledPaymentMethodsCombo.setVisible(allowtoChangeProfiledMethod);
-            if (allowtoChangeProfiledMethod) {
-                profiledPaymentMethodsCombo.setMandatory(true);
-                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
-                loadProfiledPaymentMethods(null);
-            }
-            get(proto().addThisPaymentMethodToProfile()).setVisible(false);
-
-            paymentMethodEditor.setVisible(true);
-            // Allow to Edit one time payment method
-            paymentMethodEditor.setViewable(!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
-            paymentMethodEditor.setPaymentTypeSelectionEnabled(false);
-            paymentMethodEditorSeparator.setVisible(true);
-
-            // TODO : this is the HACK - check CComponent.setVisible implementation!!!
-            paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
-        }
-
         if (isEditable()) {
             paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
             paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
+            if (isNew) {
+                get(proto().leaseTermParticipant()).setEditable(true);
+            } else {
+                get(proto().leaseTermParticipant()).setEditable(false);
+
+                loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void result) {
+                        boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+                        get(proto().selectPaymentMethod()).reset();
+                        get(proto().selectPaymentMethod()).setValue(
+                                (profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod()) ? PaymentSelect.Profiled : PaymentSelect.New),
+                                false);
+                        get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
+                        get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
+                    }
+                });
+
+                if (getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
+                    paymentMethodEditor.setVisible(true);
+                    paymentMethodEditor.setViewable(false);
+                    paymentMethodEditorSeparator.setVisible(true);
+                    get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                } else {
+                    profiledPaymentMethodsCombo.setVisible(true);
+                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
+                }
+
+                // TODO : this is the HACK - check CComponent.setVisible implementation!!!
+                paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
+            }
+
             get(proto().transactionAuthorizationNumber()).setVisible(false);
             get(proto().transactionErrorMessage()).setVisible(false);
-        } else {
+
+        } else { // view mode:
+
+            if (getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
+                paymentMethodEditor.setVisible(true);
+                paymentMethodEditorSeparator.setVisible(true);
+            } else {
+                profiledPaymentMethodsCombo.setVisible(true);
+                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
+            }
+
             boolean transactionResult = getValue().paymentMethod().isNull() ? false
                     : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
 
@@ -329,16 +340,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         super.onReset();
 
         profiledPaymentMethodsCombo.setVisible(false);
-        profiledPaymentMethodsCombo.setMandatory(false);
-        profiledPaymentMethodsCombo.reset();
         profiledPaymentMethodsCombo.setOptions(null);
+        profiledPaymentMethodsCombo.reset();
 
         paymentMethodEditor.reset();
         paymentMethodEditor.setVisible(false);
         paymentMethodEditor.setViewable(true);
-        paymentMethodEditor.setPaymentTypeSelectionEnabled(true);
         paymentMethodEditorSeparator.setVisible(false);
 
+        paymentMethodEditor.setPaymentTypeSelectionEditable(true);
+
+        get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
     }
 

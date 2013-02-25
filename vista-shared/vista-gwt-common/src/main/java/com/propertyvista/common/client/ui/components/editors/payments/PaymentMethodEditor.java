@@ -123,7 +123,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     @Override
     public void onReset() {
         super.onReset();
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(EnumSet.allOf(PaymentType.class), true);
+        if (get(proto().type()).isEditable()) {
+            ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(EnumSet.allOf(PaymentType.class), true);
+        }
         (get(proto().type())).setNote(null);
         setBillingAddressVisible(false);
     }
@@ -242,12 +244,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return get(proto().type()).isVisible();
     }
 
-    public void setPaymentTypeSelectionEnabled(boolean enabled) {
-        get(proto().type()).setEnabled(enabled);
+    public void setPaymentTypeSelectionEditable(boolean enabled) {
+        get(proto().type()).setEditable(enabled);
     }
 
-    public boolean isPaymentTypeSelectionEnabled() {
-        return get(proto().type()).isEnabled();
+    public boolean isPaymentTypeSelectionEditable() {
+        return get(proto().type()).isEditable();
     }
 
     public void setBillingAddressVisible(boolean visible) {
@@ -303,7 +305,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     @SuppressWarnings("unchecked")
     public void setPaymentTypesEnabled(Collection<PaymentType> opt, boolean enabled) {
-        ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
+        if (get(proto().type()).isEditable()) {
+            ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);
+        }
     }
 
     public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {

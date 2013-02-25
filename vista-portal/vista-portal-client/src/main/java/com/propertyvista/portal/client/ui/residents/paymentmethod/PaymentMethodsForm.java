@@ -38,8 +38,9 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -192,6 +193,14 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                         }
                     }
                 });
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                if (!PortalPaymentTypesUtil.getAllowedPaymentTypes().contains(getValue().type().getValue())) {
+                }
             }
         }
     }

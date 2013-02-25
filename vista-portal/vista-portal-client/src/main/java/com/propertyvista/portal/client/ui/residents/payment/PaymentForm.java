@@ -218,7 +218,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             paymentMethodEditor.setPaymentTypes(PortalPaymentTypesUtil.getAllowedPaymentTypes());
             paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
         }
-
     }
 
     private void checkProfiledPaymentMethods(final boolean populate) {
