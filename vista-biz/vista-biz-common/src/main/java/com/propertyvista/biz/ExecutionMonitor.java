@@ -192,7 +192,9 @@ public class ExecutionMonitor {
         }
 
         void add(BigDecimal augend) {
-            this.accumulator = accumulator.add(augend);
+            if (augend != null) {
+                this.accumulator = accumulator.add(augend);
+            }
         }
 
         void addMessage(String message) {
