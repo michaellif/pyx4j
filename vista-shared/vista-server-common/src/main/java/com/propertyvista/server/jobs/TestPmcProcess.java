@@ -18,6 +18,8 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.propertyvista.biz.ExecutionMonitor;
+
 public class TestPmcProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(TestPmcProcess.class);
@@ -43,6 +45,10 @@ public class TestPmcProcess implements PmcProcess {
             } catch (InterruptedException e) {
             }
             context.getRunStats().processed().setValue((long) i);
+            ExecutionMonitor executionMonitor = context.getExecutionMonitor();
+            executionMonitor.addErredEvent("error", "Test error message");
+            executionMonitor.addFailedEvent("failed", "Test failed message");
+            executionMonitor.addProcessedEvent("processed", "Test processed message");
         }
 
     }
