@@ -62,9 +62,15 @@ public class Trace {
         return tid.id + "}";
     }
 
+    /**
+     * Find the first time API class is entered
+     * 
+     * @param apiEntryClass
+     * @return readable source location
+     */
     public static String getCallOrigin(Class<?> apiEntryClass) {
         StackTraceElement[] ste = new Throwable().getStackTrace();
-        for (int i = 0; i < ste.length - 1; i++) {
+        for (int i = ste.length - 1; i > 2; i--) {
             if (ste[i].getClassName().equals(apiEntryClass.getName())) {
                 return clickableLocation(ste[i + 1]);
             }
@@ -72,6 +78,12 @@ public class Trace {
         return "";
     }
 
+    /**
+     * Find the last time API class is entered
+     * 
+     * @param apiEntryClass
+     * @return comparable source location withut line number
+     */
     public static String getCallOriginMethod(Class<?> apiEntryClass) {
         StackTraceElement[] ste = new Throwable().getStackTrace();
         for (int i = 0; i < ste.length - 1; i++) {
