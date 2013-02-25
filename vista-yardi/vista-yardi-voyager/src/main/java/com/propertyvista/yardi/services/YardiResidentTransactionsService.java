@@ -154,107 +154,117 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         List<Property> properties = getProperties(transaction);
 
         for (final Property property : properties) {
-            log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
             try {
-                final Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
-
-                    @Override
-                    public Building execute() throws YardiServiceException {
-                        Building building = new YardiBuildingProcessor().updateBuilding(property, executionMonitor);
-                        ServerSideFactory.create(BuildingFacade.class).persist(building);
-                        executionMonitor.addProcessedEvent("Building");
-                        return building;
-                    }
-                });
-
+                final Building building = importProperty(property, executionMonitor);
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
-                    log.info("  for " + rtCustomer.getCustomerID());
-                    log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
+                    log.info("  for {}", rtCustomer.getCustomerID());
                     try {
-                        UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
-
-                            @Override
-                            public AptUnit execute() throws YardiServiceException {
-                                AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), rtCustomer.getRTUnit());
-                                ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                                executionMonitor.addProcessedEvent("Unit");
-                                return unit;
-                            }
-                        });
-
+                        importUnit(building.propertyCode().getValue(), rtCustomer, executionMonitor);
+                        try {
+                            importLease(building.propertyCode().getValue(), rtCustomer, executionMonitor);
+                        } catch (YardiServiceException e) {
+                            executionMonitor.addFailedEvent("Lease", e);
+                        } catch (Throwable t) {
+                            executionMonitor.addErredEvent("Lease", t);
+                        }
                     } catch (YardiServiceException e) {
                         executionMonitor.addFailedEvent("Unit", e);
-                    } catch (RuntimeException e) {
-                        executionMonitor.addErredEvent("Unit", e);
-                    }
-
-                    if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
-                        log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
-                        // TODO skipping logic
-                        continue;
-                    }
-
-                    log.info("      Updating lease");
-
-                    try {
-                        UnitOfWork.execute(new Executable<Void, YardiServiceException>() {
-
-                            @Override
-                            public Void execute() throws YardiServiceException {
-                                // update lease
-                                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                                Lease lease = new YardiLeaseProcessor().processLease(rtCustomer, building.propertyCode().getValue());
-
-                                if (lease != null) {
-                                    //TODO lease information was unchanged
-                                    lease = leaseFacade.persist(lease);
-
-                                    // activate:
-                                    leaseFacade.approve(lease, null, null);
-                                    leaseFacade.activate(lease);
-                                } else {
-                                    log.info("          Lease information unchanged");
-                                }
-
-                                // update charges and payments
-
-                                final YardiBillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
-                                new YardiChargeProcessor().removeOldCharges(account);
-                                new YardiPaymentProcessor().removeOldPayments(account);
-
-                                for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
-                                    if (tr != null) {
-                                        if (tr.getCharge() != null) {
-                                            log.info("          Updating charge");
-                                            YardiCharge charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
-                                            Persistence.service().persist(charge);
-                                        }
-                                        if (tr.getPayment() != null) {
-                                            log.info("          Updating payment");
-                                            YardiPayment payment = YardiProcessorUtils.createPayment(account, tr.getPayment());
-                                            Persistence.service().persist(payment);
-                                        }
-                                    }
-                                }
-                                executionMonitor.addProcessedEvent("Lease");
-                                return null;
-                            }
-                        });
-
-                    } catch (YardiServiceException e) {
-                        executionMonitor.addFailedEvent("Lease", e);
-                    } catch (RuntimeException e) {
-                        executionMonitor.addErredEvent("Lease", e);
+                    } catch (Throwable t) {
+                        executionMonitor.addErredEvent("Unit", t);
                     }
                 }
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", e);
-            } catch (RuntimeException e) {
-                executionMonitor.addErredEvent("Building", e);
+            } catch (Throwable t) {
+                executionMonitor.addErredEvent("Building", t);
             }
 
         }
         log.info("Import complete.");
+    }
+
+    private Building importProperty(final Property property, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
+
+        Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
+
+            @Override
+            public Building execute() throws YardiServiceException {
+                Building building = new YardiBuildingProcessor().updateBuilding(property, executionMonitor);
+                ServerSideFactory.create(BuildingFacade.class).persist(building);
+                executionMonitor.addProcessedEvent("Building");
+                return building;
+            }
+        });
+        return building;
+    }
+
+    private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
+
+        AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
+
+            @Override
+            public AptUnit execute() throws YardiServiceException {
+                AptUnit unit = new YardiBuildingProcessor().updateUnit(propertyCode, rtCustomer.getRTUnit());
+                ServerSideFactory.create(BuildingFacade.class).persist(unit);
+                executionMonitor.addProcessedEvent("Unit");
+                return unit;
+            }
+        });
+        return unit;
+    }
+
+    private void importLease(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("      Updating lease");
+        if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
+            log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
+            // TODO skipping logic
+            return;
+        }
+        UnitOfWork.execute(new Executable<Void, YardiServiceException>() {
+
+            @Override
+            public Void execute() throws YardiServiceException {
+                // update lease
+                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                Lease lease = new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
+
+                if (lease != null) {
+                    //TODO lease information was unchanged
+                    lease = leaseFacade.persist(lease);
+
+                    // activate:
+                    leaseFacade.approve(lease, null, null);
+                    leaseFacade.activate(lease);
+                } else {
+                    log.info("          Lease information unchanged");
+                }
+
+                // update charges and payments
+
+                final YardiBillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
+                new YardiChargeProcessor().removeOldCharges(account);
+                new YardiPaymentProcessor().removeOldPayments(account);
+
+                for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
+                    if (tr != null) {
+                        if (tr.getCharge() != null) {
+                            log.info("          Updating charge");
+                            YardiCharge charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
+                            Persistence.service().persist(charge);
+                        }
+                        if (tr.getPayment() != null) {
+                            log.info("          Updating payment");
+                            YardiPayment payment = YardiProcessorUtils.createPayment(account, tr.getPayment());
+                            Persistence.service().persist(payment);
+                        }
+                    }
+                }
+                executionMonitor.addProcessedEvent("Lease");
+                return null;
+            }
+        });
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {

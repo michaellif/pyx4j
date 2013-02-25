@@ -22,6 +22,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 
@@ -31,6 +33,8 @@ import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 
 public class ExecutionMonitor {
+
+    private static final Logger log = LoggerFactory.getLogger(ExecutionMonitor.class);
 
     private final Map<ReportSectionId, ReportSection> sections;
 
@@ -48,9 +52,9 @@ public class ExecutionMonitor {
 
     public ExecutionMonitor(Long processed, Long failed, Long erred) {
         sections = new HashMap<ReportSectionId, ReportSection>();
-        this.processedCount = processed;
-        this.failedCount = failed;
-        this.erredCount = erred;
+        this.processedCount = processed == null ? 0L : processed;
+        this.failedCount = failed == null ? 0L : failed;
+        this.erredCount = erred == null ? 0L : erred;
     }
 
     private class ReportSectionId {
@@ -109,7 +113,9 @@ public class ExecutionMonitor {
             break;
         }
 
+        log.info("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
         dirty = true;
+
     }
 
     public void addEvent(String sectionName, CompletionType type, String message) {
@@ -129,6 +135,7 @@ public class ExecutionMonitor {
     }
 
     public void addFailedEvent(String sectionName, Throwable throwable) {
+        log.error("Event Failed", throwable);
         addFailedEvent(sectionName, throwable.toString());
     }
 
@@ -137,6 +144,7 @@ public class ExecutionMonitor {
     }
 
     public void addErredEvent(String sectionName, Throwable throwable) {
+        log.error("Event Erred", throwable);
         addErredEvent(sectionName, throwable.toString());
     }
 

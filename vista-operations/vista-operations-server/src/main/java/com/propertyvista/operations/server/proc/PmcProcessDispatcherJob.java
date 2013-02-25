@@ -143,7 +143,8 @@ public class PmcProcessDispatcherJob implements Job {
 
     private PmcProcess startProcess(Run run) {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
-        PmcProcessContext context = new PmcProcessContext(run.forDate().getValue());
+        PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
+                .failed().getValue(), run.executionReport().erred().getValue());
         try {
             if (!pmcProcess.start(context)) {
                 run.status().setValue(RunStatus.Sleeping);
@@ -206,8 +207,7 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeRun(Run run, PmcProcess pmcProcess) {
         long startTimeNano = System.nanoTime();
-        PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
-                .failed().getValue(), run.executionReport().erred().getValue());
+        PmcProcessContext context = new PmcProcessContext(run.forDate().getValue());
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
