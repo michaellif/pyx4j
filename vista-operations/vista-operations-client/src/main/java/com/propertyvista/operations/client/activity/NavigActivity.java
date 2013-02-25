@@ -75,6 +75,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new OperationsSiteMap.Management.PMC());
         folder.addNavigItem(new OperationsSiteMap.Management.OnboardingUser());
         folder.addNavigItem(new OperationsSiteMap.Management.Trigger());
+        folder.addNavigItem(new OperationsSiteMap.Management.Run());
         folder.addNavigItem(new OperationsSiteMap.Management.BillingSetup());
 
         list.add(folder);
