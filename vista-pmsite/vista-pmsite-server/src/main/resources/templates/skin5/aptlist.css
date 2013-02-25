@@ -198,6 +198,7 @@
 	width: 100%;
 	border-top: 1px solid #FFD467;
 	padding-top: 20px;
+	-webkit-padding-start: -1px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox br {
@@ -460,3 +461,44 @@ a.listingCtlButton {
 	color: ${object1_60};
 	font-weight:bold;
 }
+
+input[type=checkbox] {
+  position: relative;
+  outline: 1px solid #ed8f21;
+  *border-top: 4px solid #7F7F7F;
+  *border-top-color: rgb(127,127,127);
+  *border-left: 3px solid #7F7F7F;
+  display: inline-block;
+  *display:inline;
+  z-index: 1;
+  padding: 0;
+  width: 1.3em;
+  height: 1.3em;
+  vertical-align: text-top;
+  background: -webkit-linear-gradient(
+    top, rgba(255,255,255,0.7), rgba(255,255,255,0.96)
+  );
+  -webkit-appearance: none;
+  -webkit-box-shadow: 0 1px 0 rgba(255,255,255, 0.1),
+                      inset 0 0 1px rgba(255,255,255, 0.4);
+  -webkit-border-radius: 0px;
+}
+
+input[type=checkbox]:active {
+  background: -webkit-linear-gradient(
+    top, rgba(255,255,255,0.05), rgba(255,255,255,0.2)
+  );
+}
+
+input[type=checkbox]:checked::after {
+	position: absolute;
+	content: '';
+	left: 15%;
+	top: -10%;
+	height: 40%;
+	width: 90%;
+	border-bottom: 2px solid #1F1B1C;
+	border-left: 2px solid #1F1B1C;
+	-webkit-box-shadow: -1px 1px 0 rgba(0,0,0,0.8);
+	-webkit-transform: rotate(-45deg);
+	}
