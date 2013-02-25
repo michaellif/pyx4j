@@ -83,7 +83,10 @@ public class MailMessage implements Serializable {
             recipients.add(comaSeparatedAddresses.trim());
         } else {
             while (st.hasMoreTokens()) {
-                recipients.add(st.nextToken().trim());
+                String email = st.nextToken().trim();
+                if (email.length() > 0) {
+                    recipients.add(email);
+                }
             }
         }
         return recipients;
