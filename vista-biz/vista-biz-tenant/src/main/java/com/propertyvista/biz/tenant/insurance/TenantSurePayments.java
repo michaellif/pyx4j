@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -34,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.financial.payment.CreditCardTransactionResponse;
@@ -44,15 +46,15 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 class TenantSurePayments {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSurePayments.class);
 
     private static final I18n i18n = I18n.get(TenantSurePayments.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "TenantSurePreauthorizedPayment";
 
     private static String tenantSureMerchantTerminalId() {
         return ServerSideFactory.create(Vista2PmcFacade.class).getTenantSureMerchantTerminalId();
@@ -143,7 +145,7 @@ class TenantSurePayments {
         }
     }
 
-    static void processPayments(StatisticsRecord runStats, final LogicalDate dueDate) {
+    static void processPayments(ExecutionMonitor executionMonitor, final LogicalDate dueDate) {
         Collection<Integer> paymentDays = new ArrayList<Integer>();
         // Calculate all payment days for end of month
         {
@@ -181,11 +183,23 @@ class TenantSurePayments {
                     });
 
                     if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.Cleared) {
-                        StatisticsUtils.addProcessed(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
+                        executionMonitor.addProcessedEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME,
+                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was cleared", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                        );//@formatter:on
                     } else if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
-                        StatisticsUtils.addFailed(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
+                        executionMonitor.addFailedEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME,
+                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                        );//@formatter:on
                     } else {
-                        StatisticsUtils.addErred(runStats, 1, insuranceTenantSure.totalMonthlyPayable().getValue());
+                        executionMonitor.addErredEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME,
+                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} is neither cleared nor rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                        );//@formatter:on
                     }
 
                 }

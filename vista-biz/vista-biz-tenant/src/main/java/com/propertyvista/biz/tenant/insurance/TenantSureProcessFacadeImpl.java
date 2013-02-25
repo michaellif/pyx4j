@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -29,17 +30,19 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureProcessFacadeImpl.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "TenantSureCancellation";
 
     private static class TenantSureCancellator implements Executable<Void, RuntimeException> {
 
@@ -77,10 +80,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processCancellations(StatisticsRecord runStats, LogicalDate dueDate) {
-
-        long cancelledCounter = 0l;
-        long failedCounter = 0l;
+    public void processCancellations(ExecutionMonitor executionMonitor, LogicalDate dueDate) {
 
         log.info("processing TenantSure cancellations requested by tenant");
 
@@ -95,9 +95,9 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 String certificateNumber = ts.insuranceCertificateNumber().getValue();
                 try {
                     new UnitOfWork().execute(new TenantSureCancellator(ts));
-                    ++cancelledCounter;
+                    executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                 } catch (Throwable cancellationError) {
-                    ++failedCounter;
+                    executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME, cancellationError);
                     log.error("failed to cancel TenatSure insurance certificate: (#{})", certificateNumber);
                     log.error("failure: ", cancellationError);
                 }
@@ -121,9 +121,12 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                     String certificateNumber = ts.insuranceCertificateNumber().getValue();
                     try {
                         new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
-                        ++cancelledCounter;
+                        executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                     } catch (Throwable cancellationError) {
-                        ++failedCounter;
+                        executionMonitor.addProcessedEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME,
+                                SimpleMessageFormat.format("Failed to cancel (due to skipped payment) TenatSure insurance certificate: #{0}", certificateNumber)
+                        );//@formatter:on
                         log.error("failed to cancel (due to skipped payment) TenatSure insurance certificate: (#{})", certificateNumber);
                         log.error("failure", cancellationError);
                     }
@@ -132,15 +135,11 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         } finally {
             skippedIterator.completeRetrieval();
         }
-
-        runStats.processed().setValue(cancelledCounter);
-        runStats.failed().setValue(failedCounter);
-
     }
 
     @Override
-    public void processPayments(StatisticsRecord runStats, LogicalDate dueDate) {
-        TenantSurePayments.processPayments(runStats, dueDate);
+    public void processPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate) {
+        TenantSurePayments.processPayments(executionMonitor, dueDate);
     }
 
     @Override
@@ -149,8 +148,8 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processHQUpdate(StatisticsRecord runStats, TenantSureHQUpdateFile fileId) {
-        HQUpdate.processHQUpdate(runStats, fileId);
+    public void processHQUpdate(ExecutionMonitor executionMonitor, TenantSureHQUpdateFile fileId) {
+        HQUpdate.processHQUpdate(executionMonitor, fileId);
     }
 
     @Override
@@ -159,8 +158,8 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processReportPmc(StatisticsRecord runStats, Date date, ReportTableFormatter formater) {
-        TenantSureReports.processReportPmc(runStats, date, formater);
+    public void processReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater) {
+        TenantSureReports.processReportPmc(executionMonitor, date, formater);
     }
 
     @Override
@@ -169,8 +168,8 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public void processTransactionsReport(StatisticsRecord runtStats, Date date, ReportTableFormatter formatter) {
-        TenantSureReports.processTransactionsReport(runtStats, date, formatter);
+    public void processTransactionsReport(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter) {
+        TenantSureReports.processTransactionsReport(executionMonitor, date, formatter);
     }
 
     @Override

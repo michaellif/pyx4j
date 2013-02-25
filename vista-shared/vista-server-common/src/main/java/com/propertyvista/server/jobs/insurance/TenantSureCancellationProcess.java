@@ -32,7 +32,7 @@ public class TenantSureCancellationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processCancellations(context.getRunStats(), new LogicalDate(context.getForDate()));
+        ServerSideFactory.create(TenantSureProcessFacade.class).processCancellations(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
     }
 
     @Override

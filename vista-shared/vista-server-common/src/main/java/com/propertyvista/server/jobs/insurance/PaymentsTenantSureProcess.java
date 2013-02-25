@@ -39,7 +39,7 @@ public class PaymentsTenantSureProcess implements PmcProcess {
         dueDateCal.setTime(context.getForDate());
         dueDateCal.add(Calendar.DAY_OF_MONTH, -1);
 
-        ServerSideFactory.create(TenantSureProcessFacade.class).processPayments(context.getRunStats(), new LogicalDate(dueDateCal.getTime()));
+        ServerSideFactory.create(TenantSureProcessFacade.class).processPayments(context.getExecutionMonitor(), new LogicalDate(dueDateCal.getTime()));
     }
 
     @Override

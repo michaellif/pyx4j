@@ -41,6 +41,7 @@ import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -50,13 +51,13 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureS
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.rpc.TenantSureCcTaransactionsReportLineDTO;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 class TenantSureReports {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureReports.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "Report";
 
     static ReportTableFormatter startReport() {
         ReportTableFormatter formatter = new ReportTableCSVFormatter();
@@ -68,7 +69,7 @@ class TenantSureReports {
         return formatter;
     }
 
-    static void processReportPmc(StatisticsRecord runStats, Date date, ReportTableFormatter formatter) {
+    static void processReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter) {
         EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
 
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
@@ -111,7 +112,13 @@ class TenantSureReports {
 
                 er.reportEntity(formatter, data);
 
-                StatisticsUtils.addProcessed(runStats, 1, reportedStatusHolder.insurance().totalMonthlyPayable().getValue());
+                executionMonitor.addProcessedEvent(//@formatter:off
+                        "Report",
+                        reportedStatusHolder.insurance().totalMonthlyPayable().getValue(),
+                        SimpleMessageFormat.format("TenantSure report for {0} {1} was generated.",
+                                reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue(),
+                                reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue())
+                );//@formatter:on
             }
         } finally {
             iterator.completeRetrieval();
@@ -154,7 +161,7 @@ class TenantSureReports {
         return formatter;
     }
 
-    static void processTransactionsReport(StatisticsRecord runStats, Date date, ReportTableFormatter formatter) {
+    static void processTransactionsReport(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter) {
         EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
 
         GregorianCalendar lowerBound = new GregorianCalendar();
@@ -179,7 +186,6 @@ class TenantSureReports {
 
         EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO> reportGenerator = new EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO>(
                 TenantSureCcTaransactionsReportLineDTO.class);
-        long numOfTransactions = 0l;
         long numOfWrongPaymentMethods = 0l;
         try {
 
@@ -197,7 +203,11 @@ class TenantSureReports {
                 } else {
                     log.error("Unknown payment method details {} for TenantSure transaction {}", transaction.paymentMethod().details().getInstanceValueClass()
                             .getSimpleName(), transaction.getPrimaryKey());
-                    ++numOfWrongPaymentMethods;
+                    executionMonitor.addErredEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME,
+                            SimpleMessageFormat.format("Unknown payment method details {0} for TenantSure transaction {1}", transaction.paymentMethod().details().getInstanceValueClass()
+                                    .getSimpleName(), transaction.getPrimaryKey())
+                    );//@formatter:on
                     transactionReportLine.creditCardType().setValue("N / A");
                     transactionReportLine.creditCardNumber().setValue("N / A");
                 }
@@ -207,15 +217,12 @@ class TenantSureReports {
                                 transaction.id().getStringView()));
 
                 reportGenerator.reportEntity(formatter, transactionReportLine);
-                ++numOfTransactions;
+                executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             }
 
         } finally {
             transactions.completeRetrieval();
         }
-        runStats.processed().setValue(numOfTransactions);
-        runStats.erred().setValue(numOfWrongPaymentMethods);
-
     }
 
     static void completeTransactionsReport(ReportTableFormatter formatter, Date date) {

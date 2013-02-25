@@ -35,7 +35,7 @@ public class TenantSureReportsProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processReportPmc(context.getRunStats(), context.getForDate(), formater);
+        ServerSideFactory.create(TenantSureProcessFacade.class).processReportPmc(context.getExecutionMonitor(), context.getForDate(), formater);
     }
 
     @Override

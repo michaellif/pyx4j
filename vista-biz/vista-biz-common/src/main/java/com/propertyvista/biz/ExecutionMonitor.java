@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -138,6 +138,10 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.failed, new BigDecimal(1), message);
     }
 
+    public void addFailedEvent(String sectionName, BigDecimal value, String message) {
+        addEvent(sectionName, CompletionType.failed, value, message);
+    }
+
     public void addFailedEvent(String sectionName, Throwable throwable) {
         log.error("Event Failed", throwable);
         addFailedEvent(sectionName, throwable.toString());
@@ -147,9 +151,18 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.erred, new BigDecimal(1), message);
     }
 
+    public void addErredEvent(String sectionName, BigDecimal value, String message) {
+        addEvent(sectionName, CompletionType.erred, value, message);
+    }
+
     public void addErredEvent(String sectionName, Throwable throwable) {
         log.error("Event Erred", throwable);
         addErredEvent(sectionName, throwable.toString());
+    }
+
+    public void addErredEvent(String sectionName, BigDecimal value, Throwable throwable) {
+        log.error("Event Erred", throwable);
+        addErredEvent(sectionName, value, throwable.toString());
     }
 
     public Long getTotal() {
