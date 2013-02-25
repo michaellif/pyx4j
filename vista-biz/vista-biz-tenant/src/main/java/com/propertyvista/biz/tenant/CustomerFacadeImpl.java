@@ -30,6 +30,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -218,7 +219,11 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
         tenant.customer().portalRegistrationToken().setValue(null);
-        persistCustomer(tenant.customer());
+        try {
+            persistCustomer(tenant.customer());
+        } catch (UniqueConstraintUserRuntimeException e) {
+            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"), e);
+        }
 
         CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());
         credential.accessKey().setValue(null);
