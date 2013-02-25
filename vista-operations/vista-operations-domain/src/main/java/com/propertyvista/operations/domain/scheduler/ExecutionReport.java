@@ -42,15 +42,6 @@ public interface ExecutionReport extends IEntity {
     @ToString(index = 3)
     IPrimitive<Long> erred();
 
-    @Deprecated
-    IPrimitive<Double> amountProcessed();
-
-    @Deprecated
-    IPrimitive<Double> amountFailed();
-
-    @Deprecated
-    IPrimitive<Double> amountErred();
-
     IPrimitive<String> message();
 
     @ToString(index = 4)
