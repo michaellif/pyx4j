@@ -25,12 +25,14 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
 class TransactionContext {
@@ -135,9 +137,13 @@ class TransactionContext {
 
     void fireCompensationHandlers() {
         if (compensationHandlers != null) {
-            for (CompensationHandler handler : compensationHandlers) {
-                UnitOfWork.execute(handler);
+
+            ListIterator<CompensationHandler> li = compensationHandlers.listIterator(compensationHandlers.size());
+            while (li.hasPrevious()) {
+                CompensationHandler handler = li.previous();
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(handler);
             }
+
             compensationHandlers.clear();
         }
     }

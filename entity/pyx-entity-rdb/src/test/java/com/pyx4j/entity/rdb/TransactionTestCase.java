@@ -21,6 +21,7 @@
 package com.pyx4j.entity.rdb;
 
 import java.rmi.server.ServerNotActiveException;
+import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -196,13 +197,10 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             @Override
             public Void execute() throws RuntimeException {
 
-                // TODO this should be part of UnitOfWork
-                srv.enableNestedTransactions();
-
                 srv.persist(createEntity(setId, "1.0"));
 
                 try {
-                    UnitOfWork.execute(exec2);
+                    new UnitOfWork().execute(exec2);
                     Assert.fail("Should throw exception");
                 } catch (ServerNotActiveException ok) {
                 }
@@ -214,18 +212,18 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
         };
 
-        UnitOfWork.execute(exec1);
+        new UnitOfWork().execute(exec1);
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "2.0");
         assertExists(setId, "1.1");
     }
 
-    public void TODOtestUnitOfWorkManangementCallOrigin() {
+    public void testUnitOfWorkManangementCallOrigin() {
         final String setId = uniqueString();
 
         try {
-            UnitOfWork.execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
 
                 @Override
                 public Void execute() {
@@ -248,7 +246,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final String setId = uniqueString();
 
         try {
-            UnitOfWork.execute(new Executable<Void, ServerNotActiveException>() {
+            new UnitOfWork().execute(new Executable<Void, ServerNotActiveException>() {
 
                 @Override
                 public Void execute() throws ServerNotActiveException {
@@ -275,8 +273,10 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     }
 
-    public void XtestUnitOfWorkCompensationHandlerL2() {
+    public void testUnitOfWorkCompensationHandlerL2() {
         final String setId = uniqueString();
+
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         final Executable<Void, RuntimeException> exec2 = new Executable<Void, RuntimeException>() {
 
@@ -288,7 +288,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
                     @Override
                     public Void execute() throws RuntimeException {
                         srv.persist(createEntity(setId, "2.0CH"));
-                        System.out.println("2.0Ch");
+                        compensationHandlerOrder.add("2.0CH");
                         return null;
                     }
                 });
@@ -303,21 +303,18 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             @Override
             public Void execute() throws ServerNotActiveException {
 
-                // TODO this should be part of UnitOfWork
-                srv.enableNestedTransactions();
-
                 srv.persist(createEntity(setId, "1.0"));
 
                 UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
                     @Override
                     public Void execute() throws RuntimeException {
                         srv.persist(createEntity(setId, "1.0CH"));
-                        System.out.println("1.0Ch");
+                        compensationHandlerOrder.add("1.0CH");
                         return null;
                     }
                 });
 
-                UnitOfWork.execute(exec2);
+                new UnitOfWork().execute(exec2);
 
                 srv.persist(createEntity(setId, "1.1"));
 
@@ -325,7 +322,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
                     @Override
                     public Void execute() throws RuntimeException {
                         srv.persist(createEntity(setId, "1.1CH"));
-                        System.out.println("1.1Ch");
+                        compensationHandlerOrder.add("1.1CH");
                         return null;
                     }
                 });
@@ -336,7 +333,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         };
 
         try {
-            UnitOfWork.execute(exec1);
+            new UnitOfWork().execute(exec1);
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -347,5 +344,9 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertExists(setId, "1.1CH");
         assertNotExists(setId, "2.0");
         assertExists(setId, "2.0CH");
+
+        assertEquals(2, compensationHandlerOrder.indexOf("1.0CH"));
+        assertEquals(1, compensationHandlerOrder.indexOf("2.0CH"));
+        assertEquals(0, compensationHandlerOrder.indexOf("1.1CH"));
     }
 }

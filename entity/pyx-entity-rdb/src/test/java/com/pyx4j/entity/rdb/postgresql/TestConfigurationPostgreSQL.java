@@ -55,7 +55,7 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
 
     @Override
     public int maxPoolSize() {
-        return 1;
+        return 2;
     }
 
     @Override

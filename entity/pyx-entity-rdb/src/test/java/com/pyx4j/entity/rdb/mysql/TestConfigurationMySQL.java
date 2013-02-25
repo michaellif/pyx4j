@@ -55,7 +55,7 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
 
     @Override
     public int maxPoolSize() {
-        return 1;
+        return 2;
     }
 
     @Override

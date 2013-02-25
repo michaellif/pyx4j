@@ -37,11 +37,14 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceContext.class);
+
+    private final PersistenceContext suppressedPersistenceContext;
 
     private final ConnectionProvider connectionProvider;
 
@@ -65,6 +68,8 @@ public class PersistenceContext {
 
     private String assertTransactionManangementCallOrigin;
 
+    private String transactionManangementCallOriginSetFrom;
+
     public static final boolean traceOpenSession = false;
 
     private static Object openSessionLock = new Object();
@@ -82,7 +87,8 @@ public class PersistenceContext {
         AutoCommit
     }
 
-    PersistenceContext(ConnectionProvider connectionProvider, TransactionType transactionType) {
+    PersistenceContext(PersistenceContext suppressedPersistenceContext, ConnectionProvider connectionProvider, TransactionType transactionType) {
+        this.suppressedPersistenceContext = suppressedPersistenceContext;
         this.connectionProvider = connectionProvider;
         this.transactionType = transactionType;
         if (traceOpenSession) {
@@ -93,6 +99,10 @@ public class PersistenceContext {
             this.contextOpenFrom = "n/a";
         }
         transactionContexts.push(new TransactionContext(null, savepoints));
+    }
+
+    PersistenceContext getSuppressedPersistenceContext() {
+        return suppressedPersistenceContext;
     }
 
     String getContextOpenFrom() {
@@ -163,13 +173,17 @@ public class PersistenceContext {
         if (ServerSideConfiguration.isStartedUnderUnitTest() || ServerSideConfiguration.isStartedUnderJvmDebugMode()
                 || ServerSideConfiguration.isStartedUnderEclipse()) {
             assertTransactionManangementCallOrigin = Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class);
+            if (assertTransactionManangementCallOrigin.startsWith(UnitOfWork.class.getName())) {
+                transactionManangementCallOriginSetFrom = Trace.getCallOrigin(UnitOfWork.class);
+            }
         }
     }
 
     private void assertTransactionManangementCallOrigin() {
         if ((assertTransactionManangementCallOrigin != null)
                 && (!assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
-            throw new IllegalAccessError("Transaction Management of this thread can only performed from " + assertTransactionManangementCallOrigin);
+            throw new IllegalAccessError("Transaction Management of this thread can only performed from " + assertTransactionManangementCallOrigin //
+                    + ((transactionManangementCallOriginSetFrom != null) ? (", created from \n" + transactionManangementCallOriginSetFrom + "\n") : ""));
         }
     }
 

@@ -20,8 +20,6 @@
  */
 package com.pyx4j.entity.server;
 
-import java.util.concurrent.Callable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,35 +27,23 @@ public class UnitOfWork {
 
     private static final Logger log = LoggerFactory.getLogger(UnitOfWork.class);
 
-    @Deprecated
-    public static <T> T execute(final Callable<T> task) throws Exception {
-        boolean success = false;
-        try {
-            Persistence.service().startTransaction();
-            try {
-                T rv = task.call();
-                Persistence.service().commit();
-                success = true;
-                return rv;
-            } finally {
-                if (!success) {
-                    try {
-                        Persistence.service().rollback();
-                    } catch (Throwable e) {
-                        log.error("error during UnitOfWork {} rollback", task, e);
-                    }
-                }
-            }
-        } finally {
-            Persistence.service().endTransaction();
-        }
+    private final TransactionScopeOption transactionScopeOption;
+
+    public UnitOfWork() {
+        this(TransactionScopeOption.Required);
     }
 
-    public static <R, E extends Throwable> R execute(final Executable<R, E> task) throws E {
+    public UnitOfWork(TransactionScopeOption transactionScopeOption) {
+        this.transactionScopeOption = transactionScopeOption;
+    }
+
+    public <R, E extends Throwable> R execute(final Executable<R, E> task) throws E {
         boolean success = false;
         try {
-            Persistence.service().startTransaction();
-            //Persistence.service().setAssertTransactionManangementCallOrigin();
+            Persistence.service().startTransaction(transactionScopeOption);
+            Persistence.service().setAssertTransactionManangementCallOrigin();
+            Persistence.service().enableNestedTransactions();
+
             try {
                 R rv = task.execute();
                 Persistence.service().commit();

@@ -41,6 +41,8 @@ public interface IEntityPersistenceService {
      */
     public void startTransaction();
 
+    public void startTransaction(TransactionScopeOption transactionScopeOption);
+
     public void enableNestedTransactions();
 
     public void startBackgroundProcessTransaction();

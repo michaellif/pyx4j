@@ -74,6 +74,7 @@ import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
@@ -206,7 +207,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
-            threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.AutoCommit));
+            createTransactionContext(persistenceContext, TransactionType.AutoCommit);
         } else {
             assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
@@ -230,14 +231,38 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void startTransaction() {
+        startTransaction(TransactionScopeOption.Required);
+    }
+
+    @Override
+    public void startTransaction(TransactionScopeOption transactionScopeOption) {
         PersistenceContext persistenceContext = threadSessions.get();
-        if (persistenceContext != null) {
-            if (persistenceContext.isExplicitTransaction()) {
-                persistenceContext.savepointCreate();
-                return;
+
+        switch (transactionScopeOption) {
+        case Mandatory:
+            if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
+                throw new Error("TransactionRequiredException");
             }
+            persistenceContext.savepointCreate();
+            break;
+        case Required:
+            if ((persistenceContext != null) && (persistenceContext.isExplicitTransaction())) {
+                persistenceContext.savepointCreate();
+            } else {
+                createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction);
+            }
+            break;
+        case RequiresNew:
+            createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction);
+            break;
+        case Suppress:
+            createTransactionContext(persistenceContext, TransactionType.AutoCommit);
+            break;
         }
-        threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.ExplicitTransaction));
+    }
+
+    private void createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType) {
+        threadSessions.set(new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType));
     }
 
     @Override
@@ -251,7 +276,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             endTransaction();
 
         }
-        threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.BackgroundProcess));
+        threadSessions.set(new PersistenceContext(null, connectionProvider, TransactionType.BackgroundProcess));
     }
 
     @Override
@@ -280,9 +305,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 persistenceContext.savepointRelease();
             } else {
                 try {
-                    persistenceContext.close();
+                    try {
+                        persistenceContext.close();
+                    } finally {
+                        threadSessions.remove();
+                    }
                 } finally {
-                    threadSessions.remove();
+                    if (persistenceContext.getSuppressedPersistenceContext() != null) {
+                        threadSessions.set(persistenceContext.getSuppressedPersistenceContext());
+                    }
                 }
             }
         }

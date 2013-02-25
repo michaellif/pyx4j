@@ -72,6 +72,7 @@ import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -222,6 +223,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     @Override
     public void startTransaction() {
         //TODO
+    }
+
+    @Override
+    public void startTransaction(TransactionScopeOption transactionScopeOption) {
+        // TODO
     }
 
     @Override
