@@ -58,12 +58,20 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> avalableForPmc() {
+        return EnumSet.of(CreditCard);
+    }
+
     public static EnumSet<PaymentType> avalableInInsurance() {
         return EnumSet.of(CreditCard);
     }
 
-    public static EnumSet<PaymentType> avalableForPmc() {
-        return EnumSet.of(CreditCard);
+    public static EnumSet<PaymentType> avalableForNsf() {
+        return EnumSet.of(Check, Echeck, EFT, CreditCard);
+    }
+
+    public static EnumSet<PaymentType> notAllowedInProfile() {
+        return EnumSet.of(Cash, Check);
     }
 
     public static EnumSet<PaymentType> electronicPayments() {
@@ -72,10 +80,6 @@ public enum PaymentType {
 
     public static EnumSet<PaymentType> schedulable() {
         return EnumSet.of(Echeck, CreditCard);
-    }
-
-    public static EnumSet<PaymentType> avalableForNsf() {
-        return EnumSet.of(Check, Echeck, EFT, CreditCard);
     }
 
     // grouping:

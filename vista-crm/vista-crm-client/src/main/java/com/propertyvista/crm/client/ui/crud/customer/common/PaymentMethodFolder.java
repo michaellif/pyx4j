@@ -49,6 +49,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         getAllowedPaymentTypes(new DefaultAsyncCallback<EnumSet<PaymentType>>() {
             @Override
             public void onSuccess(EnumSet<PaymentType> result) {
+                result.removeAll(PaymentType.notAllowedInProfile());
                 new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Method Type"), result) {
                     @Override
                     public boolean onClickOk() {
