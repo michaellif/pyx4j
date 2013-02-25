@@ -215,6 +215,7 @@
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
 	display: inline-block;
 	width: 70px;
+	*width: 75px;
 }
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label:lang(fr) {
 	white-space: nowrap;
