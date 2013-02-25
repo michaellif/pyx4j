@@ -999,6 +999,10 @@ td.DatePickerMonth {
 	border-bottom: none;
 }
 
+.TenantDashboardTableRow td {
+	white-space: nowrap;
+}
+
 .TenantDashboardSection {
 	height: 12em;
 	padding: 0.5em;
@@ -1309,7 +1313,7 @@ td.DatePickerMonth {
 }
 
 .ProvideTIBGetTenantSure {
-	margin-left: 20px;
+	margin-left: 20px !important;
 }
 
 .ProvideTIUpdateExisitingInsurance {
