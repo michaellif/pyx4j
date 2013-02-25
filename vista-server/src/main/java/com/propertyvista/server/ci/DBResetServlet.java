@@ -235,6 +235,9 @@ public class DBResetServlet extends HttpServlet {
                             CacheService.resetAll();
                             o(out, "\nCacheService.resetAll Ok");
                         } else {
+                            // End transaction started by Framework filter
+                            Persistence.service().endTransaction();
+
                             Persistence.service().startBackgroundProcessTransaction();
                             Lifecycle.startElevatedUserContext();
                             Mail.getMailService().setDisabled(true);
