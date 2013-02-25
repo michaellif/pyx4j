@@ -207,16 +207,16 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
-            createTransactionContext(persistenceContext, TransactionType.AutoCommit, false);
+            createTransactionContext(persistenceContext, TransactionType.SingelAPICallAutoCommit, false);
         } else {
-            assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected, Context open from "
+            assert (!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
         }
     }
 
     private void endContext() {
         PersistenceContext persistenceContext = threadSessions.get();
-        if ((persistenceContext != null) && (!persistenceContext.isExplicitTransaction())) {
+        if ((persistenceContext != null) && (persistenceContext.isSingelAPICallTransaction())) {
             try {
                 persistenceContext.close();
             } finally {

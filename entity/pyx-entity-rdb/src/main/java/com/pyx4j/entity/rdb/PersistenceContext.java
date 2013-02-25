@@ -82,6 +82,8 @@ public class PersistenceContext {
 
     public static enum TransactionType {
 
+        SingelAPICallAutoCommit,
+
         ExplicitTransaction,
 
         AutoCommit
@@ -109,6 +111,10 @@ public class PersistenceContext {
 
     String getContextOpenFrom() {
         return contextOpenFrom;
+    }
+
+    public boolean isSingelAPICallTransaction() {
+        return transactionType == TransactionType.SingelAPICallAutoCommit;
     }
 
     public boolean isExplicitTransaction() {
