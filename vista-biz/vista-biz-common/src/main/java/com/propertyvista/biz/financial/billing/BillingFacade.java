@@ -17,13 +17,13 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 
 public interface BillingFacade {
 
@@ -31,7 +31,7 @@ public interface BillingFacade {
 
     Bill runBillingPreview(Lease leaseId);
 
-    void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord);
+    void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor);
 
     Bill getBill(Lease lease, int billSequenceNumber);
 
@@ -46,7 +46,7 @@ public interface BillingFacade {
     Bill rejectBill(Bill billStub, String reason);
 
     // Processes
-    void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord);
+    void runBilling(LogicalDate date, ExecutionMonitor executionMonitor);
 
     void initializeFutureBillingCycles();
 

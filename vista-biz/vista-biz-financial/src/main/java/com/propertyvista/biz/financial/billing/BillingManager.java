@@ -44,6 +44,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
@@ -64,10 +65,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class BillingManager {
 
@@ -97,16 +96,16 @@ public class BillingManager {
      *            - executionTargetDate
      * @param dynamicStatisticsRecord
      */
-    static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
+    static void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
         ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (billingCycleIterator.hasNext()) {
-            runBilling(billingCycleIterator.next(), dynamicStatisticsRecord);
+            runBilling(billingCycleIterator.next(), executionMonitor);
         }
     }
 
-    static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
+    static void runBilling(final BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().building(), billingCycle.building()));
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
@@ -124,7 +123,7 @@ public class BillingManager {
                 }
             }
         });
-        runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
+        runBilling(billingCycle, filteredLeaseIterator, executionMonitor);
     }
 
     private static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
@@ -183,29 +182,27 @@ public class BillingManager {
         return true;
     }
 
-    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, StatisticsRecord dynamicStatisticsRecord) {
+    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, ExecutionMonitor executionMonitor) {
         Persistence.service().commit();
         try {
             while (leasesIterator.hasNext()) {
                 BillCreationResult result = new BillCreationResult(produceBill(billingCycle, leasesIterator.next(), false));
-                appendStats(dynamicStatisticsRecord, result);
+                appendStats(executionMonitor, result);
                 Persistence.service().commit();
             }
         } catch (Throwable e) {
             Persistence.service().rollback();
             log.error("Bill run error", e);
-            appendStats(dynamicStatisticsRecord, new BillCreationResult(i18n.tr("Bill run error")));
+            appendStats(executionMonitor, new BillCreationResult(i18n.tr("Bill run error")));
             Persistence.service().commit();
         }
     }
 
-    private static void appendStats(StatisticsRecord dynamicStatisticsRecord, BillCreationResult result) {
+    private static void appendStats(ExecutionMonitor executionMonitor, BillCreationResult result) {
         if (result.getStatus() == BillCreationResult.Status.created) {
-            StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
-            Double amountProcessed = dynamicStatisticsRecord.amountProcessed().getValue();
-            dynamicStatisticsRecord.amountProcessed().setValue(amountProcessed != null ? amountProcessed : 0 + result.getTotalDueAmount().doubleValue());
+            executionMonitor.addProcessedEvent("Bill", result.getTotalDueAmount(), null);
         } else {
-            StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+            executionMonitor.addFailedEvent("Bill", "Bill status is " + result.getStatus().toString());
         }
     }
 

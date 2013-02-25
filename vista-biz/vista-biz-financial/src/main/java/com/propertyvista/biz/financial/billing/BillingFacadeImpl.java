@@ -17,13 +17,13 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 
 public class BillingFacadeImpl implements BillingFacade {
 
@@ -38,13 +38,13 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
-    public void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
-        BillingManager.runBilling(date, dynamicStatisticsRecord);
+    public void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
+        BillingManager.runBilling(date, executionMonitor);
     }
 
     @Override
-    public void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
-        BillingManager.runBilling(billingCycle, dynamicStatisticsRecord);
+    public void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
+        BillingManager.runBilling(billingCycle, executionMonitor);
     }
 
     @Override

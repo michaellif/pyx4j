@@ -130,6 +130,10 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, message);
     }
 
+    public void addProcessedEvent(String sectionName, BigDecimal value, String message) {
+        addEvent(sectionName, CompletionType.processed, value, message);
+    }
+
     public void addFailedEvent(String sectionName, String message) {
         addEvent(sectionName, CompletionType.failed, new BigDecimal(1), message);
     }

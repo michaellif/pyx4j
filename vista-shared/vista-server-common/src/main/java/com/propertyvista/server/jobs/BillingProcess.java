@@ -29,7 +29,7 @@ public class BillingProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         if (!VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(context.getForDate()), context.getRunStats());
+            ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(context.getForDate()), context.getExecutionMonitor());
         }
     }
 
