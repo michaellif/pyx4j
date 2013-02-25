@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -23,20 +24,21 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
 import com.propertyvista.server.domain.CustomerCreditCheckReportNoBackup;
 
 public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
 
     @Override
-    public void dataRetention(StatisticsRecord dynamicStatisticsRecord) {
+    public void dataRetention(ExecutionMonitor executionMonitor) {
         NamespaceManager.setNamespace(VistaNamespace.expiringNamespace);
         try {
             long maxProgress1 = Persistence.service().count(EntityQueryCriteria.create(CustomerCreditCheckReport.class));
             long maxProgress2 = Persistence.service().count(EntityQueryCriteria.create(CustomerCreditCheckReportNoBackup.class));
-            dynamicStatisticsRecord.total().setValue(maxProgress1 + maxProgress2);
+            //TODO Vlads - implement using executionMonitor
+            // dynamicStatisticsRecord.total().setValue(maxProgress1 + maxProgress2);
 
             long removed = 0;
             long moved = 0;
@@ -68,8 +70,6 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
                 removed += Persistence.service().delete(criteria);
             }
 
-            dynamicStatisticsRecord.processed().setValue(removed + moved);
-
             if (moved != 0) {
                 message.append("Moved:").append(moved);
             }
@@ -80,7 +80,8 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
                 message.append("Removed:").append(removed);
             }
 
-            dynamicStatisticsRecord.message().setValue(message.toString());
+            executionMonitor.addProcessedEvent("Report", new BigDecimal(removed + moved), message.toString());
+
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         }

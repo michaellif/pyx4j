@@ -13,10 +13,10 @@
  */
 package com.propertyvista.biz.system;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+import com.propertyvista.biz.ExecutionMonitor;
 
 public interface EquifaxProcessFacade {
 
-    void dataRetention(StatisticsRecord dynamicStatisticsRecord);
+    void dataRetention(ExecutionMonitor executionMonitor);
 
 }

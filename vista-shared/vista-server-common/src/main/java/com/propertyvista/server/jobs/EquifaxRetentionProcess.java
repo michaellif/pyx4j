@@ -32,7 +32,7 @@ public class EquifaxRetentionProcess implements PmcProcess {
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(EquifaxProcessFacade.class).dataRetention(context.getRunStats());
+        ServerSideFactory.create(EquifaxProcessFacade.class).dataRetention(context.getExecutionMonitor());
     }
 
 }
