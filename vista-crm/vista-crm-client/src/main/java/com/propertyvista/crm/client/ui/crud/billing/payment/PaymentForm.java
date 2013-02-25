@@ -305,6 +305,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     paymentMethodEditor.setViewable(false);
                     paymentMethodEditorSeparator.setVisible(true);
                     get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                    setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 } else {
                     profiledPaymentMethodsCombo.setVisible(true);
                     profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
