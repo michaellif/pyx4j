@@ -99,7 +99,7 @@ public class YardiLeaseProcessor {
 
     }
 
-    private Lease updateLease(RTCustomer rtCustomer, Lease lease) {
+    Lease updateLease(RTCustomer rtCustomer, Lease lease) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();

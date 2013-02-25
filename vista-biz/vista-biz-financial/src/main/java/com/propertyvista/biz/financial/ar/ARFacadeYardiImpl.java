@@ -75,6 +75,7 @@ public class ARFacadeYardiImpl implements ARFacade {
 
         Persistence.service().persist(receipt);
 
+        Persistence.service().retrieve(paymentRecord.billingAccount());
         Persistence.service().retrieve(paymentRecord.billingAccount().lease());
         ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
 

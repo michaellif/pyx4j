@@ -112,18 +112,19 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         log.info("Update completed.");
     }
 
-    @Deprecated
     public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.service().retrieve(lease.unit().building());
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
-        ResidentTransactions transactions = getResidentTransaction(client, yc, lease.unit().building().propertyCode().getValue(), lease.leaseId().getValue());
-        if (transactions != null) {
-            new YardiLeaseProcessor().updateLeases(transactions);
-            new YardiChargeProcessor().updateCharges(transactions);
-            new YardiPaymentProcessor().updatePayments(transactions);
-            Persistence.service().commit();
-        }
+        String propertyCode = lease.unit().building().propertyCode().getValue();
+        ResidentTransactions transaction = getResidentTransaction(client, yc, propertyCode, lease.leaseId().getValue());
+        if (transaction != null) {
 
+            for (Property property : transaction.getProperty()) {
+                for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                    importLease(propertyCode, rtCustomer);
+                }
+            }
+        }
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
@@ -221,7 +222,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         log.info("      Updating lease");
         if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
-            // TODO skipping logic
+            // TODO skipping monitor message
             return;
         }
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
@@ -233,13 +234,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 Lease lease = new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
 
                 if (lease != null) {
-                    //TODO lease information was unchanged
                     lease = leaseFacade.persist(lease);
 
                     // activate:
                     leaseFacade.approve(lease, null, null);
                     leaseFacade.activate(lease);
                 } else {
+                    // TODO "lease information was unchanged" monitor message
                     log.info("          Lease information unchanged");
                 }
 
