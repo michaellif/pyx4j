@@ -222,7 +222,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         try {
             persistCustomer(tenant.customer());
         } catch (UniqueConstraintUserRuntimeException e) {
-            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"), e);
+            throw new UserRuntimeException(i18n.tr("Your Email already registered, Contact Property Owner"), e);
         }
 
         CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());
