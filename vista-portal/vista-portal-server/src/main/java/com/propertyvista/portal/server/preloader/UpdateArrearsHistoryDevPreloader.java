@@ -19,9 +19,7 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
@@ -35,7 +33,7 @@ public class UpdateArrearsHistoryDevPreloader extends BaseVistaDevDataPreloader 
         }
 
         UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-        PmcProcessContext context = new PmcProcessContext(EntityFactory.create(StatisticsRecord.class), new Date());
+        PmcProcessContext context = new PmcProcessContext(new Date());
         GregorianCalendar cal = new GregorianCalendar();
 
         cal.add(Calendar.YEAR, -config().updateArrearsHistorNumOfYearsBack);

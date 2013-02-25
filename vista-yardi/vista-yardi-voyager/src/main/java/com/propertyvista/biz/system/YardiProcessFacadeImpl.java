@@ -15,11 +15,11 @@ package com.propertyvista.biz.system;
 
 import java.rmi.RemoteException;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
@@ -27,30 +27,30 @@ import com.propertyvista.yardi.services.YardiSystemBatchesService;
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
-    public void doAllImport(StatisticsRecord dynamicStatisticsRecord) {
+    public void doAllImport(ExecutionMonitor executionMonitor) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential(), dynamicStatisticsRecord);
+            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential(), executionMonitor);
         } catch (YardiServiceException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord) {
+    public void postReceiptBatch(ExecutionMonitor executionMonitor) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiSystemBatchesService.getInstance().postReceiptBatch(VistaDeployment.getPmcYardiCredential(), dynamicStatisticsRecord);
+            YardiSystemBatchesService.getInstance().postReceiptBatch(VistaDeployment.getPmcYardiCredential(), executionMonitor);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord) {
+    public void postReceiptReversalBatch(ExecutionMonitor executionMonitor) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
-            YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(VistaDeployment.getPmcYardiCredential(), dynamicStatisticsRecord);
+            YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(VistaDeployment.getPmcYardiCredential(), executionMonitor);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

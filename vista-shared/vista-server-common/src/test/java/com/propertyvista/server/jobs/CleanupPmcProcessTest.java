@@ -17,11 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
@@ -50,7 +48,7 @@ public class CleanupPmcProcessTest extends CleanupPmcProcessTestBase {
         );//@formatter:on
 
         // RUN CLEANUP
-        PmcProcessContext context = new PmcProcessContext(EntityFactory.create(StatisticsRecord.class), new Date());
+        PmcProcessContext context = new PmcProcessContext(new Date());
         cleanupProcessInstance.executePmcJob(context);
 
         // TEST

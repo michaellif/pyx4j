@@ -15,18 +15,18 @@ package com.propertyvista.biz.system;
 
 import java.rmi.RemoteException;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 
 public interface YardiProcessFacade {
 
-    void doAllImport(StatisticsRecord dynamicStatisticsRecord);
+    void doAllImport(ExecutionMonitor executionMonitor);
 
-    void postReceiptBatch(StatisticsRecord dynamicStatisticsRecord);
+    void postReceiptBatch(ExecutionMonitor executionMonitor);
 
-    void postReceiptReversalBatch(StatisticsRecord dynamicStatisticsRecord);
+    void postReceiptReversalBatch(ExecutionMonitor executionMonitor);
 
     void updateLease(Lease lease);
 

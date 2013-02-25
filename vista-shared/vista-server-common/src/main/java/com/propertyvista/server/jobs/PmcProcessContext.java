@@ -15,21 +15,37 @@ package com.propertyvista.server.jobs;
 
 import java.util.Date;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 
 public class PmcProcessContext {
 
+    private final ExecutionMonitor executionMonitor;
+
+    @Deprecated
     private final StatisticsRecord runStats;
 
     private final Date forDate;
 
-    public PmcProcessContext(StatisticsRecord runStats, Date forDate) {
-        this.runStats = runStats;
+    public PmcProcessContext(Date forDate) {
+        this(forDate, 0L, 0L, 0L);
+    }
+
+    public PmcProcessContext(Date forDate, Long processed, Long failed, Long erred) {
+        this.runStats = EntityFactory.create(StatisticsRecord.class);
+        this.executionMonitor = new ExecutionMonitor(processed, failed, erred);
         this.forDate = forDate;
     }
 
+    @Deprecated
     public StatisticsRecord getRunStats() {
         return runStats;
+    }
+
+    public ExecutionMonitor getExecutionMonitor() {
+        return executionMonitor;
     }
 
     public Date getForDate() {

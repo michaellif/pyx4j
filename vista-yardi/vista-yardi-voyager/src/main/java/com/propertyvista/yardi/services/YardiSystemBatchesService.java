@@ -36,10 +36,10 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -60,7 +60,7 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void postReceiptBatch(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException, RemoteException {
+    public void postReceiptBatch(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
 
         List<String> propertyCodes = getPropertyCodes(new YardiClient(yc.residentTransactionsServiceURL().getValue()), yc);
 
@@ -73,12 +73,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
             for (YardiReceipt receipt : new YardiPaymentProcessor().getPaymentReceiptsForProperty(propertyCode)) {
                 try {
                     postReceiptForBatch(yc, client, batchId, receipt);
-                    dynamicStatisticsRecord.processed().setValue(dynamicStatisticsRecord.processed().getValue() + 1);
+                    executionMonitor.addProcessedEvent("Receipt");
                     total++;
                 } catch (YardiServiceException e) {
-                    dynamicStatisticsRecord.failed().setValue(dynamicStatisticsRecord.failed().getValue() + 1);
+                    executionMonitor.addFailedEvent("Receipt", e);
                 }
-                dynamicStatisticsRecord.total().setValue(dynamicStatisticsRecord.total().getValue() + 1);
             }
             if (total > 0) {
                 postReceiptBatch(client, yc, batchId);

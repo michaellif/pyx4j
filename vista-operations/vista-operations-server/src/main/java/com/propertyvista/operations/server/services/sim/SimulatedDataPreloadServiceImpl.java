@@ -39,7 +39,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.UpdateArrearsProcess;
@@ -169,7 +168,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                 Persistence.service().startBackgroundProcessTransaction();
 
                 UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-                PmcProcessContext context = new PmcProcessContext(EntityFactory.create(StatisticsRecord.class), new Date());
+                PmcProcessContext context = new PmcProcessContext(new Date());
                 GregorianCalendar cal = new GregorianCalendar();
                 int numOfYearsBack = 3;
                 cal.add(Calendar.YEAR, -numOfYearsBack);

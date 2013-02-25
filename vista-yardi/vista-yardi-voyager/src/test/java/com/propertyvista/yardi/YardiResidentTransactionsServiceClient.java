@@ -16,15 +16,14 @@ package com.propertyvista.yardi;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
@@ -39,11 +38,7 @@ public class YardiResidentTransactionsServiceClient {
         PmcYardiCredential yardiCredential = DevYardiCredentials.getTestPmcYardiCredential();
 
         try {
-            StatisticsRecord dynamicStatisticsRecord = EntityFactory.create(StatisticsRecord.class);
-            dynamicStatisticsRecord.total().setValue(0L);
-            dynamicStatisticsRecord.failed().setValue(0L);
-            dynamicStatisticsRecord.processed().setValue(0L);
-            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, dynamicStatisticsRecord);
+            YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, new ExecutionMonitor());
             //         YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(yardiCredential);
         } finally {
             Persistence.service().commit();

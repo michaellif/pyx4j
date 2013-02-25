@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiProcessFacade;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
@@ -34,11 +34,11 @@ public class YardiImportProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        StatisticsRecord dynamicStatisticsRecord = context.getRunStats();
+        ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         if (VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(YardiProcessFacade.class).doAllImport(dynamicStatisticsRecord);
+            ServerSideFactory.create(YardiProcessFacade.class).doAllImport(executionMonitor);
         } else {
-            dynamicStatisticsRecord.message().setValue("PMC does not meet criteria");
+            executionMonitor.addErredEvent("Pmc", "PMC does not meet criteria");
         }
     }
 

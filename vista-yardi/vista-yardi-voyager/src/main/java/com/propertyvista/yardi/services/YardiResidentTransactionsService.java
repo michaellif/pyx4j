@@ -39,13 +39,13 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -57,8 +57,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -93,7 +91,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
      * @throws YardiServiceException
      *             if operation fails
      */
-    public void updateAll(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
+    public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException {
 
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
@@ -107,7 +105,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
 
         for (ResidentTransactions transaction : allTransactions) {
-            importTransaction(transaction, dynamicStatisticsRecord);
+            importTransaction(transaction, executionMonitor);
         }
 
         log.info("Update completed.");
@@ -138,33 +136,33 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         paymentProcessor.onPostReceiptReversalSuccess(reversal);
     }
 
-    public void postReceiptReversalBatch(PmcYardiCredential yc, StatisticsRecord dynamicStatisticsRecord) {
+    public void postReceiptReversalBatch(PmcYardiCredential yc, ExecutionMonitor executionMonitor) {
         for (YardiReceiptReversal reversals : new YardiPaymentProcessor().getAllReceiptReversals()) {
             try {
                 postReceiptReversal(yc, reversals);
-                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                executionMonitor.addProcessedEvent("Reversal");
             } catch (YardiServiceException e) {
-                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                executionMonitor.addFailedEvent("Reversal", e);
             }
         }
     }
 
-    private void importTransaction(ResidentTransactions transaction, final StatisticsRecord dynamicStatisticsRecord) {
+    private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("Import started...");
 
         List<Property> properties = getProperties(transaction);
 
         for (final Property property : properties) {
-            log.info("Updating building " + property.getPropertyID().get(0).getIdentification().getPrimaryID());
+            log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
             try {
                 final Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
 
                     @Override
                     public Building execute() throws YardiServiceException {
-                        Building building = new YardiBuildingProcessor().updateBuilding(property, dynamicStatisticsRecord);
+                        Building building = new YardiBuildingProcessor().updateBuilding(property, executionMonitor);
                         ServerSideFactory.create(BuildingFacade.class).persist(building);
-                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                        executionMonitor.addProcessedEvent("Building");
                         return building;
                     }
                 });
@@ -173,19 +171,21 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     log.info("  for " + rtCustomer.getCustomerID());
                     log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
                     try {
-                        AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
+                        UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
 
                             @Override
                             public AptUnit execute() throws YardiServiceException {
                                 AptUnit unit = new YardiBuildingProcessor().updateUnit(building.propertyCode().getValue(), rtCustomer.getRTUnit());
                                 ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+                                executionMonitor.addProcessedEvent("Unit");
                                 return unit;
                             }
                         });
 
                     } catch (YardiServiceException e) {
-                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                        executionMonitor.addFailedEvent("Unit", e);
+                    } catch (RuntimeException e) {
+                        executionMonitor.addErredEvent("Unit", e);
                     }
 
                     if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
@@ -236,20 +236,21 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                                         }
                                     }
                                 }
-
+                                executionMonitor.addProcessedEvent("Lease");
                                 return null;
                             }
                         });
 
                     } catch (YardiServiceException e) {
-                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
-                    } catch (UserRuntimeException t) {
-                        // TODO change. Currently here because it catches null pointer exceptions for starlight leases that have no first/last name.
-                        StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                        executionMonitor.addFailedEvent("Lease", e);
+                    } catch (RuntimeException e) {
+                        executionMonitor.addErredEvent("Lease", e);
                     }
                 }
             } catch (YardiServiceException e) {
-                StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+                executionMonitor.addFailedEvent("Building", e);
+            } catch (RuntimeException e) {
+                executionMonitor.addErredEvent("Building", e);
             }
 
         }

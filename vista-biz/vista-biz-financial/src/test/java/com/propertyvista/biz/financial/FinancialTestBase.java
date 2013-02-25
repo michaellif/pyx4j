@@ -75,7 +75,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
@@ -792,11 +791,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         taskSchedule.put(entry, new Task() {
             @Override
             public void execute() throws Exception {
-                StatisticsRecord runStats = EntityFactory.create(StatisticsRecord.class);
                 Date runDate = SysDateManager.getSysDate();
-                PmcProcessContext sharedContext = new PmcProcessContext(runStats, runDate);
+                PmcProcessContext sharedContext = new PmcProcessContext(runDate);
                 if (pmcProcess.start(sharedContext)) {
-                    PmcProcessContext pmcContext = new PmcProcessContext(runStats, runDate);
+                    PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                     pmcProcess.executePmcJob(pmcContext);
                     Persistence.service().commit();
                     pmcProcess.complete(sharedContext);

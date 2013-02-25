@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 public enum CompletionType implements Serializable {
 
-    error,
+    erred,
 
     failed,
 

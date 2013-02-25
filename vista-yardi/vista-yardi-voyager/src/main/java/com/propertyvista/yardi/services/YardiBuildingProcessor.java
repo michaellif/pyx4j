@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
@@ -31,13 +29,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
@@ -45,11 +43,11 @@ import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);
-
-    public Building updateBuilding(Property property, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
+    public Building updateBuilding(Property property, ExecutionMonitor executionMonitor) throws YardiServiceException {
         Building building = getBuildingFromProperty(property);
-        isSameCountry(building, dynamicStatisticsRecord);
+        if (!isSameCountry(building)) {
+            throw new YardiServiceException("Wrong country in building ");
+        }
         String propertyCode = building.propertyCode().getValue();
         return merge(building, getBuilding(propertyCode));
     }
@@ -147,16 +145,11 @@ public class YardiBuildingProcessor {
         return new ArrayList<RTUnit>(map.values());
     }
 
-    private boolean isSameCountry(Building building, StatisticsRecord dynamicStatisticsRecord) throws YardiServiceException {
+    private boolean isSameCountry(Building building) throws YardiServiceException {
         Pmc pmc = VistaDeployment.getCurrentPmc();
         String yardiCountry = building.info().address().country().name().getValue();
         String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
-        if (!yardiCountry.equals(countryOfOperation)) {
-            dynamicStatisticsRecord.message().setValue(
-                    "PMC country ''" + countryOfOperation + "'' does not match Yardi, ''" + yardiCountry + "'', import skipped.");
-            throw new YardiServiceException("Country mismatch");
-        }
-        return true;
+        return yardiCountry.equals(countryOfOperation);
     }
 
 }

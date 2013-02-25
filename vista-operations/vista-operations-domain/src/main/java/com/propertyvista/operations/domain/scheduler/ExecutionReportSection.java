@@ -44,6 +44,8 @@ public interface ExecutionReportSection extends IEntity {
     @MemberColumn(name = "tp")
     IPrimitive<CompletionType> type();
 
+    IPrimitive<Long> counter();
+
     IPrimitive<BigDecimal> value();
 
     @Owned

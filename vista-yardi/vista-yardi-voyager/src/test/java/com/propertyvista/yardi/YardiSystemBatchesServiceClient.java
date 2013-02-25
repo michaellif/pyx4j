@@ -16,15 +16,14 @@ package com.propertyvista.yardi;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
 public class YardiSystemBatchesServiceClient {
@@ -37,11 +36,7 @@ public class YardiSystemBatchesServiceClient {
 
         PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
         try {
-            StatisticsRecord dynamicStatisticsRecord = EntityFactory.create(StatisticsRecord.class);
-            dynamicStatisticsRecord.total().setValue(0L);
-            dynamicStatisticsRecord.failed().setValue(0L);
-            dynamicStatisticsRecord.processed().setValue(0L);
-            YardiSystemBatchesService.getInstance().postReceiptBatch(yardiCredential, dynamicStatisticsRecord);
+            YardiSystemBatchesService.getInstance().postReceiptBatch(yardiCredential, new ExecutionMonitor());
         } finally {
             Persistence.service().commit();
         }
