@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class DepositRefundProcess implements PmcProcess {
 
@@ -50,13 +49,12 @@ public class DepositRefundProcess implements PmcProcess {
             try {
                 depositFacade.issueDepositRefunds(lease);
                 Persistence.service().commit();
-
-                StatisticsUtils.addProcessed(context.getRunStats(), 1);
-            } catch (Throwable error) {
-                log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
+                context.getExecutionMonitor().addProcessedEvent("Deposit");
+            } catch (Throwable t) {
+                log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
                 Persistence.service().rollback();
                 ++failed;
-                StatisticsUtils.addFailed(context.getRunStats(), 1);
+                context.getExecutionMonitor().addFailedEvent("Deposit", t);
             }
         }
         log.info("{} out of {} leases were processed successfully", total - failed, total);
