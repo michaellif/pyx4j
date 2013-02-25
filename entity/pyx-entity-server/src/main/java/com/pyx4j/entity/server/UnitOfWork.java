@@ -64,11 +64,13 @@ public class UnitOfWork {
 
             try {
                 R rv = task.execute();
-                Persistence.service().commit();
+                if (transactionScopeOption != TransactionScopeOption.Suppress) {
+                    Persistence.service().commit();
+                }
                 success = true;
                 return rv;
             } finally {
-                if (!success) {
+                if ((!success) && (transactionScopeOption != TransactionScopeOption.Suppress)) {
                     try {
                         Persistence.service().rollback();
                     } catch (Throwable e) {
