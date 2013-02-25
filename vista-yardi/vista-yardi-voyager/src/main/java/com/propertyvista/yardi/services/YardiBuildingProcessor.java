@@ -29,7 +29,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -43,7 +42,7 @@ import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
 
-    public Building updateBuilding(Property property, ExecutionMonitor executionMonitor) throws YardiServiceException {
+    public Building updateBuilding(Property property) throws YardiServiceException {
         Building building = getBuildingFromProperty(property);
         if (!isSameCountry(building)) {
             throw new YardiServiceException("Wrong country in building ");

@@ -155,13 +155,16 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
         for (final Property property : properties) {
             try {
-                final Building building = importProperty(property, executionMonitor);
+                final Building building = importProperty(property);
+                executionMonitor.addProcessedEvent("Building");
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     log.info("  for {}", rtCustomer.getCustomerID());
                     try {
-                        importUnit(building.propertyCode().getValue(), rtCustomer, executionMonitor);
+                        importUnit(building.propertyCode().getValue(), rtCustomer);
+                        executionMonitor.addProcessedEvent("Unit");
                         try {
-                            importLease(building.propertyCode().getValue(), rtCustomer, executionMonitor);
+                            importLease(building.propertyCode().getValue(), rtCustomer);
+                            executionMonitor.addProcessedEvent("Lease");
                         } catch (YardiServiceException e) {
                             executionMonitor.addFailedEvent("Lease", e);
                         } catch (Throwable t) {
@@ -183,23 +186,22 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         log.info("Import complete.");
     }
 
-    private Building importProperty(final Property property, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+    private Building importProperty(final Property property) throws YardiServiceException {
         log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
 
         Building building = UnitOfWork.execute(new Executable<Building, YardiServiceException>() {
 
             @Override
             public Building execute() throws YardiServiceException {
-                Building building = new YardiBuildingProcessor().updateBuilding(property, executionMonitor);
+                Building building = new YardiBuildingProcessor().updateBuilding(property);
                 ServerSideFactory.create(BuildingFacade.class).persist(building);
-                executionMonitor.addProcessedEvent("Building");
                 return building;
             }
         });
         return building;
     }
 
-    private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+    private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
 
         AptUnit unit = UnitOfWork.execute(new Executable<AptUnit, YardiServiceException>() {
@@ -208,14 +210,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             public AptUnit execute() throws YardiServiceException {
                 AptUnit unit = new YardiBuildingProcessor().updateUnit(propertyCode, rtCustomer.getRTUnit());
                 ServerSideFactory.create(BuildingFacade.class).persist(unit);
-                executionMonitor.addProcessedEvent("Unit");
                 return unit;
             }
         });
         return unit;
     }
 
-    private void importLease(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+    private void importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         log.info("      Updating lease");
         if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
@@ -261,7 +262,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                         }
                     }
                 }
-                executionMonitor.addProcessedEvent("Lease");
                 return null;
             }
         });
