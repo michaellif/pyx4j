@@ -131,7 +131,6 @@ class TransactionContext {
             }
         }
         uncommittedChanges = false;
-        fireCompensationHandlers();
     }
 
     void fireCompensationHandlers() {
@@ -165,6 +164,7 @@ class TransactionContext {
         uncommittedChanges = false;
         if (commitedCompensationHandlers == null) {
             commitedCompensationHandlers = compensationHandlers;
+            compensationHandlers = null;
         } else {
             commitedCompensationHandlers.addAll(compensationHandlers);
             compensationHandlers.clear();

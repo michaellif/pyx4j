@@ -61,7 +61,11 @@ public class ServerSideConfiguration {
 
     private EnvironmentType environmentType;
 
+    private static Boolean isStartedUnderEclipse;
+
     private static Boolean jvmDebugMode;
+
+    private static Boolean isUnitTest;
 
     public static enum EnvironmentType {
         LocalJVM, GAEDevelopment, GAESandbox
@@ -206,13 +210,33 @@ public class ServerSideConfiguration {
      * @return true when running in Eclipse development env. (Not from maven)
      */
     public static boolean isStartedUnderEclipse() {
-        if (Boolean.valueOf(System.getProperty("com.pyx4j.EclipseDeveloperEnviroment"))) {
-            return true;
+        if (isStartedUnderEclipse == null) {
+            if (Boolean.valueOf(System.getProperty("com.pyx4j.EclipseDeveloperEnviroment"))) {
+                isStartedUnderEclipse = true;
+            } else {
+                StackTraceElement[] ste = new Throwable().getStackTrace();
+                String firstRunnableClass = (ste[ste.length - 1]).getClassName();
+                isStartedUnderEclipse = firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty")
+                        || firstRunnableClass.contains(".server.jetty.");
+            }
         }
-        StackTraceElement[] ste = new Throwable().getStackTrace();
-        String firstRunnableClass = (ste[ste.length - 1]).getClassName();
-        return firstRunnableClass.startsWith("org.eclipse.jdt") || firstRunnableClass.startsWith("org.eclipse.jetty")
-                || firstRunnableClass.contains(".server.jetty.");
+        return isStartedUnderEclipse;
+    }
+
+    public static boolean isStartedUnderUnitTest() {
+        if (isUnitTest == null) {
+            StackTraceElement[] ste = new Throwable().getStackTrace();
+            for (int i = ste.length - 1; i > 2; i--) {
+                if (ste[i].getClassName().startsWith("junit.")) {
+                    isUnitTest = true;
+                    break;
+                }
+            }
+            if (isUnitTest == null) {
+                isUnitTest = false;
+            }
+        }
+        return isUnitTest;
     }
 
     public static boolean isStartedUnderJvmDebugMode() {

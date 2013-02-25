@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
@@ -205,8 +206,12 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             log.error("Error", e);
             throw new UnRecoverableRuntimeException(i18n.tr("Fatal system error"));
         } catch (InvocationTargetException e) {
-            log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceInstance.getClass()), e.getCause());
-
+            log.error("Service call error\n{}\n for user: {}", Trace.clickableClassLocation(serviceInstance.getClass()), Context.getVisit(), e.getCause());
+            if (e.getCause() instanceof RuntimeExceptionSerializable) {
+                if ((e.getCause() != null) && (e.getCause() != e)) {
+                    log.error("Service call error Cause", e);
+                }
+            }
             for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
                 lifecycleListener.onRequestError();
             }

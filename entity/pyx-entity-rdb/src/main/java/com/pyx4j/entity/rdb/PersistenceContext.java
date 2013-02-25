@@ -63,6 +63,8 @@ public class PersistenceContext {
 
     private boolean nestedTransactionsEnabled = false;
 
+    private String assertTransactionManangementCallOrigin;
+
     public static final boolean traceOpenSession = false;
 
     private static Object openSessionLock = new Object();
@@ -158,7 +160,17 @@ public class PersistenceContext {
     }
 
     public void setAssertTransactionManangementCallOrigin() {
-        // TODO Auto-generated method stub
+        if (ServerSideConfiguration.isStartedUnderUnitTest() || ServerSideConfiguration.isStartedUnderJvmDebugMode()
+                || ServerSideConfiguration.isStartedUnderEclipse()) {
+            assertTransactionManangementCallOrigin = Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class);
+        }
+    }
+
+    private void assertTransactionManangementCallOrigin() {
+        if ((assertTransactionManangementCallOrigin != null)
+                && (!assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
+            throw new IllegalAccessError("Transaction Management of this thread can only performed from " + assertTransactionManangementCallOrigin);
+        }
     }
 
     public boolean isUncommittedChanges() {
@@ -203,6 +215,7 @@ public class PersistenceContext {
     }
 
     void savepointCreate() {
+        assertTransactionManangementCallOrigin();
         savepoints++;
         if (nestedTransactionsEnabled) {
             transactionContexts.push(new TransactionContext(getConnection(), savepoints));
@@ -232,6 +245,7 @@ public class PersistenceContext {
     }
 
     void commit() {
+        assertTransactionManangementCallOrigin();
         transactionContexts.peek().commit(connection, getDialect());
         if (isDirectTransactionControl() && connection != null) {
             try {
@@ -244,6 +258,7 @@ public class PersistenceContext {
     }
 
     void rollback() {
+        assertTransactionManangementCallOrigin();
         transactionContexts.peek().rollback(connection);
         if (isDirectTransactionControl() && connection != null) {
             try {

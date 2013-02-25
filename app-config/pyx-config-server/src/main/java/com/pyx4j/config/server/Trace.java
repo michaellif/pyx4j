@@ -64,12 +64,22 @@ public class Trace {
 
     public static String getCallOrigin(Class<?> apiEntryClass) {
         StackTraceElement[] ste = new Throwable().getStackTrace();
-        for (int i = ste.length - 1; i > 2; i--) {
+        for (int i = 0; i < ste.length - 1; i++) {
             if (ste[i].getClassName().equals(apiEntryClass.getName())) {
                 return clickableLocation(ste[i + 1]);
             }
         }
         return "";
+    }
+
+    public static String getCallOriginMethod(Class<?> apiEntryClass) {
+        StackTraceElement[] ste = new Throwable().getStackTrace();
+        for (int i = 0; i < ste.length - 1; i++) {
+            if (ste[i].getClassName().equals(apiEntryClass.getName())) {
+                return ste[i + 1].getClassName() + "." + ste[i + 1].getMethodName();
+            }
+        }
+        throw new Error("Unable to identify CallOriginMethod");
     }
 
     public static String getStackTrace(Throwable throwable) {

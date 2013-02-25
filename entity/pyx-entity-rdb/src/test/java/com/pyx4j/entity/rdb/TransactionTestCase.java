@@ -20,10 +20,14 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.rmi.server.ServerNotActiveException;
 import java.util.List;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -52,6 +56,49 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         criteria.eq(criteria.proto().firstName(), id);
         List<Employee> emps = srv.query(criteria);
         Assert.assertEquals(id + " Exists, result set size", 0, emps.size());
+    }
+
+    public void testNestedTransactionRollback() {
+        String setId = uniqueString();
+        Employee emp1 = createEntity(setId, "1.0");
+
+        // Tx1
+        srv.startTransaction();
+        srv.enableNestedTransactions();
+        {
+            srv.persist(emp1);
+
+            srv.persist(createEntity(setId, "1.1"));
+
+            // Tx2
+            srv.startTransaction();
+            {
+                srv.persist(createEntity(setId, "2.0"));
+                srv.commit();
+
+                srv.persist(createEntity(setId, "2.1"));
+                srv.rollback();
+
+                srv.persist(createEntity(setId, "2.2"));
+                srv.commit();
+            }
+            srv.endTransaction();
+
+            srv.persist(createEntity(setId, "1.2"));
+            srv.rollback();
+
+            srv.persist(createEntity(setId, "1.3"));
+            srv.commit();
+        }
+        srv.endTransaction();
+
+        assertNotExists(setId, "1.0");
+        assertNotExists(setId, "1.1");
+        assertNotExists(setId, "2.0");
+        assertNotExists(setId, "2.1");
+        assertNotExists(setId, "2.2");
+        assertNotExists(setId, "1.2");
+        assertExists(setId, "1.3");
     }
 
     public void testNestedTransactionsFragmentL1() {
@@ -129,5 +176,176 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertNotExists(setId, "2.1");
         assertExists(setId, "2.2");
         assertExists(setId, "1.2");
+    }
+
+    public void testUnitOfWorkNestedTransactions() {
+        final String setId = uniqueString();
+
+        final Executable<Void, ServerNotActiveException> exec2 = new Executable<Void, ServerNotActiveException>() {
+
+            @Override
+            public Void execute() throws ServerNotActiveException {
+                srv.persist(createEntity(setId, "2.0"));
+                throw new ServerNotActiveException();
+            }
+
+        };
+
+        Executable<Void, RuntimeException> exec1 = new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+
+                // TODO this should be part of UnitOfWork
+                srv.enableNestedTransactions();
+
+                srv.persist(createEntity(setId, "1.0"));
+
+                try {
+                    UnitOfWork.execute(exec2);
+                    Assert.fail("Should throw exception");
+                } catch (ServerNotActiveException ok) {
+                }
+
+                srv.persist(createEntity(setId, "1.1"));
+
+                return null;
+            }
+
+        };
+
+        UnitOfWork.execute(exec1);
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "2.0");
+        assertExists(setId, "1.1");
+    }
+
+    public void testUnitOfWorkManangementCallOrigin() {
+        final String setId = uniqueString();
+
+        try {
+            UnitOfWork.execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    srv.persist(createEntity(setId, "1.0"));
+                    // The call to commit should happen in the context of UnitOfWork
+                    srv.commit();
+                    return null;
+                }
+
+            });
+            Assert.fail("call to commit() Should throw IllegalAccessError");
+        } catch (IllegalAccessError ok) {
+        }
+
+        assertNotExists(setId, "1.0");
+
+    }
+
+    public void testUnitOfWorkCompensationHandlerL1() {
+        final String setId = uniqueString();
+
+        try {
+            UnitOfWork.execute(new Executable<Void, ServerNotActiveException>() {
+
+                @Override
+                public Void execute() throws ServerNotActiveException {
+                    srv.persist(createEntity(setId, "1.0"));
+
+                    UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                        @Override
+                        public Void execute() throws RuntimeException {
+                            srv.persist(createEntity(setId, "1.0CH"));
+                            return null;
+                        }
+                    });
+
+                    throw new ServerNotActiveException();
+                }
+
+            });
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.0CH");
+
+    }
+
+    public void XtestUnitOfWorkCompensationHandlerL2() {
+        final String setId = uniqueString();
+
+        final Executable<Void, RuntimeException> exec2 = new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                srv.persist(createEntity(setId, "2.0"));
+
+                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        srv.persist(createEntity(setId, "2.0CH"));
+                        System.out.println("2.0Ch");
+                        return null;
+                    }
+                });
+
+                return null;
+            }
+
+        };
+
+        Executable<Void, ServerNotActiveException> exec1 = new Executable<Void, ServerNotActiveException>() {
+
+            @Override
+            public Void execute() throws ServerNotActiveException {
+
+                // TODO this should be part of UnitOfWork
+                srv.enableNestedTransactions();
+
+                srv.persist(createEntity(setId, "1.0"));
+
+                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        srv.persist(createEntity(setId, "1.0CH"));
+                        System.out.println("1.0Ch");
+                        return null;
+                    }
+                });
+
+                UnitOfWork.execute(exec2);
+
+                srv.persist(createEntity(setId, "1.1"));
+
+                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        srv.persist(createEntity(setId, "1.1CH"));
+                        System.out.println("1.1Ch");
+                        return null;
+                    }
+                });
+
+                throw new ServerNotActiveException();
+            }
+
+        };
+
+        try {
+            UnitOfWork.execute(exec1);
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.0CH");
+        assertNotExists(setId, "1.1");
+        assertExists(setId, "1.1CH");
+        assertNotExists(setId, "2.0");
+        assertExists(setId, "2.0CH");
     }
 }

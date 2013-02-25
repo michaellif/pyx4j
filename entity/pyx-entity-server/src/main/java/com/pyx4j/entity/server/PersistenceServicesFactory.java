@@ -23,6 +23,8 @@ package com.pyx4j.entity.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
+
 public class PersistenceServicesFactory {
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceServicesFactory.class);
@@ -54,6 +56,13 @@ public class PersistenceServicesFactory {
             }
         }
         return instance;
+    }
+
+    public static void setPersistenceService(IEntityPersistenceService service) {
+        if (!ServerSideConfiguration.isStartedUnderUnitTest()) {
+            throw new Error("PersistenceService change available only in UnitTests");
+        }
+        instance = service;
     }
 
     public static synchronized void dispose() {

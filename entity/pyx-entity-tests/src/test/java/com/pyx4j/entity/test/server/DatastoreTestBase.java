@@ -76,6 +76,7 @@ public abstract class DatastoreTestBase extends TestCase {
         persistenceEnvironment = getPersistenceEnvironment();
         if (persistenceEnvironment != null) {
             srv = persistenceEnvironment.setupDatastore();
+            PersistenceServicesFactory.setPersistenceService(srv);
         }
         if (srv == null) {
             srv = PersistenceServicesFactory.getPersistenceService();
