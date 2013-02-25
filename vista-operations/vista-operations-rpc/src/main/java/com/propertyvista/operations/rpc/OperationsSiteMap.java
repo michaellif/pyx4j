@@ -73,6 +73,9 @@ public class OperationsSiteMap implements SiteMap {
         public static class Run extends CrudAppPlace {
         }
 
+        public static class RunData extends CrudAppPlace {
+        }
+
         public static class BillingSetup extends CrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public BillingSetup() {

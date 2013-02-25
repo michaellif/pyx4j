@@ -18,8 +18,8 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
-import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -30,6 +30,7 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.Trigger;
@@ -49,15 +50,16 @@ import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
-import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.operations.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
+import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
+import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.SelectPmcListService;
@@ -102,12 +104,14 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(TriggerCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExecutionReportSectionService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SelectPmcListService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(Vista2PmcService.class));
 
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportSection.class, EntityPermission.ALL));
         //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUser.class, EntityPermission.READ));
 
