@@ -202,6 +202,8 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(runData);
             }
             break;
+        case none:
+            break;
         }
     }
 
@@ -261,10 +263,8 @@ public class PmcProcessDispatcherJob implements Job {
 
         StatisticsUtils.nvlAddLong(stats.total(), runData.executionReport().total());
         StatisticsUtils.nvlAddLong(stats.processed(), runData.executionReport().processed());
-        StatisticsUtils.nvlAddDouble(stats.amountProcessed(), runData.executionReport().amountProcessed());
         StatisticsUtils.nvlAddLong(stats.failed(), runData.executionReport().failed());
         StatisticsUtils.nvlAddLong(stats.erred(), runData.executionReport().erred());
-        StatisticsUtils.nvlAddDouble(stats.amountFailed(), runData.executionReport().amountFailed());
 
         stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
