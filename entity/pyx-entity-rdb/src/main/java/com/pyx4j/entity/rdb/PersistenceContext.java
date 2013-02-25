@@ -48,6 +48,8 @@ public class PersistenceContext {
 
     private final ConnectionProvider connectionProvider;
 
+    private final boolean backgroundProcess;
+
     private final TransactionType transactionType;
 
     private final String contextOpenFrom;
@@ -80,16 +82,16 @@ public class PersistenceContext {
 
     public static enum TransactionType {
 
-        BackgroundProcess,
-
         ExplicitTransaction,
 
         AutoCommit
     }
 
-    PersistenceContext(PersistenceContext suppressedPersistenceContext, ConnectionProvider connectionProvider, TransactionType transactionType) {
+    PersistenceContext(PersistenceContext suppressedPersistenceContext, ConnectionProvider connectionProvider, TransactionType transactionType,
+            boolean backgroundProcess) {
         this.suppressedPersistenceContext = suppressedPersistenceContext;
         this.connectionProvider = connectionProvider;
+        this.backgroundProcess = backgroundProcess;
         this.transactionType = transactionType;
         if (traceOpenSession) {
             this.contextOpenFrom = Trace.getStackTrace(new Throwable());
@@ -110,11 +112,11 @@ public class PersistenceContext {
     }
 
     public boolean isExplicitTransaction() {
-        return transactionType != TransactionType.AutoCommit;
+        return transactionType == TransactionType.ExplicitTransaction;
     }
 
     public boolean isBackgroundProcessTransaction() {
-        return transactionType == TransactionType.BackgroundProcess;
+        return backgroundProcess;
     }
 
     void setTimeNow(Date date) {
@@ -141,7 +143,7 @@ public class PersistenceContext {
 
     public Connection getConnection() {
         if (connection == null) {
-            if (transactionType == TransactionType.BackgroundProcess) {
+            if (backgroundProcess) {
                 connection = connectionProvider.getBackgroundProcessConnection();
             } else {
                 connection = connectionProvider.getConnection();

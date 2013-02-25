@@ -226,7 +226,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public void startTransaction(TransactionScopeOption transactionScopeOption) {
+    public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
         // TODO
     }
 

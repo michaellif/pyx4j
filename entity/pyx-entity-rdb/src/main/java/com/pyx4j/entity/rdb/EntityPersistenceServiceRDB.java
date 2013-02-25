@@ -207,7 +207,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
-            createTransactionContext(persistenceContext, TransactionType.AutoCommit);
+            createTransactionContext(persistenceContext, TransactionType.AutoCommit, false);
         } else {
             assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
@@ -231,12 +231,21 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void startTransaction() {
-        startTransaction(TransactionScopeOption.Required);
+        startTransaction(TransactionScopeOption.Required, false);
     }
 
     @Override
-    public void startTransaction(TransactionScopeOption transactionScopeOption) {
+    public void startBackgroundProcessTransaction() {
+        startTransaction(TransactionScopeOption.Required, true);
+    }
+
+    @Override
+    public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
         PersistenceContext persistenceContext = threadSessions.get();
+
+        if ((persistenceContext != null) && (backgroundProcess) && (!persistenceContext.isBackgroundProcessTransaction())) {
+            throw new Error("Online Transaction should be closed before starting BackgroundProcess");
+        }
 
         switch (transactionScopeOption) {
         case Mandatory:
@@ -249,34 +258,20 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             if ((persistenceContext != null) && (persistenceContext.isExplicitTransaction())) {
                 persistenceContext.savepointCreate();
             } else {
-                createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction);
+                createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
             }
             break;
         case RequiresNew:
-            createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction);
+            createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
             break;
         case Suppress:
-            createTransactionContext(persistenceContext, TransactionType.AutoCommit);
+            createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
             break;
         }
     }
 
-    private void createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType) {
-        threadSessions.set(new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType));
-    }
-
-    @Override
-    public void startBackgroundProcessTransaction() {
-        PersistenceContext persistenceContext = threadSessions.get();
-        if (persistenceContext != null) {
-            if (persistenceContext.isBackgroundProcessTransaction()) {
-                persistenceContext.savepointCreate();
-                return;
-            }
-            endTransaction();
-
-        }
-        threadSessions.set(new PersistenceContext(null, connectionProvider, TransactionType.BackgroundProcess));
+    private void createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType, boolean backgroundProcessTransaction) {
+        threadSessions.set(new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType, backgroundProcessTransaction));
     }
 
     @Override

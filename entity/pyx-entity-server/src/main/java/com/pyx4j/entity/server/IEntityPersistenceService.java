@@ -36,16 +36,24 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 public interface IEntityPersistenceService {
 
     /**
+     * Start short lived Online Transaction
+     * 
      * Usually called when on startRequest from Lifecycle.beginRequest
      * TODO rename to startTransactionContext
      */
     public void startTransaction();
 
-    public void startTransaction(TransactionScopeOption transactionScopeOption);
+    public void startBackgroundProcessTransaction();
+
+    /**
+     * 
+     * @param transactionScopeOption
+     * @param backgroundProcess
+     *            as opposite to Online Transaction
+     */
+    public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess);
 
     public void enableNestedTransactions();
-
-    public void startBackgroundProcessTransaction();
 
     public void setAssertTransactionManangementCallOrigin();
 

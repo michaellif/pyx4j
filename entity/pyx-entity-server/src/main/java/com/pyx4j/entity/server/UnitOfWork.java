@@ -29,18 +29,36 @@ public class UnitOfWork {
 
     private final TransactionScopeOption transactionScopeOption;
 
+    private final boolean backgroundProcessTransaction;
+
+    /**
+     * Start short lived Online Transaction
+     */
     public UnitOfWork() {
         this(TransactionScopeOption.Required);
     }
 
+    /**
+     * Start short lived Online Transaction
+     */
     public UnitOfWork(TransactionScopeOption transactionScopeOption) {
+        this(transactionScopeOption, false);
+    }
+
+    /**
+     * @param transactionScopeOption
+     * @param backgroundProcessTransaction
+     *            as opposite to Online Transaction
+     */
+    public UnitOfWork(TransactionScopeOption transactionScopeOption, boolean backgroundProcessTransaction) {
         this.transactionScopeOption = transactionScopeOption;
+        this.backgroundProcessTransaction = backgroundProcessTransaction;
     }
 
     public <R, E extends Throwable> R execute(final Executable<R, E> task) throws E {
         boolean success = false;
         try {
-            Persistence.service().startTransaction(transactionScopeOption);
+            Persistence.service().startTransaction(transactionScopeOption, backgroundProcessTransaction);
             Persistence.service().setAssertTransactionManangementCallOrigin();
             Persistence.service().enableNestedTransactions();
 
