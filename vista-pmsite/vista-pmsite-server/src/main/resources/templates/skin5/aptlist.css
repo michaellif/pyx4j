@@ -46,7 +46,7 @@
 
 .advancedSearchNarrowWrap {
 	width: 280px;
-	height: 555px;
+	height: 575px;
 	background: #FA8D0C;
 	position: relative;
 	top: -15px;
@@ -137,7 +137,8 @@
 	color: #999999;
 	width: 210px;
 	margin: 1px;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
 }
 .advancedSearchNarrowWrap .searchTypeBox input[type=text] {
 	color:${background_100};
@@ -163,15 +164,18 @@
 .advancedSearchNarrowWrap .searchCommonBox select {
 	width: 92px;
 	margin: 1px;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
     color: #999999;
 }
 
 .advancedSearchNarrowWrap .searchCommonBox input[type=text] {
 	color:${background_100};
-	width: 92px;
+	width: 85px;
 	margin: 1px;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
 }
 .advancedSearchNarrowWrap .searchCommonBox .searchField .inputJoinBox {
 	display:inline-block;
@@ -180,7 +184,7 @@
 	color: #fff;
 }
 .advancedSearchNarrowWrap .searchAmenityBox {
-	border-top: 1px solid #fff;
+	border-top: 3px solid #1F1B1C;
 	padding-top: 10px;
 	margin-left: 30px;
 	margin-bottom: 10px;
@@ -188,8 +192,12 @@
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
+	position: relative;
+	top: -11px;
 	display: block;
 	width: 100%;
+	border-top: 1px solid #FFD467;
+	padding-top: 20px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox br {
@@ -199,6 +207,8 @@
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList {
 	display: block;
 	width: 190px;
+	position: relative;
+	left: -4px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
