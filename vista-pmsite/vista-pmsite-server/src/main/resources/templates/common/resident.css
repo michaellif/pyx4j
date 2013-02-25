@@ -254,14 +254,14 @@
 .gwt-DatePicker {
 	margin: 2px 4px;
 	border: 1px solid;
-	border-color: #a19265;
+	border-color: #AAAAAA;
 	color: #666666;
 	width: 250px;
 }
 
 .DatePickerMonthSelector {
-	background-color: #b3a57d;
-	color: #f7f5f0;
+	background-color: #e2e0e0;
+	color: #626057;
 	line-height: 12px;
 	border-collapse: collapse;
 	width: 100%;
@@ -344,7 +344,6 @@
 }
 
 .DatePickerWeekendDayLabel {
-	color: #b3a57d;
 	font-weight: bold;
 }
 
@@ -369,6 +368,7 @@ td.DatePickerMonth {
 	padding: 0;
 	font-size: 11px;
 	cursor: pointer;
+	vertical-align: middle;
 }
 
 .DatePickerGrid {
@@ -398,13 +398,13 @@ td.DatePickerMonth {
 }
 
 .DatePickerGrid .gwt-Label-heighlighted {
-	background-color: #f0ece1;
+	background-color: #E2E0E0;
 }
 
 .DatePickerGrid .gwt-Label-selected {
 	border: 1px solid;
-	border-color: #b3a57d;
-	background-color: #f0ece1;
+	border-color: #AAAAAA;
+	background-color: #E2E0E0;
 }
 
 .DatePickerGrid .gwt-Label-todayday {
@@ -796,6 +796,11 @@ td.DatePickerMonth {
 	height: 19px;
 }
 
+.TriggerPannel .Button:hover {
+    background: none !important;
+    border: none !important;
+}
+
 .TriggerPannel .TextBox {
     width: 6em !important;
 }
@@ -1009,19 +1014,19 @@ td.DatePickerMonth {
 }
 
 .Dialog {
-	background-color: #b3a57d;
+	background: none repeat scroll 0 0 #AAAAAA;
 }
 
 .DialogCaption {
-	background: #c2b693;
+	background: #e2e0e0;
 	filter: alpha(opacity =     95);
 	opacity: 0.95;
-	color: #f0ece1;
+	color: #626057;
 	font-weight: bold;
 }
 
 .DialogResizer {
-	background: #c2b693;
+	background: #AAAAAA;
 	filter: alpha(opacity =     95);
 	opacity: 0.95;
 }
