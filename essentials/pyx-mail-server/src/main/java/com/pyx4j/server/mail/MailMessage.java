@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class MailMessage implements Serializable {
@@ -74,6 +75,20 @@ public class MailMessage implements Serializable {
         this.replyTo = replyTo;
     }
 
+    private static List<String> getAddressList(String comaSeparatedAddresses) {
+        comaSeparatedAddresses = comaSeparatedAddresses.replaceAll(";", ",");
+        List<String> recipients = new Vector<String>();
+        StringTokenizer st = new StringTokenizer(comaSeparatedAddresses, ",");
+        if (!st.hasMoreTokens()) {
+            recipients.add(comaSeparatedAddresses.trim());
+        } else {
+            while (st.hasMoreTokens()) {
+                recipients.add(st.nextToken().trim());
+            }
+        }
+        return recipients;
+    }
+
     public Collection<String> getTo() {
         return to;
     }
@@ -89,6 +104,13 @@ public class MailMessage implements Serializable {
         this.to.add(to);
     }
 
+    public void addToList(String comaSeparatedAddresses) {
+        if (this.to == null) {
+            this.to = new Vector<String>();
+        }
+        this.to.addAll(getAddressList(comaSeparatedAddresses));
+    }
+
     public Collection<String> getCc() {
         return cc;
     }
@@ -97,12 +119,26 @@ public class MailMessage implements Serializable {
         this.cc = cc;
     }
 
+    public void addCcList(String comaSeparatedAddresses) {
+        if (this.cc == null) {
+            this.cc = new Vector<String>();
+        }
+        this.cc.addAll(getAddressList(comaSeparatedAddresses));
+    }
+
     public Collection<String> getBcc() {
         return bcc;
     }
 
     public void setBcc(Collection<String> bcc) {
         this.bcc = bcc;
+    }
+
+    public void addBccList(String comaSeparatedAddresses) {
+        if (this.bcc == null) {
+            this.bcc = new Vector<String>();
+        }
+        this.bcc.addAll(getAddressList(comaSeparatedAddresses));
     }
 
     public String getSubject() {
