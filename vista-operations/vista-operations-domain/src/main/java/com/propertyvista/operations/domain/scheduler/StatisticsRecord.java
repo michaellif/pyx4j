@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 //TODO Make it POJO  ExecutionReportModel
+@Deprecated
 public interface StatisticsRecord extends IEntity {
 
     IPrimitive<Long> total();
