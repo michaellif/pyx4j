@@ -267,10 +267,30 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
+    public void onReset() {
+        super.onReset();
+
+        profiledPaymentMethodsCombo.setVisible(false);
+        profiledPaymentMethodsCombo.setOptions(null);
+        profiledPaymentMethodsCombo.reset();
+
+        paymentMethodEditor.reset();
+        paymentMethodEditor.setVisible(false);
+        paymentMethodEditor.setViewable(true);
+        paymentMethodEditorSeparator.setVisible(false);
+
+        paymentMethodEditor.setPaymentTypeSelectionEditable(true);
+
+        get(proto().selectPaymentMethod()).setVisible(false);
+        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+    }
+
+    @Override
+    protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
         boolean isNew = getValue().id().isNull();
+
         // hide some non-relevant fields:
         get(proto().id()).setVisible(!isNew);
         get(proto().receivedDate()).setVisible(!isEditable());
@@ -291,12 +311,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     @Override
                     public void onSuccess(Void result) {
                         boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+                        boolean isProfiledMethod = profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod());
+
                         get(proto().selectPaymentMethod()).reset();
-                        get(proto().selectPaymentMethod()).setValue(
-                                (profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod()) ? PaymentSelect.Profiled : PaymentSelect.New),
-                                false);
                         get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                         get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
+                        get(proto().selectPaymentMethod()).setValue((isProfiledMethod ? PaymentSelect.Profiled : PaymentSelect.New), false, populate);
+
+                        profiledPaymentMethodsCombo.setVisible(isProfiledMethod);
                     }
                 });
 
@@ -307,8 +329,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 } else {
-                    profiledPaymentMethodsCombo.setVisible(true);
-                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
+                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
                 }
 
                 // TODO : this is the HACK - check CComponent.setVisible implementation!!!
@@ -334,25 +355,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
         }
-    }
-
-    @Override
-    public void onReset() {
-        super.onReset();
-
-        profiledPaymentMethodsCombo.setVisible(false);
-        profiledPaymentMethodsCombo.setOptions(null);
-        profiledPaymentMethodsCombo.reset();
-
-        paymentMethodEditor.reset();
-        paymentMethodEditor.setVisible(false);
-        paymentMethodEditor.setViewable(true);
-        paymentMethodEditorSeparator.setVisible(false);
-
-        paymentMethodEditor.setPaymentTypeSelectionEditable(true);
-
-        get(proto().selectPaymentMethod()).setVisible(false);
-        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
@@ -399,10 +401,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().addThisPaymentMethodToProfile()).setValue(true);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
                 break;
+
             case Echeck:
                 get(proto().addThisPaymentMethodToProfile()).setValue(true);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
                 break;
+
             default:
                 get(proto().addThisPaymentMethodToProfile()).setValue(false);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
