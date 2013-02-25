@@ -327,7 +327,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         Persistence.service().persist(current);
         Persistence.service().commit();
 
-        log.warn("Key {} id#{} made current", publicKey.name(), publicKey.getPrimaryKey());
+        log.warn("Key {} id#{} made current", publicKey.name().getValue(), publicKey.getPrimaryKey());
 
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "Key {0} id#{1} made current", publicKey.name(),
                 publicKey.getPrimaryKey());
@@ -354,8 +354,8 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         if (toPublicKey == null) {
             throw new UserRuntimeException("PublicKey 'To' not found");
         }
-        log.warn("Starting Key Rotation from {} id#{} to {} id#{}", fromPublicKey.name(), fromPublicKey.getPrimaryKey(), toPublicKey.name(),
-                toPublicKey.getPrimaryKey());
+        log.warn("Starting Key Rotation from {} id#{} to {} id#{}", fromPublicKey.name().getValue(), fromPublicKey.getPrimaryKey(), toPublicKey.name()
+                .getValue(), toPublicKey.getPrimaryKey());
 
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, fromPublicKey, "Starting Key Rotation from {0} id#{1} to {2} id#{3}",
                 fromPublicKey.name(), fromPublicKey.getPrimaryKey(), toPublicKey.name(), toPublicKey.getPrimaryKey());
@@ -391,7 +391,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         deactivateDecryption(publicKeyKey);
         getPrivateKeyStorage().removePrivateKey(publicKey.name().getValue());
 
-        log.warn("PrivateKey {} id#{} removed", publicKey.name(), publicKey.getPrimaryKey());
+        log.warn("PrivateKey {} id#{} removed", publicKey.name().getValue(), publicKey.getPrimaryKey());
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "PrivateKey {0} id#{1} removed", publicKey.name(),
                 publicKey.getPrimaryKey());
     }
@@ -406,7 +406,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         testKeyDecryption(publicKey, privateKey);
         activeKeys.put(publicKeyKey, privateKey);
 
-        log.warn("PublicKey {} id#{} Decryption activated", publicKey.name(), publicKey.getPrimaryKey());
+        log.warn("PublicKey {} id#{} Decryption activated", publicKey.name().getValue(), publicKey.getPrimaryKey());
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "PublicKey {0} id#{1} Decryption activated",
                 publicKey.name(), publicKey.getPrimaryKey());
     }
@@ -492,7 +492,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             }
         });
 
-        log.warn("New KeyPair {} id#{} created", publicKey.name(), publicKey.getPrimaryKey());
+        log.warn("New KeyPair {} id#{} created", publicKey.name().getValue(), publicKey.getPrimaryKey());
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, publicKey, "New KeyPair {0} id#{1} created", publicKey.name(),
                 publicKey.getPrimaryKey());
 
