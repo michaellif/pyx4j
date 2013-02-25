@@ -22,6 +22,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -127,6 +130,16 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
                 get(proto().billingAddress()).setEditable(!event.getValue());
+            }
+        });
+
+        // hide pictures for view only state:
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.viewable) {
+                    paymentTypeImagesPanel.setVisible(!isViewable());
+                }
             }
         });
 
