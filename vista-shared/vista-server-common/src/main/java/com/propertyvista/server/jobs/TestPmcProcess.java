@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,24 +32,24 @@ public class TestPmcProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-
         Random random = new Random();
         int max = random.nextInt(300);
 
-        context.getRunStats().total().setValue((long) max);
-        context.getRunStats().failed().setValue(0L);
-
+        ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         for (int i = 0; i < max; i++) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
             }
-            context.getRunStats().processed().setValue((long) i);
-            ExecutionMonitor executionMonitor = context.getExecutionMonitor();
-            executionMonitor.addErredEvent("error", "Test error message");
-            executionMonitor.addFailedEvent("failed", "Test failed message");
-            executionMonitor.addProcessedEvent("processed", "Test processed message");
+            executionMonitor.addProcessedEvent("test");
+
         }
+
+        executionMonitor.addErredEvent("test", "Test error message");
+        executionMonitor.addFailedEvent("test", "Test failed message");
+
+        executionMonitor.addProcessedEvent("test2", "Test processed message");
+        executionMonitor.addFailedEvent("test2", "Test2 failed message");
 
     }
 
