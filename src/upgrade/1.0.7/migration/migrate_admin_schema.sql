@@ -249,6 +249,7 @@ SET search_path = '_admin_';
                 execution_report                BIGINT,
                 name                            VARCHAR(500),
                 tp                              VARCHAR(50),
+                counter                         BIGINT,
                 value                           NUMERIC(18,2),
                         CONSTRAINT      scheduler_execution_report_section_pk PRIMARY KEY(id)
         );
@@ -367,7 +368,7 @@ SET search_path = '_admin_';
                 CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'sale'));
         ALTER TABLE dev_card_service_simulator_config ADD CONSTRAINT dev_card_service_simulator_config_response_type_e_ck 
                 CHECK ((response_type) IN ('DropConnection', 'RespondWithCode', 'RespondWithHttpCode', 'RespondWithText', 'SimulateTransations'));
-        ALTER TABLE scheduler_execution_report_section ADD CONSTRAINT scheduler_execution_report_section_tp_e_ck CHECK ((tp) IN ('error', 'failed', 'processed'));
+        ALTER TABLE scheduler_execution_report_section ADD CONSTRAINT scheduler_execution_report_section_tp_e_ck CHECK ((tp) IN ('erred', 'failed', 'processed'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
                 'leaseRenewal', 'paymentsBmoRecive', 'paymentsIssue', 'paymentsPadReciveAcknowledgment', 'paymentsPadReciveReconciliation', 
