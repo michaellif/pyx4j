@@ -57,7 +57,7 @@ public class UnitOfWork {
         boolean success = false;
         try {
             Persistence.service().startTransaction();
-            Persistence.service().setAssertTransactionManangementCallOrigin();
+            //Persistence.service().setAssertTransactionManangementCallOrigin();
             try {
                 R rv = task.execute();
                 Persistence.service().commit();
