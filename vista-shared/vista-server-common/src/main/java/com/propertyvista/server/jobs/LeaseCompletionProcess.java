@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -49,14 +51,19 @@ public class LeaseCompletionProcess implements PmcProcess {
         long failed = 0;
 
         Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+        final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         while (i.hasNext()) {
             ++total;
 
-            Lease lease = i.next();
+            final Lease lease = i.next();
             try {
-                leaseFacade.complete(lease);
-                Persistence.service().commit();
+                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        leaseFacade.complete(lease);
+                        return null;
+                    }
+                });
 
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             } catch (Throwable t) {
