@@ -59,14 +59,10 @@ public class BuildingFacadeImpl implements BuildingFacade {
         Persistence.service().merge(unit);
 
         if (isNewUnit) {
-            Persistence.service().commit();
             ServerSideFactory.create(OccupancyFacade.class).setupNewUnit((AptUnit) unit.createIdentityStub());
-            Persistence.service().commit();
             ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(unit.building(), unit);
-            Persistence.service().commit();
         } else {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).updateUnit(unit.building(), unit);
-            Persistence.service().commit();
         }
 
         return unit;

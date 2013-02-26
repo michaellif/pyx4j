@@ -1122,7 +1122,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if ((origPrice != null && !origPrice.equals(currentPrice)) || (origPrice == null && currentPrice != null)) {
             lease.unit().financial()._unitRent().setValue(currentPrice);
             Persistence.service().merge(lease.unit());
-            Persistence.service().commit();
         }
     }
 
