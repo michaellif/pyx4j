@@ -30,6 +30,7 @@ import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
@@ -59,6 +60,7 @@ import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.SimulationService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
+import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportMessageService;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
@@ -105,13 +107,15 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExecutionReportSectionService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(ExecutionReportMessageService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(SelectPmcListService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(Vista2PmcService.class));
 
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
-        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportSection.class, EntityPermission.ALL));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportSection.class, EntityPermission.READ));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(ExecutionReportMessage.class, EntityPermission.READ));
         //TODO remove
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(OperationsUser.class, EntityPermission.READ));
 

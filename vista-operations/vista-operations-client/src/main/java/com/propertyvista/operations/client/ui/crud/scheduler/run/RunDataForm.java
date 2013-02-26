@@ -23,13 +23,17 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.ExecutionReport;
+import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportMessageService;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
 
 public class RunDataForm extends OperationsEntityForm<RunData> {
@@ -78,7 +82,11 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         reportSectionLister.restoreState();
     }
 
-    public class ExecutionReportSectionLister extends ListerBase<ExecutionReportSection> {
+    public class ExecutionReportSectionLister extends BasicLister<ExecutionReportSection> {
+
+        private final ExecutionReportMessageLister messageLister;
+
+        private final Dialog messageDialog;
 
         public ExecutionReportSectionLister() {
             super(ExecutionReportSection.class);
@@ -91,13 +99,46 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
                 new MemberColumnDescriptor(new Builder(proto().messages())) {
                     @Override
                     public String convert(IEntity entity) {
-                        return String.valueOf(entity == null ? 0 : ((ISet<?>)entity.getMember(getColumnPath())).size());
+                        return String.valueOf(entity.isEmpty() ? 0 : ((ISet<?>)entity.getMember(getColumnPath())).size());
                     }
                 }
             );//@formatter:on
 
             setDataSource(new ListerDataSource<ExecutionReportSection>(ExecutionReportSection.class,
                     GWT.<AbstractListService<ExecutionReportSection>> create(ExecutionReportSectionService.class)));
+
+            setAllowZoomIn(true);
+
+            messageDialog = new OkDialog("") {
+                @Override
+                public boolean onClickOk() {
+                    return true;
+                }
+            };
+            messageDialog.setBody(messageLister = new ExecutionReportMessageLister());
+        }
+
+        @Override
+        protected void onItemSelect(ExecutionReportSection item) {
+            messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
+            messageLister.restoreState();
+            messageDialog.show();
+        }
+
+    }
+
+    public class ExecutionReportMessageLister extends BasicLister<ExecutionReportMessage> {
+
+        public ExecutionReportMessageLister() {
+            super(ExecutionReportMessage.class);
+
+            setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().eventTime()).build(),
+                new MemberColumnDescriptor.Builder(proto().message()).build()
+            );//@formatter:on
+
+            setDataSource(new ListerDataSource<ExecutionReportMessage>(ExecutionReportMessage.class,
+                    GWT.<AbstractListService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));
         }
     }
 }
