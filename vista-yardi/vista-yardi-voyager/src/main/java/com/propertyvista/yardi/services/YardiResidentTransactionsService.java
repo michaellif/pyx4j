@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,7 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -154,7 +156,17 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                         importUnit(building.propertyCode().getValue(), rtCustomer);
                         executionMonitor.addProcessedEvent("Unit");
                         try {
-                            importLease(building.propertyCode().getValue(), rtCustomer);
+                            LeaseFinancialState stats = importLease(building.propertyCode().getValue(), rtCustomer);
+                            executionMonitor.addProcessedEvent(//@formatter:off
+                                    "Charges",
+                                    stats.getCharges(),
+                                    SimpleMessageFormat.format("Charges for {0}", rtCustomer.getCustomerID())
+                            );//@formatter:on
+                            executionMonitor.addProcessedEvent(//@formatter:off
+                                    "Payments",
+                                    stats.getPayments(),
+                                    SimpleMessageFormat.format("Payments for {0}", rtCustomer.getCustomerID())
+                            );//@formatter:on
                             executionMonitor.addProcessedEvent("Lease");
                         } catch (YardiServiceException e) {
                             executionMonitor.addFailedEvent("Lease", e);
@@ -207,12 +219,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return unit;
     }
 
-    private void importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
+    private LeaseFinancialState importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
+        final LeaseFinancialState state = new LeaseFinancialState();
         log.info("      Updating lease");
         if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
-            return;
+            return state;
         }
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
@@ -245,17 +258,21 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                             log.info("          Updating charge");
                             YardiCharge charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
                             Persistence.service().persist(charge);
+                            state.addCharge(charge.amount().getValue());
                         }
                         if (tr.getPayment() != null) {
                             log.info("          Updating payment");
                             YardiPayment payment = YardiProcessorUtils.createPayment(account, tr.getPayment());
                             Persistence.service().persist(payment);
+                            state.addPayment(payment.amount().getValue());
+
                         }
                     }
                 }
                 return null;
             }
         });
+        return state;
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {
@@ -404,6 +421,29 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             properties.add(property);
         }
         return properties;
+    }
+
+    private class LeaseFinancialState {
+
+        private BigDecimal chargesAmount = BigDecimal.ZERO;
+
+        private BigDecimal paymentsAmount = BigDecimal.ZERO;
+
+        public void addCharge(BigDecimal payment) {
+            this.chargesAmount = chargesAmount.add(payment);
+        }
+
+        public void addPayment(BigDecimal payment) {
+            this.paymentsAmount = paymentsAmount.add(payment);
+        }
+
+        public BigDecimal getCharges() {
+            return chargesAmount;
+        }
+
+        public BigDecimal getPayments() {
+            return paymentsAmount;
+        }
     }
 
 }
