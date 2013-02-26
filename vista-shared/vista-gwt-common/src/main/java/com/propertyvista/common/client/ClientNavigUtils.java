@@ -47,13 +47,15 @@ public class ClientNavigUtils {
             EnumSet<CompiledLocale> SupportedLocales = CompiledLocale.getSupportedLocales();
             for (String localeName : LocaleInfo.getAvailableLocaleNames()) {
                 if (localeName.equals("default")) {
-                    localeName = "en_US";
+                    localeName = "en";
                 }
                 CompiledLocale cl = CompiledLocale.valueOf(localeName);
                 if (SupportedLocales.contains(cl)) {
                     if (!locales.contains(cl)) {
                         locales.add(cl);
                     }
+                } else if (cl == CompiledLocale.en) {
+                    locales.add(getDefaultLocaleByCountryOfOperation());
                 }
             }
 
@@ -66,11 +68,28 @@ public class ClientNavigUtils {
                 locales.remove(CompiledLocale.en_CA);
                 locales.remove(CompiledLocale.en_GB);
                 break;
+            case UK:
+                locales.remove(CompiledLocale.en_CA);
+                locales.remove(CompiledLocale.en_US);
+                break;
             default:
                 break;
             }
         }
         return locales;
+    }
+
+    public static CompiledLocale getDefaultLocaleByCountryOfOperation() {
+        switch (VistaFeatures.instance().countryOfOperation()) {
+        case Canada:
+            return CompiledLocale.en_CA;
+        case US:
+            return CompiledLocale.en_US;
+        case UK:
+            return CompiledLocale.en_GB;
+        default:
+            return getCurrentLocale();
+        }
     }
 
     public static CompiledLocale getCurrentLocale() {
@@ -82,27 +101,15 @@ public class ClientNavigUtils {
     }
 
     public static void setCountryOfOperationLocale() {
-        CompiledLocale compiledLocale = getCurrentLocale();
-        switch (VistaFeatures.instance().countryOfOperation()) {
-        case Canada:
-            if ((compiledLocale == CompiledLocale.en_US) && (isLocaleAvailable(CompiledLocale.en_CA))) {
-                ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_CA);
+        CompiledLocale currentLocale = getCurrentLocale();
+        CompiledLocale defaultLocale = getDefaultLocaleByCountryOfOperation();
+
+        if ((defaultLocale != currentLocale) && (currentLocale.getLanguage().equals(CompiledLocale.en.name()))) {
+            if (isLocaleAvailable(defaultLocale)) {
+                ClientNavigUtils.changeApplicationLocale(defaultLocale);
+            } else if (ApplicationMode.isDevelopment() && (defaultLocale != CompiledLocale.en_CA)) {
+                MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
             }
-            break;
-        case US:
-            if ((compiledLocale == CompiledLocale.en_CA) && (isLocaleAvailable(CompiledLocale.en_US))) {
-                ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_US);
-            }
-            break;
-        case UK:
-            if (compiledLocale != CompiledLocale.en_GB) {
-                if (isLocaleAvailable(CompiledLocale.en_GB)) {
-                    ClientNavigUtils.changeApplicationLocale(CompiledLocale.en_GB);
-                } else if (ApplicationMode.isDevelopment()) {
-                    MessageDialog.warn("Warning", "(dev) This PMC Locale was not compiled in this development versions");
-                }
-            }
-            break;
         }
 
     }
