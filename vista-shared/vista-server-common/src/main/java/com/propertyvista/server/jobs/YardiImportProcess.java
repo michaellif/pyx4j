@@ -37,8 +37,6 @@ public class YardiImportProcess implements PmcProcess {
         ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         if (VistaFeatures.instance().yardiIntegration()) {
             ServerSideFactory.create(YardiProcessFacade.class).doAllImport(executionMonitor);
-        } else {
-            executionMonitor.addErredEvent("Pmc", "PMC does not meet criteria");
         }
     }
 
