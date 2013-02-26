@@ -95,7 +95,6 @@ public class CleanupPmcProcess implements PmcProcess {
                 context.getExecutionMonitor().addProcessedEvent("Orphans Cleaned");
             }
         }
-        Persistence.service().commit();
         log.info("Cleanup orphan application documents complete");
     }
 
