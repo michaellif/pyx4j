@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -55,8 +57,8 @@ public class UpdateArrearsProcess implements PmcProcess {
 
             EntityQueryCriteria<InternalBillingAccount> criteria = EntityQueryCriteria.create(InternalBillingAccount.class);
             criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
-            Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-            ARFacade facade = ServerSideFactory.create(ARFacade.class);
+            final Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+            final ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
             long currentBillingAccount = 0L;
             long failed = 0L;
@@ -65,8 +67,14 @@ public class UpdateArrearsProcess implements PmcProcess {
                 ++currentBillingAccount;
 
                 try {
-                    facade.updateArrearsHistory(billingAccounts.next());
-                    Persistence.service().commit();
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() {
+                            facade.updateArrearsHistory(billingAccounts.next());
+                            return null;
+                        }
+                    });
+
                     context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                 } catch (Throwable t) {
                     log.error("failed to update arrears history: {}", t.getMessage());
@@ -84,15 +92,21 @@ public class UpdateArrearsProcess implements PmcProcess {
     public void updateBuildingArrears(PmcProcessContext context) {
         log.info("Arrears Update for buildings started");
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        Iterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-        ARFacade facade = ServerSideFactory.create(ARFacade.class);
+        final Iterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        final ARFacade facade = ServerSideFactory.create(ARFacade.class);
         long current = 0L;
         long failed = 0L;
         while (buildings.hasNext()) {
             ++current;
             try {
-                facade.updateArrearsHistory(buildings.next());
-                Persistence.service().commit();
+                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        facade.updateArrearsHistory(buildings.next());
+                        return null;
+                    }
+                });
+
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             } catch (Throwable t) {
                 log.error("failed to update arrears history: {}", t.getMessage());

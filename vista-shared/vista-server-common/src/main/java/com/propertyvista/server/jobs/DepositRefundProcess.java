@@ -17,7 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -42,13 +44,19 @@ public class DepositRefundProcess implements PmcProcess {
         long total = 0;
         long failed = 0;
 
-        DepositFacade depositFacade = ServerSideFactory.create(DepositFacade.class);
-        for (Lease lease : Persistence.service().query(criteria)) {
+        final DepositFacade depositFacade = ServerSideFactory.create(DepositFacade.class);
+        for (final Lease lease : Persistence.service().query(criteria)) {
             ++total;
 
             try {
-                depositFacade.issueDepositRefunds(lease);
-                Persistence.service().commit();
+                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        depositFacade.issueDepositRefunds(lease);
+                        return null;
+                    }
+                });
+
                 context.getExecutionMonitor().addProcessedEvent("Deposit");
             } catch (Throwable t) {
                 log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
