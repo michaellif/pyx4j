@@ -247,7 +247,7 @@
 	background-image: url("images/map_gold.png");
 	background-repeat: no-repeat;
 	background-color: #302a2c;
-	background-position: 25% center;
+	background-position: 25% top;
 	position: relative;
 	z-index: 1;
 	top: 18px;
@@ -404,9 +404,11 @@
 .listingCtlButton {
 	background-image: url("images/map_gold.png");
 	background-repeat: no-repeat;
+	background-size: 18px auto;
 	display:block;
 	width:70px;
 	height:25px;
+	margin-top: 4px;
 	padding-top:5px;
 	padding-left:30px;
 	font-weight:normal;

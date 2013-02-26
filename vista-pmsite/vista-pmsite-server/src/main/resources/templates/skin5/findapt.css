@@ -1,3 +1,9 @@
+.vista-pmsite-contentWrap {
+	background-image: url("images/content_bg.png");
+	background-repeat: repeat-x;
+	background-size: 100% 131%;
+}
+
 .vista-pmsite-findAptPage .vista-pmsite-content {
 	color: #FFFFFF;
     font-size: 16px;
@@ -16,14 +22,15 @@
 .vista-pmsite-findAptPage .vista-pmsite-mainWrap {
 	margin: 0 auto;
 	overflow: hidden;
-    background: #fff;
-    padding: 0 20px 20px;
+    /*background: #302A2C;*/
+    padding: 10px 20px;
     *padding-bottom: 90px;
     width: 920px;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption {
 	border-top: 1px solid #000000;
+	display: none;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption h1 {
@@ -35,7 +42,14 @@
 .advancedSearchWideWrap {
 	_padding: 0 80px;
 	width:620px;
-	background-color: #999999;
+	background-color: #FA8D0C;
+	background: -moz-linear-gradient(left top, #b55508, #FA8D0C);
+    background: -webkit-gradient(linear, left top, left bottom, 
+                color-stop(100%,#b55508), color-stop(100%,#FA8D0C));
+    background: -webkit-linear-gradient(top, #b55508, #FA8D0C);
+    background: -o-linear-gradient(top, #b55508, #FA8D0C);
+    background: -ms-linear-gradient(top, #b55508, #FA8D0C);
+    background: linear-gradient(top, #b55508, #FA8D0C);
 }
 
 .advancedSearchWideWrap .errorPanel {
@@ -49,13 +63,19 @@
 }
 
 .advancedSearchWideWrap input[type=submit] {
-	background: ${object1_100};
-	color: ${object1_10};
+	/*background: ${object1_100};
+	color: ${object1_10};*/
+	position: relative;
+	right: -14px;
+	background: #302A2C;
+	color: #D7AC3F;
 	cursor: pointer;
 	display:block;
 	float: right;
 	border: medium none;
-	font-size: 16px;
+	font-size: 14pt;
+	font-weight: bold;
+	text-transform: uppercase;
 	margin: 20px 0;
 	padding: 10px;
 }
