@@ -16,7 +16,7 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingProcessFacade;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingProcess implements PmcProcess {
@@ -29,7 +29,7 @@ public class BillingProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         if (!VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(context.getForDate()), context.getExecutionMonitor());
+            ServerSideFactory.create(BillingProcessFacade.class).runBilling(new LogicalDate(context.getForDate()), context.getExecutionMonitor());
         }
     }
 

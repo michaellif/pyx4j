@@ -15,7 +15,7 @@ package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingProcessFacade;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class FutureBillingCycleInitializationProcess implements PmcProcess {
@@ -28,7 +28,7 @@ public class FutureBillingCycleInitializationProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         if (!VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(BillingFacade.class).initializeFutureBillingCycles();
+            ServerSideFactory.create(BillingProcessFacade.class).initializeFutureBillingCycles(context.getExecutionMonitor());
         }
     }
 

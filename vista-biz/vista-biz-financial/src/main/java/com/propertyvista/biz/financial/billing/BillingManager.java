@@ -21,8 +21,6 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -86,22 +84,6 @@ public class BillingManager {
             return produceBill(billingCycle, lease, preview);
         } else {
             throw new BillingException(i18n.tr("Bill Run Precondition Validation failed"));
-        }
-    }
-
-    /**
-     * Runs all Billing Cycles which executionTargetDate is the same as date.
-     * 
-     * @param date
-     *            - executionTargetDate
-     * @param dynamicStatisticsRecord
-     */
-    static void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
-        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
-        ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (billingCycleIterator.hasNext()) {
-            runBilling(billingCycleIterator.next(), executionMonitor);
         }
     }
 
@@ -422,35 +404,6 @@ public class BillingManager {
             return Persistence.service().retrieve(BillingCycle.class, billingCycle.getPrimaryKey());
         } else {
             return billingCycle;
-        }
-    }
-
-    static void initializeFutureBillingCycles() {
-        for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
-
-            EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
-            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().billingCycles().$().billingType(), billingType));
-            ICursorIterator<Building> buildingIterator = Persistence.service().query(null, buildingCriteria, AttachLevel.IdOnly);
-            while (buildingIterator.hasNext()) {
-                Building building = buildingIterator.next();
-
-                // Find latest BillingCycle
-                EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-                criteria.desc(criteria.proto().billingCycleStartDate());
-                BillingCycle latestBillingCycle = Persistence.service().retrieve(criteria);
-
-                Calendar createUntill = new GregorianCalendar();
-                createUntill.setTime(Persistence.service().getTransactionSystemTime());
-                createUntill.add(Calendar.MONTH, 1);
-
-                while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {
-                    latestBillingCycle = getSubsiquentBillingCycle(latestBillingCycle);
-                }
-
-            }
-            Persistence.service().commit();
         }
     }
 

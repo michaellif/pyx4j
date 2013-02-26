@@ -45,11 +45,6 @@ public interface BillingFacade {
 
     Bill rejectBill(Bill billStub, String reason);
 
-    // Processes
-    void runBilling(LogicalDate date, ExecutionMonitor executionMonitor);
-
-    void initializeFutureBillingCycles();
-
     BillingType ensureBillingType(Lease lease);
 
     // Unitls:

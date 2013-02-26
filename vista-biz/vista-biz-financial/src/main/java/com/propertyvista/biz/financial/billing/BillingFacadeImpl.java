@@ -38,11 +38,6 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
-    public void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
-        BillingManager.runBilling(date, executionMonitor);
-    }
-
-    @Override
     public void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
         BillingManager.runBilling(billingCycle, executionMonitor);
     }
@@ -75,11 +70,6 @@ public class BillingFacadeImpl implements BillingFacade {
     @Override
     public Bill rejectBill(Bill bill, String reason) {
         return BillingManager.rejectBill(bill, reason);
-    }
-
-    @Override
-    public void initializeFutureBillingCycles() {
-        BillingManager.initializeFutureBillingCycles();
     }
 
     @Override

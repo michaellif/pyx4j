@@ -29,6 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -83,6 +84,7 @@ public class ARFacadeYardiImpl implements ARFacade {
         YardiReceipt receipt = createReceipt(payment);
         Persistence.service().persist(receipt);
 
+        Persistence.ensureRetrieve(payment.billingAccount(), AttachLevel.Attached);
         Persistence.service().retrieve(payment.billingAccount().lease());
         ServerSideFactory.create(YardiProcessFacade.class).updateLease(payment.billingAccount().lease());
 
