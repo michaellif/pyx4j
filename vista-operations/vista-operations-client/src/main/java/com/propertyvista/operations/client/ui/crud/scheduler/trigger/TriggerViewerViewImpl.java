@@ -43,7 +43,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     private final Button runForDate;
 
     public TriggerViewerViewImpl() {
-        runLister = new ListerInternalViewImplBase<Run>(new RunLister());
+        runLister = new ListerInternalViewImplBase<Run>(new RunLister(true));
 
         setForm(new TriggerForm(this));
 
