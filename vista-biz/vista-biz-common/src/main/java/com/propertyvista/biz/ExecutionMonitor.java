@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.operations.domain.scheduler.ExecutionReport;
@@ -96,6 +97,7 @@ public class ExecutionMonitor {
             sections.put(id, new ReportSection());
         }
         ReportSection section = sections.get(id);
+        section.counter++;
         section.add(value);
         section.addMessage(message);
 
@@ -199,6 +201,8 @@ public class ExecutionMonitor {
 
         private final List<ReportMessage> messages;
 
+        public long counter;
+
         ReportSection() {
             accumulator = BigDecimal.ZERO;
             messages = new ArrayList<ReportMessage>();
@@ -238,7 +242,27 @@ public class ExecutionMonitor {
 
     public void updateExecutionReport(ExecutionReport executionReport) {
         updateExecutionReportMajorStats(executionReport);
-        //TODO Add messages to executionReport
+
+        // TODO copy executionReport.details()  to sections
+        // executionReport.details().clear();
+
+        for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
+            ExecutionReportSection executionReportSection = EntityFactory.create(ExecutionReportSection.class);
+
+            executionReportSection.name().setValue(section.getKey().name);
+            executionReportSection.type().setValue(section.getKey().type);
+
+            executionReportSection.counter().setValue(section.getValue().counter);
+            executionReportSection.value().setValue(section.getValue().accumulator);
+
+            for (ReportMessage message : section.getValue().messages) {
+                ExecutionReportMessage executionReportMessage = EntityFactory.create(ExecutionReportMessage.class);
+                executionReportMessage.message().setValue(message.message);
+                executionReportMessage.eventTime().setValue(message.eventTime);
+                executionReportSection.messages().add(executionReportMessage);
+            }
+            executionReport.details().add(executionReportSection);
+        }
     }
 
     public void updateExecutionReportMajorStats(ExecutionReport executionReport) {

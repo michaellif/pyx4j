@@ -157,6 +157,7 @@ public class PmcProcessDispatcherJob implements Job {
             run.status().setValue(RunStatus.Failed);
             return null;
         } finally {
+            Persistence.service().retrieveMember(run.executionReport().details(), AttachLevel.Attached);
             context.getExecutionMonitor().updateExecutionReport(run.executionReport());
             Persistence.service().persist(run.executionReport());
         }
@@ -209,7 +210,6 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeRun(Run run, PmcProcess pmcProcess) {
         long startTimeNano = System.nanoTime();
-        PmcProcessContext context = new PmcProcessContext(run.forDate().getValue());
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
@@ -241,8 +241,12 @@ public class PmcProcessDispatcherJob implements Job {
                 }
             }
 
+            // Completion
             try {
+                PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
+                        .failed().getValue(), run.executionReport().erred().getValue());
                 pmcProcess.complete(context);
+                Persistence.service().retrieveMember(run.executionReport().details(), AttachLevel.Attached);
                 context.getExecutionMonitor().updateExecutionReport(run.executionReport());
                 Persistence.service().persist(run.executionReport());
             } catch (Throwable e) {
@@ -275,8 +279,7 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {
         long startTimeNano = System.nanoTime();
-        final PmcProcessContext context = new PmcProcessContext(forDate, runData.executionReport().processed().getValue(), runData.executionReport().failed()
-                .getValue(), runData.executionReport().erred().getValue());
+        final PmcProcessContext context = new PmcProcessContext(forDate);
 
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
@@ -338,6 +341,7 @@ public class PmcProcessDispatcherJob implements Job {
             runData.executionReport().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.executionReport().total().getValue()));
         }
 
+        Persistence.service().retrieveMember(runData.executionReport().details(), AttachLevel.Attached);
         context.getExecutionMonitor().updateExecutionReport(runData.executionReport());
         Persistence.service().persist(runData.executionReport());
         if (executionException != null) {
