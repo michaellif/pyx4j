@@ -34,12 +34,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
@@ -82,18 +82,17 @@ public class PadCaledon {
         });
     }
 
-    public PadFile sendPadFile(PadFile padFile) {
+    public boolean sendPadFile(PadFile padFile) {
         EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
         int records = Persistence.service().count(criteria);
         if (records == 0) {
-            return null;
+            return false;
         }
 
         padFile.status().setValue(PadFile.PadFileStatus.Sending);
         padFile.sent().setValue(new Date());
         Persistence.service().merge(padFile);
-        Persistence.service().commit();
 
         File padWorkdir = getPadBaseDir();
 
@@ -108,7 +107,6 @@ public class PadCaledon {
                     padFile.sent().setValue(new Date());
                     padFile.fileName().setValue(file.getName());
                     Persistence.service().merge(padFile);
-                    Persistence.service().commit();
                 }
             } while (file.exists() || fileSent.exists());
 
@@ -155,7 +153,6 @@ public class PadCaledon {
             //Error recovery
             padFile.status().setValue(PadFile.PadFileStatus.SendError);
             Persistence.service().merge(padFile);
-            Persistence.service().commit();
 
             if (file != null) {
                 move(file, padWorkdir, "error");
@@ -168,10 +165,9 @@ public class PadCaledon {
 
         padFile.status().setValue(PadFile.PadFileStatus.Sent);
         Persistence.service().merge(padFile);
-        Persistence.service().commit();
 
         padFile.batches().setAttachLevel(AttachLevel.Detached);
-        return padFile;
+        return true;
     }
 
     /**
@@ -243,7 +239,7 @@ public class PadCaledon {
         File file = files.get(0);
         files.remove(0);
         if (!file.getName().endsWith(PadAkFile.FileNameSufix)) {
-            throw new Error("Invalid acknowledgement file name" + file.getName());
+            throw new Error("Invalid acknowledgment file name" + file.getName());
         }
         PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
         move(file, padWorkdir, "processed");

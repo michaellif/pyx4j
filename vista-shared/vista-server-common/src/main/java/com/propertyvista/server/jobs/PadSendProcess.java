@@ -21,8 +21,6 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PadSendProcess implements PmcProcess {
 
-    private static final String EXECUTION_MONITOR_SECTION_NAME = "PadSent";
-
     private PadFile padFile;
 
     @Override
@@ -41,11 +39,10 @@ public class PadSendProcess implements PmcProcess {
 
     @Override
     public void complete(PmcProcessContext context) {
-        PadFile padFile = ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile(this.padFile);
-        if (padFile != null) {
-            context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+        if (ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile(this.padFile)) {
+            context.getExecutionMonitor().addProcessedEvent("SendPad", "PAD file# " + padFile.fileCreationNumber().getStringView());
         } else {
-            context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, "Nothing to send");
+            context.getExecutionMonitor().addFailedEvent("SendPad", "Nothing to send");
         }
     }
 

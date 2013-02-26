@@ -121,7 +121,7 @@ public class ExecutionMonitor {
     }
 
     public void addEvent(String sectionName, CompletionType type, String message) {
-        addEvent(sectionName, type, new BigDecimal(1), message);
+        addEvent(sectionName, type, null, message);
     }
 
     public void addProcessedEvent(String sectionName) {
@@ -132,12 +132,20 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, message);
     }
 
+    public void addProcessedEvent(String sectionName, BigDecimal value) {
+        addEvent(sectionName, CompletionType.processed, value, null);
+    }
+
     public void addProcessedEvent(String sectionName, BigDecimal value, String message) {
         addEvent(sectionName, CompletionType.processed, value, message);
     }
 
     public void addFailedEvent(String sectionName, String message) {
-        addEvent(sectionName, CompletionType.failed, new BigDecimal(1), message);
+        addEvent(sectionName, CompletionType.failed, null, message);
+    }
+
+    public void addFailedEvent(String sectionName, BigDecimal value) {
+        addEvent(sectionName, CompletionType.failed, value, null);
     }
 
     public void addFailedEvent(String sectionName, BigDecimal value, String message) {
@@ -150,7 +158,7 @@ public class ExecutionMonitor {
     }
 
     public void addErredEvent(String sectionName, String message) {
-        addEvent(sectionName, CompletionType.erred, new BigDecimal(1), message);
+        addEvent(sectionName, CompletionType.erred, null, message);
     }
 
     public void addErredEvent(String sectionName, BigDecimal value, String message) {
@@ -215,7 +223,9 @@ public class ExecutionMonitor {
         }
 
         void addMessage(String message) {
-            messages.add(new ReportMessage(message));
+            if (message != null) {
+                messages.add(new ReportMessage(message));
+            }
         }
 
         ExecutionReportSection createExecutionReportSection(ExecutionReport report) {

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -73,7 +73,6 @@ class PadCaledonAcknowledgement {
             }
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
-            Persistence.service().commit();
         } else if (EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
                 FileAcknowledgmentStatus.BatchLevelReject).contains(padFile.acknowledgmentStatus().getValue())) {
             assertAcknowledgedValues(padFile, akFile);
@@ -81,11 +80,9 @@ class PadCaledonAcknowledgement {
             updateRecords(padFile, akFile);
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
-            Persistence.service().commit();
         } else {
             padFile.status().setValue(PadFile.PadFileStatus.Invalid);
             Persistence.service().merge(padFile);
-            Persistence.service().commit();
         }
 
         return padFile;
@@ -107,7 +104,6 @@ class PadCaledonAcknowledgement {
             EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
             criteria.add(PropertyCriterion.eq(criteria.proto().batchNumber(), Integer.valueOf(akBatch.batchId().getValue())));
-            //criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), akBatch.terminalId()));
             PadBatch padBatch = Persistence.service().retrieve(criteria);
             if (padBatch == null) {
                 throw new Error("Unexpected batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue() + "' in akFile "
@@ -137,7 +133,6 @@ class PadCaledonAcknowledgement {
             EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
             criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), akDebitRecord.transactionId()));
-            //criteria.add(PropertyCriterion.eq(criteria.proto().clientId(), akDebitRecord.clientId()));
             PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord == null) {
                 throw new Error("Unexpected transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '" + akDebitRecord.clientId().getValue()

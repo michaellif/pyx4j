@@ -26,7 +26,7 @@ public interface PaymentProcessFacade {
 
     void prepareEcheckPayments(ExecutionMonitor executionMonitor, PadFile padFile);
 
-    PadFile sendPadFile(PadFile padFile);
+    boolean sendPadFile(PadFile padFile);
 
     PadFile recivePadAcknowledgementFile();
 
