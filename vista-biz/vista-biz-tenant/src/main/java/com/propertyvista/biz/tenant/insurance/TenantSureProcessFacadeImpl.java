@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.io.File;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -28,9 +30,14 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.report.ReportTableCSVFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.tenant.insurance.tenantsure.reports.InsuranceStatusReport;
+import com.propertyvista.biz.tenant.insurance.tenantsure.reports.ReportFileCreatorImpl;
+import com.propertyvista.biz.tenant.insurance.tenantsure.reports.TransactionsReport;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.CancellationType;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
@@ -154,32 +161,46 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     @Override
     public ReportTableFormatter startReport() {
-        return TenantSureReports.startReport();
+        ReportTableFormatter tableFormatter = new ReportTableCSVFormatter();
+        new InsuranceStatusReport().start(tableFormatter);
+        return tableFormatter;
     }
 
     @Override
     public void processReportPmc(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formater) {
-        TenantSureReports.processReportPmc(executionMonitor, date, formater);
+        new InsuranceStatusReport().processReport(executionMonitor, date, formater);
     }
 
     @Override
-    public void completeReport(ReportTableFormatter formater, Date date) {
-        TenantSureReports.completeReport(formater, date);
+    public void completeReport(ReportTableFormatter formatter, Date date) {
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        new InsuranceStatusReport().complete(new ReportFileCreatorImpl(SimpleMessageFormat.format("subscribers-{0,date,yyyyMMdd}.csv", date), dirReports),
+                formatter);
     }
 
     @Override
     public void processTransactionsReport(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter) {
-        TenantSureReports.processTransactionsReport(executionMonitor, date, formatter);
+        new TransactionsReport().processReport(executionMonitor, date, formatter);
     }
 
     @Override
     public ReportTableFormatter startTransactionsReport() {
-        return TenantSureReports.startTransactionsReport();
+        ReportTableFormatter f = new ReportTableCSVFormatter();
+        new TransactionsReport().start(f);
+        return f;
     }
 
     @Override
     public void completeTransactionsReport(ReportTableFormatter formatter, Date date) {
-        TenantSureReports.completeTransactionsReport(formatter, date);
+        File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
+        File dirReports = new File(sftpDir, "reports");
+        new TransactionsReport().complete(new ReportFileCreatorImpl(SimpleMessageFormat.format("transactions-{0,date,yyyyMMdd}.csv", date), dirReports) {
+            @Override
+            protected File makeFileName(File dirReports, String baseFileName, String extension) {
+                return new File(dirReports, baseFileName + extension);
+            }
+        }, formatter);
     }
 
     private LogicalDate gracePeriodEnd(InsuranceTenantSure insuranceTenantSure) {
