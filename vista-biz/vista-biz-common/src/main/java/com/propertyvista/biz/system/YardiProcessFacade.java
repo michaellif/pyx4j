@@ -24,11 +24,9 @@ public interface YardiProcessFacade {
 
     void doAllImport(ExecutionMonitor executionMonitor);
 
-    void postReceiptBatch(ExecutionMonitor executionMonitor);
-
-    void postReceiptReversalBatch(ExecutionMonitor executionMonitor);
-
     void updateLease(Lease lease);
+
+    void validateReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 
     void postReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 

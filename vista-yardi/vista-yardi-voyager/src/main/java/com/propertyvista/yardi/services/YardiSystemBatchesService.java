@@ -14,7 +14,6 @@
 package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -27,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.ws.operations.AddReceiptsToBatch;
 import com.yardi.ws.operations.AddReceiptsToBatchResponse;
+import com.yardi.ws.operations.CancelReceiptBatch;
+import com.yardi.ws.operations.CancelReceiptBatchResponse;
 import com.yardi.ws.operations.OpenReceiptBatch;
 import com.yardi.ws.operations.OpenReceiptBatchResponse;
 import com.yardi.ws.operations.PostReceiptBatch;
@@ -36,7 +37,6 @@ import com.yardi.ws.operations.TransactionXml_type1;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -60,29 +60,20 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void postReceiptBatch(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
-
-        List<String> propertyCodes = getPropertyCodes(new YardiClient(yc.residentTransactionsServiceURL().getValue()), yc);
-
+    public void validateReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
         YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
 
-        log.info("Get properties information...");
-        for (String propertyCode : propertyCodes) {
-            long batchId = openReceiptBatch(client, yc, propertyCode);
-            int total = 0;
-            for (YardiReceipt receipt : new YardiPaymentProcessor().getPaymentReceiptsForProperty(propertyCode)) {
-                try {
-                    postReceiptForBatch(yc, client, batchId, receipt);
-                    executionMonitor.addProcessedEvent("Receipt");
-                    total++;
-                } catch (YardiServiceException e) {
-                    executionMonitor.addFailedEvent("Receipt", e);
-                }
-            }
-            if (total > 0) {
-                postReceiptBatch(client, yc, batchId);
-            }
-        }
+        Persistence.service().retrieve(receipt.billingAccount());
+        Persistence.service().retrieve(receipt.billingAccount().lease());
+        Persistence.service().retrieve(receipt.billingAccount().lease().unit());
+        Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
+
+        String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
+        long batchId = openReceiptBatch(client, yc, propertyCode);
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
+        addReceiptsToBatch(client, yc, batchId, residentTransactions);
+        cancelReceiptBatch(client, yc, batchId);
     }
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
@@ -95,19 +86,11 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
         long batchId = openReceiptBatch(client, yc, propertyCode);
-        postReceiptForBatch(yc, client, batchId, receipt);
-        new YardiPaymentProcessor().onPostReceiptSuccess(receipt);
-        postReceiptBatch(client, yc, batchId);
-    }
-
-    private void postReceiptForBatch(PmcYardiCredential yc, YardiClient client, long batchId, YardiReceipt receipt) throws YardiServiceException,
-            RemoteException {
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-        if (residentTransactions.getProperty().size() > 0) {
-            addReceiptsToBatch(client, yc, batchId, residentTransactions);
-            paymentProcessor.onPostReceiptSuccess(receipt);
-        }
+        addReceiptsToBatch(client, yc, batchId, residentTransactions);
+        paymentProcessor.onPostReceiptSuccess(receipt);
+        postReceiptBatch(client, yc, batchId);
     }
 
     private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws RemoteException {
@@ -202,4 +185,32 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         }
     }
 
+    private void cancelReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
+        try {
+            c.transactionIdStart();
+            c.setCurrentAction(Action.PostReceiptBatch);
+
+            CancelReceiptBatch l = new CancelReceiptBatch();
+            l.setUserName(yc.username().getValue());
+            l.setPassword(yc.credential().getValue());
+            l.setServerName(yc.serverName().getValue());
+            l.setDatabase(yc.database().getValue());
+            l.setPlatform(yc.platform().getValue().name());
+            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            l.setBatchId(batchId);
+
+            CancelReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().cancelReceiptBatch(l);
+            String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
+            log.info("CancelReceiptBatch: {}", xml);
+
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            if (messages.isError()) {
+                throw new YardiServiceException(messages.toString());
+            } else {
+                log.info(messages.toString());
+            }
+        } catch (JAXBException e) {
+            throw new Error(e);
+        }
+    }
 }

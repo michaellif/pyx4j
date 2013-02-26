@@ -64,7 +64,40 @@ public class ARFacadeYardiImpl implements ARFacade {
     private static final Logger log = LoggerFactory.getLogger(ARFacadeYardiImpl.class);
 
     @Override
-    public void postPayment(PaymentRecord paymentRecord) throws ARException {
+    public boolean validatePayment(PaymentRecord payment) throws ARException {
+        YardiReceipt receipt = createReceipt(payment);
+
+        try {
+            ServerSideFactory.create(YardiProcessFacade.class).validateReceipt(receipt);
+        } catch (RemoteException e) {
+            throw new ARException("Receipt validation is failed due to communication failure with Yardi", e);
+        } catch (YardiServiceException e) {
+            throw new ARException("Receipt validation is failed", e);
+        }
+
+        return true;
+    }
+
+    @Override
+    public void postPayment(PaymentRecord payment) throws ARException {
+        YardiReceipt receipt = createReceipt(payment);
+        Persistence.service().persist(receipt);
+
+        Persistence.service().retrieve(payment.billingAccount().lease());
+        ServerSideFactory.create(YardiProcessFacade.class).updateLease(payment.billingAccount().lease());
+
+        try {
+            ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
+        } catch (RemoteException e) {
+            throw new ARException("Posting receipt to Yardi is failed due to communication failure", e);
+        } catch (YardiServiceException e) {
+            throw new ARException("Posting receipt to Yardi is failed", e);
+        }
+
+        Persistence.service().commit();
+    }
+
+    private YardiReceipt createReceipt(PaymentRecord paymentRecord) {
         YardiReceipt receipt = EntityFactory.create(YardiReceipt.class);
         receipt.paymentRecord().set(paymentRecord);
         receipt.amount().setValue(paymentRecord.amount().getValue().negate());
@@ -73,23 +106,7 @@ public class ARFacadeYardiImpl implements ARFacade {
         receipt.claimed().setValue(false);
         receipt.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-        Persistence.service().persist(receipt);
-
-        Persistence.service().retrieve(paymentRecord.billingAccount());
-        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
-
-        try {
-            ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
-        } catch (RemoteException e) {
-            log.warn("Yardi interface communication failure", e);
-            Validate.isTrue(!receipt.claimed().getValue(), "postReceipt is schedule to nightly process");
-        } catch (YardiServiceException e) {
-            throw new ARException("Posting receipt to Yardi is failed", e);
-        }
-
-        Persistence.service().commit();
-
+        return receipt;
     }
 
     @Override

@@ -45,6 +45,11 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
+    public boolean validatePayment(PaymentRecord payment) throws ARException {
+        return true;
+    }
+
+    @Override
     public void postPayment(PaymentRecord paymentRecord) {
         new ARPaymentProcessor().postPayment(paymentRecord);
     }

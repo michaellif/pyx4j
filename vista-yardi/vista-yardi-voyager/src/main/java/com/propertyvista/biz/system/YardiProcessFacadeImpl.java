@@ -37,26 +37,6 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceiptBatch(ExecutionMonitor executionMonitor) {
-        assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiSystemBatchesService.getInstance().postReceiptBatch(VistaDeployment.getPmcYardiCredential(), executionMonitor);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void postReceiptReversalBatch(ExecutionMonitor executionMonitor) {
-        assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiResidentTransactionsService.getInstance().postReceiptReversalBatch(VistaDeployment.getPmcYardiCredential(), executionMonitor);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public void updateLease(Lease lease) {
         assert VistaFeatures.instance().yardiIntegration();
         try {
@@ -64,6 +44,12 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void validateReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException {
+        assert VistaFeatures.instance().yardiIntegration();
+        YardiSystemBatchesService.getInstance().validateReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
     }
 
     @Override
@@ -81,4 +67,5 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
             throw new RuntimeException(e);
         }
     }
+
 }

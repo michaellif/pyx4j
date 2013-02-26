@@ -39,6 +39,8 @@ public interface ARFacade {
 
     void postInvoiceLineItem(InvoiceLineItem invoiceLineItem);
 
+    boolean validatePayment(PaymentRecord payment) throws ARException;
+
     void postPayment(PaymentRecord payment) throws ARException;
 
     DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount);

@@ -138,17 +138,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         paymentProcessor.onPostReceiptReversalSuccess(reversal);
     }
 
-    public void postReceiptReversalBatch(PmcYardiCredential yc, ExecutionMonitor executionMonitor) {
-        for (YardiReceiptReversal reversals : new YardiPaymentProcessor().getAllReceiptReversals()) {
-            try {
-                postReceiptReversal(yc, reversals);
-                executionMonitor.addProcessedEvent("Reversal");
-            } catch (YardiServiceException e) {
-                executionMonitor.addFailedEvent("Reversal", e);
-            }
-        }
-    }
-
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("Import started...");
