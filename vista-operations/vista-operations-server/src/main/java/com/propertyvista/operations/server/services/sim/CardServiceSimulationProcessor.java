@@ -175,7 +175,7 @@ public class CardServiceSimulationProcessor {
         CardServiceSimulationTransaction createdTransaction = findSimulatedResponce(card, caledonRequest);
         if (createdTransaction != null) {
             caledonResponse.code = createdTransaction.responseCode().getValue();
-            caledonResponse.text = "Simulated Tx code '" + card.responseCode().getStringView() + "'";
+            caledonResponse.text = "Simulated Tx code '" + createdTransaction.responseCode().getStringView() + "'";
 
             createdTransaction.amount().setValue(CardServiceSimulationUtils.parsAmount(caledonRequest.amount));
             createdTransaction.reference().setValue(caledonRequest.referenceNumber);

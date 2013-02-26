@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -59,7 +58,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @Caption(description = "Force rejection code on next transaction (of this type)")
     IPrimitive<Boolean> scheduledSimulatedResponce();
 
-    @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
