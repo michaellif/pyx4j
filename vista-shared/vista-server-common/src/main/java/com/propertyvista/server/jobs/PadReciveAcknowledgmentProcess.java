@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,9 +15,9 @@ package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
@@ -47,7 +47,7 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(context.getRunStats(), padFile);
+        ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(context.getExecutionMonitor(), padFile);
     }
 
     @Override

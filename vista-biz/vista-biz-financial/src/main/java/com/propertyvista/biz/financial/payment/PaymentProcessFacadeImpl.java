@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -54,13 +55,21 @@ import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmen
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     private static final Logger log = LoggerFactory.getLogger(PaymentProcessFacadeImpl.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME_PROCESSED = "PaymentProcessProcessed";
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME_REJECTED = "PaymentProcessRejected";
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME_RETURNED = "PaymentProcessReturned";
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME_DUPLICATE = "PaymentProcessDuplicate";
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME_ERRED = "PaymentProcessErred";
 
     @Override
     public PadFile preparePadFile() {
@@ -73,7 +82,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void prepareEcheckPayments(StatisticsRecord dynamicStatisticsRecord, PadFile padFile) {
+    public void prepareEcheckPayments(ExecutionMonitor executionMonitor, PadFile padFile) {
         // We take all Queued records in this PMC
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued));
@@ -83,9 +92,17 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             while (paymentRecordIterator.hasNext()) {
                 PaymentRecord paymentRecord = paymentRecordIterator.next();
                 if (new PadProcessor().processPayment(paymentRecord, padFile)) {
-                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                    executionMonitor.addProcessedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_PROCESSED,
+                            paymentRecord.amount().getValue(),
+                            SimpleMessageFormat.format("eCheck Payment processed")
+                    );//@formatter:on
                 } else {
-                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+                    executionMonitor.addFailedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_REJECTED,
+                            paymentRecord.amount().getValue(),
+                            SimpleMessageFormat.format("eCheck Payment was rejected")
+                    );//@formatter:on
                 }
             }
         } finally {
@@ -100,7 +117,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void processAcknowledgement(StatisticsRecord dynamicStatisticsRecord, final PadFile padFile) {
+    public void processAcknowledgement(final ExecutionMonitor executionMonitor, final PadFile padFile) {
         if (!EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
                 FileAcknowledgmentStatus.BatchLevelReject, FileAcknowledgmentStatus.Accepted).contains(padFile.acknowledgmentStatus().getValue())) {
             throw new Error("Invalid pad file acknowledgmentStatus " + padFile.acknowledgmentStatus().getValue());
@@ -120,7 +137,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         for (PadDebitRecord debitRecord : rejectedRecodrs) {
             new PadProcessor().acknowledgmentReject(debitRecord);
-            StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
+            executionMonitor.addFailedEvent(//@formatter:off
+                    EXECUTION_MONITOR_SECTION_NAME_REJECTED,
+                    debitRecord.amount().getValue(),
+                    SimpleMessageFormat.format("Pad Debit Record was rejected")
+            );//@formatter:on
         }
 
         List<PadBatch> rejectedBatch = TaskRunner.runInOperationsNamespace(new Callable<List<PadBatch>>() {
@@ -133,6 +154,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 List<PadBatch> rejectedBatch = Persistence.service().query(criteria);
                 for (PadBatch padBatch : rejectedBatch) {
                     Persistence.service().retrieveMember(padBatch.records());
+                    executionMonitor.addFailedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_REJECTED,
+                            padBatch.batchAmount().getValue(),
+                            SimpleMessageFormat.format("Pad Batch was rejected")
+                    );//@formatter:on
                 }
                 return rejectedBatch;
             }
@@ -154,11 +180,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                     return Persistence.service().count(criteria);
                 }
             });
-            if (countBatchs > 0) {
-                dynamicStatisticsRecord.message().setValue("All Accepted");
-            }
-        } else {
-            dynamicStatisticsRecord.message().setValue("Batch Level Reject:" + rejectedBatch.size() + "; Transaction Reject:" + rejectedRecodrs.size());
         }
     }
 
@@ -202,7 +223,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void processPadReconciliation(StatisticsRecord dynamicStatisticsRecord, final PadReconciliationFile reconciliationFile) {
+    public void processPadReconciliation(ExecutionMonitor executionMonitor, final PadReconciliationFile reconciliationFile) {
         final String namespace = NamespaceManager.getNamespace();
 
         List<PadReconciliationSummary> transactions = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationSummary>>() {
@@ -232,53 +253,44 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
                     processed++;
-                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
+                    executionMonitor.addProcessedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_PROCESSED,
+                            debitRecord.amount().getValue(),
+                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was processed")
+                    );//@formatter:on
                     break;
                 case REJECTED:
                     rejected++;
-                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
+                    executionMonitor.addFailedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_REJECTED,
+                            debitRecord.amount().getValue(),
+                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was rejected")
+                    );//@formatter:on
                     break;
                 case RETURNED:
                     returned++;
-                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
+                    executionMonitor.addFailedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_RETURNED,
+                            debitRecord.amount().getValue(),
+                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was returned")
+                    );//@formatter:on
                     break;
                 case DUPLICATE:
                     duplicate++;
-                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
+                    executionMonitor.addFailedEvent(//@formatter:off
+                            EXECUTION_MONITOR_SECTION_NAME_DUPLICATE,
+                            debitRecord.amount().getValue(),
+                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record is a duplicate, not processed")
+                    );//@formatter:on
                     break;
                 }
             }
         }
         Persistence.service().commit();
-
-        StringBuilder message = new StringBuilder();
-        if (processed != 0) {
-            message.append("Processed:").append(processed);
-        }
-        if (returned != 0) {
-            if (message.length() > 0) {
-                message.append(", ");
-            }
-            message.append("Returned:").append(returned);
-        }
-        if (rejected != 0) {
-            if (message.length() > 0) {
-                message.append(", ");
-            }
-            message.append("Rejected:").append(rejected);
-        }
-        if (duplicate != 0) {
-            if (message.length() > 0) {
-                message.append(", ");
-            }
-            message.append("Duplicate:").append(duplicate);
-        }
-
-        dynamicStatisticsRecord.message().setValue(message.toString());
     }
 
     @Override
-    public void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate runDate) {
+    public void createPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
         // Find Bills
         //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
         Calendar c = new GregorianCalendar();
@@ -297,7 +309,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
         try {
             while (billIterator.hasNext()) {
-                createPreauthorisedPayment(billIterator.next(), dynamicStatisticsRecord);
+                createPreauthorisedPayment(billIterator.next(), executionMonitor);
             }
         } finally {
             billIterator.completeRetrieval();
@@ -305,7 +317,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     }
 
-    private void createPreauthorisedPayment(final Bill bill, final StatisticsRecord dynamicStatisticsRecord) {
+    private void createPreauthorisedPayment(final Bill bill, final ExecutionMonitor executionMonitor) {
         try {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
 
@@ -334,7 +346,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                             LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
                             if (method != null) {
                                 createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
-                                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
+                                executionMonitor.addProcessedEvent(//@formatter:off
+                                        EXECUTION_MONITOR_SECTION_NAME_PROCESSED,
+                                        currentBalance,
+                                        SimpleMessageFormat.format("Preauthorized payment created")
+                                );//@formatter:on
                             }
                             break tanantLoop;
                         case CoApplicant:
@@ -350,7 +366,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             });
         } catch (PaymentException e) {
             log.error("Preauthorised payment creation failed", e);
-            StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+            executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME_ERRED, e);
         }
     }
 
@@ -378,7 +394,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void processScheduledPayments(StatisticsRecord dynamicStatisticsRecord, PaymentType paymentType) {
+    public void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
@@ -387,14 +403,14 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (paymentRecordIterator.hasNext()) {
-                processScheduledPayment(paymentRecordIterator.next(), dynamicStatisticsRecord);
+                processScheduledPayment(paymentRecordIterator.next(), executionMonitor);
             }
         } finally {
             paymentRecordIterator.completeRetrieval();
         }
     }
 
-    private void processScheduledPayment(final PaymentRecord paymentRecord, final StatisticsRecord dynamicStatisticsRecord) {
+    private void processScheduledPayment(final PaymentRecord paymentRecord, final ExecutionMonitor executionMonitor) {
         try {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
 
@@ -403,16 +419,24 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                     PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
 
                     if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                        StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, processedPaymentRecord.amount().getValue());
+                        executionMonitor.addFailedEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME_REJECTED,
+                                processedPaymentRecord.amount().getValue(),
+                                SimpleMessageFormat.format("Payment was rejected")
+                        );//@formatter:on
                     } else {
-                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, processedPaymentRecord.amount().getValue());
+                        executionMonitor.addProcessedEvent(//@formatter:off
+                                EXECUTION_MONITOR_SECTION_NAME_PROCESSED,
+                                processedPaymentRecord.amount().getValue(),
+                                SimpleMessageFormat.format("Payment was processed")
+                        );//@formatter:on
                     }
                     return null;
                 }
             });
         } catch (PaymentException e) {
             log.error("Preauthorised payment creation failed", e);
-            StatisticsUtils.addErred(dynamicStatisticsRecord, 1);
+            executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME_ERRED, e);
         }
     }
 
