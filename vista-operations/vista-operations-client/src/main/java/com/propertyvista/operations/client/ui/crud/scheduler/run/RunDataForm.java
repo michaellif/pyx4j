@@ -109,7 +109,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
             setAllowZoomIn(true);
 
-            messageDialog = new OkDialog("") {
+            messageDialog = new OkDialog(i18n.tr("Execution Messages")) {
                 @Override
                 public boolean onClickOk() {
                     return true;
