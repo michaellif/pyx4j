@@ -66,6 +66,16 @@ public class CustomSkinProxyServlet extends HttpServlet {
     }
 
     @Override
+    public void destroy() {
+        if (connectionManager != null) {
+            connectionManager.shutdown();
+            connectionManager = null;
+        }
+        client = null;
+        super.destroy();
+    }
+
+    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             GetMethod method = new GetMethod(getServiceURL(request));
