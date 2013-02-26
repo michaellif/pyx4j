@@ -71,6 +71,8 @@ public abstract class TimestampTestCase extends DatastoreTestBase {
     }
 
     public void testUpdatedTimestamp() throws InterruptedException {
+        // Update date is taken from transaction
+        srv.endTransaction();
         WithTimestamp ent = EntityFactory.create(WithTimestamp.class);
         ent.name().setValue(uniqueString());
 
