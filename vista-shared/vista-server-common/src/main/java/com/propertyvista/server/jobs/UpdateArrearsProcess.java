@@ -29,12 +29,13 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(UpdateArrearsProcess.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "ArrearsUpdated";
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -66,12 +67,12 @@ public class UpdateArrearsProcess implements PmcProcess {
                 try {
                     facade.updateArrearsHistory(billingAccounts.next());
                     Persistence.service().commit();
-                    StatisticsUtils.addProcessed(context.getRunStats(), 1);
-                } catch (Throwable caught) {
-                    log.error("failed to update arrears history: {}", caught.getMessage());
+                    context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                } catch (Throwable t) {
+                    log.error("failed to update arrears history: {}", t.getMessage());
                     Persistence.service().rollback();
                     failed++;
-                    StatisticsUtils.addFailed(context.getRunStats(), 1);
+                    context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
                 }
 
             }
@@ -92,12 +93,12 @@ public class UpdateArrearsProcess implements PmcProcess {
             try {
                 facade.updateArrearsHistory(buildings.next());
                 Persistence.service().commit();
-                StatisticsUtils.addProcessed(context.getRunStats(), 1);
-            } catch (Throwable caught) {
-                log.error("failed to update arrears history: {}", caught.getMessage());
+                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+            } catch (Throwable t) {
+                log.error("failed to update arrears history: {}", t.getMessage());
                 Persistence.service().rollback();
                 failed++;
-                StatisticsUtils.addFailed(context.getRunStats(), 1);
+                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
         }
 

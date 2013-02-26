@@ -35,6 +35,7 @@ import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.pmc.Pmc;
@@ -43,7 +44,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -88,7 +88,7 @@ class VistaBusinessStatsReport {
         return formatter;
     }
 
-    static void processStatsReportsPmc(StatisticsRecord runStats, ReportTableFormatter formatter) {
+    static void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter) {
         EntityReportFormatter<VistaBusinessStatsPmcData> er = new EntityReportFormatter<VistaBusinessStatsPmcData>(VistaBusinessStatsPmcData.class);
         VistaBusinessStatsPmcData data = EntityFactory.create(VistaBusinessStatsPmcData.class);
 

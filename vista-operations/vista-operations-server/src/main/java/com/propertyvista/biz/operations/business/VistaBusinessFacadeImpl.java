@@ -15,7 +15,7 @@ package com.propertyvista.biz.operations.business;
 
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+import com.propertyvista.biz.ExecutionMonitor;
 
 public class VistaBusinessFacadeImpl implements VistaBusinessFacade {
 
@@ -25,8 +25,8 @@ public class VistaBusinessFacadeImpl implements VistaBusinessFacade {
     }
 
     @Override
-    public void processStatsReportsPmc(StatisticsRecord runStats, ReportTableFormatter formater) {
-        VistaBusinessStatsReport.processStatsReportsPmc(runStats, formater);
+    public void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formater) {
+        VistaBusinessStatsReport.processStatsReportsPmc(executionMonitor, formater);
     }
 
     @Override

@@ -15,13 +15,13 @@ package com.propertyvista.biz.operations.business;
 
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
-import com.propertyvista.operations.domain.scheduler.StatisticsRecord;
+import com.propertyvista.biz.ExecutionMonitor;
 
 public interface VistaBusinessFacade {
 
     ReportTableFormatter startStatsReport();
 
-    void processStatsReportsPmc(StatisticsRecord runStats, ReportTableFormatter formater);
+    void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formater);
 
     void completeStatsReport(ReportTableFormatter formater);
 }

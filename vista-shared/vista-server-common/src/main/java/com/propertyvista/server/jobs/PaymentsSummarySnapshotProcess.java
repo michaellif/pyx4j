@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -30,6 +30,8 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(PaymentsSummarySnapshotProcess.class);
 
+    protected static final String EXECUTION_MONITOR_SECTION_NAME = "PaymentSummarySnapshot";
+
     @Override
     public boolean start(PmcProcessContext context) {
         log.info("Payment Summary Snapshot process started");
@@ -39,26 +41,21 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
     @Override
     public void executePmcJob(final PmcProcessContext context) {
         long maxProgress = Persistence.service().count(EntityQueryCriteria.create(MerchantAccount.class)) * (long) PaymentRecord.PaymentStatus.values().length;
-        context.getRunStats().total().setValue(maxProgress);
 
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper(new PaymentsSummarySnapshotHook() {
-
-            long processed = 0L;
-
-            long failed = 0L;
 
             @Override
             public boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary) {
                 Persistence.service().commit();
-                context.getRunStats().processed().setValue(++processed);
+                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                 return true;
             }
 
             @Override
-            public boolean onPaymentsSummarySnapshotFailed(Throwable caught) {
+            public boolean onPaymentsSummarySnapshotFailed(Throwable t) {
                 Persistence.service().rollback();
-                context.getRunStats().failed().setValue(++failed);
-                log.error("Failed to create payments summary snapshot", caught);
+                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
+                log.error("Failed to create payments summary snapshot", t);
                 return true;
             }
         });

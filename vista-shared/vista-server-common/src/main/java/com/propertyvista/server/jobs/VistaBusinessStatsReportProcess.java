@@ -30,7 +30,7 @@ public class VistaBusinessStatsReportProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(VistaBusinessFacade.class).processStatsReportsPmc(context.getRunStats(), formater);
+        ServerSideFactory.create(VistaBusinessFacade.class).processStatsReportsPmc(context.getExecutionMonitor(), formater);
     }
 
     @Override

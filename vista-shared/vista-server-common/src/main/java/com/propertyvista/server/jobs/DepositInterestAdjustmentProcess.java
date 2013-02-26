@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -23,11 +23,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class DepositInterestAdjustmentProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(DepositInterestAdjustmentProcess.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "DepositIntrestAdjustment";
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -51,12 +52,12 @@ public class DepositInterestAdjustmentProcess implements PmcProcess {
                 depositFacade.collectInterest(lease);
                 Persistence.service().commit();
 
-                StatisticsUtils.addProcessed(context.getRunStats(), 1);
-            } catch (Throwable error) {
-                log.error("failed to calculate deposit adjustments for lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
+                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+            } catch (Throwable t) {
+                log.error("failed to calculate deposit adjustments for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
                 Persistence.service().rollback();
                 ++failed;
-                StatisticsUtils.addFailed(context.getRunStats(), 1);
+                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
         }
         log.info("{} out of {} leases were processed successfully", total - failed, total);

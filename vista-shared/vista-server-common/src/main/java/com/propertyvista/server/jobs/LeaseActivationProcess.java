@@ -25,12 +25,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseActivationProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseActivationProcess.class);
+
+    private static final String EXECUTION_MONITOR_SECTION_NAME = "LeaseActivated";
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -59,12 +60,12 @@ public class LeaseActivationProcess implements PmcProcess {
                         leaseFacade.activate(lease);
                         Persistence.service().commit();
 
-                        StatisticsUtils.addProcessed(context.getRunStats(), 1);
-                    } catch (Throwable error) {
-                        log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
+                        context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                    } catch (Throwable t) {
+                        log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
                         Persistence.service().rollback();
                         ++failed;
-                        StatisticsUtils.addFailed(context.getRunStats(), 1);
+                        context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
                     }
                 }
             } finally {
