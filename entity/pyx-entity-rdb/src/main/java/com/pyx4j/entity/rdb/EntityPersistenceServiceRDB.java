@@ -265,7 +265,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
             break;
         case Suppress:
-            createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
+            if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
+                createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
+            }
             break;
         }
     }
