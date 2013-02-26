@@ -237,8 +237,8 @@ SET search_path = '_admin_';
         
         ALTER TABLE scheduler_run_stats RENAME TO scheduler_execution_report;
         
-        ALTER TABLE scheduler_execution_report  ADD COLUMN erred BIGINT,
-                                                ADD COLUMN amount_erred DOUBLE PRECISION;
+        ALTER TABLE scheduler_execution_report  ADD COLUMN erred BIGINT;
+                                               
         
         
         -- scheduler_execution_report_section
@@ -415,6 +415,21 @@ SET search_path = '_admin_';
         ***
         ***     ============================================================================================================
         **/
+        
+        -- scheduler_execution_report_section
+        
+        INSERT INTO scheduler_execution_report_section(id,execution_report,name,tp,counter,value)
+        (SELECT  nextval('public.scheduler_execution_report_section_seq') AS id, 
+                id AS execution_report,'Amount' AS name,'processed' AS tp, processed AS counter,amount_processed AS value
+        FROM    _admin_.scheduler_execution_report 
+        WHERE   processed IS NOT NULL
+        UNION
+        SELECT  nextval('public.scheduler_execution_report_section_seq') AS id, 
+                id AS execution_report,'Amount' AS name,'failed' AS tp, failed AS counter,amount_failed AS value
+        FROM    _admin_.scheduler_execution_report
+        WHERE   failed IS NOT NULL
+        ORDER BY 2);
+
         
         UPDATE admin_pmc_vista_features 
         SET  tenant_sure_integration = FALSE ;
