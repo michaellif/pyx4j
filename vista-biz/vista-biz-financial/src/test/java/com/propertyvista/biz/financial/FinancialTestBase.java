@@ -107,8 +107,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     public interface RegressionTests extends FunctionalTests {
     }
 
-    private long startTime;
-
     protected PmcDataModel pmcDataModel;
 
     protected BuildingDataModel buildingDataModel;
@@ -157,7 +155,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
         SysDateManager.setSysDate("01-Jan-2000");
-        startTime = System.currentTimeMillis();
 
         NamespaceManager.setNamespace("t" + System.currentTimeMillis());
 
@@ -170,7 +167,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void tearDown() throws Exception {
         Persistence.service().commit();
         Persistence.service().endTransaction();
-        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
 
         TestLifecycle.tearDown();
         super.tearDown();

@@ -202,7 +202,7 @@ public class BillingManager {
         if (result.getStatus() == BillCreationResult.Status.created) {
             executionMonitor.addProcessedEvent("Bill", result.getTotalDueAmount(), null);
         } else {
-            executionMonitor.addFailedEvent("Bill", "Bill status is " + result.getStatus().toString());
+            executionMonitor.addFailedEvent("Bill", "Bill failed");
         }
     }
 

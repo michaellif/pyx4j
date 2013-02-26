@@ -115,7 +115,7 @@ public class ExecutionMonitor {
             break;
         }
 
-        log.info("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
+        log.debug("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
         dirty = true;
 
     }
