@@ -33,7 +33,9 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.IEntity;
 
 public class DataPreloaderCollection extends AbstractDataPreloader {
@@ -140,27 +142,20 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
     @Override
     public String create() {
         StringBuilder b = new StringBuilder();
-        for (DataPreloader preloader : childPreloaders) {
+        for (final DataPreloader preloader : childPreloaders) {
             preloader.setParametersValues(parameters);
             log.debug("create preloader {}", preloader.getClass());
             long start = System.currentTimeMillis();
-            Persistence.service().startTransaction();
-            String txt;
-            boolean success = false;
-            try {
-                txt = preloader.create();
-                Persistence.service().commit();
-                success = true;
-            } finally {
-                if (!success) {
-                    try {
-                        Persistence.service().rollback();
-                    } catch (Throwable ignore) {
-                        log.error("error in rollback", ignore);
-                    }
+
+            String txt = new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<String, RuntimeException>() {
+
+                @Override
+                public String execute() {
+                    return preloader.create();
                 }
-                Persistence.service().endTransaction();
-            }
+
+            });
+
             if (CommonsStringUtils.isStringSet(txt)) {
                 b.append(txt).append('\n');
             }
