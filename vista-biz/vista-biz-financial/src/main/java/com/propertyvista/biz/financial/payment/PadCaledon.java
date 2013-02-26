@@ -28,7 +28,10 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -236,12 +239,21 @@ public class PadCaledon {
         if (files.size() == 0) {
             return null;
         }
-        File file = files.get(0);
+        final File file = files.get(0);
         files.remove(0);
         if (!file.getName().endsWith(PadAkFile.FileNameSufix)) {
             throw new Error("Invalid acknowledgment file name" + file.getName());
         }
-        PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
+
+        PadFile padFile = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
+
+            @Override
+            public PadFile execute() {
+                return new PadCaledonAcknowledgement().processFile(file);
+            }
+
+        });
+
         move(file, padWorkdir, "processed");
 
         // Cleanup SFTP directory

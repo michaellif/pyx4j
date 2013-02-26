@@ -36,14 +36,6 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
 
         setForm(new PadFileForm(this));
 
-        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
-            @Override
-            public void execute() {
-                ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
-            }
-        });
-        addHeaderToolbarItem(replyReconciliation.asWidget());
-
         Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new Command() {
             @Override
             public void execute() {
@@ -51,6 +43,14 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
             }
         });
         addHeaderToolbarItem(replyAcknowledgment.asWidget());
+
+        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
+            @Override
+            public void execute() {
+                ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
+            }
+        });
+        addHeaderToolbarItem(replyReconciliation.asWidget());
 
     }
 

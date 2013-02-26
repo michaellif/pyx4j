@@ -45,6 +45,8 @@ public class ExecutionMonitor {
 
     private Long erredCount;
 
+    private String message;
+
     private boolean dirty = false;
 
     public ExecutionMonitor() {
@@ -161,6 +163,10 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.erred, null, message);
     }
 
+    public void addErredEvent(String sectionName, BigDecimal value) {
+        addEvent(sectionName, CompletionType.erred, value, null);
+    }
+
     public void addErredEvent(String sectionName, BigDecimal value, String message) {
         addEvent(sectionName, CompletionType.erred, value, message);
     }
@@ -173,6 +179,10 @@ public class ExecutionMonitor {
     public void addErredEvent(String sectionName, BigDecimal value, Throwable throwable) {
         log.error("Event Erred", throwable);
         addErredEvent(sectionName, value, throwable.toString());
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Long getTotal() {
@@ -255,6 +265,8 @@ public class ExecutionMonitor {
 
         // TODO copy executionReport.details()  to sections
         // executionReport.details().clear();
+
+        executionReport.message().setValue(message);
 
         for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
             ExecutionReportSection executionReportSection = EntityFactory.create(ExecutionReportSection.class);

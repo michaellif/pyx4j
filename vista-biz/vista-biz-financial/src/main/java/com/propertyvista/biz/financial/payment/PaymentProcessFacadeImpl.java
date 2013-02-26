@@ -52,7 +52,6 @@ import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -145,11 +144,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         for (PadDebitRecord debitRecord : rejectedRecodrs) {
             new PadProcessor().acknowledgmentReject(debitRecord);
-            executionMonitor.addFailedEvent(//@formatter:off
-                    REJECTED,
-                    debitRecord.amount().getValue(),
-                    SimpleMessageFormat.format("Pad Debit Record was rejected")
-            );//@formatter:on
+            executionMonitor.addFailedEvent("Debit Record rejected", debitRecord.amount().getValue());
         }
 
         List<PadBatch> rejectedBatch = TaskRunner.runInOperationsNamespace(new Callable<List<PadBatch>>() {
@@ -162,11 +157,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 List<PadBatch> rejectedBatch = Persistence.service().query(criteria);
                 for (PadBatch padBatch : rejectedBatch) {
                     Persistence.service().retrieveMember(padBatch.records());
-                    executionMonitor.addFailedEvent(//@formatter:off
-                            REJECTED,
-                            padBatch.batchAmount().getValue(),
-                            SimpleMessageFormat.format("Pad Batch was rejected")
-                    );//@formatter:on
+                    executionMonitor.addFailedEvent("Pad Batch rejected", padBatch.batchAmount().getValue());
                 }
                 return rejectedBatch;
             }
@@ -175,8 +166,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         for (PadBatch padBatch : rejectedBatch) {
             new PadProcessor().aggregatedTransferRejected(padBatch);
         }
-
-        Persistence.service().commit();
 
         if (rejectedBatch.size() == 0 && rejectedRecodrs.size() == 0) {
             Integer countBatchs = TaskRunner.runInOperationsNamespace(new Callable<Integer>() {
@@ -188,6 +177,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                     return Persistence.service().count(criteria);
                 }
             });
+            if (countBatchs > 0) {
+                executionMonitor.setMessage("All Accepted");
+            }
         }
     }
 
@@ -249,52 +241,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             return;
         }
 
-        int processed = 0;
-        int returned = 0;
-        int rejected = 0;
-        int duplicate = 0;
-
         for (PadReconciliationSummary summary : transactions) {
-            new PadProcessor().aggregatedTransferReconciliation(summary);
-
-            for (PadReconciliationDebitRecord debitRecord : summary.records()) {
-                switch (debitRecord.reconciliationStatus().getValue()) {
-                case PROCESSED:
-                    processed++;
-                    executionMonitor.addProcessedEvent(//@formatter:off
-                            PROCESSED,
-                            debitRecord.amount().getValue(),
-                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was processed")
-                    );//@formatter:on
-                    break;
-                case REJECTED:
-                    rejected++;
-                    executionMonitor.addFailedEvent(//@formatter:off
-                            REJECTED,
-                            debitRecord.amount().getValue(),
-                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was rejected")
-                    );//@formatter:on
-                    break;
-                case RETURNED:
-                    returned++;
-                    executionMonitor.addFailedEvent(//@formatter:off
-                            RETURNED,
-                            debitRecord.amount().getValue(),
-                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record was returned")
-                    );//@formatter:on
-                    break;
-                case DUPLICATE:
-                    duplicate++;
-                    executionMonitor.addFailedEvent(//@formatter:off
-                            DUPLICATE,
-                            debitRecord.amount().getValue(),
-                            SimpleMessageFormat.format("Pad Reconcilliation Debit Record is a duplicate, not processed")
-                    );//@formatter:on
-                    break;
-                }
-            }
+            new PadProcessor().aggregatedTransferReconciliation(executionMonitor, summary);
         }
-        Persistence.service().commit();
     }
 
     @Override

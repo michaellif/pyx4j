@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -21,19 +21,19 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.payment.pad.PadBatch;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -41,6 +41,12 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PadProcessor {
@@ -228,10 +234,10 @@ public class PadProcessor {
         Persistence.service().persist(aggregatedTransfer);
     }
 
-    public void aggregatedTransferReconciliation(PadReconciliationSummary summary) {
-        final String namespace = NamespaceManager.getNamespace();
+    public void aggregatedTransferReconciliation(ExecutionMonitor executionMonitor, PadReconciliationSummary summary) {
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
 
-        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        final AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
         switch (summary.reconciliationStatus().getValue()) {
         case HOLD:
@@ -270,65 +276,99 @@ public class PadProcessor {
         Persistence.service().persist(at);
 
         for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
-            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
-                    PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
-            if (paymentRecord == null) {
-                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found in " + namespace);
-            }
-            if (PaymentType.Echeck != paymentRecord.paymentMethod().type().getValue()) {
-                throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
-            }
-            if (debitRecord.amount().getValue().compareTo(paymentRecord.amount().getValue()) != 0) {
-                throw new Error("Unexpected transaction amount '" + paymentRecord.amount().getValue() + "', terminalId '"
-                        + debitRecord.merchantTerminalId().getValue() + "', transactionId " + debitRecord.transactionId().getValue());
-            }
 
-            // Verify PAD record
-            final PadDebitRecord padDebitRecord = TaskRunner.runInOperationsNamespace(new Callable<PadDebitRecord>() {
-                @Override
-                public PadDebitRecord call() throws Exception {
-                    EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
-                    criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), debitRecord.transactionId()));
-                    criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
-                    return Persistence.service().retrieve(criteria);
+            try {
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        processDebitRecord(pmc, at, debitRecord);
+                        return null;
+                    }
+
+                });
+
+                switch (debitRecord.reconciliationStatus().getValue()) {
+                case PROCESSED:
+                    executionMonitor.addProcessedEvent("Processed", debitRecord.amount().getValue());
+                    break;
+                case REJECTED:
+                    executionMonitor.addFailedEvent("Rejected", debitRecord.amount().getValue());
+                    break;
+                case RETURNED:
+                    executionMonitor.addFailedEvent("Returned", debitRecord.amount().getValue());
+                    break;
+                case DUPLICATE:
+                    executionMonitor.addErredEvent("Duplicate", debitRecord.amount().getValue(), "TransactionId " + debitRecord.transactionId().getValue());
+                    break;
                 }
-            });
-            if (padDebitRecord == null) {
-                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' not found");
+
+            } catch (Throwable e) {
+                log.error("payment transaction '" + debitRecord.transactionId().getValue() + "' processing error", e);
+                executionMonitor.addErredEvent("Duplicate", debitRecord.amount().getValue());
             }
-
-            switch (debitRecord.reconciliationStatus().getValue()) {
-            case PROCESSED:
-                if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
-                }
-                reconciliationClearedPayment(at, debitRecord, paymentRecord);
-                break;
-            case REJECTED:
-                if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
-                }
-                reconciliationRejectPayment(at, debitRecord, paymentRecord);
-                break;
-            case RETURNED:
-                reconciliationReturnedPayment(at, debitRecord, paymentRecord);
-                break;
-            case DUPLICATE:
-                // TODO What todo ?
-            default:
-                throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());
-            }
-
-            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    padDebitRecord.processed().setValue(Boolean.TRUE);
-                    Persistence.service().persist(padDebitRecord);
-                    return null;
-                }
-            });
-
         }
+    }
+
+    private void processDebitRecord(final Pmc pmc, AggregatedTransfer at, final PadReconciliationDebitRecord debitRecord) {
+
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
+                PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
+        if (paymentRecord == null) {
+            throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found in " + pmc.namespace().getStringView());
+        }
+        if (PaymentType.Echeck != paymentRecord.paymentMethod().type().getValue()) {
+            throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        }
+        if (debitRecord.amount().getValue().compareTo(paymentRecord.amount().getValue()) != 0) {
+            throw new Error("Unexpected transaction amount '" + paymentRecord.amount().getValue() + "', terminalId '"
+                    + debitRecord.merchantTerminalId().getValue() + "', transactionId " + debitRecord.transactionId().getValue());
+        }
+
+        // Verify PAD record
+        final PadDebitRecord padDebitRecord = TaskRunner.runInOperationsNamespace(new Callable<PadDebitRecord>() {
+            @Override
+            public PadDebitRecord call() throws Exception {
+                EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), debitRecord.transactionId()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), pmc.namespace()));
+                return Persistence.service().retrieve(criteria);
+            }
+        });
+        if (padDebitRecord == null) {
+            throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' not found");
+        }
+
+        switch (debitRecord.reconciliationStatus().getValue()) {
+        case PROCESSED:
+            if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
+                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+            }
+            reconciliationClearedPayment(at, debitRecord, paymentRecord);
+            break;
+        case REJECTED:
+            if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
+                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+            }
+            reconciliationRejectPayment(at, debitRecord, paymentRecord);
+            break;
+        case RETURNED:
+            reconciliationReturnedPayment(at, debitRecord, paymentRecord);
+            break;
+        case DUPLICATE:
+            // TODO What todo ?
+        default:
+            throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());
+        }
+
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                padDebitRecord.processed().setValue(Boolean.TRUE);
+                Persistence.service().persist(padDebitRecord);
+                return null;
+            }
+        });
     }
 
     private void reconciliationRejectPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
