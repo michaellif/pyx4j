@@ -46,23 +46,19 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
 
             @Override
             public boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary) {
-                Persistence.service().commit();
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                 return true;
             }
 
             @Override
             public boolean onPaymentsSummarySnapshotFailed(Throwable t) {
-                Persistence.service().rollback();
                 context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
                 log.error("Failed to create payments summary snapshot", t);
                 return true;
             }
         });
 
-        // TODO this should be yesterday, or something like that
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
-        summaryHelper.takePaymentsSummarySnapshots(today);
+        summaryHelper.takePaymentsSummarySnapshots(new LogicalDate(context.getForDate()));
     }
 
     @Override

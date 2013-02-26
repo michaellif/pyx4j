@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -192,41 +194,48 @@ public final class PaymentsSummaryHelper {
      * @deprecated if used generates too many records in database per day... if used as intended (every day) will bomb the database with A LOT of records
      */
     @Deprecated
-    public void takePaymentsSummarySnapshots(LogicalDate snapshotDay) {
+    public void takePaymentsSummarySnapshots(final LogicalDate snapshotDay) {
 
-        Iterator<MerchantAccount> merchantAccountsIterator = Persistence.service().query(null, EntityQueryCriteria.create(MerchantAccount.class),
+        final Iterator<MerchantAccount> merchantAccountsIterator = Persistence.service().query(null, EntityQueryCriteria.create(MerchantAccount.class),
                 AttachLevel.IdOnly);
 
         boolean shouldRun = true;
         while (merchantAccountsIterator.hasNext() & shouldRun) {
-            for (PaymentRecord.PaymentStatus paymentStatus : PaymentStatus.values()) {
+            for (final PaymentRecord.PaymentStatus paymentStatus : PaymentStatus.values()) {
                 try {
-                    MerchantAccount merchantAccount = merchantAccountsIterator.next();
+                    PaymentsSummary summary = new UnitOfWork().execute(new Executable<PaymentsSummary, Throwable>() {
+                        @Override
+                        public PaymentsSummary execute() throws Throwable {
+                            MerchantAccount merchantAccount = merchantAccountsIterator.next();
 
-                    PaymentsSummary currentPaymentsSummary = retrieveSummary(merchantAccount, paymentStatus, snapshotDay);
-                    PaymentsSummary updatedPaymentsSummary = calculateSummary(merchantAccount, paymentStatus, snapshotDay);
+                            PaymentsSummary currentPaymentsSummary = retrieveSummary(merchantAccount, paymentStatus, snapshotDay);
+                            PaymentsSummary updatedPaymentsSummary = calculateSummary(merchantAccount, paymentStatus, snapshotDay);
 
-                    boolean isUpdated = true;
-                    if (currentPaymentsSummary != null) {
-                        if (EntityGraph.fullyEqualValues(currentPaymentsSummary, updatedPaymentsSummary)) {
-                            updatedPaymentsSummary.setPrimaryKey(currentPaymentsSummary.getPrimaryKey());
-                        } else {
-                            isUpdated = false;
+                            boolean isUpdated = true;
+                            if (currentPaymentsSummary != null) {
+                                if (EntityGraph.fullyEqualValues(currentPaymentsSummary, updatedPaymentsSummary)) {
+                                    updatedPaymentsSummary.setPrimaryKey(currentPaymentsSummary.getPrimaryKey());
+                                } else {
+                                    isUpdated = false;
+                                }
+                            }
+                            if (isUpdated) {
+                                Persistence.service().persist(updatedPaymentsSummary);
+                            }
+                            return updatedPaymentsSummary;
                         }
-                    }
-                    if (isUpdated) {
-                        Persistence.service().persist(updatedPaymentsSummary);
-                    }
+                    });
 
                     if (paymentsSummarySnapshotHook != null) {
-                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotTaken(updatedPaymentsSummary);
+                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotTaken(summary);
                     }
 
-                } catch (Throwable caught) {
+                } catch (Throwable e) {
                     if (paymentsSummarySnapshotHook != null) {
-                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotFailed(caught);
+                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotFailed(e);
                     }
                 }
+
             }
         }
 
