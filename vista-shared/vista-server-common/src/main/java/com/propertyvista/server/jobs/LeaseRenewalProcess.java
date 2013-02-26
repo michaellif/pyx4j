@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseRenewalProcess implements PmcProcess {
@@ -59,13 +58,12 @@ public class LeaseRenewalProcess implements PmcProcess {
                 try {
                     leaseFacade.renew(lease);
                     Persistence.service().commit();
-
-                    StatisticsUtils.addProcessed(context.getRunStats(), 1);
+                    context.getExecutionMonitor().addProcessedEvent("Lease");
                 } catch (Throwable error) {
                     log.error("failed to renew lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
                     Persistence.service().rollback();
                     ++failed;
-                    StatisticsUtils.addFailed(context.getRunStats(), 1);
+                    context.getExecutionMonitor().addFailedEvent("Lease", error);
                 }
             }
             log.info("{} out of {} leases were renewed successfully", total - failed, total);
