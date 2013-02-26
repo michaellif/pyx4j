@@ -95,7 +95,8 @@
 	letter-spacing:1px;
 	margin-left:30px;
 	color: #000000;
-	background-color:#CCCCCC;
+	background-color:#fa8d0c;
+	box-shadow: inset rgba(255,255,255,0.4) 2px 2px 2px 1px;
 	text-align:center;
 	float:left; 
 }
@@ -132,8 +133,11 @@
 }
 .advancedSearchWideWrap .searchTypeBox select {
 	width:212px;
+	height: 24px;
 	margin: 0;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
     color: #999999;
 }
 .advancedSearchWideWrap .searchTypeBox input[type=text] {
@@ -169,7 +173,9 @@
 .advancedSearchWideWrap .searchCommonBox select {
 	width:55px;
 	margin: 0;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
     color: #999999;
 }
 .advancedSearchWideWrap .searchCommonBox input[type=text] {
@@ -179,7 +185,9 @@
 	*display: inline;
 	width:53px;
 	margin:0px;
-	border: 1px solid #000000;
+	border-top: 4px solid #7F7F7F;
+	border-left: 4px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
 }
 .advancedSearchWideWrap .searchAmenityBox {
 	float:left;
