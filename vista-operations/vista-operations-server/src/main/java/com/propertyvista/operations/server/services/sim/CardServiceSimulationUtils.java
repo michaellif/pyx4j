@@ -96,6 +96,8 @@ class CardServiceSimulationUtils {
             return SimpulationTransactionType.preAuthorizationReversal;
         case COMPLETION:
             return SimpulationTransactionType.completion;
+        case VOID:
+            return SimpulationTransactionType.returnVoid;
         default:
             throw new Error("Unsupported transactionType '" + transactionType + "'");
         }

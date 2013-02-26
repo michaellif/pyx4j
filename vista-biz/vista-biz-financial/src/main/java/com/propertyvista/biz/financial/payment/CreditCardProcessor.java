@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -173,13 +175,13 @@ class CreditCardProcessor {
         }
     }
 
-    public static void realTimeSale(PaymentRecord paymentRecord) {
+    public static void realTimeSale(final PaymentRecord paymentRecord) {
         MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
 
-        Merchant merchant = EntityFactory.create(Merchant.class);
+        final Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
 
-        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        final PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue(ReferenceNumberPrefix.RentPayments.getValue() + paymentRecord.id().getStringView());
         request.amount().setValue(paymentRecord.amount().getValue());
         CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
@@ -203,14 +205,39 @@ class CreditCardProcessor {
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
         }
 
-        UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+        if (response.success().getValue()) {
+            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
-            @Override
-            public Void execute() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
+                @Override
+                public Void execute() {
+                    try {
+                        PaymentResponse response = new CaledonPaymentProcessor().voidTransaction(merchant, request);
+                        if (response.success().getValue()) {
+                            log.info("transaction successfully voided {}", response.message().getValue());
+                        } else {
+                            log.error("Unable to void CC transaction {} {} {}; response {} {}", merchant.terminalID().getValue(), request.referenceNumber()
+                                    .getValue(), //
+                                    request.amount().getValue(), //
+                                    response.code().getValue(), response.message().getValue());
+
+                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
+                                    "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
+                                    merchant.terminalID().getValue(), request.referenceNumber().getValue(), request.amount().getValue(), //
+                                    response.code().getValue(), response.message().getValue());
+                        }
+                    } catch (Throwable e) {
+                        log.error("Unable to void CC transaction {} {} {}; response {} {}", merchant.terminalID().getValue(), request.referenceNumber()
+                                .getValue(), request.amount().getValue(), e);
+
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
+                                "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
+                                merchant.terminalID().getValue(), request.referenceNumber().getValue(), request.amount().getValue(), e);
+                    }
+
+                    return null;
+                }
+            });
+        }
 
     }
 

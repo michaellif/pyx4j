@@ -47,6 +47,28 @@
 		</layout>
 	</appender>
 
+    <appender name="FileAppender.alert" class="com.pyx4j.log4j.RollingFileAppender">
+        <param name="Threshold" value="debug" />
+
+        <param name="File" value="%{container.home}/logs/%{contextName}/vista-alert.log" />
+        <param name="Append" value="false" />
+        <!-- start new file on every restart -->
+        <param name="MaxFileSize" value="3000KB" />
+        <param name="MaxBackupIndex" value="100" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <!--
+                Patterns %d event date %r Number of milliseconds elapsed since the
+                start of the application until the creation of the logging event. %p
+                event priority %c logger name %C Caller class %F Caller file %l
+                Caller full location information %L Caller Line number %M Caller
+                method %m message %n platform dependent line separator %x NDC %X MDC
+            -->
+            <param name="ConversionPattern"
+                value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
+        </layout>
+    </appender>
+    
 	<appender name="FileAppender.client" class="com.pyx4j.log4j.RollingFileAppender">
 		<param name="Threshold" value="trace" />
 
@@ -68,7 +90,7 @@
 				value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
 		</layout>
 	</appender>
-	
+
     <appender name="FileAppender.client.warn" class="com.pyx4j.log4j.RollingFileAppender">
         <param name="Threshold" value="warn" />
 
@@ -90,7 +112,7 @@
                 value="%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}.%x]\t %l [%t]\n\t%m\n" />
         </layout>
     </appender>
-    
+
     <appender name="FileAppender.importer" class="com.pyx4j.log4j.RollingFileAppender">
         <param name="Threshold" value="debug" />
 
@@ -118,7 +140,7 @@
         <appender-ref ref="FileAppender.importer" />
         <appender-ref ref="FileAppender.warn" />
     </logger>
-        
+
 	<logger name="com.propertyvista">
 		<level value="debug" />
 	</logger>
@@ -134,13 +156,18 @@
     <logger name="com.mchange">
         <level value="warn" />
     </logger>
-    
+
 	<logger name="client">
         <level value="trace" />
         <appender-ref ref="FileAppender.client" />
         <appender-ref ref="FileAppender.client.warn" />
     </logger>
-    
+
+    <logger name="operations-alert">
+        <level value="debug" />
+        <appender-ref ref="FileAppender.alert" />
+    </logger>
+
 	<root>
 		<level value="info" />
 		<appender-ref ref="ConsoleAppender-info" />

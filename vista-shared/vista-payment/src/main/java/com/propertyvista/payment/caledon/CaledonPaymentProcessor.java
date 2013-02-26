@@ -225,4 +225,20 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         return createResponse(cresponse);
     }
 
+    @Override
+    public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
+        CaledonRequestToken crequest = new CaledonRequestToken();
+
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.transactionType = CaledonTransactionType.VOID.getValue();
+        crequest.creditCardNumber = "0";
+        crequest.expiryDate = "0000";
+        crequest.referenceNumber = request.referenceNumber().getValue();
+        crequest.setAmount(request.amount().getValue());
+
+        CaledonResponse cresponse = client.transaction(crequest);
+
+        return createResponse(cresponse);
+    }
+
 }

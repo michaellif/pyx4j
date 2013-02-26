@@ -51,6 +51,7 @@ public class CardServiceSimulationProcessor {
                 case SALE:
                 case AUTH_REVERSE:
                 case COMPLETION:
+                case VOID:
                     caledonResponse = processCard(merchantAccount, caledonRequest);
                     break;
                 default:
@@ -245,7 +246,8 @@ public class CardServiceSimulationProcessor {
                 }
             }
                 break;
-            case COMPLETION:
+
+            case COMPLETION: {
                 CardServiceSimulationTransaction preAuthorizationTransaction = findPreAuthorization(card, caledonRequest.referenceNumber);
                 if (preAuthorizationTransaction != null) {
                     newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
@@ -258,7 +260,26 @@ public class CardServiceSimulationProcessor {
                     caledonResponse.code = "1016";
                     caledonResponse.text = "COMPLETION NO MATCH";
                 }
+            }
                 break;
+
+            case VOID: {
+                CardServiceSimulationTransaction prevTransaction = findPreAuthorization(card, caledonRequest.referenceNumber);
+                if (prevTransaction != null) {
+                    newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
+                    card.balance().setValue(newBalance);
+                    card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(transaction.amount().getValue()));
+
+                    caledonResponse.code = "0000";
+                    caledonResponse.text = "VOID OK";
+                    moveMoney(merchantAccount, transaction.amount().getValue());
+                } else {
+                    caledonResponse.code = "1017";
+                    caledonResponse.text = "NO MATCH";
+                }
+            }
+                break;
+
             default:
                 throw new Error("Unsupported transactionType '" + transactionType + "'");
             }

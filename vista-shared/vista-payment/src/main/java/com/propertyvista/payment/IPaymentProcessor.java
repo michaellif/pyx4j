@@ -33,5 +33,7 @@ public interface IPaymentProcessor {
 
     PaymentResponse tokenSale(Merchant merchant, PaymentRequest request);
 
+    PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request);
+
     boolean isNetworkError(String responseCode);
 }

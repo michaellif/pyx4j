@@ -40,6 +40,8 @@ public interface CardServiceSimulationTransaction extends IEntity {
 
         sale,
 
+        returnVoid,
+
         preAuthorization,
 
         preAuthorizationReversal,
