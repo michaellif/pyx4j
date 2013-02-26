@@ -173,5 +173,6 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         } else {
             ServerSideFactory.create(CommunicationFacade.class).sendProspectPasswordRetrievalToken(customer);
         }
+        Persistence.service().commit();
     }
 }

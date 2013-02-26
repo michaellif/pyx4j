@@ -25,7 +25,10 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -57,11 +60,18 @@ public class PmcCreator {
         final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
-            RDBUtils.ensureNamespace();
+            new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<Void, RuntimeException>() {
 
-            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.initAllEntityTables();
-            }
+                @Override
+                public Void execute() {
+                    RDBUtils.ensureNamespace();
+                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                        RDBUtils.initAllEntityTables();
+                    }
+                    return null;
+                }
+
+            });
 
             AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
             preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
@@ -82,8 +92,6 @@ public class PmcCreator {
                     createCrmEmployee(email, email, email, email, null, defaultRole);
                 }
             }
-
-            Persistence.service().commit();
 
         } finally {
             NamespaceManager.setNamespace(namespace);

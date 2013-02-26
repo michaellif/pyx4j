@@ -20,6 +20,7 @@ import java.util.Set;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.security.shared.Behavior;
@@ -97,6 +98,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected void sendPasswordRetrievalToken(CrmUser user) {
         ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(user);
+        Persistence.service().commit();
     }
 
 }

@@ -223,7 +223,6 @@ public class LeaseLifecycleSimulator {
             log.info("ProcessEvent: {} {}", container.date(), container.event().getClass().getSimpleName());
         }
         container.event().exec();
-        Persistence.service().commit();
     }
 
     private boolean hasNextEvent() {
@@ -417,7 +416,6 @@ public class LeaseLifecycleSimulator {
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);
-                Persistence.service().commit();
                 return paymentRecord;
             }
         }

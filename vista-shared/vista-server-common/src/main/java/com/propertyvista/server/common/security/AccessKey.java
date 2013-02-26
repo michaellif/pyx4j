@@ -136,7 +136,6 @@ public class AccessKey {
         expire.add(Calendar.DATE, keyExpireDays);
         credential.accessKeyExpire().setValue(expire.getTime());
         Persistence.service().persist(credential);
-        Persistence.service().commit();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
         }

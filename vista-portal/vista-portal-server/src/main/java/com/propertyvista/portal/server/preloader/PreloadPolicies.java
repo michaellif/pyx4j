@@ -31,11 +31,13 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMet
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPreloader;
+import com.propertyvista.portal.server.preloader.policy.util.AbstractPoliciesPreloader;
+import com.propertyvista.portal.server.preloader.policy.util.OrganizationPoliciesNodePreloader;
 
-public class PreloadPolicies extends SimplePoliciesPreloader {
+public class PreloadPolicies extends AbstractPoliciesPreloader {
 
     public PreloadPolicies(boolean isProduction) {
+        add(new OrganizationPoliciesNodePreloader());
         add(new ARPolicyPreloader());
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());

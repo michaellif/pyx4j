@@ -47,7 +47,6 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
     }
 
     public void createTerms(VistaTerms.Target target, String termsSourceFile) {
-
         String termsContent;
         try {
             termsContent = IOUtils.getUTF8TextResource(termsSourceFile, VistaTermsPreloader.class);
@@ -64,8 +63,6 @@ public class VistaTermsPreloader extends AbstractDataPreloader {
         vistaTerms.version().document().add(legalDocument);
         vistaTerms.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(vistaTerms);
-        Persistence.service().commit();
-
     }
 
 }

@@ -58,9 +58,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
             AptUnit unit = makeAvailable(aptUnitSource.next());
-            Persistence.service().commit();
             Lease lease = generator.createLeaseWithTenants(unit);
-            Persistence.service().commit();
             LeaseGenerator.attachDocumentData(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
@@ -84,7 +82,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 cal.add(Calendar.MONTH, -1);
                 Persistence.service().setTransactionSystemTime(cal.getTime());
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
-                Persistence.service().commit();
 
                 for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
                     participant.leaseParticipant().customer().personScreening().saveAction().setValue(SaveAction.saveAsFinal);
@@ -98,12 +95,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
 
                 ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
-                Persistence.service().commit();
 
                 if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
                     Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
                     ServerSideFactory.create(LeaseFacade.class).activate(lease);
-                    Persistence.service().commit();
                 }
                 Persistence.service().setTransactionSystemTime(trDate);
             } else {

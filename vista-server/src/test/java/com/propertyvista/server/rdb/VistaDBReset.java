@@ -77,8 +77,10 @@ public class VistaDBReset {
             } else {
                 RDBUtils.initAllEntityTables();
             }
+            Persistence.service().commit();
 
             Pmc pmc = PmcCreatorDev.createPmc(VistaNamespace.demoNamespace, false);
+            Persistence.service().commit();
 
             new VistaOperationsDataPreloaders().preloadAll();
 
@@ -95,6 +97,7 @@ public class VistaDBReset {
             RDBUtils.ensureNamespace();
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 RDBUtils.initAllEntityTables();
+                Persistence.service().commit();
             }
 
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
@@ -109,7 +112,6 @@ public class VistaDBReset {
                 Mail.getMailService().setDisabled(true);
                 ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                 log.info(preloaders.preloadAll());
-                Persistence.service().commit();
             } finally {
                 ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
                 Mail.getMailService().setDisabled(false);

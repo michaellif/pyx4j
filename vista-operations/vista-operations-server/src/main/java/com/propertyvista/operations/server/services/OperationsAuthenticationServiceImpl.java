@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,16 +17,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
-public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<OperationsUser, OperationsUserCredential> implements OperationsAuthenticationService {
+public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<OperationsUser, OperationsUserCredential> implements
+        OperationsAuthenticationService {
 
     public OperationsAuthenticationServiceImpl() {
         super(OperationsUser.class, OperationsUserCredential.class);
@@ -57,6 +59,7 @@ public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServ
     @Override
     protected void sendPasswordRetrievalToken(OperationsUser user) {
         ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
+        Persistence.service().commit();
     }
 
 }

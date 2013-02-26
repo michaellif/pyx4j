@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,7 +19,9 @@ import java.util.List;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
@@ -50,12 +52,18 @@ public abstract class AbstractPolicyPreloader<P extends Policy> extends Abstract
         this.topNode = topNode;
     }
 
+    public PolicyNode getTopNode() {
+        if (topNode != null) {
+            return topNode;
+        } else {
+            return Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        }
+    }
+
     @Override
     public String create() {
         StringBuilder log = new StringBuilder();
-        if (topNode == null) {
-            throw new Error("top node was not set");
-        }
+        PolicyNode topNode = getTopNode();
         Policy policy = createPolicy(log);
         policy.node().set(topNode);
         Persistence.service().merge(policy);
