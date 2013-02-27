@@ -42,7 +42,8 @@ public class GradientProperty extends Property {
     protected String convertToString(Theme theme, Palette palette) {
         String color1 = palette.getThemeColor(startColor, startVibrance);
         String color2 = palette.getThemeColor(endColor, endVibrance);
-        String ie = "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
+        String ien = "filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='" + color1 + "', endColorstr='" + color2 + "');";
+        String ie = "background:-ms-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
         String ff = "background:-moz-linear-gradient(top,  " + color1 + ",  " + color2 + ");";
         String other = "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
 
@@ -55,6 +56,6 @@ public class GradientProperty extends Property {
 //            return "background:-webkit-gradient(linear, left top, left bottom, from(" + color1 + "), to(" + color2 + "));";
 //        }
 
-        return ie + "\n" + ff + "\n" + other;
+        return ien + "\n" + ie + "\n" + ff + "\n" + other;
     }
 }
