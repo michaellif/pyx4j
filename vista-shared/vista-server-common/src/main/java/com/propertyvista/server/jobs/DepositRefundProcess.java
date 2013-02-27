@@ -41,13 +41,8 @@ public class DepositRefundProcess implements PmcProcess {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
 
-        long total = 0;
-        long failed = 0;
-
         final DepositFacade depositFacade = ServerSideFactory.create(DepositFacade.class);
         for (final Lease lease : Persistence.service().query(criteria)) {
-            ++total;
-
             try {
                 new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                     @Override
@@ -59,12 +54,9 @@ public class DepositRefundProcess implements PmcProcess {
 
                 context.getExecutionMonitor().addProcessedEvent("Deposit");
             } catch (Throwable t) {
-                log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                ++failed;
                 context.getExecutionMonitor().addFailedEvent("Deposit", t);
             }
         }
-        log.info("{} out of {} leases were processed successfully", total - failed, total);
     }
 
     @Override
