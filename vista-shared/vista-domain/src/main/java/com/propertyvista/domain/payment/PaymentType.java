@@ -26,7 +26,7 @@ public enum PaymentType {
 
     Check,
 
-    @Translate("eCheck")
+    @Translate("eCheck (ACH)")
     Echeck,
 
     EFT,

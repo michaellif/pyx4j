@@ -15675,8 +15675,8 @@ msgstr ""
 
 #: com/propertyvista/domain/dashboard/gadgets/payments/PaymentFeesDTO.java:2
 #: com/propertyvista/domain/payment/PaymentType.java:1
-msgid "eCheque"
-msgstr ""
+msgid "eCheck (ACH)"
+msgstr "eCheck "
 
 #. java-format
 #: com/pyx4j/forms/client/ui/folder/BoxFolderItemDecorator.java:141
