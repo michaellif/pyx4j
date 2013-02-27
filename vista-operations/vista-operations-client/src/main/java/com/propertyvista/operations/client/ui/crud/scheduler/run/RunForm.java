@@ -33,9 +33,9 @@ public class RunForm extends OperationsEntityForm<Run> {
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)),
-                18).build());
+                40).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 40).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forDate()), 10).build());

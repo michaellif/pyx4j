@@ -34,9 +34,9 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 
 public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
@@ -216,15 +216,15 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().residentTransactionsServiceURL()), 35).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().sysBatchServiceURL()), 35).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().propertyCode()), 35).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().residentTransactionsServiceURL()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().sysBatchServiceURL()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().propertyCode()), 30).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().username()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().username()), 30).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().credential()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serverName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().database()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().credential()), 30).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serverName()), 30).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().database()), 30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().platform()), 15).build());
 
         return content;

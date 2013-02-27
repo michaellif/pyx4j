@@ -46,8 +46,8 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().triggerType()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 40).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().triggerType()), 40).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().populationType()), 10).build());
         main.setWidget(++row, 0, inject(proto().population(), new PopulationFolder(isEditable())));
