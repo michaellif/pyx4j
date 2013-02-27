@@ -794,6 +794,7 @@ td.DatePickerMonth {
 	border: none;
 	padding: 0;
 	height: 19px;
+	margin-left: 0 !important;
 }
 
 .TriggerPannel .Button:hover {
@@ -1211,6 +1212,14 @@ td.DatePickerMonth {
 .LandingCaption {
 	margin: 1.5em 0;
 	width: 100%;
+}
+
+.LandingCaptionTextEmph {
+	font-weight: bold;
+}
+
+div.LandingButtonHolder, div.gwt-Label {
+	text-align: center !important;
 }
 
 .LandingOrLineSeparator {
