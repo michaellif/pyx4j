@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -60,7 +60,6 @@ public class DepositRefundProcess implements PmcProcess {
                 context.getExecutionMonitor().addProcessedEvent("Deposit");
             } catch (Throwable t) {
                 log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                Persistence.service().rollback();
                 ++failed;
                 context.getExecutionMonitor().addFailedEvent("Deposit", t);
             }
