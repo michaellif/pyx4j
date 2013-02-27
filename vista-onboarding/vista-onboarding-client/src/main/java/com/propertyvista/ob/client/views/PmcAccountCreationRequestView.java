@@ -33,7 +33,12 @@ public interface PmcAccountCreationRequestView extends IView {
 
     void setPresenter(Presenter presenter);
 
+    void setEnabled(boolean isEnabled);
+
+    void setMessage(String message);
+
     PmcAccountCreationRequest getPmcAccountCreationRequest();
 
     void setPmcAccountCreationRequest(PmcAccountCreationRequest request);
+
 }

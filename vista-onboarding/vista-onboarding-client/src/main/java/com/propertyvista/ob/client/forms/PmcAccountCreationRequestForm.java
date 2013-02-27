@@ -74,6 +74,8 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     private final DnsCheckRequestHandler dnsNameCheckRequestHandler;
 
+    private Button submitButton;
+
     public PmcAccountCreationRequestForm(DnsCheckRequestHandler dnsCheckRequestHandler) {
         super(PmcAccountCreationRequest.class);
         this.dnsNameCheckRequestHandler = dnsCheckRequestHandler;
@@ -199,7 +201,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         termsAgreementShortcutPanel.getElement().getStyle().setPaddingRight(20, Unit.PX);
         signUpPanel.add(termsAgreementShortcutPanel);
 
-        final Button submitButton = new Button(i18n.tr("Sign Up"), new Command() {
+        submitButton = new Button(i18n.tr("Sign Up"), new Command() {
             @Override
             public void execute() {
                 revalidate();
@@ -244,6 +246,10 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
 
     public void onSubmit(PmcAccountCreationRequest duplicate) {
 
+    }
+
+    public void setSubmitEnable(boolean isEnabled) {
+        submitButton.setEnabled(isEnabled);
     }
 
     public void onTermsOpenRequest() {

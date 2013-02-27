@@ -22,12 +22,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
@@ -40,6 +42,8 @@ import com.propertyvista.ob.rpc.services.PmcRegistrationService;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PmcAccountCreationRequestActivity extends AbstractActivity implements PmcAccountCreationRequestView.Presenter {
+
+    private static final I18n i18n = I18n.get(PmcAccountCreationCompleteActivity.class);
 
     private final AppPlace place;
 
@@ -64,6 +68,10 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
+        view.setEnabled(CrmSiteBrowserRequirments.isBrowserCompatible());
+        view.setMessage(CrmSiteBrowserRequirments.isBrowserCompatible() ? "" : "<div>" + i18n.tr("Your Browser is Not Supported!") + "</div>" + "<div>"
+                + i18n.tr("Please use the most recent version of Internet&nbsp;Explorer, Google&nbsp;Chrome, Firefox or Apple&nbsp;Safari.") + "</div>");
+
         PmcAccountCreationRequest req = EntityFactory.create(PmcAccountCreationRequest.class);
 
         String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();

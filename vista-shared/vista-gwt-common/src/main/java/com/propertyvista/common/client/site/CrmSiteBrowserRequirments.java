@@ -7,16 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-10
+ * Created on 2013-02-27
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.ob.client.themes;
+package com.propertyvista.common.client.site;
 
-import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.gwt.commons.BrowserType;
 
-public enum OnboardingStyles implements IStyleName {
+public class CrmSiteBrowserRequirments {
 
-    VistaObMainPanel, VistaObView, SignUpText, SignUpTextSection, SignUpSectionCaption, SignUpSectionDetails, OnboardingCaption, OnboardingMessage;
+    public static boolean isBrowserCompatible() {
+        if (BrowserType.isIE()) {
+            return BrowserType.isIENative() && ((VistaSite.isIEVersion9Native() && BrowserType.isIE8Native()) || BrowserType.isIE10());
+        } else if (BrowserType.isFirefox() || BrowserType.isSafari()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

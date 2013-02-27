@@ -38,6 +38,8 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
 
     private PmcAccountCreationRequestView.Presenter presenter;
 
+    private final HTML messageHolder;
+
     public PmcAccountCreationRequestViewImpl() {
 
         form = new PmcAccountCreationRequestForm(new PmcAccountCreationRequestForm.DnsCheckRequestHandler() {
@@ -63,6 +65,9 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         caption.getElement().getStyle().setClear(Clear.BOTH);
         caption.setText(i18n.tr("Sign Up For PropertyVista"));
 
+        messageHolder = new HTML();
+        messageHolder.setStyleName(OnboardingStyles.OnboardingMessage.name());
+
         form.initContent();
         form.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         form.asWidget().getElement().getStyle().setWidth(300, Unit.PX);
@@ -75,6 +80,7 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
         FlowPanel panel = new FlowPanel();
         panel.addStyleName(OnboardingStyles.VistaObView.name());
         panel.add(caption);
+        panel.add(messageHolder);
         panel.add(text);
         panel.add(form);
         initWidget(panel);
@@ -84,6 +90,17 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
     public void setPresenter(PmcAccountCreationRequestView.Presenter presenter) {
         this.presenter = presenter;
         this.form.setVisited(false);
+    }
+
+    @Override
+    public void setEnabled(boolean isEnabled) {
+        form.setEnabled(isEnabled);
+        form.setSubmitEnable(isEnabled);
+    }
+
+    @Override
+    public void setMessage(String message) {
+        messageHolder.setHTML(message);
     }
 
     @Override

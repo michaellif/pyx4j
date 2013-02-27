@@ -114,7 +114,6 @@ public class OnboardingTheme extends Theme {
     }
 
     private void initPmcAccountRequestFormLayoutAndStyles() {
-
         Style style = new Style(".", PmcAccountCreationRequestForm.Styles.PmcUrlFieldNote.name() + " p");
         style.addProperty("padding-bottom", "5px");
         style.addProperty("text-align", "justify");
@@ -159,6 +158,15 @@ public class OnboardingTheme extends Theme {
         style = new Style("." + OnboardingStyles.SignUpSectionDetails.name());
         addStyle(style);
 
+        style = new Style(".", OnboardingStyles.OnboardingMessage.name());
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "#BB0000");
+        style.addProperty("width", "100%");
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "16px");
+        style.addProperty("margin", "1em");
+        style.addProperty("margin-bottom", "3em");
+        addStyle(style);
     }
 
     private void initPmcAccountCreationProgressViewStyles() {

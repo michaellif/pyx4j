@@ -49,6 +49,7 @@ import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
@@ -184,18 +185,8 @@ public class CrmSite extends VistaSite {
         return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
     }
 
-    private boolean isBrowserCompatible() {
-        if (BrowserType.isIE()) {
-            return BrowserType.isIENative() && ((isIEVersion9Native() && BrowserType.isIE8Native()) || BrowserType.isIE10());
-        } else if (BrowserType.isFirefox() || BrowserType.isSafari()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private boolean verifyBrowserCompatibility() {
-        if (!isBrowserCompatible()) {
+        if (!CrmSiteBrowserRequirments.isBrowserCompatible()) {
             hideLoadingIndicator();
             log.warn("Unsupported Browser UserAgent [{}]", BrowserType.getUserAgent());
             Window.alert(i18n.tr("Unsupported Browser")
