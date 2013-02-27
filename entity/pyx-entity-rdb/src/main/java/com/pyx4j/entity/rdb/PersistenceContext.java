@@ -37,8 +37,8 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
@@ -190,7 +190,7 @@ public class PersistenceContext {
 
     public Date getTimeNow() {
         if (timeNow == null) {
-            timeNow = DateUtils.getRoundedNow();
+            timeNow = Persistence.getSystemTime();
         }
         return timeNow;
     }
