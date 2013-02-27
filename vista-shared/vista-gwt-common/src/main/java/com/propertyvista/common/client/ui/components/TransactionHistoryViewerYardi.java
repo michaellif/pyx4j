@@ -49,7 +49,8 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
     }
 
     public TransactionHistoryViewerYardi() {
-        this(NumberFormat.getFormat(i18n.tr("$#,##0.00")));
+        // yardi may have negative charges that are actually credits - we use CR suffix in these cases
+        this(NumberFormat.getFormat(i18n.tr("$#,##0.00;# CR")));
     }
 
     @Override
@@ -104,8 +105,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
                 HTML descriptionHtml = new HTML(htmlEscape(description));
 
                 BigDecimal amount = item.amount().getValue();
-                // we take the absolute value so that both outstanding charges and unapplied payments will look as positive amounts, (unapplied payments are negative)
-                HTML amountHtml = amount != null ? new HTML(htmlEscape(currencyFormat.format(amount.abs()))) : new HTML("&nbsp;");
+                HTML amountHtml = amount != null ? new HTML(htmlEscape(currencyFormat.format(amount))) : new HTML("&nbsp;");
 
                 ++row[0];
                 panel.setWidget(row[0], COL_DATE, dateHtml);
@@ -128,7 +128,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             }
 
             HTML totalDescription = new HTML(htmlEscape(i18n.tr("Total")));
-            HTML totalHtml = new HTML(htmlEscape(currencyFormat.format(totalAmount.abs())));
+            HTML totalHtml = new HTML(htmlEscape(currencyFormat.format(totalAmount)));
 
             ++row[0];
             panel.setWidget(row[0], COL_DESCRIPTION, totalDescription);
