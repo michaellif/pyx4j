@@ -92,12 +92,13 @@ public class TestLifecycle {
     }
 
     public static void endRequest() {
+        Lifecycle.endRpcRequest();
         Lifecycle.endRequest();
     }
 
     public static void tearDown() {
         if (Context.getRequest() != null) {
-            Lifecycle.endRequest();
+            endRequest();
         }
         threadLocalContext.remove();
     }

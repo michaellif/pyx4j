@@ -242,48 +242,73 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
         PersistenceContext persistenceContext = threadSessions.get();
+        PersistenceContext newPersistenceContext;
 
         if ((persistenceContext != null) && (backgroundProcess) && (!persistenceContext.isBackgroundProcessTransaction())) {
             throw new Error("Online Transaction should be closed before starting BackgroundProcess");
         }
+
+        //TODO make it betters
+        boolean tracedSavepoint = false;
 
         switch (transactionScopeOption) {
         case Mandatory:
             if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
                 throw new Error("TransactionRequiredException");
             }
+            tracedSavepoint = true;
             persistenceContext.savepointCreate();
+            newPersistenceContext = persistenceContext;
             break;
         case Required:
             if ((persistenceContext != null) && (persistenceContext.isExplicitTransaction())) {
+                tracedSavepoint = true;
                 persistenceContext.savepointCreate();
+                newPersistenceContext = persistenceContext;
             } else {
-                createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
+                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
             }
             break;
         case RequiresNew:
-            createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
+            newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.ExplicitTransaction, backgroundProcess);
             break;
         case Suppress:
             if ((persistenceContext == null) || (persistenceContext.isExplicitTransaction())) {
-                createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
+                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
             } else {
+                tracedSavepoint = true;
                 persistenceContext.savepointCreate();
+                newPersistenceContext = persistenceContext;
             }
             break;
         default:
             throw new IllegalArgumentException();
         }
+        newPersistenceContext.startTransaction();
+
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} startTransaction scope {} \n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption,
+                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            if (tracedSavepoint) {
+                if (PersistenceContext.traceTransaction) {
+                    log.info("{} setSavepoint SP{}", newPersistenceContext.txId(), newPersistenceContext.savepoints);
+                }
+            }
+        }
     }
 
-    private void createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType, boolean backgroundProcessTransaction) {
-        threadSessions.set(new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType, backgroundProcessTransaction));
+    private PersistenceContext createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType,
+            boolean backgroundProcessTransaction) {
+        PersistenceContext newPersistenceContext = new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType,
+                backgroundProcessTransaction);
+        threadSessions.set(newPersistenceContext);
+        return newPersistenceContext;
     }
 
     @Override
-    public void enableNestedTransactions() {
+    public void enableSavepointAsNestedTransactions() {
         assert getPersistenceContext() != null : "Transaction Context was not started";
-        getPersistenceContext().enableNestedTransactions();
+        getPersistenceContext().enableSavepointAsNestedTransactions();
     }
 
     @Override
@@ -300,23 +325,35 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void endTransaction() {
-        PersistenceContext persistenceContext = threadSessions.get();
-        if (persistenceContext != null) {
-            if (persistenceContext.savepointActive()) {
-                persistenceContext.savepointRelease();
-            } else {
+        PersistenceContext persistenceContext = getPersistenceContext();
+        assert (persistenceContext != null) : "Transaction Context was not started";
+
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} endTransaction", persistenceContext.txId());
+        }
+
+        if (persistenceContext.endTransaction()) {
+            try {
                 try {
-                    try {
-                        persistenceContext.close();
-                    } finally {
-                        threadSessions.remove();
-                    }
+                    persistenceContext.close();
                 } finally {
-                    if (persistenceContext.getSuppressedPersistenceContext() != null) {
-                        threadSessions.set(persistenceContext.getSuppressedPersistenceContext());
-                    }
+                    threadSessions.remove();
+                }
+            } finally {
+                if (persistenceContext.getSuppressedPersistenceContext() != null) {
+                    threadSessions.set(persistenceContext.getSuppressedPersistenceContext());
                 }
             }
+        }
+    }
+
+    @Override
+    public Boolean getTransactionScopeOption() {
+        PersistenceContext persistenceContext = getPersistenceContext();
+        if (persistenceContext != null) {
+            return persistenceContext.isExplicitTransaction();
+        } else {
+            return null;
         }
     }
 
@@ -353,8 +390,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     @Override
     public void commit() {
         PersistenceContext persistenceContext = threadSessions.get();
-        if ((persistenceContext == null) || (!persistenceContext.isExplicitTransaction())) {
+        if (persistenceContext == null) {
             throw new Error("There are no open transaction");
+        }
+        if (!persistenceContext.isExplicitTransaction()) {
+            throw new Error("Current transaction does not require commit()");
         }
         persistenceContext.commit();
     }

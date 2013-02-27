@@ -107,7 +107,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
         // Tx1
         srv.startTransaction();
-        srv.enableNestedTransactions();
+        srv.enableSavepointAsNestedTransactions();
         {
             srv.persist(emp1);
 
@@ -150,7 +150,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
         // Tx1
         srv.startTransaction();
-        srv.enableNestedTransactions();
+        srv.enableSavepointAsNestedTransactions();
         {
             srv.persist(emp1);
             srv.commit();
@@ -191,7 +191,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
         // Tx1
         srv.startTransaction();
-        srv.enableNestedTransactions();
+        srv.enableSavepointAsNestedTransactions();
         {
             srv.persist(emp1);
 

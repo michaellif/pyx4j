@@ -53,9 +53,14 @@ public interface IEntityPersistenceService {
      */
     public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess);
 
-    public void enableNestedTransactions();
+    //TODO VladS& MishaL proper enum and proper name
+    // return  not null when there are transaction.
+    // return false when transation is autoCommit
+    public Boolean getTransactionScopeOption();
 
     public void setAssertTransactionManangementCallOrigin();
+
+    public void enableSavepointAsNestedTransactions();
 
     /**
      * Validate that Transaction is explicitly committed or rolled back and then close it.

@@ -70,7 +70,7 @@ public class Trace {
      */
     public static String getCallOrigin(Class<?> apiEntryClass) {
         StackTraceElement[] ste = new Throwable().getStackTrace();
-        for (int i = ste.length - 1; i > 2; i--) {
+        for (int i = ste.length - 1; i > 1; i--) {
             if (ste[i].getClassName().equals(apiEntryClass.getName())) {
                 return clickableLocation(ste[i + 1]);
             }

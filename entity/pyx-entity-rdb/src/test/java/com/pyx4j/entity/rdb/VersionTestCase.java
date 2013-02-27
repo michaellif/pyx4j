@@ -52,7 +52,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testInitialCreateDraft() {
         String testId = uniqueString();
-        srv.startTransaction();
         setDBTime("2010-01-01");
         ItemA itemA1 = EntityFactory.create(ItemA.class);
         itemA1.testId().setValue(testId);
@@ -202,8 +201,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("ToStringMembers getStringView", " - " + draftName, itemA1r.getStringView());
         }
 
-        srv.startTransaction();
-
         // Retrieval of item before current existed
         {
             setDBTime("2010-01-01");
@@ -249,7 +246,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testInitialPreload() {
         String testId = uniqueString();
-        srv.startTransaction();
         setDBTime("2010-02-01");
 
         // Initial item
@@ -320,7 +316,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testSaveDraft() {
         String testId = uniqueString();
-        srv.startTransaction();
 
         setDBTime("2011-01-01");
 
@@ -374,7 +369,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // finalize
         itemA1f.saveAction().setValue(SaveAction.saveAsFinal);
         srv.persist(itemA1f);
-        srv.commit();
 
         // verify Draft removed
         {
@@ -400,7 +394,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testVersionedReference() {
         String testId = uniqueString();
-        srv.startTransaction();
 
         // Initial item
         ItemA itemA1 = EntityFactory.create(ItemA.class);
@@ -475,7 +468,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testVersionedGraphReference() {
         String testId = uniqueString();
-        srv.startTransaction();
 
         // First Initial item
         setDBTime("2011-01-01");
@@ -555,7 +547,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testInconclusiveVersioningAppoach() {
         String testId = uniqueString();
-        srv.startTransaction();
         setDBTime("2010-01-01");
 
         final String v1Name = "V1-" + uniqueString();
@@ -679,7 +670,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testVersionedGraphWithOneToManySave(TestCaseMethod testCaseMethod) {
         String testId = uniqueString();
-        srv.startTransaction();
 
         OwnedByVerOneToManyParent o = EntityFactory.create(OwnedByVerOneToManyParent.class);
         o.testId().setValue(testId);
@@ -707,7 +697,6 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
     public void testVersionQueryCriteria() {
         String testId = uniqueString();
-        srv.startTransaction();
 
         // Initial item without version
         ItemA itemA0 = EntityFactory.create(ItemA.class);

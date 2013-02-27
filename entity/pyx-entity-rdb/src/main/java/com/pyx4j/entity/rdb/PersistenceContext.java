@@ -42,6 +42,10 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
+    public static final boolean traceOpenSession = false;
+
+    public static final boolean traceTransaction = true;
+
     private static final Logger log = LoggerFactory.getLogger(PersistenceContext.class);
 
     private final PersistenceContext suppressedPersistenceContext;
@@ -60,25 +64,19 @@ public class PersistenceContext {
 
     private Key currentUserKey;
 
-    private int savepoints = 0;
+    int savepoints = 0;
 
     private long transactionStart = -1;
 
     private final Stack<TransactionContext> transactionContexts = new Stack<TransactionContext>();
-
-    private boolean nestedTransactionsEnabled = false;
-
-    private String assertTransactionManangementCallOrigin;
-
-    private String transactionManangementCallOriginSetFrom;
-
-    public static final boolean traceOpenSession = false;
 
     private static Object openSessionLock = new Object();
 
     private static long openSessionCount = 0;
 
     private static Set<PersistenceContext> openSessions = new HashSet<PersistenceContext>();
+
+    private boolean isEnded = false;
 
     public static enum TransactionType {
 
@@ -88,6 +86,31 @@ public class PersistenceContext {
 
         AutoCommit
     }
+
+    private static int txCount = 0;
+
+    private static class TransactionContextOptions {
+
+        private boolean enableSavepointAsNestedTransactions = false;
+
+        private String assertTransactionManangementCallOrigin;
+
+        private String transactionManangementCallOriginSetFrom;
+
+        private final int txId = txCount++;
+
+        TransactionContextOptions() {
+        }
+
+        TransactionContextOptions(TransactionContextOptions options) {
+            this.enableSavepointAsNestedTransactions = options.enableSavepointAsNestedTransactions;
+            this.assertTransactionManangementCallOrigin = options.assertTransactionManangementCallOrigin;
+            this.transactionManangementCallOriginSetFrom = options.transactionManangementCallOriginSetFrom;
+        }
+
+    }
+
+    private final Stack<TransactionContextOptions> options = new Stack<TransactionContextOptions>();
 
     PersistenceContext(PersistenceContext suppressedPersistenceContext, ConnectionProvider connectionProvider, TransactionType transactionType,
             boolean backgroundProcess) {
@@ -103,6 +126,39 @@ public class PersistenceContext {
             this.contextOpenFrom = "n/a";
         }
         transactionContexts.push(new TransactionContext(null, savepoints));
+    }
+
+    void startTransaction() {
+        if (options.isEmpty()) {
+            options.push(new TransactionContextOptions());
+        } else {
+            options.push(new TransactionContextOptions(options()));
+        }
+    }
+
+    boolean endTransaction() {
+        if (isEnded) {
+            throw new Error("Transaction already ended");
+        }
+        try {
+            if (savepointActive()) {
+                savepointRelease();
+                return false;
+            } else {
+                isEnded = true;
+                return true;
+            }
+        } finally {
+            options.pop();
+        }
+    }
+
+    TransactionContextOptions options() {
+        return options.peek();
+    }
+
+    String txId() {
+        return "TX" + options().txId;
     }
 
     PersistenceContext getSuppressedPersistenceContext() {
@@ -180,18 +236,22 @@ public class PersistenceContext {
     public void setAssertTransactionManangementCallOrigin() {
         if (ServerSideConfiguration.isStartedUnderUnitTest() || ServerSideConfiguration.isStartedUnderJvmDebugMode()
                 || ServerSideConfiguration.isStartedUnderEclipse()) {
-            assertTransactionManangementCallOrigin = Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class);
-            if (assertTransactionManangementCallOrigin.startsWith(UnitOfWork.class.getName())) {
-                transactionManangementCallOriginSetFrom = Trace.getCallOrigin(UnitOfWork.class);
+            assertTransactionManangementCallOrigin();
+            options().assertTransactionManangementCallOrigin = Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class);
+            if (options().assertTransactionManangementCallOrigin.startsWith(UnitOfWork.class.getName())) {
+                options().transactionManangementCallOriginSetFrom = Trace.getCallOrigin(UnitOfWork.class);
             }
         }
     }
 
     private void assertTransactionManangementCallOrigin() {
-        if ((assertTransactionManangementCallOrigin != null)
-                && (!assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
-            throw new IllegalAccessError("Transaction Management of this thread can only performed from " + assertTransactionManangementCallOrigin //
-                    + ((transactionManangementCallOriginSetFrom != null) ? (", created from \n" + transactionManangementCallOriginSetFrom + "\n") : ""));
+        if ((options().assertTransactionManangementCallOrigin != null)
+                && (!options().assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
+            throw new IllegalAccessError(
+                    "Transaction Management of this thread can only performed from "
+                            + options().assertTransactionManangementCallOrigin //
+                            + ((options().transactionManangementCallOriginSetFrom != null) ? (", created from \n"
+                                    + options().transactionManangementCallOriginSetFrom + "\n") : ""));
         }
     }
 
@@ -232,26 +292,30 @@ public class PersistenceContext {
         }
     }
 
-    public void enableNestedTransactions() {
+    void enableSavepointAsNestedTransactions() {
+        assertTransactionManangementCallOrigin();
         if (isExplicitTransaction()) {
-            nestedTransactionsEnabled = true;
+            options().enableSavepointAsNestedTransactions = true;
         }
     }
 
     void savepointCreate() {
         assertTransactionManangementCallOrigin();
         savepoints++;
-        if (nestedTransactionsEnabled) {
+        if (options().enableSavepointAsNestedTransactions) {
             transactionContexts.push(new TransactionContext(getConnection(), savepoints));
         }
     }
 
-    void savepointRelease() {
+    private void savepointRelease() {
         assert (savepoints > 0) : " Inconsistent Transaction end";
         savepoints--;
-        if (nestedTransactionsEnabled) {
+        if (options().enableSavepointAsNestedTransactions) {
             TransactionContext tc = transactionContexts.pop();
             tc.merge(transactionContexts.peek());
+            if (PersistenceContext.traceTransaction) {
+                log.info("{} releaseSavepoint {}", txId(), tc.savepointName);
+            }
             tc.releaseSavepoint(connection, getDialect());
         }
     }
@@ -261,7 +325,7 @@ public class PersistenceContext {
     }
 
     private boolean isDirectTransactionControl() {
-        return !nestedTransactionsEnabled || !savepointActive();
+        return !options().enableSavepointAsNestedTransactions || !savepointActive();
     }
 
     void addTransactionCompensationHandler(CompensationHandler handler) {
@@ -269,6 +333,9 @@ public class PersistenceContext {
     }
 
     void commit() {
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} commit\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+        }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().commit(connection, getDialect());
         if (isDirectTransactionControl() && connection != null) {
@@ -282,6 +349,9 @@ public class PersistenceContext {
     }
 
     void rollback() {
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} rollback\n\tfrom:{}\t", txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+        }
         assertTransactionManangementCallOrigin();
         transactionContexts.peek().rollback(connection);
         if (isDirectTransactionControl() && connection != null) {
@@ -328,6 +398,12 @@ public class PersistenceContext {
                 }
             }
             connection = null;
+        }
+        if (!isEnded) {
+            if (PersistenceContext.traceTransaction) {
+                log.info("{} terminate", txId());
+            }
+            throw new Error("Transaction was not ended");
         }
     }
 

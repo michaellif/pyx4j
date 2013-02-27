@@ -100,11 +100,16 @@ public abstract class DatastoreTestBase extends TestCase {
             } catch (Throwable ignore) {
             }
             try {
-                srv.endTransaction();
+                try {
+                    if (srv.getTransactionScopeOption() != null) {
+                        srv.endTransaction();
+                    }
+                } finally {
+                    srv.removeThreadLocale();
+                }
             } finally {
-                srv.removeThreadLocale();
+                persistenceEnvironment.teardownDatastore(srv);
             }
-            persistenceEnvironment.teardownDatastore(srv);
         }
         log.debug("ended test {}.{}", this.getClass().getName(), this.getName());
     }

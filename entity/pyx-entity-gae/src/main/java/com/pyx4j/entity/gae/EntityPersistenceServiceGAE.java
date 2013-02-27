@@ -231,12 +231,18 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
+    public Boolean getTransactionScopeOption() {
+        // TODO
+        return null;
+    }
+
+    @Override
     public void startBackgroundProcessTransaction() {
         //TODO
     }
 
     @Override
-    public void enableNestedTransactions() {
+    public void enableSavepointAsNestedTransactions() {
         // TODO
     }
 

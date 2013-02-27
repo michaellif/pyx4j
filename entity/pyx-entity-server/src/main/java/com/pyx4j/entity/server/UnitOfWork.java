@@ -59,11 +59,8 @@ public class UnitOfWork {
         boolean success = false;
         try {
             Persistence.service().startTransaction(transactionScopeOption, backgroundProcessTransaction);
-            //TODO Fix this.
-            if (transactionScopeOption == TransactionScopeOption.RequiresNew) {
-                // Persistence.service().setAssertTransactionManangementCallOrigin();
-                // Persistence.service().enableNestedTransactions();
-            }
+            Persistence.service().setAssertTransactionManangementCallOrigin();
+            Persistence.service().enableSavepointAsNestedTransactions();
 
             try {
                 R rv = task.execute();

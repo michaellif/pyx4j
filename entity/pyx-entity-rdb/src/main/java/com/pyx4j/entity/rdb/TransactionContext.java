@@ -37,7 +37,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 
 class TransactionContext {
 
-    private String savepointName;
+    String savepointName;
 
     private Savepoint savepoint;
 
@@ -155,7 +155,7 @@ class TransactionContext {
                 try {
                     connection.releaseSavepoint(savepoint);
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    //throw new RuntimeException(e);
                 } finally {
                     savepoint = null;
                 }
