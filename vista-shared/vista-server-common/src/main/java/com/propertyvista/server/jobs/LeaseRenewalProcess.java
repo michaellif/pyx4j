@@ -68,7 +68,6 @@ public class LeaseRenewalProcess implements PmcProcess {
                     context.getExecutionMonitor().addProcessedEvent("Lease");
                 } catch (Throwable error) {
                     log.error("failed to renew lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
-                    Persistence.service().rollback();
                     ++failed;
                     context.getExecutionMonitor().addFailedEvent("Lease", error);
                 }

@@ -68,7 +68,6 @@ public class LeaseCompletionProcess implements PmcProcess {
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             } catch (Throwable t) {
                 log.error("failed to complete lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                Persistence.service().rollback();
                 ++failed;
                 context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
