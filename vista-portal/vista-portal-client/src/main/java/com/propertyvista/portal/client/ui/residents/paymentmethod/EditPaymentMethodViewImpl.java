@@ -33,7 +33,7 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
 
             @Override
             public Collection<PaymentType> defaultPaymentTypes() {
-                return PortalPaymentTypesUtil.avalableInProfile();
+                return PortalPaymentTypesUtil.getAllowedPaymentTypes();
             }
 
             @Override
