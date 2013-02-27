@@ -154,24 +154,26 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        Persistence.service().startBackgroundProcessTransaction();
-        Persistence.service().enableNestedTransactions();
-        SysDateManager.setSysDate("01-Jan-2000");
-
         NamespaceManager.setNamespace("t" + System.currentTimeMillis());
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.testNamespace(NamespaceManager.getNamespace());
         TestLifecycle.beginRequest();
+
+        Persistence.service().endTransaction();
+        Persistence.service().startBackgroundProcessTransaction();
+        Persistence.service().enableSavepointAsNestedTransactions();
+        SysDateManager.setSysDate("01-Jan-2000");
     }
 
     @Override
     protected void tearDown() throws Exception {
-        Persistence.service().commit();
-        Persistence.service().endTransaction();
-
-        TestLifecycle.tearDown();
-        super.tearDown();
+        try {
+            Persistence.service().commit();
+        } finally {
+            TestLifecycle.tearDown();
+            super.tearDown();
+        }
     }
 
     protected void preloadData() {
@@ -798,7 +800,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                         PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                         pmcProcess.executePmcJob(pmcContext);
                         pmcProcess.complete(sharedContext);
-                        Persistence.service().commit();
                     }
                 } finally {
                     Persistence.service().endTransaction();
