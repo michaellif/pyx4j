@@ -127,6 +127,7 @@
 	color: #666666;
 	font-weight: bold;
 	display: inline;
+	white-space: nowrap;
 }
 
 .WidgetDecorator-readOnly .WidgetDecoratorLabel {
