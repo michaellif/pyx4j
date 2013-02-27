@@ -88,16 +88,19 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
                 tenantInLease.leaseTermV().holder().lease().billingAccount(), VistaApplication.resident);
-        Validate.isTrue(allowedPaymentTypes.contains(entity.type().getValue()));
 
-        entity.isOneTimePayment().setValue(Boolean.FALSE);
+        // save just allowed methods here:
+        if (allowedPaymentTypes.contains(entity.type().getValue())) {
+            entity.isOneTimePayment().setValue(Boolean.FALSE);
 
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
+            ServerSideFactory.create(PaymentMethodFacade.class)
+                    .persistLeasePaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
 
-        if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseParticipant().preauthorizedPayment().isNull()) {
-            if (!tenantInLease.leaseParticipant().preauthorizedPayment().equals(entity)) {
-                tenantInLease.leaseParticipant().preauthorizedPayment().set(entity);
-                Persistence.service().merge(tenantInLease.leaseParticipant());
+            if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseParticipant().preauthorizedPayment().isNull()) {
+                if (!tenantInLease.leaseParticipant().preauthorizedPayment().equals(entity)) {
+                    tenantInLease.leaseParticipant().preauthorizedPayment().set(entity);
+                    Persistence.service().merge(tenantInLease.leaseParticipant());
+                }
             }
         }
     }

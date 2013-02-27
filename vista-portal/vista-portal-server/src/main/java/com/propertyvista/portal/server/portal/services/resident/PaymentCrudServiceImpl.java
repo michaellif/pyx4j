@@ -102,34 +102,32 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
                 VistaApplication.resident);
+        Validate.isTrue(allowedPaymentTypes.contains(dto.paymentMethod().type().getValue()));
 
-        // save just allowed methods here:
-        if (allowedPaymentTypes.contains(dto.paymentMethod().type().getValue())) {
-            // Do not change profile methods
-            if (entity.paymentMethod().id().isNull()) {
-                if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-                    entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
-                } else {
-                    entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
-                }
-
-                // some corrections for particular method types:
-                if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                    entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
-                }
+        // Do not change profile methods
+        if (entity.paymentMethod().id().isNull()) {
+            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+            } else {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
             }
 
-            ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
-            Persistence.service().commit();
-
-            try {
-                ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
-            } catch (PaymentException e) {
-                throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
+            // some corrections for particular method types:
+            if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
             }
-
-            Persistence.service().commit();
         }
+
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        Persistence.service().commit();
+
+        try {
+            ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
+        } catch (PaymentException e) {
+            throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
+        }
+
+        Persistence.service().commit();
     }
 
     @Override
