@@ -56,6 +56,8 @@ public class Lifecycle {
 
     private static String END_SESSION_ATR = "pyx.endSession";
 
+    private static String END_REQUEST_ATR = "pyx.endRpcRequest";
+
     public static void beginRequest(HttpServletRequest httprequest, HttpServletResponse httpresponse) {
         //long start = System.nanoTime();
         Context.beginRequest(httprequest, httpresponse);
@@ -107,6 +109,9 @@ public class Lifecycle {
 
     public static void endRequest() {
         try {
+            if (Context.getRequest().getAttribute(END_REQUEST_ATR) == null) {
+                endRpcRequest();
+            }
             HttpSession session = Context.getSession();
             if (session != null) {
                 Visit visit = Context.getVisit();
@@ -122,7 +127,7 @@ public class Lifecycle {
             }
             HttpServletRequest request = Context.getRequest();
             if ((request != null) && (request.getAttribute(END_SESSION_ATR) != null)) {
-                // Remove Session Cookie 
+                // Remove Session Cookie
                 Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
                 c.setPath("/");
                 c.setMaxAge(0);
@@ -144,16 +149,20 @@ public class Lifecycle {
     }
 
     public static void endRpcRequest() {
-        if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
-            // Remove Session Cookie 
-            Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
-            c.setPath("/");
-            c.setMaxAge(0);
-            Context.getResponse().addCookie(c);
-        }
+        try {
+            if (Context.getRequest().getAttribute(END_SESSION_ATR) != null) {
+                // Remove Session Cookie
+                Cookie c = new Cookie(ServerSideConfiguration.instance().getSessionCookieName(), "");
+                c.setPath("/");
+                c.setMaxAge(0);
+                Context.getResponse().addCookie(c);
+            }
 
-        for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
-            lifecycleListener.onRequestEnd();
+            for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
+                lifecycleListener.onRequestEnd();
+            }
+        } finally {
+            Context.getRequest().setAttribute(END_REQUEST_ATR, Boolean.TRUE);
         }
     }
 
@@ -184,7 +193,7 @@ public class Lifecycle {
             // The same user. No need to create new session, consider that behaviors are updated
         } else {
             HttpSession session = Context.getSession();
-            // Preserve some administration and debug session attributes 
+            // Preserve some administration and debug session attributes
             Map<String, Object> keepAttributes = new HashMap<String, Object>();
             if (session != null) {
                 for (Enumeration<String> en = session.getAttributeNames(); en.hasMoreElements();) {

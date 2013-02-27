@@ -31,7 +31,9 @@ public class PersistenceContextLifecycleListener implements LifecycleListener {
 
     @Override
     public void onRequestEnd() {
-        Persistence.service().endTransaction();
+        if (Persistence.service().getTransactionScopeOption() != null) {
+            Persistence.service().endTransaction();
+        }
     }
 
     @Override
