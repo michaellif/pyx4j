@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
@@ -35,11 +34,6 @@ public class BillingFacadeImpl implements BillingFacade {
     @Override
     public Bill runBillingPreview(Lease leaseId) {
         return BillingManager.runBilling(leaseId, true);
-    }
-
-    @Override
-    public void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
-        BillingManager.runBilling(billingCycle, executionMonitor);
     }
 
     @Override

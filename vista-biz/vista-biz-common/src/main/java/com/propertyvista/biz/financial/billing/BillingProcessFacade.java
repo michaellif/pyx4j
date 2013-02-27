@@ -16,12 +16,14 @@ package com.propertyvista.biz.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public interface BillingProcessFacade {
 
     void initializeFutureBillingCycles(ExecutionMonitor executionMonitor);
 
-    // Processes
     void runBilling(LogicalDate date, ExecutionMonitor executionMonitor);
+
+    void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor);
 
 }

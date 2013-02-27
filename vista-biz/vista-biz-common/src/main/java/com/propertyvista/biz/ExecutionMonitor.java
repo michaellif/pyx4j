@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -292,5 +293,11 @@ public class ExecutionMonitor {
         executionReport.processed().setValue(getProcessed());
         executionReport.failed().setValue(getFailed());
         executionReport.erred().setValue(getErred());
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("processedCount", processedCount).append("failedCount", failedCount).append("erredCount", erredCount)
+                .toString();
     }
 }

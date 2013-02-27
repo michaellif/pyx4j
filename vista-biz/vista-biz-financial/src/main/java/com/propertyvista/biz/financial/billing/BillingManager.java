@@ -21,28 +21,22 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Filter;
-import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
@@ -87,28 +81,7 @@ public class BillingManager {
         }
     }
 
-    static void runBilling(final BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
-        EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().building(), billingCycle.building()));
-        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
-        leaseCriteria.add(PropertyCriterion.in(leaseCriteria.proto().status(), Lease.Status.Active));
-
-        ICursorIterator<Lease> leaseIterator = Persistence.service().query(null, leaseCriteria, AttachLevel.Attached);
-        FilterIterator<Lease> filteredLeaseIterator = new FilterIterator<Lease>(leaseIterator, new Filter<Lease>() {
-            @Override
-            public boolean accept(Lease lease) {
-                //Don't run bill on cycle that out of boundaries of lease end
-                if (billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) > 0) {
-                    return false;
-                } else {
-                    return validateBillingRunPreconditions(billingCycle, lease, false);
-                }
-            }
-        });
-        runBilling(billingCycle, filteredLeaseIterator, executionMonitor);
-    }
-
-    private static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
+    static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         BillingCycle nextCycle = getNextBillingCycle(lease);
         if (!nextCycle.equals(billingCycle)) {
@@ -164,31 +137,7 @@ public class BillingManager {
         return true;
     }
 
-    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, ExecutionMonitor executionMonitor) {
-        Persistence.service().commit();
-        try {
-            while (leasesIterator.hasNext()) {
-                BillCreationResult result = new BillCreationResult(produceBill(billingCycle, leasesIterator.next(), false));
-                appendStats(executionMonitor, result);
-                Persistence.service().commit();
-            }
-        } catch (Throwable e) {
-            Persistence.service().rollback();
-            log.error("Bill run error", e);
-            appendStats(executionMonitor, new BillCreationResult(i18n.tr("Bill run error")));
-            Persistence.service().commit();
-        }
-    }
-
-    private static void appendStats(ExecutionMonitor executionMonitor, BillCreationResult result) {
-        if (result.getStatus() == BillCreationResult.Status.created) {
-            executionMonitor.addProcessedEvent("Bill", result.getTotalDueAmount(), null);
-        } else {
-            executionMonitor.addFailedEvent("Bill", "Bill failed");
-        }
-    }
-
-    private static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
+    static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
         BillProducer producer = new BillProducer(billingCycle, lease, preview);
         return producer.produceBill();
     }

@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -101,6 +104,8 @@ import com.propertyvista.test.preloader.TaxesDataModel;
 import com.propertyvista.test.preloader.TenantDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
+
+    private static final Logger log = LoggerFactory.getLogger(FinancialTestBase.class);
 
     public interface FunctionalTests {
     }
@@ -793,12 +798,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             public void execute() throws Exception {
 
                 try {
-                    Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
                     Date runDate = SysDateManager.getSysDate();
+                    Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
+                    SysDateManager.setSysDate(runDate);
                     PmcProcessContext sharedContext = new PmcProcessContext(runDate);
                     if (pmcProcess.start(sharedContext)) {
                         PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                         pmcProcess.executePmcJob(pmcContext);
+                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(),
+                                pmcProcess.getClass().getSimpleName(), pmcContext.getExecutionMonitor());
                         pmcProcess.complete(sharedContext);
                     }
                 } finally {
