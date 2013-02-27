@@ -32,6 +32,7 @@ import java.util.HashMap;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
@@ -154,6 +155,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
+        Persistence.service().enableNestedTransactions();
         SysDateManager.setSysDate("01-Jan-2000");
 
         NamespaceManager.setNamespace("t" + System.currentTimeMillis());
@@ -787,14 +789,21 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         taskSchedule.put(entry, new Task() {
             @Override
             public void execute() throws Exception {
-                Date runDate = SysDateManager.getSysDate();
-                PmcProcessContext sharedContext = new PmcProcessContext(runDate);
-                if (pmcProcess.start(sharedContext)) {
-                    PmcProcessContext pmcContext = new PmcProcessContext(runDate);
-                    pmcProcess.executePmcJob(pmcContext);
-                    Persistence.service().commit();
-                    pmcProcess.complete(sharedContext);
+
+                try {
+                    Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
+                    Date runDate = SysDateManager.getSysDate();
+                    PmcProcessContext sharedContext = new PmcProcessContext(runDate);
+                    if (pmcProcess.start(sharedContext)) {
+                        PmcProcessContext pmcContext = new PmcProcessContext(runDate);
+                        pmcProcess.executePmcJob(pmcContext);
+                        pmcProcess.complete(sharedContext);
+                        Persistence.service().commit();
+                    }
+                } finally {
+                    Persistence.service().endTransaction();
                 }
+
             }
         });
     }
