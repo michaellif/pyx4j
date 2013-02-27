@@ -178,7 +178,7 @@ public class YardiProcessorUtils {
         case Check:
             return YardiPaymentType.Check.name();
         case Echeck:
-            return YardiPaymentType.ACH.name();
+            return YardiPaymentType.Other.name();
         case EFT:
             return YardiPaymentType.ACH.name();
         case CreditCard:
