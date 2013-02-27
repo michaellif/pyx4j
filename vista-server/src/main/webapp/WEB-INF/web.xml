@@ -269,6 +269,23 @@
         <url-pattern>/operations/db-reset</url-pattern>
     </servlet-mapping>
 
+<!--
+
+http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinvest.com/voyager6008sp17/webservices/itfresidenttransactions20.asmx
+
+-->
+
+<!--
+    <servlet>
+        <servlet-name>DevDumpProxyServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.dev.DevDumpProxyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DevDumpProxyServlet</servlet-name>
+        <url-pattern>/o/wsp/*</url-pattern>
+    </servlet-mapping>
+-->
     <servlet>
         <servlet-name>CardServiceSimulationServlet</servlet-name>
         <servlet-class>com.propertyvista.operations.server.services.sim.CardServiceSimulationServlet</servlet-class>
