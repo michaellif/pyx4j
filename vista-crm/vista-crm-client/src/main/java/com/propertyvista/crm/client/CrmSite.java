@@ -186,7 +186,7 @@ public class CrmSite extends VistaSite {
 
     private boolean isBrowserCompatible() {
         if (BrowserType.isIE()) {
-            return BrowserType.isIENative() && isIEVersion9Native() && (BrowserType.isIE8Native());
+            return BrowserType.isIENative() && ((isIEVersion9Native() && BrowserType.isIE8Native()) || BrowserType.isIE10());
         } else if (BrowserType.isFirefox() || BrowserType.isSafari()) {
             return true;
         } else {
