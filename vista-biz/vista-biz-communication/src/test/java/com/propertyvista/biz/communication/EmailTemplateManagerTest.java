@@ -144,8 +144,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     }
 
     @Override
-    public void tearDown() {
-        TestLifecycle.tearDown();
+    public void tearDown() throws Exception {
+        try {
+            Persistence.service().commit();
+        } finally {
+            TestLifecycle.tearDown();
+            super.tearDown();
+        }
     }
 
     public void testTemplates() {
