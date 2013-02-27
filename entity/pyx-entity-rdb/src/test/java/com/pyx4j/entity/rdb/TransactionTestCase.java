@@ -28,6 +28,7 @@ import junit.framework.Assert;
 
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -57,6 +58,47 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         criteria.eq(criteria.proto().firstName(), id);
         List<Employee> emps = srv.query(criteria);
         Assert.assertEquals(id + " Exists, result set size", 0, emps.size());
+    }
+
+    private void assertTransactionNotPresent() {
+        try {
+            srv.getTransactionSystemTime();
+        } catch (Throwable ok) {
+            return;
+        }
+        Assert.fail("Should throw exception since there should be no transaction context");
+
+    }
+
+    public void testNestedTransactionStack() {
+        final String setId = uniqueString();
+        srv.persist(createEntity(setId, "0.0"));
+        srv.endTransaction();
+
+        assertTransactionNotPresent();
+        srv.startTransaction(TransactionScopeOption.Suppress, false);
+        {
+            srv.persist(createEntity(setId, "1.0"));
+
+            srv.startTransaction(TransactionScopeOption.RequiresNew, false);
+            {
+                // This will lock DB
+                //srv.persist(createEntity(setId, "2.0"));
+                srv.count(EntityQueryCriteria.create(Employee.class));
+
+                srv.startTransaction(TransactionScopeOption.Suppress, false);
+                {
+                    srv.persist(createEntity(setId, "3.0"));
+                }
+                srv.endTransaction();
+
+                srv.commit();
+            }
+            srv.endTransaction();
+
+        }
+        srv.endTransaction();
+        assertTransactionNotPresent();
     }
 
     public void testNestedTransactionRollback() {

@@ -54,7 +54,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
 
     @Override
     public int maxPoolSize() {
-        return 2;
+        return 5;
     }
 
     @Override

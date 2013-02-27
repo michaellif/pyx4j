@@ -233,7 +233,9 @@ public class PersistenceContext {
     }
 
     public void enableNestedTransactions() {
-        nestedTransactionsEnabled = true;
+        if (isExplicitTransaction()) {
+            nestedTransactionsEnabled = true;
+        }
     }
 
     void savepointCreate() {
