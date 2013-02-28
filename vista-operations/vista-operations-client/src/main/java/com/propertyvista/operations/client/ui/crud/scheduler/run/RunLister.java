@@ -26,10 +26,13 @@ import com.propertyvista.operations.domain.scheduler.Run;
 
 public class RunLister extends ListerBase<Run> {
 
-    private static List<ColumnDescriptor> INLINE_VIEW_COLUMN_DESCRIPTORS;
-    static {
+    private static List<ColumnDescriptor> INLINE_VIEW_COLUMN_DESCRIPTORS = createInlineViewColumnDescriptors();
+
+    private static List<ColumnDescriptor> VIEW_COLUMN_DESCRIPTORS = createViewColumnDescriptors();
+
+    static List<ColumnDescriptor> createInlineViewColumnDescriptors() {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
-        INLINE_VIEW_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+        List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.status()).build(),
                 new MemberColumnDescriptor.Builder(proto.started()).build(),
                 new MemberColumnDescriptor.Builder(proto.forDate()).build(),
@@ -42,25 +45,18 @@ public class RunLister extends ListerBase<Run> {
                 new MemberColumnDescriptor.Builder(proto.created()).build(),
                 new MemberColumnDescriptor.Builder(proto.updated()).build()
         );//@formatter:on
+        return c;
     }
 
-    private static List<ColumnDescriptor> VIEW_COLUMN_DESCRIPTORS;
-    static {
+    static List<ColumnDescriptor> createViewColumnDescriptors() {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
-        VIEW_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.trigger().name()).title("Trigger").build(),
-                new MemberColumnDescriptor.Builder(proto.status()).build(),
-                new MemberColumnDescriptor.Builder(proto.started()).build(),
-                new MemberColumnDescriptor.Builder(proto.forDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().total()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().processed()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().failed()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().erred()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().averageDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto.executionReport().totalDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto.created()).build(),
-                new MemberColumnDescriptor.Builder(proto.updated()).build()
+        List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.trigger().name()).title("Trigger Name").build(),
+                new MemberColumnDescriptor.Builder(proto.trigger().triggerType()).build(),
+                new MemberColumnDescriptor.Builder(proto.trigger()).searchableOnly().build()
         );//@formatter:on
+        c.addAll(createInlineViewColumnDescriptors());
+        return c;
     }
 
     public RunLister(boolean isInlineMode) {
