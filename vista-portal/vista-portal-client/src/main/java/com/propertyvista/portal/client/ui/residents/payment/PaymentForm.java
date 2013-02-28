@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,6 +32,8 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -255,6 +258,20 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
         // TODO : this is the HACK - check CComponent.setVisible implementation!!!
         paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
+    }
+
+    @Override
+    public void addValidations() {
+        get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+            @Override
+            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                if (value != null) {
+                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null
+                            : new ValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
+                }
+                return null;
+            }
+        });
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
