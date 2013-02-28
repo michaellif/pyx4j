@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -38,6 +39,8 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.CfcApiAdapterFacade.ReinstatementType;
+import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
+import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
@@ -75,15 +78,32 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     @Override
     public TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId) {
-        if (coverage.numberOfPreviousClaims().getValue() != PreviousClaims.MoreThanTwo) {
-            InsuranceTenantSureClient client = initializeClient(tenantId, coverage.tenantName().getValue(), coverage.tenantPhone().getValue());
-            TenantSureQuoteDTO quote = ServerSideFactory.create(CfcApiAdapterFacade.class).getQuote(client, coverage);
-            return quote;
-        } else {
-            TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
-            quote.specialQuote().setValue(i18n.tr("Please call TenantSure {0} to get your quote.", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
-            return quote;
+        InsuranceTenantSureClient client = initializeClient(tenantId, coverage.tenantName().getValue(), coverage.tenantPhone().getValue());
+        boolean isTooManyPrevClaims = false;
+
+        TenantSureQuoteDTO quote = null;
+
+        try {
+            if (coverage.numberOfPreviousClaims().getValue() != PreviousClaims.MoreThanTwo) {
+                quote = ServerSideFactory.create(CfcApiAdapterFacade.class).getQuote(client, coverage);
+            } else {
+                isTooManyPrevClaims = true;
+            }
+        } catch (TooManyPreviousClaimsException e) {
+            isTooManyPrevClaims = true;
+        } catch (CfcApiException e) {
+            log.error("failed to get a quote due to CFCAPI error", e);
+            throw new UserRuntimeException(i18n.tr("Failed to get a quote, please try again."));
         }
+        if (isTooManyPrevClaims) {
+            quote = EntityFactory.create(TenantSureQuoteDTO.class);
+            quote.specialQuote().setValue(i18n.tr("Please call TenantSure {0} to get your quote.", TenantSureConstants.TENANTSURE_PHONE_NUMBER));
+        }
+        if (quote == null) {
+            throw new Error("Failed to get a quote for impossible reason");
+        }
+        return quote;
+
     }
 
     /**
@@ -468,6 +488,13 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             emails.add(email);
         }
         ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
+    }
+
+    @Override
+    public String sendQuote(Tenant tenantId, String quoteId) {
+        List<String> emails = Arrays.asList(getTenantsEmail(tenantId));
+        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(quoteId, emails);
+        return emails.get(0);
     }
 
     private String getTenantsEmail(Tenant tenantId) {

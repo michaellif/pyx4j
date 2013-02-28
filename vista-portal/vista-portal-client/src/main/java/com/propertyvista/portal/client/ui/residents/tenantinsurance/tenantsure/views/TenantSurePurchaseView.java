@@ -40,6 +40,8 @@ public interface TenantSurePurchaseView extends IsWidget {
 
         void cancel();
 
+        void sendQuoteDetails(String value);
+
     }
 
     void setPresenter(Presenter presenter);
@@ -59,6 +61,8 @@ public interface TenantSurePurchaseView extends IsWidget {
     void populatePaymentProcessingError(String errorReason);
 
     void populatePaymentProcessingSuccess();
+
+    void populateSendQuoteDetailSuccess(String email);
 
     void setBillingAddress(AddressStructured billingAddress);
 

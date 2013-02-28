@@ -134,6 +134,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
+        // TODO check out the quote from visit
 
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
 
@@ -157,6 +158,13 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     @Override
     public void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
+    }
+    
+    @Override
+    public void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId) {
+        // TODO add check that this quoteId belongs to the Tenant in content
+        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(TenantAppContext.getCurrentUserTenant().<Tenant>createIdentityStub(), quoteId);        
+        asyncCallback.onSuccess(email);
     }
 
     private String getDefaultPhone(Person person) {
@@ -182,4 +190,6 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         }
         return filteredValues;
     }
+
+   
 }

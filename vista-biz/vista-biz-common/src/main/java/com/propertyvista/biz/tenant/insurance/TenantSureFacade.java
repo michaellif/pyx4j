@@ -70,6 +70,10 @@ public interface TenantSureFacade {
 
     InsurancePaymentMethod updatePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
+    /** Sends a bound insurance */
     void sendDocumentation(Tenant tenantId, String email);
+
+    /** Sends a quote */
+    String sendQuote(Tenant tenantId, String quoteId);
 
 }

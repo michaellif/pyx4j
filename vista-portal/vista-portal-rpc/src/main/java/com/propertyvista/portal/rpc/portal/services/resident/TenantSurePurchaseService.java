@@ -34,4 +34,6 @@ public interface TenantSurePurchaseService extends IService {
             InsurancePaymentMethod paymentMethod);
 
     void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback);
+
+    void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId);
 }

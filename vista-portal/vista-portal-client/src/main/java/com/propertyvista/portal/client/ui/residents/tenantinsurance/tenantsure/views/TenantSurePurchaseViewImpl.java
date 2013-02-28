@@ -23,6 +23,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -87,6 +88,8 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     private final StepDriver stepDriver;
 
     private TenantSurePersonalDisclaimerHolderDTO personalDiscalmerHolder;
+
+    private Button quoteSend;
 
     public TenantSurePurchaseViewImpl() {
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
@@ -160,15 +163,17 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     @Override
     public void setQuote(TenantSureQuoteDTO quote) {
         retrievingQuoteMessage.setVisible(false);
+
         quoteViewer.setValue(quote);
         paymentStepQuoteViewer.setValue(quote);
 
         quoteViewer.setVisible(quote != null);
 
         boolean canAcceptQuote = quote != null && !quote.isNull() && quote.specialQuote().isNull();
-        if (acceptQuoteButton != null) {
+        if (acceptQuoteButton != null) { // this is hack and it's needed there
             acceptQuoteButton.setEnabled(canAcceptQuote);
         }
+        quoteSend.setVisible(canAcceptQuote);
 
     }
 
@@ -214,7 +219,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     @Override
     public void waitForPaymentProcessing() {
-
         processingPaymentMessage.setVisible(true);
 
         paymentProcessingErrorMessage.setVisible(false);
@@ -224,6 +228,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     @Override
     public void populatePaymentProcessingSuccess() {
         paymentSucceededCallback.onSuccess(null);
+    }
+
+    @Override
+    public void populateSendQuoteDetailSuccess(String email) {
+        MessageDialog.info(i18n.tr("Your quote documentation was sent to {0}", email));
     }
 
     private Step makePersonalDisclaimerStep() {
@@ -270,6 +279,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private Step makeQuotationRequestStep() {
         quotationRequestStepPanel = new FormFlexPanel();
+        quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
         int qrpRow = -1;
         quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Coverage"));
         quoteRequestForm = new TenantSureQuotationRequestForm();
@@ -285,6 +295,16 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         pleaseFillOutTheFormMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote from Highcourt Partners Limited"));
         quoteSection.add(pleaseFillOutTheFormMessage);
+
+        quoteSend = new Button(i18n.tr("Email Quote Details"), new Command() {
+            @Override
+            public void execute() {
+                presenter.sendQuoteDetails(quoteViewer.getValue().quoteId().getValue());
+            }
+        });
+        SimplePanel quoteSendHolder = new SimplePanel(quoteSend);
+        quoteSendHolder.setStyleName(TenantSureTheme.StyleName.TSSendDocs.name());
+        quoteSection.add(quoteSendHolder);
 
         quoteViewer = new TenantSureQuoteViewer(true);
         quoteViewer.initContent();
@@ -439,7 +459,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         label.setText(i18n.tr("Payment Processed Successfuly: an email with your insurance policy has been sent to your email."));
         finishStepPanel.add(label);
 
-        Anchor returnToInsuranceManagement = new Anchor(i18n.tr("return to Tenant Insurance"), new Command() {
+        Anchor returnToInsuranceManagement = new Anchor(i18n.tr("Return to Tenant Insurance"), new Command() {
             @Override
             public void execute() {
                 presenter.onPaymentProcessingSuccessAccepted();

@@ -139,6 +139,28 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     }
 
     @Override
+    public void sendQuoteDetails(String quoteId) {
+        service.sendQuoteDetails(new DefaultAsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+
+            @Override
+            public void onSuccess(String email) {
+                view.populateSendQuoteDetailSuccess(email);
+            }
+
+        }, quoteId);
+
+    }
+
+    @Override
     public void cancel() {
         History.back();
     }

@@ -50,6 +50,8 @@ import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCoverageRequestAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
+import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
+import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
@@ -138,7 +140,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) {
+    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws CfcApiException {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -147,8 +149,13 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
         TenantSureCoverageRequestAdapter.fillOptionQuote(client, coverageRequest, optionQuote);
         Result quoteResponse = api.createQuote(optionQuote).getOptionQuoteResult();
-        if (!isSuccessfulCode(quoteResponse.getCode())) {
-            throw new Error(quoteResponse.getCode());
+        if (CfcApiException.isCfcErrorCodeLine(quoteResponse.getCode())) {
+            String error = quoteResponse.getCode();
+            if (TooManyPreviousClaimsException.isTooManyPreviousClaimsMessage(error)) {
+                throw new TooManyPreviousClaimsException(error);
+            } else {
+                throw new CfcApiException(quoteResponse.getCode());
+            }
         }
 
         TenantSureQuoteDTO tenantSureQuote = EntityFactory.create(TenantSureQuoteDTO.class);
@@ -213,7 +220,8 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
         ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
         toEmailArray.getString().addAll(emails);
-        cfcApiSoap.requestDocument(quoteId, sessionId, toEmailArray, new ObjectFactory().createArrayOfString());
+        Result r = cfcApiSoap.requestDocument(quoteId, sessionId, toEmailArray, new ObjectFactory().createArrayOfString());
+        assertSuccessfulResponse(r);
     }
 
     @Override

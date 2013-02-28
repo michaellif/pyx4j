@@ -37,7 +37,8 @@ public class TenantSureTheme extends Theme {
         TSPurchaseViewCancelButton,
         TSPucrhaseViewMessageText,
         TSUnavailableMessage,
-        TSPurchaseViewError;
+        TSSendDocs,
+        TSPurchaseViewError, ;
         
     }//@formatter:on
 
@@ -117,6 +118,20 @@ public class TenantSureTheme extends Theme {
         {
             Style style = new Style("." + TenantSureTheme.StyleName.TSPurchaseViewCancelButton.name());
             style.addProperty("float", "right");
+            addStyle(style);
+        }
+
+        {
+            Style style = new Style(".", TenantSureTheme.StyleName.TSSendDocs.name());
+            style.addProperty("text-align", "center");
+            style.addProperty("padding-top", "20px");
+            style.addProperty("padding-bottom", "20px");
+            addStyle(style);
+        }
+
+        {
+            Style style = new Style(".", TenantSureTheme.StyleName.TSSendDocs.name(), " .Button");
+            style.addProperty("float", "none");
             addStyle(style);
         }
 
