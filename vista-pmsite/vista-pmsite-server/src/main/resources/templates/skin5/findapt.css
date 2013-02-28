@@ -11,7 +11,7 @@
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
     border-top: 5px solid #000000;
-    background: url("images/FreeCableTV.png") no-repeat right;
+    background: url("images/resident.jpg") no-repeat right;
 }
 
 .vista-pmsite-findAptPage #advancedSearchCriteriaForm1 {
@@ -49,6 +49,8 @@
     background: -webkit-linear-gradient(top, #b55508, #FA8D0C);
     background: -o-linear-gradient(top, #b55508, #FA8D0C);
     background: -ms-linear-gradient(top, #b55508, #FA8D0C);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b55508', endColorstr='#FA8D0C');/*For IE7-8-9*/ 
+	height: 1%;/*For IE7*/
     background: linear-gradient(top, #b55508, #FA8D0C);
 }
 
@@ -146,11 +148,13 @@
 	border: 1px solid #000000;
 }
 .advancedSearchWideWrap .searchCommonBox {
+	width: 540px;
 	_clear:both;
 	float:left;
-	padding: 0 0 0 80px;
+	padding: 0 0 30px 80px;
 	*padding-bottom: 8px;
 	margin-top:30px;
+	border-bottom: 3px solid #1f1b1c;
 }
 .advancedSearchWideWrap .searchCommonBox .searchField {
 	margin-left:23px;
@@ -183,7 +187,7 @@
 	display:inline-block;
 	zoom: 1;
 	*display: inline;
-	width:53px;
+	width:50px;
 	margin:0px;
 	border-top: 4px solid #7F7F7F;
 	border-left: 4px solid #7F7F7F;
@@ -192,9 +196,8 @@
 .advancedSearchWideWrap .searchAmenityBox {
 	float:left;
 	_clear:both;
-	border-top: 1px solid #fff;
+	border-top: 1px solid #ffd467;
 	padding: 20px 80px 0 80px;
-	margin-top:30px;
 	margin-bottom:40px;
 }
 .advancedSearchWideWrap .searchAmenityBox br {
@@ -217,6 +220,7 @@
 	font-size:13px;
 	_float: left;
 	_clear: both;
+	vertical-align: bottom;
 }
 .advancedSearchWideWrap .typeselActiveHover {
 	color:${object1_20} !important;
