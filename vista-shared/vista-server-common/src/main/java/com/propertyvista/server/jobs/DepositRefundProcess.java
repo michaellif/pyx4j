@@ -57,6 +57,7 @@ public class DepositRefundProcess implements PmcProcess {
                 context.getExecutionMonitor().addFailedEvent("Deposit", t);
             }
         }
+        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override

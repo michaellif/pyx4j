@@ -48,15 +48,10 @@ public class LeaseActivationProcess implements PmcProcess {
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Approved));
             criteria.add(PropertyCriterion.le(criteria.proto().currentTerm().termFrom(), context.getForDate()));
 
-            long total = 0;
-            long failed = 0;
-
             ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
             final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
             try {
                 while (i.hasNext()) {
-                    ++total;
-
                     final Lease lease = i.next();
                     try {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
@@ -69,15 +64,14 @@ public class LeaseActivationProcess implements PmcProcess {
 
                         context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                     } catch (Throwable t) {
-                        log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                        ++failed;
                         context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
                     }
                 }
+                log.info(context.getExecutionMonitor().toString());
             } finally {
                 i.completeRetrieval();
             }
-            log.info("{} out of {} leases were activated successfully", total - failed, total);
+            log.info(context.getExecutionMonitor().toString());
         }
     }
 

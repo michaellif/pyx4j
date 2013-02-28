@@ -43,13 +43,8 @@ public class DepositInterestAdjustmentProcess implements PmcProcess {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
 
-        long total = 0;
-        long failed = 0;
-
         final DepositFacade depositFacade = ServerSideFactory.create(DepositFacade.class);
         for (final Lease lease : Persistence.service().query(criteria)) {
-            ++total;
-
             try {
                 new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                     @Override
@@ -61,12 +56,10 @@ public class DepositInterestAdjustmentProcess implements PmcProcess {
 
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             } catch (Throwable t) {
-                log.error("failed to calculate deposit adjustments for lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                ++failed;
                 context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
         }
-        log.info("{} out of {} leases were processed successfully", total - failed, total);
+        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override

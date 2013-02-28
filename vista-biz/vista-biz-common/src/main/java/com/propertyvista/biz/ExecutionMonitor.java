@@ -297,7 +297,7 @@ public class ExecutionMonitor {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("processedCount", processedCount).append("failedCount", failedCount).append("erredCount", erredCount)
-                .toString();
+        return "Execution Monitor: "
+                + new ToStringBuilder(this).append("processedCount", processedCount).append("failedCount", failedCount).append("erredCount", erredCount);
     }
 }

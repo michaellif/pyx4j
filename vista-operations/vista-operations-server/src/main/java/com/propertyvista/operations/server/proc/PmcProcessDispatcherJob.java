@@ -39,6 +39,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
@@ -59,7 +60,6 @@ import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
-import com.propertyvista.server.jobs.report.StatisticsUtils;
 
 public class PmcProcessDispatcherJob implements Job {
 
@@ -265,16 +265,24 @@ public class PmcProcessDispatcherJob implements Job {
     private void addRunDataStatsToRunStats(ExecutionReport stats, long startTimeNano, RunData runData) {
         long durationNano = System.nanoTime() - startTimeNano;
 
-        StatisticsUtils.nvlAddLong(stats.total(), runData.executionReport().total());
-        StatisticsUtils.nvlAddLong(stats.processed(), runData.executionReport().processed());
-        StatisticsUtils.nvlAddLong(stats.failed(), runData.executionReport().failed());
-        StatisticsUtils.nvlAddLong(stats.erred(), runData.executionReport().erred());
+        nvlAddLong(stats.total(), runData.executionReport().total());
+        nvlAddLong(stats.processed(), runData.executionReport().processed());
+        nvlAddLong(stats.failed(), runData.executionReport().failed());
+        nvlAddLong(stats.erred(), runData.executionReport().erred());
 
         stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
             stats.averageDuration().setValue(durationNano / (Consts.MSEC2NANO * stats.total().getValue()));
         }
         Persistence.service().persist(stats);
+    }
+
+    public static void nvlAddLong(IPrimitive<Long> target, IPrimitive<Long> value) {
+        if (target.isNull()) {
+            target.setValue(value.getValue());
+        } else if (!value.isNull()) {
+            target.setValue(target.getValue() + value.getValue());
+        }
     }
 
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {

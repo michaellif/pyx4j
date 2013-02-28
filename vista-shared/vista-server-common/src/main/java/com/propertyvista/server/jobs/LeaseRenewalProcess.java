@@ -54,8 +54,6 @@ public class LeaseRenewalProcess implements PmcProcess {
             Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
             final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
             while (i.hasNext()) {
-                ++total;
-
                 final Lease lease = i.next();
                 try {
                     new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
@@ -67,12 +65,10 @@ public class LeaseRenewalProcess implements PmcProcess {
                     });
                     context.getExecutionMonitor().addProcessedEvent("Lease");
                 } catch (Throwable error) {
-                    log.error("failed to renew lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
-                    ++failed;
                     context.getExecutionMonitor().addFailedEvent("Lease", error);
                 }
             }
-            log.info("{} out of {} leases were renewed successfully", total - failed, total);
+            log.info(context.getExecutionMonitor().toString());
         }
     }
 

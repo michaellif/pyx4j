@@ -47,13 +47,9 @@ public class LeaseCompletionProcess implements PmcProcess {
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
         criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), context.getForDate()));
 
-        long total = 0;
-        long failed = 0;
-
         Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         while (i.hasNext()) {
-            ++total;
 
             final Lease lease = i.next();
             try {
@@ -64,15 +60,12 @@ public class LeaseCompletionProcess implements PmcProcess {
                         return null;
                     }
                 });
-
                 context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
             } catch (Throwable t) {
-                log.error("failed to complete lease id = {}:  {}", lease.getPrimaryKey(), t.getMessage());
-                ++failed;
                 context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
         }
-        log.info("{} out of {} leases were completed successfully", total - failed, total);
+        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override
