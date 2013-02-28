@@ -16,6 +16,7 @@ package com.propertyvista.server.config;
 import java.io.File;
 import java.util.Map;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
@@ -27,6 +28,9 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
 
     public VistaConfigurationPostgreSQLProperties(File configDirectory, Map<String, String> properties) {
         File dbCredentialsFile = new File(configDirectory, "db-credentials.properties");
+
+        this.properties.unreturnedConnectionBackgroundProcessTimeout = 4 * Consts.HOURS2SEC;
+
         readProperties("db", properties);
         if (dbCredentialsFile.canRead()) {
             Credentials credentials = CredentialsFileStorage.getCredentials(dbCredentialsFile);
