@@ -24,22 +24,23 @@ public class ConfigurationToString {
 
     public static String toString(Configuration conf) {
         StringBuilder b = new StringBuilder();
-        b.append("configurationClass               : ").append(conf.getClass().getName()).append("\n");
-        b.append("connectionUrl                    : ").append(conf.connectionUrl()).append("\n");
-        b.append("dbHost                           : ").append(conf.dbHost()).append("\n");
-        b.append("dbName                           : ").append(conf.dbName()).append("\n");
-        b.append("userName                         : ").append(conf.userName()).append("\n");
-        b.append("Multitenant                      : ").append(conf.getMultitenancyType()).append("\n");
-        b.append("Ddl                              : ").append(conf.ddl()).append("\n");
-        b.append("initialPoolSize                  : ").append(conf.initialPoolSize()).append("\n");
-        b.append("minPoolSize                      : ").append(conf.minPoolSize()).append("\n");
-        b.append("maxPoolSize                      : ").append(conf.maxPoolSize()).append("\n");
-        b.append("initialBackgroundProcessPoolSize : ").append(conf.initialBackgroundProcessPoolSize()).append("\n");
-        b.append("minBackgroundProcessPoolSize     : ").append(conf.minBackgroundProcessPoolSize()).append("\n");
-        b.append("maxBackgroundProcessPoolSize     : ").append(conf.maxBackgroundProcessPoolSize()).append("\n");
-        b.append("maxPoolPreparedStatements        : ").append(conf.maxPoolPreparedStatements()).append("\n");
-        b.append("unreturnedConnectionTimeout      : ").append(conf.unreturnedConnectionTimeout()).append("\n");
-        b.append("tablesIdentityOffset             : ").append(conf.tablesIdentityOffset()).append("\n");
+        b.append("configurationClass                           : ").append(conf.getClass().getName()).append("\n");
+        b.append("connectionUrl                                : ").append(conf.connectionUrl()).append("\n");
+        b.append("dbHost                                       : ").append(conf.dbHost()).append("\n");
+        b.append("dbName                                       : ").append(conf.dbName()).append("\n");
+        b.append("userName                                     : ").append(conf.userName()).append("\n");
+        b.append("Multitenant                                  : ").append(conf.getMultitenancyType()).append("\n");
+        b.append("Ddl                                          : ").append(conf.ddl()).append("\n");
+        b.append("initialPoolSize                              : ").append(conf.initialPoolSize()).append("\n");
+        b.append("minPoolSize                                  : ").append(conf.minPoolSize()).append("\n");
+        b.append("maxPoolSize                                  : ").append(conf.maxPoolSize()).append("\n");
+        b.append("initialBackgroundProcessPoolSize             : ").append(conf.initialBackgroundProcessPoolSize()).append("\n");
+        b.append("minBackgroundProcessPoolSize                 : ").append(conf.minBackgroundProcessPoolSize()).append("\n");
+        b.append("maxBackgroundProcessPoolSize                 : ").append(conf.maxBackgroundProcessPoolSize()).append("\n");
+        b.append("maxPoolPreparedStatements                    : ").append(conf.maxPoolPreparedStatements()).append("\n");
+        b.append("unreturnedConnectionTimeout                  : ").append(conf.unreturnedConnectionTimeout()).append("\n");
+        b.append("unreturnedConnectionBackgroundProcessTimeout : ").append(conf.unreturnedConnectionBackgroundProcessTimeout()).append("\n");
+        b.append("tablesIdentityOffset                         : ").append(conf.tablesIdentityOffset()).append("\n");
         return b.toString();
     }
 }
