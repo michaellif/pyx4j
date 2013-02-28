@@ -189,6 +189,7 @@
     border-spacing: 0;
     padding: 6px;
     width: 100%;
+    table-layout:fixed;
 }
 
 .FormFlexPanelHR {
@@ -1008,6 +1009,11 @@ td.DatePickerMonth {
 
 .TenantDashboardTableRow td {
 	white-space: nowrap;
+	
+}
+
+.TenantDashboardTableRow td+td {
+	white-space: normal;
 }
 
 .TenantDashboardSection {
