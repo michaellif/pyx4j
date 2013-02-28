@@ -531,9 +531,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 }
 
                 leaseFacade.persist(lease.currentTerm());
+                Persistence.service().commit();
                 return billableItem;
             }
         }
+
         return null;
     }
 
@@ -804,8 +806,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                     if (pmcProcess.start(sharedContext)) {
                         PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                         pmcProcess.executePmcJob(pmcContext);
-                        log.info("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(), pmcProcess.getClass().getSimpleName(),
-                                pmcContext.getExecutionMonitor());
+                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(),
+                                pmcProcess.getClass().getSimpleName(), pmcContext.getExecutionMonitor());
                         pmcProcess.complete(sharedContext);
                     }
                 } finally {
