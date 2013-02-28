@@ -29,9 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
@@ -81,40 +79,13 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
         optionQuote.setPolicyPeriod("12M");
-        optionQuote.setOptionalExtras(formatOptionalExtras(coverageRequest, tenantSureClient.tenant().lease().unit().building()));
+        optionQuote.setOptionalExtras(new TenantSureOptionalExtrasFormatter().formatOptionalExtras(coverageRequest, tenantSureClient.tenant()));
 
         // quote from the CFC-API doc:
         // Pass a blank string.
         // This field is reserved for a future date where we may offer the ability for clients to supply discount codes or similar.
         optionQuote.setReferralCode("");
 
-    }
-
-    static String formatOptionalExtras(TenantSureCoverageDTO coverageRequest, Building building) {
-        StringBuilder optionalExtras = new StringBuilder();
-        // use the enum to assert the existance of the option
-        optionalExtras.append("Deductible=").append(TenantSureDeductibleOption.deductibleOf(coverageRequest.deductible().getValue()).amount()).append(";");
-
-        if (coverageRequest.smoker().isBooleanTrue()) {
-            optionalExtras.append("Smoker=true;");
-        }
-        if (coverageRequest.numberOfPreviousClaims().getValue().numericValue() > 0) {
-            optionalExtras.append("Claims=").append(coverageRequest.numberOfPreviousClaims().getValue().numericValue()).append(";");
-        }
-
-        if (building.info().hasFireAlarm().isBooleanTrue()) {
-            optionalExtras.append("Alarm=true;");
-        }
-
-        if (building.info().hasSprinklers().isBooleanTrue()) {
-            optionalExtras.append("Sprinklers=true;");
-        }
-
-        if (building.info().hasEarthquakes().isBooleanTrue()) {
-            optionalExtras.append("BCEQ=true;");
-        }
-
-        return optionalExtras.toString();
     }
 
     static BigDecimal countNumberOfTenants(com.propertyvista.domain.tenant.lease.LeaseTerm term) {
