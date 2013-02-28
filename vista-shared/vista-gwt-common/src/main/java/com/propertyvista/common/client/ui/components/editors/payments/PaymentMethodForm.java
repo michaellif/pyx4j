@@ -169,7 +169,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     private Widget createLegalTermsPanel() {
         FormFlexPanel panel = new FormFlexPanel();
 
-        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Debit Agreement"));
+        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
 
         panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
         panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
