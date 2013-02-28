@@ -72,8 +72,10 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
             createLineItems(row, contentPanel, outstangingCharges);
 
-            contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
-            createLineItems(row, contentPanel, unappliedPayments);
+            if (!unappliedPayments.isEmpty()) {
+                contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
+                createLineItems(row, contentPanel, unappliedPayments);
+            }
         }
         return contentPanel;
     }
