@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
@@ -28,7 +29,7 @@ public class RunLister extends ListerBase<Run> {
     private static List<ColumnDescriptor> INLINE_VIEW_COLUMN_DESCRIPTORS;
     static {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
-        INLINE_VIEW_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off        
+        INLINE_VIEW_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.status()).build(),
                 new MemberColumnDescriptor.Builder(proto.started()).build(),
                 new MemberColumnDescriptor.Builder(proto.forDate()).build(),
@@ -65,5 +66,10 @@ public class RunLister extends ListerBase<Run> {
     public RunLister(boolean isInlineMode) {
         super(Run.class, false);
         setColumnDescriptors(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS);
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().updated(), true));
     }
 }
