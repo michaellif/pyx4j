@@ -30,6 +30,7 @@ import com.yardi.ws.ServiceResponse;
 import com.yardi.ws.ServiceResponse.ServiceResponseResult;
 import com.yardi.ws.WSScreeningService;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -68,19 +69,17 @@ public class WSScreeningServiceImpl implements WSScreeningService {
             ApplicantScreening screeningRequest = MarshallUtil.unmarshal(ApplicantScreening.class, requestXml);
             validateRequest(screeningRequest);
 
-            //TODO how can we create request for multiple applicants?
-            Applicant mainApplicant = screeningRequest.getApplicant().get(0);
-            Customer customer = new ApplicantScreeningMapper().map(mainApplicant);
-
-            //TODO define customer Key
-
-            //return existing report for VIEW request type
+            //return existing report for VIEW request
             if (isViewRequestType(screeningRequest.getRequest().getRequestType())) {
-                CustomerCreditCheckReport report = getExistingReport(customer, screeningRequest.getRequest().getReportID());
+                CustomerCreditCheckReport report = getExistingReport(screeningRequest.getRequest().getReportID());
 
                 log.info("GetScreeningReport returned existing report.");
                 return createResponse(screeningRequest, report);
             }
+
+            //TODO how can we create request for multiple applicants?
+            Applicant mainApplicant = screeningRequest.getApplicant().get(0);
+            Customer customer = new ApplicantScreeningMapper().map(mainApplicant);
 
             //run credit check
 
@@ -96,9 +95,9 @@ public class WSScreeningServiceImpl implements WSScreeningService {
         return response;
     }
 
-    private CustomerCreditCheckReport getExistingReport(Customer customer, String reportId) throws YardiServiceException {
+    private CustomerCreditCheckReport getExistingReport(String reportId) throws YardiServiceException {
         EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer.getPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Key(reportId)));
         List<CustomerCreditCheckReport> reports = Persistence.service().query(criteria);
         if (reports.isEmpty()) {
             throw new YardiServiceException(i18n.tr("No reports found for reportID {0}", reportId));
@@ -144,22 +143,22 @@ public class WSScreeningServiceImpl implements WSScreeningService {
         if (!USER_ACCOUNT.equals(request.getUserAccount())) {
             throw new YardiServiceException(i18n.tr("Invalid request parameters: UserAccount"));
         }
-        if (StringUtils.isBlank(request.getRequestType())) {
-            throw new YardiServiceException(i18n.tr("Invalid request parameters: RequestType is not specified"));
-        }
         if (!isValidRequestType(request.getRequestType())) {
             throw new YardiServiceException(i18n.tr("Invalid request parameters: RequestType is not specified"));
         }
         if (screeningRequest.getApplicant().isEmpty()) {
             throw new YardiServiceException(i18n.tr("Invalid request parameters: no applicants specified"));
         }
+
         Applicant applicant = screeningRequest.getApplicant().get(0);
         if (applicant.getASInformation() == null) {
             throw new YardiServiceException(i18n.tr("Invalid request parameters: ASInformation section missing"));
         }
-        if (applicant.getIncome() == null) {
-            throw new YardiServiceException(i18n.tr("Invalid request parameters: Income section missing"));
+        String sin = applicant.getASInformation().getSocSecNumber();
+        if (StringUtils.isBlank(sin)) {
+            throw new YardiServiceException(i18n.tr("Invalid request parameters: SocSecNumber is not specified"));
         }
+
     }
 
     private boolean isValidRequestType(String requestType) {

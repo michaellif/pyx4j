@@ -25,7 +25,6 @@ import com.yardi.entity.screening.Income;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -37,9 +36,8 @@ import com.propertyvista.domain.tenant.income.IncomeSource;
 
 public class ApplicantScreeningMapper {
 
-    private static I18n i18n = I18n.get(ApplicantScreeningMapper.class);
-
     public Customer map(Applicant applicant) throws YardiServiceException {
+
         Customer customer = EntityFactory.create(Customer.class);
 
         YardiCustomer yCustomer = applicant.getCustomers().getCustomer().get(0);
@@ -55,7 +53,6 @@ public class ApplicantScreeningMapper {
         CustomerCreditCheck creditCheck = EntityFactory.create(CustomerCreditCheck.class);
         customer.personScreening().creditChecks().add(creditCheck);
 
-        //TODO check whether moveIn, moveOut, rented fields are required???
         AddressMapper addrMapper = new AddressMapper();
         for (Address address : yCustomer.getAddress()) {
             if (address.getType() == Addressinfo.CURRENT) {
@@ -68,9 +65,6 @@ public class ApplicantScreeningMapper {
 
         //sin
         String sin = applicant.getASInformation().getSocSecNumber();
-        if (StringUtils.isEmpty(sin)) {
-            throw new YardiServiceException(i18n.tr("Invalid request parameters: SocSecNumber is not specified"));
-        }
 
         IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
         creditCheck.screening().documents().add(document);
@@ -79,25 +73,27 @@ public class ApplicantScreeningMapper {
         document.idNumber().setValue(sin);
 
         //income
-        CustomerScreeningIncome presentIncome = EntityFactory.create(CustomerScreeningIncome.class);
-        creditCheck.screening().version().incomes().add(presentIncome);
+        if (applicant.getIncome() != null) {
 
-        Date startDate = applicant.getIncome().getEmploymentStartDate();
-        if (startDate != null) {
-            presentIncome.details().starts().setValue(new LogicalDate(startDate));
-        }
-        Date endDate = applicant.getIncome().getEmploymentEndDate();
-        if (endDate != null) {
-            presentIncome.details().ends().setValue(new LogicalDate(endDate));
-        }
+            CustomerScreeningIncome presentIncome = EntityFactory.create(CustomerScreeningIncome.class);
+            creditCheck.screening().version().incomes().add(presentIncome);
 
-        presentIncome.incomeSource().setValue(getIncomeSource(applicant.getIncome()));
+            Date startDate = applicant.getIncome().getEmploymentStartDate();
+            if (startDate != null) {
+                presentIncome.details().starts().setValue(new LogicalDate(startDate));
+            }
+            Date endDate = applicant.getIncome().getEmploymentEndDate();
+            if (endDate != null) {
+                presentIncome.details().ends().setValue(new LogicalDate(endDate));
+            }
+
+            presentIncome.incomeSource().setValue(getIncomeSource(applicant.getIncome()));
+        }
 
         //amount to check
-        if (applicant.getOther() == null || applicant.getOther().getCurrentRent() == null) {
-            throw new YardiServiceException(i18n.tr("Invalid request parameters: CurrentRent is not specified"));
+        if (applicant.getOther() != null && applicant.getOther().getCurrentRent() != null) {
+            creditCheck.amountChecked().setValue(applicant.getOther().getCurrentRent());
         }
-        creditCheck.amountChecked().setValue(applicant.getOther().getCurrentRent());
 
         return customer;
     }
