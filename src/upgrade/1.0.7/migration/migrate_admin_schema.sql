@@ -233,6 +233,26 @@ SET search_path = '_admin_';
         
         -- ALTER TABLE legal_document ALTER COLUMN content TYPE VARCHAR(300000);
         
+        -- operations_alert
+        
+        CREATE TABLE operations_alert
+        (
+                id                              BIGINT                          NOT NULL,
+                namespace                       VARCHAR(63),
+                usr                             BIGINT,
+                handled                         BOOLEAN,
+                admin                           BIGINT,
+                remote_addr                     VARCHAR(39),
+                created                         TIMESTAMP,
+                app                             VARCHAR(50),
+                entity_id                       BIGINT,
+                entity_class                    VARCHAR(500),
+                details                         VARCHAR(2048),
+                        CONSTRAINT      operations_alert_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE operations_alert OWNER TO vista;
+        
         -- scheduler_run_stats
         
         ALTER TABLE scheduler_run_stats RENAME TO scheduler_execution_report;
@@ -365,9 +385,10 @@ SET search_path = '_admin_';
                 'LoginFailed', 'PermitionsUpdate', 'Read', 'System', 'Update'));
         ALTER TABLE dev_card_service_simulation_card ADD CONSTRAINT dev_card_service_simulation_card_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa'));
         ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_transaction_type_e_ck 
-                CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'sale'));
+                CHECK ((transaction_type) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'returnVoid', 'sale'));
         ALTER TABLE dev_card_service_simulator_config ADD CONSTRAINT dev_card_service_simulator_config_response_type_e_ck 
                 CHECK ((response_type) IN ('DropConnection', 'RespondWithCode', 'RespondWithHttpCode', 'RespondWithText', 'SimulateTransations'));
+        ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK (app IN ('crm', 'operations', 'prospect', 'resident'));
         ALTER TABLE scheduler_execution_report_section ADD CONSTRAINT scheduler_execution_report_section_tp_e_ck CHECK ((tp) IN ('erred', 'failed', 'processed'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
@@ -397,6 +418,7 @@ SET search_path = '_admin_';
         
         CREATE UNIQUE INDEX admin_pmc_merchant_account_index_merchant_terminal_id_idx ON admin_pmc_merchant_account_index USING btree (merchant_terminal_id);
         CREATE INDEX customer_credit_check_transaction_pmc_idx ON customer_credit_check_transaction USING btree (pmc);
+        CREATE INDEX operations_alert_usr_namespace_idx ON operations_alert USING btree (usr, namespace);
         CREATE INDEX operations_user_credential$behaviors_owner_idx ON operations_user_credential$behaviors USING btree (owner);
         CREATE INDEX operations_user_name_idx ON operations_user USING btree (name);
         CREATE UNIQUE INDEX operations_user_email_idx ON operations_user USING btree (LOWER(email));
@@ -430,6 +452,15 @@ SET search_path = '_admin_';
         WHERE   failed IS NOT NULL
         ORDER BY 2);
 
+        /**
+        ***     Drop unneded columns in scheduler_execution_report
+        **/
+        
+        /*
+        ALTER TABLE scheduler_execution_report  DROP COLUMN amount_failed,
+                                                DROP COLUMN amount_processed;
+        */
+        
         
         UPDATE admin_pmc_vista_features 
         SET  tenant_sure_integration = FALSE ;
