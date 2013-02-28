@@ -21,11 +21,8 @@ import com.pyx4j.gwt.server.DateUtils;
 public class SysDateManager {
 
     public static void setSysDate(Date date) {
-        if (date == null) {
-            Persistence.service().setTransactionSystemTime(new Date());
-        } else {
-            Persistence.service().setTransactionSystemTime(date);
-        }
+        Persistence.setSystemTime(date);
+        Persistence.service().setTransactionSystemTime(Persistence.getSystemTime());
     }
 
     public static void setSysDate(String dateStr) {
@@ -33,7 +30,7 @@ public class SysDateManager {
     }
 
     public static Date getSysDate() {
-        return Persistence.service().getTransactionSystemTime();
+        return Persistence.getSystemTime();
     }
 
 }

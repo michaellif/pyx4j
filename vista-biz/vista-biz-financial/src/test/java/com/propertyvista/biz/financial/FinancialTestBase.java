@@ -798,15 +798,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             public void execute() throws Exception {
 
                 try {
-                    Date runDate = SysDateManager.getSysDate();
                     Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
-                    SysDateManager.setSysDate(runDate);
+                    Date runDate = SysDateManager.getSysDate();
                     PmcProcessContext sharedContext = new PmcProcessContext(runDate);
                     if (pmcProcess.start(sharedContext)) {
                         PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                         pmcProcess.executePmcJob(pmcContext);
-                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(),
-                                pmcProcess.getClass().getSimpleName(), pmcContext.getExecutionMonitor());
+                        log.info("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(), pmcProcess.getClass().getSimpleName(),
+                                pmcContext.getExecutionMonitor());
                         pmcProcess.complete(sharedContext);
                     }
                 } finally {
