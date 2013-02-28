@@ -150,7 +150,7 @@ public class OracleDialect extends Dialect {
         if (e instanceof SQLIntegrityConstraintViolationException) {
             return (e.getErrorCode() == 1);
         } else {
-            return true;
+            return false;
         }
     }
 
