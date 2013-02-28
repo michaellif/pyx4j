@@ -361,6 +361,16 @@ public class MessageTemplates {
         }
     }
 
+    private static String wrapTenantSureHtml(String text) {
+        try {
+            String html = IOUtils.getTextResource("email/template-tenantsure.html");
+            return html.replace("{MESSAGE}", text);
+        } catch (IOException e) {
+            log.error("template error", e);
+            return text;
+        }
+    }
+
     private static EmailTemplate emailTemplatePasswordRetrievalAdmin() {
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
@@ -432,9 +442,9 @@ public class MessageTemplates {
             body = body.replace("${periodEndDate}", gracePeriodEndDate.toString());
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
                     + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
-            template.content().setValue(i18n.tr(//@formatter:off
+            template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
                 body
-        ));//@formatter:on
+        )));//@formatter:on
 
             return template;
 
@@ -448,9 +458,9 @@ public class MessageTemplates {
         template.subject().setValue(i18n.tr("Payment Processing Resumed"));
         try {
             String body = IOUtils.getTextResource("email/tenantsure-payments-resumed.html");
-            template.content().setValue(i18n.tr(//@formatter:off
+            template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
                 body
-        ));//@formatter:on
+        )));//@formatter:on
 
             return template;
 
