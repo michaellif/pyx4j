@@ -48,7 +48,11 @@ public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTena
         explanationMessage.setHTML(value.noInsuranceStatusMessage().getValue());
         contentPanel.add(explanationMessage);
 
-        Anchor goToInsuranceScreenAnchor = new Anchor(i18n.tr("Provide proof of insurance"), new Command() {
+        String anchorLabel = VistaFeatures.instance().tenantSure()//@formatter:off 
+                ? i18n.tr("Provide Proof of Insurance / Purchase Insurance")
+                : i18n.tr("Provide Proof of Insurance");//@formatter:on
+
+        Anchor goToInsuranceScreenAnchor = new Anchor(anchorLabel, new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(
