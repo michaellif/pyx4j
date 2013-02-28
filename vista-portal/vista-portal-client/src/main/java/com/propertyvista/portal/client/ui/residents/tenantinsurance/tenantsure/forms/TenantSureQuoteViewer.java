@@ -22,6 +22,9 @@ import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityViewer;
@@ -30,7 +33,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
@@ -58,34 +60,37 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                BigDecimal total = null;
-                addDetailRecord(paymentBreakdownPanel, ++row, quote.grossPremium().getMeta().getCaption(), quote.grossPremium().getValue());
-                for (InsuranceTenantSureTax tax : quote.grossPremiumTaxBreakdown()) {
-                    addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
-                }
-                total = quote.totalPayable().getValue();
+                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Quote Number:"));
+                paymentBreakdownPanel.setWidget(++row, 0, new HTML(quote.quoteId().getValue()));
+                paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
+                paymentBreakdownPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+                paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
+                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment:"));
+                addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
+
+                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments:"));
+                addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
+
+                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment:"));
+                addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 if (!quote.underwriterFee().isNull()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee*"), quote.underwriterFee().getValue());
-                    total = total.add(quote.underwriterFee().getValue());
-                    for (InsuranceTenantSureTax tax : quote.underwriterFeeTaxBreakdown()) {
-                        addDetailRecord(paymentBreakdownPanel, ++row, tax.description().getValue(), tax.absoluteAmount().getValue());
-                        total = total.add(tax.absoluteAmount().getValue());
-                    }
-
-                    addTotalRecord(paymentBreakdownPanel, ++row, i18n.tr("Total"), total);
-                    contentPanel.add(paymentBreakdownPanel);
-
-                    if (underwirterFeeAsFootnote) {
-                        Label underwriterFeeLabel = new Label();
-                        underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
-                        underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-                        underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
-                        underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee (plus applicable taxes) will be charged upon enrollment."));
-                        contentPanel.add(underwriterFeeLabel);
-                    }
                 }
+                if (!quote.totalAnnualTax().isNull() && quote.totalAnnualTax().getValue().compareTo(BigDecimal.ZERO) > 0) {
+                    addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Tax"), quote.totalAnnualTax().getValue());
+                }
+                addTotalRecord(paymentBreakdownPanel, ++row, i18n.tr("Total"), quote.totalAnnualPayable().getValue());
+                contentPanel.add(paymentBreakdownPanel);
 
+                if (underwirterFeeAsFootnote) {
+                    Label underwriterFeeLabel = new Label();
+                    underwriterFeeLabel.setStyleName(BillingTheme.StyleName.BillingDetailItem.name());
+                    underwriterFeeLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
+                    underwriterFeeLabel.getElement().getStyle().setMarginTop(1, Unit.EM);
+                    underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee (plus applicable taxes) will be charged upon enrollment."));
+                    contentPanel.add(underwriterFeeLabel);
+                }
             } else {
                 Label specialQuoteText = new Label();
                 specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -96,6 +101,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
 
                 contentPanel.add(specialQuoteText);
             }
+
         }
 
         return contentPanel;

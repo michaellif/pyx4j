@@ -98,13 +98,31 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     /** a date when cancellation command has been issued */
     IPrimitive<LogicalDate> cancellationDate();
 
-    /** this is an amount that gets charged every month (i.e. monthly premium + the taxes */
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> annualPremium();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> underwriterFee();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnnualTax();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnnualPayable();
+
+    /** this is the amount that gets charged first on enrollment */
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalFirstPayable();
+
+    /** this is an amount that gets charged every month (i.e. monthly premium + the taxes) */
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();
 
-    /** details that we keep to display the user */
-    @Owned
-    InsuranceTenantSureDetails details();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> contentsCoverage();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> deductible();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

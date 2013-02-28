@@ -18,11 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxUnderwriterFee;
 
 /**
  * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
@@ -32,28 +28,30 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxUnderwrit
 @Transient
 public interface TenantSureQuoteDTO extends IEntity {
 
-    IPrimitive<String> quoteId();
-
-    /** holds the requested parameters that have been used to create this quote */
+    /** holds the request parameter that have been used to create this quote */
     TenantSureCoverageDTO coverage();
 
-    /** annual gross premium */
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> grossPremium();
+    IPrimitive<String> quoteId();
 
-    IList<InsuranceTenantSureTaxGrossPremium> grossPremiumTaxBreakdown();
-
-    /** this is gross premium plus gross premium tax (doesn't include underwriter fee) */
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> totalPayable();
+    IPrimitive<BigDecimal> annualPremium();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> underwriterFee();
 
-    IList<InsuranceTenantSureTaxUnderwriterFee> underwriterFeeTaxBreakdown();
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnnualTax();
 
-    // TODO here must be taxes that apply to underwriter's fee too
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnnualPayable();
 
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalFirstPayable();
+
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalMonthlyPayable();
+
+    @Format("#,##0.00")
     /** if this field is not <code>null</code> then automatic quote is not available through the CFC system, and it will hold a message that should be displayed */
     IPrimitive<String> specialQuote();
 

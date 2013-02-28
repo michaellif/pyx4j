@@ -29,30 +29,26 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
-import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteResponseDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
@@ -117,34 +113,19 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void getQuote(AsyncCallback<TenantSureQuoteResponseDTO> callback, TenantSureCoverageDTO quotationRequest) {
+    public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
-        TenantSureQuoteResponseDTO quoteResponse = EntityFactory.create(TenantSureQuoteResponseDTO.class);
 
-        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(quotationRequest,
-                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
-        quoteResponse.quote().set(quote);
+        TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(//@formatter:off
+                quotationRequest,
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+        );//@formatter:on
 
-        if (quote.specialQuote().isNull()) {
-            TenantSurePaymentDTO monthlyPayment = EntityFactory.create(TenantSurePaymentDTO.class);
-            TenantSurePaymentItemDTO monthlyPremium = monthlyPayment.paymentBreakdown().$();
-            monthlyPremium.amount().setValue(quote.grossPremium().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-            monthlyPremium.description().setValue(i18n.tr("Premium"));
-            for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
-                TenantSurePaymentItemTaxDTO monthlyPremiumTax = monthlyPremium.taxBreakdown().$();
-                monthlyPremiumTax.tax().setValue(grossPremiumTax.description().getValue());
-                monthlyPremiumTax.amount().setValue(
-                        grossPremiumTax.absoluteAmount().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-                monthlyPremium.taxBreakdown().add(monthlyPremiumTax);
-            }
-            monthlyPayment.paymentBreakdown().add(monthlyPremium);
-            monthlyPayment.total().setValue(quote.totalPayable().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-
-            quoteResponse.monthlyPayment().set(monthlyPayment);
-        }
-        callback.onSuccess(quoteResponse);
+        // TODO save quote in visit
+        UserVisit visit = Context.getUserVisit(UserVisit.class);
+        callback.onSuccess(quote);
     }
 
     @Override
@@ -157,11 +138,18 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
 
         // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
-        ServerSideFactory.create(TenantSureFacade.class)
-                .savePaymentMethod(paymentMethod, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub());
+        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
+                paymentMethod,
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+        );//@formatter:on
 
-        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(quote, TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(), tenantName,
-                tenantPhone);
+        // TODO the quote that we use here MUST be fetched from user context (and not from client's side), since we use money from that quote object to create payments in
+        ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
+                quote,
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+                tenantName,
+                tenantPhone
+        );//@formatter:off
 
         callback.onSuccess(null);
     }

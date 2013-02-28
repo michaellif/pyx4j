@@ -34,8 +34,8 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.v
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteResponseDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 
 public class TenantSurePurchaseActivity extends AbstractActivity implements TenantSurePurchaseView.Presenter {
@@ -84,9 +84,9 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     @Override
     public void onCoverageRequestChanged() {
         view.waitForQuote();
-        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteResponseDTO>() {
+        service.getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
             @Override
-            public void onSuccess(TenantSureQuoteResponseDTO quote) {
+            public void onSuccess(TenantSureQuoteDTO quote) {
                 view.setQuote(quote);
             }
 

@@ -20,7 +20,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteResponseDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -29,7 +28,7 @@ public interface TenantSurePurchaseService extends IService {
 
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);
 
-    void getQuote(AsyncCallback<TenantSureQuoteResponseDTO> callback, TenantSureCoverageDTO coverageRequest);
+    void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
 
     void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod);

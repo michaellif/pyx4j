@@ -38,7 +38,6 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.CfcApiAdapterFacade.ReinstatementType;
-import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
@@ -47,9 +46,6 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.Cancellatio
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTax;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxGrossPremium;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTaxMonthlyPremium;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -137,31 +133,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
         insuranceTenantSure.inceptionDate().setValue(new LogicalDate());
         insuranceTenantSure.liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
-        insuranceTenantSure.details().contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
-        insuranceTenantSure.details().deductible().setValue(quote.coverage().deductible().getValue());
+        insuranceTenantSure.contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
+        insuranceTenantSure.deductible().setValue(quote.coverage().deductible().getValue());
 
-        insuranceTenantSure.details().grossPremium().setValue(quote.grossPremium().getValue());
-        for (InsuranceTenantSureTaxGrossPremium tax : quote.grossPremiumTaxBreakdown()) {
-            insuranceTenantSure.details().taxes().add(tax);
-        }
-        insuranceTenantSure.details().underwriterFee().setValue(quote.underwriterFee().getValue());
-        // TODO save underwriters fee taxes
-        insuranceTenantSure.details().totalPayable().setValue(quote.totalPayable().getValue());
-
-        // calculate monthly payment details
-        insuranceTenantSure.details().monthlyPremium()
-                .setValue(quote.grossPremium().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-        for (InsuranceTenantSureTaxGrossPremium grossPremiumTax : quote.grossPremiumTaxBreakdown()) {
-            InsuranceTenantSureTaxMonthlyPremium monthlyPremiumTax = EntityFactory.create(InsuranceTenantSureTaxMonthlyPremium.class);
-            monthlyPremiumTax.description().setValue(grossPremiumTax.description().getValue());
-            monthlyPremiumTax.businessLine().setValue(grossPremiumTax.businessLine().getValue());
-            monthlyPremiumTax.absoluteAmount().setValue(
-                    grossPremiumTax.absoluteAmount().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-            insuranceTenantSure.details().monthlyPremiumTaxes().add(monthlyPremiumTax);
-        }
-        insuranceTenantSure.totalMonthlyPayable().setValue(
-                quote.totalPayable().getValue().divide(new BigDecimal(12), TenantSureCfcMoneyAdapter.getRoundingMode()));
-
+        insuranceTenantSure.annualPremium().setValue(quote.annualPremium().getValue());
+        insuranceTenantSure.underwriterFee().setValue(quote.underwriterFee().getValue());
+        insuranceTenantSure.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
+        insuranceTenantSure.totalAnnualPayable().setValue(quote.totalAnnualPayable().getValue());
+        insuranceTenantSure.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
+        insuranceTenantSure.totalFirstPayable().setValue(quote.totalFirstPayable().getValue());
         Persistence.service().persist(insuranceTenantSure);
 
         // Start payment
@@ -169,9 +149,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-
-        // TODO add underwriter's fee + underwriter's fee taxes
-        transaction.amount().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
+        transaction.amount().setValue(insuranceTenantSure.totalFirstPayable().getValue());
         transaction.paymentDue().setValue(insuranceTenantSure.inceptionDate().getValue());
         Persistence.service().persist(transaction);
 
@@ -298,20 +276,20 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
 
         status.quote().coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.liabilityCoverage().getValue());
-        status.quote().coverage().contentsCoverage().setValue(insuranceTenantSure.details().contentsCoverage().getValue());
-        status.quote().coverage().deductible().setValue(insuranceTenantSure.details().deductible().getValue());
+        status.quote().coverage().contentsCoverage().setValue(insuranceTenantSure.contentsCoverage().getValue());
+        status.quote().coverage().deductible().setValue(insuranceTenantSure.deductible().getValue());
         status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.inceptionDate().getValue());
 
-        status.quote().grossPremium().setValue(insuranceTenantSure.details().grossPremium().getValue());
-        status.quote().underwriterFee().setValue(insuranceTenantSure.details().underwriterFee().getValue());
-        status.quote().grossPremiumTaxBreakdown().addAll(insuranceTenantSure.details().taxes());
-        status.quote().totalPayable().setValue(insuranceTenantSure.details().totalPayable().getValue());
+        status.quote().annualPremium().setValue(insuranceTenantSure.annualPremium().getValue());
+        status.quote().underwriterFee().setValue(insuranceTenantSure.underwriterFee().getValue());
+        status.quote().totalAnnualTax().setValue(insuranceTenantSure.totalAnnualTax().getValue());
+        status.quote().totalAnnualPayable().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
 
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         status.nextPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
-                i18n.tr("Premium"),
-                insuranceTenantSure.details().monthlyPremium().getValue(),
-                taxes2Dto(insuranceTenantSure.details().monthlyPremiumTaxes())
+                    i18n.tr("Premium + Taxes"), 
+                    insuranceTenantSure.totalMonthlyPayable().getValue(),
+                    new ArrayList<TenantSurePaymentItemTaxDTO>()
         ));//@formatter:on
         status.nextPaymentDetails().total().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
 
@@ -319,13 +297,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             TenantSureMessageDTO message = status.messages().$();
             if (insuranceTenantSure.cancellation().getValue() == CancellationType.SkipPayment) {
                 status.isPaymentFailed().setValue(true);
-                message.messageText()
-                        .setValue(
-                                i18n.tr("There was a problem with your last scheduled payment. If you don''t update your credit card details until {0,date,short}, your TenantSure insurance will expire.",
-                                        getGracePeriodEndDate(insuranceTenantSure)));
+                message.messageText().setValue(i18n.tr(//@formatter:off
+                        "There was a problem with your last scheduled payment. If you don''t update your credit card details until {0,date,short}, your TenantSure insurance will expire.",
+                        getGracePeriodEndDate(insuranceTenantSure)
+                ));//@formatter:on
             } else {
-                message.messageText().setValue(
-                        i18n.tr("Your insurance has been cancelled and will expire on {0,date,short}", insuranceTenantSure.expiryDate().getValue()));
+                message.messageText().setValue(i18n.tr(//@formatter:off
+                        "Your insurance has been cancelled and will expire on {0,date,short}",
+                        insuranceTenantSure.expiryDate().getValue()
+                ));//@formatter:on
             }
             status.messages().add(message);
 
@@ -525,21 +505,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         paymentItem.amount().setValue(amount);
         paymentItem.taxBreakdown().addAll(taxes);
         return paymentItem;
-    }
-
-    private static TenantSurePaymentItemTaxDTO makePaymentItemTax(String taxName, BigDecimal amount) {
-        TenantSurePaymentItemTaxDTO paymentItemTax = EntityFactory.create(TenantSurePaymentItemTaxDTO.class);
-        paymentItemTax.tax().setValue(taxName);
-        paymentItemTax.amount().setValue(amount);
-        return paymentItemTax;
-    }
-
-    private static <Tax extends InsuranceTenantSureTax> List<TenantSurePaymentItemTaxDTO> taxes2Dto(List<Tax> taxes) {
-        List<TenantSurePaymentItemTaxDTO> dtoTaxes = new ArrayList<TenantSurePaymentItemTaxDTO>(taxes.size());
-        for (Tax tax : taxes) {
-            dtoTaxes.add(makePaymentItemTax(tax.description().getValue(), tax.absoluteAmount().getValue()));
-        }
-        return dtoTaxes;
     }
 
 }

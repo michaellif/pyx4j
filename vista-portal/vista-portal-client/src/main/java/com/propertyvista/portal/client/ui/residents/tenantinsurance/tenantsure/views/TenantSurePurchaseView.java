@@ -20,7 +20,6 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteResponseDTO;
 
 public interface TenantSurePurchaseView extends IsWidget {
 
@@ -51,7 +50,7 @@ public interface TenantSurePurchaseView extends IsWidget {
     /** render view in the maintenance mode */
     void setTenantSureOnMaintenance(String message);
 
-    void setQuote(TenantSureQuoteResponseDTO quoteResponse);
+    void setQuote(TenantSureQuoteDTO quote);
 
     void waitForQuote();
 
