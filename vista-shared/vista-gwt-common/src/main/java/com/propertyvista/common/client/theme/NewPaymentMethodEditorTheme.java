@@ -35,7 +35,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages);
-        style.addProperty("width", "70px");
+        style.addProperty("width", "50px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages, " div");
@@ -54,7 +54,6 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages, " div img");
-        style.addProperty("padding-left", "10px");
         style.addProperty("height", "30px");
         addStyle(style);
 
@@ -75,7 +74,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
                 DefaultWidgetsTheme.StyleDependent.pushed);
 //        style.addProperty("border-top", "1px solid #bbb");
 //        style.addProperty("border-bottom", "1px solid #bbb");
-        style.addProperty("width", "100px");
+        style.addProperty("width", "130px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorForm);
