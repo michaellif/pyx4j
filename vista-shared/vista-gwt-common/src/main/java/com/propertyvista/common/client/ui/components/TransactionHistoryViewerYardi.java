@@ -42,15 +42,22 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
 
     private static final I18n i18n = I18n.get(I18n.class);
 
-    private final NumberFormat currencyFormat;
+    private final NumberFormat chargeFormat;
 
-    public TransactionHistoryViewerYardi(NumberFormat currencyFormat) {
-        this.currencyFormat = currencyFormat;
+    private final NumberFormat paymentFormat;
+
+    public TransactionHistoryViewerYardi(String chargeFormat, String paymentFormat) {
+        this.chargeFormat = NumberFormat.getFormat(chargeFormat);
+        this.paymentFormat = NumberFormat.getFormat(paymentFormat);
+    }
+
+    public TransactionHistoryViewerYardi(String moneyFormat) {
+        this(moneyFormat, moneyFormat);
     }
 
     public TransactionHistoryViewerYardi() {
-        // yardi may have negative charges that are actually credits - we use CR suffix in these cases
-        this(NumberFormat.getFormat(i18n.tr("$#,##0.00;# CR")));
+        // use CR suffix for negative charges and inverse sign for payments shown in Payments sections
+        this(i18n.tr("$#,##0.00;# CR"), i18n.tr("-$#,##0.00;$#,##0.00;"));
     }
 
     @Override
@@ -70,17 +77,17 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
 
             int[] row = { -1 };
             contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
-            createLineItems(row, contentPanel, outstangingCharges);
+            renderLineItems(row, contentPanel, outstangingCharges, chargeFormat);
 
             if (!unappliedPayments.isEmpty()) {
                 contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
-                createLineItems(row, contentPanel, unappliedPayments);
+                renderLineItems(row, contentPanel, unappliedPayments, paymentFormat);
             }
         }
         return contentPanel;
     }
 
-    private <E extends InvoiceLineItem> void createLineItems(int[] row, FormFlexPanel panel, List<E> items) {
+    private <E extends InvoiceLineItem> void renderLineItems(int[] row, FormFlexPanel panel, List<E> items, NumberFormat format) {
         // this code should be very defensive because you never know the quality of information that is coming from Yardi
         if (!items.isEmpty()) {
             int COL_DATE = 0;
@@ -107,7 +114,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
                 HTML descriptionHtml = new HTML(htmlEscape(description));
 
                 BigDecimal amount = item.amount().getValue();
-                HTML amountHtml = amount != null ? new HTML(htmlEscape(currencyFormat.format(amount))) : new HTML("&nbsp;");
+                HTML amountHtml = amount != null ? new HTML(htmlEscape(format.format(amount))) : new HTML("&nbsp;");
 
                 ++row[0];
                 panel.setWidget(row[0], COL_DATE, dateHtml);
@@ -130,7 +137,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             }
 
             HTML totalDescription = new HTML(htmlEscape(i18n.tr("Total")));
-            HTML totalHtml = new HTML(htmlEscape(currencyFormat.format(totalAmount)));
+            HTML totalHtml = new HTML(htmlEscape(format.format(totalAmount)));
 
             ++row[0];
             panel.setWidget(row[0], COL_DESCRIPTION, totalDescription);
