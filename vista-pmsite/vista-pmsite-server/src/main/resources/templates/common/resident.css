@@ -121,6 +121,7 @@
 .WidgetDecoratorLabelHolder, .BillingLineItem {
 	padding-right: 1em;
 	font-weight: bold;
+	min-width: 20em !important;
 }
 
 .WidgetDecoratorLabel {
@@ -1736,7 +1737,11 @@ ul.footer_locations li {
 .vista-pmsite-main .content {
 	min-height: 15em;
 	line-height: 1.5em;
-	overflow: hidden;
+	overflow: hidden !important;
+}
+
+.vista-pmsite-main .content div{
+	overflow: hidden !important;
 }
 
 #gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
