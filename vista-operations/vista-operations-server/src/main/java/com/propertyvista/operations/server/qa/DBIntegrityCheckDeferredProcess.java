@@ -84,7 +84,15 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
-            RDBUtils.initAllEntityTables();
+            new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    RDBUtils.initAllEntityTables();
+                    return null;
+                }
+
+            });
             commonNamespaceIntegrityCheck();
             VistaUpgrade.upgradePmcData(entity);
         } finally {
@@ -108,7 +116,16 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             NamespaceManager.setNamespace(namespace);
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.initNameSpaceSpecificEntityTables();
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        RDBUtils.initNameSpaceSpecificEntityTables();
+                        return null;
+                    }
+
+                });
             }
 
             exportTablesInfo(new Filter<Class<? extends IEntity>>() {
@@ -123,32 +140,44 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
         }
     }
 
-    private void exportTablesInfo(Filter<Class<? extends IEntity>> filter) {
-        ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-        TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
-        for (String className : allClasses) {
-            if (className.toLowerCase().contains(".gae")) {
-                continue;
-            }
-            Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
-            EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
-            if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
-                continue;
-            }
-            if (filter.accept(entityClass)) {
-                if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
-                    continue;
+    private void exportTablesInfo(final Filter<Class<? extends IEntity>> filter) {
+        new UnitOfWork(TransactionScopeOption.Suppress, true).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+
+                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
+                List<String> allClasses = EntityClassFinder.getEntityClassesNames();
+                TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
+                for (String className : allClasses) {
+                    if (className.toLowerCase().contains(".gae")) {
+                        continue;
+                    }
+                    Class<? extends IEntity> entityClass = ServerEntityFactory.entityClass(className);
+                    EntityMeta meta = EntityFactory.getEntityMeta(entityClass);
+                    if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null
+                            || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
+                        continue;
+                    }
+                    if (filter.accept(entityClass)) {
+                        if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
+                            continue;
+                        }
+                        int keys = Persistence.service().count(EntityQueryCriteria.create(entityClass));
+                        tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
+                    }
                 }
-                int keys = Persistence.service().count(EntityQueryCriteria.create(entityClass));
-                tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
+                for (Entry<String, Integer> entry : tablesMap.entrySet()) {
+                    formatter.cell(NamespaceManager.getNamespace());
+                    formatter.cell(entry.getKey());
+                    formatter.cell(entry.getValue());
+                    formatter.newRow();
+                }
+
+                return null;
             }
-        }
-        for (Entry<String, Integer> entry : tablesMap.entrySet()) {
-            formatter.cell(NamespaceManager.getNamespace());
-            formatter.cell(entry.getKey());
-            formatter.cell(entry.getValue());
-            formatter.newRow();
-        }
+
+        });
+
     }
 }
