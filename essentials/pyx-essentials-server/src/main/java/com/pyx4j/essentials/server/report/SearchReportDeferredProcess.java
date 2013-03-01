@@ -95,7 +95,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             formatCompleate = true;
         } else {
             long start = System.currentTimeMillis();
-            Persistence.service().startTransaction();
+            Persistence.service().startBackgroundProcessTransaction();
             try {
                 if (selectedMemberNames == null) {
                     maximum = Persistence.service().count(request.getCriteria());

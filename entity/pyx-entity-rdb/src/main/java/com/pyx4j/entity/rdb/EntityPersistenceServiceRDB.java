@@ -75,6 +75,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
@@ -287,8 +288,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         newPersistenceContext.startTransaction();
 
         if (PersistenceContext.traceTransaction) {
-            log.info("{} startTransaction scope {} \n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption,
-                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+            log.info("{} startTransaction scope {} {}\n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption, backgroundProcess ? "Background"
+                    : "Online", Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class));
             if (tracedSavepoint) {
                 if (PersistenceContext.traceTransaction) {
                     log.info("{} setSavepoint SP{}", newPersistenceContext.txId(), newPersistenceContext.savepoints);

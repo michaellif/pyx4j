@@ -223,7 +223,8 @@ public class PersistenceContext {
             }
 
             if (traceOpenSession) {
-                log.info("*** connection open  {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
+                log.info("*** connection open  {} {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType, backgroundProcess ? "Background"
+                        : "Online");
                 synchronized (openSessionLock) {
                     openSessionCount++;
                     openSessions.add(this);
