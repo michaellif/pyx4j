@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -94,8 +95,8 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void openTerms() {
         try {
-            Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class), "new",
-                    "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class), "_blank",
+                    BrowserType.isIE() ? "status=1,toolbar=1,location=1,resizable=1,scrollbars=1" : null);
         } catch (Throwable popupBlocked) {
             AppSite.getPlaceController().goTo(new OnboardingSiteMap.PmcAccountTerms());
         }
