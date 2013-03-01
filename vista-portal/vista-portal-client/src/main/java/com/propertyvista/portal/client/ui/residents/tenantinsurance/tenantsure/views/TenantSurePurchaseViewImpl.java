@@ -136,6 +136,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         quoteRequestForm.setCoverageParams(quotationRequestParams);
 
+        paymentMethodForm.setVisited(false);
         paymentMethodForm.populate(paymentMethod);
         paymentMethodForm.setPreAuthorizedAgreement(quotationRequestParams.preAuthorizedDebitAgreement().getValue());
 

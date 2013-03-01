@@ -67,7 +67,7 @@ public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
                 paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
                 if (!quote.totalFirstPayable().isNull()) {
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment:"));
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*:"));
                     addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
                 }
 
