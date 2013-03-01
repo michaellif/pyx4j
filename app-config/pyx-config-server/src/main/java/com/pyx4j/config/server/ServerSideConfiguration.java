@@ -85,7 +85,9 @@ public class ServerSideConfiguration {
             if (ServerSideConfiguration.instance == instance) {
                 return;
             }
-            throw new Error("Can't redefine ServerSideConfiguration", instanceDefinedFrom);
+            if (!ServerSideConfiguration.isStartedUnderUnitTest()) {
+                throw new Error("Can't redefine ServerSideConfiguration", instanceDefinedFrom);
+            }
         }
         ServerSideConfiguration.instance = instance;
         instanceDefinedFrom = new Throwable("ServerSideConfiguration initialized from");
