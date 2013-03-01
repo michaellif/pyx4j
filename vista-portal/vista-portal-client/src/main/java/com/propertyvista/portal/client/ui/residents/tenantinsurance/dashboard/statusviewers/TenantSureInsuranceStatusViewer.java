@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -20,11 +21,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -49,10 +52,14 @@ public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTen
         tenantSureLogo.addStyleName(STYLE_PREFIX + StyleSuffix.TenantSureLogo.name());
         contentPanel.add(tenantSureLogo);
 
-        contentPanel.add(new Label(i18n.tr("Personal Liablity: ${0}", tenantSureStatus.liabilityCoverage().getStringView())));
-        contentPanel.add(new Label(i18n.tr("Monthly Premium: ${0}", tenantSureStatus.monthlyPremiumPayment().getStringView())));
+        contentPanel.add(new Label(i18n.tr("Liablity Coverage: {0}",
+                MoneyComboBox.CANADIAN_CURRENCY_FORMAT.format(tenantSureStatus.liabilityCoverage().getValue()))));
+        contentPanel.add(new Label(i18n.tr("Monthly Premium: {0}",
+                MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT.format(tenantSureStatus.monthlyPremiumPayment().getValue()))));
+
         if (!tenantSureStatus.nextPaymentDate().isNull()) {
-            contentPanel.add(new Label(i18n.tr("Next Payment Date: {0}", tenantSureStatus.nextPaymentDate().getStringView())));
+            contentPanel.add(new Label(i18n.tr("Next Payment Date: {0}",
+                    DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(tenantSureStatus.nextPaymentDate().getValue()))));
         }
 
         if (!tenantSureStatus.messages().isEmpty()) {

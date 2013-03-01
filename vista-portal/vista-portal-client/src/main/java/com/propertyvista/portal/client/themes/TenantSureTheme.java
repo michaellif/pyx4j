@@ -38,17 +38,17 @@ public class TenantSureTheme extends Theme {
         TSPucrhaseViewMessageText,
         TSUnavailableMessage,
         TSSendDocs,
-        TSPurchaseViewError, ;
+        TSPurchaseViewError, 
+        TSPaymentAmount;
         
     }//@formatter:on
 
     public TenantSureTheme() {
-
         initDecoratorStyles();
         initTenantSurePurchaseViewStyles();
         initTenantSureAboutViewStyles();
         initSureFaqViewStyles();
-
+        initOther();
     }
 
     private void initDecoratorStyles() {
@@ -168,6 +168,12 @@ public class TenantSureTheme extends Theme {
             style.addProperty("text-align", "justify");
             addStyle(style);
         }
+    }
+
+    public void initOther() {
+        Style style = new Style("." + TenantSureTheme.StyleName.TSPaymentAmount.name());
+        style.addProperty("width", "10em");
+        addStyle(style);
     }
 
 }

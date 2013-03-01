@@ -68,23 +68,23 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().inceptionDate())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().coverage().inceptionDate())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate())).componentWidth(10).build());
 
         // TODO maybe create a separate coverage viewer?
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().personalLiabilityCoverage())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().quote().coverage().contentsCoverage())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().coverage().personalLiabilityCoverage())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().coverage().contentsCoverage())).componentWidth(10).build());
 
-        // TODO investigate why format of annotated on the filed doesn't work
+        // TODO investigate why format of annotated on the field doesn't work
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().quote().coverage().personalLiabilityCoverage())).setFormat(currencyFormat);
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().quote().coverage().contentsCoverage())).setFormat(currencyFormat);
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().coverage().personalLiabilityCoverage())).setFormat(currencyFormat);
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().coverage().contentsCoverage())).setFormat(currencyFormat);
 
         panel.setH3(++row, 0, 1, i18n.tr("Annual Payment"));
-        panel.setWidget(++row, 0, inject(proto().quote(), new TenantSureQuoteViewer(false)));
+        panel.setWidget(++row, 0, inject(proto().annualPaymentDetails(), new TenantSurePaymentViewer()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Next Monthly Payment"));
-        panel.setWidget(++row, 0, inject(proto().nextPaymentDetails(), new TenantSureMonthlyPaymentViewer()));
+        panel.setWidget(++row, 0, inject(proto().nextPaymentDetails(), new TenantSurePaymentViewer()));
 
         panel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
 
@@ -94,9 +94,9 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().quote().coverage().contentsCoverage()).setVisible(
-                !getValue().quote().coverage().contentsCoverage().isNull()
-                        && !getValue().quote().coverage().contentsCoverage().getValue().equals(new BigDecimal("0.00")));
+        boolean hasContextCoverage = !getValue().coverage().contentsCoverage().isNull()
+                && !getValue().coverage().contentsCoverage().getValue().equals(new BigDecimal("0.00"));
+        get(proto().coverage().contentsCoverage()).setVisible(hasContextCoverage);
         get(proto().expiryDate()).setVisible(!getValue().expiryDate().isNull());
     }
 }

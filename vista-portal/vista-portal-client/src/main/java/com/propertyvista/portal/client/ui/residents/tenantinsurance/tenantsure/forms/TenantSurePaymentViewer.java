@@ -30,26 +30,26 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.portal.client.themes.TenantSureTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 
-// TODO this is actually generic payment viewer and must be renamed to represent this (however now it's used only for monthly payments (it must be used instead of TenantSureQuoteViewer)
-public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaymentDTO> {
+public class TenantSurePaymentViewer extends CEntityViewer<TenantSurePaymentDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureMonthlyPaymentViewer.class);
+    private static final I18n i18n = I18n.get(TenantSurePaymentViewer.class);
 
     private final NumberFormat currencyFormat;
 
     private final DateTimeFormat dateFormat;
 
-    public TenantSureMonthlyPaymentViewer(NumberFormat currencyFormat, DateTimeFormat dateFormat) {
+    public TenantSurePaymentViewer(NumberFormat currencyFormat, DateTimeFormat dateFormat) {
         this.currencyFormat = currencyFormat;
         this.dateFormat = dateFormat;
     }
 
-    public TenantSureMonthlyPaymentViewer() {
+    public TenantSurePaymentViewer() {
         this(MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT, DateTimeFormat.getFormat(CDatePicker.defaultDateFormat));
     }
 
@@ -57,16 +57,19 @@ public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaym
     public IsWidget createContent(TenantSurePaymentDTO payment) {
         FlowPanel contentPanel = new FlowPanel();
         if (payment != null) {
+            int row = -1;
+            FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
             for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
-                int row = -1;
-                FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
+
                 addDetailRecord(paymentBreakdownPanel, ++row, paymentItem.description().getValue(), paymentItem.amount().getValue());
                 for (TenantSurePaymentItemTaxDTO tax : paymentItem.taxBreakdown()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, tax.tax().getValue(), tax.amount().getValue());
                 }
-                addTotalRecord(paymentBreakdownPanel, ++row, payment.total().getMeta().getCaption(), payment.total().getValue());
-                contentPanel.add(paymentBreakdownPanel);
             }
+            if (!payment.total().isNull()) {
+                addTotalRecord(paymentBreakdownPanel, ++row, payment.total().getMeta().getCaption(), payment.total().getValue());
+            }
+            contentPanel.add(paymentBreakdownPanel);
 
             if (!payment.paymentDate().isNull()) {
                 Label nextPaymentDateLabel = new Label();
@@ -89,6 +92,7 @@ public class TenantSureMonthlyPaymentViewer extends CEntityViewer<TenantSurePaym
         table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
         table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
         table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
+        table.getFlexCellFormatter().addStyleName(row, 2, TenantSureTheme.StyleName.TSPaymentAmount.name());
     }
 
     private void addTotalRecord(FlexTable table, int row, String description, BigDecimal amount) {

@@ -295,19 +295,32 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificateNumber().getValue());
         status.expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
 
-        status.quote().coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.liabilityCoverage().getValue());
-        status.quote().coverage().contentsCoverage().setValue(insuranceTenantSure.contentsCoverage().getValue());
-        status.quote().coverage().deductible().setValue(insuranceTenantSure.deductible().getValue());
-        status.quote().coverage().inceptionDate().setValue(insuranceTenantSure.inceptionDate().getValue());
+        status.coverage().personalLiabilityCoverage().setValue(insuranceTenantSure.liabilityCoverage().getValue());
+        status.coverage().contentsCoverage().setValue(insuranceTenantSure.contentsCoverage().getValue());
+        status.coverage().deductible().setValue(insuranceTenantSure.deductible().getValue());
+        status.coverage().inceptionDate().setValue(insuranceTenantSure.inceptionDate().getValue());
 
-        status.quote().annualPremium().setValue(insuranceTenantSure.annualPremium().getValue());
-        status.quote().underwriterFee().setValue(insuranceTenantSure.underwriterFee().getValue());
-        status.quote().totalAnnualTax().setValue(insuranceTenantSure.totalAnnualTax().getValue());
-        status.quote().totalAnnualPayable().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
+        status.annualPaymentDetails().paymentDate().setValue(null);
+        status.annualPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
+                insuranceTenantSure.annualPremium().getMeta().getCaption(),
+                insuranceTenantSure.annualPremium().getValue(),
+                new ArrayList<TenantSurePaymentItemTaxDTO>()
+        ));//@formatter:off
+        status.annualPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
+                insuranceTenantSure.underwriterFee().getMeta().getCaption(),
+                insuranceTenantSure.underwriterFee().getValue(),
+                new ArrayList<TenantSurePaymentItemTaxDTO>()
+                ));//@formatter:off
+        status.annualPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
+                insuranceTenantSure.totalAnnualTax().getMeta().getCaption(),
+                insuranceTenantSure.totalAnnualTax().getValue(),
+                new ArrayList<TenantSurePaymentItemTaxDTO>()
+                ));//@formatter:off
+        status.annualPaymentDetails().total().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
 
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         status.nextPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
-                    i18n.tr("Premium + Taxes"), 
+                    i18n.tr("Premium + Tax"), 
                     insuranceTenantSure.totalMonthlyPayable().getValue(),
                     new ArrayList<TenantSurePaymentItemTaxDTO>()
         ));//@formatter:on

@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+// TODO maybe tax should be another item of equal rights with pointer to other item?
 @Transient
 public interface TenantSurePaymentItemDTO extends IEntity {
 

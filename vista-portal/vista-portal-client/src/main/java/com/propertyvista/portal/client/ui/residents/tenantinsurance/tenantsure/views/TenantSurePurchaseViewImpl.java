@@ -449,6 +449,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private Step makePaymentSucceededStep() {
         final FlowPanel finishStepPanel = new FlowPanel();
+        // TODO move styling to theme
         finishStepPanel.getElement().getStyle().setProperty("display", "table-cell");
         finishStepPanel.getElement().getStyle().setProperty("verticalAlign", "middle");
         finishStepPanel.getElement().getStyle().setProperty("textAlign", "center");

@@ -31,7 +31,9 @@ public interface TenantSureTenantInsuranceStatusDetailedDTO extends IEntity {
      */
     IPrimitive<LogicalDate> expiryDate();
 
-    TenantSureQuoteDTO quote();
+    TenantSureCoverageDTO coverage();
+
+    TenantSurePaymentDTO annualPaymentDetails();
 
     TenantSurePaymentDTO nextPaymentDetails();
 
