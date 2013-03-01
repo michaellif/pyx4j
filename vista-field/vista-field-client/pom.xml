@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.propertyvista</groupId>
         <artifactId>vista-field</artifactId>
-        <version>1.0.7-SNAPSHOT</version><!--vista-version-->
+        <version>1.0.8-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
