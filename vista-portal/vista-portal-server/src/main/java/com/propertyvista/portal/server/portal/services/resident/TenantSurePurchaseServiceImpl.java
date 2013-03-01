@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -27,10 +29,9 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
@@ -55,7 +56,41 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
 
-    private static I18n i18n = I18n.get(TenantSurePurchaseServiceImpl.class);
+    private static class ServerSideQuteStorage {
+
+        public static void put(TenantSureQuoteDTO quote) {
+            getQuoteStorage().put(quote.quoteId().getValue(), quote);
+        }
+
+        public static TenantSureQuoteDTO get(String quoteId) {
+            return getQuoteStorage().get(quoteId);
+        }
+
+        public static void clear() {
+            Visit visit = Context.getVisit();
+            synchronized (visit) {
+                Context.getVisit().setAttribute(ServerSideQuteStorage.class.getName(), null);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        private static ConcurrentHashMap<String, TenantSureQuoteDTO> getQuoteStorage() {
+            Visit visit = Context.getVisit();
+
+            ConcurrentHashMap<String, TenantSureQuoteDTO> storage;
+            synchronized (visit) {
+                Serializable o = Context.getVisit().getAttribute(ServerSideQuteStorage.class.getName());
+                if (o == null) {
+                    storage = new ConcurrentHashMap<String, TenantSureQuoteDTO>();
+                    Context.getVisit().setAttribute(ServerSideQuteStorage.class.getName(), storage);
+                } else {
+                    storage = (ConcurrentHashMap<String, TenantSureQuoteDTO>) o;
+                }
+            }
+            return storage;
+        }
+
+    }
 
     private static List<BigDecimal> CONTENTS_COVERAGE_OPTIONS;
 
@@ -101,11 +136,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
 
         params.deductibleOptions().addAll(getDeductibleOptions());
-
-        if (false) {
-            // TODO right now this is filled on client from resources
-            params.personalDisclaimerHolder();
-        }
+        // TODO fill in personal disclaimer: right now this is filled on client from resources         
         params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
 
         callback.onSuccess(params);
@@ -123,18 +154,18 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()
         );//@formatter:on
 
-        // TODO save quote in visit
-        UserVisit visit = Context.getUserVisit(UserVisit.class);
+        if (quote.specialQuote().isNull()) {
+            ServerSideQuteStorage.put(quote);
+        }
         callback.onSuccess(quote);
     }
 
     @Override
-    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
+    public void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quoteIdHolder, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
-        // TODO check out the quote from visit
 
         paymentMethod.tenant().set(TenantAppContext.getCurrentUserTenant());
 
@@ -144,7 +175,10 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()
         );//@formatter:on
 
-        // TODO the quote that we use here MUST be fetched from user context (and not from client's side), since we use money from that quote object to create payments in
+        TenantSureQuoteDTO quote = ServerSideQuteStorage.get(quoteIdHolder.quoteId().getValue());
+        if (quote == null) {
+            throw new Error("The requested quote " + quoteIdHolder.quoteId().getValue() + " was not found in client's context");
+        }
         ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
                 quote,
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
@@ -152,6 +186,8 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 tenantPhone
         );//@formatter:off
 
+        ServerSideQuteStorage.clear();
+        
         callback.onSuccess(null);
     }
 
@@ -162,7 +198,9 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     
     @Override
     public void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId) {
-        // TODO add check that this quoteId belongs to the Tenant in content
+        if (ServerSideQuteStorage.get(quoteId) == null) {
+            throw new Error("The requested quote " + quoteId + " was not found in client's context");
+        }
         String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(TenantAppContext.getCurrentUserTenant().<Tenant>createIdentityStub(), quoteId);        
         asyncCallback.onSuccess(email);
     }
