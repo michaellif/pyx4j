@@ -15,6 +15,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -50,11 +51,11 @@ public class RunLister extends ListerBase<Run> {
 
     static List<ColumnDescriptor> createViewColumnDescriptors() {
         Run proto = EntityFactory.getEntityPrototype(Run.class);
-        List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
+        List<ColumnDescriptor> c = new Vector<ColumnDescriptor>(Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.trigger().name()).title("Trigger Name").build(),
                 new MemberColumnDescriptor.Builder(proto.trigger().triggerType()).build(),
                 new MemberColumnDescriptor.Builder(proto.trigger()).searchableOnly().build()
-        );//@formatter:on
+        ));//@formatter:on
         c.addAll(createInlineViewColumnDescriptors());
         return c;
     }
