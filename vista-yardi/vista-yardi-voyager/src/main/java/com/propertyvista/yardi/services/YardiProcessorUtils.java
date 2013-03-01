@@ -133,7 +133,7 @@ public class YardiProcessorUtils {
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
         Detail detail = new Detail();
-        detail.setDocumentNumber(yp.paymentRecord().paymentMethod().type().getValue().toString());
+        detail.setDocumentNumber(yp.paymentRecord().paymentMethod().type().getValue().toString() + " #" + yp.getPrimaryKey().toString());
         detail.setTransactionDate(pr.createdDate().getValue());
         detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
         detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
