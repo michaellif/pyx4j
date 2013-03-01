@@ -69,7 +69,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return protocol + pmcDnsName + ".residentportalsite.com/";
         case staging:
-            return protocol + pmcDnsName + "-portal-staging03.propertyvista.com/";
+            return protocol + pmcDnsName + "-portal-staging03.residentportalsite.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
@@ -81,7 +81,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case production:
             return "https://" + pmcDnsName + ".prospectportalsite.com/";
         case staging:
-            return "https://" + pmcDnsName + "-ptapp-staging03.propertyvista.com/";
+            return "https://" + pmcDnsName + "-ptapp-staging03.prospectportalsite.com/";
         default:
             throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
         }
