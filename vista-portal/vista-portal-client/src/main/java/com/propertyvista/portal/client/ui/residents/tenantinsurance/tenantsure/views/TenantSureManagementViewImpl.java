@@ -52,6 +52,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     }
 
+    // TODO (VISTA-2625) something is wrong here: email doesn't get propagated to ccomponent, because NFocusComponen. BlurHandler doesn't fire when user click OK button 
+    @Deprecated
     private abstract static class EmailInputDialog extends OkCancelDialog {
 
         private CEntityForm<EmailHolder> form;
@@ -158,8 +160,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     @Override
-    public void reportSendDocumentatioinSuccess() {
-        MessageDialog.info(i18n.tr("Documentation has been sent successfully!"));
+    public void reportSendCertificateSuccess(String emailAddress) {
+        MessageDialog.info(i18n.tr("Your insurance certificate was sent to {0}." + emailAddress));
     }
 
     private Widget makeGreetingPanel() {
@@ -186,23 +188,11 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         FlowPanel actionsPanel = new FlowPanel();
         actionsPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementActionsPanel.name());
 
-        sendDocumentationButton = new Anchor(i18n.tr("Resend Insurance Certificate..."), new Command() {
+        sendDocumentationButton = new Anchor(i18n.tr("Resend Insurance Certificate"), new Command() {
             @Override
             public void execute() {
-                new EmailInputDialog("") {
-                    @Override
-                    public boolean onClickOk() {
-                        String email = getEmail();
-                        if (email != null) {
-                            presenter.sendDocumentation(email);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    };
-                }.show();
+                presenter.sendCertificate(null);
             }
-
         });
 
         updateCCButton = new Anchor(i18n.tr("Update Credit Card Details"), new Command() {
@@ -259,6 +249,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         actionsPanel.add(makeAClaim);
         actionsPanel.add(updateCCButton);
         actionsPanel.add(updateCCAndPay);
+        actionsPanel.add(new HTML("&nbsp;")); // add separator 
         actionsPanel.add(cancelTenantSureButton);
         actionsPanel.add(reinstateTenantSureButton);
 

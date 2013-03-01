@@ -490,17 +490,17 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     @Override
-    public void sendDocumentation(Tenant tenantId, String email) {
-        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-
+    public String sendCertificate(Tenant tenantId, String email) {
         List<String> emails = new ArrayList<String>();
         SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
         if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
             emails.add(mailConfig.getForwardAllTo());
         } else {
-            emails.add(email);
+            emails.add(email != null ? email : getTenantsEmail(tenantId));
         }
+        InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
+        return emails.get(0);
     }
 
     @Override

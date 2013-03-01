@@ -31,7 +31,8 @@ public interface TenantSureManagementView extends IsWidget {
 
         void viewAboutTenantSure();
 
-        void sendDocumentation(String email);
+        /** email can be null: then tenant's default email should be used */
+        void sendCertificate(String email);
 
     }
 
@@ -45,6 +46,10 @@ public interface TenantSureManagementView extends IsWidget {
 
     void reportError(String message);
 
-    void reportSendDocumentatioinSuccess();
+    /**
+     * @param emailAddress
+     *            is the address that the email has been send to
+     */
+    void reportSendCertificateSuccess(String emailAddress);
 
 }

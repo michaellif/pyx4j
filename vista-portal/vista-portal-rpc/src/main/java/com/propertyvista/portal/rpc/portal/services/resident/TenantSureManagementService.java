@@ -35,6 +35,9 @@ public interface TenantSureManagementService extends IService {
 
     void reinstate(AsyncCallback<VoidSerializable> callback);
 
-    void sendDocumentation(AsyncCallback<VoidSerializable> defaultAsyncCallback, String email);
+    /**
+     * if email is <code>null</code> will send the email to the tenant's email address, returns an email address that was used to send it.
+     */
+    void sendCertificate(AsyncCallback<String> defaultAsyncCallback, String email);
 
 }

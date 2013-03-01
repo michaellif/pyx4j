@@ -87,14 +87,14 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     }
 
     @Override
-    public void sendDocumentation(AsyncCallback<VoidSerializable> callback, String email) {
+    public void sendCertificate(AsyncCallback<String> callback, String email) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
 
-        ServerSideFactory.create(TenantSureFacade.class).sendDocumentation(
+        String sendTo = ServerSideFactory.create(TenantSureFacade.class).sendCertificate(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
-        callback.onSuccess(null);
+        callback.onSuccess(sendTo);
     }
 
 }
