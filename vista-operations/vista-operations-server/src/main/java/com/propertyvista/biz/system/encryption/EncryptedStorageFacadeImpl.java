@@ -315,18 +315,26 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     @Override
-    public void makeCurrent(Key publicKeyKey) {
+    public void makeCurrent(final Key publicKeyKey) {
         EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
         if (publicKey == null) {
             throw new UserRuntimeException("PublicKey not found");
         }
-        EncryptedStorageCurrentKey current = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
-        if (current == null) {
-            current = EntityFactory.create(EncryptedStorageCurrentKey.class);
-        }
-        current.current().setPrimaryKey(publicKeyKey);
-        Persistence.service().persist(current);
-        Persistence.service().commit();
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                EncryptedStorageCurrentKey current = Persistence.service().retrieve(EntityQueryCriteria.create(EncryptedStorageCurrentKey.class));
+                if (current == null) {
+                    current = EntityFactory.create(EncryptedStorageCurrentKey.class);
+                }
+                current.current().setPrimaryKey(publicKeyKey);
+                Persistence.service().persist(current);
+                return null;
+            }
+
+        });
 
         log.warn("Key {} id#{} made current", publicKey.name().getValue(), publicKey.getPrimaryKey());
 
