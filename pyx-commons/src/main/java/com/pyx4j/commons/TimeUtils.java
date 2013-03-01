@@ -84,20 +84,27 @@ public class TimeUtils {
         StringBuffer sb;
         sb = new StringBuffer();
         if (h != 0) {
-            sb.append(CommonsStringUtils.d00((int) h)).append(":");
+            sb.append(CommonsStringUtils.d00((int) h)).append("h");
         }
         if ((h != 0) || (min != 0)) {
-            sb.append(CommonsStringUtils.d00((int) min)).append(".");
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(CommonsStringUtils.d00((int) min)).append("min");
+        }
+
+        if (sb.length() > 0) {
+            sb.append(' ');
         }
         sb.append(CommonsStringUtils.d00((int) sec));
         if ((h == 0) && (min == 0)) {
-            sb.append(" sec");
+            sb.append("sec");
         }
         if ((h == 0) && (min == 0) && (sec <= 1)) {
             msec -= 1000 * sec;
-            sb.append(" ");
+            sb.append(' ');
             sb.append(CommonsStringUtils.d000((int) msec));
-            sb.append(" msec");
+            sb.append("msec");
         }
         return sb.toString();
     }
