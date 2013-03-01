@@ -40,6 +40,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
+import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -241,6 +242,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
         return VistaSMTPMailServiceConfig.getCustomConfig("mail.tenantsure", this);
+    }
+
+    @Override
+    public TenantSureConfiguration getTenantSureConfiguration() {
+        return new VistaTenantSureConfiguration(this);
     }
 
     @Override

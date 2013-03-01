@@ -31,6 +31,7 @@ import com.pyx4j.security.shared.AclCreator;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
+import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 
 public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
@@ -218,6 +219,22 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
         return new VistaTestsEncryptedStorageConfiguration();
+    }
+
+    @Override
+    public TenantSureConfiguration getTenantSureConfiguration() {
+        return new TenantSureConfiguration() {
+
+            @Override
+            public boolean useCfcApiAdapterMockup() {
+                return true;
+            }
+
+            @Override
+            public String cfcApiEndpointUrl() {
+                return null;
+            }
+        };
     }
 
 }

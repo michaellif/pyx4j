@@ -14,22 +14,24 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import com.pyx4j.config.server.FacadeFactory;
+import com.pyx4j.config.server.ServerSideConfiguration;
 
-import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.TenantSureConfiguration;
 
 public class CfcApiAdapterFacadeFactory implements FacadeFactory<CfcApiAdapterFacade> {
 
-    private static final boolean USE_CFC_API_MOCKUP_CLIENT = false;
+    private static TenantSureConfiguration getTenantSureConfig() {
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureConfiguration();
+    }
 
     @Override
     public CfcApiAdapterFacade create() {
-
-        if (VistaDemo.isDemo()) {
-            return new CfcApiAdapterFacadeMockupImpl();
-        } else if (USE_CFC_API_MOCKUP_CLIENT) {
+        TenantSureConfiguration cfgConfiguration = getTenantSureConfig();
+        if (cfgConfiguration.useCfcApiAdapterMockup()) {
             return new CfcApiAdapterFacadeMockupImpl();
         } else {
-            return new CfcApiAdapterFacadeImpl();
+            return new CfcApiAdapterFacadeImpl(cfgConfiguration);
         }
 
     }

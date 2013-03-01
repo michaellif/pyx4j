@@ -69,7 +69,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         public static void clear() {
             Visit visit = Context.getVisit();
             synchronized (visit) {
-                Context.getVisit().setAttribute(ServerSideQuteStorage.class.getName(), null);
+                Context.getVisit().removeAttribute(ServerSideQuteStorage.class.getName());
             }
         }
 

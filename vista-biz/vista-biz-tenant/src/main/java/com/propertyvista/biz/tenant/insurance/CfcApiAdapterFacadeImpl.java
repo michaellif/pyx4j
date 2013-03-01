@@ -14,15 +14,9 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.SocketAddress;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +47,7 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureT
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
@@ -65,17 +59,17 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_STUFF = true;
 
+    private final TenantSureConfiguration configuration;
+
+    public CfcApiAdapterFacadeImpl(TenantSureConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
     // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
-            String url = null;
-            if (VistaDeployment.isVistaProduction()) {
-                url = "https://api.cfcprograms.com/cfc_api.asmx";
-            } else {
-                url = "http://testapi.cfcprograms.com/cfc_api.asmx";
-            }
-
+            String url = configuration.cfcApiEndpointUrl();
             api = new CFCAPI(new URL(url), new QName("http://api.cfcprograms.com/", "CFC_API"));
 
         } catch (MalformedURLException e) {
@@ -91,31 +85,6 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
                 return handlerChain;
             }
         });
-
-        boolean eclipseTcpIpMonitor = false;
-
-        if (eclipseTcpIpMonitor) {
-            ProxySelector ps = new ProxySelector() {
-
-                ProxySelector defsel = ProxySelector.getDefault();
-
-                @Override
-                public List<Proxy> select(URI uri) {
-                    if (uri.getHost().equals("testapi.cfcprograms.com")) {
-                        ArrayList<Proxy> l = new ArrayList<Proxy>();
-                        l.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 9992)));
-                        return l;
-                    }
-                    return defsel.select(uri);
-                }
-
-                @Override
-                public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
-                    defsel.connectFailed(uri, sa, ioe);
-                }
-            };
-            ProxySelector.setDefault(ps);
-        }
 
         return api;
     }

@@ -102,6 +102,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration();
 
+    public abstract TenantSureConfiguration getTenantSureConfiguration();
+
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;
     }
