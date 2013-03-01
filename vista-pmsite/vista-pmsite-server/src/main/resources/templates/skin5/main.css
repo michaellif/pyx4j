@@ -91,8 +91,7 @@ a:hover {
 
 select {
 	color: #999999;
-	border-right: 1px solid #ec8e21;
-	border-bottom: 1px solid #ec8e21;
+	outline: 1px solid #EC8E21;
 }
 .hidden { display:none; }
 
