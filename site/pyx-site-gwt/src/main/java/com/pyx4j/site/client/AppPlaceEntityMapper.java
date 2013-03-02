@@ -36,6 +36,11 @@ public class AppPlaceEntityMapper {
     public static void register(Class<? extends IEntity> type, Class<? extends CrudAppPlace> placeClass, ImageResource image) {
         AppPlaceData data = new AppPlaceData(placeClass, image);
         map.put(type, data);
+        Class<? extends IEntity> dboType = EntityFactory.getEntityMeta(type).getDBOClass();
+        if (dboType != type) {
+            map.put(dboType, data);
+        }
+
     }
 
     public static CrudAppPlace resolvePlace(Class<? extends IEntity> type, Key id) {
