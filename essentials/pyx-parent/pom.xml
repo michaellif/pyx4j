@@ -677,7 +677,7 @@
                         <dependency>
                             <groupId>net.kindleit</groupId>
                             <artifactId>gae-runtime</artifactId>
-                            <version>${gaeVersion}</version>
+                            <version>${gaeVersion}.1</version>
                             <type>pom</type>
                         </dependency>
                     </dependencies>
