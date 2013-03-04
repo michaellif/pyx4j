@@ -28,15 +28,13 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
 
     private static final I18n i18n = I18n.get(VistaUnrecoverableErrorHandler.class);
 
-    private final boolean isDemo;
-
-    public VistaUnrecoverableErrorHandler(boolean isDemo) {
-        this.isDemo = isDemo;
+    public VistaUnrecoverableErrorHandler() {
         UncaughtHandler.setUnrecoverableErrorHandler(this);
     }
 
@@ -87,12 +85,12 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     @Override
-    protected void showDefaultError(Throwable caught, String errorCode) {
+    protected void showUserError(String text) {
+        showMessage(text, UserMessageType.ERROR);
+    }
 
-        String detailsMessage = "";
-        if (ApplicationMode.isDevelopment() && CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
-            detailsMessage += "\n" + caught.getMessage();
-        }
+    @Override
+    protected void showDefaultError(Throwable caught, String errorCode) {
 
         boolean sessionClosed = false;
 
@@ -104,11 +102,13 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
             userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
         }
 
-        userMessage += detailsMessage;
+        if (ApplicationMode.isDevelopment() && CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {
+            userMessage += "\n(DEV)\n" + caught.getMessage();
+        }
 
         StringBuilder debugMessage = new StringBuilder();
 
-        if (!isDemo && ApplicationMode.isDevelopment()) {
+        if (!VistaDemo.isDemo() && ApplicationMode.isDevelopment()) {
             debugMessage.append(new Date());
             if (errorCode != null) {
                 debugMessage.append("ErrorCode [" + errorCode + "]");

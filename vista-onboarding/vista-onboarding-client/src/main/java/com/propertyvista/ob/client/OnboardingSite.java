@@ -61,7 +61,7 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler(false));
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
         // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
         getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
             @Override
