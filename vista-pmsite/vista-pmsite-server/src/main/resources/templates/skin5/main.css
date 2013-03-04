@@ -45,6 +45,7 @@ html,body {
 body {
 	font: 16px Calibri;
 	line-height: 1.4;
+	zoom: 1;
 	background: #2f292a;
 	opacity: 0.95;
 	/*background: #fff url("images/bg-pattern.jpg");*/
@@ -55,7 +56,7 @@ body {
 	/*background: no-repeat  -ms-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* IE10+ */
 	/*background: no-repeat  linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* W3C */
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='${object1_60}', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-
+	
 }
 
 input,select,textarea {
@@ -152,8 +153,9 @@ select {
 	height: 60px;
 	position: absolute;
 	top: 75%;
-	left: 518px;
+	/*left: 518px;*/
 	width: auto;
+	right: 0;
 }
 
 .navigation ul {

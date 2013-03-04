@@ -7,17 +7,20 @@
 .vista-pmsite-findAptPage .vista-pmsite-content {
 	color: #FFFFFF;
     font-size: 16px;
-    height: auto;
+    height: 476px;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
     border-top: 5px solid #000000;
     background: url("images/resident.jpg") no-repeat right top;
+    zoom: 1;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/resident.jpg', sizingMethod='scale');
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/resident.jpg', sizingMethod='scale')";
 }
 
 .vista-pmsite-findAptPage #advancedSearchCriteriaForm1 {
 	top: 0;
-	height: 383px;
+	height: 403px;
 	*height: 366px;
 }
 
@@ -26,7 +29,7 @@
 	overflow: hidden;
     /*background: #302A2C;*/
     padding: 10px 20px;
-    *padding-bottom: 90px;
+    padding-bottom: 100px;
     width: 920px;
 }
 
@@ -53,6 +56,7 @@
     background: -ms-linear-gradient(top, #b55508, #FA8D0C);
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b55508', endColorstr='#FA8D0C');/*For IE7-8-9*/ 
 	height: 1%;/*For IE7*/
+	height: 370px; /*For IE8*/
     background: linear-gradient(top, #b55508, #FA8D0C);
 }
 
@@ -70,7 +74,8 @@
 	/*background: ${object1_100};
 	color: ${object1_10};*/
 	position: relative;
-	right: -14px;
+	top: 20px;
+	right: -10px;
 	background: #302A2C;
 	color: #D7AC3F;
 	cursor: pointer;
@@ -80,8 +85,8 @@
 	font-size: 14pt;
 	font-weight: bold;
 	text-transform: uppercase;
-	margin: 20px 0;
-	padding: 10px;
+	/*margin: 20px 0;
+	padding: 10px;*/
 }
 
 .advancedSearchWideWrap label {
