@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.IsWarningException;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 
 public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
@@ -108,6 +109,8 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
         Throwable cause = unwrapCause(caught);
         if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
+        } else if (cause instanceof UserRuntimeException) {
+            showUserError(cause.getMessage());
         } else if (isVersionMismatch(cause)) {
             showReloadApplication();
         } else if (cause instanceof StatusCodeException) {
@@ -148,6 +151,8 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
     protected abstract void showUnauthorized();
 
     protected abstract void showWarning(String text);
+
+    protected abstract void showUserError(String text);
 
     protected abstract void showThrottle();
 
