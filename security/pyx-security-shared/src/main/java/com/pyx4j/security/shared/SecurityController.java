@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.ConverterUtils;
@@ -33,6 +36,8 @@ import com.pyx4j.security.server.SecurityControllerCreator;
 public abstract class SecurityController {
 
     private static final SecurityController controller = init();
+
+    private static final Logger log = LoggerFactory.getLogger(SecurityController.class);
 
     private static final SecurityController init() {
         if (ApplicationMode.isGWTClient()) {
@@ -78,6 +83,7 @@ public abstract class SecurityController {
 
     public static void assertBehavior(Behavior behavior) {
         if (!checkBehavior(behavior)) {
+            log.warn("Permission denied {}", behavior);
             if (ApplicationMode.isDevelopment()) {
                 throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + behavior);
             } else {
@@ -88,6 +94,7 @@ public abstract class SecurityController {
 
     public static void assertAnyBehavior(Behavior... behaviors) {
         if (!checkAnyBehavior(behaviors)) {
+            log.warn("Permission denied {}", ConverterUtils.convertArray(behaviors, " or "));
             if (ApplicationMode.isDevelopment()) {
                 throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + ConverterUtils.convertArray(behaviors, " or "));
             } else {
@@ -106,6 +113,7 @@ public abstract class SecurityController {
 
     public static void assertPermission(Permission permission) throws SecurityViolationException {
         if (!checkPermission(permission)) {
+            log.warn("Permission denied {}", permission);
             if (ApplicationMode.isDevelopment()) {
                 throw new SecurityViolationException("Permission denied " + ApplicationMode.DEV + permission);
             } else {
