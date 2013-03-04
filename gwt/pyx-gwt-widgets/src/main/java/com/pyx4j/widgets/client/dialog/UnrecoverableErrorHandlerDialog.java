@@ -156,6 +156,11 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
     }
 
     @Override
+    protected void showUserError(String text) {
+        MessageDialog.show(i18n.tr("Error"), text, Type.Error, new ShowOnceDialogOptions());
+    }
+
+    @Override
     protected void showDefaultError(Throwable caught, String errorCode) {
 
         String detailsMessage = "";
