@@ -60,7 +60,7 @@ public class PadProcessor {
         }
         paymentRecord.merchantAccount().set(merchantAccount);
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-        paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
 
         Persistence.service().retrieve(paymentRecord.billingAccount());

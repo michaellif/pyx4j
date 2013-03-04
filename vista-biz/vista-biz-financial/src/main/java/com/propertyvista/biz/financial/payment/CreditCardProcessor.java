@@ -195,7 +195,6 @@ class CreditCardProcessor {
             log.debug("ccTransaction accepted {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
         } else {
             log.debug("ccTransaction rejected {}", response);

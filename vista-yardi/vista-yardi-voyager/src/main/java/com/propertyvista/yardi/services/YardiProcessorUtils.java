@@ -134,7 +134,7 @@ public class YardiProcessorUtils {
 
         Detail detail = new Detail();
         detail.setDocumentNumber(yp.paymentRecord().paymentMethod().type().getValue().toString() + " #" + yp.getPrimaryKey().toString());
-        detail.setTransactionDate(pr.createdDate().getValue());
+        detail.setTransactionDate(pr.receivedDate().getValue());
         detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
         detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
         detail.setAmount(pr.amount().getValue().toString());

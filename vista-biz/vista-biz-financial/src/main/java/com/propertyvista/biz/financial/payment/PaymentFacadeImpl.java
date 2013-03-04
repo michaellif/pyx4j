@@ -133,12 +133,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             break;
         case Check:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             break;
         case CreditCard:
             // The credit card processing is done in new transaction and committed regardless of results
@@ -149,7 +147,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
             break;
         case EFT:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             break;
         case Interac:
             throw new IllegalArgumentException("Not implemented");
@@ -158,12 +155,15 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         Persistence.service().merge(paymentRecord);
+
         if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             try {
                 ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             } catch (ARException e) {
                 throw new PaymentException("Failed to post payment to AR while processing payment", e);
             }
+            Persistence.service().merge(paymentRecord);
         }
 
         return paymentRecord;
