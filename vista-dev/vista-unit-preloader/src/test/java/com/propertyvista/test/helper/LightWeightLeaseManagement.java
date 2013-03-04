@@ -40,8 +40,11 @@ public class LightWeightLeaseManagement {
 
         lease.status().setValue(status);
 
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.type().setValue(Service.ServiceType.residentialUnit);
+
+        InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+        lease.billingAccount().set(billingAccount);
+        lease.billingAccount().paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
@@ -55,9 +58,6 @@ public class LightWeightLeaseManagement {
             LeaseTerm term = lease.currentTerm().detach();
 
             lease.currentTerm().set(null);
-
-            InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
-            lease.billingAccount().set(billingAccount);
 
             Persistence.service().persist(lease);
             lease.currentTerm().set(term);

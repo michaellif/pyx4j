@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -24,7 +23,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
@@ -71,22 +69,14 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmationMethod()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useDefaultBillingCycleSartDay())).build());
-        get(proto().useDefaultBillingCycleSartDay()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().defaultBillingCycleSartDay()).setEnabled(event.getValue());
 
-            }
-        });
-
-        ArrayList<Integer> options = new ArrayList<Integer>();
-        for (int i = 1; i < 29; i++) {
-            options.add(i);
-        }
-        CComboBox<Integer> comboBox = new CComboBox<Integer>();
-        comboBox.setOptions(options);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultBillingCycleSartDay(), comboBox), 5).build());
+//        ArrayList<Integer> options = new ArrayList<Integer>();
+//        for (int i = 1; i < 29; i++) {
+//            options.add(i);
+//        }
+//        CComboBox<Integer> comboBox = new CComboBox<Integer>();
+//        comboBox.setOptions(options);
+//        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultBillingCycleSartDay(), comboBox), 5).build());
 
         return panel;
     }
@@ -131,7 +121,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().defaultBillingCycleSartDay()).setEnabled(getValue().useDefaultBillingCycleSartDay().getValue());
         bindBaseFeeEditor(getValue().lateFee().baseFeeType().getValue(), true);
         bindMaxFeeEditor(getValue().lateFee().maxTotalFeeType().getValue(), true);
     }

@@ -26,6 +26,7 @@ import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -44,14 +45,11 @@ public interface LeaseBillingPolicy extends Policy {
         };
     }
 
+    @Owned
+    IList<LeaseBillingTypePolicyItem> availableBillingTypes();
+
     @NotNull
     IPrimitive<InternalBillingAccount.ProrationMethod> prorationMethod();
-
-    @NotNull
-    IPrimitive<Boolean> useDefaultBillingCycleSartDay();
-
-    @NotNull
-    IPrimitive<Integer> defaultBillingCycleSartDay();
 
     @Owned
     LateFeeItem lateFee();

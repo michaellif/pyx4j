@@ -23,7 +23,9 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeaseBillingPolicyDataModel {
 
@@ -41,8 +43,6 @@ public class LeaseBillingPolicyDataModel {
     public void generate() {
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        policy.defaultBillingCycleSartDay().setValue(config.defaultBillingCycleSartDay);
-        policy.useDefaultBillingCycleSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Actual);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
@@ -70,6 +70,11 @@ public class LeaseBillingPolicyDataModel {
         policy.confirmationMethod().setValue(config.billConfirmationMethod);
 
         policy.node().set(pmcDataModel.getOrgNode());
+
+        LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+        policy.availableBillingTypes().add(billingType);
 
         Persistence.service().persist(policy);
     }

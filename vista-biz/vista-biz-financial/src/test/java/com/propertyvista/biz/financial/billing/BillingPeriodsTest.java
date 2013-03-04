@@ -57,7 +57,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("01-Mar-2012").
         billingCyclePeriodEndDate("31-Mar-2012").
         billingCycleExecutionTargetDate("15-Feb-2012").
@@ -81,7 +80,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Apr-2012").
         billingCyclePeriodEndDate("30-Apr-2012").
         billingCycleExecutionTargetDate("17-Mar-2012").
@@ -109,7 +107,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-May-2012").
         billingCyclePeriodEndDate("31-May-2012").
         billingCycleExecutionTargetDate("16-Apr-2012").
@@ -134,7 +131,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-May-2012").
         billingCyclePeriodEndDate("31-May-2012").
         billingCycleExecutionTargetDate("16-Apr-2012").
@@ -157,7 +153,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(5).
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Jun-2012").
         billingCyclePeriodEndDate("30-Jun-2012").
         billingCycleExecutionTargetDate("17-May-2012").
@@ -179,7 +174,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Jul-2012").
         billingCyclePeriodEndDate("31-Jul-2012").
         billingCycleExecutionTargetDate("16-Jun-2012").
@@ -201,7 +195,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Aug-2012").
         billingCyclePeriodEndDate("31-Aug-2012").
         billingCycleExecutionTargetDate("17-Jul-2012").
@@ -225,7 +218,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(8).
         previousBillSequenceNumber(7).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("01-Sep-2012").
         billingCyclePeriodEndDate("30-Sep-2012").
         billingCycleExecutionTargetDate("17-Aug-2012").
@@ -269,7 +261,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Mar-2012").
         billingCyclePeriodEndDate("22-Apr-2012").
         billingCycleExecutionTargetDate("08-Mar-2012").
@@ -291,7 +282,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Apr-2012").
         billingCyclePeriodEndDate("22-May-2012").
         billingCycleExecutionTargetDate("08-Apr-2012").
@@ -311,7 +301,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(3).
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-May-2012").
         billingCyclePeriodEndDate("22-Jun-2012").
         billingCycleExecutionTargetDate("08-May-2012").
@@ -327,7 +316,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(4).
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-May-2012").
         billingCyclePeriodEndDate("22-Jun-2012").
         billingCycleExecutionTargetDate("08-May-2012").
@@ -347,7 +335,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(5).
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Jun-2012").
         billingCyclePeriodEndDate("22-Jul-2012").
         billingCycleExecutionTargetDate("08-Jun-2012").
@@ -367,7 +354,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Jul-2012").
         billingCyclePeriodEndDate("22-Aug-2012").
         billingCycleExecutionTargetDate("08-Jul-2012").
@@ -388,7 +374,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(23).
-        billingTypePeriodTargetDay(8).
         billingCyclePeriodStartDate("23-Aug-2012").
         billingCyclePeriodEndDate("22-Sep-2012").
         billingCycleExecutionTargetDate("08-Aug-2012").
@@ -442,7 +427,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Mar-2012").
         billingCyclePeriodEndDate("31-Mar-2012").
         billingCycleExecutionTargetDate("15-Feb-2012").
@@ -466,7 +450,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Apr-2012").
         billingCyclePeriodEndDate("30-Apr-2012").
         billingCycleExecutionTargetDate("17-Mar-2012").
@@ -497,7 +480,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(5).
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Jul-2012").
         billingCyclePeriodEndDate("31-Jul-2012").
         billingCycleExecutionTargetDate("16-Jun-2012").
@@ -518,7 +500,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(6).
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Aug-2012").
         billingCyclePeriodEndDate("31-Aug-2012").
         billingCycleExecutionTargetDate("17-Jul-2012").
@@ -541,7 +522,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(1).
-        billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Sep-2012").
         billingCyclePeriodEndDate("30-Sep-2012").
         billingCycleExecutionTargetDate("17-Aug-2012").

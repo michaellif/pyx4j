@@ -51,11 +51,6 @@ public class BillTester extends Tester {
         return this;
     }
 
-    public BillTester billingTypePeriodTargetDay(Integer day) {
-        assertEquals("Billing Cycle Period Run Target Day", day, bill.billingCycle().billingType().billingCycleTargetDay().getValue());
-        return this;
-    }
-
     public BillTester billingCyclePeriodStartDate(String date) {
         assertEquals("Billing Run Period Start Day", getDate(date), bill.billingCycle().billingCycleStartDate().getValue());
         return this;

@@ -49,6 +49,7 @@ import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
@@ -65,6 +66,8 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.security.CrmUser;
@@ -75,7 +78,6 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -118,9 +120,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
-
-        // TODO could be more variants in the future:
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         if (lease.type().isNull()) {
             lease.type().setValue(Service.ServiceType.residentialUnit);
@@ -831,6 +830,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
             Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
 
             lease.unit().set(unit);
+
+            LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
+            // TODO - need to clarify the work flow: for more than one available type, the policy item should probably be selected in UI
+            LeaseBillingTypePolicyItem billingType = billingPolicy.availableBillingTypes().get(0);
+            lease.billingAccount().paymentFrequency().set(billingType.paymentFrequency());
+            lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
 
             if (lease.billingAccount().isInstanceOf(InternalBillingAccount.class)) {
                 lease.billingAccount().billingType().set(ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease));

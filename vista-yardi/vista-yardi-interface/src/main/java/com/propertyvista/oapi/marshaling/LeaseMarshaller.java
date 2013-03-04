@@ -62,7 +62,7 @@ public class LeaseMarshaller implements Marshaller<Lease, LeaseIO> {
         leaseIO.unitNumber = MarshallerUtils.getValue(lease.unit().info().number());
 
         leaseIO.status = MarshallerUtils.createIo(LeaseStatusIO.class, lease.status());
-        leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.paymentFrequency());
+        leaseIO.paymentFrequency = MarshallerUtils.createIo(PaymentFrequencyIO.class, lease.billingAccount().paymentFrequency());
         leaseIO.leaseFrom = MarshallerUtils.createIo(LogicalDateIO.class, lease.leaseFrom());
         leaseIO.leaseTo = MarshallerUtils.createIo(LogicalDateIO.class, lease.currentTerm().termTo());
 

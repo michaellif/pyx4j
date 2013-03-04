@@ -38,7 +38,7 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
         bind(proto().type(), new NotNullValidator());
         bind(proto().unit(), new NotNullValidator());
-        bind(proto().paymentFrequency(), new NotNullValidator());
+        bind(proto().billingAccount().paymentFrequency(), new NotNullValidator());
 
         bind(proto().currentTerm(), new NotNullValidator());
 

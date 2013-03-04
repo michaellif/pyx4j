@@ -39,6 +39,7 @@ import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
@@ -105,9 +106,18 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<InvoiceLineItem> invoiceLineItems();
 
+    @NotNull
+    IPrimitive<PaymentFrequency> paymentFrequency();
+
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
+
+    IPrimitive<Integer> billingCycleStartDay();
+
+    IPrimitive<Integer> offsetPaymentDueDay();
+
+    IPrimitive<Integer> offsetPreauthorizedPaymentDay();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @Owned(cascade = {})
@@ -123,4 +133,5 @@ public interface BillingAccount extends IEntity {
     ISet<PaymentRecord> payments();
 
     IPrimitive<PaymentAccepted> paymentAccepted();
+
 }

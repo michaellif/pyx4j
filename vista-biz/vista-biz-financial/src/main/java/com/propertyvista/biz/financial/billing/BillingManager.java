@@ -50,7 +50,6 @@ import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
-import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -250,9 +249,6 @@ public class BillingManager {
                     billingType = EntityFactory.create(BillingType.class);
                     billingType.paymentFrequency().setValue(paymentFrequency);
                     billingType.billingCycleStartDay().setValue(billingCycleStartDay);
-                    billingType.billingCycleTargetDay().setValue(
-                            (billingCycleStartDay + paymentFrequency.getNumOfCycles() - paymentFrequency.getBillRunTargetDayOffset())
-                                    % paymentFrequency.getNumOfCycles());
 
                     Persistence.service().persist(billingType);
                     Persistence.service().commit();
@@ -269,13 +265,10 @@ public class BillingManager {
         if (!billingType.isNull()) {
             return billingType;
         } else {
-            PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
-            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
-                    LeaseBillingPolicy.class);
-            Integer billingCycleStartDay = leaseBillingPolicy.defaultBillingCycleSartDay().getValue();
+            PaymentFrequency paymentFrequency = lease.billingAccount().paymentFrequency().getValue();
+            Integer billingCycleStartDay = lease.billingAccount().billingCycleStartDay().getValue();
             if (billingCycleStartDay == null) {
-                billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.currentTerm().termFrom()
-                        .getValue());
+                billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(paymentFrequency, lease.currentTerm().termFrom().getValue());
             }
             return ensureBillingType(paymentFrequency, billingCycleStartDay);
         }

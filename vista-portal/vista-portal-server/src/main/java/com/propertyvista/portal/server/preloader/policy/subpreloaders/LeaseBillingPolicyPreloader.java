@@ -18,6 +18,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy.BillConfirmationMethod;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBillingPolicy> {
@@ -30,9 +32,13 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
     protected LeaseBillingPolicy createPolicy(StringBuilder log) {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
         policy.prorationMethod().setValue(ProrationMethod.Actual);
-        policy.useDefaultBillingCycleSartDay().setValue(true);
-        policy.defaultBillingCycleSartDay().setValue(1);
         policy.confirmationMethod().setValue(BillConfirmationMethod.manual);
+
+        LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingCycleStartDay().setValue(1);
+        policy.availableBillingTypes().add(billingType);
+
         log.append(policy.getStringView());
         return policy;
     }

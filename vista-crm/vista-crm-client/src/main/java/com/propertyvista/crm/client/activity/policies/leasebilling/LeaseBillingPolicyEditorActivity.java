@@ -39,8 +39,6 @@ public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<L
 
             @Override
             public void onSuccess(LeaseBillingPolicyDTO entity) {
-                entity.defaultBillingCycleSartDay().setValue(1);
-                entity.useDefaultBillingCycleSartDay().setValue(false);
                 entity.prorationMethod().setValue(ProrationMethod.Standard);
 
                 callback.onSuccess(entity);

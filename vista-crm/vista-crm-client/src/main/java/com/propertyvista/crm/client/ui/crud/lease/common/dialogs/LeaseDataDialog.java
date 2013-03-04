@@ -90,7 +90,7 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
         Lease newLease = EntityFactory.create(Lease.class);
 
         newLease.type().setValue(leaseType);
-        newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        newLease.billingAccount().paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         if (VistaFeatures.instance().yardiIntegration()) {
             YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);

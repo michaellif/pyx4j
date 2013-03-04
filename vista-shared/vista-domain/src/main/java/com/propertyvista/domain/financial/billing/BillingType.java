@@ -44,6 +44,4 @@ public interface BillingType extends IEntity {
     @Indexed(uniqueConstraint = true, group = { "A,2" })
     IPrimitive<Integer> billingCycleStartDay();
 
-    IPrimitive<Integer> billingCycleTargetDay();
-
 }

@@ -213,9 +213,6 @@ public interface Lease extends IEntity {
     IPrimitive<Service.ServiceType> type();
 
     @NotNull
-    IPrimitive<PaymentFrequency> paymentFrequency();
-
-    @NotNull
     @ToString(index = 2)
     AptUnit unit();
 

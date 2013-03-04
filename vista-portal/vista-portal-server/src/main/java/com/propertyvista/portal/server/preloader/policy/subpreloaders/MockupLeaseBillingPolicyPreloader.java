@@ -24,7 +24,9 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy.BillConfirmationMethod;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBillingPolicy> {
@@ -38,9 +40,6 @@ public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<L
     @Override
     protected LeaseBillingPolicy createPolicy(StringBuilder log) {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
-
-        policy.defaultBillingCycleSartDay().setValue(1);
-        policy.useDefaultBillingCycleSartDay().setValue(true);
 
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
@@ -67,6 +66,11 @@ public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<L
         policy.nsfFees().add(nsfItem);
 
         policy.confirmationMethod().setValue(BillConfirmationMethod.manual);
+
+        LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingCycleStartDay().setValue(1);
+        policy.availableBillingTypes().add(billingType);
 
         return policy;
     }
