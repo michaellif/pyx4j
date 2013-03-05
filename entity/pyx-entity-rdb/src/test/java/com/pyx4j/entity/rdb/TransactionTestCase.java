@@ -319,7 +319,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "");
+        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                "");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
@@ -339,7 +340,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.RequiresNew, "");
+        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                TransactionScopeOption.RequiresNew, "");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
@@ -360,7 +362,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "1.g");
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                    TransactionScopeOption.Required, "1.g");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -388,7 +391,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.RequiresNew, "1.g");
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                    TransactionScopeOption.RequiresNew, "1.g");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -400,7 +404,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.a", "1.c");
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                    TransactionScopeOption.Required, "2.a", "1.c");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -424,7 +429,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.b");
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                    TransactionScopeOption.Required, "2.b");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -436,15 +442,19 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.b");
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
+                    TransactionScopeOption.Required, "2.b");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
 
     }
 
+    //**************************** Tester **************************//
+
     private void executeUnitOfWork(final String setId, final List<String> compensationHandlerOrder, TransactionScopeOption extTransactionScopeOption,
-            final TransactionScopeOption intTransactionScopeOption, final String... exceptionPoints) throws ServerNotActiveException {
+            final TransactionScopeOption int1TransactionScopeOption, final TransactionScopeOption int2TransactionScopeOption, final String... exceptionPoints)
+            throws ServerNotActiveException {
 
         final Executable<Void, ServerNotActiveException> exec2 = new Executable<Void, ServerNotActiveException>() {
 
@@ -485,7 +495,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
                 throwException("1.b", exceptionPoints);
 
                 try {
-                    new UnitOfWork(intTransactionScopeOption).execute(exec2);
+                    new UnitOfWork(int1TransactionScopeOption).execute(exec2);
                 } catch (Exception e) {
                     throwException("1.c", exceptionPoints);
                 }
@@ -500,7 +510,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
                 throwException("1.e", exceptionPoints);
 
                 try {
-                    new UnitOfWork(intTransactionScopeOption).execute(exec3);
+                    new UnitOfWork(int2TransactionScopeOption).execute(exec3);
                 } catch (Exception e) {
                     throwException("1.f", exceptionPoints);
                 }
