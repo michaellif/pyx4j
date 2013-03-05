@@ -22,6 +22,9 @@ package com.pyx4j.site.client;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.commons.Key;
@@ -31,16 +34,16 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class AppPlaceEntityMapper {
 
+    private static final Logger log = LoggerFactory.getLogger(AppPlaceEntityMapper.class);
+
     private static HashMap<Class<? extends IEntity>, AppPlaceData> map = new HashMap<Class<? extends IEntity>, AppPlaceData>();
 
     public static void register(Class<? extends IEntity> type, Class<? extends CrudAppPlace> placeClass, ImageResource image) {
         AppPlaceData data = new AppPlaceData(placeClass, image);
-        map.put(type, data);
-        Class<? extends IEntity> dboType = EntityFactory.getEntityMeta(type).getDBOClass();
-        if (dboType != type) {
-            map.put(dboType, data);
+        if (map.containsKey(type)) {
+            log.error("type is already registered {} to {}", type, map.get(type), new Throwable());
         }
-
+        map.put(type, data);
     }
 
     public static CrudAppPlace resolvePlace(Class<? extends IEntity> type, Key id) {
