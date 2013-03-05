@@ -106,7 +106,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
         }
 
-        if ("static".equals(namespaceProposal)) {
+        if (("static".equals(namespaceProposal)) || ("operations".equals(namespaceProposal))) {
             return VistaNamespace.noNamespace;
         }
 
@@ -143,7 +143,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         if ((pmcNamespace == null) || (VistaNamespace.noNamespace.equals(pmcNamespace))) {
-            log.warn("accessing host {}, path {}", serverName, httprequest.getServletPath());
+            log.warn("accessing host {}, {}, path {}", serverName, namespaceProposal, httprequest.getServletPath());
             if (httprequest.getServletPath().endsWith("robots.txt") || httprequest.getServletPath().endsWith("favicon.ico")) {
                 return VistaNamespace.noNamespace;
             } else {
