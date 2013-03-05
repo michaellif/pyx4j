@@ -12,6 +12,7 @@
     <inherits name='com.pyx4j.Commons' />
 	<inherits name='com.pyx4j.site.GwtSite' />
 
+    <source path="client/config/demo"/>
     <source path="client/site"/>
     <source path="client/events"/>
     <source path="client/resources"/>

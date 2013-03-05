@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.common.client.config;
+package com.propertyvista.common.client.config.demo;
 
 import com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration;
 
