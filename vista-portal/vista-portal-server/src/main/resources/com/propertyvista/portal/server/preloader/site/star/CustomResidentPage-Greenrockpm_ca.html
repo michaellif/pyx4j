@@ -22,61 +22,88 @@
 <script>themeEngine.basePath = "/";</script>
 
 <style>
+.home #masthead {
+    position: relative;
+    height: auto;
+}
+
+.PortalViewDisplay table,.PortalView table, .Dialog table, .gwt-DatePicker table {
+	border: none;
+	margin-bottom: 0.5em;
+}
+
+.PortalViewDisplay table td,.PortalView table td, .Dialog table td, .gwt-DatePicker table td{
+	border-top: none;
+}
+
+.PortalViewDisplay table th,.PortalView table th, .Dialog table th, .gwt-DatePicker table th {
+	border-top: none;
+}
+
+.PortalViewDisplay table th+th,.PortalView table th+th, .Dialog table th+th, .gwt-DatePicker table th+th {
+	border-left: none;
+}
+
+.PortalViewDisplay table td+td,.PortalView table td+td, .Dialog table td+td, .gwt-DatePicker table td+td {
+	border-left: none;
+}
+
+table th, table td {
+    padding: 0;
+}
+
+div.LandingCaption {
+	font: 20px "calibri","arial",sans-serif;
+	color: #4C721D;
+}
+
 div.FormFlexPanelH1Label {
-	font: bold 16px 'Droid Sans', helvetica, arial, sans-serif;
-	color: #117140;
+	font: bold 18px "calibri","arial",sans-serif;
+	color: #4C721D;
 }
 
 div.Button,button.gwt-Button {
-	background: #5E7FBE;
-	border: 5px double #FFFFFF;
+	background: #3d7a28;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 2px 2px 2px 2px;
+	height: auto;
 }
 
 div.Button:hover,button.gwt-Button:hover {
-	background: #4F6DA9;
-	border: 5px double #FFFFFF;
+	background: #468b2e;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 2px 2px 2px 2px;
 }
 
 div.ButtonText,button.gwt-Button {
 	color: #FFFFFF;
-	text-transform: lowercase;
-	text-shadow: 0 2px 4px #000000;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 button.gwt-Button {
 	cursor: pointer;
 	min-width: 7em;
-	padding: 3px;
+	padding: 5px;
 }
 
 .ProvideTIBGetTenantSure .ButtonText{
 	text-transform: inherit;
-} 
+}
+
+input[type="checkbox"], input[type="radio"] {
+    margin: 3px;
+}
 
 div.secondaryNavig ul li:hover {
-	color: #05572D;
-}
-
-.EntityFolderAddButton {
-	color: #93AAC2 !important;
-	cursor: pointer;
-	font-style: italic !important;
-	font-weight: normal;
-}
-
-div.LandingCaption {
-	font: 16px 'Droid Sans', helvetica, arial, sans-serif;
-	color: #117140;
-}
-
-div#siteAuthInsert {
-	bottom: 0 !important;
+	color: #649429;
 }
 
 div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
 	{
-	border: 1px solid #AAAAAA;
-	width: 95% !important;
+	border-radius: 0;
+	width: 92% !important;
+	padding: 4px 2px;
 }
 
 ol li {
@@ -86,25 +113,49 @@ ol li {
 	text-align: justify;
 }
 
-div#body_inside {
-	box-shadow: 0 0 2px #888888 !important;
+table {
+	width: auto;
 }
 
-div.LandingOrLineSeparator div {
-	border-color: #117140;
+.Dialog {
+	background: none repeat scroll 0 0 ##4B4B4B !important;
+	z-index: 100 !important;
 }
 
 .DialogCaption {
+	background: #888888 !important;
+	color: #fff !important;
 	padding-top: 0.4em;
 	padding-left: 0.5em;
 }
 
-.DatePickerWeekendDayLabel {
-    color: #117140;
+.Dialog table {
+    margin-bottom: 0;
+    padding: 0;
+    border-radius: 0;
+}
+
+.secondaryNavig {
+    margin-right: 0 !important;
+}
+
+.PaymentEditorButtons .RadioGroupItem label{
+	float: none !important;
+	margin-left: 0.5em;
+}
+
+input[type="file"]:focus, input[type="checkbox"]:focus, select:focus{
+	outline: none;
 }
 
 .FormFlexPanelH2 {
-    border-bottom: 2px solid #117140 !important;
+    border-bottom: 1px solid #666666 !important;
+	border-radius: 0;
+}
+
+
+.BillingDetailTotalAmount {
+    border-top: 1px solid black !important;
 }
 </style>
 </head>
@@ -114,9 +165,7 @@ div.LandingOrLineSeparator div {
 		<div class="ie-shadow-left"></div>
 
 		<div class="container">
-			<div style="float: right; position: relative; bottom: 30px"
-				id="resident_login" />
-
+			
 			<div class="slideshow">
 				<header id="masthead" data-role="branding">
 					<div class="container">
@@ -143,6 +192,9 @@ div.LandingOrLineSeparator div {
 				</header>
 
 			</div>
+			
+			<div style="float: right; position: relative; bottom: 30px"
+				id="resident_login" />
 
 				<div class="page-content">
 					<div id="resident_content" />
