@@ -31,11 +31,10 @@ import com.propertyvista.payment.caledon.CaledonTransactionType;
 
 class CardServiceSimulationUtils {
 
-    static Date getExpiryMonthEnd() {
+    static Date getExpiryMonthStart() {
         Calendar c = Calendar.getInstance();
         c.setTime(Persistence.service().getTransactionSystemTime());
         c.set(Calendar.DAY_OF_MONTH, 1);
-        c.add(Calendar.MONTH, 1);
         return c.getTime();
     }
 

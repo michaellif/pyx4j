@@ -195,7 +195,7 @@ public class CardServiceSimulationProcessor {
         if (!card.responseCode().isNull()) {
             caledonResponse.code = card.responseCode().getStringView();
             caledonResponse.text = "Simulated Card code '" + card.responseCode().getStringView() + "'";
-        } else if (card.expiryDate().getValue().after(CardServiceSimulationUtils.getExpiryMonthEnd())) {
+        } else if (card.expiryDate().getValue().before(CardServiceSimulationUtils.getExpiryMonthStart())) {
             caledonResponse.code = "1254";
             caledonResponse.text = "EXPIRED CARD";
         } else {
