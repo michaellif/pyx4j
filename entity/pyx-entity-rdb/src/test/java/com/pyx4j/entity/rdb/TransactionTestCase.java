@@ -315,11 +315,31 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     }
 
-    public void testUnitOfWorkCompensationHandlerL2_0() throws ServerNotActiveException {
+    public void testUnitOfWorkCompensationHandlerL2_NoErrors1() throws ServerNotActiveException {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "");
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "1.0CH");
+        assertExists(setId, "1.1");
+        assertNotExists(setId, "1.1CH");
+        assertExists(setId, "1.2");
+        assertNotExists(setId, "1.2CH");
+        assertExists(setId, "2.0");
+        assertNotExists(setId, "2.0CH");
+        assertExists(setId, "3.0");
+        assertNotExists(setId, "3.0CH");
+
+        assertEquals(0, compensationHandlerOrder.size());
+    }
+
+    public void _testUnitOfWorkCompensationHandlerL2_NoErrors2() throws ServerNotActiveException {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.RequiresNew, "");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
