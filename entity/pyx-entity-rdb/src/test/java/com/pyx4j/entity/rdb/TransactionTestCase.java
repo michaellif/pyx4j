@@ -377,12 +377,10 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertNotExists(setId, "2.0");
         assertExists(setId, "2.0CH");
         assertNotExists(setId, "3.0");
-        assertExists(setId, "3.0CH");
 
-        assertEquals(4, compensationHandlerOrder.indexOf("1.0CH"));
-        assertEquals(3, compensationHandlerOrder.indexOf("2.0CH"));
-        assertEquals(2, compensationHandlerOrder.indexOf("1.1CH"));
-        assertEquals(1, compensationHandlerOrder.indexOf("3.0CH"));
+        assertEquals(3, compensationHandlerOrder.indexOf("1.0CH"));
+        assertEquals(2, compensationHandlerOrder.indexOf("2.0CH"));
+        assertEquals(1, compensationHandlerOrder.indexOf("1.1CH"));
         assertEquals(0, compensationHandlerOrder.indexOf("1.2CH"));
     }
 
@@ -475,7 +473,6 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             public Void execute() throws ServerNotActiveException {
                 throwException("3.a", exceptionPoints);
                 srv.persist(createEntity(setId, "3.0"));
-                addTransactionCompensationHandler(setId, "3.0CH", compensationHandlerOrder);
                 throwException("3.b", exceptionPoints);
                 return null;
             }
