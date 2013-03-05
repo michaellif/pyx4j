@@ -320,12 +320,13 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.annualPaymentDetails().total().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
 
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
+        BigDecimal thisMonthlyPayable = TenantSurePayments.getMonthlyPayable(insuranceTenantSure, status.nextPaymentDetails().paymentDate().getValue());
         status.nextPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
                     i18n.tr("Premium + Tax"), 
-                    TenantSurePayments.getMonthlyPayable(insuranceTenantSure, status.nextPaymentDetails().paymentDate().getValue()),
+                    thisMonthlyPayable,
                     new ArrayList<TenantSurePaymentItemTaxDTO>()
         ));//@formatter:on
-        status.nextPaymentDetails().total().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
+        status.nextPaymentDetails().total().setValue(thisMonthlyPayable);
 
         if (insuranceTenantSure.status().getValue() == TenantSureStatus.PendingCancellation) {
             TenantSureMessageDTO message = status.messages().$();
