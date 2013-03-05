@@ -1,12 +1,17 @@
+.Header{
+	background-color: transparent !important;
+}
 .vista-pmsite-staticPage {
 }
 
-.vista-pmsite-staticPage .vista-pmsite-main {
-	background: #fff;
-}
+.vista-pmsite-staticPage .vista-pmsite-main {}
 
-.vista-pmsite-main .caption {
-	border-top: 1px solid #000;
+.vista-pmsite-main .caption {}
+.vista-pmsite-main .caption h1 {
+	position: absolute;
+	top: 168px;
+	padding-right: 20px;
+	background-color: #2F292A;
 }
 
 .vista-pmsite-staticPage .vista-pmsite-mainWrap {
@@ -14,27 +19,32 @@
 	margin: 0 auto;
 	overflow: hidden;
 	padding: 0 20px 20px 20px;
-	background: #fff;
 }
 
 .vista-pmsite-staticPage .secondaryNavig {
-	border-top: 1px solid #000;
 	width: 300px;
 	float: left;
 	min-height: 400px;
+	margin-top: 40px;
 	margin-right: 20px;
 	padding-top: 20px;
+	border-top: 3px solid #1F1B1C;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul {
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
+	margin-top: -20px;
+	padding-top: 30px;
+	border-top: 1px solid #484243;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li {
 	font-size: 16px;
 	font-weight: normal;
+	text-transform: uppercase;
+	color: #D7AC3F;
 	height: 28px;
 	overflow: hidden;
 	padding: 0 10px 0 20px;
@@ -42,30 +52,46 @@
 
 .vista-pmsite-staticPage .secondaryNavig ul li.active {
 	background: url("images/menu_active.png") no-repeat left center;
+	background-color: #766134;
+	border-bottom: 1px solid #D7AC3F;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li a {
-	color: black;
+	/*color: #1F1B1C;*/
 	text-decoration: none;
+	font-weight: normal;
+	
+}
+.vista-pmsite-staticPage .secondaryNavig ul li:hover {
+	background-color: #756033;
+	border-bottom: 1px solid #D7AC3F;
+	color: #1F1B1C;
+}
+.vista-pmsite-staticPage .secondaryNavig ul li:hover span {
+	font-weight: bold !important;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li a:hover span {
-	color: #CCCCCC;
+	color: #D7AC3F;
     outline: medium none;
     text-decoration: none;
-    text-decoration: underline;
+    font-weight: bold;
+    background-color: #756033;
+    background-position: left center;
+    background-size: auto;
+    /*border-bottom: 1px solid #D7AC3F;*/
 }
 
-.vista-pmsite-staticPage .secondaryNavig ul li.active a span {	
+.vista-pmsite-staticPage .secondaryNavig ul li.active a span {
+	font-weight: bold;
 }
 
 
 .vista-pmsite-staticPage .vista-pmsite-main .content {
-	color: black;
-	background: white;
+	color: #B4AFB0;
 	overflow: hidden;
 	padding-top: 30px;
-	border-top: 5px solid #000000;
+	border-top: 3px solid #1F1B1C;
 	text-align: justify;
 	min-height: 350px;
 }
@@ -76,6 +102,7 @@
 
 .vista-pmsite-staticPage .content  p {
 	padding: 0 0 15px;
+	color: #B4AFB0;
 }
 
 .vista-pmsite-staticPage .content  p em {
@@ -98,9 +125,15 @@
 .vista-pmsite-staticPage .content  h2 {
     font-family: monospace;
     font-size: 14pt;
-    font-weight: bold;	
+    font-weight: bold;
+    color: #d7ac3f;
     line-height: 20px;
 	padding-bottom: 15px;
+}
+.vista-pmsite-staticPage .content  h2:first-child{
+	border-top: 1px solid #484243;
+	padding-top: 30px;
+	margin-top: -30px;
 }
 
 .vista-pmsite-staticPage .content  h3 {

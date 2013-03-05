@@ -375,7 +375,7 @@ ul.footer_locations li {
  */
 .vista-pmsite-main .caption {
 //	background-size: 100% 100%;
-	background: white;
+	/*background: white;*/
 	height: 30px;
 	overflow: hidden;
 	padding: 5px 0 5px 0;
@@ -383,10 +383,10 @@ ul.footer_locations li {
 }
 
 .vista-pmsite-main .caption h1 {
-	font-family: monospace;
-    font-size: 14pt;
+	text-transform: uppercase;
+    font-size: 16pt;
     font-weight: normal;
-	color: #E8E8E8;
+	color: #FFFFFF;
 }
 .caption2 {
 	height: 30px;
