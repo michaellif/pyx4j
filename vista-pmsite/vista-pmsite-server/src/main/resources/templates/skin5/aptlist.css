@@ -144,7 +144,9 @@
 	color:${background_100};
 	width: 210px;
 	margin: 1px;
-	border: 1px solid #000000;
+	outline: 1px solid #EC8E21;
+	border-top: 4px solid #7F7F7F;
+	border-left: 3px solid #7F7F7F;
 }
 
 .advancedSearchNarrowWrap .errorPanel {
