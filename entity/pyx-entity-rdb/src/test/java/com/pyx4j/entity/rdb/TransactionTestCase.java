@@ -315,26 +315,138 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     }
 
-    public void testUnitOfWorkCompensationHandlerL2() {
+    public void testUnitOfWorkCompensationHandlerL2_0() throws ServerNotActiveException {
         final String setId = uniqueString();
-
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        final Executable<Void, RuntimeException> exec2 = new Executable<Void, RuntimeException>() {
+        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "");
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "1.0CH");
+        assertExists(setId, "1.1");
+        assertNotExists(setId, "1.1CH");
+        assertExists(setId, "1.2");
+        assertNotExists(setId, "1.2CH");
+        assertExists(setId, "2.0");
+        assertNotExists(setId, "2.0CH");
+        assertExists(setId, "3.0");
+        assertNotExists(setId, "3.0CH");
+
+        assertEquals(0, compensationHandlerOrder.size());
+    }
+
+    public void testUnitOfWorkCompensationHandlerL2_1() {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        try {
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "1.g");
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.0CH");
+        assertNotExists(setId, "1.1");
+        assertExists(setId, "1.1CH");
+        assertNotExists(setId, "1.2");
+        assertExists(setId, "1.2CH");
+        assertNotExists(setId, "2.0");
+        assertExists(setId, "2.0CH");
+        assertNotExists(setId, "3.0");
+        assertExists(setId, "3.0CH");
+
+        assertEquals(4, compensationHandlerOrder.indexOf("1.0CH"));
+        assertEquals(3, compensationHandlerOrder.indexOf("2.0CH"));
+        assertEquals(2, compensationHandlerOrder.indexOf("1.1CH"));
+        assertEquals(1, compensationHandlerOrder.indexOf("3.0CH"));
+        assertEquals(0, compensationHandlerOrder.indexOf("1.2CH"));
+    }
+
+    public void _testUnitOfWorkCompensationHandlerL2_2() {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        try {
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.RequiresNew, "1.g");
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+    }
+
+    public void testUnitOfWorkCompensationHandlerL2_3() {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        try {
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.a", "1.c");
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.0CH");
+        assertNotExists(setId, "1.1");
+        assertNotExists(setId, "1.1CH");
+        assertNotExists(setId, "1.2");
+        assertNotExists(setId, "1.2CH");
+        assertNotExists(setId, "2.0");
+        assertNotExists(setId, "2.0CH");
+        assertNotExists(setId, "3.0");
+        assertNotExists(setId, "3.0CH");
+
+        assertEquals(0, compensationHandlerOrder.indexOf("1.0CH"));
+    }
+
+    public void _testUnitOfWorkCompensationHandlerL2_4() {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        try {
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.b");
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+    }
+
+    public void _testUnitOfWorkCompensationHandlerL2_5() {
+        final String setId = uniqueString();
+        final List<String> compensationHandlerOrder = new ArrayList<String>();
+
+        try {
+            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, "2.b");
+            Assert.fail("Should throw Exception");
+        } catch (ServerNotActiveException ok) {
+        }
+
+    }
+
+    private void executeUnitOfWork(final String setId, final List<String> compensationHandlerOrder, TransactionScopeOption extTransactionScopeOption,
+            final TransactionScopeOption intTransactionScopeOption, final String... exceptionPoints) throws ServerNotActiveException {
+
+        final Executable<Void, ServerNotActiveException> exec2 = new Executable<Void, ServerNotActiveException>() {
 
             @Override
-            public Void execute() {
+            public Void execute() throws ServerNotActiveException {
+                throwException("2.a", exceptionPoints);
                 srv.persist(createEntity(setId, "2.0"));
+                addTransactionCompensationHandler(setId, "2.0CH", compensationHandlerOrder);
+                throwException("2.b", exceptionPoints);
+                return null;
+            }
 
-                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-                    @Override
-                    public Void execute() throws RuntimeException {
-                        srv.persist(createEntity(setId, "2.0CH"));
-                        compensationHandlerOrder.add("2.0CH");
-                        return null;
-                    }
-                });
+        };
 
+        final Executable<Void, ServerNotActiveException> exec3 = new Executable<Void, ServerNotActiveException>() {
+
+            @Override
+            public Void execute() throws ServerNotActiveException {
+                throwException("3.a", exceptionPoints);
+                srv.persist(createEntity(setId, "3.0"));
+                addTransactionCompensationHandler(setId, "3.0CH", compensationHandlerOrder);
+                throwException("3.b", exceptionPoints);
                 return null;
             }
 
@@ -344,51 +456,70 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
             @Override
             public Void execute() throws ServerNotActiveException {
+                throwException("1.a", exceptionPoints);
+                {
+                    srv.persist(createEntity(setId, "1.0"));
+                    addTransactionCompensationHandler(setId, "1.0CH", compensationHandlerOrder);
+                }
 
-                srv.persist(createEntity(setId, "1.0"));
+                throwException("1.b", exceptionPoints);
 
-                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-                    @Override
-                    public Void execute() throws RuntimeException {
-                        srv.persist(createEntity(setId, "1.0CH"));
-                        compensationHandlerOrder.add("1.0CH");
-                        return null;
-                    }
-                });
+                try {
+                    new UnitOfWork(intTransactionScopeOption).execute(exec2);
+                } catch (Exception e) {
+                    throwException("1.c", exceptionPoints);
+                }
 
-                new UnitOfWork().execute(exec2);
+                throwException("1.d", exceptionPoints);
 
-                srv.persist(createEntity(setId, "1.1"));
+                {
+                    srv.persist(createEntity(setId, "1.1"));
+                    addTransactionCompensationHandler(setId, "1.1CH", compensationHandlerOrder);
+                }
 
-                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-                    @Override
-                    public Void execute() throws RuntimeException {
-                        srv.persist(createEntity(setId, "1.1CH"));
-                        compensationHandlerOrder.add("1.1CH");
-                        return null;
-                    }
-                });
+                throwException("1.e", exceptionPoints);
 
-                throw new ServerNotActiveException();
+                try {
+                    new UnitOfWork(intTransactionScopeOption).execute(exec3);
+                } catch (Exception e) {
+                    throwException("1.f", exceptionPoints);
+                }
+
+                throwException("1.f", exceptionPoints);
+
+                {
+                    srv.persist(createEntity(setId, "1.2"));
+                    addTransactionCompensationHandler(setId, "1.2CH", compensationHandlerOrder);
+                }
+
+                throwException("1.g", exceptionPoints);
+
+                return null;
             }
 
         };
 
-        try {
-            new UnitOfWork().execute(exec1);
-            Assert.fail("Should throw Exception");
-        } catch (ServerNotActiveException ok) {
+        new UnitOfWork(extTransactionScopeOption).execute(exec1);
+
+    }
+
+    private void throwException(String id, String... exceptionPoints) throws ServerNotActiveException {
+        for (String exceptionPoint : exceptionPoints) {
+            if (id.equals(exceptionPoint)) {
+                throw new ServerNotActiveException();
+            }
         }
 
-        assertNotExists(setId, "1.0");
-        assertExists(setId, "1.0CH");
-        assertNotExists(setId, "1.1");
-        assertExists(setId, "1.1CH");
-        assertNotExists(setId, "2.0");
-        assertExists(setId, "2.0CH");
+    }
 
-        assertEquals(2, compensationHandlerOrder.indexOf("1.0CH"));
-        assertEquals(1, compensationHandlerOrder.indexOf("2.0CH"));
-        assertEquals(0, compensationHandlerOrder.indexOf("1.1CH"));
+    private void addTransactionCompensationHandler(final String setId, final String compensatorId, final List<String> compensationHandlerOrder) {
+        UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+            @Override
+            public Void execute() throws RuntimeException {
+                srv.persist(createEntity(setId, compensatorId));
+                compensationHandlerOrder.add(compensatorId);
+                return null;
+            }
+        });
     }
 }
