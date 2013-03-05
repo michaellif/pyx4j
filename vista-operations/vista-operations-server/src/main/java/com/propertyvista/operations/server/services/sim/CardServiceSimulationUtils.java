@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 
@@ -38,20 +39,27 @@ class CardServiceSimulationUtils {
         return c.getTime();
     }
 
-    static BigDecimal parsAmount(String amount) {
-        String valueCents;
-        String valueDollars;
-        int len = amount.length();
-        if (len <= 2) {
-            valueCents = amount;
-            valueDollars = "0";
+    static BigDecimal parsAmount(String value) {
+        if (CommonsStringUtils.isEmpty(value)) {
+            return null;
         } else {
-            valueCents = amount.substring(len - 2, len);
-            valueDollars = amount.substring(0, len - 2);
-        }
+            String valueCents;
+            String valueDollars;
+            int len = value.length();
+            if (len == 1) {
+                valueCents = "0" + value;
+                valueDollars = "0";
+            } else if (len == 2) {
+                valueCents = value;
+                valueDollars = "0";
+            } else {
+                valueCents = value.substring(len - 2, len);
+                valueDollars = value.substring(0, len - 2);
+            }
 
-        BigDecimal money = new BigDecimal(valueDollars + "." + valueCents);
-        return money.setScale(2);
+            BigDecimal money = new BigDecimal(valueDollars + "." + valueCents);
+            return money.setScale(2);
+        }
     }
 
     static LogicalDate parsDate(String expiryDate) {
