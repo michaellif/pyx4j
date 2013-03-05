@@ -494,6 +494,8 @@ public class DBResetServlet extends HttpServlet {
                         field.setInt(cfg, Integer.valueOf(value));
                     } else if (field.getType().equals(Long.class) || field.getType().equals(long.class)) {
                         field.setLong(cfg, Long.valueOf(value));
+                    } else if (field.getType().equals(String.class)) {
+                        field.set(cfg, value);
                     }
                 } catch (Throwable e) {
                     throw new Error(e);

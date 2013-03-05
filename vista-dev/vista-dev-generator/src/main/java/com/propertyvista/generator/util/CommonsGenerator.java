@@ -13,8 +13,8 @@
  */
 package com.propertyvista.generator.util;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -168,15 +168,40 @@ public class CommonsGenerator {
         return contact;
     }
 
-    public static AddressStructured createAddress() {
+    private static void loadAddress() {
         if (adresses == null) {
-            adresses = EntityCSVReciver.create(AddressStructured.class).loadResourceFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
+            adresses = EntityCSVReciver.create(AddressStructured.class)
+                    .loadResourceFile(IOUtils.resourceFileName("address-struct.csv", CommonsGenerator.class));
         }
+    }
+
+    public static AddressStructured createAddress() {
+        loadAddress();
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
         if (addressStructured.streetType().isNull()) {
             addressStructured.streetType().setValue(StreetType.other);
         }
         return addressStructured;
+    }
+
+    public static AddressStructured createAddress(String provinceCode) {
+        if (provinceCode == null) {
+            return createAddress();
+        } else {
+            loadAddress();
+            List<AddressStructured> adressesFiltered = new ArrayList<AddressStructured>();
+            for (AddressStructured addressStructured : adresses) {
+                if (provinceCode.equalsIgnoreCase(addressStructured.province().code().getValue())) {
+                    adressesFiltered.add(addressStructured);
+                }
+            }
+
+            AddressStructured addressStructured = adressesFiltered.get(DataGenerator.randomInt(adressesFiltered.size())).duplicate();
+            if (addressStructured.streetType().isNull()) {
+                addressStructured.streetType().setValue(StreetType.other);
+            }
+            return addressStructured;
+        }
     }
 
     public static AddressStructured createRandomAddress() {

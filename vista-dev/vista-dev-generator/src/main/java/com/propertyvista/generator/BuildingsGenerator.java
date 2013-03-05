@@ -53,20 +53,26 @@ import com.propertyvista.generator.util.RandomUtil;
 
 public class BuildingsGenerator {
 
+    public static class BuildingsGeneratorConfig {
+
+        public String provinceCode = null;
+
+    }
+
     public BuildingsGenerator(long seed) {
         DataGenerator.setRandomSeed(seed);
     }
 
-    public List<Building> createBuildings(int numBuildings) {
+    public List<Building> createBuildings(int numBuildings, BuildingsGeneratorConfig config) {
         List<Building> buildings = new ArrayList<Building>();
         for (int b = 0; b < numBuildings; b++) {
-            Building building = createBuilding(b);
+            Building building = createBuilding(b, config);
             buildings.add(building);
         }
         return buildings;
     }
 
-    public Building createBuilding(int counter) {
+    public Building createBuilding(int counter, BuildingsGeneratorConfig config) {
         // building type
 //        BuildingInfo.Type buildingType = RandomUtil.random(BuildingInfo.Type.values());
 // randomator put very little 'residential' types!?
@@ -76,7 +82,7 @@ public class BuildingsGenerator {
         String website = "www.property" + (counter + 1) + ".com";
 
         // address
-        AddressStructured address = CommonsGenerator.createAddress();
+        AddressStructured address = CommonsGenerator.createAddress(config.provinceCode);
 
         // email
         String email = "building" + (counter + 1) + "@propertyvista.com";

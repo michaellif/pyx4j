@@ -52,6 +52,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.generator.BuildingsGenerator;
+import com.propertyvista.generator.BuildingsGenerator.BuildingsGeneratorConfig;
 import com.propertyvista.generator.MediaGenerator;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.generator.ProductCatalogGenerator;
@@ -111,8 +112,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(portfolios);
 
+        BuildingsGeneratorConfig config = new BuildingsGeneratorConfig();
+        config.provinceCode = config().province;
+
         int unitCount = 0;
-        List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings);
+        List<Building> buildings = buildingGenerator.createBuildings(config().numResidentialBuildings, config);
 
         SharedGeoLocator.setMode(Mode.updateCache);
         int noGeoCount = 0;
