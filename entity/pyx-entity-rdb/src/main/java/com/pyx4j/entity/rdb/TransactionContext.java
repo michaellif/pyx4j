@@ -171,7 +171,7 @@ class TransactionContext {
         if (commitedCompensationHandlers == null) {
             commitedCompensationHandlers = compensationHandlers;
             compensationHandlers = null;
-        } else {
+        } else if (compensationHandlers != null) {
             commitedCompensationHandlers.addAll(compensationHandlers);
             compensationHandlers.clear();
         }
