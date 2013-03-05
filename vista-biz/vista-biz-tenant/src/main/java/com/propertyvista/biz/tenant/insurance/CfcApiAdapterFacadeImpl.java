@@ -148,17 +148,16 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
         RoundingMode rm = TenantSureCfcMoneyAdapter.getRoundingMode();
 
-        BigDecimal monthlyPremiumPart = annualPremium.divide(new BigDecimal("12.00"), rm);
-        BigDecimal monthlyTaxPart = annualPremium.divide(annualPremium.add(underwritingFee), rm).multiply(totalAnnualTax).divide(new BigDecimal("12.00"));
-        BigDecimal monthlyPayment = monthlyPremiumPart.add(monthlyTaxPart);
+        BigDecimal annualGross = annualPremium.add(totalAnnualTax);
 
-        BigDecimal firstPaymentPart = monthlyPremiumPart.add(underwritingFee);
-        BigDecimal firstPaymentTaxPart = firstPaymentPart.divide(annualPremium.add(underwritingFee), rm).multiply(totalAnnualTax);
-        BigDecimal firstPayment = firstPaymentPart.add(firstPaymentTaxPart);
+        // Make  the total of the monthly payments to be equal the annual total.
+        BigDecimal monthlyPayment = annualGross.divide(new BigDecimal("12.00"), rm);
+        BigDecimal firstPayment = annualGross.subtract(monthlyPayment.multiply(new BigDecimal("11.00")));
+        firstPayment = firstPayment.add(underwritingFee);
 
         tenantSureQuote.annualPremium().setValue(annualPremium);
         tenantSureQuote.underwriterFee().setValue(underwritingFee);
-        tenantSureQuote.totalAnnualTax().setValue(underwritingFee);
+        tenantSureQuote.totalAnnualTax().setValue(totalAnnualTax);
         tenantSureQuote.totalAnnualPayable().setValue(annualPremium.add(underwritingFee).add(totalAnnualTax));
         tenantSureQuote.totalMonthlyPayable().setValue(monthlyPayment);
         tenantSureQuote.totalFirstPayable().setValue(firstPayment);
