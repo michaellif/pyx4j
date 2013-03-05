@@ -153,6 +153,8 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         // Make  the total of the monthly payments to be equal the annual total.
         BigDecimal monthlyPayment = annualGross.divide(new BigDecimal("12.00"), rm);
         BigDecimal firstPayment = annualGross.subtract(monthlyPayment.multiply(new BigDecimal("11.00")));
+        tenantSureQuote.totalAnniversaryFirstMonthPayable().setValue(firstPayment);
+
         firstPayment = firstPayment.add(underwritingFee);
 
         tenantSureQuote.annualPremium().setValue(annualPremium);

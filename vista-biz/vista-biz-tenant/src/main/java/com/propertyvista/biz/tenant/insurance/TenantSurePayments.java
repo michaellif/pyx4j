@@ -185,19 +185,19 @@ class TenantSurePayments {
                     if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.Cleared) {
                         executionMonitor.addProcessedEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
-                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                transaction.amount().getValue(),
                                 SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was cleared", insuranceTenantSure.insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     } else if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
                         executionMonitor.addFailedEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
-                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                transaction.amount().getValue(),
                                 SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     } else {
                         executionMonitor.addErredEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
-                                insuranceTenantSure.totalMonthlyPayable().getValue(),
+                                transaction.amount().getValue(),
                                 SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} is neither cleared nor rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     }
@@ -219,12 +219,27 @@ class TenantSurePayments {
         return Persistence.service().exists(criteria);
     }
 
+    private static int getMonth(LogicalDate date) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        return cal.get(Calendar.MONTH);
+    }
+
+    static BigDecimal getMonthlyPayable(InsuranceTenantSure insuranceTenantSure, LogicalDate dueDate) {
+        if (getMonth(insuranceTenantSure.inceptionDate().getValue()) == getMonth(dueDate)) {
+            return insuranceTenantSure.totalAnniversaryFirstMonthPayable().getValue();
+        } else {
+            return insuranceTenantSure.totalMonthlyPayable().getValue();
+        }
+    }
+
     static InsuranceTenantSureTransaction makePaymentTransaction(InsuranceTenantSure insuranceTenantSure, LogicalDate dueDate) {
         InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(getPaymentMethod(insuranceTenantSure.client().tenant()));
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        transaction.amount().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
+        transaction.amount().setValue(getMonthlyPayable(insuranceTenantSure, dueDate));
+
         transaction.paymentDue().setValue(dueDate);
         Persistence.service().persist(transaction);
 

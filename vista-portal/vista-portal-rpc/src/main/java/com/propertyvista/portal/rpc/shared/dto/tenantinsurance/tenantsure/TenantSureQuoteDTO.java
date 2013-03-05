@@ -49,6 +49,9 @@ public interface TenantSureQuoteDTO extends IEntity {
     IPrimitive<BigDecimal> totalFirstPayable();
 
     @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnniversaryFirstMonthPayable();
+
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();
 
     @Format("#,##0.00")

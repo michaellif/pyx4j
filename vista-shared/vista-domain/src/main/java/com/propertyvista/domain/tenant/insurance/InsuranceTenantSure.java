@@ -114,6 +114,10 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalFirstPayable();
 
+    /** this is the amount that gets charged on anniversary of enrollment instead of totalMonthlyPayable */
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> totalAnniversaryFirstMonthPayable();
+
     /** this is an amount that gets charged every month (i.e. monthly premium + the taxes) */
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();

@@ -161,6 +161,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
         insuranceTenantSure.totalAnnualPayable().setValue(quote.totalAnnualPayable().getValue());
         insuranceTenantSure.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
+        insuranceTenantSure.totalAnniversaryFirstMonthPayable().setValue(quote.totalAnniversaryFirstMonthPayable().getValue());
         insuranceTenantSure.totalFirstPayable().setValue(quote.totalFirstPayable().getValue());
         Persistence.service().persist(insuranceTenantSure);
 
@@ -321,7 +322,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         status.nextPaymentDetails().paymentDate().setValue(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         status.nextPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
                     i18n.tr("Premium + Tax"), 
-                    insuranceTenantSure.totalMonthlyPayable().getValue(),
+                    TenantSurePayments.getMonthlyPayable(insuranceTenantSure, status.nextPaymentDetails().paymentDate().getValue()),
                     new ArrayList<TenantSurePaymentItemTaxDTO>()
         ));//@formatter:on
         status.nextPaymentDetails().total().setValue(insuranceTenantSure.totalMonthlyPayable().getValue());
