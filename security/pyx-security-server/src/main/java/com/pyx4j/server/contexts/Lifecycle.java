@@ -109,7 +109,7 @@ public class Lifecycle {
 
     public static void endRequest() {
         try {
-            if (Context.getRequest().getAttribute(END_REQUEST_ATR) == null) {
+            if ((Context.getRequest() != null) && Context.getRequest().getAttribute(END_REQUEST_ATR) == null) {
                 endRpcRequest();
             }
             HttpSession session = Context.getSession();
