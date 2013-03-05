@@ -331,6 +331,9 @@ public class PersistenceContext {
 
     void addTransactionCompensationHandler(CompensationHandler handler) {
         transactionContexts.peek().addTransactionCompensationHandler(handler);
+        if (PersistenceContext.traceTransaction) {
+            log.info("{} add CompensationHandler {}", txId(), handler.getClass().getName());
+        }
     }
 
     void commit() {

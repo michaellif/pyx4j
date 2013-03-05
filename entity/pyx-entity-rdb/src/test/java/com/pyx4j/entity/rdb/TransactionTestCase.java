@@ -221,6 +221,61 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertExists(setId, "1.2");
     }
 
+    public void testTransactionsCompensationHandler() {
+        final String setId = uniqueString();
+        srv.endTransaction();
+
+        srv.startTransaction();
+
+        srv.persist(createEntity(setId, "1.0"));
+
+        srv.addTransactionCompensationHandler(new CompensationHandler() {
+            @Override
+            public Void execute() throws RuntimeException {
+                srv.persist(createEntity(setId, "1.0CH"));
+                return null;
+            }
+        });
+
+        srv.rollback();
+
+        srv.persist(createEntity(setId, "1.1"));
+
+        srv.commit();
+
+        srv.endTransaction();
+
+        assertNotExists(setId, "1.0");
+        assertExists(setId, "1.0CH");
+        assertExists(setId, "1.1");
+    }
+
+    public void testTransactionsCompensationHandlerMultipeCommit() {
+        final String setId = uniqueString();
+        srv.endTransaction();
+
+        srv.startTransaction();
+
+        srv.persist(createEntity(setId, "1.0"));
+
+        srv.addTransactionCompensationHandler(new CompensationHandler() {
+            @Override
+            public Void execute() throws RuntimeException {
+                srv.persist(createEntity(setId, "1.0CH"));
+                return null;
+            }
+        });
+
+        srv.commit();
+        srv.commit();
+        srv.commit();
+
+        srv.endTransaction();
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "1.0CH");
+    }
+
     public void testUnitOfWorkNestedTransactions() {
         final String setId = uniqueString();
 
