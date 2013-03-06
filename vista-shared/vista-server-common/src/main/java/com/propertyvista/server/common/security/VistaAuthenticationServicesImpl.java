@@ -302,9 +302,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
         if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
             return null;
-        } else if (isDynamicBehaviours()) {
-            return currentBehaviours;
         } else if (currentBehaviours.contains(getPasswordChangeRequiredBehavior())) {
+            return currentBehaviours;
+        } else if (isDynamicBehaviours()) {
             return currentBehaviours;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
