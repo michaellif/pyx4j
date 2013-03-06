@@ -48,9 +48,12 @@ public interface PasswordChangeRequest extends IEntity {
     @Transient(logTransient = true)
     IPrimitive<String> currentPassword();
 
+    @Editor(type = EditorType.label)
+    @Caption(name = "Account Security Question")
     IPrimitive<String> securityQuestion();
 
     @NotNull
+    @Caption(name = "Your answer")
     IPrimitive<String> securityAnswer();
 
     @NotNull
