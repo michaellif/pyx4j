@@ -30,7 +30,7 @@ public class VistaTestDBSetup {
     public static synchronized void init() {
         if (initOnce == null) {
             DatabaseType databaseType = DatabaseType.HSQLDB;
-            //DatabaseType databaseType = DatabaseType.MySQL;
+            //databaseType = DatabaseType.MySQL;
             //databaseType = DatabaseType.PostgreSQL;
 
             // Fail safe if somebody committed the file by mistake 
