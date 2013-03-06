@@ -20,7 +20,6 @@
 	margin-left:10px;
 }
 .floorplanInfoPanel .infoBox {
-	font-weight:bold;
 	padding-left: 10px;
 } 
 .floorplanInfoPanel .infoBoxEntry {
@@ -29,8 +28,11 @@
 .floorplanInfoPanel .infoBoxEntry .infoBoxCaption {
 	display:block;
 	padding-top:4px;
+	color: #D7AC3F;
+	text-transform: uppercase;
 }
 .floorplanInfoPanel .infoBoxEntry .infoBoxText {
 	display:block;
 	padding-top:4px;
+	color: #B4AFB0;
 }
