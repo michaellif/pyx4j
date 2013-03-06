@@ -24,6 +24,11 @@ import com.pyx4j.commons.GWTClassNamePreserve;
 
 public interface NavigNode extends GWTClassNamePreserve {
 
+    /**
+     * Allows to create on server history token that can be redirected and properly opens in browser
+     */
+    public static String PLACE_ARGUMENT = "place";
+
     public static String PAGE_SEPARATOR = "/";
 
     public static String ARGS_GROUP_SEPARATOR = "?";
