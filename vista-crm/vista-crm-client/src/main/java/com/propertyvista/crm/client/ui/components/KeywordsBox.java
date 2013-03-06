@@ -22,6 +22,7 @@ import java.util.Set;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -101,14 +102,15 @@ public abstract class KeywordsBox extends Composite {
         }
 
         private Widget makeAddButton() {
-            Button button = new Button("+");
-            button.addClickHandler(new ClickHandler() {
+            Button button = new Button("+", new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
+                    // TODO Auto-generated method stub
                     if (keywordsList.getSelectedIndex() > 0) { // the first item is blank
                         KeywordsBox.this.select(keywordsList.getItemText(keywordsList.getSelectedIndex()));
                     }
                 }
+
             });
             button.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.KeywordsAdderButton);
             return button;

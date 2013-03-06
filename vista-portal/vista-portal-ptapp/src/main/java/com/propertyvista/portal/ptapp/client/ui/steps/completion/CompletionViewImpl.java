@@ -15,8 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.completion;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -55,24 +54,28 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         HorizontalPanel actions = new HorizontalPanel();
 
-        Button viewAction = new Button(i18n.tr("View Status"));
-        viewAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        viewAction.addClickHandler(new ClickHandler() {
+        Button viewAction = new Button(i18n.tr("View Status"), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 AppSite.getPlaceController().goTo(new PtSiteMap.ApplicationStatus());
             }
+
         });
+        viewAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         actions.add(viewAction);
 
-        Button logoutAction = new Button(i18n.tr("Log Out"));
-        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        logoutAction.addClickHandler(new ClickHandler() {
+        Button logoutAction = new Button(i18n.tr("Log Out"), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
             }
+
         });
+        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         actions.add(logoutAction);
 
         actions.setSpacing(15);

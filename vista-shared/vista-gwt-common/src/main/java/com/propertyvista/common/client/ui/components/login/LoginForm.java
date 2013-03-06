@@ -115,15 +115,16 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         buttonPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-        Button loginButton = new Button(i18n.tr("Login"));
-        loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        loginButton.addClickHandler(new ClickHandler() {
+        Button loginButton = new Button(i18n.tr("Login"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 login();
             }
+
         });
+        loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
 
         loginButton.getElement().getStyle().setMarginLeft(9, Unit.EM);
         loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);

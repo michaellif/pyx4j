@@ -337,16 +337,16 @@ public class LandingViewImpl extends Composite implements LandingView {
         loginTermsLinkPanel.addAndReplaceElement(termsAndConditions, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
         sideLayout.getContent().add(loginTermsLinkPanel);
 
-        loginButton = new Button(i18n.tr("LOGIN"));
-        loginButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
-        loginButton.setCommand(new Command() {
+        loginButton = new Button(i18n.tr("LOGIN"), new Command() {
 
             @Override
             public void execute() {
+                // TODO Auto-generated method stub
                 onLogin();
             }
 
         });
+        loginButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         SimplePanel loginButtonHolder = new SimplePanel();
         loginButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         loginButtonHolder.setWidget(loginButton);

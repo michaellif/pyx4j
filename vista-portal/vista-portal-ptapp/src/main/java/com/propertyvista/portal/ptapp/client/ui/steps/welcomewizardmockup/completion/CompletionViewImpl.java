@@ -15,8 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.compl
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -49,11 +48,11 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         HorizontalPanel actions = new HorizontalPanel();
 
-        Button logoutAction = new Button(i18n.tr("Log Out"));
-        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
-        logoutAction.addClickHandler(new ClickHandler() {
+        Button logoutAction = new Button(i18n.tr("Log Out"), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 GWT.<ResetWizardService> create(ResetWizardService.class).resetWizard(new DefaultAsyncCallback<VoidSerializable>() {
                     @Override
                     public void onSuccess(VoidSerializable result) {
@@ -61,7 +60,9 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
                     }
                 });
             }
+
         });
+        logoutAction.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         actions.add(logoutAction);
 
         actions.setSpacing(15);

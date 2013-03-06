@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -384,9 +382,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
 
-            renewButton.addClickHandler(new ClickHandler() {
+            renewButton.setCommand(new Command() {
+
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
+                    // TODO Auto-generated method stub
+
                     new RenewLeaseBox() {
                         @Override
                         public boolean onClickOk() {

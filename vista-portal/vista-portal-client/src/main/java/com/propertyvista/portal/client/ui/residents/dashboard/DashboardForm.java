@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.dashboard;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -255,15 +256,15 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                 actions.add(viewBill);
             }
 
-            payButton = new Button(i18n.tr("Pay Now"));
-            payButton.addClickHandler(new ClickHandler() {
+            payButton = new Button(i18n.tr("Pay Now"), new Command() {
                 @Override
-                public void onClick(ClickEvent event) {
+                public void execute() {
+                    // TODO Auto-generated method stub
                     presenter.payNow();
                 }
+
             });
             actions.add(payButton);
-
             content.add(actions);
             content.setCellHorizontalAlignment(actions, HorizontalPanel.ALIGN_RIGHT);
             content.setWidth("100%");

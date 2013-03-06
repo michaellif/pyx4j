@@ -14,8 +14,7 @@
 package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -62,10 +61,10 @@ public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorV
         Style msgBar = content.getCellFormatter().getElement(row, 0).getStyle();
         msgBar.setProperty("padding", "30px");
 
-        Button back = new Button("OK");
-        back.addClickHandler(new ClickHandler() {
+        Button back = new Button("OK", new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 presenter.backToOrigin();
             }
         });

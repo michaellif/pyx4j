@@ -26,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -145,15 +146,16 @@ public class MessagesListControlPanel extends FormFlexPanel {
         chckbxMyFavorites.getElement().getStyle().setMarginTop(35, Unit.PX);
 
         //second row:
-        btnAllTopics = new Button(i18n.tr("All Topics"));
-        this.setWidget(++row, 0, btnAllTopics);
-        btnAllTopics.addClickHandler(new ClickHandler() {
+        btnAllTopics = new Button(i18n.tr("All Topics"), new Command() {
 
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                // TODO Auto-generated method stub
                 Window.alert("btnAllTopics - under construction - should remove the text search value");
             }
+
         });
+        this.setWidget(++row, 0, btnAllTopics);
         btnAllTopics.setEnabled(false);
         btnAllTopics.getElement().getStyle().setFloat(Style.Float.LEFT);
         btnAllTopics.getElement().getStyle().setMarginBottom(5, Unit.PX);
