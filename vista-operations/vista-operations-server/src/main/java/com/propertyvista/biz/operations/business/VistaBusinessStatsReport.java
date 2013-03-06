@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.operations.business;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,12 +39,16 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -94,6 +99,8 @@ class VistaBusinessStatsReport {
 
         Date reportSince = DateUtils.addDays(new Date(), -7);
 
+        Date monthlyPeriod = DateUtils.addMonths(new Date(), -1);
+
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         data.name().setValue(pmc.name().getStringView());
 
@@ -141,22 +148,77 @@ class VistaBusinessStatsReport {
             data.registeredTenantsCount().setValue(Persistence.service().count(criteria));
         }
 
+        // TODO add "total tenants using electronic payments"
+
         {
-            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-            criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
-            data.tenantInsurance().setValue(Persistence.service().count(criteria));
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
+            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            List<PaymentRecord> records = Persistence.service().query(criteria);
+            BigDecimal amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
+            data.eChequeCount().setValue(records.size());
+            data.eChequeValue().setValue(amount);
         }
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.processed());
-            data.processedPayments().setValue(Persistence.service().count(criteria));
+            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.EFT);
+            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            List<PaymentRecord> records = Persistence.service().query(criteria);
+            BigDecimal amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
+            data.eftCount().setValue(records.size());
+            data.eftValue().setValue(amount);
         }
+
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.processed());
-            criteria.ge(criteria.proto().createdDate(), reportSince);
-            data.newProcessedPayments().setValue(Persistence.service().count(criteria));
+            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
+            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            List<PaymentRecord> records = Persistence.service().query(criteria);
+            BigDecimal amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
+            data.interacCount().setValue(records.size());
+            data.interacValue().setValue(amount);
+        }
+
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.CreditCard);
+            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            List<PaymentRecord> records = Persistence.service().query(criteria);
+            BigDecimal amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
+            data.creditCardCount().setValue(records.size());
+            data.creditCardValue().setValue(amount);
+        }
+
+        {
+            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+            criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
+            data.insuranceCount().setValue(Persistence.service().count(criteria));
+        }
+
+        {
+            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
+            List<Lease.Status> statuses = new ArrayList<Lease.Status>();
+            statuses.add(Lease.Status.ExistingLease);
+            statuses.add(Lease.Status.Active);
+            criteria.in(criteria.proto().lease().status(), statuses);
+            data.insurancePercent().setValue(data.insuranceCount().getValue() * 1.0 / Persistence.service().count(criteria));
         }
 
         er.reportEntity(formatter, data);

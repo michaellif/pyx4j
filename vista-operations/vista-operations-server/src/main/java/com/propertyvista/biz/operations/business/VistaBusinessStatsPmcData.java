@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.operations.business;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
@@ -32,11 +33,15 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     IPrimitive<Date> lastLogin();
 
+    // PMC stats
+
     IPrimitive<Integer> buildingCount();
 
     IPrimitive<Integer> newBuildingCount();
 
     IPrimitive<Integer> unitsCount();
+
+    // Tenants
 
     IPrimitive<Integer> tenantsCount();
 
@@ -44,9 +49,50 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     IPrimitive<Integer> registeredTenantsCount();
 
-    IPrimitive<Integer> tenantInsurance();
+    // Electronic payments
 
-    IPrimitive<Integer> processedPayments();
+    IPrimitive<Integer> payingTenants();
 
-    IPrimitive<Integer> newProcessedPayments();
+    IPrimitive<Double> payingTenantsPercent();
+
+    IPrimitive<Integer> newPayingTenants();
+
+    IPrimitive<Double> newPayingTenantsPercent();
+
+    IPrimitive<Integer> eChequeCount();
+
+    IPrimitive<BigDecimal> eChequeValue();
+
+    IPrimitive<Integer> eftCount();
+
+    IPrimitive<BigDecimal> eftValue();
+
+    IPrimitive<Integer> interacCount();
+
+    IPrimitive<BigDecimal> interacValue();
+
+    IPrimitive<Integer> creditCardCount();
+
+    IPrimitive<BigDecimal> creditCardValue();
+
+    // TenantSure
+
+    IPrimitive<Integer> insuranceCount();
+
+    IPrimitive<Double> insurancePercent();
+
+    IPrimitive<Integer> newInsurance();
+
+    IPrimitive<Integer> otherInsurance();
+
+    IPrimitive<Double> otherInsurancePercent();
+
+    IPrimitive<Integer> noInsurance();
+
+    IPrimitive<Double> noInsurancePercent();
+
+    // Equifax
+
+    IPrimitive<Integer> processedReports();
+
 }
