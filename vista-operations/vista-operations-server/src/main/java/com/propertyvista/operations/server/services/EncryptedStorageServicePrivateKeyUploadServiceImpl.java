@@ -39,7 +39,7 @@ public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends Abstract
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(UploadData data,
+    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
             UploadDeferredProcess<PrivateKeyDTO, PrivateKeyDTO> process, UploadResponse<PrivateKeyDTO> response) {
 
         byte[] keyData = Base64.decode(data.data);

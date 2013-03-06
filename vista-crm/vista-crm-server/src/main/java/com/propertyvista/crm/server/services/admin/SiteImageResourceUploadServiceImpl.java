@@ -58,7 +58,7 @@ public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImp
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<IEntity, SiteImageResource> process,
+    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<IEntity, SiteImageResource> process,
             final UploadResponse<SiteImageResource> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);

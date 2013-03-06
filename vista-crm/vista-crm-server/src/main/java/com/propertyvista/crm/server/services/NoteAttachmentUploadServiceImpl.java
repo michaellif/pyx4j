@@ -45,7 +45,7 @@ public class NoteAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<N
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(UploadData data,
+    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
             UploadDeferredProcess<NoteAttachmentUploadDTO, File> process, UploadResponse<File> response) {
 
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));

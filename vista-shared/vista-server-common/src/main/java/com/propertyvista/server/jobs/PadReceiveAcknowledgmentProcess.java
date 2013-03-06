@@ -20,7 +20,7 @@ import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
-public class PadReciveAcknowledgmentProcess implements PmcProcess {
+public class PadReceiveAcknowledgmentProcess implements PmcProcess {
 
     private static final String EXECUTION_MONITOR_SECTION_NAME = "PadAcknowledgementReceived";
 
@@ -31,7 +31,7 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         }
-        padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFile();
+        padFile = ServerSideFactory.create(PaymentProcessFacade.class).receivePadAcknowledgementFile();
         if (padFile != null) {
             if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
 

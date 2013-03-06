@@ -150,8 +150,8 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
     }
 
     @Override
-    public TenantSureHQUpdateFile reciveHQUpdatesFile() {
-        return HQUpdate.reciveHQUpdatesFile();
+    public TenantSureHQUpdateFile receiveHQUpdatesFile() {
+        return HQUpdate.receiveHQUpdatesFile();
     }
 
     @Override

@@ -35,14 +35,14 @@ public enum PmcProcessType implements Serializable {
     @Translate("Process Scheduled eCheque Payments")
     paymentsScheduledEcheck,
 
-    paymentsBmoRecive,
+    paymentsBmoReceive,
 
     @Translate("Send eCheque Payments to Caledon")
     paymentsPadSend,
 
-    paymentsPadReciveAcknowledgment,
+    paymentsPadReceiveAcknowledgment,
 
-    paymentsPadReciveReconciliation,
+    paymentsPadReceiveReconciliation,
 
     paymentsTenantSure(true),
 

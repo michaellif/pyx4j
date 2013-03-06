@@ -23,7 +23,7 @@ import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 class HQUpdate {
 
-    static TenantSureHQUpdateFile reciveHQUpdatesFile() {
+    static TenantSureHQUpdateFile receiveHQUpdatesFile() {
         File sftpDir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureInterfaceSftpDirectory();
         File dirHqUpdate = new File(sftpDir, "hq-update");
         return null;

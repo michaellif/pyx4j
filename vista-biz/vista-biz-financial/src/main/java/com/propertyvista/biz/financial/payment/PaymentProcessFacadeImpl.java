@@ -119,8 +119,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public PadFile recivePadAcknowledgementFile() {
-        return new PadCaledon().recivePadAcknowledgementFile();
+    public PadFile receivePadAcknowledgementFile() {
+        return new PadCaledon().receivePadAcknowledgementFile();
     }
 
     @Override
@@ -218,8 +218,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public PadReconciliationFile recivePadReconciliation() {
-        return new PadCaledon().recivePadReconciliation();
+    public PadReconciliationFile receivePadReconciliation() {
+        return new PadCaledon().receivePadReconciliation();
     }
 
     @Override

@@ -71,7 +71,7 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             final UploadResponse<ImportUploadResponseDTO> response) {
         process.getData().type().setValue(ImportUploadDTO.ImportType.updateUnitAvailability);
         process.onUploadRecived(data, response);

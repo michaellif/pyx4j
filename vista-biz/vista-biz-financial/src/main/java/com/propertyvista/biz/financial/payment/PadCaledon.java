@@ -233,7 +233,7 @@ public class PadCaledon {
         }
     }
 
-    public PadFile recivePadAcknowledgementFile() {
+    public PadFile receivePadAcknowledgementFile() {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
         if (files.size() == 0) {
@@ -270,7 +270,7 @@ public class PadCaledon {
         return padFile;
     }
 
-    public PadReconciliationFile recivePadReconciliation() {
+    public PadReconciliationFile receivePadReconciliation() {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, PadFileType.Reconciliation, padWorkdir);
         if (files.size() == 0) {

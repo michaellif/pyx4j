@@ -38,10 +38,10 @@ public class PmcProcessFactory {
             return new PaymentsScheduledProcess(PaymentType.Echeck);
         case paymentsPadSend:
             return new PadSendProcess();
-        case paymentsPadReciveAcknowledgment:
-            return new PadReciveAcknowledgmentProcess();
-        case paymentsPadReciveReconciliation:
-            return new PadReciveReconciliationProcess();
+        case paymentsPadReceiveAcknowledgment:
+            return new PadReceiveAcknowledgmentProcess();
+        case paymentsPadReceiveReconciliation:
+            return new PadReceiveReconciliationProcess();
         case paymentsTenantSure:
             return new PaymentsTenantSureProcess();
         case initializeFutureBillingCycles:

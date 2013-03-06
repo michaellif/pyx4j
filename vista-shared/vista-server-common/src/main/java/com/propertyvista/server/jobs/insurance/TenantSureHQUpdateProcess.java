@@ -29,7 +29,7 @@ public class TenantSureHQUpdateProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        file = ServerSideFactory.create(TenantSureProcessFacade.class).reciveHQUpdatesFile();
+        file = ServerSideFactory.create(TenantSureProcessFacade.class).receiveHQUpdatesFile();
         return (file != null);
     }
 

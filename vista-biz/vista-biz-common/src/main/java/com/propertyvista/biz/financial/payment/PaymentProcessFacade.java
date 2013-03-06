@@ -28,13 +28,13 @@ public interface PaymentProcessFacade {
 
     boolean sendPadFile(PadFile padFile);
 
-    PadFile recivePadAcknowledgementFile();
+    PadFile receivePadAcknowledgementFile();
 
     void processAcknowledgement(ExecutionMonitor executionMonitor, PadFile padFile);
 
     void updatePadFileAcknowledProcessingStatus(PadFile padFileId);
 
-    PadReconciliationFile recivePadReconciliation();
+    PadReconciliationFile receivePadReconciliation();
 
     void processPadReconciliation(ExecutionMonitor executionMonitor, PadReconciliationFile reconciliationFile);
 

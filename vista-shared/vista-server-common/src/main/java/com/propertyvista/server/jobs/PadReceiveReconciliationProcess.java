@@ -19,7 +19,7 @@ import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 
-public class PadReciveReconciliationProcess implements PmcProcess {
+public class PadReceiveReconciliationProcess implements PmcProcess {
 
     private PadReconciliationFile reconciliationFile;
 
@@ -28,7 +28,7 @@ public class PadReciveReconciliationProcess implements PmcProcess {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         }
-        reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadReconciliation();
+        reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).receivePadReconciliation();
         return (reconciliationFile != null);
     }
 

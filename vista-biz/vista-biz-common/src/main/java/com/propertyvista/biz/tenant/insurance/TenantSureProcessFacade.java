@@ -23,7 +23,7 @@ import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
 public interface TenantSureProcessFacade {
 
-    TenantSureHQUpdateFile reciveHQUpdatesFile();
+    TenantSureHQUpdateFile receiveHQUpdatesFile();
 
     void processHQUpdate(ExecutionMonitor executionMonitor, TenantSureHQUpdateFile fileId);
 

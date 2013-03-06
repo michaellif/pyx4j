@@ -56,7 +56,7 @@ public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceI
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process, UploadResponse<IEntity> response) {
+    public ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process, UploadResponse<IEntity> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
 
         ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
