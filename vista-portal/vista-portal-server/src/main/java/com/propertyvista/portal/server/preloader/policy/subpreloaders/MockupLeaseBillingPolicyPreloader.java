@@ -70,6 +70,7 @@ public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<L
         LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingCycleStartDay().setValue(1);
+        billingType.offsetExecutionTargetDay().setValue(-15);
         policy.availableBillingTypes().add(billingType);
 
         return policy;

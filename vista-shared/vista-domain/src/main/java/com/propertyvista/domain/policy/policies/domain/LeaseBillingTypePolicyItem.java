@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,13 +23,16 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
 
     IPrimitive<PaymentFrequency> paymentFrequency();
 
-    // TODO moved from LeaseBillingPolicy - if null, use LeaseStardDate
+    @Caption(description = "First day of Billing Cycle for selected Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();
 
+    @Caption(description = "Billing Cycle Due day, relative to Start Day")
     IPrimitive<Integer> offsetPaymentDueDay();
 
+    @Caption(description = "When to run Preauthorized Payments, relative to Start Day")
     IPrimitive<Integer> offsetPreauthorizedPaymentDay();
 
+    @Caption(description = "When to create Bill for the next cycle, relative to Start Day")
     IPrimitive<Integer> offsetExecutionTargetDay();
 
 }

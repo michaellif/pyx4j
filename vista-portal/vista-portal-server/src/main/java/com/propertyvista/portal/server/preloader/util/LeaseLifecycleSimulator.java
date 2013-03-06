@@ -43,7 +43,6 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -456,28 +455,15 @@ public class LeaseLifecycleSimulator {
             if (numOfBills != 0) {
                 if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
-                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
-                    // the following code is copies the calculations inside the billing facade privates
-                    Persistence.service().retrieve(lease.billingAccount());
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
                     if (lastBill.billingPeriodStartDate().isNull()) {
                         // lease ended
                         return;
                     }
 
-                    Calendar billingPeriodStartDate = new GregorianCalendar();
-                    billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
-                    billingPeriodStartDate.add(Calendar.MONTH, 1);
-                    if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
-                        // lease ended
-                        return;
-                    }
+                    LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextCycleExecutionDate(lastBill.billingCycle());
 
-                    LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
-                            billingPeriodStartDate.getTime()));
-                    // CREEPY PART ENDS HERE *******************************************************************************************************************
-
-                    if (now().equals(billingCycleDay)) {
+                    if (now().equals(billingRunDay)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         billing.runBilling(lease);
                         billing.confirmBill(billing.getLatestBill(lease));
@@ -495,7 +481,7 @@ public class LeaseLifecycleSimulator {
                         queueEvent(nextRun, new RunBillingRecurrent(lease));
 
                     } else {
-                        queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
+                        queueEvent(billingRunDay, new RunBillingRecurrent(lease));
                     }
                 }
             }
@@ -544,10 +530,10 @@ public class LeaseLifecycleSimulator {
 
     // UTILITY FUNCTIONS
     // FIXME copied form BillingCycleManager, find some other and better way to do it
-    private static LogicalDate calculateBillingCycleTargetExecutionDate(BillingType cycle, LogicalDate billingCycleStartDate) {
+    private static LogicalDate calculateBillingCycleTargetExecutionDate(int targetDayOffset, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
-        calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
+        calendar.add(Calendar.DATE, targetDayOffset);
         return new LogicalDate(calendar.getTime());
     }
 

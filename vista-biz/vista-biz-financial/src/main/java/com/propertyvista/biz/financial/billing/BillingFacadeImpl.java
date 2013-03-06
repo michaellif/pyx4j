@@ -16,10 +16,14 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -80,7 +84,16 @@ public class BillingFacadeImpl implements BillingFacade {
     public LogicalDate getNextCycleExecutionDate(BillingCycle cycle) {
         LogicalDate startDate = BillDateUtils.calculateSubsiquentBillingCycleStartDate(cycle.billingType().paymentFrequency().getValue(), cycle
                 .billingCycleStartDate().getValue());
-        return BillDateUtils.calculateBillingCycleTargetExecutionDate(cycle.billingType().paymentFrequency().getValue(), startDate);
+        // get execution day offset from policy
+        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(cycle.building(), LeaseBillingPolicy.class);
+        Integer execOffset = null;
+        for (LeaseBillingTypePolicyItem item : leaseBillingPolicy.availableBillingTypes()) {
+            if (item.paymentFrequency().getValue().equals(cycle.billingType().paymentFrequency().getValue())) {
+                execOffset = item.offsetExecutionTargetDay().getValue();
+                break;
+            }
+        }
+        return BillDateUtils.calculateBillingCycleTargetExecutionDate(execOffset, startDate);
     }
 
     @Override

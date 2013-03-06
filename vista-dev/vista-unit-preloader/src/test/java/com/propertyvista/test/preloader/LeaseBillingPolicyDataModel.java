@@ -74,6 +74,7 @@ public class LeaseBillingPolicyDataModel {
         LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+        billingType.offsetExecutionTargetDay().setValue(-15);
         policy.availableBillingTypes().add(billingType);
 
         Persistence.service().persist(policy);

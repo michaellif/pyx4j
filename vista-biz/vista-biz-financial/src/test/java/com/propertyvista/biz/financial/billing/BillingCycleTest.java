@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.billing;
 
 import java.text.ParseException;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.LogicalDate;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
+@Ignore
 @Category(FunctionalTests.class)
 public class BillingCycleTest extends VistaDBTestBase {
 

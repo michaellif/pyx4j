@@ -14,16 +14,25 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -31,8 +40,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.payment.PaymentType;
@@ -40,7 +53,9 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBillingPolicyDTO> {
 
@@ -69,14 +84,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmationMethod()), 10).build());
-
-//        ArrayList<Integer> options = new ArrayList<Integer>();
-//        for (int i = 1; i < 29; i++) {
-//            options.add(i);
-//        }
-//        CComboBox<Integer> comboBox = new CComboBox<Integer>();
-//        comboBox.setOptions(options);
-//        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultBillingCycleSartDay(), comboBox), 5).build());
+        panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
+        panel.setWidget(++row, 0, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
 
         return panel;
     }
@@ -182,6 +191,142 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             comp.setVisible(maxFeeType != MaxTotalFeeType.Unlimited);
         }
 
+    }
+
+    class LeaseBillingTypeFolder extends VistaBoxFolder<LeaseBillingTypePolicyItem> {
+
+        private final Set<PaymentFrequency> usedFrequencies = new HashSet<PaymentFrequency>();
+
+        public LeaseBillingTypeFolder() {
+            super(LeaseBillingTypePolicyItem.class);
+            this.addValueChangeHandler(new ValueChangeHandler<IList<LeaseBillingTypePolicyItem>>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<IList<LeaseBillingTypePolicyItem>> event) {
+                    updateUsedFrequencies();
+                }
+            });
+        }
+
+        private void updateUsedFrequencies() {
+            usedFrequencies.clear();
+            for (LeaseBillingTypePolicyItem item : getValue()) {
+                usedFrequencies.add(item.paymentFrequency().getValue());
+            }
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            updateUsedFrequencies();
+        }
+
+        @Override
+        protected void addItem() {
+            new PaymentFrequencySelectorDialog(usedFrequencies, new ValueChangeHandler<PaymentFrequency>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<PaymentFrequency> event) {
+                    LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+                    item.paymentFrequency().setValue(event.getValue());
+                    LeaseBillingTypeFolder.super.addItem(item);
+                }
+            }).show();
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof LeaseBillingTypePolicyItem) {
+                return new LeaseBillingTypeEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        class LeaseBillingTypeEditor extends CEntityDecoratableForm<LeaseBillingTypePolicyItem> {
+
+            private CComboBox<Integer> startDay;
+
+            private CComboBox<Integer> dueDayOffset;
+
+            private CComboBox<Integer> pmntDayOffset;
+
+            private CComboBox<Integer> execDayOffset;
+
+            public LeaseBillingTypeEditor() {
+                super(LeaseBillingTypePolicyItem.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CLabel<PaymentFrequency>()), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDay(), startDay = new CComboBox<Integer>()), 15)
+                        .labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetPaymentDueDay(), dueDayOffset = new CComboBox<Integer>()), 15)
+                        .labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetPreauthorizedPaymentDay(), pmntDayOffset = new CComboBox<Integer>()), 15)
+                        .labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetExecutionTargetDay(), execDayOffset = new CComboBox<Integer>()), 15)
+                        .labelWidth(20).build());
+                return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                if (getValue() != null) {
+                    int cycles = getValue().paymentFrequency().getValue().getNumOfCycles();
+                    startDay.setOptions(makeList(1, cycles));
+                    int maxOffset = cycles - 1;
+                    dueDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                    pmntDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                    execDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                }
+            }
+
+            private List<Integer> makeList(int min, int max) {
+                int step = max > min ? 1 : -1;
+                ArrayList<Integer> options = new ArrayList<Integer>();
+                for (int i = min; i != max; i += step) {
+                    options.add(i);
+                }
+                options.add(max);
+                return options;
+            }
+        }
+
+        class PaymentFrequencySelectorDialog extends Dialog implements CancelOption {
+            public PaymentFrequencySelectorDialog(final Set<PaymentFrequency> usedFrequencies, final ValueChangeHandler<PaymentFrequency> selectHandler) {
+                super(i18n.tr("Select Payment Frequency"));
+                setDialogOptions(this);
+
+                CComboBox<PaymentFrequency> selector = new CComboBox<PaymentFrequency>();
+                selector.setMandatory(true);
+                Set<PaymentFrequency> options = EnumSet.allOf(PaymentFrequency.class);
+                options.removeAll(usedFrequencies);
+                selector.setOptions(options);
+
+                selector.addValueChangeHandler(new ValueChangeHandler<PaymentFrequency>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<PaymentFrequency> event) {
+                        selectHandler.onValueChange(event);
+                        hide();
+                    }
+                });
+
+                if (options.size() == 0) {
+                    setBody(new Label(i18n.tr("Sorry, no more items to choose from.")));
+                } else {
+                    setBody(selector);
+                    selector.getWidget().getEditor().setVisibleItemCount(options.size());
+                }
+            }
+
+            @Override
+            public boolean onClickCancel() {
+                return true;
+            }
+        }
     }
 
     private class NsfFeeItemFolder extends VistaTableFolder<NsfFeeItem> {

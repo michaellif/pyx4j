@@ -50,7 +50,9 @@ import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -322,8 +324,18 @@ public class BillingManager {
                     billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
                     billingCycle.billingCycleEndDate().setValue(
                             BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
-                    billingCycle.executionTargetDate().setValue(
-                            BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
+
+                    // get execution day offset from policy
+                    LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
+                            LeaseBillingPolicy.class);
+                    Integer execOffset = null;
+                    for (LeaseBillingTypePolicyItem item : leaseBillingPolicy.availableBillingTypes()) {
+                        if (item.paymentFrequency().getValue().equals(billingType.paymentFrequency().getValue())) {
+                            execOffset = item.offsetExecutionTargetDay().getValue();
+                            break;
+                        }
+                    }
+                    billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(execOffset, billingCycleStartDate));
 
 // Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB
 //                    billingCycle.stats().notConfirmed().setValue(0L);
