@@ -222,7 +222,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             uploadResponse.fileSize = uploadData.data.length;
             uploadResponse.timestamp = System.currentTimeMillis();
             log.debug("Got uploaded file {}", uploadResponse.fileName);
-            ProcessingStatus status = reciver.onUploadRecived(uploadData, process, uploadResponse);
+            ProcessingStatus status = reciver.onUploadReceived(uploadData, process, uploadResponse);
             switch (status) {
             case completed:
                 if (process != null) {
