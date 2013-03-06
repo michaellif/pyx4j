@@ -81,6 +81,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
                         password,
                         result,
                         SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
+                        false,
                         accountRecoveryOptionsService
                 ).show();//@formatter:on
             }

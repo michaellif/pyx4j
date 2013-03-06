@@ -74,6 +74,7 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
                 null,
                 accountRecoveryOptions,
                 SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion),
+                true,
                 accountRecoveryOptionsService
         ) {                    
             @Override
@@ -85,12 +86,7 @@ public class MandatoryAccountRecoveryOptionsSetupActivity extends AbstractActivi
             @Override
             protected void onUpdateRecoveryOptionsFail(com.pyx4j.commons.UserRuntimeException caught) {
                 showRecoveryOptionsDialog(accountRecoveryOptions);
-            };
-            
-            @Override
-            public boolean onClickCancel() {                
-                return false;
-            };
+            };            
             
         }.show();//@formatter:on
     }

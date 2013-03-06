@@ -14,18 +14,21 @@
 package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Composite;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptionsService;
 
-public class AccountRecoveryOptionsDialog extends OkCancelDialog {
+public class AccountRecoveryOptionsDialog extends Composite {
 
     public static I18n i18n = I18n.get(AccountRecoveryOptionsDialog.class);
 
@@ -39,9 +42,11 @@ public class AccountRecoveryOptionsDialog extends OkCancelDialog {
 
     private final Timer cancellationTimer;
 
-    public AccountRecoveryOptionsDialog(String password, AccountRecoveryOptionsDTO recoveryOptions, boolean isSecurityQuestionRequired,
+    private Dialog dialog;
+
+    public AccountRecoveryOptionsDialog(String password, AccountRecoveryOptionsDTO recoveryOptions, boolean isSecurityQuestionRequired, boolean forceSetup,
             AbstractAccountRecoveryOptionsService accountRecoveryOptionsService) {
-        super(i18n.tr("Account Recovery Options"));
+
         this.service = accountRecoveryOptionsService;
         this.password = password;
         this.recoveryOptionsForm = new AccountRecoveryOptionsForm(true);
@@ -51,16 +56,38 @@ public class AccountRecoveryOptionsDialog extends OkCancelDialog {
         this.cancellationTimer = new Timer() {
             @Override
             public void run() {
-                AccountRecoveryOptionsDialog.this.hide();
+                AccountRecoveryOptionsDialog.this.dialog.hide();
             }
         };
         this.cancellationTimer.schedule(CANCEL_TIMEOUT);
 
-        setBody(this.recoveryOptionsForm.asWidget());
+        this.dialog = new Dialog(//@formatter:off
+                i18n.tr("Account Recovery Options"), 
+                (forceSetup ? new OkOption() { @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();} }                              
+                            : new OkCancelOption() { 
+                                @Override public boolean onClickOk() { return AccountRecoveryOptionsDialog.this.onClickOk();}
+                                @Override public boolean onClickCancel() { return AccountRecoveryOptionsDialog.this.onClickCancel();}})            
+                , this.recoveryOptionsForm.asWidget()
+        ) { 
+            @Override protected String optionTextOk() { 
+                return i18n.tr("Update"); 
+            }
+        };//@formatter:on
     }
 
-    @Override
-    public boolean onClickOk() {
+    public void show() {
+        dialog.show();
+    }
+
+    protected void onUpdateRecoveryOptionsSuccess(AuthenticationResponse result) {
+
+    }
+
+    protected void onUpdateRecoveryOptionsFail(UserRuntimeException caught) {
+
+    }
+
+    private boolean onClickOk() {
         this.cancellationTimer.cancel();
         AccountRecoveryOptionsDTO recoveryOptions = recoveryOptionsForm.getValue().duplicate(AccountRecoveryOptionsDTO.class);
         recoveryOptions.password().setValue(password);
@@ -84,23 +111,9 @@ public class AccountRecoveryOptionsDialog extends OkCancelDialog {
         return true;
     }
 
-    @Override
-    public boolean onClickCancel() {
+    private boolean onClickCancel() {
         this.cancellationTimer.cancel();
-        return super.onClickCancel();
-    }
-
-    @Override
-    protected String optionTextOk() {
-        return i18n.tr("Update");
-    }
-
-    protected void onUpdateRecoveryOptionsSuccess(AuthenticationResponse result) {
-
-    }
-
-    protected void onUpdateRecoveryOptionsFail(UserRuntimeException caught) {
-
+        return true;
     }
 
 }
