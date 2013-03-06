@@ -5,16 +5,15 @@
 	padding: 0 20px 20px 20px;
 	margin: 0 auto;
 	overflow: hidden;
-    background: #fff;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
 	display: inline-block;
 	width: 260px;
 	vertical-align: top;
 	padding: 0 20px 20px 20px;
-	margin-right: 20px;
+	margin: 30px 20px 0 0;
 	float: left;
-	background-color:${object2_10};
+	background-color:#000000;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-main {
 	display: inline-block;
@@ -22,8 +21,10 @@
 	vertical-align: top;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-main .caption2 {
+	border-bottom: 3px solid #1F1B1C;
 }
 .vista-pmsite-inquiryFormPage .inquiryFormWrap {
 	min-height: 550px;
-	border-top: 5px solid #000000;
+	border-top: 1px solid #484243;
+	padding-top:20px;
 }

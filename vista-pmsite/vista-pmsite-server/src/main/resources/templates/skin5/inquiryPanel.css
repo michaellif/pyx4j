@@ -10,8 +10,12 @@
 	*display: inline;
     zoom: 1;	
 }
+select {
+	outline: 1px solid #EC8E21;
+}
 .inquiryPanel .inputEntry {
 	padding:10px 0;
+	color: #B4AFB0;
 }
 .inquiryPanel .inputEntry .inputLabel {
 	display:inline-block;
@@ -19,17 +23,20 @@
 	padding-right:20px;
 	text-align:right;
 	vertical-align:top;
+	color:#D7AC3F;
 /* if EI7 */	
 	*display: inline;
     zoom: 1;
 }
 
 .inquiryPanel .inputEntry input {
-	border: 1px solid #000000;
+	border: 1px solid #EC8E21;
+	box-shadow: inset 5px 5px 5px #7f7f7f;
 }
 
 .inquiryPanel .inputEntry input[type="radio"]  {
 	border: 0px solid #000000;
+	box-shadow: none;
 }
 
 .inquiryPanel .inputEntry .inputLabel.altApmnt {
@@ -45,7 +52,8 @@
 }
 .inquiryPanel .inputEntry textarea {
 	width:360px;
-	border: 1px solid #000000;
+	border: 1px solid #EC8E21;
+	box-shadow: inset 5px 5px 5px #7f7f7f;
 }
 
 .inquiryPanel .inputEntry .apmntBox {
@@ -63,16 +71,32 @@
     zoom: 1;	
 }
 .inquiryPanel input[type=submit] {
-	background: ${object1_100};
-	border: 2px solid ${object1_100};
+	background: -moz-linear-gradient(top, #b55508, #FA8D0C);
+    background: -webkit-gradient(linear, left top, left bottom, 
+                color-stop(100%,#b55508), color-stop(100%,#FA8D0C));
+    background: -webkit-linear-gradient(top, #b55508, #FA8D0C);
+    filter:	progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b55508', endColorstr='#FA8D0C');
+    zoom: 1;
+    background: -o-linear-gradient(top, #b55508, #FA8D0C);
+    background: -ms-linear-gradient(top, #b55508, #FA8D0C);
+    background: linear-gradient(top, #b55508, #FA8D0C);
+    box-shadow: 5px 5px 5px #fff inset;
+	/*background: ${object1_100};
+	border: 2px solid ${object1_100};*/
 	color: ${object1_10};
-    height: 32px;
+    height: 36px;
     min-width:128px;
     padding:0 8px;
-    font-size: 16px;
+    font-size: 14pt;
+    font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
     margin-left: 40px;
+    border: none;
+}
+.inquiryPanel input[type=submit]:hover {
+	box-shadow: 5px 5px 5px #fff;
+	color: #1F1B1C;
 }
 
 /*
