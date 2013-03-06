@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.pub;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +26,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
@@ -53,9 +54,8 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     }
 
     @Override
-    protected boolean isSessionValid() {
-        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(),
-                VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
+    protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired });
     }
 
     private boolean isAccountRecoveryOptionsConfigured(CrmUserCredential userCredential) {

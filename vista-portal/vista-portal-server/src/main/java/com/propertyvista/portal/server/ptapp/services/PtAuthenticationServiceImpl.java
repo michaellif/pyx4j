@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.ptapp.services;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +26,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
@@ -62,9 +63,8 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     }
 
     @Override
-    protected boolean isSessionValid() {
-        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(),
-                VistaCustomerBehavior.ApplicationSelectionRequired);
+    protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.ApplicationSelectionRequired });
     }
 
     @Override

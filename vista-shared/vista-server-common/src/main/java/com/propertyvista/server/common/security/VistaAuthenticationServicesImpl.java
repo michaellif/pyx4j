@@ -15,6 +15,7 @@ package com.propertyvista.server.common.security;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -93,6 +94,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
+    protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior() });
+    }
+
     protected abstract void sendPasswordRetrievalToken(U user);
 
     protected Set<Behavior> getBehaviors(E userCredential) {
@@ -108,7 +113,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     protected boolean isSessionValid() {
-        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior());
+        return SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors());
     }
 
     @Override
@@ -297,12 +302,21 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return PasswordEncryptor.checkPassword(inputPassword, encryptedPassword);
     }
 
+    public static <T extends Behavior> boolean containsAnyBehavior(Collection<T> list, Collection<T> subSet) {
+        for (Behavior behavior : list) {
+            if (subSet.contains(behavior)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public final Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
         E userCredential = Persistence.service().retrieve(credentialClass, principalPrimaryKey);
         if ((userCredential == null) || (!userCredential.enabled().isBooleanTrue())) {
             return null;
-        } else if (currentBehaviours.contains(getPasswordChangeRequiredBehavior())) {
+        } else if (containsAnyBehavior(currentBehaviours, getAccountSetupRequiredBehaviors())) {
             return currentBehaviours;
         } else if (isDynamicBehaviours()) {
             return currentBehaviours;

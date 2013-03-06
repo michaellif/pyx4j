@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.services;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.Behavior;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -72,8 +72,8 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
-    protected boolean isSessionValid() {
-        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired);
+    protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired });
     }
 
     @Override
