@@ -175,7 +175,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
     }
 
     private static String getCrmAccessUrl(String vistaCrmBaseUrl, String token) {
-        return AppPlaceInfo.absoluteUrl(vistaCrmBaseUrl, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(vistaCrmBaseUrl, true, CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 }

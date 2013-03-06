@@ -45,7 +45,7 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public void showVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), PortalSiteMap.PortalTermsAndConditions.class), null, null);
+        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
     }
 
     @Override

@@ -183,8 +183,8 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         termsAgreementLabel.getElement().getStyle().setDisplay(Display.INLINE);
         termsAgreementShortcutPanel.add(termsAgreementLabel);
 
-        Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"),
-                AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), OnboardingSiteMap.PmcAccountTerms.class));
+        Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"), AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), false,
+                OnboardingSiteMap.PmcAccountTerms.class));
         termsAnchor.addClickHandler(new ClickHandler() {
 
             @Override

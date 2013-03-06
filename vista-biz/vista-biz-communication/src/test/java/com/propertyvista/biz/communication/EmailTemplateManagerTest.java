@@ -139,8 +139,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
 
-        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
-                AuthenticationService.AUTH_TOKEN_ARG, token);
+        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
+                PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     @Override
@@ -325,8 +325,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     crmUser.name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class,
-                            AuthenticationService.AUTH_TOKEN_ARG, token)
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), true,
+                            CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {
@@ -342,8 +342,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.LoginWithToken.class,
-                            AuthenticationService.AUTH_TOKEN_ARG, token)
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
+                            PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {
@@ -359,8 +359,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
-                            AuthenticationService.AUTH_TOKEN_ARG, token)
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
+                            PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {
@@ -481,8 +481,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
                     company,
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.LoginWithToken.class,
-                            AuthenticationService.AUTH_TOKEN_ARG, token),
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
+                            PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token),
                     portalHomeUrl,
                     tenantHomeUrl,
                     building.marketing().name().getValue(),

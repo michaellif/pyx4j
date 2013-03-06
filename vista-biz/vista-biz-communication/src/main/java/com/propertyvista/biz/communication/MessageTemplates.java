@@ -224,8 +224,8 @@ public class MessageTemplates {
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         pwdReqT.RequestorName().set(user.name());
         pwdReqT.PasswordResetUrl().setValue(
-                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), OperationsSiteMap.LoginWithToken.class,
-                        AuthenticationService.AUTH_TOKEN_ARG, token));
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), true,
+                        OperationsSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
         data.add(pwdReqT);
 
         MailMessage email = new MailMessage();
@@ -441,7 +441,7 @@ public class MessageTemplates {
             String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
             body = body.replace("${periodEndDate}", gracePeriodEndDate.toString());
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
-                    + DeploymentConsts.TENANT_URL_PATH, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
+                    + DeploymentConsts.TENANT_URL_PATH, true, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
             template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
                 body
         )));//@formatter:on

@@ -168,20 +168,20 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getCrmAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), CrmSiteMap.LoginWithToken.class,
-                AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), true,
+                CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPtappAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
-                AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
+                PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPortalAccessUrl(String token) {
         return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH,
-                PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+                true, PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     private static OnlineApplication getApplication(LeaseTermParticipant tenantInLease) {
