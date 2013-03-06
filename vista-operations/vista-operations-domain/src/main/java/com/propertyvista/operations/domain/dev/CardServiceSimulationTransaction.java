@@ -56,6 +56,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @JoinColumn
     CardServiceSimulationCard card();
 
+    @Indexed(group = { "r,2" }, uniqueConstraint = true)
     IPrimitive<SimpulationTransactionType> transactionType();
 
     @Caption(description = "Force rejection code on next transaction (of this type)")
@@ -65,7 +66,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
-    @Indexed(uniqueConstraint = true)
+    @Indexed(group = { "r,1" }, uniqueConstraint = true)
     IPrimitive<String> reference();
 
     IPrimitive<String> responseCode();
