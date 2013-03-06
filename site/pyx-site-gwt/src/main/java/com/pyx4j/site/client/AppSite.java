@@ -20,6 +20,9 @@
  */
 package com.pyx4j.site.client;
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +31,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -43,6 +47,7 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
@@ -67,6 +72,37 @@ public abstract class AppSite implements EntryPoint {
 
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
         this.appId = appId;
+
+        String encodedPlace = Window.Location.getParameter(NavigNode.PLACE_ARGUMENT);
+        if (encodedPlace != null) {
+            // Redirect to proper location with history token
+            // Example: app?place=placeName&v1=1&v2=2  -> app#placeName?v1=1&v2=2
+            StringBuilder hash = new StringBuilder();
+            UrlBuilder urlBuilder = Window.Location.createUrlBuilder();
+            hash.append(encodedPlace);
+
+            boolean first = true;
+            for (Entry<String, List<String>> me : Window.Location.getParameterMap().entrySet()) {
+                String paramName = me.getKey();
+                urlBuilder.removeParameter(paramName);
+                if (!paramName.equals(NavigNode.PLACE_ARGUMENT)) {
+                    if (first) {
+                        hash.append(NavigNode.ARGS_GROUP_SEPARATOR);
+                        first = false;
+                    } else if (hash.length() > 0) {
+                        hash.append(NavigNode.ARGS_SEPARATOR);
+                    }
+                    hash.append(paramName);
+                    hash.append(NavigNode.NAME_VALUE_SEPARATOR);
+                    // TODO verify multiple values
+                    hash.append(Window.Location.getParameter(paramName));
+                }
+            }
+            urlBuilder.setHash(hash.toString());
+            log.debug("redirect {}", urlBuilder);
+            Window.Location.assign(urlBuilder.buildString());
+        }
+
         ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
         Element head = Document.get().getElementsByTagName("html").getItem(0);

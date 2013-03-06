@@ -83,27 +83,35 @@ public class AppPlaceInfo {
         return new StringDebugId(getPlaceId(clazz));
     }
 
-    public static String absoluteUrl(String appUrl, AppPlace place) {
+    public static String absoluteUrl(String appUrl, boolean redirectable, AppPlace place) {
         StringBuilder b = new StringBuilder();
         if (appUrl != null) {
             b.append(appUrl);
         }
-        b.append("#");
+        if (redirectable) {
+            b.append("?").append(NavigNode.PLACE_ARGUMENT).append("=");
+        } else {
+            b.append("#");
+        }
         b.append(place.getToken());
         return b.toString();
     }
 
-    public static String absoluteUrl(String appUrl, Class<? extends Place> placeClass, String... encodedComponentsNameValue) {
+    public static String absoluteUrl(String appUrl, boolean redirectable, Class<? extends Place> placeClass, String... encodedComponentsNameValue) {
         StringBuilder b = new StringBuilder();
         if (appUrl != null) {
             b.append(appUrl);
         }
         if (placeClass != null) {
-            b.append("#");
+            if (redirectable) {
+                b.append("?").append(NavigNode.PLACE_ARGUMENT).append("=");
+            } else {
+                b.append("#");
+            }
             b.append(getPlaceId(placeClass));
         }
         if (encodedComponentsNameValue != null) {
-            boolean first = true;
+            boolean first = !redirectable;
             boolean name = true;
             for (String encodedComponent : encodedComponentsNameValue) {
                 if (first) {
@@ -120,5 +128,4 @@ public class AppPlaceInfo {
         }
         return b.toString();
     }
-
 }
