@@ -57,6 +57,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     CardServiceSimulationCard card();
 
     @Indexed(group = { "r,2" }, uniqueConstraint = true)
+    @MemberColumn(name = "tp")
     IPrimitive<SimpulationTransactionType> transactionType();
 
     @Caption(description = "Force rejection code on next transaction (of this type)")
