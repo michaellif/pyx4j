@@ -19,31 +19,22 @@ import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
-import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @Ignore
 @Category(FunctionalTests.class)
-public class BillingCycleTest extends VistaDBTestBase {
-
-    private static Building building;
+public class BillingCycleTest extends FinancialTestBase {
 
     @Override
-    protected void setUp() throws java.lang.Exception {
+    protected void setUp() throws Exception {
         super.setUp();
-        if (building == null) {
-            building = EntityFactory.create(Building.class);
-            building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
-            Persistence.service().persist(building);
-        }
+        preloadData();
     }
 
     public void testFirstBillingCycle() throws ParseException {
@@ -113,13 +104,14 @@ public class BillingCycleTest extends VistaDBTestBase {
 
     private BillingCycle createFirstBillingCycle(LogicalDate leaseStartDate, Integer billingCycleStartDay) {
         BillingType billingType = BillingManager.ensureBillingType(PaymentFrequency.Monthly, billingCycleStartDay);
-        BillingCycle billingCycle = BillingManager.getNewLeaseInitialBillingCycle(billingType, building, leaseStartDate);
+        BillingCycle billingCycle = BillingManager.getNewLeaseInitialBillingCycle(billingType, buildingDataModel.getBuilding(), leaseStartDate);
         return billingCycle;
     }
 
     private BillingCycle createExistingLeaseInitialBillingCycle(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingCycleStartDay) {
         BillingType billingType = BillingManager.ensureBillingType(PaymentFrequency.Monthly, billingCycleStartDay);
-        BillingCycle billingCycle = BillingManager.getExistingLeaseInitialBillingCycle(billingType, building, leaseStartDate, leaseCreationDate);
+        BillingCycle billingCycle = BillingManager.getExistingLeaseInitialBillingCycle(billingType, buildingDataModel.getBuilding(), leaseStartDate,
+                leaseCreationDate);
         return billingCycle;
     }
 
