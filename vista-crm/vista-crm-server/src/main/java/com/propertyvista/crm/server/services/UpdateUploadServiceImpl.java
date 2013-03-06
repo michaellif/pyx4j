@@ -74,7 +74,7 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             final UploadResponse<ImportUploadResponseDTO> response) {
         process.getData().type().setValue(ImportUploadDTO.ImportType.updateUnitAvailability);
-        process.onUploadRecived(data, response);
+        process.onUploadReceived(data, response);
         DeferredProcessRegistry.start(data.deferredCorrelationId, process, ThreadPoolNames.IMPORTS);
         return ProcessingStatus.processWillContinue;
 

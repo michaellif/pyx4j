@@ -46,7 +46,7 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
     }
 
     @Override
-    public void onUploadRecived(final UploadData data, final UploadResponse<ImportUploadResponseDTO> response) {
+    public void onUploadReceived(final UploadData data, final UploadResponse<ImportUploadResponseDTO> response) {
         binaryData = data.data;
         this.response = response;
         this.response.data = EntityFactory.create(ImportUploadResponseDTO.class);

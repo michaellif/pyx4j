@@ -78,7 +78,7 @@ public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             final UploadResponse<ImportUploadResponseDTO> response) {
 
-        process.onUploadRecived(data, response);
+        process.onUploadReceived(data, response);
 
         Pmc pmc = Persistence.service().retrieve(Pmc.class, process.getData().id().getValue());
         if (pmc == null) {

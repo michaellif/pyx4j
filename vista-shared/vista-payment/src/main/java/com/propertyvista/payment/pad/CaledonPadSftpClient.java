@@ -163,18 +163,18 @@ public class CaledonPadSftpClient {
         }
     }
 
-    public List<File> reciveFiles(String companyId, PadFileType padFileType, File targetDirectory) {
-        return reciveFiles(getSrc, companyId, padFileType, targetDirectory);
+    public List<File> receiveFiles(String companyId, PadFileType padFileType, File targetDirectory) {
+        return receiveFiles(getSrc, companyId, padFileType, targetDirectory);
     }
 
-    public List<File> reciveFilesSim(File targetDirectory) {
+    public List<File> receiveFilesSim(File targetDirectory) {
         if (!CaledonPadSftpClient.usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
-        return reciveFiles(postDst, null, PadFileType.PadFile, targetDirectory);
+        return receiveFiles(postDst, null, PadFileType.PadFile, targetDirectory);
     }
 
-    private List<File> reciveFiles(String src, String companyId, PadFileType padFileType, File targetDirectory) {
+    private List<File> receiveFiles(String src, String companyId, PadFileType padFileType, File targetDirectory) {
         SftpClient client = new SftpClient();
         try {
             client.connect();

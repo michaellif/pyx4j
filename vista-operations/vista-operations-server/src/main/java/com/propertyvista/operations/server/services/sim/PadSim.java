@@ -56,7 +56,7 @@ public class PadSim {
 
     public PadSimFile loadPadFile() {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().reciveFilesSim(padWorkdir);
+        List<File> files = new CaledonPadSftpClient().receiveFilesSim(padWorkdir);
         if (files.size() == 0) {
             return null;
         }
