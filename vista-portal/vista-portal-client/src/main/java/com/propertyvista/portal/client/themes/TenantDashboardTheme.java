@@ -49,8 +49,12 @@ public class TenantDashboardTheme extends Theme {
 
         style = new Style(".", StyleName.TenantDashboardTableHeader);
         style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("line-height", "35px");
+        style.addProperty("height", "20px");
         style.addProperty("color", ThemeColor.foreground, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantDashboardTableHeader, ">td");
+        style.addProperty("padding", "2px 6px");
         addStyle(style);
 
         style = new Style(".", StyleName.TenantDashboardTableRow);
@@ -61,6 +65,10 @@ public class TenantDashboardTheme extends Theme {
 
         style = new Style(".", StyleName.TenantDashboardTableRow, ":last-child");
         style.addProperty("border-bottom", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantDashboardTableRow, ">td");
+        style.addProperty("padding", "2px 6px");
         addStyle(style);
 
 //        style = new Style(".", StyleName.TenantDashboardTableRow, ":hover");

@@ -78,40 +78,46 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             }
         });
 
-        openRequestsPanel.setH1(++row, 0, 5, i18n.tr("OPEN TICKETS"), newTicket);
+        openRequestsPanel.setH1(++row, 0, 6, i18n.tr("OPEN TICKETS"), newTicket);
 
+        int col = -1;
         if (openRequests.size() > 0) {
-            openRequestsPanel.getColumnFormatter().setWidth(0, "120px");
-            openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-            openRequestsPanel.getColumnFormatter().setWidth(2, "120px");
-            openRequestsPanel.getColumnFormatter().setWidth(3, "45px");
-            openRequestsPanel.getColumnFormatter().setWidth(4, "40px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "120px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "40px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "130px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "35px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "40px");
+            openRequestsPanel.getColumnFormatter().setWidth(++col, "35px");
 
-            openRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
-            openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
-            openRequestsPanel.setHTML(row, 2, i18n.tr("Description"));
-            openRequestsPanel.setHTML(row, 3, "");
-            openRequestsPanel.setHTML(row, 4, "");
+            col = -1;
+            openRequestsPanel.setHTML(++row, ++col, i18n.tr("Ticket"));
+            openRequestsPanel.getCellFormatter().getElement(row, col).getStyle().setPaddingLeft(4, Unit.PX);
+            openRequestsPanel.setHTML(row, ++col, i18n.tr("Status"));
+            openRequestsPanel.setHTML(row, ++col, i18n.tr("Description"));
+            openRequestsPanel.setHTML(row, ++col, i18n.tr("Entry Allowed"));
+            openRequestsPanel.setHTML(row, ++col, "");
+            openRequestsPanel.setHTML(row, ++col, "");
 
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
             for (final MaintenanceRequestDTO request : openRequests) {
-                openRequestsPanel.setHTML(++row, 0, issueDetails(request));
-                openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                col = -1;
+                openRequestsPanel.setHTML(++row, ++col, issueDetails(request));
+                openRequestsPanel.getCellFormatter().getElement(row, col).getStyle().setPaddingLeft(4, Unit.PX);
 
                 switch (request.status().getValue()) {
                 case Submitted:
-                    openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.submitted().getStringView()
-                            + "</i>");
+                    openRequestsPanel.setHTML(row, ++col, request.status().getStringView() + "<p><i style='font-size:0.8em'>"
+                            + request.submitted().getStringView() + "</i>");
                     break;
                 case Scheduled:
-                    openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>"
+                    openRequestsPanel.setHTML(row, ++col, request.status().getStringView() + "<p><i style='font-size:0.8em'>"
                             + request.scheduledTime().getStringView() + ",&nbsp" + request.scheduledDate().getStringView() + "</i>");
                     break;
                 }
 
-                openRequestsPanel.setHTML(row, 2, request.description().getStringView());
+                openRequestsPanel.setHTML(row, ++col, request.description().getStringView());
+                openRequestsPanel.setHTML(row, ++col, request.permissionToEnter().isBooleanTrue() ? i18n.tr("Yes") : i18n.tr("No"));
 
                 Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
                 cancelTicket.addClickHandler(new ClickHandler() {
@@ -122,7 +128,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                         }
                     }
                 });
-                openRequestsPanel.setWidget(row, 3, cancelTicket);
+                openRequestsPanel.setWidget(row, ++col, cancelTicket);
 
                 Anchor viewlTicket = new Anchor(i18n.tr("View"));
                 viewlTicket.addClickHandler(new ClickHandler() {
@@ -131,7 +137,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                         presenter.editRequest(request);
                     }
                 });
-                openRequestsPanel.setWidget(row, 4, viewlTicket);
+                openRequestsPanel.setWidget(row, ++col, viewlTicket);
 
                 openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
@@ -156,9 +162,9 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
         if (historyRequests.size() > 0) {
             historyRequestsPanel.getColumnFormatter().setWidth(0, "120px");
-            historyRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-            historyRequestsPanel.getColumnFormatter().setWidth(2, "120px");
-            historyRequestsPanel.getColumnFormatter().setWidth(3, "85px");
+            historyRequestsPanel.getColumnFormatter().setWidth(1, "40px");
+            historyRequestsPanel.getColumnFormatter().setWidth(2, "130px");
+            historyRequestsPanel.getColumnFormatter().setWidth(3, "110px");
 
             historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
             historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
