@@ -304,6 +304,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             return null;
         } else if (isDynamicBehaviours()) {
             return currentBehaviours;
+        } else if (currentBehaviours.contains(getPasswordChangeRequiredBehavior())) {
+            return currentBehaviours;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(userCredential));
