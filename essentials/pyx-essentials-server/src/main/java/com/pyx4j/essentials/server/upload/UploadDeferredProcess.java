@@ -43,7 +43,7 @@ public class UploadDeferredProcess<U extends IEntity, R extends IEntity> impleme
         this.data = data;
     }
 
-    public void onUploadRecived(final UploadData data, final UploadResponse<R> response) {
+    public void onUploadReceived(final UploadData data, final UploadResponse<R> response) {
     }
 
     @Override
