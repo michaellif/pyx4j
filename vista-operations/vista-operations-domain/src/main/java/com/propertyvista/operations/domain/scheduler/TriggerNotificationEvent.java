@@ -25,7 +25,9 @@ public enum TriggerNotificationEvent implements Serializable {
 
     Error,
 
-    Completed;
+    Completed,
+
+    NonEmpty;
 
     @Override
     public String toString() {

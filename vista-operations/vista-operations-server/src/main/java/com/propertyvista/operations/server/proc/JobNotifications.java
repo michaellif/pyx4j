@@ -13,6 +13,9 @@
  */
 package com.propertyvista.operations.server.proc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.mail.Mail;
@@ -28,21 +31,27 @@ public class JobNotifications {
 
     public static void notify(Trigger trigger, Run run) {
 
-        TriggerNotificationEvent event;
+        List<TriggerNotificationEvent> events = new ArrayList<TriggerNotificationEvent>();
+        events.add(TriggerNotificationEvent.All);
+
         switch (run.status().getValue()) {
         case Completed:
-            event = TriggerNotificationEvent.Completed;
+            events.add(TriggerNotificationEvent.Completed);
             break;
         case PartiallyCompleted:
         case Failed:
-            event = TriggerNotificationEvent.Error;
+            events.add(TriggerNotificationEvent.Error);
             break;
         default:
             return;
         }
 
+        if (run.executionReport().total().getValue(0L) > 0) {
+            events.add(TriggerNotificationEvent.NonEmpty);
+        }
+
         for (TriggerNotification notificationCfg : trigger.notifications()) {
-            if ((notificationCfg.event().getValue() == TriggerNotificationEvent.All) || (notificationCfg.event().getValue() == event)) {
+            if (events.contains(notificationCfg.event().getValue())) {
                 sendNotification(trigger, run, notificationCfg.user());
             }
         }
