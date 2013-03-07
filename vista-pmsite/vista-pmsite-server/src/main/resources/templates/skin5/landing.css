@@ -9,7 +9,6 @@
 }
 
 .infobox_header {
-	height: 30px;
 	padding: 5px 0;
 	border-bottom: 3px solid #1F1B1C;
 }
@@ -67,7 +66,7 @@
 
 .quickSearch .infobox_body {
     margin-bottom: 20px;
-    padding: 18px 20px;
+    padding: 10px 40px;
 }
 
 .quickSearch h3 {
@@ -79,7 +78,7 @@
 }
 
 .quickSearch label {
-	color: #fff;
+	color: #E8E8E8;
 	font-weight: bold;
 	display: block;
 	font-size: 13px;
@@ -87,7 +86,7 @@
 }
 
 .quickSearch select {
-	width: 240px;
+	width: 200px;
 	margin-bottom: 15px;
 	margin: 0 0 6px 0;
 }
@@ -95,10 +94,11 @@
 .quickSearch input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
-	color:#fff;
+	color:#000000;
 	cursor: pointer;
-	padding: 10px;
-	font-size: 13px;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .quickSearch .submit {
@@ -151,8 +151,7 @@
 	display: none;
 }
 
-.testimBox .infobox_content {
-    font-size: 12pt;	
+.testimBox .infobox_content {	
     color: #E8E8E8;
 }
 
@@ -165,13 +164,13 @@
 }
 
 .newsBox .date {
-	color: #828282;
+	color: #fff;
 	font-size: 12px;
 	margin: 12px 0 4px 0;
 }
 
 .newsBox .headline {
-	color: #E8E8E8;
+	color: #D7AC3F;
 	font-family: monospace;
 	font-weight: bold;
 	text-transform: uppercase;
@@ -183,7 +182,6 @@
 
 .newsBox .text {
 	color: #E8E8E8;
- 	font-size: 9pt;
 	line-height: 11pt;
  	text-align: justify;
 }
@@ -194,7 +192,7 @@
 }
 
 .infobox_content .read_more {
-	color: #E8E8E8;
+	color: #FA8D0C;
 	font-size: 20px;
 	line-height: 14px;
 	vertical-align: text-top;
@@ -203,6 +201,20 @@
 .infobox_header .read_more {
 	color: #fff;
 	padding: 7px;
+}
+
+.narrowGadgetBox.quickSearch .infobox_header {
+    text-align: center;
+    border-bottom: none;
+}
+
+.narrowGadgetBox.quickSearch .infobox_body {
+    border-top: none;
+}
+
+.narrowGadgetBox.quickSearch .infobox_header .infobox_header_title {
+    color: #000000;
+    font-weight: bold;
 }
 
 .infobox_header_title {
@@ -225,15 +237,15 @@
 }
 
 .promoBox .infobox_content {
-	width: 140px;
+	width: 154px;
 	float:left;
-	border-top: 5px solid #000000;
 	margin-right: 5px;
 	overflow: hidden;
 }
 
 .address {
 	display: inline-block;
+	color: #E8E8E8;
 }
 
 .promoBox .infobox_content:first-child {
@@ -241,6 +253,15 @@
 }
 
 .promoBox .picture {
+ 	border: 2px solid #000000;
+	min-height: 93px;
+    padding: 5px 5px;
+    text-align: center;
+    width: 140px;
+}
+
+.promoBox .picture:hover {
+ 	border: 2px solid #D7AC3F;
 
 }
 
