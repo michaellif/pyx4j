@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
@@ -88,6 +89,6 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
 
     @Override
     public void onShowVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
     }
 }

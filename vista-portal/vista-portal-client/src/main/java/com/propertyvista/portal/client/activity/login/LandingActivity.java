@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
@@ -45,7 +46,7 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public void showVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
     }
 
     @Override
