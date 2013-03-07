@@ -23,6 +23,7 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -79,31 +80,7 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        ClientContext.obtainAuthenticationData((com.pyx4j.security.rpc.AuthenticationService) GWT.create(PortalAuthenticationService.class),
-                new DefaultAsyncCallback<Boolean>() {
-
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
-                            @Override
-                            public void onSuccess(SiteDefinitionsDTO descriptor) {
-                                if (!descriptor.useCustomHtml().isBooleanTrue()) {
-                                    StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
-                                }
-                                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
-                                getHistoryHandler().handleCurrentHistory();
-                            }
-                        }, ClientNavigUtils.getCurrentLocale());
-                    }
-
-                    //TODO remove this when initial application message is implemented
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        getHistoryHandler().handleCurrentHistory();
-                        super.onFailure(caught);
-                    }
-                }, true, getAuthenticationToken());
-
+        initialize();
     }
 
     public final native String getAuthenticationToken() /*-{
@@ -113,6 +90,49 @@ public class PortalSite extends VistaSite {
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
+    }
+
+    private void initialize() {
+        initSiteTheme();
+    }
+
+    private void initSiteTheme() {
+        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
+            @Override
+            public void onSuccess(SiteDefinitionsDTO descriptor) {
+                hideLoadingIndicator();
+                if (!descriptor.useCustomHtml().isBooleanTrue()) {
+                    StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                }
+                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
+                VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
+                VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
+                obtainAuthenticationData();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                hideLoadingIndicator();
+                super.onFailure(caught);
+            }
+        }, ClientNavigUtils.getCurrentLocale());
+
+    }
+
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData(GWT.<AuthenticationService> create(PortalAuthenticationService.class), new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                getHistoryHandler().handleCurrentHistory();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                getHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        }, true, getAuthenticationToken());
     }
 
     public static PortalSite instance() {
