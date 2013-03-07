@@ -193,6 +193,7 @@ public abstract class AppSite implements EntryPoint {
             log.debug("GWT.getHostPageBaseURL             {}", GWT.getHostPageBaseURL());
             log.debug("GWT.getModuleBaseForStaticFiles    {}", GWT.getModuleBaseForStaticFiles());
             log.debug("NavigationUri.getDeploymentBaseURL {}", NavigationUri.getDeploymentBaseURL());
+            log.debug("NavigationUri.getHostPageURL       {}", NavigationUri.getHostPageURL());
         }
         onSiteLoad();
     }
