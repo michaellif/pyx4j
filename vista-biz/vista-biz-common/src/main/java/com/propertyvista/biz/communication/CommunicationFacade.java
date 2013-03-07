@@ -16,9 +16,9 @@ package com.propertyvista.biz.communication;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -59,7 +59,7 @@ public interface CommunicationFacade {
 
     void sendNewPmcEmail(OnboardingUser user, Pmc pmc);
 
-    void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate);
+    void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate);
 
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
 

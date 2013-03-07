@@ -395,7 +395,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         Persistence.service().merge(insuranceTenantSure);
 
-        sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure));
+        sendPaymentNotProcessedEmail(getTenantsEmail(tenantId), getGracePeriodEndDate(insuranceTenantSure),
+                TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
 
         Persistence.service().commit();
     }
@@ -533,8 +534,8 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         return new LogicalDate(gracePeriodEnd.getTime());
     }
 
-    private void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate) {
-        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate);
+    private void sendPaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantSurePaymentNotProcessedEmail(tenantEmail, gracePeriodEndDate, cancellationDate);
     }
 
     private void sendPaymentsResumedEmail(String tenantEmail) {

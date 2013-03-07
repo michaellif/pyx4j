@@ -14,6 +14,8 @@
 package com.propertyvista.biz.communication;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -277,9 +279,9 @@ public class MessageTemplates {
         return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureEmailSender();
     }
 
-    public static MailMessage createTenantSurePaymentNotProcessedEmail(LogicalDate gracePeriodEndDate) {
+    public static MailMessage createTenantSurePaymentNotProcessedEmail(LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
 
-        EmailTemplate emailTemplate = emailTemplateTenantSurePaymentNotProcessed(gracePeriodEndDate);
+        EmailTemplate emailTemplate = emailTemplateTenantSurePaymentNotProcessed(gracePeriodEndDate, cancellationDate);
         MailMessage email = new MailMessage();
         email.setSender(getTenantSureSender());
         buildSimpleEmail(email, emailTemplate);
@@ -434,17 +436,20 @@ public class MessageTemplates {
         return resetUrl.toString();
     }
 
-    private static EmailTemplate emailTemplateTenantSurePaymentNotProcessed(LogicalDate gracePeriodEndDate) {
+    private static EmailTemplate emailTemplateTenantSurePaymentNotProcessed(LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.subject().setValue(i18n.tr("15 Day Notice of Cancellation for Non-payment of Premium"));
+        DateFormat dateFormat = new SimpleDateFormat(i18n.tr("yyyy-MM-dd"));
+
         try {
             String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
-            body = body.replace("${periodEndDate}", gracePeriodEndDate.toString());
+            body = body.replace("${cancellationDate}", dateFormat.format(cancellationDate));
+            body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
                     + DeploymentConsts.TENANT_URL_PATH, true, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
             template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
                 body
-        )));//@formatter:on
+            )));//@formatter:on
 
             return template;
 
