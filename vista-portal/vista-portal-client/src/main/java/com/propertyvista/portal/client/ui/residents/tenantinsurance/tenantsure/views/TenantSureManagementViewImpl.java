@@ -161,7 +161,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
 
     @Override
     public void reportSendCertificateSuccess(String emailAddress) {
-        MessageDialog.info(i18n.tr("Your insurance certificate was sent to {0}." + emailAddress));
+        MessageDialog.info(i18n.tr("Your insurance certificate was sent to {0}.", emailAddress));
     }
 
     private Widget makeGreetingPanel() {
