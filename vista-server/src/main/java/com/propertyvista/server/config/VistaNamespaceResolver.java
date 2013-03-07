@@ -86,7 +86,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         // www.ABC.propertyvista.com
 
         String serverName = httprequest.getServerName();
-        if ("localhost".equals(serverName) || httprequest.getLocalAddr().equals(serverName) || "10.0.2.2".equals(serverName)) {
+        if ("localhost".equals(serverName) || httprequest.getLocalAddr().equals(serverName)) {
             return VistaNamespace.demoNamespace;
         }
 
