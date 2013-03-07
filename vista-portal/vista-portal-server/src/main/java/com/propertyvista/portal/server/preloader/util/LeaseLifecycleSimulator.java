@@ -328,17 +328,7 @@ public class LeaseLifecycleSimulator {
         }
 
         private void queueReccurentBilling() {
-            // TODO the day must be fetched from the facade
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(now());
-
-            LogicalDate firstBillingDay;
-            if (cal.get(Calendar.DAY_OF_MONTH) > 15) {
-                cal.add(Calendar.MONTH, 1);
-            }
-            cal.set(Calendar.DAY_OF_MONTH, 15);
-            firstBillingDay = new LogicalDate(cal.getTime());
-            queueEvent(firstBillingDay, new RunBillingRecurrent(lease));
+            new RunBillingRecurrent(lease).exec();
         }
 
         private void queueTenantActions() {
@@ -477,6 +467,7 @@ public class LeaseLifecycleSimulator {
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(now());
                         cal.add(Calendar.MONTH, 1);
+
                         LogicalDate nextRun = new LogicalDate(cal.getTime());
                         queueEvent(nextRun, new RunBillingRecurrent(lease));
 
