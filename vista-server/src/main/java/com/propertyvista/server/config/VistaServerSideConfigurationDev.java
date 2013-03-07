@@ -19,6 +19,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.misc.VistaTODO;
 
@@ -113,7 +114,17 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
 
     @Override
     public String getApplicationURLNamespace() {
-        return ".dev.birchwoodsoftwaregroup.com:" + devServerPort + devContextPath + "/";
+        String hostPrefix = ".dev";
+        if (Context.getRequest() != null) {
+            // 192.168.179.1  -> .h.birchwoodsoftwaregroup.com
+            // 10.0.2.2  -> .m.birchwoodsoftwaregroup.com
+            if (Context.getRequest().getServerName().contains(".m.birchwoodsoftwaregroup.com")) {
+                hostPrefix = ".m";
+            } else if (Context.getRequest().getServerName().contains(".h.birchwoodsoftwaregroup.com")) {
+                hostPrefix = ".h";
+            }
+        }
+        return hostPrefix + ".birchwoodsoftwaregroup.com:" + devServerPort + devContextPath + "/";
     }
 
     @Override
