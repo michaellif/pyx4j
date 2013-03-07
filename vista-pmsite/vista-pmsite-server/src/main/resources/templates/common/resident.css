@@ -1358,6 +1358,16 @@ div.LandingButtonHolder, div.gwt-Label {
 	text-align: center;
 }
 
+.FormFlexPanel tr td > div.gwt-HTML.TSPucrhaseViewMessageText {
+	color: #652c02 !important;
+	background-color: #edd3ae !important;
+	border: 1px solid #db5f03;
+	border-radius: 5px 5px 5px 5px;
+	padding: 1px 7px;
+	margin-top: 3px;
+	width: 12em;
+}
+
 .TSPurchaseViewNextStepButton {
 	float: right;
 	margin-right: 20px;
