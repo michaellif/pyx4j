@@ -320,10 +320,10 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
     }
 
     public void setFilters(List<Criterion> filters) {
-        if (filters != null) {
-            dataTablePanel.setFilters(filters);
-        } else {
+        if (filters == null || filters.isEmpty()) {
             dataTablePanel.resetFilters();
+        } else {
+            dataTablePanel.setFilters(filters);
         }
     }
 
@@ -389,15 +389,14 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
      * Do not store and restore filters set on this lister.
      * The lister filter is created by navigation link, e.g. parent filter
      */
-
     public void setExternalFilters(List<Criterion> externalFilters) {
         this.externalFilters = externalFilters;
     }
 
     public void storeState(Place place) {
         getMemento().setCurrentPlace(place);
-        if (externalFilters == null) {
 
+        if (externalFilters == null) {
             getMemento().clear();
 
             getMemento().putInteger(MementoKeys.page.name(), getPageNumber());
@@ -412,7 +411,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         List<Criterion> filters = getDefaultFilters();
         List<Sort> sorts = getDefaultSorting();
 
-        if (getMemento().mayRestore() && ((externalFilters == null))) {
+        if (getMemento().mayRestore() && externalFilters == null) {
             pageNumber = getMemento().getInteger(MementoKeys.page.name());
             filters = (List<Criterion>) getMemento().getObject(MementoKeys.filterData.name());
             sorts = (List<Sort>) getMemento().getObject(MementoKeys.sortingData.name());
