@@ -17,14 +17,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivity {
 
@@ -41,15 +37,5 @@ public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivit
         MaintenanceRequestDTO request = EntityFactory.create(MaintenanceRequestDTO.class);
         request.status().setValue(MaintenanceRequestStatus.Submitted);
         view.populate(request);
-    }
-
-    @Override
-    public void save(MaintenanceRequestDTO request) {
-        srv.create(new DefaultAsyncCallback<Key>() {
-            @Override
-            public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
-            }
-        }, request);
     }
 }
