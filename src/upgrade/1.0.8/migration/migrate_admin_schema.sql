@@ -47,12 +47,37 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- dev_card_service_simulation_transaction
+        
+        ALTER TABLE dev_card_service_simulation_transaction RENAME COLUMN transaction_type TO tp;
+        
+        
         -- scheduler_execution_report
        
         ALTER TABLE scheduler_execution_report  DROP COLUMN amount_failed,
                                                 DROP COLUMN amount_processed;
        
        
+        /**
+        ***     ============================================================================================================
+        ***
+        ***             DATA MIGRATION
+        ***
+        ***     ============================================================================================================
+        **/
+       
+       
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsBmoReceive'
+        WHERE   trigger_type = 'paymentsBmoRecive';
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsPadReceiveAcknowledgment'
+        WHERE   trigger_type = 'paymentsPadReciveAcknowledgment';
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsPadReceiveReconciliation'
+        WHERE   trigger_type = 'paymentsPadReciveReconciliation';
         
         /**
         ***     ========================================================================================================
@@ -83,20 +108,10 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        CREATE UNIQUE INDEX dev_card_service_simulation_transaction_reference_tp_idx ON dev_card_service_simulation_transaction USING btree (reference, tp);
+            
        
-        
-        /**
-        ***     ============================================================================================================
-        ***
-        ***             DATA MIGRATION
-        ***
-        ***     ============================================================================================================
-        **/
-        
-       
-     
-        
-        
+
 
 COMMIT;
 
