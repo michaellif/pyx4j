@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.http.client.UrlBuilder;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.NavigUtils;
@@ -106,6 +108,17 @@ public class NavigationUri {
             url = url.substring(0, url.length() - (module.length() + 1));
         }
         return url;
+    }
+
+    public static String getHostPageURL() {
+        UrlBuilder urlBuilder = new UrlBuilder();
+        urlBuilder.setProtocol(Window.Location.getProtocol());
+        urlBuilder.setHost(Window.Location.getHost());
+        String path = Window.Location.getPath();
+        if (path != null && path.length() > 0) {
+            urlBuilder.setPath(path);
+        }
+        return urlBuilder.buildString();
     }
 
     public String getPath() {
