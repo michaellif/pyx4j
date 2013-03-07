@@ -13,30 +13,46 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Caption;
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncomeInfo;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 @Transient
+@ToStringFormat("{0}, {1}, {2}, {3}")
 public interface TenantFinancialDTO extends IEntity {
 
-    @ToString
+    @ToString(index = 0)
     Person person();
 
     IList<CustomerScreeningIncome> incomes();
 
-    @Caption(name = "Incomes (Other)")
-    IList<CustomerScreeningIncomeInfo> incomes2();
-
     IList<CustomerScreeningPersonalAsset> assets();
 
     IList<LeaseTermGuarantor> guarantors();
+
+    // Quick summary:
+
+    @ToString(index = 1)
+    @Format("#,##0.")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> consolidatedIncome();
+
+    @ToString(index = 2)
+    IPrimitive<String> employer();
+
+    @ToString(index = 3)
+    IPrimitive<String> position();
 }

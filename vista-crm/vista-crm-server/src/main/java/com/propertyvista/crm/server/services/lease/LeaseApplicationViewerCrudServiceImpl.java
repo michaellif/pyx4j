@@ -38,6 +38,8 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -91,9 +93,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
 
         {
-            TenantFinancialDTO tenantFinancial = new TenantConverter.TenantFinancialEditorConverter().createDTO(leaseParticipant.effectiveScreening());
-            tenantFinancial.person().set(leaseParticipant.leaseParticipant().customer().person());
-            dto.tenantFinancials().add(tenantFinancial);
+            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(leaseParticipant.effectiveScreening());
+            tenantFinancialDTO.person().set(leaseParticipant.leaseParticipant().customer().person());
+            dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
         }
 
         // approval data
@@ -118,6 +120,30 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             dto.leaseApproval().participants().add(approval);
         }
+    }
+
+    private TenantFinancialDTO fillQuickSummary(TenantFinancialDTO tenantFinancial) {
+        tenantFinancial.consolidatedIncome().setValue(BigDecimal.ZERO);
+
+        for (CustomerScreeningIncome income : tenantFinancial.incomes()) {
+            tenantFinancial.consolidatedIncome().setValue(tenantFinancial.consolidatedIncome().getValue().add(income.details().monthlyAmount().getValue()));
+
+            if (tenantFinancial.employer().isNull()) {
+                if (income.details().isInstanceOf(IEmploymentInfo.class)) {
+                    IEmploymentInfo ei = income.details().cast();
+                    tenantFinancial.employer().setValue(ei.name().getValue());
+                    tenantFinancial.position().setValue(ei.position().getValue());
+                }
+            }
+        }
+
+        if (tenantFinancial.employer().isNull()) {
+            if (!tenantFinancial.incomes().isEmpty()) {
+                tenantFinancial.employer().setValue(tenantFinancial.incomes().get(0).incomeSource().getStringView());
+            }
+        }
+
+        return tenantFinancial;
     }
 
     @Override
