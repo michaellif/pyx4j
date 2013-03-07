@@ -89,6 +89,11 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
 
     @Override
     public void onShowVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
+    }
+
+    @Override
+    public final Class<? extends Place> getPortalTermsPlace() {
+        return PortalSiteMap.PortalTermsAndConditions.class;
     }
 }

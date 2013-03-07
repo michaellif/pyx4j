@@ -46,7 +46,7 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public void showVistaTerms() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, PortalSiteMap.PortalTermsAndConditions.class), "_blank", null);
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
     }
 
     @Override
@@ -54,5 +54,10 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
         return Arrays.asList(//@formatter:off
                 new DevLoginCredentialsImpl(UserType.TENANT, 'T')
         );//@formatter:on
+    }
+
+    @Override
+    public final Class<? extends Place> getPortalTermsPlace() {
+        return PortalSiteMap.PortalTermsAndConditions.class;
     }
 }

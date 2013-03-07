@@ -115,7 +115,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
         get(proto().dnsName()).addValueValidator(new EditableValueValidator<String>() {
-
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String value) {
                 if (value != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
@@ -186,7 +185,6 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         Anchor termsAnchor = new Anchor(i18n.tr("Terms of Service"), AppPlaceInfo.absoluteUrl(GWT.getHostPageBaseURL(), false,
                 OnboardingSiteMap.PmcAccountTerms.class));
         termsAnchor.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 onTermsOpenRequest();

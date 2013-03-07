@@ -15,9 +15,13 @@ package com.propertyvista.portal.client.ui.residents.registration;
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -27,6 +31,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -47,6 +52,8 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
 
     private Presenter presenter;
 
+    private Anchor termsAndConditionsAnchor;
+
     public TenantRegistrationViewImpl() {
         LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
         bindResitrationPanel(viewPanel.getLeft());
@@ -64,6 +71,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        this.termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPortalTermsPlace()));
     }
 
     @Override
@@ -84,13 +92,16 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         layout.getContent().add(signupform);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.signUpViewTermsAgreementText().getText());
-        Anchor termsAndConditions = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), new Command() {
+        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
+//        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.onShowVistaTerms();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
-        loginTermsLinkPanel.addAndReplaceElement(termsAndConditions, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
         layout.getContent().add(loginTermsLinkPanel);
 
         SimplePanel buttonHolder = new SimplePanel();

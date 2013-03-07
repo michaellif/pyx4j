@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.login;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.core.shared.GWT;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,9 +29,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -53,8 +55,9 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
-import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -200,7 +203,6 @@ public class LandingViewImpl extends Composite implements LandingView {
                         .getUserType().toString()));
                 touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
                 touchAnchor.getElement().getStyle().setDisplay(Display.BLOCK);
-
                 touchAnchor.addClickHandler(new ClickHandler() {
 
                     private final int hotKey = credentials.getHotKey();
@@ -245,6 +247,8 @@ public class LandingViewImpl extends Composite implements LandingView {
 
     private Label signUpGreeting;
 
+    private Anchor termsAndConditionsAnchor;
+
     public LandingViewImpl() {
         LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
         // attach handler to invoke login via ENTER key
@@ -279,6 +283,7 @@ public class LandingViewImpl extends Composite implements LandingView {
     @Override
     public void setPresenter(com.propertyvista.common.client.ui.components.login.LoginView.Presenter presenter) {
         this.presenter = (Presenter) presenter;
+        this.termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getPortalTermsPlace()));
     }
 
     @Override
@@ -328,20 +333,21 @@ public class LandingViewImpl extends Composite implements LandingView {
         sideLayout.getContent().add(loginForm);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
-        Anchor termsAndConditions = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"), new Command() {
+        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
+        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 presenter.showVistaTerms();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
-        loginTermsLinkPanel.addAndReplaceElement(termsAndConditions, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
         sideLayout.getContent().add(loginTermsLinkPanel);
 
         loginButton = new Button(i18n.tr("LOGIN"), new Command() {
-
             @Override
             public void execute() {
-                // TODO Auto-generated method stub
                 onLogin();
             }
 

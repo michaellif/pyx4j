@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.residents.registration;
 
 import java.util.List;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
@@ -27,6 +28,8 @@ public interface TenantRegistrationView extends IsWidget {
         void onRegister();
 
         void onShowVistaTerms();
+
+        Class<? extends Place> getPortalTermsPlace();
 
     }
 
