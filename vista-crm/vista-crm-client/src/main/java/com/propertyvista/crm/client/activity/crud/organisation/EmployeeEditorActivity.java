@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.organisation;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -40,5 +42,12 @@ public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> imple
         ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), ClientContext
                 .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<EmployeeDTO> callback) {
+        EmployeeDTO newEmployee = EntityFactory.create(getEntityClass());
+        newEmployee.enabled().setValue(true);
+        callback.onSuccess(newEmployee);
     }
 }
