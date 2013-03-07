@@ -26,7 +26,7 @@ public class ClientApplicationBackendConfigGae extends ClientApplicationBackendC
 
     @Override
     public ApplicationBackendType getBackendType() {
-        return ApplicationBackendType.RDB;
+        return ApplicationBackendType.GAE;
     }
 
 }

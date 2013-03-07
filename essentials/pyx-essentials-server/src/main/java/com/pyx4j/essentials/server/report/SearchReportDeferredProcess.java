@@ -43,6 +43,7 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
+import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.security.shared.SecurityController;
 
 public class SearchReportDeferredProcess<E extends IEntity> implements IDeferredProcess {
@@ -76,6 +77,9 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         this.request = request;
         this.entityClass = request.getCriteria().getEntityClass();
         this.formatter = new ReportTableCSVFormatter();
+        if (request.getDownloadFormat() == null) {
+            request.setDownloadFormat(DownloadFormat.CSV);
+        }
         ((ReportTableCSVFormatter) this.formatter).setTimezoneOffset(request.getTimezoneOffset());
     }
 

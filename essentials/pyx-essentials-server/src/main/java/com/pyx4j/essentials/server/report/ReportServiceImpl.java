@@ -22,6 +22,8 @@ package com.pyx4j.essentials.server.report;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ApplicationBackend;
+import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
@@ -33,7 +35,11 @@ public class ReportServiceImpl<E extends IEntity> implements ReportService<E> {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new SearchReportDeferredProcess<E>(reportRequest), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+        if (ApplicationBackend.getBackendType() == ApplicationBackendType.GAE) {
+            callback.onSuccess(DeferredProcessRegistry.register(new SearchReportDeferredProcess<E>(reportRequest)));
+        } else {
+            callback.onSuccess(DeferredProcessRegistry.fork(new SearchReportDeferredProcess<E>(reportRequest), DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+        }
     }
 
     @Override
