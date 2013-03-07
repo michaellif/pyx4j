@@ -89,7 +89,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().emergencyContacts());
             TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createDTO(leaseParticipant);
             new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
-            dto.tenantInfo().add(tenantInfoDTO);
+            dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
         }
 
         {
@@ -122,6 +122,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
     }
 
+    private TenantInfoDTO fillQuickSummary(TenantInfoDTO tenantInfo) {
+
+        return tenantInfo;
+    }
+
     private TenantFinancialDTO fillQuickSummary(TenantFinancialDTO tenantFinancial) {
         tenantFinancial.consolidatedIncome().setValue(BigDecimal.ZERO);
 
@@ -135,6 +140,10 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                     tenantFinancial.position().setValue(ei.position().getValue());
                 }
             }
+        }
+
+        if (tenantFinancial.consolidatedIncome().getValue().compareTo(BigDecimal.ZERO) == 0) {
+            tenantFinancial.consolidatedIncome().set(null);
         }
 
         if (tenantFinancial.employer().isNull()) {

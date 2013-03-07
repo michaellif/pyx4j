@@ -51,6 +51,7 @@ public class TenantConverter {
         protected void bind() {
             bind(dtoProto.person(), dboProto.leaseParticipant().customer().person());
             bind(dtoProto.emergencyContacts(), dboProto.leaseParticipant().customer().emergencyContacts());
+            bind(dtoProto.role(), dboProto.role());
         }
     }
 

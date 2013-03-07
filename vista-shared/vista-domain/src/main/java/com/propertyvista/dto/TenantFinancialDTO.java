@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 
 @Transient
-@ToStringFormat("{0}, {1}, {2}, {3}")
+@ToStringFormat("{0}{1,choice,null#|!null#, ${1}}{2,choice,null#|!null#, {2}}{3,choice,null#|!null#, {3}}")
 public interface TenantFinancialDTO extends IEntity {
 
     @ToString(index = 0)
@@ -46,7 +46,7 @@ public interface TenantFinancialDTO extends IEntity {
     // Quick summary:
 
     @ToString(index = 1)
-    @Format("#,##0.")
+    @Format("#,##0")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> consolidatedIncome();
 

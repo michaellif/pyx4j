@@ -15,18 +15,25 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
-import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 
 @Transient
+@ToStringFormat("{0}, {1}")
 public interface TenantInfoDTO extends CustomerScreening {
 
-    @ToString
+    @ToString(index = 0)
     Person person();
+
+    @ToString(index = 1)
+    IPrimitive<Role> role();
 
     @Length(3)
     IList<EmergencyContact> emergencyContacts();

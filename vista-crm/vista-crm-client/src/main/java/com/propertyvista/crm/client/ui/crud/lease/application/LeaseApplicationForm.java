@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.ui.crud.lease.application;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -91,6 +93,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                 }
                 return super.create(member);
             }
+
+            @Override
+            public IFolderItemDecorator<TenantInfoDTO> createItemDecorator() {
+                BoxFolderItemDecorator<TenantInfoDTO> decor = (BoxFolderItemDecorator<TenantInfoDTO>) super.createItemDecorator();
+                decor.setExpended(false);
+                return decor;
+            }
         };
     }
 
@@ -102,6 +111,13 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
                     return new FinancialViewForm(true);
                 }
                 return super.create(member);
+            }
+
+            @Override
+            public IFolderItemDecorator<TenantFinancialDTO> createItemDecorator() {
+                BoxFolderItemDecorator<TenantFinancialDTO> decor = (BoxFolderItemDecorator<TenantFinancialDTO>) super.createItemDecorator();
+                decor.setExpended(false);
+                return decor;
             }
         };
     }
