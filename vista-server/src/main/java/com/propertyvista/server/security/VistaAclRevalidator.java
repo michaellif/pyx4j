@@ -19,10 +19,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.operations.server.services.OperationsAuthenticationServiceImpl;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
+import com.propertyvista.operations.server.services.OperationsAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.PtAuthenticationServiceImpl;
 
@@ -31,19 +31,28 @@ public class VistaAclRevalidator implements AclRevalidator {
     @Override
     public Set<Behavior> getCurrentBehaviours(Key principalPrimaryKey, Set<Behavior> currentBehaviours, long aclTimeStamp) {
         AclRevalidator aclRevalidator;
-        if (currentBehaviours.contains(VistaBasicBehavior.CRM) || currentBehaviours.contains(VistaBasicBehavior.CRMPasswordChangeRequired)) {
+
+        VistaApplication app = VistaApplication.getVistaApplication(currentBehaviours);
+        if (app == null) {
+            return null;
+        }
+        switch (app) {
+        case crm:
             aclRevalidator = new CrmAuthenticationServiceImpl();
-        } else if (currentBehaviours.contains(VistaBasicBehavior.Operations) || currentBehaviours.contains(VistaBasicBehavior.OperationsPasswordChangeRequired)) {
+            break;
+        case operations:
             aclRevalidator = new OperationsAuthenticationServiceImpl();
-        } else if (currentBehaviours.contains(VistaBasicBehavior.ProspectiveApp)
-                || currentBehaviours.contains(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
+            break;
+        case prospect:
             aclRevalidator = new PtAuthenticationServiceImpl();
-        } else if (currentBehaviours.contains(VistaBasicBehavior.TenantPortal)
-                || currentBehaviours.contains(VistaBasicBehavior.TenantPortalPasswordChangeRequired)) {
+            break;
+        case resident:
             aclRevalidator = new PortalAuthenticationServiceImpl();
-        } else if (currentBehaviours.contains(VistaBasicBehavior.Onboarding)) {
+            break;
+        case onboarding:
             aclRevalidator = new OnboardingAuthenticationServiceImpl();
-        } else {
+            break;
+        default:
             return null;
         }
         return aclRevalidator.getCurrentBehaviours(principalPrimaryKey, currentBehaviours, aclTimeStamp);

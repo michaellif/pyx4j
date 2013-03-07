@@ -22,6 +22,7 @@ import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
@@ -37,6 +38,11 @@ public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServ
     @Override
     protected boolean honorSystemState() {
         return false;
+    }
+
+    @Override
+    protected VistaApplication getVistaApplication() {
+        return VistaApplication.operations;
     }
 
     @Override

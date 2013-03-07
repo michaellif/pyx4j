@@ -64,6 +64,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
@@ -90,6 +91,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         this.credentialClass = credentialClass;
     }
 
+    protected abstract VistaApplication getVistaApplication();
+
     protected abstract VistaBasicBehavior getApplicationBehavior();
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
@@ -113,7 +116,14 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     protected boolean isSessionValid() {
-        return SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors());
+        if (!(SecurityController.checkBehavior(getVistaApplication()) && (SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController
+                .checkAnyBehavior(getAccountSetupRequiredBehaviors())))) {
+            log.warn("{}{}", getVistaApplication(), SecurityController.checkBehavior(getVistaApplication()));
+            log.warn("{}{}", getApplicationBehavior(), SecurityController.checkBehavior(getApplicationBehavior()));
+            log.warn("{}{}", getAccountSetupRequiredBehaviors(), SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
+        }
+        return SecurityController.checkBehavior(getVistaApplication())
+                && (SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
     }
 
     @Override
@@ -201,6 +211,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
 
         Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.add(getVistaApplication());
         if (token.behaviorPasswordChangeRequired) {
             behaviors.add(getPasswordChangeRequiredBehavior());
         } else {
@@ -283,6 +294,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
         if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
             Set<Behavior> behaviors = new HashSet<Behavior>();
+            behaviors.add(getVistaApplication());
             behaviors.add(getPasswordChangeRequiredBehavior());
             UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
             visit.setEmail(user.email().getValue());
@@ -293,6 +305,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(cr));
+            behaviors.add(getVistaApplication());
             behaviors.add(getApplicationBehavior());
             return beginSession(user, cr, behaviors, null);
         }
@@ -323,6 +336,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(userCredential));
+            behaviors.add(getVistaApplication());
             behaviors.add(getApplicationBehavior());
             return behaviors;
         }
@@ -333,6 +347,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         // Try to begin Session
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(getBehaviors(credentials));
+        behaviors.add(getVistaApplication());
         behaviors.add(getApplicationBehavior());
         String sessionToken = beginSession(user, credentials, behaviors, additionalConditions);
         if (!isSessionValid()) {
@@ -349,7 +364,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
     protected String beginSession(U user, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
-        if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getApplicationBehavior())))) {
+        if (behaviors.isEmpty() || ((behaviors.size() == 2) && (behaviors.contains(getApplicationBehavior())) && (behaviors.contains(getVistaApplication())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
@@ -402,7 +417,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     public final AuthenticationResponse createAuthenticationResponse(String sessionToken) {
         AuthenticationResponse ar = super.createAuthenticationResponse(sessionToken);
 
-        String baseUrl = VistaDeployment.getBaseApplicationURL(getApplicationBehavior(), true);
+        String baseUrl = VistaDeployment.getBaseApplicationURL(getVistaApplication(), true);
         String requestUrl = Context.getRequest().getRequestURL().toString();
 
         SystemWallMessage systemWallMessage = null;

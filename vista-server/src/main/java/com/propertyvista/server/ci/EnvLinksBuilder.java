@@ -25,7 +25,7 @@ import com.pyx4j.entity.xml.XMLStringWriter;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -47,7 +47,7 @@ class EnvLinksBuilder extends XMLStringWriter {
             td("Onboarding");
 
             startIdented("td");
-            a(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Onboarding, true));
+            a(VistaDeployment.getBaseApplicationURL(VistaApplication.onboarding, true));
             endIdented();
             endIdented();
         }
@@ -58,7 +58,7 @@ class EnvLinksBuilder extends XMLStringWriter {
             td("Operations");
 
             startIdented("td");
-            a(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true));
+            a(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true));
             endIdented();
             endIdented();
         }
@@ -95,9 +95,9 @@ class EnvLinksBuilder extends XMLStringWriter {
     }
 
     private void writePmc(Pmc pmc) {
-        writeApp(pmc, pmc.namespace().getValue(), "CRM", VistaBasicBehavior.CRM);
-        writeApp(pmc, null, "Portal", VistaBasicBehavior.TenantPortal);
-        writeApp(pmc, null, "PTApp", VistaBasicBehavior.ProspectiveApp);
+        writeApp(pmc, pmc.namespace().getValue(), "CRM", VistaApplication.crm);
+        writeApp(pmc, null, "Portal", VistaApplication.resident);
+        writeApp(pmc, null, "PTApp", VistaApplication.prospect);
 
         tr_hr();
     }
@@ -110,14 +110,14 @@ class EnvLinksBuilder extends XMLStringWriter {
         endIdented();
     }
 
-    private void writeApp(Pmc pmc, String c1, String name, VistaBasicBehavior behavior) {
+    private void writeApp(Pmc pmc, String c1, String name, VistaApplication application) {
         startIdented("tr");
         td(c1);
 
         td(name);
 
         startIdented("td");
-        a(VistaDeployment.getBaseApplicationURL(pmc, behavior, true));
+        a(VistaDeployment.getBaseApplicationURL(pmc, application, true));
         endIdented();
         endIdented();
     }

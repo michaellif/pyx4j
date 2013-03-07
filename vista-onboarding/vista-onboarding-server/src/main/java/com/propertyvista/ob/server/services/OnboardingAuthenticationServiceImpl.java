@@ -34,6 +34,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
@@ -42,6 +43,10 @@ import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.server.AuthenticationServiceImpl implements OnboardingAuthenticationService,
         AclRevalidator {
+
+    protected VistaApplication getVistaApplication() {
+        return VistaApplication.onboarding;
+    }
 
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.Onboarding;
@@ -56,6 +61,7 @@ public class OnboardingAuthenticationServiceImpl extends com.pyx4j.security.serv
         OnboardingUserVisit visit = new OnboardingUserVisit();
         visit.setStatus(OnboardingApplicationStatus.starting);
         Set<Behavior> behaviors = new HashSet<Behavior>();
+        behaviors.add(getVistaApplication());
         behaviors.add(getApplicationBehavior());
         String token = Lifecycle.beginSession(visit, behaviors);
         return token;

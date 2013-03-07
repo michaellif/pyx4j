@@ -13,7 +13,15 @@
  */
 package com.propertyvista.domain.security;
 
-public enum VistaApplication {
+import java.util.Set;
+
+import com.pyx4j.security.shared.Behavior;
+
+/**
+ * No not assign this Behavior to any permissions.
+ * This is used for Application identification and namespace integrity validations.
+ */
+public enum VistaApplication implements Behavior {
 
     operations,
 
@@ -21,6 +29,16 @@ public enum VistaApplication {
 
     resident,
 
-    prospect;
+    prospect,
 
+    onboarding;
+
+    public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {
+        for (VistaApplication behaviour : VistaApplication.values()) {
+            if (behaviours.contains(behaviour)) {
+                return behaviour;
+            }
+        }
+        return null;
+    }
 }

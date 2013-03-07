@@ -64,7 +64,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.CityPage;
@@ -400,7 +400,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     public static void onSecurePage(Request request) {
         HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
         // redirect if not secure
-        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
+        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
         String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {

@@ -25,6 +25,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -79,34 +80,74 @@ public class VistaDeployment {
     }
 
     /**
+     * @deprecated Use function with VistaApplication argument
+     */
+    @Deprecated
+    public static String getBaseApplicationURL(VistaBasicBehavior behavior, boolean secure) {
+        if (behavior == VistaBasicBehavior.Operations) {
+            return getBaseApplicationURL(null, behavior, secure);
+        } else {
+            return getBaseApplicationURL(getCurrentPmc(), behavior, secure);
+        }
+    }
+
+    /**
+     * @deprecated Use function with VistaApplication argument
+     */
+    @Deprecated
+    public static String getBaseApplicationURL(Pmc pmc, VistaBasicBehavior behavior, boolean secure) {
+        VistaApplication application;
+        switch (behavior) {
+        case Operations:
+            application = VistaApplication.operations;
+            break;
+        case Onboarding:
+            application = VistaApplication.onboarding;
+            break;
+        case CRM:
+            application = VistaApplication.crm;
+            break;
+        case ProspectiveApp:
+            application = VistaApplication.prospect;
+            break;
+        case TenantPortal:
+            application = VistaApplication.resident;
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+        return getBaseApplicationURL(pmc, application, secure);
+    }
+
+    /**
      * @param target
      *            residentPortal. Crm or PtApp
      * @param secure
      *            only matters for residentPortal, for other types will be ignored
      * @return full URL
      */
-    public static String getBaseApplicationURL(VistaBasicBehavior application, boolean secure) {
-        if (application == VistaBasicBehavior.Operations) {
+    public static String getBaseApplicationURL(VistaApplication application, boolean secure) {
+        if (application == VistaApplication.operations) {
             return getBaseApplicationURL(null, application, secure);
         } else {
             return getBaseApplicationURL(getCurrentPmc(), application, secure);
         }
     }
 
-    public static String getBaseApplicationURL(Pmc pmc, VistaBasicBehavior application, boolean secure) {
+    public static String getBaseApplicationURL(Pmc pmc, VistaApplication application, boolean secure) {
         DnsNameTarget target;
         switch (application) {
-        case Operations:
+        case operations:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOperations();
-        case Onboarding:
+        case onboarding:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOnboarding();
-        case CRM:
+        case crm:
             target = DnsNameTarget.vistaCrm;
             break;
-        case ProspectiveApp:
+        case prospect:
             target = DnsNameTarget.prospectPortal;
             break;
-        case TenantPortal:
+        case resident:
             target = DnsNameTarget.residentPortal;
             break;
         default:

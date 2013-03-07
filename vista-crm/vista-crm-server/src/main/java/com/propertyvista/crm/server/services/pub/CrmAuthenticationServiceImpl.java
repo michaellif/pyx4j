@@ -33,6 +33,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -41,6 +42,11 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
 
     public CrmAuthenticationServiceImpl() {
         super(CrmUser.class, CrmUserCredential.class);
+    }
+
+    @Override
+    protected VistaApplication getVistaApplication() {
+        return VistaApplication.crm;
     }
 
     @Override
@@ -78,6 +84,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
         Set<Behavior> actualBehaviors;
         if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
             actualBehaviors = new HashSet<Behavior>();
+            actualBehaviors.add(getVistaApplication());
             actualBehaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
             actualBehaviors.add(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
         } else {

@@ -30,6 +30,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.VistaApplication;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -45,6 +46,11 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     public PtAuthenticationServiceImpl() {
         super(CustomerUser.class, CustomerUserCredential.class);
+    }
+
+    @Override
+    protected VistaApplication getVistaApplication() {
+        return VistaApplication.prospect;
     }
 
     @Override

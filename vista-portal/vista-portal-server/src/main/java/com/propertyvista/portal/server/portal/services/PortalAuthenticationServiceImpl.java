@@ -62,6 +62,11 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
+    protected VistaApplication getVistaApplication() {
+        return VistaApplication.resident;
+    }
+
+    @Override
     protected VistaBasicBehavior getApplicationBehavior() {
         return VistaBasicBehavior.TenantPortal;
     }
@@ -87,6 +92,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     @Override
     public String beginSession(CustomerUser user, CustomerUserCredential credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
+        actualBehaviors.add(getVistaApplication());
 
         // See if active Lease exists
         List<Lease> leases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(user);
