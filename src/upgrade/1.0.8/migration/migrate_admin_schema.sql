@@ -34,7 +34,9 @@ SET search_path = '_admin_';
         **/
         
         -- Check constraints
+        ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE dev_card_service_simulation_transaction DROP CONSTRAINT dev_card_service_simulation_transaction_transaction_type_e_ck;
+        ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
        
@@ -88,9 +90,10 @@ SET search_path = '_admin_';
         **/
                
         -- Check constraints
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident'));
         ALTER TABLE dev_card_service_simulation_transaction ADD CONSTRAINT dev_card_service_simulation_transaction_tp_e_ck 
                 CHECK ((tp) IN ('completion', 'preAuthorization', 'preAuthorizationReversal', 'returnVoid', 'sale'));
- 
+        ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'onboarding', 'operations', 'prospect', 'resident'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 
                 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadReceiveAcknowledgment', 
