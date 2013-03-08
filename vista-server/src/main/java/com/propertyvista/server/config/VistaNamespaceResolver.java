@@ -108,7 +108,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 if (namespaceProposal.matches(prodPmcAppEnvRegex)) {
                     namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
                 }
-            } else if (dnsBase.equals("birchwoodsoftwaregroup.com")) {
+            } else if (dnsBase.equals("birchwoodsoftwaregroup.com") || dnsBase.equals("pyx4j.com")) {
                 namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
             }
         }
