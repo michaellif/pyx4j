@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.customer;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
@@ -30,18 +31,22 @@ public interface PadFileModel extends IEntity {
     ImportInformation _import();
 
     @ImportColumn(names = { "Tenant ID" })
+    @NotNull
     IPrimitive<String> tenantId();
 
     @ImportColumn(names = { "Bank Account Holder", "Name" })
     IPrimitive<String> name();
 
     @ImportColumn(names = { "Institution" })
+    @NotNull
     IPrimitive<String> bankId();
 
     @ImportColumn(names = { "Transit Number", "Transit" })
+    @NotNull
     IPrimitive<String> transitNumber();
 
     @ImportColumn(names = { "Account Number", "Account" })
+    @NotNull
     IPrimitive<String> accountNumber();
 
     IPrimitive<String> charge();

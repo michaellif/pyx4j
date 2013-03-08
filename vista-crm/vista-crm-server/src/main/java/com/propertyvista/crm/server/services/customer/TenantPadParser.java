@@ -20,6 +20,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -37,17 +38,15 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.interfaces.importer.model.ImportIO;
-import com.propertyvista.interfaces.importer.parser.ImportParser;
 
-public class TenantPadParser implements ImportParser {
+public class TenantPadParser {
 
     private final static Logger log = LoggerFactory.getLogger(TenantPadParser.class);
 
     private static final I18n i18n = I18n.get(TenantPadParser.class);
 
-    @Override
-    public ImportIO parse(byte[] data, DownloadFormat format) {
+    public void parse(byte[] data, DownloadFormat format) {
+        TenantPadCounter counters = new TenantPadCounter();
         if ((format != DownloadFormat.XLS) && (format != DownloadFormat.XLSX)) {
             throw new IllegalArgumentException();
         }
@@ -73,12 +72,13 @@ public class TenantPadParser implements ImportParser {
                 log.error("XLSLoad error", e);
                 throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
             }
-            convertUnits(receiver.getEntities());
+            counters.add(convertUnits(receiver.getEntities()));
         }
-        return null;
+        log.info(SimpleMessageFormat.format("{0} payment methods created, {1} skipped", counters.imported, counters.skipped));
     }
 
-    private void convertUnits(List<PadFileModel> entities) {
+    private TenantPadCounter convertUnits(List<PadFileModel> entities) {
+        TenantPadCounter counters = new TenantPadCounter();
         for (PadFileModel entity : entities) {
             LeaseTermParticipant<?> leaseTermParticipant = EntityFactory.create(LeaseTermParticipant.class);
             {
@@ -97,6 +97,7 @@ public class TenantPadParser implements ImportParser {
             Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().customer());
             Persistence.service().retrieveMember(leaseTermParticipant.leaseParticipant().customer().paymentMethods());
             if (padExists(leaseTermParticipant.leaseParticipant().customer(), details)) {
+                counters.skipped++;
                 continue;
             }
 
@@ -116,7 +117,10 @@ public class TenantPadParser implements ImportParser {
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(leaseTermParticipant.leaseParticipant().lease().unit().building(),
                     method);
             Persistence.service().commit();
+            counters.imported++;
         }
+
+        return counters;
     }
 
     private static class PadFileCSVReciver extends EntityCSVReciver<PadFileModel> {
@@ -167,5 +171,22 @@ public class TenantPadParser implements ImportParser {
         address.suiteNumber().set(leaseTermParticipant.leaseTermV().holder().lease().unit().info().number());
 
         return address;
+    }
+
+    public class TenantPadCounter {
+
+        public int imported;
+
+        public int skipped;
+
+        public TenantPadCounter() {
+            this.imported = 0;
+            this.skipped = 0;
+        }
+
+        public void add(TenantPadCounter counters) {
+            this.imported += counters.imported;
+            this.skipped += counters.skipped;
+        }
     }
 }
