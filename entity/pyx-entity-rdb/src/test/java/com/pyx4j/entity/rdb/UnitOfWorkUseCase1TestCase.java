@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.rdb;
 
+import static com.pyx4j.entity.server.TransactionScopeOption.Required;
+import static com.pyx4j.entity.server.TransactionScopeOption.RequiresNew;
+
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +63,31 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         Assert.assertEquals(id + " Exists, result set size", 0, emps.size());
     }
 
-    public void testUnitOfWorkCompensationHandlerL2_NoErrors1() throws ServerNotActiveException {
+    //===================== SUCESSFUL FLOWS =====================//
+
+    public void testUnitOfWorkCompensationHandler_Required_Required_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(Required, Required);
+    }
+
+    public void testUnitOfWorkCompensationHandler_Required_RequiresNew_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(Required, RequiresNew);
+    }
+
+    public void testUnitOfWorkCompensationHandler_RequiresNew_Required_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(RequiresNew, Required);
+    }
+
+    public void testUnitOfWorkCompensationHandler_RequiresNew_RequiresNew_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(RequiresNew, RequiresNew);
+    }
+
+    private void testUnitOfWorkCompensationHandler_Pass(final TransactionScopeOption int1TransactionScopeOption,
+            final TransactionScopeOption int2TransactionScopeOption) throws ServerNotActiveException {
+
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                "");
+        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
@@ -81,34 +103,31 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         assertEquals(0, compensationHandlerOrder.size());
     }
 
-    public void _testUnitOfWorkCompensationHandlerL2_NoErrors2() throws ServerNotActiveException {
-        final String setId = uniqueString();
-        final List<String> compensationHandlerOrder = new ArrayList<String>();
+    //===================== EXCEPTION FLOWS =====================//
 
-        executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                TransactionScopeOption.RequiresNew, "");
-
-        assertExists(setId, "1.0");
-        assertNotExists(setId, "1.0CH");
-        assertExists(setId, "1.1");
-        assertNotExists(setId, "1.1CH");
-        assertExists(setId, "1.2");
-        assertNotExists(setId, "1.2CH");
-        assertExists(setId, "2.0");
-        assertNotExists(setId, "2.0CH");
-        assertExists(setId, "3.0");
-        assertNotExists(setId, "3.0CH");
-
-        assertEquals(0, compensationHandlerOrder.size());
+    public void testUnitOfWorkCompensationHandler_Required_Required_1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(Required, Required);
     }
 
-    public void testUnitOfWorkCompensationHandlerL2_1() {
+    public void testUnitOfWorkCompensationHandler_Required_RequiresNew__1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(Required, RequiresNew);
+    }
+
+    public void testUnitOfWorkCompensationHandler_RequiresNew_Required__1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(RequiresNew, Required);
+    }
+
+    public void testUnitOfWorkCompensationHandler_RequiresNew_RequiresNew__1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(RequiresNew, RequiresNew);
+    }
+
+    private void testUnitOfWorkCompensationHandler_1g(final TransactionScopeOption int1TransactionScopeOption,
+            final TransactionScopeOption int2TransactionScopeOption) {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                    TransactionScopeOption.Required, "1.g");
+            executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "1.g");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -129,26 +148,12 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         assertEquals(0, compensationHandlerOrder.indexOf("1.2CH"));
     }
 
-    public void _testUnitOfWorkCompensationHandlerL2_2() {
+    public void testUnitOfWorkCompensationHandler_2a1c() {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                    TransactionScopeOption.RequiresNew, "1.g");
-            Assert.fail("Should throw Exception");
-        } catch (ServerNotActiveException ok) {
-        }
-
-    }
-
-    public void testUnitOfWorkCompensationHandlerL2_3() {
-        final String setId = uniqueString();
-        final List<String> compensationHandlerOrder = new ArrayList<String>();
-
-        try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                    TransactionScopeOption.Required, "2.a", "1.c");
+            executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.a", "1.c");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -167,35 +172,51 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         assertEquals(0, compensationHandlerOrder.indexOf("1.0CH"));
     }
 
-    public void _testUnitOfWorkCompensationHandlerL2_4() {
+    public void testUnitOfWorkCompensationHandler_2a() throws ServerNotActiveException {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                    TransactionScopeOption.Required, "2.b");
-            Assert.fail("Should throw Exception");
-        } catch (ServerNotActiveException ok) {
-        }
+        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.a");
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "1.0CH");
+        assertExists(setId, "1.1");
+        assertNotExists(setId, "1.1CH");
+        assertExists(setId, "1.2");
+        assertNotExists(setId, "1.2CH");
+        assertNotExists(setId, "2.0");
+        assertNotExists(setId, "2.0CH");
+        assertExists(setId, "3.0");
+        assertNotExists(setId, "3.0CH");
+
+        assertEquals(0, compensationHandlerOrder.size());
 
     }
 
-    public void _testUnitOfWorkCompensationHandlerL2_5() {
+    public void testUnitOfWorkCompensationHandler_2b() throws ServerNotActiveException {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        try {
-            executeUnitOfWork(setId, compensationHandlerOrder, TransactionScopeOption.Required, TransactionScopeOption.Required,
-                    TransactionScopeOption.Required, "2.b");
-            Assert.fail("Should throw Exception");
-        } catch (ServerNotActiveException ok) {
-        }
+        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.b");
+
+        assertExists(setId, "1.0");
+        assertNotExists(setId, "1.0CH");
+        assertExists(setId, "1.1");
+        assertNotExists(setId, "1.1CH");
+        assertExists(setId, "1.2");
+        assertNotExists(setId, "1.2CH");
+        assertNotExists(setId, "2.0");
+        assertExists(setId, "2.0CH");
+        assertExists(setId, "3.0");
+        assertNotExists(setId, "3.0CH");
+
+        assertEquals(0, compensationHandlerOrder.indexOf("2.0CH"));
 
     }
 
     //**************************** Tester **************************//
 
-    private void executeUnitOfWork(final String setId, final List<String> compensationHandlerOrder, TransactionScopeOption extTransactionScopeOption,
+    private void executeUseCase1(final String setId, final List<String> compensationHandlerOrder, TransactionScopeOption extTransactionScopeOption,
             final TransactionScopeOption int1TransactionScopeOption, final TransactionScopeOption int2TransactionScopeOption, final String... exceptionPoints)
             throws ServerNotActiveException {
 
