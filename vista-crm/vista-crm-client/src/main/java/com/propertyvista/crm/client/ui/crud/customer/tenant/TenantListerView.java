@@ -23,6 +23,10 @@ public interface TenantListerView extends IListerView<TenantDTO> {
 
         void downloadTenantsSecrets();
 
+        void uploadPadFile();
+
     }
+
+    void setTenantPadFileUploadEnabled(boolean isEnabled);
 
 }

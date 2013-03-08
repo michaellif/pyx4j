@@ -19,6 +19,7 @@ import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
+import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadServiceImpl;
@@ -34,5 +35,7 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         bind(ApplicationDocumentUploadServiceImpl.class);
         bind(PmcDocumentFileUploadServiceImpl.class);
         bind(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
+        bind(TenantPadFileUploadServiceImpl.class);
     }
+
 }

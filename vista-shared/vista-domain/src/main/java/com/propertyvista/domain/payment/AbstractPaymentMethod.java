@@ -51,6 +51,7 @@ public interface AbstractPaymentMethod extends IEntity {
     /**
      * Indicates if this method is deleted (still persists in DB but not used anymore!).
      */
+    @NotNull
     IPrimitive<Boolean> isDeleted();
 
 }

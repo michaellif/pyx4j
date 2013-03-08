@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
@@ -46,6 +47,7 @@ public interface LeasePaymentMethod extends PaymentMethod {
      * Indicates if this method is one-time usage only.
      * TODO: rename to isProfiledMethod (inverse logic!)
      */
+    @NotNull
     IPrimitive<Boolean> isOneTimePayment();
 
     /**

@@ -21,4 +21,9 @@ public class TenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> imple
     public TenantListerViewImpl() {
         setLister(new TenantLister());
     }
+
+    @Override
+    public void setTenantPadFileUploadEnabled(boolean isEnabled) {
+        ((TenantLister) getLister()).setTenantPadFileUploadEnable(isEnabled);
+    }
 }

@@ -30,6 +30,8 @@ public class TenantLister extends ListerBase<TenantDTO> {
 
     protected static final I18n i18n = I18n.get(TenantLister.class);
 
+    private Button padFileUpload;
+
     public TenantLister() {
         super(TenantDTO.class, false);
 
@@ -61,11 +63,22 @@ public class TenantLister extends ListerBase<TenantDTO> {
             }
         }));
 
+        addActionItem(padFileUpload = new Button(i18n.tr("Upload PAD File"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantListerView.Presenter) getPresenter()).uploadPadFile();
+            }
+        }));
+
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().lease().leaseId().getPath().toString(), false), new Sort(proto().customer().person().name().getPath().toString(),
                 false));
+    }
+
+    public void setTenantPadFileUploadEnable(boolean isEnabled) {
+        padFileUpload.setVisible(isEnabled);
     }
 }
