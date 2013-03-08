@@ -20,16 +20,20 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("${0}{1,choice,null#|!null#, {1}}")
 @DiscriminatorValue("other")
 @Caption(name = "Income Information Other")
 public interface IncomeInfoOther extends IEntity, CustomerScreeningIncomeInfo {
 
-    @Override
     @NotNull
+    @Override
+    @ToString(index = 0)
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();

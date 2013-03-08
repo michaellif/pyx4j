@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -30,12 +32,14 @@ import com.propertyvista.domain.contact.AddressStructured;
 
 @AbstractEntity
 @Inheritance
+@ToStringFormat("${0}, {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
 
-    @Override
-    @Caption(name = "Employer Name")
     @NotNull
+    @Override
+    @ToString(index = 1)
+    @Caption(name = "Employer Name")
     IPrimitive<String> name();
 
     @EmbeddedEntity
@@ -54,11 +58,14 @@ public interface IEmploymentInfo extends CustomerScreeningIncomeInfo {
     @NotNull
     IPrimitive<String> supervisorPhone();
 
+    @NotNull
+    @ToString(index = 2)
     @Caption(name = "Position")
     IPrimitive<String> position();
 
     @NotNull
     @Override
+    @ToString(index = 0)
     @Caption(name = "Monthly Salary")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

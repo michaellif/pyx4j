@@ -20,14 +20,19 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("${0}, {1}, {2}")
 @DiscriminatorValue("selfEmployed")
 @Caption(name = "Income Information Self Employed")
 public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
 
+    @NotNull
     @Override
+    @ToString(index = 1)
     @Caption(name = "Name Of Company")
     IPrimitive<String> name();
 
@@ -52,9 +57,10 @@ public interface IncomeInfoSelfEmployed extends IEmploymentInfo {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyRevenue();
 
-    @Override
-    @Caption(name = "Monthly Salary/Dividend")
     @NotNull
+    @Override
+    @ToString(index = 0)
+    @Caption(name = "Monthly Salary/Dividend")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();

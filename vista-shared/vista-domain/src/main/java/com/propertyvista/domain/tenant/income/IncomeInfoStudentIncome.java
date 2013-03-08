@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
@@ -29,6 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressStructured;
 
+@ToStringFormat("${0}, {1}")
 @DiscriminatorValue("student")
 @Caption(name = "Income Information Student Income")
 public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
@@ -51,16 +54,19 @@ public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
         }
     }
 
+    @NotNull
     @Override
+    @ToString(index = 1)
     @Caption(name = "School")
     IPrimitive<String> name();
 
     @EmbeddedEntity
     AddressStructured address();
 
-    @Override
-    @Caption(name = "Gross Monthly Amount")
     @NotNull
+    @Override
+    @ToString(index = 0)
+    @Caption(name = "Gross Monthly Amount")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> monthlyAmount();
