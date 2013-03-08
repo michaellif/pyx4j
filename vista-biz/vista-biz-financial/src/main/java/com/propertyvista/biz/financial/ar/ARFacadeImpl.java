@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
@@ -26,6 +27,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -35,6 +37,7 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeImpl implements ARFacade {
@@ -127,6 +130,12 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
         return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast());
+    }
+
+    @Override
+    public Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

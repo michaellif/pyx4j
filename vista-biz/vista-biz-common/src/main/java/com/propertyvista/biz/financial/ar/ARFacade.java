@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -33,6 +35,7 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public interface ARFacade {
@@ -60,6 +63,8 @@ public interface ARFacade {
     TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount);
 
     BigDecimal getCurrentBalance(BillingAccount billingAccount);
+
+    Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle);
 
     BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf);
 

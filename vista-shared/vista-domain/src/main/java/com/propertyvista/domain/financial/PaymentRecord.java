@@ -61,11 +61,13 @@ public interface PaymentRecord extends IEntity {
 
         Submitted,
 
+        // Payment Scheduled from Submitted state if targetDate > now (not posted to AR)
         Scheduled,
 
+        // Waiting to be sent/resent to payment gateway (posted to AR)
         Queued,
 
-        // This state is skipped in current implementation and may be enabled by Policy in future
+        //TODO vlads+michael to discuss!!! This state is skipped in current implementation and may be enabled by Policy in future
         Processing,
 
         Received,

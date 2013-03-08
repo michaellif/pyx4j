@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.commons.lang.Validate;
@@ -42,6 +43,7 @@ import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -56,6 +58,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARFacadeYardiImpl implements ARFacade {
@@ -259,4 +262,9 @@ public class ARFacadeYardiImpl implements ARFacade {
         return new ArrayList<InvoiceLineItem>(Persistence.service().query(criteria));
     }
 
+    @Override
+    public Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
