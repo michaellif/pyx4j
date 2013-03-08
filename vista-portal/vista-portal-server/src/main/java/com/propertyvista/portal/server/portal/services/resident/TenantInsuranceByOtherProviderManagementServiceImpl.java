@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal.services.resident;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -44,7 +45,7 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
     public void get(AsyncCallback<InsuranceGeneric> callback) {
         EntityQueryCriteria<InsuranceGeneric> criteria = EntityQueryCriteria.create(InsuranceGeneric.class);
         criteria.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenant());
-        criteria.ge(criteria.proto().expiryDate(), new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        criteria.ge(criteria.proto().expiryDate(), new LogicalDate(SystemDateManager.getDate()));
 
         InsuranceGeneric insuranceCertificate = Persistence.secureRetrieve(criteria);
         if (insuranceCertificate == null) {

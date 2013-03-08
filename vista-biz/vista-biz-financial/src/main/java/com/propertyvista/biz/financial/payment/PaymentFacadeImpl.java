@@ -21,6 +21,7 @@ import org.apache.commons.lang.Validate;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -72,7 +73,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     public PaymentRecord persistPayment(PaymentRecord paymentRecord) {
         if (paymentRecord.paymentStatus().isNull()) {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         }
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
@@ -84,7 +85,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         PaymentMethodPersister.persistLeasePaymentMethod(building, paymentRecord.paymentMethod());
 
         if (paymentRecord.id().isNull()) {
-            paymentRecord.createdDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         }
 
         Persistence.service().merge(paymentRecord);
@@ -114,7 +115,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
         if (paymentRecord.merchantAccount().isNull()
                 && (PaymentRecord.merchantAccountIsRequedForPayments || PaymentType.electronicPayments().contains(
@@ -133,7 +134,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             break;
         case Check:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
@@ -157,7 +158,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Persistence.service().merge(paymentRecord);
 
         if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             try {
                 ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             } catch (ARException e) {
@@ -180,8 +181,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         PaymentStatus incommingStatus = paymentRecord.paymentStatus().getValue();
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
 
         if (incommingStatus == PaymentRecord.PaymentStatus.Queued) {
@@ -210,8 +211,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
@@ -236,8 +237,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
 
         switch (paymentRecord.paymentMethod().type().getValue()) {

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -179,7 +180,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                 while (!isInterrupted() & !simToday.after(today)) {
                     boolean error = false;
                     try {
-                        Persistence.service().setTransactionSystemTime(simToday);
+                        SystemDateManager.setDate(simToday);
                         updateArrearsProcess.executePmcJob(context);
                     } catch (Throwable caught) {
                         caught.printStackTrace();
@@ -194,7 +195,6 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                     simToday = new LogicalDate(cal.getTime());
                     incProgress();
                 }
-                Persistence.service().setTransactionSystemTime(null);
             } finally {
                 Persistence.service().endTransaction();
                 Lifecycle.endContext();

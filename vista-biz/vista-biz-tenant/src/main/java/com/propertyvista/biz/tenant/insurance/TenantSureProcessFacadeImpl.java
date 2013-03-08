@@ -24,6 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -121,7 +122,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().cancellation(), InsuranceTenantSure.CancellationType.SkipPayment);
         ICursorIterator<InsuranceTenantSure> skippedIterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
         try {
-            LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+            LogicalDate today = new LogicalDate(SystemDateManager.getDate());
             while (iterator.hasNext()) {
                 InsuranceTenantSure ts = iterator.next();
                 if (gracePeriodEnd(ts).compareTo(today) < 0) {

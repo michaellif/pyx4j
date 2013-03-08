@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -76,7 +77,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
         LogicalDate lowerLeavingBound = null;
         LogicalDate upperLeavingBound = null;
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         NoticesGadgetDataDTO proto = EntityFactory.getEntityPrototype(NoticesGadgetDataDTO.class);
         IObject<?> noticesFilter = proto.getMember(noticesFilterPreset.getPath());
@@ -115,7 +116,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         if (buildingsFilter != null && !buildingsFilter.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
         }
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
         criteria.add(PropertyCriterion.le(criteria.proto()._availableForRent(), today));
         return criteria;
     }

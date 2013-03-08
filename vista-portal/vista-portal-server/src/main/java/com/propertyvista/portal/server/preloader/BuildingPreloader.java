@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -250,11 +251,11 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             // Save Versioned Items,
             // Preload data in a past all for product catalog assignments in LaseSimulator
-            Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
+            SystemDateManager.setDate(DateUtils.detectDateformat("2008-01-01"));
             try {
                 ServerSideFactory.create(ProductCatalogFacade.class).persist(building.productCatalog(), true);
             } finally {
-                Persistence.service().setTransactionSystemTime(null);
+                SystemDateManager.resetDate();
             }
 
             // Units:
@@ -262,12 +263,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             try {
                 unitCount += units.size();
                 for (AptUnit unit : units) {
-                    Persistence.service().setTransactionSystemTime(RandomUtil.randomLogicalDate(2010, 2012));
+                    SystemDateManager.setDate(RandomUtil.randomLogicalDate(2010, 2012));
                     ServerSideFactory.create(BuildingFacade.class).persist(unit);
                     productCatalogGenerator.createAptUnitServices(building.productCatalog(), unit);
                 }
             } finally {
-                Persistence.service().setTransactionSystemTime(null);
+                SystemDateManager.resetDate();
             }
             ServerSideFactory.create(ProductCatalogFacade.class).persist(building.productCatalog(), true);
 

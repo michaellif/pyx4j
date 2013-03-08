@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -74,7 +75,7 @@ public class BillingProcessManager {
                             BillingCycle latestBillingCycle = Persistence.service().retrieve(criteria);
 
                             Calendar createUntill = new GregorianCalendar();
-                            createUntill.setTime(Persistence.service().getTransactionSystemTime());
+                            createUntill.setTime(SystemDateManager.getDate());
                             createUntill.add(Calendar.MONTH, 1);
 
                             while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {

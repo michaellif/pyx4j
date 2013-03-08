@@ -22,6 +22,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -117,7 +118,7 @@ public class PadSim {
     public void replyAcknowledgment(PadSimFile triggerStub) {
         PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
         padFile.status().setValue(PadSimFile.PadSimFileStatus.Acknowledged);
-        padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
+        padFile.acknowledged().setValue(SystemDateManager.getDate());
 
         Persistence.service().retrieveMember(padFile.batches());
         updateAcknowledgments(padFile);
@@ -168,7 +169,7 @@ public class PadSim {
             for (PadSimDebitRecord record : padBatch.records()) {
                 if (record.acknowledgmentStatusCode().isNull()) {
                     if (record.paymentDate().isNull()) {
-                        record.paymentDate().setValue(CaledonPadUtils.formatDate(Persistence.service().getTransactionSystemTime()));
+                        record.paymentDate().setValue(CaledonPadUtils.formatDate(SystemDateManager.getDate()));
                     }
                     if (record.reconciliationStatus().isNull()) {
                         record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
@@ -218,7 +219,7 @@ public class PadSim {
         Persistence.service().retrieveMember(padFile.batches());
 
         padFile.status().setValue(PadSimFile.PadSimFileStatus.ReconciliationSent);
-        padFile.reconciliationSent().setValue(Persistence.service().getTransactionSystemTime());
+        padFile.reconciliationSent().setValue(SystemDateManager.getDate());
         updateReconciliation(padFile);
 
         File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));

@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -110,7 +111,7 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     }
 
     private <Criteria extends EntityQueryCriteria<? extends AptUnit>> Criteria fillOccupiedUnitsCriteria(Criteria criteria, Vector<Building> buildings) {
-        LogicalDate when = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate when = new LogicalDate(SystemDateManager.getDate());
 
         if (buildings != null && !buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));

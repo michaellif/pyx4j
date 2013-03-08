@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -44,7 +45,7 @@ public class Util {
     }
 
     public static LogicalDate dayOfCurrentTransaction() {
-        return new LogicalDate(Persistence.service().getTransactionSystemTime());
+        return new LogicalDate(SystemDateManager.getDate());
     }
 
     public static LogicalDate beginningOfMonth(LogicalDate dayOfMonth) {

@@ -15,6 +15,7 @@ package com.propertyvista.biz.occupancy;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -197,7 +198,7 @@ public class OccupancyFacadeAvailableForRentOnlyImpl implements OccupancyFacade 
     }
 
     private LogicalDate now() {
-        return new LogicalDate(Persistence.service().getTransactionSystemTime());
+        return new LogicalDate(SystemDateManager.getDate());
     }
 
     private boolean isAvailableForRent(AptUnit unit) {

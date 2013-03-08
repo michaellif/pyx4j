@@ -18,6 +18,7 @@ import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -46,7 +47,7 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
             StringBuilder message = new StringBuilder();
 
             {
-                Date onlineStorageDeadLine = DateUtils.addDays(Persistence.service().getTransactionSystemTime(), -52);
+                Date onlineStorageDeadLine = DateUtils.addDays(SystemDateManager.getDate(), -52);
                 EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
                 criteria.le(criteria.proto().created(), onlineStorageDeadLine);
                 ICursorIterator<CustomerCreditCheckReport> cur = Persistence.service().query(null, criteria, AttachLevel.Attached);
@@ -64,7 +65,7 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
             }
 
             {
-                Date storageDeadLine = DateUtils.addDays(Persistence.service().getTransactionSystemTime(), -60);
+                Date storageDeadLine = DateUtils.addDays(SystemDateManager.getDate(), -60);
                 EntityQueryCriteria<CustomerCreditCheckReportNoBackup> criteria = EntityQueryCriteria.create(CustomerCreditCheckReportNoBackup.class);
                 criteria.le(criteria.proto().created(), storageDeadLine);
                 removed += Persistence.service().delete(criteria);

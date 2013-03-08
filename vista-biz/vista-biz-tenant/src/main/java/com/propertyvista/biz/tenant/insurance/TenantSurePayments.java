@@ -27,6 +27,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -113,7 +114,7 @@ class TenantSurePayments {
         String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(amount, tenantSureMerchantTerminalId(),
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
-        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+        transaction.transactionDate().setValue(SystemDateManager.getDate());
         return transaction;
     }
 
@@ -129,7 +130,7 @@ class TenantSurePayments {
         String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(amount, tenantSureMerchantTerminalId(),
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
-        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+        transaction.transactionDate().setValue(SystemDateManager.getDate());
     }
 
     public static void performOutstandingPayment(final InsuranceTenantSure insuranceTenantSure) {
@@ -245,7 +246,7 @@ class TenantSurePayments {
 
         Persistence.service().commit();
 
-        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+        transaction.transactionDate().setValue(SystemDateManager.getDate());
 
         try {
             String referenceNumber = transaction.id().getStringView();

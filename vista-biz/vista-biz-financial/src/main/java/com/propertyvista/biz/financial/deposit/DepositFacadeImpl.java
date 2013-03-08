@@ -28,6 +28,7 @@ import java.util.Map;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -199,7 +200,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
                 DepositInterestAdjustment adjustment = EntityFactory.create(DepositInterestAdjustment.class);
-                adjustment.date().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+                adjustment.date().setValue(new LogicalDate(SystemDateManager.getDate()));
                 adjustment.interestRate().set(policyItem.annualInterestRate());
                 adjustment.amount().setValue(
                         MoneyUtils.round(deposit.lifecycle().currentAmount().getValue()
@@ -236,7 +237,7 @@ public class DepositFacadeImpl implements DepositFacade {
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
-        Date now = Persistence.service().getTransactionSystemTime();
+        Date now = SystemDateManager.getDate();
 
         Map<Deposit, ProductTerm> deposits = getCurrentDeposits(lease);
         for (Deposit deposit : deposits.keySet()) {
@@ -269,7 +270,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 } else {
                     Calendar calendar = new GregorianCalendar();
                     // see if we are past the refund window
-                    calendar.setTime(Persistence.service().getTransactionSystemTime());
+                    calendar.setTime(SystemDateManager.getDate());
                     if (!policyItem.securityDepositRefundWindow().isNull()) {
                         calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
                     }

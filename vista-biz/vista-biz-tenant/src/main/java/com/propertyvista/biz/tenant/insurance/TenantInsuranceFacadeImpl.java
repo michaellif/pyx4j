@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant.insurance;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -38,7 +39,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
     @Override
     public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
         InsuranceCertificate insuranceCertificate = null;

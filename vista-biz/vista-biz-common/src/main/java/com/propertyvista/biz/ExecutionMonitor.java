@@ -26,7 +26,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.domain.scheduler.CompletionType;
@@ -252,7 +252,7 @@ public class ExecutionMonitor {
 
         public ReportMessage(String message) {
             this.message = message;
-            this.eventTime = Persistence.service().getTransactionSystemTime();
+            this.eventTime = SystemDateManager.getDate();
         }
 
         ExecutionReportMessage createExecutionReportMessage(ExecutionReportSection report) {

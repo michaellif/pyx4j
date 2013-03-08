@@ -19,6 +19,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -69,7 +70,7 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
             IObject<?> member) {
         MaintenanceGadgetDataDTO proto = EntityFactory.getEntityPrototype(MaintenanceGadgetDataDTO.class);
 
-        LogicalDate today = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
         LogicalDate lowerBound = null;
         LogicalDate upperBound = null;
         GregorianCalendar cal = new GregorianCalendar();

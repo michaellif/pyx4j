@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -55,7 +56,7 @@ public class ARArrearsManager {
         arrearsSnapshot.totalAgingBuckets().set(
                 ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.createAgingBuckets(DebitType.total), arrearsSnapshot.agingBuckets()));
 
-        arrearsSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
 
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
@@ -102,7 +103,7 @@ public class ARArrearsManager {
         LeaseArrearsSnapshot currentSnapshot = createArrearsSnapshot(billingAccount);
 
         // 2. retrieve previous ArrearsSnapshot
-        LogicalDate asOfNow = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate asOfNow = new LogicalDate(SystemDateManager.getDate());
         LeaseArrearsSnapshot previousSnapshot = getArrearsSnapshot(billingAccount, asOfNow);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
@@ -116,7 +117,7 @@ public class ARArrearsManager {
         BuildingArrearsSnapshot currentSnapshot = createArrearsSnapshot(building);
 
         // 2. retrieve previous ArrearsSnapshot
-        LogicalDate asOf = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate asOf = new LogicalDate(SystemDateManager.getDate());
         BuildingArrearsSnapshot previousSnapshot = getArrearsSnapshot(building, asOf);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
@@ -280,7 +281,7 @@ public class ARArrearsManager {
 
             if (previousSnapshot != null) {
                 GregorianCalendar cal = new GregorianCalendar();
-                cal.setTime(Persistence.service().getTransactionSystemTime());
+                cal.setTime(SystemDateManager.getDate());
                 cal.add(Calendar.DAY_OF_MONTH, -1);
                 LogicalDate prevSnapshotToDate = new LogicalDate(cal.getTime());
 
@@ -297,7 +298,7 @@ public class ARArrearsManager {
                 Persistence.service().delete(previousSnapshot);
             }
 
-            currentSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            currentSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             currentSnapshot.toDate().setValue(OccupancyFacade.MAX_DATE);
             Persistence.service().persist(currentSnapshot);
         }

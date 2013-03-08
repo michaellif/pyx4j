@@ -18,7 +18,7 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -46,7 +46,7 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
         makePaymentRecord(merchantAccountB, "01-May-2010", "200.00", PaymentType.CreditCard, PaymentStatus.Received);
         makePaymentRecord(merchantAccountB, "01-May-2010", "200.00", PaymentType.CreditCard, PaymentStatus.Rejected);
 
-        Persistence.service().setTransactionSystemTime(new LogicalDate(detectDateformat("01-Aug-2010")));
+        SystemDateManager.setDate(new LogicalDate(detectDateformat("01-Aug-2010")));
 
         // test        
         {

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -89,7 +90,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub) {
-        runForDate(callback, triggerStub, Persistence.service().getTransactionSystemTime());
+        runForDate(callback, triggerStub, SystemDateManager.getDate());
     }
 
     @Override

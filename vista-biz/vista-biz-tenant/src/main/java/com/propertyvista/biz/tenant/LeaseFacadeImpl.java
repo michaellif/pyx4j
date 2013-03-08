@@ -30,6 +30,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -325,7 +326,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         recordApplicationData(lease.currentTerm());
 
@@ -350,7 +351,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         Persistence.secureSave(lease);
 
@@ -375,13 +376,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Status leaseStatus = lease.status().getValue();
 
         lease.status().setValue(Lease.Status.Approved);
-        lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.approvalDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         if (leaseStatus == Status.Application) {
             lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
             lease.leaseApplication().decidedBy().set(decidedBy);
             lease.leaseApplication().decisionReason().setValue(decisionReason);
-            lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
             recordApplicationData(lease.currentTerm());
         }
@@ -426,7 +427,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (!VistaFeatures.instance().yardiIntegration()) {
                 // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
                 Bill bill = billingFacade.getLatestBill(lease);
-                LogicalDate curDate = new LogicalDate(Persistence.service().getTransactionSystemTime());
+                LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
                 LogicalDate nextExecDate = billingFacade.getNextCycleExecutionDate(bill.billingCycle());
                 if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
                     billingFacade.runBilling(lease);
@@ -458,7 +459,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        }
 
         lease.status().setValue(Status.Active);
-        lease.activationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.activationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.secureSave(lease);
 
         ensureLeaseUniqness(lease);
@@ -507,7 +508,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException("Lease has next term ready");
         }
         // if still has time to go:
-        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(Persistence.service().getTransactionSystemTime()))) {
+        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
             throw new IllegalStateException("Lease is not ended yet");
         }
 
@@ -661,7 +662,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new IllegalStateException(SimpleMessageFormat.format("Lease " + leaseId.getPrimaryKey() + " has no completion event"));
         }
 
-        lease.actualMoveOut().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.actualMoveOut().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         updateLeaseDates(lease);
 

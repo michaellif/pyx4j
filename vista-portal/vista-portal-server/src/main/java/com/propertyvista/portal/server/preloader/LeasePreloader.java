@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -76,11 +77,11 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i < config().numOfLeasesWithNoSimulation) {
-                Date trDate = Persistence.service().getTransactionSystemTime();
+                Date trDate = SystemDateManager.getDate();
                 Calendar cal = new GregorianCalendar();
                 cal.setTime(new LogicalDate(Math.min(new LogicalDate().getTime(), lease.currentTerm().termFrom().getValue().getTime())));
                 cal.add(Calendar.MONTH, -1);
-                Persistence.service().setTransactionSystemTime(cal.getTime());
+                SystemDateManager.setDate(cal.getTime());
                 lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
                 for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
@@ -97,10 +98,10 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 ServerSideFactory.create(LeaseFacade.class).approve(lease, null, null);
 
                 if (lease.leaseFrom().getValue().compareTo(trDate) <= 0) {
-                    Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
+                    SystemDateManager.setDate(lease.leaseFrom().getValue());
                     ServerSideFactory.create(LeaseFacade.class).activate(lease);
                 }
-                Persistence.service().setTransactionSystemTime(trDate);
+                SystemDateManager.setDate(trDate);
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
@@ -219,7 +220,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             if (lease.currentTerm().termFrom().getValue().before(new Date())) {
-                Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
+                SystemDateManager.setDate(lease.currentTerm().termFrom().getValue());
             }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
@@ -233,7 +234,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (mustHaveApplication || RandomUtil.randomBoolean()) {
                 ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
             }
-            Persistence.service().setTransactionSystemTime(null);
+            SystemDateManager.resetDate();
         }
 
         TenantsEquifaxTestCasesGenerator tenantsEquifaxTestCasesGenerator = new TenantsEquifaxTestCasesGenerator();
@@ -272,9 +273,12 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     private AptUnit makeAvailable(final AptUnit unit) {
         if (unit._availableForRent().isNull()) {
-            Persistence.service().setTransactionSystemTime(getStatusFromDate(unit));
-            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
-            Persistence.service().setTransactionSystemTime(null);
+            SystemDateManager.setDate(getStatusFromDate(unit));
+            try {
+                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
+            } finally {
+                SystemDateManager.resetDate();
+            }
         }
         return Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey());
     }

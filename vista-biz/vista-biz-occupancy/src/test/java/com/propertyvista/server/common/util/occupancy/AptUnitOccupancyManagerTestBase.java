@@ -30,6 +30,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -78,7 +79,7 @@ public class AptUnitOccupancyManagerTestBase {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        Persistence.service().setTransactionSystemTime(asDate("1900-01-01"));
+        SystemDateManager.setDate(asDate("1900-01-01"));
         PmcDataModel pmcDataModel = new PmcDataModel(new PreloadConfig());
         pmcDataModel.generate();
 
@@ -115,7 +116,7 @@ public class AptUnitOccupancyManagerTestBase {
 
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
         Persistence.service().commit();
-        Persistence.service().setTransactionSystemTime(null);
+        SystemDateManager.resetDate();
     }
 
     protected void generateIdAssignmentPolicy() {
@@ -149,7 +150,7 @@ public class AptUnitOccupancyManagerTestBase {
     }
 
     protected void now(String nowDate) {
-        Persistence.service().setTransactionSystemTime(asDate(nowDate));
+        SystemDateManager.setDate(asDate(nowDate));
     }
 
     protected OccupancyFacade getUOM() {

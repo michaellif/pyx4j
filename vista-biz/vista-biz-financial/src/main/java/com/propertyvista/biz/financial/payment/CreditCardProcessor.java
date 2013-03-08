@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -194,12 +194,12 @@ class CreditCardProcessor {
         if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
         } else {
             log.debug("ccTransaction rejected {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
         }

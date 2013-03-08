@@ -22,7 +22,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -34,7 +34,7 @@ class CardServiceSimulationUtils {
 
     static Date getExpiryMonthStart() {
         Calendar c = Calendar.getInstance();
-        c.setTime(Persistence.service().getTransactionSystemTime());
+        c.setTime(SystemDateManager.getDate());
         c.set(Calendar.DAY_OF_MONTH, 1);
         return c.getTime();
     }

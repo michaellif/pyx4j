@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -341,7 +342,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
             break;
         case CreditCard:
-            paymentRecord.targetDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.targetDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
             ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
             break;
@@ -355,7 +356,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
-        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), Persistence.service().getTransactionSystemTime()));
+        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), SystemDateManager.getDate()));
 
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {

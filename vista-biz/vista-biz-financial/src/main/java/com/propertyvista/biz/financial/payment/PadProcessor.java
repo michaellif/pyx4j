@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -60,7 +61,7 @@ public class PadProcessor {
         }
         paymentRecord.merchantAccount().set(merchantAccount);
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
 
         Persistence.service().retrieve(paymentRecord.billingAccount());
@@ -129,8 +130,8 @@ public class PadProcessor {
             throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         // Caledon status codes
         if ("2001".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
@@ -379,8 +380,8 @@ public class PadProcessor {
         paymentRecord.padReconciliationDebitRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
 
@@ -398,8 +399,8 @@ public class PadProcessor {
         paymentRecord.padReconciliationDebitRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
         log.info("Payment {} {} Cleared", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
@@ -412,8 +413,8 @@ public class PadProcessor {
         paymentRecord.padReconciliationReturnRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);
-        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
 

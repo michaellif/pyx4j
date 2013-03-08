@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -50,7 +51,7 @@ class ScreeningPayments {
     static Key preAuthorization(PmcEquifaxInfo equifaxInfo) {
         final CustomerCreditCheckTransaction transaction = EntityFactory.create(CustomerCreditCheckTransaction.class);
         transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Draft);
-        transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+        transaction.transactionDate().setValue(SystemDateManager.getDate());
         transaction.pmc().set(VistaDeployment.getCurrentPmc());
 
         AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
@@ -86,13 +87,13 @@ class ScreeningPayments {
 
         // Do authorization
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(transaction.amount().getValue(), merchantTerminalId(),
-                    ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(transaction.amount().getValue(),
+                    merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Authorized);
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
-            transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+            transaction.transactionDate().setValue(SystemDateManager.getDate());
 
         } catch (Throwable e) {
             log.error("Error", e);
@@ -130,7 +131,7 @@ class ScreeningPayments {
         try {
             ServerSideFactory.create(CreditCardFacade.class).preAuthorizationReversal(merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening,
                     transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
-            transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+            transaction.transactionDate().setValue(SystemDateManager.getDate());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Reversal);
 
             TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
@@ -162,7 +163,7 @@ class ScreeningPayments {
                     ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
-            transaction.transactionDate().setValue(Persistence.service().getTransactionSystemTime());
+            transaction.transactionDate().setValue(SystemDateManager.getDate());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Cleared);
         } catch (Throwable e) {
             log.error("Error", e);

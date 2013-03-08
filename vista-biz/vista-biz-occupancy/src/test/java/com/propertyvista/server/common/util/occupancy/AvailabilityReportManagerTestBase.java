@@ -26,6 +26,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -82,7 +83,7 @@ public class AvailabilityReportManagerTestBase {
     }
 
     protected void now(String nowDate) {
-        Persistence.service().setTransactionSystemTime(asDate(nowDate));
+        SystemDateManager.setDate(asDate(nowDate));
     }
 
     protected void computeAvailabilityOn(String dateRepr) {

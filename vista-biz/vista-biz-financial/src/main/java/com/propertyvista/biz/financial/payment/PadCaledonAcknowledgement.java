@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.io.File;
 import java.util.EnumSet;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -58,7 +59,7 @@ class PadCaledonAcknowledgement {
             throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file " + file.getName());
         }
 
-        padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
+        padFile.acknowledged().setValue(SystemDateManager.getDate());
         padFile.acknowledgmentRejectReasonMessage().setValue(akFile.acknowledgmentRejectReasonMessage().getValue());
 
         if (padFile.acknowledgmentStatus().getValue() == FileAcknowledgmentStatus.Accepted) {

@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.shared.UserVisit;
@@ -103,7 +104,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
     protected void tearDown() throws Exception {
         try {
             super.tearDown();
-            Persistence.service().setTransactionSystemTime(null);
+            SystemDateManager.resetDate();
         } finally {
             Persistence.service().commit();
             Persistence.service().endTransaction();

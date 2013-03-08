@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.jobs.PmcProcessContext;
@@ -41,12 +41,12 @@ public class UpdateArrearsHistoryDevPreloader extends BaseVistaDevDataPreloader 
         LogicalDate simToday = new LogicalDate(cal.getTime());
 
         while (!simToday.after(today)) {
-            Persistence.service().setTransactionSystemTime(simToday);
+            SystemDateManager.setDate(simToday);
             updateArrearsProcess.executePmcJob(context);
             cal.add(Calendar.MONTH, 1);
             simToday = new LogicalDate(cal.getTime());
         }
-        Persistence.service().setTransactionSystemTime(null);
+        SystemDateManager.resetDate();
 
         return "ArearsHistory Updated";
     }

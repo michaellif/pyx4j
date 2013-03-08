@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -139,10 +140,10 @@ public class LeaseLifecycleSimulator {
             log.info("-- Start new RandomLifeCycle for Lease {} from {}", lease.getPrimaryKey(), simStart);
         }
 
-        Persistence.service().setTransactionSystemTime(simStart);
+        SystemDateManager.setDate(simStart);
         if (lease.unit()._availableForRent().isNull()) {
             if (!ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(lease.unit().getPrimaryKey())) {
-                Persistence.service().setTransactionSystemTime(null);
+                SystemDateManager.resetDate();
                 throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
             } else {
                 ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
@@ -217,7 +218,7 @@ public class LeaseLifecycleSimulator {
 
     private void processNextEvent() {
         LeaseEventContainer container = events.poll();
-        Persistence.service().setTransactionSystemTime(container.date());
+        SystemDateManager.setDate(container.date());
         if (debug) {
             log.info("ProcessEvent: {} {}", container.date(), container.event().getClass().getSimpleName());
         }
@@ -558,11 +559,11 @@ public class LeaseLifecycleSimulator {
     }
 
     private static void cleanUp() {
-        Persistence.service().setTransactionSystemTime(null);
+        SystemDateManager.resetDate();
     }
 
     private static LogicalDate now() {
-        return new LogicalDate(Persistence.service().getTransactionSystemTime());
+        return new LogicalDate(SystemDateManager.getDate());
     }
 
     private static LogicalDate toDate(String date) {

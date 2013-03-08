@@ -15,14 +15,13 @@ package com.propertyvista.biz.financial;
 
 import java.util.Date;
 
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class SysDateManager {
 
     public static void setSysDate(Date date) {
-        Persistence.setSystemTime(date);
-        Persistence.service().setTransactionSystemTime(Persistence.getSystemTime());
+        SystemDateManager.setDate(date);
     }
 
     public static void setSysDate(String dateStr) {
@@ -30,7 +29,7 @@ public class SysDateManager {
     }
 
     public static Date getSysDate() {
-        return Persistence.getSystemTime();
+        return SystemDateManager.getDate();
     }
 
 }

@@ -29,6 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -361,7 +362,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
                 CfcApiAdapterFacade.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
-        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
@@ -378,7 +379,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
                 CfcApiAdapterFacade.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
-        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         insuranceTenantSure.status().setValue(TenantSureStatus.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
         insuranceTenantSure.expiryDate().setValue(expiryDate);
@@ -427,7 +428,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         validateIsCancellable(insuranceTenantSure);
 
-        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         insuranceTenantSure.status().setValue(expiryDate.compareTo(new LogicalDate()) < 0 ? TenantSureStatus.PendingCancellation : TenantSureStatus.Cancelled);
         insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenantSure);
         insuranceTenantSure.cancellationDescriptionReasonFromTenantSure().setValue(cancellationReason);
