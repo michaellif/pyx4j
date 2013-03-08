@@ -60,12 +60,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
     }
 
     private void assertTransactionNotPresent() {
-        try {
-            srv.getTransactionSystemTime();
-        } catch (Throwable ok) {
-            return;
-        }
-        Assert.fail("Should throw exception since there should be no transaction context");
+        Assert.assertTrue("There should be no transaction context", srv.getTransactionScopeOption() == null);
 
     }
 

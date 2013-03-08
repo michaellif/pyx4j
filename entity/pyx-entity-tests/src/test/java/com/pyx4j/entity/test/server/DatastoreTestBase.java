@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -118,7 +119,7 @@ public abstract class DatastoreTestBase extends TestCase {
      * Emulate Database current time
      */
     protected void setDBTime(String dateStr) {
-        srv.setTransactionSystemTime(DateUtils.detectDateformat(dateStr));
+        SystemDateManager.setDate(DateUtils.detectDateformat(dateStr));
     }
 
     static public void assertValueEquals(String message, Object expected, Object actual) {

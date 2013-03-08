@@ -21,8 +21,10 @@
 package com.pyx4j.server.contexts;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Locale;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.i18n.server.I18nManager;
 
 @SuppressWarnings("serial")
@@ -36,10 +38,17 @@ public class InheritableUserContext implements Serializable {
 
     final DevSession devSession;
 
+    final Date sysDate;
+
     InheritableUserContext(Visit abstractVisit) {
         this.abstractVisit = abstractVisit;
         namespace = NamespaceManager.getNamespace();
         locale = I18nManager.getThreadLocale();
         devSession = DevSession.getSession();
+        if (SystemDateManager.isDateSet()) {
+            sysDate = SystemDateManager.getDate();
+        } else {
+            sysDate = null;
+        }
     }
 }

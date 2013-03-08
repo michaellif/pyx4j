@@ -34,11 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
@@ -153,6 +154,10 @@ public class PersistenceContext {
         }
     }
 
+    void endCallContext() {
+        timeNow = null;
+    }
+
     TransactionContextOptions options() {
         return options.peek();
     }
@@ -190,7 +195,7 @@ public class PersistenceContext {
 
     public Date getTimeNow() {
         if (timeNow == null) {
-            timeNow = Persistence.getSystemTime();
+            timeNow = DateUtils.getDBRounded(SystemDateManager.getDate());
         }
         return timeNow;
     }

@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.server;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,15 +78,6 @@ public interface IEntityPersistenceService {
     public void addTransactionCompensationHandler(CompensationHandler handler);
 
     public void setTransactionUserKey(Key currentUserKey);
-
-    /**
-     * This used for unit tests
-     * 
-     * @param date
-     */
-    public void setTransactionSystemTime(Date date);
-
-    public Date getTransactionSystemTime();
 
     public interface ICursorIterator<T> extends Iterator<T> {
 

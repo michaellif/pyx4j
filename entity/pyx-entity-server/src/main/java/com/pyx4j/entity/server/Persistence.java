@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.server;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,30 +40,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
-import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.security.shared.SecurityController;
 
 public class Persistence {
 
-    private static Date unitTestSystemTime;
-
     public static synchronized IEntityPersistenceService service() {
         return PersistenceServicesFactory.getPersistenceService();
-    }
-
-    public static Date getSystemTime() {
-        if (unitTestSystemTime != null) {
-            return unitTestSystemTime;
-        } else {
-            return DateUtils.getRoundedNow();
-        }
-    }
-
-    public static void setSystemTime(Date date) {
-        if (!ServerSideConfiguration.isStartedUnderUnitTest()) {
-            throw new Error("SystemTime change available only in UnitTests");
-        }
-        unitTestSystemTime = date;
     }
 
     public static <T extends IEntity> EntitySearchResult<T> secureQuery(EntityListCriteria<T> criteria) {
