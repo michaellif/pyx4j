@@ -115,14 +115,29 @@ public class EntityGraph {
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
+        return fullyEqualValues(ent1, ent2, (IObject<?>) null);
+    }
+
+    public static boolean fullyEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
         // Cast if required to concert instance
         ent1 = ent1.cast();
         ent2 = ent2.cast();
+
+        Set<Path> ignorePath = new HashSet<Path>();
+        if (ignoreValues != null) {
+            for (IObject<?> ignore : ignoreValues) {
+                ignorePath.add(ignore.getPath());
+            }
+        }
 
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             IObject<?> member1 = ent1.getMember(memberName);
+            if (ignorePath.contains(member1.getPath())) {
+                continue;
+            }
+
             IObject<?> member2 = ent2.getMember(memberName);
             if ((member1.getAttachLevel() == AttachLevel.Detached) && (member2.getAttachLevel() == AttachLevel.Detached)) {
                 continue;
