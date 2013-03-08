@@ -20,13 +20,10 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import java.util.Date;
-
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.test.preloader.PreloadConfig;
@@ -240,7 +237,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
     }
 
     public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws Exception {
-        SysDateManager.setSysDate((Date) null);
 
         PreloadConfig config = new PreloadConfig();
         config.defaultBillingCycleSartDay = null;
