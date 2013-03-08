@@ -40,7 +40,7 @@ public class TenantPadFileUploadServiceImpl extends AbstractUploadServiceImpl<IE
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadRecived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
+    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
             UploadResponse<IEntity> response) {
         new TenantPadParser().parse(data.data, DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
         return ProcessingStatus.completed;
