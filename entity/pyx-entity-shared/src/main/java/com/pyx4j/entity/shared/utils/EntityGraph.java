@@ -115,7 +115,7 @@ public class EntityGraph {
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
-        return fullyEqualValues(ent1, ent2, (IObject<?>) null);
+        return fullyEqualValues(ent1, ent2, new IObject<?>[0]);
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
