@@ -204,7 +204,7 @@ public class JobUtils {
     }
 
     private static void updateTrigger(TriggerSchedule origSchedule, TriggerSchedule updateSchedule, JobKey keyOfJobToFire) throws SchedulerException {
-        if (!EntityGraph.fullyEqualValues(origSchedule, updateSchedule)) {
+        if (!EntityGraph.fullyEqualValues(origSchedule, updateSchedule, origSchedule.trigger(), origSchedule.nextFireTime())) {
             SchedulerHelper.getScheduler().unscheduleJob(getTriggerKey(updateSchedule));
             if (updateSchedule.repeatType().getValue() != ScheduleType.Manual) {
                 Trigger quartzTrigger = buildTrigger(updateSchedule, keyOfJobToFire);
