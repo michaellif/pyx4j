@@ -45,6 +45,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
+    private final static Set<String> mapToNoNamespace = new HashSet<String>();
+
     private final static String prodPmcAppEnvRegex = "^.*prod\\d*$|^.*staging\\d*$";
 
     static {
@@ -58,6 +60,11 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         prodSystemDnsBase.add("propertyvista.biz");
         prodSystemDnsBase.add("residentportal.info");
         prodSystemDnsBase.add("prospectportal.info");
+
+        mapToNoNamespace.add("static");
+        mapToNoNamespace.add("operations");
+        mapToNoNamespace.add("h");
+        mapToNoNamespace.add("m");
     }
 
     @Override
@@ -106,7 +113,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
         }
 
-        if (("static".equals(namespaceProposal)) || ("operations".equals(namespaceProposal))) {
+        if (mapToNoNamespace.contains(namespaceProposal)) {
             return VistaNamespace.noNamespace;
         }
 

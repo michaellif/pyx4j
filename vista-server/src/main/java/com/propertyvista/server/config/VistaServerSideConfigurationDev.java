@@ -118,9 +118,10 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         if (Context.getRequest() != null) {
             // 192.168.179.1  -> .h.birchwoodsoftwaregroup.com
             // 10.0.2.2  -> .m.birchwoodsoftwaregroup.com
-            if (Context.getRequest().getServerName().contains(".m.birchwoodsoftwaregroup.com")) {
+            String serverName = Context.getRequest().getServerName();
+            if (serverName.endsWith("m.birchwoodsoftwaregroup.com")) {
                 hostPrefix = ".m";
-            } else if (Context.getRequest().getServerName().contains(".h.birchwoodsoftwaregroup.com")) {
+            } else if (serverName.endsWith("h.birchwoodsoftwaregroup.com")) {
                 hostPrefix = ".h";
             }
         }
