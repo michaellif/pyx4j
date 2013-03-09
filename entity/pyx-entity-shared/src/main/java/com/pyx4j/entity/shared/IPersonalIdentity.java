@@ -42,7 +42,6 @@ public interface IPersonalIdentity extends IEntity {
      * Indicator for Server to update number() base on obfuscatedNumber().
      */
     //TODO for pyx @ColumnIdentificator(NumberUpdateValue.class)
-    // TODO rename to newNumber
     @Transient(logTransient = true)
     IPrimitive<String> newNumber();
 

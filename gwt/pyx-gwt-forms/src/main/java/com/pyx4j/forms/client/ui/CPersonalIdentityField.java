@@ -38,11 +38,17 @@ import com.pyx4j.i18n.shared.I18n;
  * This however should not be considered as a final solution as the new entity may also require some additional
  * business-related initialization steps...
  */
-public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFieldBase<IPersonalIdentity, NPersonalIdentityField> {
+public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFieldBase<T, NPersonalIdentityField<T>> {
 
     private static final I18n i18n = I18n.get(CPersonalIdentityField.class);
 
     private final Class<T> entityClass;
+
+    public interface PersonalIdentityIFormat<V extends IPersonalIdentity> extends IFormat<V> {
+
+        String obfuscate(String data);
+
+    }
 
     public CPersonalIdentityField(Class<T> entityClass) {
         this(entityClass, null);
@@ -65,13 +71,19 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
-        setFormat(new PersonalIdentityFormat(pattern));
+        setFormat(new PersonalIdentityFormat<T>(this, pattern));
         addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
     }
 
     @Override
-    protected NPersonalIdentityField createWidget() {
-        return new NPersonalIdentityField(this);
+    public void setFormat(IFormat<T> format) {
+        assert format instanceof PersonalIdentityIFormat;
+        super.setFormat(format);
+    }
+
+    @Override
+    protected NPersonalIdentityField<T> createWidget() {
+        return new NPersonalIdentityField<T>(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {
@@ -100,12 +112,14 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
     public void postprocess() {
         IPersonalIdentity value = getValue();
         if (value != null && !value.newNumber().isNull()) {
-            value.obfuscatedNumber().setValue(((PersonalIdentityFormat) getFormat()).obfuscate(value.newNumber().getValue()));
+            value.obfuscatedNumber().setValue(((PersonalIdentityIFormat<T>) getFormat()).obfuscate(value.newNumber().getValue()));
             value.newNumber().setValue(null);
         }
     }
 
-    class PersonalIdentityFormat implements IFormat<IPersonalIdentity> {
+    private static class PersonalIdentityFormat<E extends IPersonalIdentity> implements PersonalIdentityIFormat<E> {
+
+        private final CPersonalIdentityField<E> component;
 
         private final char FORMAT_CLEAR = 'x';
 
@@ -119,7 +133,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
 
         private int patternIdx = -1;
 
-        public PersonalIdentityFormat(String pattern) {
+        public PersonalIdentityFormat(CPersonalIdentityField<E> component, String pattern) {
+            this.component = component;
             // pattern is interpreted as follows:
             //   X - input character in this position will be translated to 'X' (hidden data)
             //   x - input character in this position will not be modified (open data)
@@ -153,8 +168,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         }
 
         @Override
-        public IPersonalIdentity parse(String string) throws ParseException {
-            IPersonalIdentity value = getValue();
+        public E parse(String string) throws ParseException {
+            E value = component.getValue();
             if (CommonsStringUtils.isEmpty(string)) {
                 // empty input means no change to the model object
                 // TODO - need a way to clear value
@@ -169,7 +184,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                 boolean userInput = (value == null || value.obfuscatedNumber().isNull());
                 // populate resulting value
                 if (value == null) {
-                    value = EntityFactory.create(entityClass);
+                    value = EntityFactory.create(component.entityClass);
                 }
                 if (userInput) {
                     // if no obfuscated value then we are getting new user input
@@ -222,7 +237,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             return output.toString();
         }
 
-        protected String obfuscate(String data) {
+        @Override
+        public String obfuscate(String data) {
             if (patternIdx == -1) {
                 return "";
             }

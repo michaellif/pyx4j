@@ -7,9 +7,9 @@ import com.google.gwt.event.dom.client.FocusHandler;
 
 import com.pyx4j.entity.shared.IPersonalIdentity;
 
-public class NPersonalIdentityField extends NTextBox<IPersonalIdentity> {
+public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBox<E> {
 
-    public NPersonalIdentityField(CPersonalIdentityField cComponent) {
+    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent) {
         super(cComponent);
     }
 
