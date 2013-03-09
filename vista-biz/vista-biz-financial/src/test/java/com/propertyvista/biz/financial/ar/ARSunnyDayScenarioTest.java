@@ -26,7 +26,6 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
@@ -47,7 +46,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         approveApplication(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
@@ -76,7 +75,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         activateLease();
 
         runBilling(true);
@@ -88,7 +87,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        setSysDate("18-Apr-2011");
 
         addBooking("25-Apr-2011");
         addBooking("05-May-2011");
@@ -103,7 +102,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         addBooking("28-Apr-2011");
         finalizeLeaseAdendum();
 
-        SysDateManager.setSysDate("18-May-2011");
+        setSysDate("18-May-2011");
 
         addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
@@ -114,7 +113,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        SysDateManager.setSysDate("18-Jun-2011");
+        setSysDate("18-Jun-2011");
 
         addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
@@ -125,7 +124,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        SysDateManager.setSysDate("18-Jul-2011");
+        setSysDate("18-Jul-2011");
 
         runBilling(true);
 
@@ -133,7 +132,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        SysDateManager.setSysDate("05-Aug-2011");
+        setSysDate("05-Aug-2011");
 
         completeLease();
 

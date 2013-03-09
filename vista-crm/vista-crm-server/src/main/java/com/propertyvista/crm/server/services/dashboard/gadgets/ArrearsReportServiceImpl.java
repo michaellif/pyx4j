@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,7 +39,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
@@ -187,7 +187,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             buildings = buildingsFilter;
         }
 
-        final LogicalDate now = new LogicalDate(SysDateManager.getSysDate());
+        final LogicalDate now = new LogicalDate(SystemDateManager.getDate());
 
         final GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
@@ -238,7 +238,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        LogicalDate today = new LogicalDate(SysDateManager.getSysDate());
+        LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         if (!asOf.after(today)) { // if we asked for the future value of total arrears return 0            
 

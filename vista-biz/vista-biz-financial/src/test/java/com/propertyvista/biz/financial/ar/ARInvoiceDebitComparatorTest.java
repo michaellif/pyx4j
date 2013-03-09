@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
@@ -45,7 +44,7 @@ public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
     }
 
     public void testBucketAgeComparator() {
-        SysDateManager.setSysDate("01-Apr-2011");
+        setSysDate("01-Apr-2011");
 
         //Same day
         compareBucketAge("01-Apr-2011", "01-Apr-2011", 0);

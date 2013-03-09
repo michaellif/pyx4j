@@ -28,7 +28,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -52,7 +51,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("22-Feb-2011");
+        setSysDate("22-Feb-2011");
         Bill bill = approveApplication(true);
 
         InvoiceDebit invoiceDebit = null;
@@ -79,7 +78,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         outstandingDebit(new BigDecimal("930.30"), 2);
         // @formatter:on
 
-        SysDateManager.setSysDate("25-Feb-2011");
+        setSysDate("25-Feb-2011");
         PaymentRecord payment = receiveAndPostPayment("25-Feb-2011", "300.00");
 
         // @formatter:off
@@ -94,15 +93,15 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("01-Mar-2011");
+        setSysDate("01-Mar-2011");
         activateLease();
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
-        SysDateManager.setSysDate("25-Mar-2011");
+        setSysDate("25-Mar-2011");
 
         PaymentRecord payment2 = receiveAndPostPayment("25-Mar-2011", "301.00");
         Persistence.service().retrieve(invoiceDebitParking);
@@ -112,7 +111,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
-        SysDateManager.setSysDate("31-Mar-2011");
+        setSysDate("31-Mar-2011");
 
         removeHardLink(link);
         Persistence.service().retrieve(invoiceDebitLease);
@@ -122,33 +121,33 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        setSysDate("18-Apr-2011");
 
         runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
-        SysDateManager.setSysDate("25-Apr-2011");
+        setSysDate("25-Apr-2011");
         receiveAndPostPayment("25-Apr-2011", "302.00");
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //==================== RUN 4 ======================//
 
-        SysDateManager.setSysDate("18-May-2011");
+        setSysDate("18-May-2011");
 
         runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
-        SysDateManager.setSysDate("25-May-2011");
+        setSysDate("25-May-2011");
         receiveAndPostPayment("25-May-2011", "100.00");
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //==================== RUN 5 ======================//
 
-        SysDateManager.setSysDate("27-May-2011");
+        setSysDate("27-May-2011");
 
         rejectPayment(payment, false);
 

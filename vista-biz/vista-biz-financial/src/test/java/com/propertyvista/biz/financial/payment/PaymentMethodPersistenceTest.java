@@ -23,7 +23,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -37,7 +36,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
-        SysDateManager.setSysDate("01-Feb-2012");
+        setSysDate("01-Feb-2012");
         createLease("01-Feb-2012", "31-Dec-2012");
     }
 

@@ -18,9 +18,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
@@ -251,7 +251,7 @@ public class BillDateUtils {
         if (bill.billType().getValue() == Bill.BillType.Final) {
             //TODO add policy for final bill duedate - for now 7 days after bill run
             Calendar calendar = new GregorianCalendar();
-            calendar.setTime(SysDateManager.getSysDate());
+            calendar.setTime(SystemDateManager.getDate());
             calendar.add(Calendar.DATE, 7);
             return new LogicalDate(calendar.getTime());
         } else {

@@ -37,7 +37,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -194,7 +193,7 @@ public class ARArrearsManager {
 
         Map<DebitType, AgingBuckets> agingBucketsMap = new HashMap<DebitType, AgingBuckets>();
 
-        LogicalDate currentDate = new LogicalDate(SysDateManager.getSysDate());
+        LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);

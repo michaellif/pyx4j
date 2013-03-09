@@ -43,7 +43,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
     public void testScenario() throws Exception {
 
-        setDate("17-Feb-2011");
+        setSysDate("17-Feb-2011");
 
         createLease("01-Mar-2011", "31-Jul-2011");
         BillableItemAdjustment svcAdj_1 = addServiceAdjustment("-30.30", Type.monetary);
@@ -81,7 +81,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         changeBillableItemAdjustment(parkAdj_1.uid().getValue(), "01-Mar-2011", "31-Mar-2011");
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
 
         bill = runBilling(true);
 
@@ -101,7 +101,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
         // Service = $883.00 after $30.30 + $17.00 adjustment
 
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
 
         bill = runBilling(true);
 
@@ -123,7 +123,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         changeBillableItemAdjustment(svcAdj_3.uid().getValue(), "01-Jun-2011", "30-Jun-2011");
 
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
 
         bill = runBilling(true);
 
@@ -143,7 +143,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         //==================== RUN 5 ======================//
         // Service = $900.00 after $30.30 adjustment
 
-        advanceDate("18-Jun-2011");
+        advanceSysDate("18-Jun-2011");
 
         bill = runBilling(true);
 
@@ -162,7 +162,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        advanceDate("05-Aug-2011");
+        advanceSysDate("05-Aug-2011");
 
         completeLease();
 

@@ -28,7 +28,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
@@ -55,25 +54,25 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("22-Feb-2011");
+        setSysDate("22-Feb-2011");
         approveApplication(true);
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("01-Mar-2011");
+        setSysDate("01-Mar-2011");
         activateLease();
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         runBilling(true);
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        setSysDate("18-Apr-2011");
         runBilling(true);
 
         //==================== RUN 4 ======================//
 
-        SysDateManager.setSysDate("18-May-2011");
+        setSysDate("18-May-2011");
         runBilling(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));

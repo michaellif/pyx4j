@@ -16,12 +16,12 @@ package com.propertyvista.portal.server.ptapp.services.steps.welcomewizardmockup
 import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -48,7 +48,7 @@ public class WelcomeWizardDemoData {
     }
 
     public static LogicalDate leaseStart() {
-        return new LogicalDate(SysDateManager.getSysDate());
+        return new LogicalDate(SystemDateManager.getDate());
     }
 
     public static Random rnd() {

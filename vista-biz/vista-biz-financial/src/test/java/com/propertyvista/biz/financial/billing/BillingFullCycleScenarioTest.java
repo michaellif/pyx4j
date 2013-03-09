@@ -26,7 +26,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.test.preloader.PreloadConfig;
@@ -48,7 +47,7 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("13-Jan-2012");
+        setSysDate("13-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -75,10 +74,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         activateLease();
 
-        SysDateManager.setSysDate("30-Jan-2012");
+        setSysDate("30-Jan-2012");
         receiveAndPostPayment("30-Jan-2012", "1535.29");
 
-        SysDateManager.setSysDate("01-Feb-2012");
+        setSysDate("01-Feb-2012");
 
         bill = runBilling(true);
 
@@ -101,10 +100,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 LATE PAYMENT ======================//
 
-        SysDateManager.setSysDate("16-Feb-2012");
+        setSysDate("16-Feb-2012");
         receiveAndPostPayment("16-Feb-2012", "1041.94");
 
-        SysDateManager.setSysDate("01-Mar-2012");
+        setSysDate("01-Mar-2012");
 
         bill = runBilling(true);
 
@@ -129,10 +128,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         // @formatter:on
 
         //==================== RUN 4 ======================//
-        SysDateManager.setSysDate("15-Mar-2012");
+        setSysDate("15-Mar-2012");
         receiveAndPostPayment("15-Mar-2012", "1141.94");
 
-        SysDateManager.setSysDate("01-Apr-2012");
+        setSysDate("01-Apr-2012");
 
         bill = runBilling(true);
 
@@ -158,10 +157,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 OVER PAYMENT======================//
 
-        SysDateManager.setSysDate("14-Apr-2012");
+        setSysDate("14-Apr-2012");
         receiveAndPostPayment("14-Apr-2012", "1341.94");
 
-        SysDateManager.setSysDate("01-May-2012");
+        setSysDate("01-May-2012");
 
         bill = runBilling(true);
 
@@ -187,10 +186,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 OVERPAYMENT!======================//
 
-        SysDateManager.setSysDate("13-May-2012");
+        setSysDate("13-May-2012");
         receiveAndPostPayment("13-May-2012", "2041.94");
 
-        SysDateManager.setSysDate("01-Jun-2012");
+        setSysDate("01-Jun-2012");
 
         bill = runBilling(true);
 
@@ -214,10 +213,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 7 NO PAYMENT ======================//
 
-        SysDateManager.setSysDate("29-Jun-2012");
+        setSysDate("29-Jun-2012");
         receiveAndPostPayment("29-Jun-2012", "0.01");
 
-        SysDateManager.setSysDate("01-Jul-2012");
+        setSysDate("01-Jul-2012");
 
         bill = runBilling(true);
 
@@ -240,10 +239,10 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 8 OVER PAYMENT ======================//
 
-        SysDateManager.setSysDate("29-Jul-2012");
+        setSysDate("29-Jul-2012");
         receiveAndPostPayment("29-Jul-2012", "2111.00");
 
-        SysDateManager.setSysDate("01-Aug-2012");
+        setSysDate("01-Aug-2012");
 
         bill = runBilling(true);
 
@@ -265,9 +264,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 9 NO PAYMENT ======================//
 
-        SysDateManager.setSysDate("29-Aug-2012");
+        setSysDate("29-Aug-2012");
 
-        SysDateManager.setSysDate("01-Sep-2012");
+        setSysDate("01-Sep-2012");
 
         bill = runBilling(true);
 
@@ -291,9 +290,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 10  ======================//
 
-        SysDateManager.setSysDate("15-Sep-2012");
+        setSysDate("15-Sep-2012");
         receiveAndPostPayment("15-Sep-2012", "806.75");
-        SysDateManager.setSysDate("01-Oct-2012");
+        setSysDate("01-Oct-2012");
 
         bill = runBilling(true);
 
@@ -317,9 +316,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 11  ======================//
 
-        SysDateManager.setSysDate("15-Oct-2012");
+        setSysDate("15-Oct-2012");
         receiveAndPostPayment("15-Oct-2012", "1141.94");
-        SysDateManager.setSysDate("01-Nov-2012");
+        setSysDate("01-Nov-2012");
 
         bill = runBilling(true);
 
@@ -343,9 +342,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 12  ======================//
 
-        SysDateManager.setSysDate("11-Nov-2012");
+        setSysDate("11-Nov-2012");
         receiveAndPostPayment("11-Nov-2012", "1041.94");
-        SysDateManager.setSysDate("01-Dec-2012");
+        setSysDate("01-Dec-2012");
 
         bill = runBilling(true);
 
@@ -369,9 +368,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 13  ======================//
 
-        SysDateManager.setSysDate("14-Dec-2012");
+        setSysDate("14-Dec-2012");
         receiveAndPostPayment("14-Dec-2012", "1041.94");
-        SysDateManager.setSysDate("01-Jan-2013");
+        setSysDate("01-Jan-2013");
 
         bill = runBilling(true);
 
@@ -395,9 +394,9 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 14  ======================//
 
-        SysDateManager.setSysDate("07-Jan-2013");
+        setSysDate("07-Jan-2013");
         receiveAndPostPayment("07-Jan-2013", "1041.94");
-        SysDateManager.setSysDate("01-Feb-2013");
+        setSysDate("01-Feb-2013");
 
         bill = runBilling(true);
 

@@ -26,7 +26,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -60,7 +59,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -103,7 +102,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("02-Jan-2013");
+        setSysDate("02-Jan-2013");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -143,7 +142,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -182,7 +181,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -221,7 +220,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -260,7 +259,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -299,7 +298,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -338,7 +337,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -377,7 +376,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -416,7 +415,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -455,7 +454,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -494,7 +493,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -533,7 +532,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -572,7 +571,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -611,7 +610,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -650,7 +649,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -689,7 +688,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -728,7 +727,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -767,7 +766,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -806,7 +805,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -845,7 +844,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -884,7 +883,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -924,7 +923,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -963,7 +962,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1002,7 +1001,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1041,7 +1040,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1080,7 +1079,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1119,7 +1118,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1158,7 +1157,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1197,7 +1196,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -1236,7 +1235,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("03-Jan-2012");
+        setSysDate("03-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off

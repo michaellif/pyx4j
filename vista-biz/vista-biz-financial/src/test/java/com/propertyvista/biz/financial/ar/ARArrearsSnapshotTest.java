@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.ar;
 
-import static com.propertyvista.biz.financial.SysDateManager.setSysDate;
-
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;

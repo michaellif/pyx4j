@@ -24,7 +24,6 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.preloader.PreloadConfig;
@@ -47,7 +46,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -76,7 +75,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("16-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -103,7 +102,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("17-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -129,7 +128,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("18-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -155,7 +154,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("19-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -183,7 +182,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("20-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -211,7 +210,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("21-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -239,7 +238,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("22-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -266,7 +265,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("23-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -293,7 +292,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("24-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -320,7 +319,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("25-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -347,7 +346,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("26-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -374,7 +373,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("27-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -401,7 +400,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("28-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -428,7 +427,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("29-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -455,7 +454,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("30-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -482,7 +481,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("31-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -509,7 +508,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("01-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -536,7 +535,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("02-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -563,7 +562,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("02-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -590,7 +589,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("03-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -617,7 +616,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("04-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -644,7 +643,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("05-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -671,7 +670,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("06-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -698,7 +697,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("07-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -725,7 +724,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("08-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -752,7 +751,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("09-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -779,7 +778,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("10-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -806,7 +805,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("11-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -833,7 +832,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("12-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -860,7 +859,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("13-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -887,7 +886,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         createLease("14-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", Type.monetary);
 
-        SysDateManager.setSysDate("01-Jan-2012");
+        setSysDate("01-Jan-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off

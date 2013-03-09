@@ -42,7 +42,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
     public void testScenario() throws Exception {
 
-        setDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
@@ -120,7 +120,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
 
         receiveAndPostPayment("18-Mar-2011", "1603.05");
 
@@ -149,7 +149,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
 
         addBooking("25-Apr-2011");
         addBooking("5-May-2011");
@@ -183,7 +183,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("20.00", false);
         addGoodWillCredit("30.00");
 
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
 
         addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
@@ -210,7 +210,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        advanceDate("18-Jun-2011");
+        advanceSysDate("18-Jun-2011");
 
         addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
@@ -237,7 +237,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        advanceDate("18-Jul-2011");
+        advanceSysDate("18-Jul-2011");
 
         bill = runBilling(true);
 
@@ -260,7 +260,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        advanceDate("05-Aug-2011");
+        advanceSysDate("05-Aug-2011");
 
 //-->        completeLease();
 

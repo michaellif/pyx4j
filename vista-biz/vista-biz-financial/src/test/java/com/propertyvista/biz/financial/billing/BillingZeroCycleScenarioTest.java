@@ -48,7 +48,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("17-Mar-2011"); // create existing lease
+        setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
         createLease("03-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
@@ -76,10 +76,10 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== CYCLE 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
         receiveAndPostPayment("18-Mar-2011", "300.00");
 
-        advanceDate("22-Mar-2011");
+        advanceSysDate("22-Mar-2011");
 
         confirmBill(true);
 
@@ -101,10 +101,10 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== CYCLE 3 ======================//
 
-        advanceDate("28-Mar-2011");
+        advanceSysDate("28-Mar-2011");
         receiveAndPostPayment("28-Mar-2011", "1058.00");
 
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -134,7 +134,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("17-Mar-2011"); // create existing lease
+        setSysDate("17-Mar-2011"); // create existing lease
 
         // try existing lease from just earlier this month
         createLease("03-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
@@ -165,7 +165,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
         confirmBill(true);
 
         // @formatter:off

@@ -17,7 +17,6 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
@@ -33,7 +32,7 @@ public class BillingBulkRunTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        SysDateManager.setSysDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);

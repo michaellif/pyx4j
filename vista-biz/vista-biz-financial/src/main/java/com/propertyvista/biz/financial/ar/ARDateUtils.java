@@ -17,9 +17,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 
 public class ARDateUtils {
@@ -27,7 +27,7 @@ public class ARDateUtils {
     private static final I18n i18n = I18n.get(ARDateUtils.class);
 
     public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount) {
-        return calculateDueDate(billingAccount, new LogicalDate(SysDateManager.getSysDate()));
+        return calculateDueDate(billingAccount, new LogicalDate(SystemDateManager.getDate()));
     }
 
     public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount, LogicalDate postDate) {

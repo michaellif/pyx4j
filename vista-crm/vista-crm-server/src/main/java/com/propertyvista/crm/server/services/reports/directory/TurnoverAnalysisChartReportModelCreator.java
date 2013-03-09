@@ -20,12 +20,12 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.LocalService;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
@@ -58,7 +58,7 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
 
         final UnitTurnoverAnalysisGadgetMetadata turnoverAnalysisMetadata = (UnitTurnoverAnalysisGadgetMetadata) gadgetMetadata;
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
-                SysDateManager.getSysDate());
+                SystemDateManager.getDate());
 
         LocalService.create(UnitTurnoverAnalysisGadgetService.class).turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 

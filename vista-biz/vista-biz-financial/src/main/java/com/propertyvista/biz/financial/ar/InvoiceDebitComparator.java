@@ -18,8 +18,8 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 
@@ -49,7 +49,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
     }
 
     static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {
-        LogicalDate currentDate = new LogicalDate(SysDateManager.getSysDate());
+        LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);
         calendar.add(Calendar.DATE, -90);

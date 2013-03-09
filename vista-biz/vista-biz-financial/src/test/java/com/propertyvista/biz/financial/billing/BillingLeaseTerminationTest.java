@@ -41,7 +41,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
     public void testTerminateGracefully() throws Exception {
 
-        setDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
@@ -73,7 +73,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
 
         receiveAndPostPayment("18-Mar-2011", "1418.33");
 
@@ -100,7 +100,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
 
         // terminate lease
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
         terminateLease(CompletionType.Termination, "10-May-2011");
 
         bill = runBilling(true);
@@ -122,7 +122,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:on
 
         //==================== RUN 4 ======================//
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
 
         bill = runBilling(true);
 
@@ -149,7 +149,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
     public void testTerminateNow() throws Exception {
 
-        setDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
@@ -181,7 +181,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
 
         receiveAndPostPayment("18-Mar-2011", "1418.33");
 
@@ -208,7 +208,7 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
 
         // terminate lease
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
         terminateLease(CompletionType.Termination);
 
         bill = runBilling(true);

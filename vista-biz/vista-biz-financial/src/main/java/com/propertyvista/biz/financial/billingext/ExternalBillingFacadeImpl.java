@@ -19,12 +19,12 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -57,7 +57,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         charge.period().setValue(Period.next);
         charge.claimed().setValue(false);
         charge.dueDate().setValue(ARDateUtils.calculateDueDate(billingAccount));
-        charge.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        charge.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().persist(charge);
 
         return true;
@@ -76,7 +76,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         payment.amount().setValue(paymentDTO.amount().getValue().negate());
         payment.description().set(paymentDTO.description());
         payment.claimed().setValue(false);
-        payment.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        payment.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().persist(payment);
 
         return true;

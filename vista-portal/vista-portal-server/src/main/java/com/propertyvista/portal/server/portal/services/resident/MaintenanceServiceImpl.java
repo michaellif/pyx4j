@@ -19,13 +19,13 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -103,7 +103,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
         if (rs.size() > 0) {
             MaintenanceRequest req = rs.get(0);
             req.status().setValue(MaintenanceRequestStatus.Cancelled);
-            req.updated().setValue(new LogicalDate(SysDateManager.getSysDate()));
+            req.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
             Persistence.service().merge(req);
             Persistence.service().commit();
             callback.onSuccess(null);

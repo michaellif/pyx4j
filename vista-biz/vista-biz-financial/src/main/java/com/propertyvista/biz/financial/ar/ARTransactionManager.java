@@ -22,12 +22,12 @@ import org.apache.commons.lang.Validate;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -59,7 +59,7 @@ class ARTransactionManager {
             return;
         }
 
-        invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        invoiceLineItem.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         manageCreditDebitLinks(invoiceLineItem);
 
@@ -107,7 +107,7 @@ class ARTransactionManager {
         List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
         th.lineItems().addAll(lineItems);
         th.fromDate().setValue(fromDate);
-        th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         th.currentBalanceAmount().setValue(getCurrentBallance(billingAccount));
 
         Collection<AgingBuckets> agingBucketsCollection = ARArrearsManager.getAgingBuckets(billingAccount);

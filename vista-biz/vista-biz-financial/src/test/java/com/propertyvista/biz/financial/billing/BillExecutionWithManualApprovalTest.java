@@ -42,13 +42,13 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("15-Feb-2011");
+        setSysDate("15-Feb-2011");
 
         createLease("01-Mar-2011", "31-May-2011");
 
         //==================== CYCLE 1 ======================//
 
-        advanceDate("18-Feb-2011");
+        advanceSysDate("18-Feb-2011");
         approveApplication(true);
 
         // @formatter:off
@@ -63,7 +63,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
         confirmBill(true);
 
         // @formatter:off
@@ -78,7 +78,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 3 ======================//
 
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
         confirmBill(true);
 
         // @formatter:off
@@ -93,7 +93,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 4 ======================//
 
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
 
         //Billing does't run in the last cycle of lease term
         // @formatter:off
@@ -108,7 +108,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== FINAL ======================//
 
-        advanceDate("05-Jun-2011");
+        advanceSysDate("05-Jun-2011");
         runBilling(true);
 
         // @formatter:off
@@ -125,11 +125,11 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("15-May-2011");
+        setSysDate("15-May-2011");
 
         createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
-        advanceDate("22-May-2011");
+        advanceSysDate("22-May-2011");
         approveExistingLease(true);
 
         //==================== ZERO CYCLE ======================//
@@ -160,7 +160,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 2 ======================//
 
-        advanceDate("18-Jun-2011");
+        advanceSysDate("18-Jun-2011");
         confirmBill(true);
 
         // @formatter:off
@@ -175,7 +175,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 3 ======================//
 
-        advanceDate("18-Jul-2011");
+        advanceSysDate("18-Jul-2011");
         confirmBill(true);
 
         // @formatter:off
@@ -190,7 +190,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== FINAL ======================//
 
-        advanceDate("05-Sep-2011");
+        advanceSysDate("05-Sep-2011");
 
         // @formatter:off
         new BillTester(runBilling()).
@@ -206,11 +206,11 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("02-May-2011");
+        setSysDate("02-May-2011");
 
         createLease("01-Mar-2009", "30-Jun-2011", null, new BigDecimal("300.00"));
 
-        advanceDate("04-May-2011");
+        advanceSysDate("04-May-2011");
         approveExistingLease(true);
 
         //==================== ZERO CYCLE ======================//
@@ -227,7 +227,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== CYCLE 1 ======================//
 
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
         confirmBill(true);
 
         // @formatter:off
@@ -242,7 +242,7 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
 
         //==================== FINAL ======================//
 
-        advanceDate("05-Jul-2011");
+        advanceSysDate("05-Jul-2011");
 
         // @formatter:off
         new BillTester(runBilling()).

@@ -26,7 +26,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -46,7 +45,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
         //==================== First Bill ======================//
 
-        SysDateManager.setSysDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -67,10 +66,10 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         //==================== Bill 2 (full payment in time scenario) ======================/
 
         // Add Payment for April (paid in full)
-        SysDateManager.setSysDate("31-Mar-2011");
+        setSysDate("31-Mar-2011");
         receiveAndPostPayment("31-Mar-2011", "1972.24");
 
-        SysDateManager.setSysDate("17-Apr-2011");
+        setSysDate("17-Apr-2011");
         activateLease();
 
         bill = runBilling(true);
@@ -91,15 +90,15 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         //==================== Bill 3 (reject last payment scenario) ======================//
 
         // Add Payment for May
-        SysDateManager.setSysDate("01-May-2011");
+        setSysDate("01-May-2011");
         receiveAndPostPayment("30-Apr-2011", "1000.00", PaymentType.Echeck);
         PaymentRecord payment = receiveAndPostPayment("30-Apr-2011", "41.94", PaymentType.Check);
 
         // reject payments
-        SysDateManager.setSysDate("05-May-2011");
+        setSysDate("05-May-2011");
         rejectPayment(payment, true);
 
-        SysDateManager.setSysDate("17-May-2011");
+        setSysDate("17-May-2011");
 
         bill = runBilling(true);
 
@@ -118,15 +117,15 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         //==================== Bill 4 (reject intermediate payment scenario) ======================//
 
         // Add Payment for June
-        SysDateManager.setSysDate("01-Jun-2011");
+        setSysDate("01-Jun-2011");
         payment = receiveAndPostPayment("30-May-2011", "950.00", PaymentType.Echeck);
         receiveAndPostPayment("31-May-2011", "163.88", PaymentType.Check);
 
         // reject payments
-        SysDateManager.setSysDate("05-Jun-2011");
+        setSysDate("05-Jun-2011");
         rejectPayment(payment, true);
 
-        SysDateManager.setSysDate("17-Jun-2011");
+        setSysDate("17-Jun-2011");
 
         bill = runBilling(true);
 
@@ -145,17 +144,17 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         //==================== Bill 5 (reject two payments scenario) ======================//
 
         // Add Payment for July
-        SysDateManager.setSysDate("01-Jul-2011");
+        setSysDate("01-Jul-2011");
         payment = receiveAndPostPayment("29-Jun-2011", "900.00", PaymentType.Check);
         PaymentRecord payment2 = receiveAndPostPayment("30-Jun-2011", "1191.94", PaymentType.Echeck);
 
         // reject payments
-        SysDateManager.setSysDate("05-Jul-2011");
+        setSysDate("05-Jul-2011");
         rejectPayment(payment, true);
-        SysDateManager.setSysDate("06-Jul-2011");
+        setSysDate("06-Jul-2011");
         rejectPayment(payment2, true);
 
-        SysDateManager.setSysDate("17-Jul-2011");
+        setSysDate("17-Jul-2011");
 
         bill = runBilling(true);
 

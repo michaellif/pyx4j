@@ -29,7 +29,7 @@ public class ExternalBillingTest extends ExternalTestBase {
     }
 
     public void testScenatio() {
-        setDate("15-Sep-2011");
+        setSysDate("15-Sep-2011");
         createLease("01-Oct-2011", "31-Aug-2012");
 
 //        approveApplication(false);
@@ -41,7 +41,7 @@ public class ExternalBillingTest extends ExternalTestBase {
 
         postExternalPayment("1000.00", "payment", "E-Check");
 
-        setDate("17-Sep-2011");
+        setSysDate("17-Sep-2011");
         Bill bill = runExternalBilling();
 
         // @formatter:off

@@ -45,11 +45,11 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         setLeaseBatchProcess();
         setBillingBatchProcess();
 
-        setDate("15-May-2011");
+        setSysDate("15-May-2011");
 
         createLease("01-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
-        advanceDate("22-May-2011");
+        advanceSysDate("22-May-2011");
         approveExistingLease(true);
 
         //==================== ZERO CYCLE ======================//
@@ -92,12 +92,12 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         totalDueAmount("1391.94");
         // @formatter:on
 
-        advanceDate("25-May-2011");
+        advanceSysDate("25-May-2011");
         receiveAndPostPayment("25-May-2011", "1391.94");
 
         //==================== CYCLE 2 ======================//
 
-        advanceDate("18-Jun-2011");
+        advanceSysDate("18-Jun-2011");
         confirmBill(true);
 
         // @formatter:off

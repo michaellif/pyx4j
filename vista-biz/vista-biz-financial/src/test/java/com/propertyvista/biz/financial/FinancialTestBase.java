@@ -169,7 +169,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().endTransaction();
         Persistence.service().startBackgroundProcessTransaction();
         Persistence.service().enableSavepointAsNestedTransactions();
-        SysDateManager.setSysDate("01-Jan-2000");
+        setSysDate("01-Jan-2000");
     }
 
     @Override
@@ -197,7 +197,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void preloadData(PreloadConfig config) {
         this.config = config;
 
-        setDate("01-Jan-2010");
+        setSysDate("01-Jan-2010");
 
         pmcDataModel = new PmcDataModel(config);
         pmcDataModel.generate();
@@ -331,7 +331,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(carryforwardBalance);
 
-        lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        lease.creationDate().setValue(new LogicalDate(getSysDate()));
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
         Persistence.service().commit();
@@ -392,7 +392,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void terminateLease(CompletionType reason, String asOfDate) {
         LogicalDate asOf;
         if (asOfDate == null) {
-            asOf = new LogicalDate(SysDateManager.getSysDate());
+            asOf = new LogicalDate(getSysDate());
         } else {
             asOf = new LogicalDate(DateUtils.detectDateformat(asOfDate));
         }
@@ -645,7 +645,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.status().setValue(Status.submited);
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
-        adjustment.targetDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        adjustment.targetDate().setValue(new LogicalDate(getSysDate()));
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
         adjustment.billingAccount().set(lease.billingAccount());
@@ -800,13 +800,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
                 try {
                     Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
-                    Date runDate = SysDateManager.getSysDate();
+                    Date runDate = getSysDate();
                     PmcProcessContext sharedContext = new PmcProcessContext(runDate);
                     if (pmcProcess.start(sharedContext)) {
                         PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                         pmcProcess.executePmcJob(pmcContext);
-                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", SysDateManager.getSysDate(),
-                                pmcProcess.getClass().getSimpleName(), pmcContext.getExecutionMonitor());
+                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", getSysDate(), pmcProcess.getClass().getSimpleName(),
+                                pmcContext.getExecutionMonitor());
                         pmcProcess.complete(sharedContext);
                     }
                 } finally {
@@ -817,12 +817,20 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         });
     }
 
-    protected void setDate(String dateStr) {
-        SysDateManager.setSysDate(dateStr);
+    public static void setSysDate(Date date) {
+        SystemDateManager.setDate(date);
     }
 
-    protected void advanceDate(String dateStr) throws Exception {
-        Date curDate = SysDateManager.getSysDate();
+    public static void setSysDate(String dateStr) {
+        setSysDate(DateUtils.detectDateformat(dateStr));
+    }
+
+    public static Date getSysDate() {
+        return SystemDateManager.getDate();
+    }
+
+    protected void advanceSysDate(String dateStr) throws Exception {
+        Date curDate = getSysDate();
         Date setDate = DateUtils.detectDateformat(dateStr);
         if (setDate.before(curDate)) {
             throw new Error("Can't go back in time from " + curDate.toString() + " to " + setDate.toString());
@@ -840,12 +848,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 }
                 Task task = taskSchedule.get(entry);
                 if (task != null) {
-                    SysDateManager.setSysDate(cal.getTime());
+                    setSysDate(cal.getTime());
                     task.execute();
                 }
             }
         }
-        SysDateManager.setSysDate(setDate);
+        setSysDate(setDate);
     }
 
     protected void setBillingBatchProcess() {
@@ -866,4 +874,5 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
         schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
     }
+
 }

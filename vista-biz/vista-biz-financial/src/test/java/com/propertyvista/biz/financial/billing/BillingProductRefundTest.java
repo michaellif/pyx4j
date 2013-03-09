@@ -42,7 +42,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
     public void testScenario() throws Exception {
 
-        setDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
@@ -74,7 +74,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        advanceDate("18-Mar-2011");
+        advanceSysDate("18-Mar-2011");
 
         receiveAndPostPayment("18-Mar-2011", "1338.82");
 
@@ -99,12 +99,12 @@ public class BillingProductRefundTest extends FinancialTestBase {
         receiveAndPostPayment("19-Mar-2011", "1131.54");
 
         // Current period adjustment
-        advanceDate("20-Mar-2011");
+        advanceSysDate("20-Mar-2011");
         addFeatureAdjustment(parking.uid().getValue(), "-10", BillableItemAdjustment.Type.monetary, "20-Mar-2011", "10-Apr-2011");
 
         //==================== RUN 3 ======================//
 
-        advanceDate("18-Apr-2011");
+        advanceSysDate("18-Apr-2011");
 
         finalizeLeaseAdendum();
 
@@ -129,12 +129,12 @@ public class BillingProductRefundTest extends FinancialTestBase {
         receiveAndPostPayment("19-Apr-2011", "1124.56");
 
         // cancel feature for previous period
-        advanceDate("20-Apr-2011");
+        advanceSysDate("20-Apr-2011");
         cancelBillableItem(parking.uid().getValue(), "21-Apr-2011");
 
         //==================== RUN 4 ======================//
 
-        advanceDate("18-May-2011");
+        advanceSysDate("18-May-2011");
 
         bill = runBilling(true);
 
@@ -159,7 +159,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        advanceDate("18-Jun-2011");
+        advanceSysDate("18-Jun-2011");
 
         bill = runBilling(true);
 
@@ -183,7 +183,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        advanceDate("18-Jul-2011");
+        advanceSysDate("18-Jul-2011");
 
         bill = runBilling(true);
 
@@ -206,7 +206,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        advanceDate("05-Aug-2011");
+        advanceSysDate("05-Aug-2011");
 
         bill = runBilling(true);
 

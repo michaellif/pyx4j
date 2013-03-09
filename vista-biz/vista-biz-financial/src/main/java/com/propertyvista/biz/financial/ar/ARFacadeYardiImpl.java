@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -38,7 +39,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -109,7 +109,7 @@ public class ARFacadeYardiImpl implements ARFacade {
         receipt.billingAccount().set(paymentRecord.billingAccount());
         receipt.description().setValue(i18n.tr("Payment Received - Thank You"));
         receipt.claimed().setValue(false);
-        receipt.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        receipt.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         return receipt;
     }
@@ -123,7 +123,7 @@ public class ARFacadeYardiImpl implements ARFacade {
         reversal.description().setValue(i18n.tr("Payment from ''{0}'' was rejected", paymentRecord.createdDate().getValue().toString()));
         reversal.taxTotal().setValue(BigDecimal.ZERO);
         reversal.claimed().setValue(false);
-        reversal.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        reversal.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         reversal.applyNSF().setValue(applyNSF);
 
         Persistence.service().persist(reversal);
@@ -159,7 +159,7 @@ public class ARFacadeYardiImpl implements ARFacade {
         th.lineItems().addAll(charges);
         th.lineItems().addAll(payments);
         th.currentBalanceAmount().setValue(calculateTotal(charges, payments));
-        th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         return th;
     }
 

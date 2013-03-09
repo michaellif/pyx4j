@@ -24,7 +24,6 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
@@ -40,7 +39,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
     public void testSequentialBillingCycle() {
 
-        setDate("17-Mar-2011");
+        setSysDate("17-Mar-2011");
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
@@ -58,7 +57,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
 
         Bill bill = approveApplication(true);
 
@@ -77,7 +76,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         activateLease();
 
         bill = runBilling(true);
@@ -97,7 +96,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        setSysDate("18-Apr-2011");
         addPet("10-Apr-2011", null);
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
         finalizeLeaseAdendum();
@@ -119,7 +118,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        SysDateManager.setSysDate("18-May-2011");
+        setSysDate("18-May-2011");
         //TODO calculate arrears
         changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
         finalizeLeaseAdendum();
@@ -141,7 +140,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        SysDateManager.setSysDate("18-Jun-2011");
+        setSysDate("18-Jun-2011");
 
         bill = runBilling(true);
 
@@ -160,7 +159,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        SysDateManager.setSysDate("18-Jul-2011");
+        setSysDate("18-Jul-2011");
 
         bill = runBilling(true);
 
@@ -180,7 +179,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        SysDateManager.setSysDate("05-Aug-2011");
+        setSysDate("05-Aug-2011");
 
         completeLease();
 

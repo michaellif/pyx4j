@@ -26,11 +26,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingManager;
@@ -92,7 +92,7 @@ class ExternalBillProducer {
             bill.billingCycle().set(billingCycle);
             BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);
 
-            bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+            bill.executionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
             bill.billType().setValue(BillType.External);
 

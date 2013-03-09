@@ -26,13 +26,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -145,7 +145,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
 
         // some default values:
-        dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));

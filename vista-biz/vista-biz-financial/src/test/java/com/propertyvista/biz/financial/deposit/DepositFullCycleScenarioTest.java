@@ -34,7 +34,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
     public void testScenario() throws Exception {
 
-        setDate("17-Feb-2012");
+        setSysDate("17-Feb-2012");
 
         createLease("01-Mar-2012", "31-May-2012");
         addParking();
@@ -46,7 +46,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         setDepositBatchProcess();
         //==================== RUN 1 - SERVICE AND FEATURE DEPOSITS TAKEN ======================//
 
-        advanceDate("18-Feb-2012");
+        advanceSysDate("18-Feb-2012");
         Bill bill = approveApplication(true);
 
         // @formatter:off
@@ -72,10 +72,10 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
 //-->        activateLease();
 
-        advanceDate("01-Mar-2012");
+        advanceSysDate("01-Mar-2012");
         receiveAndPostPayment("01-Mar-2012", "2491.44");
 
-        advanceDate("18-Mar-2012");
+        advanceSysDate("18-Mar-2012");
 
         bill = runBilling(true);
 
@@ -97,10 +97,10 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 - PET DEPOSIT REFUND WITH ONE INTEREST ADJ ======================//
 
-        advanceDate("01-Apr-2012");
+        advanceSysDate("01-Apr-2012");
         receiveAndPostPayment("01-Apr-2012", "1288.34");
 
-        advanceDate("18-Apr-2012");
+        advanceSysDate("18-Apr-2012");
 
         bill = runBilling(true);
 
@@ -121,10 +121,10 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN final - SVC AND FEATURE REFUNDS (see history dump) ======================//
 
-        advanceDate("01-May-2012");
+        advanceSysDate("01-May-2012");
         receiveAndPostPayment("01-May-2012", "127.74");
 
-        advanceDate("01-Jun-2012");
+        advanceSysDate("01-Jun-2012");
 
 //-->        completeLease();
 

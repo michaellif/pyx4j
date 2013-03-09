@@ -26,7 +26,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 
@@ -45,22 +44,22 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("17-Feb-2011");
+        setSysDate("17-Feb-2011");
         Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).totalDueAmount("1972.24");
         // @formatter:on
 
-        SysDateManager.setSysDate("28-Feb-2011");
+        setSysDate("28-Feb-2011");
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-        SysDateManager.setSysDate("01-Mar-2011");
+        setSysDate("01-Mar-2011");
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        setSysDate("18-Mar-2011");
         activateLease();
 
         bill = runBilling(true);
@@ -73,7 +72,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        setSysDate("18-Apr-2011");
 
         bill = runBilling(true);
 

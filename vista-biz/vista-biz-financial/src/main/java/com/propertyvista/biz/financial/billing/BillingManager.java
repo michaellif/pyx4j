@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -37,7 +38,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -122,14 +122,14 @@ public class BillingManager {
             boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0;
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
-            if (!isPreviousConfirmedBillTheLast && SysDateManager.getSysDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
+            if (!isPreviousConfirmedBillTheLast && SystemDateManager.getDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
                 log.warn(i18n.tr("Regular billing can't run before target execution date"));
                 return false;
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
-            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.leaseTo().getValue()) < 0)
-                    && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
+            if (isPreviousConfirmedBillTheLast && (SystemDateManager.getDate().compareTo(lease.leaseTo().getValue()) < 0)
+                    && (lease.expectedMoveOut().isNull() || (SystemDateManager.getDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
                 log.warn(i18n.tr("Final billing can't run before both lease end date and move-out date"));
                 return false;
             }
