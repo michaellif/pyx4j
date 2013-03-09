@@ -248,9 +248,11 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             private CComboBox<Integer> dueDayOffset;
 
-            private CComboBox<Integer> pmntDayOffset;
+            private CComboBox<Integer> billDayOffset;
 
-            private CComboBox<Integer> execDayOffset;
+            private CComboBox<Integer> padPmntDayOffset;
+
+            private CComboBox<Integer> padCalcDayOffset;
 
             public LeaseBillingTypeEditor() {
                 super(LeaseBillingTypePolicyItem.class);
@@ -263,11 +265,13 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CLabel<PaymentFrequency>()), 15).labelWidth(20).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDay(), startDay = new CComboBox<Integer>()), 15)
                         .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetPaymentDueDay(), dueDayOffset = new CComboBox<Integer>()), 15)
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentDueDayOffset(), dueDayOffset = new CComboBox<Integer>()), 15)
                         .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetPreauthorizedPaymentDay(), pmntDayOffset = new CComboBox<Integer>()), 15)
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billExecutionDayOffset(), billDayOffset = new CComboBox<Integer>()), 15)
                         .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offsetExecutionTargetDay(), execDayOffset = new CComboBox<Integer>()), 15)
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padCalculationDayOffset(), padCalcDayOffset = new CComboBox<Integer>()), 15)
+                        .labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padExecutionDayOffset(), padPmntDayOffset = new CComboBox<Integer>()), 15)
                         .labelWidth(20).build());
                 return content;
             }
@@ -279,8 +283,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     startDay.setOptions(makeList(1, cycles));
                     int maxOffset = cycles - 1;
                     dueDayOffset.setOptions(makeList(-maxOffset, maxOffset));
-                    pmntDayOffset.setOptions(makeList(-maxOffset, maxOffset));
-                    execDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                    billDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                    padCalcDayOffset.setOptions(makeList(-maxOffset, maxOffset));
+                    padPmntDayOffset.setOptions(makeList(0, maxOffset));
                 }
             }
 

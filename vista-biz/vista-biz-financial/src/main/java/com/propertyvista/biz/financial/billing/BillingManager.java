@@ -331,7 +331,7 @@ public class BillingManager {
                     Integer execOffset = null;
                     for (LeaseBillingTypePolicyItem item : leaseBillingPolicy.availableBillingTypes()) {
                         if (item.paymentFrequency().getValue().equals(billingType.paymentFrequency().getValue())) {
-                            execOffset = item.offsetExecutionTargetDay().getValue();
+                            execOffset = item.billExecutionDayOffset().getValue();
                             break;
                         }
                     }

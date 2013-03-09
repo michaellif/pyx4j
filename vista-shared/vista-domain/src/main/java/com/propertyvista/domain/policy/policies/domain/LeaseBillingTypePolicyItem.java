@@ -26,13 +26,16 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     @Caption(description = "First day of Billing Cycle for selected Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();
 
-    @Caption(description = "Billing Cycle Due day, relative to Start Day")
-    IPrimitive<Integer> offsetPaymentDueDay();
-
-    @Caption(description = "When to run Preauthorized Payments, relative to Start Day")
-    IPrimitive<Integer> offsetPreauthorizedPaymentDay();
-
     @Caption(description = "When to create Bill for the next cycle, relative to Start Day")
-    IPrimitive<Integer> offsetExecutionTargetDay();
+    IPrimitive<Integer> billExecutionDayOffset();
+
+    @Caption(description = "Bill payment Due day, relative to Start Day")
+    IPrimitive<Integer> paymentDueDayOffset();
+
+    @Caption(description = "When to calculate Preauthorized Payments, relative to Start Day")
+    IPrimitive<Integer> padCalculationDayOffset();
+
+    @Caption(description = "When to run Preauthorized Payments, relative to Calculation Day")
+    IPrimitive<Integer> padExecutionDayOffset();
 
 }
