@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -28,6 +30,8 @@ public interface PADPolicy extends Policy {
     public enum PADChargeType {
         FixedAmount, LastPeriodServiceCharge, OwedServiceCharge
     }
+
+    IPrimitive<BigDecimal> amount();
 
     IPrimitive<PADChargeType> chargeType();
 
