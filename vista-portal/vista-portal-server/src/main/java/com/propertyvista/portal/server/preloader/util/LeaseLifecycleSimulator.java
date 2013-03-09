@@ -281,7 +281,9 @@ public class LeaseLifecycleSimulator {
                 log.debug(lease.toString());
                 log.info("***");
             }
+
             // TODO change that to Employee Agent Decision
+            hasImmideateApproval = true; // till now..
             queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
         }
     }
@@ -456,8 +458,13 @@ public class LeaseLifecycleSimulator {
 
                     if (now().equals(billingRunDay)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
-                        billing.runBilling(lease);
-                        billing.confirmBill(billing.getLatestBill(lease));
+                        try {
+                            billing.runBilling(lease);
+                            billing.confirmBill(billing.getLatestBill(lease));
+                        } catch (Exception e) {
+                            // TODO re-think LeaseSimulation logic (make the same as billing unit test!!!????) 
+                            log.error("Error", e);
+                        }
 
                         if (debug) {
                             System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
