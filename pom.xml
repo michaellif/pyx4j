@@ -403,6 +403,10 @@
                         <groupId>xerces</groupId>
                         <artifactId>xercesImpl</artifactId>
                     </exclusion>
+                    <exclusion>
+                         <groupId>javax.servlet</groupId>
+                         <artifactId>servlet-api</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
