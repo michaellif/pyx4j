@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -448,7 +449,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                 } else if (value == null || value.equals("")) {
                     contentHtml = new HTML("&nbsp;");
                 } else {
-                    contentHtml = new HTML(value.toString());
+                    contentHtml = new HTML(SafeHtmlUtils.fromString(value.toString()));
                     if (!columnDescriptor.isWordWrap()) {
                         contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
                         contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
