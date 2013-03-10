@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
 import com.pyx4j.widgets.client.Label;
 
 public class NLabel<E> extends NComponent<E, Label, CLabel<E>, Label> implements INativeComponent<E> {
@@ -40,11 +42,11 @@ public class NLabel<E> extends NComponent<E, Label, CLabel<E>, Label> implements
 
     @Override
     public void setNativeValue(E value) {
-        String html = value == null ? "" : getCComponent().getFormat().format(value);
+        String text = value == null ? "" : getCComponent().getFormat().format(value);
         if (isViewable()) {
-            getViewer().setHTML(html);
+            getViewer().setHTML(SafeHtmlUtils.fromString(text));
         } else {
-            getEditor().setHTML(html);
+            getEditor().setHTML(SafeHtmlUtils.fromString(text));
         }
     }
 
