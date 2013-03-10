@@ -25,7 +25,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
 
 public class PaymentAcceptanceUtils {

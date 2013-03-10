@@ -34,7 +34,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;

@@ -20,7 +20,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
 import com.propertyvista.operations.server.services.OperationsAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;

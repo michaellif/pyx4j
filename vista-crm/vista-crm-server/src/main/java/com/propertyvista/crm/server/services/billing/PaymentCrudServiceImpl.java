@@ -43,7 +43,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;

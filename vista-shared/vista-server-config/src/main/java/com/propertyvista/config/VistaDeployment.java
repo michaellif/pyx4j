@@ -25,7 +25,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;

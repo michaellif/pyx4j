@@ -25,7 +25,7 @@ import com.pyx4j.entity.xml.XMLStringWriter;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.jobs.TaskRunner;
 

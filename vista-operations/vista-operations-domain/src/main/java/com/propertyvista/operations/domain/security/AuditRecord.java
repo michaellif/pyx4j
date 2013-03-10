@@ -28,7 +28,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AuditRecordEventType;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)

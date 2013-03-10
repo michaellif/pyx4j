@@ -33,7 +33,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;

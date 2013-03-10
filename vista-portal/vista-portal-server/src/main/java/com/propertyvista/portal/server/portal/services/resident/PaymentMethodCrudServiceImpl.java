@@ -31,7 +31,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.security.VistaApplication;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
