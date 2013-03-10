@@ -14,6 +14,7 @@
 package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -26,16 +27,24 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     @Caption(description = "First day of Billing Cycle for selected Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();
 
+    @NotNull
     @Caption(description = "When to create Bill for the next cycle, relative to Start Day")
     IPrimitive<Integer> billExecutionDayOffset();
 
+    @NotNull
     @Caption(description = "Bill payment Due day, relative to Start Day")
     IPrimitive<Integer> paymentDueDayOffset();
 
+    @NotNull
+    @Caption(description = "Final Bill payment Due day, relative to Lease End Day")
+    IPrimitive<Integer> finalDueDayOffset();
+
+    @NotNull
     @Caption(description = "When to calculate Preauthorized Payments, relative to Start Day")
     IPrimitive<Integer> padCalculationDayOffset();
 
-    @Caption(description = "When to run Preauthorized Payments, relative to Calculation Day")
+    @NotNull
+    @Caption(description = "When to run Preauthorized Payments, relative to Start Day")
     IPrimitive<Integer> padExecutionDayOffset();
 
 }

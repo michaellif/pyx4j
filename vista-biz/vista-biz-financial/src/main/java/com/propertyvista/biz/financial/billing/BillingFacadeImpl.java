@@ -93,7 +93,7 @@ public class BillingFacadeImpl implements BillingFacade {
                 break;
             }
         }
-        return BillDateUtils.calculateBillingCycleTargetExecutionDate(execOffset, startDate);
+        return BillDateUtils.calculateBillingCycleDateByOffset(execOffset, startDate);
     }
 
     @Override

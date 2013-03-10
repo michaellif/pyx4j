@@ -328,14 +328,22 @@ public class BillingManager {
                     // get execution day offset from policy
                     LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building,
                             LeaseBillingPolicy.class);
-                    Integer execOffset = null;
+                    LeaseBillingTypePolicyItem leaseBillingType = null;
                     for (LeaseBillingTypePolicyItem item : leaseBillingPolicy.availableBillingTypes()) {
                         if (item.paymentFrequency().getValue().equals(billingType.paymentFrequency().getValue())) {
-                            execOffset = item.billExecutionDayOffset().getValue();
+                            leaseBillingType = item;
                             break;
                         }
                     }
-                    billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(execOffset, billingCycleStartDate));
+                    if (leaseBillingType == null) {
+                        throw new BillingException("LeaseBillingTypePolicy not found for payment frequency: " + billingType.paymentFrequency().getValue());
+                    }
+                    billingCycle.executionTargetDate().setValue(
+                            BillDateUtils.calculateBillingCycleDateByOffset(leaseBillingType.billExecutionDayOffset().getValue(), billingCycleStartDate));
+                    billingCycle.padCalculationDate().setValue(
+                            BillDateUtils.calculateBillingCycleDateByOffset(leaseBillingType.padCalculationDayOffset().getValue(), billingCycleStartDate));
+                    billingCycle.padExecutionDate().setValue(
+                            BillDateUtils.calculateBillingCycleDateByOffset(leaseBillingType.padExecutionDayOffset().getValue(), billingCycleStartDate));
 
 // Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB
 //                    billingCycle.stats().notConfirmed().setValue(0L);

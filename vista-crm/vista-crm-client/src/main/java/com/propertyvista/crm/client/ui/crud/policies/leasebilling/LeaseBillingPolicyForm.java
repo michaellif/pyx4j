@@ -37,6 +37,8 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IFormView;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -244,18 +246,28 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         class LeaseBillingTypeEditor extends CEntityDecoratableForm<LeaseBillingTypePolicyItem> {
 
-            private CComboBox<Integer> startDay;
+            private final CComboBox<Integer> startDay;
 
-            private CComboBox<Integer> dueDayOffset;
+            private final CComboBox<Integer> dueDayOffset;
 
-            private CComboBox<Integer> billDayOffset;
+            private final CComboBox<Integer> finalDueDayOffset;
 
-            private CComboBox<Integer> padPmntDayOffset;
+            private final CComboBox<Integer> billDayOffset;
 
-            private CComboBox<Integer> padCalcDayOffset;
+            private final CComboBox<Integer> padExecDayOffset;
+
+            private final CComboBox<Integer> padCalcDayOffset;
 
             public LeaseBillingTypeEditor() {
                 super(LeaseBillingTypePolicyItem.class);
+
+                startDay = new CComboBox<Integer>();
+                startDay.setNoSelectionText(i18n.tr("Same as Lease Start Day"));
+                dueDayOffset = new CComboBox<Integer>();
+                finalDueDayOffset = new CComboBox<Integer>();
+                billDayOffset = new CComboBox<Integer>();
+                padCalcDayOffset = new CComboBox<Integer>();
+                padExecDayOffset = new CComboBox<Integer>();
             }
 
             @Override
@@ -263,16 +275,34 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CLabel<PaymentFrequency>()), 15).labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDay(), startDay = new CComboBox<Integer>()), 15)
-                        .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentDueDayOffset(), dueDayOffset = new CComboBox<Integer>()), 15)
-                        .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billExecutionDayOffset(), billDayOffset = new CComboBox<Integer>()), 15)
-                        .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padCalculationDayOffset(), padCalcDayOffset = new CComboBox<Integer>()), 15)
-                        .labelWidth(20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padExecutionDayOffset(), padPmntDayOffset = new CComboBox<Integer>()), 15)
-                        .labelWidth(20).build());
+
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDay(), startDay), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentDueDayOffset(), dueDayOffset), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().finalDueDayOffset(), finalDueDayOffset), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billExecutionDayOffset(), billDayOffset), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padCalculationDayOffset(), padCalcDayOffset), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padExecutionDayOffset(), padExecDayOffset), 15).labelWidth(20).build());
+
+                // validators
+                padCalcDayOffset.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Integer> event) {
+                        padExecDayOffset.revalidate();
+                    }
+                });
+                padExecDayOffset.addValueValidator(new EditableValueValidator<Integer>() {
+                    @Override
+                    public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
+                        if (value == null || padCalcDayOffset.getValue() == null) {
+                            return null;
+                        } else if (value.compareTo(padCalcDayOffset.getValue()) > 0) {
+                            return null;
+                        } else {
+                            return new ValidationError(component, i18n.tr("Must be greater than {0}", proto().padCalculationDayOffset().getMeta().getCaption()));
+                        }
+                    }
+                });
+
                 return content;
             }
 
@@ -282,10 +312,12 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     int cycles = getValue().paymentFrequency().getValue().getNumOfCycles();
                     startDay.setOptions(makeList(1, cycles));
                     int maxOffset = cycles - 1;
-                    dueDayOffset.setOptions(makeList(-maxOffset, maxOffset));
-                    billDayOffset.setOptions(makeList(-maxOffset, maxOffset));
-                    padCalcDayOffset.setOptions(makeList(-maxOffset, maxOffset));
-                    padPmntDayOffset.setOptions(makeList(0, maxOffset));
+                    dueDayOffset.setOptions(makeList(0, maxOffset / 2));
+                    finalDueDayOffset.setOptions(makeList(0, maxOffset));
+                    billDayOffset.setOptions(makeList(-maxOffset / 2, -1));
+                    padCalcDayOffset.setOptions(makeList(-maxOffset / 2, maxOffset / 2));
+                    // TODO - validate pmnt >= calc
+                    padExecDayOffset.setOptions(makeList(0, maxOffset / 2));
                 }
             }
 

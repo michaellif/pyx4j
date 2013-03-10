@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
@@ -148,10 +147,10 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingCycleTargetExecutionDate(int targetDayOffset, LogicalDate billingCycleStartDate) {
+    public static LogicalDate calculateBillingCycleDateByOffset(int offset, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
-        calendar.add(Calendar.DATE, targetDayOffset);
+        calendar.add(Calendar.DATE, offset);
         return new LogicalDate(calendar.getTime());
     }
 
@@ -248,15 +247,16 @@ public class BillDateUtils {
     }
 
     public static LogicalDate calculateBillDueDate(Bill bill) {
+        LogicalDate startDate;
+        int dueDateOffset;
         if (bill.billType().getValue() == Bill.BillType.Final) {
-            //TODO add policy for final bill duedate - for now 7 days after bill run
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(SystemDateManager.getDate());
-            calendar.add(Calendar.DATE, 7);
-            return new LogicalDate(calendar.getTime());
+            startDate = bill.billingAccount().lease().leaseTo().getValue();
+            dueDateOffset = bill.billingAccount().finalDueDayOffset().getValue();
         } else {
-            return bill.billingPeriodStartDate().getValue();
+            startDate = bill.billingPeriodStartDate().getValue();
+            dueDateOffset = bill.billingAccount().paymentDueDayOffset().getValue();
         }
+        return calculateBillingCycleDateByOffset(dueDateOffset, startDate);
     }
 
     public static String formatDays(InvoiceLineItem lineItem) {

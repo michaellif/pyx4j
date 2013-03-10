@@ -26,6 +26,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
@@ -42,11 +43,10 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
     }
 
     /*
-     * Late payments can only be identified on the 1st of the current month, which is the Due Date of the
-     * CurrentPeriodBill and the corresponding due amount is the TotalDueAmount of the CurrentPeriodBill
-     * (or BalanceForfardAmount of the NextPeriodBill)
+     * Late payments are calculated for the CurrentPeriodBill and the corresponding due amount is the TotalDueAmount
+     * of the CurrentPeriodBill (or BalanceForfardAmount of the NextPeriodBill)
      * That amount does not include any payments and immediate charges posted after the CurrentPeriodBill
-     * run date. These charges have to be taken from the InterimLineItems.
+     * run date. These charges and payments have to be taken from unclaimed InvoiceLineItems.
      */
     private void createLatePaymentFeeItem() {
         if (getBillingManager().getCurrentPeriodBill() == null || getBillingManager().getCurrentPeriodBill().isNull()) {
@@ -57,12 +57,23 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         Bill curBill = getBillingManager().getCurrentPeriodBill();
         BigDecimal overdueAmount = curBill.totalDueAmount().getValue();
 
-        // add all posted interim items
+        // Check for posted but unclaimed items
         Persistence.service().retrieve(curBill.billingAccount());
         List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceLineItem item : items) {
-            if (!item.postDate().isNull() && item.postDate().getValue().compareTo(curBill.dueDate().getValue()) <= 0) {
+            if (item.postDate().isNull()) {
+                continue;
+            }
+            if (!item.postDate().getValue().after(curBill.dueDate().getValue())) {
+                // immediate charges posted after bill run but before due date are still due
                 overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));
+            } else if (item instanceof InvoicePayment) {
+                // account for PAD payments posted after due date
+                // TODO - need to ensure that corresponding PAD execution has actually happened
+                InvoicePayment payment = (InvoicePayment) item;
+                if (payment.paymentRecord().paymentMethod().isPreauthorized().isBooleanTrue()) {
+                    overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));
+                }
             }
         }
 

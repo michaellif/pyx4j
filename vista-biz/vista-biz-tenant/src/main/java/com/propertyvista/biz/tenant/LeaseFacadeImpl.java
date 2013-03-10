@@ -837,6 +837,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
             LeaseBillingTypePolicyItem billingType = billingPolicy.availableBillingTypes().get(0);
             lease.billingAccount().paymentFrequency().set(billingType.paymentFrequency());
             lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
+            lease.billingAccount().paymentDueDayOffset().set(billingType.paymentDueDayOffset());
+            lease.billingAccount().finalDueDayOffset().set(billingType.finalDueDayOffset());
 
             if (lease.billingAccount().isInstanceOf(InternalBillingAccount.class)) {
                 lease.billingAccount().billingType().set(ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease));

@@ -115,9 +115,9 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Integer> billingCycleStartDay();
 
-    IPrimitive<Integer> offsetPaymentDueDay();
+    IPrimitive<Integer> paymentDueDayOffset();
 
-    IPrimitive<Integer> offsetPreauthorizedPaymentDay();
+    IPrimitive<Integer> finalDueDayOffset();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @Owned(cascade = {})
