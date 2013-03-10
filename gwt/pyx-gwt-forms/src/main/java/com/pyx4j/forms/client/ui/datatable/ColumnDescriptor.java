@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.entity.shared.IEntity;
 
 public class ColumnDescriptor {
@@ -116,8 +117,39 @@ public class ColumnDescriptor {
     /**
      * May return Widget to be shown in DataTable
      */
+    @SuppressWarnings("deprecation")
     public Object getCellValue(IEntity entity) {
-        return convert(entity);
+        String text = convert(entity);
+
+        //It is OK to move this formating functions to better place and make algorithms pluggable.
+
+        // hard value trim
+        if ((builder.trimLength > 0) && (text != null) && text.length() > builder.trimLength) {
+            text = text.substring(0, builder.trimLength) + "...";
+        }
+
+        //Break the long words and text
+        if ((builder.ensureWordWrap > 0) && (text != null)) {
+            StringBuilder b = new StringBuilder();
+            int wordLen = 0;
+            for (char c : text.toCharArray()) {
+                b.append(c);
+                wordLen++;
+                if (c == '.') {
+                    b.append(HtmlUtils.ZERO_WIDTH_SPACE_UTF8);
+                    wordLen = 0;
+                } else if (Character.isSpace(c)) {
+                    wordLen = 0;
+                }
+                if (wordLen > builder.ensureWordWrap) {
+                    b.append(HtmlUtils.ZERO_WIDTH_SPACE_UTF8);
+                    wordLen = 0;
+                }
+            }
+            text = b.toString();
+        }
+
+        return text;
     }
 
     @Override
@@ -160,6 +192,10 @@ public class ColumnDescriptor {
         private boolean wordWrap = true;
 
         private boolean visible = true;
+
+        private int trimLength = 0;
+
+        private int ensureWordWrap = 0;
 
         public Builder(String columnName, String columnTitle) {
             if (columnName == null) {
@@ -208,6 +244,23 @@ public class ColumnDescriptor {
 
         public Builder wordWrap(boolean wordWrap) {
             this.wordWrap = wordWrap;
+            return this;
+        }
+
+        /**
+         * Terminate string with "..." if one exceeds specified length
+         */
+        public Builder trim(int trimLength) {
+            this.trimLength = trimLength;
+            return this;
+        }
+
+        /**
+         * make long text wrappable by html
+         * e.g. Something that actually working instead of CSS word-wrap:break-word
+         */
+        public Builder ensureWordWrap(int maxNonWrappableWordLenght) {
+            this.ensureWordWrap = maxNonWrappableWordLenght;
             return this;
         }
 

@@ -29,6 +29,8 @@ public class HtmlUtils {
 
     public static final char NO_BREAK_SPACE_UTF8 = '\u00A0';
 
+    public static final char ZERO_WIDTH_SPACE_UTF8 = '\u200B';
+
     private final static String[] HTML_ENTITIES = {
 
     ">", "&gt;",
