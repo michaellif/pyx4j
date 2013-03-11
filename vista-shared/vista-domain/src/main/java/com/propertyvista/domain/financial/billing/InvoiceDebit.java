@@ -33,7 +33,7 @@ public interface InvoiceDebit extends InvoiceLineItem {
     @I18n
     public enum DebitType {
 
-        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, target, other, total;
+        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, target, other, unknown, total;
 
         @Override
         public String toString() {

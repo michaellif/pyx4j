@@ -26,10 +26,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -188,34 +186,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
         charge.dueDate().setValue(bill.dueDate().getValue());
-
-        if (BillingUtils.isService(billableItem.item().product())) {
-            charge.debitType().setValue(DebitType.lease);
-        } else if (BillingUtils.isFeature(billableItem.item().product())) {
-            switch (billableItem.item().product().<Feature.FeatureV> cast().holder().featureType().getValue()) {
-            case parking:
-                charge.debitType().setValue(DebitType.parking);
-                break;
-            case pet:
-                charge.debitType().setValue(DebitType.pet);
-                break;
-            case addOn:
-                charge.debitType().setValue(DebitType.addOn);
-                break;
-            case utility:
-                charge.debitType().setValue(DebitType.utility);
-                break;
-            case locker:
-                charge.debitType().setValue(DebitType.locker);
-                break;
-            case booking:
-                charge.debitType().setValue(DebitType.booking);
-                break;
-            default:
-                charge.debitType().setValue(DebitType.other);
-                break;
-            }
-        }
+        charge.debitType().setValue(new DebitTypeAdapter().getDebitType(billableItem.item().type()));
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.productType().setValue(InvoiceProductCharge.ProductType.service);

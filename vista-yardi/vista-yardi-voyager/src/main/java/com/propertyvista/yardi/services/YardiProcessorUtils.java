@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
@@ -105,6 +106,7 @@ public class YardiProcessorUtils {
             }
         }
         charge.chargeCode().setValue(detail.getChargeCode());
+        charge.debitType().setValue(new DebitTypeAdapter().getDebitType(new ProductItemTypeAdapter().findProductItemType(detail.getChargeCode())));
         charge.amount().setValue(new BigDecimal(detail.getAmount()));
         charge.description().setValue(detail.getDescription());
         charge.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
