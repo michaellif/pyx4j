@@ -19,12 +19,24 @@ BEGIN TRANSACTION;
 
 
  -- New sequences
+ CREATE SEQUENCE field_user_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE lease_billing_policy$available_billing_types_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE lease_billing_type_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE padpolicy$chargeable_service_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE padpolicy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE product_item_type$yardi_charge_codes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_charge_code_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+
+
   
  -- Change owner to vista
+ ALTER SEQUENCE field_user_seq OWNER TO vista ;
  ALTER SEQUENCE lease_billing_policy$available_billing_types_seq OWNER TO vista ;
  ALTER SEQUENCE lease_billing_type_policy_item_seq OWNER TO vista ;
+ ALTER SEQUENCE padpolicy$chargeable_service_seq OWNER TO vista ;
+ ALTER SEQUENCE padpolicy_seq OWNER TO vista ;
+ ALTER SEQUENCE product_item_type$yardi_charge_codes_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_charge_code_seq OWNER TO vista ;
 
  
 COMMIT;
