@@ -26,9 +26,11 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class ServiceTypeForm extends CrmEntityForm<ServiceItemType> {
+public class ServiceTypeForm extends CrmEntityForm<ServiceItemType> implements HasYardiIntegrationMode {
 
     private static final I18n i18n = I18n.get(ServiceTypeForm.class);
+
+    private ProductItemTypeYardiIntegrationForm yardiIntegrationMixin;
 
     public ServiceTypeForm(IFormView<ServiceItemType> view) {
         super(ServiceItemType.class, view);
@@ -58,7 +60,15 @@ public class ServiceTypeForm extends CrmEntityForm<ServiceItemType> {
             }
         }), 25).build());
 
+        content.setWidget(++row, 0, yardiIntegrationMixin = new ProductItemTypeYardiIntegrationForm());
+        yardiIntegrationMixin.bind(this);
+
         selectTab(addTab(content));
 
+    }
+
+    @Override
+    public void setYardiIntegrationModeEnabled(boolean enabled) {
+        yardiIntegrationMixin.setYardiIntegrationModeEnabled(enabled);
     }
 }

@@ -17,6 +17,6 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public interface FeatureTypeViewerView extends IViewerView<FeatureItemType> {
+public interface FeatureTypeViewerView extends IViewerView<FeatureItemType>, HasYardiIntegrationMode {
 
 }

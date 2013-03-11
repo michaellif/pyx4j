@@ -22,4 +22,9 @@ public class FeatureTypeEditorViewImpl extends CrmEditorViewImplBase<FeatureItem
         setForm(new FeatureTypeForm(this));
     }
 
+    @Override
+    public void setYardiIntegrationModeEnabled(boolean enabled) {
+        ((FeatureTypeForm) getForm()).setYardiIntegrationModeEnabled(enabled);
+    }
+
 }

@@ -19,10 +19,12 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.HasYardiIntegrationMode;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceItemTypeEditorActivity extends CrmEditorActivity<ServiceItemType> {
 
@@ -30,5 +32,11 @@ public class ServiceItemTypeEditorActivity extends CrmEditorActivity<ServiceItem
     public ServiceItemTypeEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(ServiceTypeEditorView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(ServiceItemTypeCrudService.class), ServiceItemType.class);
+    }
+
+    @Override
+    public void onPopulateSuccess(ServiceItemType result) {
+        super.onPopulateSuccess(result);
+        ((HasYardiIntegrationMode) getView()).setYardiIntegrationModeEnabled(VistaFeatures.instance().yardiIntegration());
     }
 }

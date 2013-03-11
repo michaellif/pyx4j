@@ -21,4 +21,9 @@ public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ServiceItem
     public ServiceTypeViewerViewImpl() {
         setForm(new ServiceTypeForm(this));
     }
+
+    @Override
+    public void setYardiIntegrationModeEnabled(boolean enabled) {
+        ((HasYardiIntegrationMode) getForm()).setYardiIntegrationModeEnabled(enabled);
+    }
 }

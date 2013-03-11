@@ -21,4 +21,9 @@ public class FeatureTypeViewerViewImpl extends CrmViewerViewImplBase<FeatureItem
     public FeatureTypeViewerViewImpl() {
         setForm(new FeatureTypeForm(this));
     }
+
+    @Override
+    public void setYardiIntegrationModeEnabled(boolean enabled) {
+        ((FeatureTypeForm) getForm()).setYardiIntegrationModeEnabled(enabled);
+    }
 }

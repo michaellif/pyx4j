@@ -18,9 +18,11 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.GlCode;
@@ -41,4 +43,8 @@ public interface ProductItemType extends IEntity {
 
     @Timestamp
     IPrimitive<Date> updated();
+
+    @Owned
+    IList<YardiChargeCode> yardiChargeCodes();
+
 }

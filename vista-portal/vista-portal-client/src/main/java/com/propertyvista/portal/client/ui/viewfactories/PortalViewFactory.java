@@ -135,6 +135,7 @@ public class PortalViewFactory extends ViewFactoryBase {
             } else if (LeaseContextSelectionView.class.equals(type)) {
                 map.put(type, new LeaseContextSelectionViewImpl());
             } else if (TenantSureManagementView.class.equals(type)) {
+
                 map.put(type, new TenantSureManagementViewImpl());
             } else if (TenantSurePurchaseView.class.equals(type)) {
                 map.put(type, new TenantSurePurchaseViewImpl());

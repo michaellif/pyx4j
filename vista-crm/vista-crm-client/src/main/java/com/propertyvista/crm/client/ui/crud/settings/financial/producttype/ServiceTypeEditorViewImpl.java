@@ -22,4 +22,9 @@ public class ServiceTypeEditorViewImpl extends CrmEditorViewImplBase<ServiceItem
         setForm(new ServiceTypeForm(this));
     }
 
+    @Override
+    public void setYardiIntegrationModeEnabled(boolean enabled) {
+        ((HasYardiIntegrationMode) getForm()).setYardiIntegrationModeEnabled(enabled);
+    }
+
 }

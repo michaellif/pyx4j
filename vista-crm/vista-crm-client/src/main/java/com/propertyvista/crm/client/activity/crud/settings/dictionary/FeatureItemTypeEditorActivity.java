@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.Featu
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureItemTypeEditorActivity extends CrmEditorActivity<FeatureItemType> {
 
@@ -31,6 +32,12 @@ public class FeatureItemTypeEditorActivity extends CrmEditorActivity<FeatureItem
     public FeatureItemTypeEditorActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(FeatureTypeEditorView.class), (AbstractCrudService<FeatureItemType>) GWT
                 .create(FeatureItemTypeCrudService.class), FeatureItemType.class);
+    }
+
+    @Override
+    public void onPopulateSuccess(FeatureItemType result) {
+        super.onPopulateSuccess(result);
+        ((FeatureTypeEditorView) getView()).setYardiIntegrationModeEnabled(VistaFeatures.instance().yardiIntegration());
     }
 
 }
