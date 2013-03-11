@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.policy;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -47,6 +49,11 @@ public class PolicyFacadeImpl implements PolicyFacade {
         }
 
         return PolicyManager.obtainEffectivePolicy(node, policyClass);
+    }
+
+    @Override
+    public <T extends PolicyNode> List<T> getGovernedNodesOfType(Policy policy, Class<T> nodeType) {
+        return PolicyManager.descendantsOf(policy.node(), nodeType);
     }
 
 }

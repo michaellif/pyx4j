@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.policy;
 
+import java.util.List;
+
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.policy.framework.Policy;
@@ -23,5 +25,7 @@ public interface PolicyFacade {
     <POLICY extends Policy> POLICY obtainEffectivePolicy(PolicyNode node, final Class<POLICY> policyClass);
 
     <POLICY extends Policy> POLICY obtainHierarchicalEffectivePolicy(IEntity entity, final Class<POLICY> policyClass);
+
+    <T extends PolicyNode> List<T> getGovernedNodesOfType(Policy policy, Class<T> nodeType);
 
 }
