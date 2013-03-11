@@ -175,6 +175,16 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public String getDefaultBaseURLvistaField(String pmcDnsName) {
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace();
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.FIELD_URL;
+        }
+    }
+
+    @Override
     public String getCardServiceSimulatorUrl() {
         return "http://" + "operations" + getApplicationURLNamespace() + "o/" + "CardServiceSimulation";
     }

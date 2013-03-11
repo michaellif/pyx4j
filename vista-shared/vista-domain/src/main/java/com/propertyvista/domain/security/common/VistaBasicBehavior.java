@@ -42,4 +42,8 @@ public enum VistaBasicBehavior implements Behavior {
 
     OperationsPasswordChangeRequired,
 
+    Field,
+
+    FieldPasswordChangeRequired,
+
 }

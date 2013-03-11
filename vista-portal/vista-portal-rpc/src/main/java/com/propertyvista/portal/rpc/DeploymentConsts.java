@@ -21,6 +21,8 @@ public interface DeploymentConsts {
 
     public static final String CRM_URL = "crm/";
 
+    public static final String FIELD_URL = "field/";
+
     public static final String TENANT_URL_PATH = "residents";
 
     public static final String portalInectionProxy = "/vista/https/";

@@ -340,6 +340,11 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RemoteServiceServlet</servlet-name>
+        <url-pattern>/field/srv/*</url-pattern>
+    </servlet-mapping>
 
     <!-- <servlet> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
         </servlet> <servlet-mapping> <servlet-name>RemoteJ2SEServiceServlet</servlet-name> <url-pattern>/internal/j2sesrv/*</url-pattern>

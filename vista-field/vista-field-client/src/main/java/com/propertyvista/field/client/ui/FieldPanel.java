@@ -25,7 +25,6 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
@@ -35,59 +34,50 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.field.client.theme.FieldPalette;
+import com.propertyvista.field.client.mvp.MainActivityMapper;
+import com.propertyvista.field.client.mvp.UtilityActivityMapper;
 import com.propertyvista.field.client.theme.FieldTheme;
 
 public class FieldPanel extends LayoutPanel {
 
+    private final LayoutPanel centerAreaContent;
+
     public FieldPanel() {
 
-        EventBus eventBus = AppSite.getEventBus();
-
-        StyleManger.installTheme(new FieldTheme(), new FieldPalette());
         setStyleName(FieldTheme.StyleName.SiteView.name());
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setStyleName(FieldTheme.StyleName.SiteViewContent.name());
         add(contentPanel);
 
-        //============ Header Panel ============
-        FlowPanel headerPanel = new FlowPanel();
-        headerPanel.setStyleName(FieldTheme.StyleName.SiteViewHeader.name());
-        contentPanel.addNorth(headerPanel, 5);
-
         //============ Main application area ============
-        LayoutPanel centerPanel = new LayoutPanel();
-        contentPanel.add(centerPanel);
+        centerAreaContent = new LayoutPanel();
+        contentPanel.add(centerAreaContent);
+        centerAreaContent.setVisible(false);
 
         //============ Main application area content: lister (left) and details view (right) =======
         SplitLayoutPanel splitPanel = new SplitLayoutPanel(2);
         splitPanel.setSize("100%", "100%");
-        centerPanel.add(splitPanel);
+        centerAreaContent.add(splitPanel);
 
-        DisplayPanel listerDisplay = new DisplayPanel();
-        listerDisplay.setSize("100%", "100%");
-        splitPanel.add(listerDisplay);
+        //============= Container for login and retrieve password views ===========
+        UtilityDisplayPanel utilityDisplay = new UtilityDisplayPanel(centerAreaContent);
 
-        DisplayPanel detailsDisplay = new DisplayPanel();
-        detailsDisplay.setSize("100%", "100%");
-        splitPanel.add(detailsDisplay);
+        //============ Main Panel ============
+        DisplayPanel mainDisplay = new DisplayPanel();
+        mainDisplay.setSize("100%", "100%");
+        splitPanel.add(mainDisplay);
 
-        //============ Footer Panel ============
-        FlowPanel footerPanel = new FlowPanel();
-        footerPanel.setStyleName(FieldTheme.StyleName.SiteViewFooter.name());
-        contentPanel.addSouth(footerPanel, 5);
+        EventBus eventBus = AppSite.getEventBus();
 
-        // Activity <-> Display bindings:
-//        bind(new NavigActivityMapper(), listerDisplay, eventBus);
-//        bind(new ConsoleActivityMapper(), consoleDisplay, eventBus);
-//        bind(new MainActivityMapper(), mainDisplay, eventBus);
+        //Activity <-> Display bindings:
+        bind(new UtilityActivityMapper(), utilityDisplay, eventBus);
+        bind(new MainActivityMapper(), mainDisplay, eventBus);
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
@@ -116,7 +106,7 @@ public class FieldPanel extends LayoutPanel {
         @Override
         public void setWidget(IsWidget w) {
             super.setWidget(w);
-            //centerAreaContent.setVisible(true);
+            centerAreaContent.setVisible(true);
         }
     }
 

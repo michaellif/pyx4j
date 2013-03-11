@@ -152,6 +152,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public String getDefaultBaseURLvistaField(String pmcDnsName) {
+        return getMainApplicationURL() + "f";
+    }
+
+    @Override
     public String getDefaultBaseURLvistaOperations() {
         return getMainApplicationURL() + "a";
     }

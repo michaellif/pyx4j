@@ -88,6 +88,12 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
      */
     public abstract String getDefaultBaseURLvistaOnboarding();
 
+    /**
+     * This method should not be used directly since PMC may have custom DNS configuration
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true);
+     */
+    public abstract String getDefaultBaseURLvistaField(String pmcDnsName);
+
     public abstract String getCardServiceSimulatorUrl();
 
     public abstract String getCaledonCompanyId();

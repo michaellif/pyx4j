@@ -31,7 +31,9 @@ public enum VistaApplication implements Behavior {
 
     prospect,
 
-    onboarding;
+    onboarding,
+
+    field;
 
     public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {
         for (VistaApplication behaviour : VistaApplication.values()) {

@@ -13,29 +13,86 @@
  */
 package com.propertyvista.field.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.SessionInactiveEvent;
+import com.pyx4j.security.client.SessionInactiveHandler;
+import com.pyx4j.security.client.SessionMonitor;
+import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+
 import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.field.client.theme.FieldPalette;
+import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.FieldPanel;
-import com.propertyvista.field.rpc.FiledSiteMap;
+import com.propertyvista.field.rpc.FieldSiteMap;
+import com.propertyvista.field.rpc.services.FieldAuthenticationService;
 
 public class FieldSite extends VistaSite {
 
     public FieldSite() {
-        super("vista-field", FiledSiteMap.class);
+        super("vista-field", FieldSiteMap.class, new FieldSiteAppPlaceDispatcher());
     }
 
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-
         hideLoadingIndicator();
+
+        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
         RootPanel.get().add(RootLayoutPanel.get());
 
         RootLayoutPanel.get().add(new FieldPanel());
+
+        FieldEntityMapper.init();
+
+        SessionInactiveDialog.register();
+        SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
+            @Override
+            public void onSessionInactive(SessionInactiveEvent event) {
+                ClientContext.logout((AuthenticationService) GWT.create(FieldAuthenticationService.class), null);
+            }
+        });
+
+        getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                if (!ClientContext.isAuthenticated()) {
+                    //TODO do logout
+                }
+            }
+        });
+
+        StyleManger.installTheme(new FieldTheme(), new FieldPalette());
+
+        obtainAuthenticationData();
+    }
+
+    private void obtainAuthenticationData() {
+        ClientContext.obtainAuthenticationData(((AuthenticationService) GWT.create(FieldAuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                AppSite.getHistoryHandler().handleCurrentHistory();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                AppSite.getHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        });
     }
 
     @Override
