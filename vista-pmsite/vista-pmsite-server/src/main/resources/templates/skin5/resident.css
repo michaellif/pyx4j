@@ -23,39 +23,48 @@
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
-	border-top: 1px solid #000000;
+	border-top: 3px solid #1F1B1C;
 	padding: 20px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
-	margin-right: 20px;
+	margin: 40px 20px 0 0;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul {
+	width: 210px;
 	list-style: none outside none;
 	margin: 0;
+	margin-top: -20px;
 	padding: 0;
+	padding-top: 30px;
 	font-size: 16px;
     font-weight: normal;
+    border-top: 1px solid #484243;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
+	width: 200px;
 	font-size: 16px;
 	font-weight: normal;
 	height: 28px;
 	overflow: hidden;
 	padding: 0 10px 0 20px;
+	color: #D7AC3F;
+	text-transform: uppercase;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li.active {
     background: url("images/menu_active.png") no-repeat scroll 0 50% transparent;
+    background-color: #756033;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li:hover {
-	color: #CCCCCC;
+	font-weight: bold;
     outline: medium none;
     text-decoration: none;
-    text-decoration: underline;
+    border-bottom: 1px solid #D7AC3F;
+    background: #756033;
 }
 .LandingOrLineSeparator {
 	padding-top: 30px;
@@ -69,6 +78,14 @@
     color: #B4AFB0;
     border-top: 3px solid #1F1B1C;
 }
+.vista-pmsite-residentPage .vista-pmsite-main .content > div {
+    border-top-color: #484243;
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-top: -30px;
+    padding-top: 10px;
+}
+
 .LandingViewPanel {
 	border-top: 1px solid #484243;
 	margin-top: -30px;
@@ -80,6 +97,16 @@
     font-size: 14pt;
     font-weight: bold;
     text-shadow: none;
+    text-align: left;
+    background: #302A2C;
+    color: #B4AFB0;
+}
+.vista-pmsite-residentPage .TenantDashboard .FormFlexPanel .FormFlexPanelH1 {
+	color: #B4AFB0;
+	background: #302A2C;
+}
+.FormFlexPanel td {
+	text-align: center;
 }
 
 .vista-pmsite-residentPage .LandingViewSectionHeader {
@@ -88,11 +115,15 @@
     font-size: 14pt;
     color: #D7AC3F;
 }
+.TenantDashboardTableHeader {
+	background: #302A2C !important;
+}
 
 .vista-pmsite-residentPage a {
-	color: #D7AC3F;
+	color: #D7AC3F !important;
 	white-space: nowrap;
 	padding: 10px 0;
+	margin-right: 20px;
 	font-size: 14px;
 }
 
@@ -123,12 +154,17 @@
     cursor: pointer;
     float: right;
     font-size: 14pt;
-    padding: 10px;
+    padding: 40px 10px 10px 10px;
     width: auto;
     min-width: 70px;
     text-align: center;
     filter: false; /*for IE9*/
    	font-weight: bold;
+}
+.vista-pmsite-residentPage .Button .ButtonText {
+	position: relative;
+	top: -30px;
+	right: 20px;
 }
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{
