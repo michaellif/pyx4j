@@ -97,9 +97,8 @@ public class TimeUtils {
             sb.append(' ');
         }
         sb.append(CommonsStringUtils.d00((int) sec));
-        if ((h == 0) && (min == 0)) {
-            sb.append("sec");
-        }
+        sb.append("sec");
+
         if ((h == 0) && (min == 0) && (sec <= 1)) {
             msec -= 1000 * sec;
             sb.append(' ');
