@@ -1,5 +1,5 @@
 .vista-pmsite-residentPage .vista-pmsite-content {
-	min-height: 500px;
+	min-height: 400px;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-mainWrap {
@@ -88,11 +88,15 @@
 	padding-top: 20px;
 }
 
+.TenantDashboardSection td {
+    vertical-align: middle !important;
+}
+
 .LandingButtonHolder {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    text-align: center;
+    text-align: center !important;
     width: 20em;
 }
 

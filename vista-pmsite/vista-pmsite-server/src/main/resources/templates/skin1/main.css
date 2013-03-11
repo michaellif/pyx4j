@@ -318,7 +318,9 @@ ul.footer_locations li {
 	background: url("images/vista.png") no-repeat;
 	display:inline-block;
 	width: 100px; height: 20px;
+	vertical-align: middle;
 }
+
 /*
  * Content
  */

@@ -3,7 +3,7 @@
 }
 
 .vista-pmsite-residentPage .vista-pmsite-content {
-	min-height: 500px;
+	min-height: 400px;
 	padding-bottom: 20px;
 }
 
@@ -62,6 +62,11 @@
 	background-color: ${background_10};
 	line-height: 20px;
 	overflow: hidden;
+}
+
+.LandingOrLineSeparator div {
+	border-color: ${foreground_20} !important;
+	border-style: solid !important;
 }
 
 .vista-pmsite-residentPage .LandingViewSectionHeader {
@@ -154,4 +159,12 @@
 
 .EntityFolderRowItemDecorator table td:FIRST-CHILD{
 	width: 683px;
+}
+
+.TenantDashboardSection td {
+    vertical-align: middle !important;
+}
+
+.LandingButtonHolder {
+    text-align: center !important;
 }
