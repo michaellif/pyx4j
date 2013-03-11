@@ -1,9 +1,3 @@
-.vista-pmsite-residentPage {
-}
-
-.vista-pmsite-residentPage .vista-pmsite-main {
-}
-
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 500px;
 }
@@ -12,26 +6,37 @@
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
-	background: #fff;
+}
+
+.vista-pmsite-residentPage .PortalView .vista-pmsite-mainWrap {
+	width: 960px;
+	padding: 0;
 }
 
 .vista-pmsite-residentPage .caption {
-	width: 920px;
-	margin: 0 20px;
-	border-top: 1px solid #000000;
+	overflow: hidden;
+	position: relative;
+	top: 16px;
+	background: #302A2C;
+	width: 160px;
+	z-index: 1;
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
-	padding: 35px 0;
+	border-top: 1px solid #000000;
+	padding: 20px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
+	margin-right: 20px;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul {
 	list-style: none outside none;
 	margin: 0;
 	padding: 0;
+	font-size: 16px;
+    font-weight: normal;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
@@ -39,24 +44,185 @@
 	font-weight: normal;
 	height: 28px;
 	overflow: hidden;
-	padding: 0 10px 0 35px;
+	padding: 0 10px 0 20px;
 }
 
-
-.vista-pmsite-residentPage .secondaryNavig ul li:hover div {
-	color: red;
+.vista-pmsite-residentPage .secondaryNavig ul li.active {
+    background: url("images/menu_active.png") no-repeat scroll 0 50% transparent;
 }
 
-.vista-pmsite-residentPage .secondaryNavig ul li.active div {
-	color: red;
-	font-weight: bold;
+.vista-pmsite-residentPage .secondaryNavig ul li:hover {
+	color: #CCCCCC;
+    outline: medium none;
+    text-decoration: none;
+    text-decoration: underline;
+}
+.LandingOrLineSeparator {
+	padding-top: 30px;
 }
 
 .vista-pmsite-residentPage .vista-pmsite-main .content {
-	min-height: 500px;
+	min-height: 200px;
 	line-height: 20px;
-	width: 920px;
-	margin: 0 20px;
-	border-top: 5px solid #000000;
 	padding-top: 30px;
+    overflow: hidden;
+    color: #B4AFB0;
+    border-top: 3px solid #1F1B1C;
+}
+.LandingViewPanel {
+	border-top: 1px solid #484243;
+	margin-top: -30px;
+	padding-top: 10px;
+}
+
+.vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaptionTextEmph  {
+	font-family: monospace;
+    font-size: 14pt;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.vista-pmsite-residentPage .LandingViewSectionHeader {
+	text-align: center;
+	font-family: monospace;
+    font-size: 14pt;
+    color: #D7AC3F;
+}
+
+.vista-pmsite-residentPage a {
+	color: #D7AC3F;
+	white-space: nowrap;
+	padding: 10px 0;
+	font-size: 14px;
+}
+
+.vista-pmsite-residentPage .TenantDashboardSection {
+	padding-top: 20px;
+}
+
+.LandingButtonHolder {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+    width: 20em;
+}
+
+.vista-pmsite-residentPage .FormFlexPanelH3Label {
+    color: black;
+    font-family: monospace;
+    font-size: 13pt;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.vista-pmsite-residentPage .Button, .gwt-Button {
+    background: none repeat scroll 0 0 #302A2C;
+    border: none;
+    color: #D7AC3F;
+    cursor: pointer;
+    float: right;
+    font-size: 14pt;
+    padding: 10px;
+    width: auto;
+    min-width: 70px;
+    text-align: center;
+    filter: false; /*for IE9*/
+   	font-weight: bold;
+}
+
+.vista-pmsite-residentPage .LandingButtonHolder .Button{
+	float: none;
+    height: 1.5em;
+    width: 7em;
+}
+.vista-pmsite-residentPage .LandingButtonHolder .Button:hover {
+	color: #FA8D0C;
+}
+
+.vista-pmsite-residentPage .Button-disabled{
+	cursor: default;
+}
+
+.vista-pmsite-residentPage .EntityFolderAddButton, .vista-pmsite-residentPage .EntityFolderTableHeaderLabel  {
+	color: #000000;
+	font-weight: bold;
+}
+
+
+.vista-pmsite-residentPage .TextBox, .vista-pmsite-residentPage .ListBox {
+	border-top: 4px solid #7F7F7F;
+	border-left: 3px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
+}
+
+
+.vista-pmsite-residentPage .LandingTermsAndConditionsBox {
+	margin-left: 60px;
+	margin-right: 60px;
+	color: #B4AFB0;
+}
+
+.vista-pmsite-residentPage .WidgetDecorator-readOnly .WidgetDecoratorLabel, .vista-pmsite-residentPage .BillingLineItem, .vista-pmsite-residentPage  .WidgetDecoratorLabel {
+    color: #B4AFB0;
+}
+
+.vista-pmsite-residentPage .WidgetDecorator-readOnly, .vista-pmsite-residentPage  .BillingBillTotal .WidgetDecoratorComponent {
+	color: #000000;
+	font-weight: normal;
+}
+
+.vista-pmsite-residentPage .ValidationLabel ul {
+	padding-left: 6px;
+}
+
+
+.vista-pmsite-residentPage .PaymentEditorForm {
+	max-width: 491px;
+}
+
+.vista-pmsite-residentPage .PaymentEditorLegalTerms {
+	max-width: 673px;
+}
+
+.FormFlexPanel {
+	max-width: 685px;
+	overflow: hidden;
+}
+
+.TriggerPannel .TextBox	{
+	width: 90px !important;
+}
+
+.SiteViewAction .Anchor {
+	white-space: nowrap;
+	float: right;
+}
+
+.Dialog {
+    background-color: #999999 !important;
+}
+
+.DialogCaption {
+    background: none repeat scroll 0 0 #CCCCCC !important;
+    color: #fff!important;
+}
+
+.TenantSureManagementStatusDetailsPanel {
+    width: 65% !important;
+}
+
+
+.TenantSureManagementActionsPanel {
+    width: 35% !important;
+}
+
+.TenantSureManagementActionsPanel .Anchor-disabled {
+	color: #666666 !important;
+    text-decoration: none;
+    cursor: default;
+}
+
+.EntityFolderRowItemDecorator table td:FIRST-CHILD{
+	width: 683px;
 }
