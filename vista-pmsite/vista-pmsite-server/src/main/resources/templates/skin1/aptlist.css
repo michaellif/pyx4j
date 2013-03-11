@@ -55,13 +55,13 @@
 }
 .advancedSearchNarrowWrap .searchTypeSelButton {
 	float: left;
-	width: 70px;
+	width: 84px;
 	font-size: 14px;
 	letter-spacing: 0px;
 	color:${foreground_100};
 	background-color:${foreground_10};
 	margin-left: 10px;
-	padding: 3px 10px;
+	padding: 3px;
 	text-align: center;
 }
 
