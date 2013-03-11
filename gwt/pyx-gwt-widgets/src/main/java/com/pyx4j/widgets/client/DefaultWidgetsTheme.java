@@ -32,6 +32,8 @@ public class DefaultWidgetsTheme extends Theme {
     public static enum StyleName implements IStyleName {
         TextBox, ListBox, Toolbar, ToolbarItem, ToolbarSeparator,
 
+        StatusBar,
+
         Button, ButtonContent, ButtonText,
 
         Anchor,
@@ -56,6 +58,7 @@ public class DefaultWidgetsTheme extends Theme {
         initListBoxStyle();
         initButtonStyle();
         initToolbarStyle();
+        initStatusBarStyle();
         initRateItStyle();
         initImageGalleryStyle();
         initRadioGroupStyle();
@@ -170,6 +173,13 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("padding", "3px 6px");
+        addStyle(style);
+    }
+
+    protected void initStatusBarStyle() {
+        Style style = new Style(".", StyleName.StatusBar);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
+        style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
 
