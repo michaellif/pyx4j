@@ -142,7 +142,7 @@
 }
 .advancedSearchNarrowWrap .searchTypeBox input[type=text] {
 	color:${background_100};
-	width: 210px;
+	width: 205px;
 	margin: 1px;
 	outline: 1px solid #EC8E21;
 	border-top: 4px solid #7F7F7F;

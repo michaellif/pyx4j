@@ -156,6 +156,7 @@
 .advancedSearchWideWrap .searchTypeBox input[type=text] {
 	color:${background_100};
 	width:208px;
+	height: 17px;
 	outline: 1px solid #EC8E21;
 }
 .advancedSearchWideWrap .searchCommonBox {
