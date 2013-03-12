@@ -100,7 +100,7 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.text = "TOKEN ALREADY EXISTS";
             } else {
                 token = EntityFactory.create(CardServiceSimulationToken.class);
-                CardServiceSimulationCard card = ensureUnAttachedCard(merchantAccount, caledonRequest);
+                CardServiceSimulationCard card = findOrEnsureCard(merchantAccount, caledonRequest);
                 if (card.cardType().isNull()) {
                     caledonResponse.code = "1020";
                     caledonResponse.text = "CARD NUMBER INVALID";
@@ -145,8 +145,12 @@ public class CardServiceSimulationProcessor {
                 caledonResponse.code = "1101";
                 caledonResponse.text = "TOKEN NOT FOUND";
             } else {
-                token.card().number().setValue(caledonRequest.creditCardNumber);
-                token.card().expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
+                if (CommonsStringUtils.isStringSet(caledonRequest.creditCardNumber)) {
+                    token.card().number().setValue(caledonRequest.creditCardNumber);
+                }
+                if (CommonsStringUtils.isStringSet(caledonRequest.expiryDate)) {
+                    token.card().expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
+                }
                 Persistence.service().persist(token.card());
 
                 caledonResponse.code = "0000";
@@ -340,33 +344,33 @@ public class CardServiceSimulationProcessor {
         return card;
     }
 
-    private static CardServiceSimulationCard ensureUnAttachedCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
+    private static CardServiceSimulationCard findOrEnsureCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         CardServiceSimulationCard card;
         {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
             criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
             criteria.isNull(criteria.proto().merchant());
             card = Persistence.service().retrieve(criteria);
-            if (card != null) {
-                card.merchant().set(merchantAccount);
-                Persistence.service().persist(card);
-                return card;
-            }
         }
-        {
+        if (card == null) {
             EntityQueryCriteria<CardServiceSimulationCard> criteria = EntityQueryCriteria.create(CardServiceSimulationCard.class);
             criteria.eq(criteria.proto().number(), caledonRequest.creditCardNumber);
             criteria.eq(criteria.proto().merchant(), merchantAccount);
-            criteria.notExists(criteria.proto().tokens());
+            //criteria.notExists(criteria.proto().tokens());
             card = Persistence.service().retrieve(criteria);
-            if (card != null) {
-                return card;
-            }
         }
-        card = createCard(merchantAccount, caledonRequest);
-        if (!card.cardType().isNull()) {
-            Persistence.service().persist(card);
+        if (card == null) {
+            card = createCard(merchantAccount, caledonRequest);
         }
+        card.merchant().set(merchantAccount);
+        card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
+        if (card.balance().isNull()) {
+            card.balance().setValue(new BigDecimal("10000"));
+        }
+        if (card.reserved().isNull()) {
+            card.reserved().setValue(BigDecimal.ZERO);
+        }
+        Persistence.service().persist(card);
         return card;
     }
 
@@ -382,7 +386,7 @@ public class CardServiceSimulationProcessor {
                 return null;
             }
         } else {
-            return ensureUnAttachedCard(merchantAccount, caledonRequest);
+            return findOrEnsureCard(merchantAccount, caledonRequest);
         }
     }
 }
