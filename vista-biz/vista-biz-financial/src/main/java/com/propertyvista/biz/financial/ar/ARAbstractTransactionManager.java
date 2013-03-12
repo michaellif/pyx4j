@@ -72,7 +72,7 @@ public abstract class ARAbstractTransactionManager {
         Collection<AgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
 
         th.agingBuckets().addAll(agingBucketsCollection);
-        th.totalAgingBuckets().set(ARArrearsManager.addInPlace(ARArrearsManager.createAgingBuckets(DebitType.total), agingBucketsCollection));
+        th.totalAgingBuckets().set(ARAbstractArrearsManager.addInPlace(ARAbstractArrearsManager.createAgingBuckets(DebitType.total), agingBucketsCollection));
 
         return th;
     }

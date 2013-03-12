@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
-public abstract class ARArrearsManager {
+public abstract class ARAbstractArrearsManager {
 
     abstract protected Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount);
 

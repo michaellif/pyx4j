@@ -38,7 +38,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
-import com.propertyvista.biz.financial.ar.ARArrearsManager;
+import com.propertyvista.biz.financial.ar.ARAbstractArrearsManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -51,7 +51,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
-class ARInternalArrearsManager extends ARArrearsManager {
+class ARInternalArrearsManager extends ARAbstractArrearsManager {
 
     private ARInternalArrearsManager() {
     }

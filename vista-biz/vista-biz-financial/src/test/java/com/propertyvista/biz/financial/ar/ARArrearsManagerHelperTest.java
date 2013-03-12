@@ -44,7 +44,7 @@ public class ARArrearsManagerHelperTest extends ARArrearsManagerHelperTestBase {
         buckets2.creditAmount().setValue(new BigDecimal("20000000.00"));
         buckets2.totalBalance().setValue(new BigDecimal("200000000.00"));
 
-        ARArrearsManager.addInPlace(buckets1, buckets2);
+        ARAbstractArrearsManager.addInPlace(buckets1, buckets2);
         assertEquals(buckets1.bucketThisMonth().getValue(), new BigDecimal("3.00"));
         assertEquals(buckets1.bucketCurrent().getValue(), new BigDecimal("30.00"));
         assertEquals(buckets1.bucket30().getValue(), new BigDecimal("300.00"));
