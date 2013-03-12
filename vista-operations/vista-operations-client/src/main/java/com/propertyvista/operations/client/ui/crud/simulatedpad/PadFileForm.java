@@ -46,10 +46,10 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 25).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().state()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().state()), 25).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().received()), 10).build());
