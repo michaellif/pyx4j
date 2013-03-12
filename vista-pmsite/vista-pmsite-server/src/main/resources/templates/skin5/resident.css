@@ -29,6 +29,7 @@
 	float: left;
 	min-height: 400px;
 	margin: 40px 20px 0 0;
+	line-height: 1.67;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul {
@@ -57,6 +58,9 @@
 .vista-pmsite-residentPage .secondaryNavig ul li.active {
     background: url("images/menu_active.png") no-repeat scroll 0 50% transparent;
     background-color: #756033;
+    font-weight: bold;
+    color: #1F1B1C;
+    border-bottom: 1px solid #D7AC3F;
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li:hover {
@@ -64,7 +68,8 @@
     outline: medium none;
     text-decoration: none;
     border-bottom: 1px solid #D7AC3F;
-    background: #756033;
+    background-color: #756033;
+    color: #1F1B1C;
 }
 .LandingOrLineSeparator {
 	padding-top: 30px;
@@ -121,9 +126,9 @@
 
 .vista-pmsite-residentPage a {
 	color: #D7AC3F !important;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 	padding: 10px 0;
-	margin-right: 20px;
+	/*margin-right: 20px;*/
 	font-size: 14px;
 }
 
@@ -134,7 +139,7 @@
 .LandingButtonHolder {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 10px !important;
     text-align: center;
     width: 20em;
 }
@@ -154,7 +159,7 @@
     cursor: pointer;
     float: right;
     font-size: 14pt;
-    padding: 40px 10px 10px 10px;
+    /*padding: 40px 10px 10px 10px;*/
     width: auto;
     min-width: 70px;
     text-align: center;
@@ -162,9 +167,9 @@
    	font-weight: bold;
 }
 .vista-pmsite-residentPage .Button .ButtonText {
-	position: relative;
+	/*position: relative;
 	top: -30px;
-	right: 20px;
+	right: 20px;*/
 }
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{
@@ -184,7 +189,9 @@
 	color: #000000;
 	font-weight: bold;
 }
-
+.LandingViewSectionContent table {
+	border-collapse: separate;
+}
 
 .vista-pmsite-residentPage .TextBox, .vista-pmsite-residentPage .ListBox {
 	border-top: 4px solid #7F7F7F;

@@ -60,6 +60,7 @@
 	/*color: #1F1B1C;*/
 	text-decoration: none;
 	font-weight: normal;
+	vertical-align: middle;
 	
 }
 .vista-pmsite-staticPage .secondaryNavig ul li:hover {
@@ -69,10 +70,10 @@
 }
 .vista-pmsite-staticPage .secondaryNavig ul li:hover span {
 	font-weight: bold !important;
+	color: #1F1B1C;
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul li a:hover span {
-	color: #D7AC3F;
     outline: medium none;
     text-decoration: none;
     font-weight: bold;
@@ -84,6 +85,8 @@
 
 .vista-pmsite-staticPage .secondaryNavig ul li.active a span {
 	font-weight: bold;
+	color: #1F1B1C;
+	vertical-align: middle;
 }
 
 
