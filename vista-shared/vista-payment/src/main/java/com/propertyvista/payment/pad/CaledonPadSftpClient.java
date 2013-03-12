@@ -34,9 +34,9 @@ import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAkFile;
 import com.propertyvista.shared.VistaSystemIdentification;
 
@@ -77,7 +77,8 @@ public class CaledonPadSftpClient {
 
     private static Credentials getCredentials() {
         AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "caledon-credentials.properties"));
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), (usePadSimulator() ? "caledon-simulator-credentials.properties"
+                : "caledon-credentials.properties")));
     }
 
     private static String sftpHost() {
