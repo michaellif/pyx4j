@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -75,7 +76,8 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         setSysDate("18-May-2011");
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //
         ARPolicy policy = arPolicyDataModel.getPolicy();
@@ -83,21 +85,22 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
+        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(
+                retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
+        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
+        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
     }
 

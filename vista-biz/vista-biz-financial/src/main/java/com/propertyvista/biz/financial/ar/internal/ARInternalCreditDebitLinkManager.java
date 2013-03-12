@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -72,12 +72,24 @@ import com.propertyvista.portal.rpc.shared.BillingException;
  * @author michaellif
  * 
  */
-class ARCreditDebitLinkManager {
+class ARInternalCreditDebitLinkManager {
 
-    private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
+    private static final I18n i18n = I18n.get(ARInternalPaymentManager.class);
 
-    static InvoiceCredit consumeCredit(InvoiceCredit credit) {
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(credit.billingAccount().<InternalBillingAccount> cast());
+    private ARInternalCreditDebitLinkManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final ARInternalCreditDebitLinkManager INSTANCE = new ARInternalCreditDebitLinkManager();
+    }
+
+    static ARInternalCreditDebitLinkManager getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    InvoiceCredit consumeCredit(InvoiceCredit credit) {
+        List<InvoiceDebit> debits = ARInternalTransactionManager.getInstance().getNotCoveredDebitInvoiceLineItems(
+                credit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceDebit debit : debits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
@@ -118,7 +130,7 @@ class ARCreditDebitLinkManager {
      * - Exceptions
      * credit amount - credit hard links >= amount && debit - debit hard links >= amount
      */
-    static DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount) {
+    DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount) {
 
         DebitCreditLink link = null;
         if (debit.amount().getValue().add(debit.taxTotal().getValue()).compareTo(amount) < 0) {
@@ -129,8 +141,8 @@ class ARCreditDebitLinkManager {
             throw new BillingException(i18n.tr("Provided amount exceeds Payment"));
         }
 
-        InvoicePayment payment = ARTransactionManager.getCorrespodingCreditByPayment(paymentRecord.billingAccount().<InternalBillingAccount> cast(),
-                paymentRecord);
+        InvoicePayment payment = ARInternalTransactionManager.getInstance().getCorrespodingCreditByPayment(
+                paymentRecord.billingAccount().<InternalBillingAccount> cast(), paymentRecord);
 
         // check if amount covers all soft links paid by credit
         BigDecimal sum = BigDecimal.ZERO;
@@ -218,15 +230,16 @@ class ARCreditDebitLinkManager {
         return link;
     }
 
-    static void removeHardLink(DebitCreditLink link) {
+    void removeHardLink(DebitCreditLink link) {
         if (link.hardLink().isBooleanTrue()) {
             link.hardLink().setValue(false);
             Persistence.service().persist(link);
         }
     }
 
-    static InvoiceDebit coverDebit(InvoiceDebit debit) {
-        List<InvoiceCredit> credits = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(debit.billingAccount().<InternalBillingAccount> cast());
+    InvoiceDebit coverDebit(InvoiceDebit debit) {
+        List<InvoiceCredit> credits = ARInternalTransactionManager.getInstance().getNotConsumedCreditInvoiceLineItems(
+                debit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceCredit credit : credits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
@@ -263,9 +276,9 @@ class ARCreditDebitLinkManager {
         return debit;
     }
 
-    static void declinePayment(InvoicePaymentBackOut backOut) {
-        InvoicePayment invoicePaymentToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount().<InternalBillingAccount> cast(),
-                backOut.paymentRecord());
+    void declinePayment(InvoicePaymentBackOut backOut) {
+        InvoicePayment invoicePaymentToReturn = ARInternalTransactionManager.getInstance().getCorrespodingCreditByPayment(
+                backOut.billingAccount().<InternalBillingAccount> cast(), backOut.paymentRecord());
         if (invoicePaymentToReturn == null) {
             throw new BillingException(i18n.tr("Cannot find Payment Record"));
         }
@@ -280,10 +293,10 @@ class ARCreditDebitLinkManager {
         }
     }
 
-    private static List<InvoiceCredit> restoreBackwardPayments(InternalBillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
+    private List<InvoiceCredit> restoreBackwardPayments(InternalBillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
 
         Collection<DebitCreditLink> itemsToRemove = new ArrayList<DebitCreditLink>();
-        List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);
+        List<InvoiceCredit> credits = ARInternalTransactionManager.getInstance().getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);
         if (credits != null && credits.size() > 0) {
             for (InvoiceCredit credit : credits) {
                 Persistence.service().retrieve(credit.debitLinks());
@@ -308,7 +321,7 @@ class ARCreditDebitLinkManager {
         return credits;
     }
 
-    static Collection<DebitCreditLink> getDebitCreditLinksByItem(InvoiceLineItem invoiceLineItem) {
+    Collection<DebitCreditLink> getDebitCreditLinksByItem(InvoiceLineItem invoiceLineItem) {
         Collection<DebitCreditLink> links;
         {
             EntityQueryCriteria<DebitCreditLink> criteria = EntityQueryCriteria.create(DebitCreditLink.class);

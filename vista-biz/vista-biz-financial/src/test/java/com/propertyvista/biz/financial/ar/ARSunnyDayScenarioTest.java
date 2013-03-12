@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -49,7 +51,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         setSysDate("18-Mar-2011");
         approveApplication(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -80,7 +83,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
@@ -138,7 +142,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
     }
 

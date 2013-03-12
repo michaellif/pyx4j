@@ -11,12 +11,13 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.yardi;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +40,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARException;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -61,11 +65,11 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class ARFacadeYardiImpl implements ARFacade {
+public class ARYardiFacadeImpl implements ARFacade {
 
-    private static final I18n i18n = I18n.get(ARFacadeYardiImpl.class);
+    private static final I18n i18n = I18n.get(ARYardiFacadeImpl.class);
 
-    private static final Logger log = LoggerFactory.getLogger(ARFacadeYardiImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ARYardiFacadeImpl.class);
 
     @Override
     public boolean validatePayment(PaymentRecord payment) throws ARException {
@@ -264,6 +268,18 @@ public class ARFacadeYardiImpl implements ARFacade {
 
     @Override
     public Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
         // TODO Auto-generated method stub
         return null;
     }

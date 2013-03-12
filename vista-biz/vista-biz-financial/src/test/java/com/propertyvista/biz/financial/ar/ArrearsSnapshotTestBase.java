@@ -19,6 +19,7 @@ import java.util.EnumMap;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -57,12 +58,12 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
     }
 
     protected void updateArrearsHistory() {
-        ARArrearsManager.updateArrearsHistory(billingAccount());
+        ServerSideFactory.create(ARFacade.class).updateArrearsHistory(billingAccount());
         Persistence.service().commit();
     }
 
     protected void assertArrearsSnapshotStart(String asOf) {
-        actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
+        actualArrearsSnapshot = ServerSideFactory.create(ARFacade.class).getArrearsSnapshot(billingAccount(), asDate(asOf));
         prevFromDate = actualArrearsSnapshot.fromDate().getValue();
         prevExpectedAgingBuckets = new EnumMap<DebitType, AgingBuckets>(DebitType.class);
 
@@ -87,7 +88,7 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
     }
 
     protected void assertPrevArrearsSnapshot(LogicalDate asOf) {
-        actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asOf);
+        actualArrearsSnapshot = ServerSideFactory.create(ARFacade.class).getArrearsSnapshot(billingAccount(), asOf);
         assertEquals("got unexpected snapshot from other date", prevFromDate, actualArrearsSnapshot.fromDate().getValue());
 
         for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {

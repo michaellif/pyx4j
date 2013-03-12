@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -28,9 +29,20 @@ import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
-class ARNSFProcessor extends AbstractARProcessor {
+class ARInternalNSFManager {
 
-    private static final I18n i18n = I18n.get(ARNSFProcessor.class);
+    private static final I18n i18n = I18n.get(ARInternalNSFManager.class);
+
+    private ARInternalNSFManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final ARInternalNSFManager INSTANCE = new ARInternalNSFManager();
+    }
+
+    static ARInternalNSFManager getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     void applyNSFCharge(PaymentRecord paymentRecord) {
         Persistence.service().retrieve(paymentRecord.billingAccount());
@@ -62,6 +74,6 @@ class ARNSFProcessor extends AbstractARProcessor {
 
         Persistence.service().persist(charge);
 
-        ARTransactionManager.postInvoiceLineItem(charge);
+        ARInternalTransactionManager.getInstance().postInvoiceLineItem(charge);
     }
 }

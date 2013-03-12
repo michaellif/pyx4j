@@ -11,17 +11,29 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
+import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
+class ARInternalLeaseAdjustmentManager {
+
+    private ARInternalLeaseAdjustmentManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final ARInternalLeaseAdjustmentManager INSTANCE = new ARInternalLeaseAdjustmentManager();
+    }
+
+    static ARInternalLeaseAdjustmentManager getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     void postImmediateAdjustment(LeaseAdjustment adjustment) {
 
@@ -43,7 +55,7 @@ public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
             lineItem.claimed().setValue(false);
             Persistence.service().persist(lineItem);
 
-            ARTransactionManager.postInvoiceLineItem(lineItem);
+            ARInternalTransactionManager.getInstance().postInvoiceLineItem(lineItem);
 
         }
 

@@ -49,17 +49,17 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
      * run date. These charges and payments have to be taken from unclaimed InvoiceLineItems.
      */
     private void createLatePaymentFeeItem() {
-        if (getBillingManager().getCurrentPeriodBill() == null || getBillingManager().getCurrentPeriodBill().isNull()) {
+        if (getBillProducer().getCurrentPeriodBill() == null || getBillProducer().getCurrentPeriodBill().isNull()) {
             // too early for late payment calculations
             return;
         }
         // Start with the total due amount calculated on the run date
-        Bill curBill = getBillingManager().getCurrentPeriodBill();
+        Bill curBill = getBillProducer().getCurrentPeriodBill();
         BigDecimal overdueAmount = curBill.totalDueAmount().getValue();
 
         // Check for posted but unclaimed items
         Persistence.service().retrieve(curBill.billingAccount());
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
         for (InvoiceLineItem item : items) {
             if (item.postDate().isNull()) {
                 continue;
@@ -82,24 +82,24 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         }
 
         // calculate late fees
-        BigDecimal serviceCharge = getBillingManager().getCurrentPeriodBill().serviceCharge().getValue();
+        BigDecimal serviceCharge = getBillProducer().getCurrentPeriodBill().serviceCharge().getValue();
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                getBillingManager().getNextPeriodBill().billingCycle().building(), LeaseBillingPolicy.class);
+                getBillProducer().getNextPeriodBill().billingCycle().building(), LeaseBillingPolicy.class);
         BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(overdueAmount, serviceCharge, leaseBillingPolicy);
 
         // create late fee line item
         InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
-        charge.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
-        charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+        charge.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
+        charge.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
         charge.amount().setValue(latePaymentFee);
         charge.taxTotal().setValue(BigDecimal.ZERO);
         charge.description().setValue(i18n.tr("Late payment fee"));
         charge.debitType().setValue(DebitType.latePayment);
 
-        getBillingManager().getNextPeriodBill().lineItems().add(charge);
+        getBillProducer().getNextPeriodBill().lineItems().add(charge);
 
-        getBillingManager().getNextPeriodBill().latePaymentFees()
-                .setValue(getBillingManager().getNextPeriodBill().latePaymentFees().getValue().add(charge.amount().getValue()));
+        getBillProducer().getNextPeriodBill().latePaymentFees()
+                .setValue(getBillProducer().getNextPeriodBill().latePaymentFees().getValue().add(charge.amount().getValue()));
 
     }
 }

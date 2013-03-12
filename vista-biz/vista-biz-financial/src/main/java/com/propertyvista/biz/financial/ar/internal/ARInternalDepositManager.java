@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -21,9 +21,20 @@ import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 
-public class ARDepositProcessor extends AbstractARProcessor {
+class ARInternalDepositManager {
 
-    private static final I18n i18n = I18n.get(ARDepositProcessor.class);
+    private static final I18n i18n = I18n.get(ARInternalDepositManager.class);
+
+    private ARInternalDepositManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final ARInternalDepositManager INSTANCE = new ARInternalDepositManager();
+    }
+
+    static ARInternalDepositManager getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     void postDepositRefund(Deposit deposit) {
         assert (!deposit.lifecycle().isNull());
@@ -41,7 +52,7 @@ public class ARDepositProcessor extends AbstractARProcessor {
         refund.claimed().setValue(false);
         Persistence.service().persist(refund);
 
-        ARTransactionManager.postInvoiceLineItem(refund);
+        ARInternalTransactionManager.getInstance().postInvoiceLineItem(refund);
 
         deposit.lifecycle().status().setValue(DepositStatus.Refunded);
 

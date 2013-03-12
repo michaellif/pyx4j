@@ -32,8 +32,8 @@ public class ExternalPaymentProcessor extends ExternalAbstractProcessor {
     }
 
     private void attachPaymentRecords() {
-        Bill bill = getBillingManager().getCurrentBill();
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getCurrentBill().billingAccount());
+        Bill bill = getBillProducer().getCurrentBill();
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getCurrentBill().billingAccount());
         for (InvoicePayment payment : BillingUtils.getLineItemsForType(items, InvoicePayment.class)) {
             bill.lineItems().add(payment);
             bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(payment.amount().getValue()));

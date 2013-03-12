@@ -34,7 +34,7 @@ public class BillingPaymentProcessor extends AbstractBillingProcessor {
 
     private void attachPaymentRecords() {
 
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
 
         for (InvoicePayment payment : BillingUtils.getLineItemsForType(items, InvoicePayment.class)) {
             attachPayment(payment);
@@ -50,19 +50,19 @@ public class BillingPaymentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachPayment(InvoicePayment payment) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.lineItems().add(payment);
         bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
     private void attachPaymentBackOut(InvoicePaymentBackOut paymentBackOut) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.lineItems().add(paymentBackOut);
         bill.paymentRejectedAmount().setValue(bill.paymentRejectedAmount().getValue().add(paymentBackOut.amount().getValue()));
     }
 
     private void attachNSF(InvoiceNSF nsf) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.lineItems().add(nsf);
         bill.nsfCharges().setValue(bill.nsfCharges().getValue().add(nsf.amount().getValue()));
     }

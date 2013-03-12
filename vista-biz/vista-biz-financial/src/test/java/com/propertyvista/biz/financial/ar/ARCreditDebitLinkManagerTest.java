@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -99,7 +100,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         setSysDate("18-Mar-2011");
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         setSysDate("25-Mar-2011");
 
@@ -109,7 +111,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         Persistence.service().retrieve(invoiceDebitLease);
         createHardDebitCreditLink(payment, invoiceDebitLease, "149.00");
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         setSysDate("31-Mar-2011");
 
@@ -117,7 +120,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         Persistence.service().retrieve(invoiceDebitLease);
         createHardDebitCreditLink(payment, invoiceDebitLease, "151.00");
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //==================== RUN 3 ======================//
 
@@ -125,12 +129,14 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         setSysDate("25-Apr-2011");
         receiveAndPostPayment("25-Apr-2011", "302.00");
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //==================== RUN 4 ======================//
 
@@ -138,12 +144,14 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         setSysDate("25-May-2011");
         receiveAndPostPayment("25-May-2011", "100.00");
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //==================== RUN 5 ======================//
 
@@ -151,7 +159,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         rejectPayment(payment, false);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
+                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
     }
 
 }

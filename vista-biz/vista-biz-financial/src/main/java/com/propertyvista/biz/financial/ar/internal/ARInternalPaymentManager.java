@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
@@ -23,9 +23,20 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
-public class ARPaymentProcessor extends AbstractARProcessor {
+class ARInternalPaymentManager {
 
-    private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
+    private static final I18n i18n = I18n.get(ARInternalPaymentManager.class);
+
+    private ARInternalPaymentManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final ARInternalPaymentManager INSTANCE = new ARInternalPaymentManager();
+    }
+
+    static ARInternalPaymentManager getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     void postPayment(PaymentRecord paymentRecord) {
 
@@ -38,7 +49,7 @@ public class ARPaymentProcessor extends AbstractARProcessor {
 
         Persistence.service().persist(payment);
 
-        ARTransactionManager.postInvoiceLineItem(payment);
+        ARInternalTransactionManager.getInstance().postInvoiceLineItem(payment);
     }
 
     void rejectPayment(PaymentRecord paymentRecord) {
@@ -53,6 +64,6 @@ public class ARPaymentProcessor extends AbstractARProcessor {
 
         Persistence.service().persist(backOut);
 
-        ARTransactionManager.postInvoiceLineItem(backOut);
+        ARInternalTransactionManager.getInstance().postInvoiceLineItem(backOut);
     }
 }

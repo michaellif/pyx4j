@@ -48,7 +48,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     @Override
     protected void execute() {
         // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
-        if (!getBillingManager().getNextPeriodBill().billingPeriodStartDate().isNull()) {
+        if (!getBillProducer().getNextPeriodBill().billingPeriodStartDate().isNull()) {
             createInvoiceDeposits();
         }
         createDepositRefunds();
@@ -56,8 +56,8 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void createInvoiceDeposits() {
-        createInvoiceDeposit(getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
-        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
+        createInvoiceDeposit(getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
                 .featureItems()) {
             createInvoiceDeposit(billableItem);
         }
@@ -69,10 +69,10 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         for (Deposit deposit : billableItem.deposits()) {
             LogicalDate effectiveDate = billableItem.effectiveDate().getValue();
             if (!deposit.isProcessed().isBooleanTrue()
-                    && (effectiveDate == null || !effectiveDate.after(getBillingManager().getNextPeriodBill().billingPeriodEndDate().getValue()))) {
+                    && (effectiveDate == null || !effectiveDate.after(getBillProducer().getNextPeriodBill().billingPeriodEndDate().getValue()))) {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
-                invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
-                invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+                invoiceDeposit.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
+                invoiceDeposit.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
                 invoiceDeposit.debitType().setValue(DebitType.deposit);
                 invoiceDeposit.description().setValue(deposit.description().getStringView());
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
@@ -88,16 +88,16 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         if (invoiceDeposit == null) {
             return;
         }
-        getBillingManager().getNextPeriodBill().depositAmount()
-                .setValue(getBillingManager().getNextPeriodBill().depositAmount().getValue().add(invoiceDeposit.amount().getValue()));
-        getBillingManager().getNextPeriodBill().lineItems().add(invoiceDeposit);
+        getBillProducer().getNextPeriodBill().depositAmount()
+                .setValue(getBillProducer().getNextPeriodBill().depositAmount().getValue().add(invoiceDeposit.amount().getValue()));
+        getBillProducer().getNextPeriodBill().lineItems().add(invoiceDeposit);
         //TODO
         // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
     private void createDepositRefunds() {
         // LastMonthDeposit - if this is the last month bill, or final bill, post the refund
-        Bill nextBill = getBillingManager().getNextPeriodBill();
+        Bill nextBill = getBillProducer().getNextPeriodBill();
         if (nextBill.billType().getValue().equals(BillType.Final)
                 || !nextBill.billingCycle().billingCycleEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
@@ -112,14 +112,14 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void attachDepositRefunds() {
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
         for (InvoiceDepositRefund payment : BillingUtils.getLineItemsForType(items, InvoiceDepositRefund.class)) {
             addDepositRefund(payment);
         }
     }
 
     private void addDepositRefund(InvoiceDepositRefund depositRefund) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.lineItems().add(depositRefund);
         bill.depositRefundAmount().setValue(bill.depositRefundAmount().getValue().add(depositRefund.amount().getValue()));
     }

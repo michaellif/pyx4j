@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial;
+package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 

@@ -39,7 +39,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
 
     private void createInitialBalanceRecord() {
         // calculate product charge total
-        Bill nextPeriodBill = getBillingManager().getNextPeriodBill();
+        Bill nextPeriodBill = getBillProducer().getNextPeriodBill();
         BigDecimal total = nextPeriodBill.serviceCharge().getValue()
 // @formatter:off
             .add(nextPeriodBill.recurringFeatureCharges().getValue())
@@ -53,17 +53,17 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
             zeroCycleBalance = credit;
         } else {
             InvoiceCarryforwardCharge charge = EntityFactory.create(InvoiceCarryforwardCharge.class);
-            charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+            charge.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
             charge.taxTotal().setValue(BigDecimal.ZERO);
             charge.debitType().setValue(DebitType.other);
             zeroCycleBalance = charge;
         }
-        zeroCycleBalance.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
+        zeroCycleBalance.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
         zeroCycleBalance.amount().setValue(initialBalance);
         zeroCycleBalance.description().setValue(i18n.tr("Carryforward Balance"));
-        getBillingManager().getNextPeriodBill().lineItems().add(zeroCycleBalance);
-        getBillingManager().getNextPeriodBill().carryForwardCredit()
-        .setValue(getBillingManager().getNextPeriodBill().carryForwardCredit().getValue().add(zeroCycleBalance.amount().getValue()));
+        getBillProducer().getNextPeriodBill().lineItems().add(zeroCycleBalance);
+        getBillProducer().getNextPeriodBill().carryForwardCredit()
+        .setValue(getBillProducer().getNextPeriodBill().carryForwardCredit().getValue().add(zeroCycleBalance.amount().getValue()));
 
     }
 

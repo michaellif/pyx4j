@@ -13,19 +13,17 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
-
 public abstract class AbstractBillingProcessor extends AbstractProcessor {
 
-    private final BillProducer billingManager;
+    private final BillProducer billProducer;
 
-    AbstractBillingProcessor(BillProducer billingManager) {
-        this.billingManager = billingManager;
+    AbstractBillingProcessor(BillProducer billProducer) {
+        this.billProducer = billProducer;
     }
 
     protected abstract void execute();
 
-    public BillProducer getBillingManager() {
-        return billingManager;
+    public BillProducer getBillProducer() {
+        return billProducer;
     }
 }

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -42,9 +43,9 @@ public class TransactionHistoryTester extends Tester {
     public TransactionHistoryTester(BillingAccount billingAccount, boolean continueOnError) {
         super(continueOnError);
         InternalBillingAccount internalBillingAccount = billingAccount.<InternalBillingAccount> cast();
-        transactionHistory = ARTransactionManager.getTransactionHistory(internalBillingAccount);
-        notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(internalBillingAccount);
-        notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(internalBillingAccount);
+        transactionHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(internalBillingAccount);
+        notCoveredDebitInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(internalBillingAccount);
+        notConsumedCreditInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotConsumedCreditInvoiceLineItems(internalBillingAccount);
     }
 
     public TransactionHistoryTester lineItemSize(int size) {

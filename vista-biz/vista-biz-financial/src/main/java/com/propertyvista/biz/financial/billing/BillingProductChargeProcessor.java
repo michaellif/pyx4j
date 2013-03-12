@@ -45,22 +45,22 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     @Override
     protected void execute() {
         // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
-        if (!getBillingManager().getNextPeriodBill().billingPeriodStartDate().isNull()) {
+        if (!getBillProducer().getNextPeriodBill().billingPeriodStartDate().isNull()) {
             createCharges();
         }
     }
 
     private void createCharges() {
 
-        BillableItem service = getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem();
-        if (!Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
+        BillableItem service = getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem();
+        if (!Bill.BillType.Final.equals(getBillProducer().getNextPeriodBill().billType().getValue())) {
             createCharge(service);
         }
         // for Final bill charges may still need to be revised
         reviseChargeForPeriod(service, InvoiceProductCharge.Period.current);
         reviseChargeForPeriod(service, InvoiceProductCharge.Period.previous);
 
-        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
+        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
                 .featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
@@ -84,22 +84,22 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private void createChargeForNextPeriod(BillableItem billableItem) {
 
-        if (Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
+        if (Bill.BillType.Final.equals(getBillProducer().getNextPeriodBill().billType().getValue())) {
             return;
         }
-        addCharge(createCharge(billableItem, getBillingManager().getNextPeriodBill(), InvoiceProductCharge.Period.next));
+        addCharge(createCharge(billableItem, getBillProducer().getNextPeriodBill(), InvoiceProductCharge.Period.next));
     }
 
     private void reviseChargeForCurrentPeriod(BillableItem billableItem) {
-        if (getBillingManager().getCurrentPeriodBill() == null) {
+        if (getBillProducer().getCurrentPeriodBill() == null) {
             return;
         }
 
-        InvoiceProductCharge revisedCharge = createCharge(billableItem, getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.Period.current);
+        InvoiceProductCharge revisedCharge = createCharge(billableItem, getBillProducer().getCurrentPeriodBill(), InvoiceProductCharge.Period.current);
 
         InvoiceProductCharge originalCharge = null;
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -117,17 +117,17 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     }
 
     private void reviseChargeForPreviousPeriod(BillableItem billableItem) {
-        if (getBillingManager().getPreviousPeriodBill() == null) {
+        if (getBillProducer().getPreviousPeriodBill() == null) {
             return;
         }
 
-        InvoiceProductCharge finalCharge = createCharge(billableItem, getBillingManager().getPreviousPeriodBill(), InvoiceProductCharge.Period.previous);
+        InvoiceProductCharge finalCharge = createCharge(billableItem, getBillProducer().getPreviousPeriodBill(), InvoiceProductCharge.Period.previous);
 
         InvoiceProductCharge originalCharge = null;
 
         //TODO handle case when both previous and current have charge
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getPreviousPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -135,7 +135,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             }
         }
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.current.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -292,13 +292,13 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         BillingCycle cycle = null;
         switch (charge.period().getValue()) {
         case previous:
-            cycle = getBillingManager().getPreviousPeriodBill().billingCycle();
+            cycle = getBillProducer().getPreviousPeriodBill().billingCycle();
             break;
         case current:
-            cycle = getBillingManager().getCurrentPeriodBill().billingCycle();
+            cycle = getBillProducer().getCurrentPeriodBill().billingCycle();
             break;
         case next:
-            cycle = getBillingManager().getNextPeriodBill().billingCycle();
+            cycle = getBillProducer().getNextPeriodBill().billingCycle();
             break;
         }
 
@@ -311,7 +311,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             return;
         }
 
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
             bill.serviceCharge().setValue(bill.serviceCharge().getValue().add(charge.amount().getValue()));
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
@@ -327,10 +327,10 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         Bill bill = null;
         switch (period) {
         case current:
-            bill = getBillingManager().getCurrentPeriodBill();
+            bill = getBillProducer().getCurrentPeriodBill();
             break;
         case previous:
-            bill = getBillingManager().getPreviousPeriodBill();
+            bill = getBillProducer().getPreviousPeriodBill();
             break;
         }
 
@@ -359,7 +359,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             // original charge from previous period could have already been revised in current period bill as follows:
             // case 1 - new amount: issue a credit for the original amount and a charge from the new amount
             // case 2 - full refund: simply credit for the original amount
-            Bill currBill = getBillingManager().getCurrentPeriodBill();
+            Bill currBill = getBillProducer().getCurrentPeriodBill();
             // Look for corresponding charge in currBill where charge.period() = previous and use that as original charge if found
             InvoiceProductCharge found = null;
             for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(currBill, InvoiceProductCharge.class)) {
@@ -406,8 +406,8 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         credit.amount().setValue(charge.amount().getValue().add(charge.taxTotal().getValue()).negate());
         credit.billingAccount().set(charge.billingAccount());
         credit.description().setValue(i18n.tr("Revised {0} Credit", charge.description().getValue()));
-        getBillingManager().getNextPeriodBill().previousChargeRefunds()
-                .setValue(getBillingManager().getNextPeriodBill().previousChargeRefunds().getValue().add(credit.amount().getValue()));
-        getBillingManager().getNextPeriodBill().lineItems().add(credit);
+        getBillProducer().getNextPeriodBill().previousChargeRefunds()
+                .setValue(getBillProducer().getNextPeriodBill().previousChargeRefunds().getValue().add(credit.amount().getValue()));
+        getBillProducer().getNextPeriodBill().lineItems().add(credit);
     }
 }

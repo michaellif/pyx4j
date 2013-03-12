@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.ar;
 
 import com.pyx4j.config.server.FacadeFactory;
 
+import com.propertyvista.biz.financial.ar.internal.ARInternalFacadeImpl;
+import com.propertyvista.biz.financial.ar.yardi.ARYardiFacadeImpl;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ARFacadeFactory implements FacadeFactory<ARFacade> {
@@ -22,9 +24,9 @@ public class ARFacadeFactory implements FacadeFactory<ARFacade> {
     @Override
     public ARFacade create() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return new ARFacadeYardiImpl();
+            return new ARYardiFacadeImpl();
         } else {
-            return new ARFacadeImpl();
+            return new ARInternalFacadeImpl();
         }
     }
 

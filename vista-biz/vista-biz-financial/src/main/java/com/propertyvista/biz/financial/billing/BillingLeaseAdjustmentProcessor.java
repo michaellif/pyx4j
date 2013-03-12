@@ -37,20 +37,20 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void createPendingLeaseAdjustments() {
-        for (LeaseAdjustment adjustment : getBillingManager().getNextPeriodBill().billingAccount().adjustments()) {
+        for (LeaseAdjustment adjustment : getBillProducer().getNextPeriodBill().billingAccount().adjustments()) {
             if (LeaseAdjustment.Status.submited == adjustment.status().getValue()
                     && LeaseAdjustment.ExecutionType.pending == adjustment.executionType().getValue()) {
                 // Find if adjustment effective date fails on current or next billing period 
-                DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(getBillingManager().getPreviousPeriodBill().billingPeriodStartDate()
-                        .getValue(), getBillingManager().getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate()
+                DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(getBillProducer().getPreviousPeriodBill().billingPeriodStartDate()
+                        .getValue(), getBillProducer().getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate()
                         .getValue(), adjustment.targetDate().getValue()));
                 if (overlap != null) {
                     //Check if that adjustment is already presented in previous bills
                     boolean attachedToPreviousBill = false;
                     if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
                         List<InvoiceAccountCharge> charges = new ArrayList<InvoiceAccountCharge>();
-                        charges.addAll(BillingUtils.getLineItemsForType(getBillingManager().getPreviousPeriodBill(), InvoiceAccountCharge.class));
-                        charges.addAll(BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceAccountCharge.class));
+                        charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCharge.class));
+                        charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCharge.class));
                         for (InvoiceAccountCharge charge : charges) {
                             if (charge.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;
@@ -61,8 +61,8 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
                         }
                     } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
                         List<InvoiceAccountCredit> credits = new ArrayList<InvoiceAccountCredit>();
-                        credits.addAll(BillingUtils.getLineItemsForType(getBillingManager().getPreviousPeriodBill(), InvoiceAccountCredit.class));
-                        credits.addAll(BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceAccountCredit.class));
+                        credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCredit.class));
+                        credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCredit.class));
                         for (InvoiceAccountCredit credit : credits) {
                             if (credit.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;
@@ -78,7 +78,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachImmediateLeaseAdjustments() {
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
         for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(items, InvoiceAccountCredit.class)) {
             attachImmediateCredit(credit);
         }
@@ -88,13 +88,13 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachImmediateCredit(InvoiceAccountCredit credit) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.immediateAccountAdjustments().setValue(bill.immediateAccountAdjustments().getValue().add(credit.amount().getValue()));
         bill.lineItems().add(credit);
     }
 
     private void attachImmediateCharge(InvoiceAccountCharge charge) {
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.immediateAccountAdjustments().setValue(
                 bill.immediateAccountAdjustments().getValue().add(charge.amount().getValue()).add(charge.taxTotal().getValue()));
         bill.lineItems().add(charge);
@@ -102,8 +102,8 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
 
     private void createPendingCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
-        charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-        Bill bill = getBillingManager().getNextPeriodBill();
+        charge.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.pendingAccountAdjustments().setValue(bill.pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
         bill.lineItems().add(charge);
         bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
@@ -111,7 +111,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
 
     private void createPendingCredit(LeaseAdjustment adjustment) {
         InvoiceAccountCredit credit = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
-        Bill bill = getBillingManager().getNextPeriodBill();
+        Bill bill = getBillProducer().getNextPeriodBill();
         bill.pendingAccountAdjustments().setValue(bill.pendingAccountAdjustments().getValue().add(credit.amount().getValue()));
         bill.lineItems().add(credit);
     }
