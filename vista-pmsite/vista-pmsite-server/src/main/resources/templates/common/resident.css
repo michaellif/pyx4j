@@ -902,10 +902,6 @@ td.DatePickerMonth {
 	border-bottom-color: #949494;
 }
 
-.EntityFolderRowItemDecorator table td:FIRST-CHILD{
-	width: 683px;
-}
-
 .EntityFolderActionsBar {
 	opacity: 0.2;
 }
@@ -1827,4 +1823,8 @@ ul.footer_locations li {
     text-decoration: none;
     cursor: default;
 	font-size: 110%;
+}
+
+.TenantDashboardSection td {
+    vertical-align: middle !important;
 }
