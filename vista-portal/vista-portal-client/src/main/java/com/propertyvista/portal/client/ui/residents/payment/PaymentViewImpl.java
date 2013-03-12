@@ -25,19 +25,7 @@ public class PaymentViewImpl extends BasicViewImpl<PaymentRecordDTO> implements 
 
     public PaymentViewImpl() {
         super(i18n.tr("Submit"), null);
-        setForm(new PaymentForm() {
-            @Override
-            protected void onIAgree(boolean set) {
-                getSubmitButton().setEnabled(set);
-            }
-        });
-    }
-
-    @Override
-    public void populate(PaymentRecordDTO value) {
-        super.populate(value);
-
-        getSubmitButton().setEnabled(false);
+        setForm(new PaymentForm());
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -77,11 +78,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
-        }
-
-        @Override
-        protected void onIAgree(boolean set) {
-            PaymentForm.this.onIAgree(set);
         }
     };
 
@@ -349,7 +345,11 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         }
     }
 
-    protected void onIAgree(boolean set) {
-        // Implements meaningful in derived classes...
+    private Widget createLegalTermsPanel() {
+        FormFlexPanel panel = new FormFlexPanel();
+
+        panel.setWidget(1, 0, new HTML(i18n.tr("By pressing Submit you are acknowledgeing our...")));
+
+        return panel;
     }
 }

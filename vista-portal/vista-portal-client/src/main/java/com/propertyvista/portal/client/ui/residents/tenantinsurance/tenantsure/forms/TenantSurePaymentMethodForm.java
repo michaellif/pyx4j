@@ -16,10 +16,20 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -27,7 +37,13 @@ import com.propertyvista.domain.payment.PaymentType;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaymentMethod> {
 
+    private static final I18n i18n = I18n.get(TenantSurePaymentMethodForm.class);
+
     private final Command onSameAsCurrentAddressSelected;
+
+    private final CCheckBox iAgreeBox = new CCheckBox();
+
+    protected final CLabel<String> legalTerms = new CLabel<String>();
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -41,8 +57,40 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         this.isAgreedToPreauthorizedPayments = false;
     }
 
-    public boolean isAgreedToPreauthorizedPayments() {
-        return isAgreedToPreauthorizedPayments;
+    @Override
+    public IsWidget createContent() {
+        FormFlexPanel content = new FormFlexPanel();
+
+        content.setWidget(0, 0, super.createContent());
+        content.setBR(1, 0, 1);
+        content.setWidget(2, 0, createLegalTermsPanel());
+
+        return content;
+    }
+
+    private Widget createLegalTermsPanel() {
+        FormFlexPanel panel = new FormFlexPanel();
+
+        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
+
+        panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
+        panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+
+        panel.setWidget(2, 0, new DecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
+        iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                onIAgree(event.getValue());
+            }
+        });
+
+        return panel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
+        super.onValueSet(populate);
     }
 
     @Override
@@ -55,26 +103,18 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     @Override
-    protected void loadLegalTerms(PaymentType type) {
-        // DO nothin, we set it via setPreAuthorizedAgreement()
-    }
-
-    @Override
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
         if (set) {
             onSameAsCurrentAddressSelected.execute();
         }
     }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
-        super.onValueSet(populate);
-    }
-
-    @Override
     protected void onIAgree(boolean set) {
         isAgreedToPreauthorizedPayments = set;
+    }
+
+    public boolean isAgreedToPreauthorizedPayments() {
+        return isAgreedToPreauthorizedPayments;
     }
 
 }

@@ -50,18 +50,6 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
             }
-
-            @Override
-            protected void onIAgree(boolean set) {
-                getSubmitButton().setEnabled(set);
-            }
         });
-    }
-
-    @Override
-    public void populate(LeasePaymentMethod value) {
-        super.populate(value);
-
-        getSubmitButton().setEnabled(false);
     }
 }

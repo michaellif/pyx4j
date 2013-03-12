@@ -19,14 +19,10 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -34,7 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -46,10 +41,6 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
     private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
-
-    private final CCheckBox iAgreeBox = new CCheckBox();
-
-    protected final CLabel<String> legalTerms = new CLabel<String>();
 
     private final boolean twoColumns;
 
@@ -111,17 +102,12 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         container.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        container.setBR(++row, 0, 3);
-        container.setWidget(++row, 0, createLegalTermsPanel());
-        container.getFlexCellFormatter().setColSpan(row, 0, 3);
-
         // tweaks:
         get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 selectPaymentDetailsEditor(event.getValue(), false);
-                loadLegalTerms(event.getValue());
             }
         });
 
@@ -158,48 +144,5 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         }
 
         setPaymentTypeSelectionEditable(getValue().id().isNull());
-
-        if (!getValue().type().isNull()) {
-            loadLegalTerms(getValue().type().getValue());
-        }
-
-        iAgreeBox.setValue(false);
-    }
-
-    private Widget createLegalTermsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
-
-        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
-
-        panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
-        panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
-
-        panel.setWidget(2, 0, new DecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
-        iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onIAgree(event.getValue());
-            }
-        });
-
-        return panel;
-    }
-
-    protected void loadLegalTerms(PaymentType type) {
-        switch (type) {
-        case Echeck:
-            legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());
-            break;
-        case CreditCard:
-            legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedCC().getText());
-            break;
-        default:
-            assert false : "Illegal payment method type!";
-            break;
-        }
-    }
-
-    protected void onIAgree(boolean set) {
-        // Implements meaningful in derived classes...
     }
 }

@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -28,18 +29,24 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.resources.VistaResources;
+import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
@@ -171,10 +178,11 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         if (event.getValue().booleanValue()) {
-                            MessageDialog.confirm(i18n.tr("Please Confirm"), i18n.tr("Mark the payment as pre-authorized?"), new Command() {
+                            new PaymentMethodPreauthorizationAgreementDialog(get(proto().type()).getValue()) {
                                 @Override
-                                public void execute() { // Confirmation:
+                                public boolean onClickOk() { // Confirmation:
                                     presenter.savePaymentMethod(LeasePaymentMethodEditor.this.getValue());
+
                                     for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                                         for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
                                             if (comp instanceof LeasePaymentMethodEditor && !comp.equals(LeasePaymentMethodEditor.this)) {
@@ -183,13 +191,16 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                                             }
                                         }
                                     }
+
+                                    return true;
                                 }
-                            }, new Command() {
+
                                 @Override
-                                public void execute() { // Declining:
+                                public boolean onClickCancel() { // Declining:
                                     get(proto().isPreauthorized()).setValue(false, false);
+                                    return true;
                                 }
-                            });
+                            }.show();
                         }
                     }
                 });
@@ -205,6 +216,40 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                     get(proto().isPreauthorized()).setEnabled(false);
                 }
             }
+        }
+    }
+
+    public static abstract class PaymentMethodPreauthorizationAgreementDialog extends OkCancelDialog {
+
+        private static final I18n i18n = I18n.get(PaymentMethodPreauthorizationAgreementDialog.class);
+
+        public PaymentMethodPreauthorizationAgreementDialog(PaymentType paymentType) {
+            super(i18n.tr("Please Confirm"));
+            setBody(createBody(paymentType));
+            getOkButton().setText(i18n.tr("I Agree"));
+        }
+
+        private IsWidget createBody(PaymentType type) {
+            CLabel<String> legalTerms = new CLabel<String>();
+            switch (type) {
+            case Echeck:
+                legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());
+                break;
+            case CreditCard:
+                legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedCC().getText());
+                break;
+            default:
+                assert false : "Illegal payment method type!";
+                break;
+            }
+
+            FormFlexPanel content = new FormFlexPanel();
+
+            content.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
+            content.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
+            content.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+
+            return content;
         }
     }
 }
