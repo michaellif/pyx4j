@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
@@ -74,7 +74,7 @@ public class BillingUtils {
         return isFeature(product) && !((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }
 
-    public static List<InvoiceLineItem> getUnclaimedLineItems(InternalBillingAccount billingAccount) {
+    public static List<InvoiceLineItem> getUnclaimedLineItems(BillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().claimed(), false));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));

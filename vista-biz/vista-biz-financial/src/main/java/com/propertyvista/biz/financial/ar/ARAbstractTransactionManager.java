@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -49,11 +49,11 @@ public abstract class ARAbstractTransactionManager {
         Persistence.service().persist(invoiceLineItem);
     }
 
-    protected TransactionHistoryDTO getTransactionHistory(InternalBillingAccount billingAccount) {
+    protected TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
         return getTransactionHistory(billingAccount, null);
     }
 
-    TransactionHistoryDTO getTransactionHistory(InternalBillingAccount billingAccount, LogicalDate fromDate) {
+    TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount, LogicalDate fromDate) {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
@@ -77,10 +77,10 @@ public abstract class ARAbstractTransactionManager {
         return th;
     }
 
-    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(InternalBillingAccount billingAccount);
+    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
 
-    abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(InternalBillingAccount billingAccount);
+    abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 
-    abstract protected BigDecimal getCurrentBallance(InternalBillingAccount billingAccount);
+    abstract protected BigDecimal getCurrentBallance(BillingAccount billingAccount);
 
 }

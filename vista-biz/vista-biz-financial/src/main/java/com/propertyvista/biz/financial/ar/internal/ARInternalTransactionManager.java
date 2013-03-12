@@ -27,7 +27,7 @@ import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -84,7 +84,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(InternalBillingAccount billingAccount) {
+    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
         List<InvoiceDebit> lineItems;
         {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
@@ -110,7 +110,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(InternalBillingAccount billingAccount) {
+    protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO));
@@ -120,7 +120,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
         return lineItems;
     }
 
-    protected InvoicePayment getCorrespodingCreditByPayment(InternalBillingAccount billingAccount, PaymentRecord paymentRecord) {
+    protected InvoicePayment getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
         InvoicePayment credit;
         {
             EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
@@ -131,7 +131,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
         return credit;
     }
 
-    protected List<InvoiceCredit> getSuccedingCreditInvoiceLineItems(InternalBillingAccount billingAccount, InvoiceCredit credit) {
+    protected List<InvoiceCredit> getSuccedingCreditInvoiceLineItems(BillingAccount billingAccount, InvoiceCredit credit) {
         List<InvoiceCredit> lineItems;
         {
             EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
@@ -146,7 +146,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected BigDecimal getCurrentBallance(InternalBillingAccount billingAccount) {
+    protected BigDecimal getCurrentBallance(BillingAccount billingAccount) {
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         if (bill == null) {
             return BigDecimal.ZERO;
@@ -162,7 +162,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected TransactionHistoryDTO getTransactionHistory(InternalBillingAccount billingAccount) {
+    protected TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
         return super.getTransactionHistory(billingAccount);
     }
 

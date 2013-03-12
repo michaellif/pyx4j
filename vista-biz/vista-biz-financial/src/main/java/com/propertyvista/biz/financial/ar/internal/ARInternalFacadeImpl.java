@@ -73,10 +73,7 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        ARInternalPaymentManager.getInstance().rejectPayment(paymentRecord);
-        if (applyNSF) {
-            ARInternalNSFManager.getInstance().applyNSFCharge(paymentRecord);
-        }
+        ARInternalPaymentManager.getInstance().rejectPayment(paymentRecord, applyNSF);
     }
 
     @Override

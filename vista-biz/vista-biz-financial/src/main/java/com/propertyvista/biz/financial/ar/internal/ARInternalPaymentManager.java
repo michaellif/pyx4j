@@ -19,11 +19,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
-class ARInternalPaymentManager {
+class ARInternalPaymentManager extends ARAbstractPaymentManager {
 
     private static final I18n i18n = I18n.get(ARInternalPaymentManager.class);
 
@@ -38,7 +40,8 @@ class ARInternalPaymentManager {
         return SingletonHolder.INSTANCE;
     }
 
-    void postPayment(PaymentRecord paymentRecord) {
+    @Override
+    protected void postPayment(PaymentRecord paymentRecord) {
 
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);
@@ -52,7 +55,8 @@ class ARInternalPaymentManager {
         ARInternalTransactionManager.getInstance().postInvoiceLineItem(payment);
     }
 
-    void rejectPayment(PaymentRecord paymentRecord) {
+    @Override
+    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
 
         InvoicePaymentBackOut backOut = EntityFactory.create(InvoicePaymentBackOut.class);
         backOut.paymentRecord().set(paymentRecord);
@@ -65,5 +69,14 @@ class ARInternalPaymentManager {
         Persistence.service().persist(backOut);
 
         ARInternalTransactionManager.getInstance().postInvoiceLineItem(backOut);
+
+        if (applyNSF) {
+            ARInternalNSFManager.getInstance().applyNSFCharge(paymentRecord);
+        }
+    }
+
+    @Override
+    protected boolean validatePayment(PaymentRecord payment) throws ARException {
+        return true;
     }
 }

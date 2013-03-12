@@ -116,7 +116,6 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
                 epr.externalTransactionId().set(record.externalTransactionId());
             }
         }
-        Persistence.service().commit();
     }
 
     @Override
@@ -142,7 +141,6 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         epr.billingAccount().set(paymentRecord.billingAccount());
         epr.paymentRecord().set(paymentRecord);
         Persistence.service().persist(epr);
-        Persistence.service().commit();
     }
 
     private PaymentRecord getPaymentRecord(String transactionId) {
