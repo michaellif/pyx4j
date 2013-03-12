@@ -23,7 +23,7 @@ public class ProductItemTypeAdapter {
     /** @return product item type or <code>null</code> if a product item type for the given chargeCode haven't been found */
     public ProductItemType findProductItemType(String chargeCode) {
         EntityQueryCriteria<ProductItemType> criteria = EntityQueryCriteria.create(ProductItemType.class);
-        criteria.eq(criteria.proto().yardiChargeCodes().$(), chargeCode);
+        criteria.eq(criteria.proto().yardiChargeCodes().$().yardiChargeCode(), chargeCode);
         return Persistence.service().retrieve(criteria);
     }
 
