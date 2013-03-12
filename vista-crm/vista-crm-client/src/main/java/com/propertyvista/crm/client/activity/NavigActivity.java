@@ -43,6 +43,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
+import com.propertyvista.domain.reports.PaymentRecordReportMetadata;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -192,7 +193,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.reportsActive());
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Report.CustomerCreditCheck().formListerPlace()); // TODO this one is just temporary until the real report is ready
+        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(PaymentRecordReportMetadata.class)));
+//        folder.addNavigItem(new CrmSiteMap.Report.CustomerCreditCheck().formListerPlace()); // TODO this one is just temporary until the real report is ready
         return folder;
     }
 }

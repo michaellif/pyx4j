@@ -7,13 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-19
- * @author Amer Sohail
+ * Created on 2013-03-12
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.reports;
-
-import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -22,15 +20,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @Transient
-@Caption(name = "Customer Credit Check Report")
-public interface CustomerCreditCheckReportMetadata extends ReportMetadata {
+@Caption(name = "Payment Record Report")
+public interface PaymentRecordReportMetadata extends ReportMetadata {
 
-    IPrimitive<LogicalDate> minCreditCheckDate();
+    IPrimitive<LogicalDate> from();
 
-    IPrimitive<LogicalDate> maxCreditCheckDate();
-
-    IPrimitive<BigDecimal> minAmountChecked();
-
-    IPrimitive<BigDecimal> maxAmountChecked();
+    IPrimitive<LogicalDate> until();
 
 }

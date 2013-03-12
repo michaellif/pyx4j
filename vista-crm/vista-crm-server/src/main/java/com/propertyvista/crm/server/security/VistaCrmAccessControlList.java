@@ -114,6 +114,8 @@ import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateM
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
+import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
+import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
@@ -225,6 +227,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BreadcrumbsService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcTermsOfServiceService.class));
+
+// - Reports:
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsSettingsPersistenceService.class));
 
 // - Dashboard:
         // we want owners (dashboard creator) to have full access to dashboards they own, and other users only read-only access and only for shared.

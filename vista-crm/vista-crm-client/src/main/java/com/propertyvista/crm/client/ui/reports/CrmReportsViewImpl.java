@@ -22,8 +22,10 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.client.ui.reports.factories.AvailabilityReportFactory;
 import com.propertyvista.crm.client.ui.reports.factories.CustomerCreditCheckReportFactory;
+import com.propertyvista.crm.client.ui.reports.factories.PaymentRecordReportFactory;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
+import com.propertyvista.domain.reports.PaymentRecordReportMetadata;
 
 public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
 
@@ -33,6 +35,7 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
         factoryMap = new HashMap<Class<? extends ReportMetadata>, ReportFactory<?>>();
         factoryMap.put(AvailabilityReportMetadata.class, new AvailabilityReportFactory());
         factoryMap.put(CustomerCreditCheckReportMetadata.class, new CustomerCreditCheckReportFactory());
+        factoryMap.put(PaymentRecordReportMetadata.class, new PaymentRecordReportFactory());
     }
 
     public CrmReportsViewImpl() {

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.factories;
+package com.propertyvista.crm.client.ui.reports.components;
 
 import java.util.Set;
 
