@@ -64,7 +64,8 @@ BEGIN
         -- billing_billing_cycle
         
         ALTER TABLE billing_billing_cycle       ADD COLUMN pad_calculation_date DATE,
-                                                ADD COLUMN pad_execution_date DATE;
+                                                ADD COLUMN pad_execution_date DATE,
+                                                ADD COLUMN bill_execution_date DATE;
                                                 
                                                 
         -- field_user
@@ -200,6 +201,23 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- Move payment frequency from lease to billing_account
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_account  AS b '
+                ||'SET  payment_frequency =  l.payment_frequency '
+                ||'FROM '||v_schema_name||'.lease AS l '
+                ||'WHERE b.id = l.billing_account ';
+                
+        -- Create lease_billing_type_policy_items 
+        
+        EXECUTE 'INSERT INTO lease_billing_type_policy_item (id,payment_frequency,billing_cycle_start_day,'
+                ||'bill_execution_day_offset,payment_due_day_offset,final_due_day_offset,pad_calculation_day_offset,pad_execution_day_offset) '
+                ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, b.payment_frequency, '
+                ||'l.default_billing_cycle_sart_day AS billing_cycle_start_day,-15 AS bill_execution_day_offset,'
+                ||'0 AS payment_due_day_offset,15 AS final_due_day_offset, -3 AS pad_calculation_day_offset,'
+                ||'0 AS pad_execution_day_offset '
+                ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
+                ||'             (SELECT DISTINCT payment_frequency FROM '||v_schema_name||'.billing_account ) AS b )';   
         
          
         /**
