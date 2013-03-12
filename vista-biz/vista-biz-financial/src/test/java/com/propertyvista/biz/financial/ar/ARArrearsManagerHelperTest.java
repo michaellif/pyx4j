@@ -15,13 +15,11 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
-import junit.framework.TestCase;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 
-public class ARArrearsManagerHelperTest extends TestCase {
+public class ARArrearsManagerHelperTest extends ARArrearsManagerHelperTestBase {
 
     public void testAddInPlace() {
         AgingBuckets buckets1 = EntityFactory.create(AgingBuckets.class);
@@ -56,6 +54,9 @@ public class ARArrearsManagerHelperTest extends TestCase {
         assertEquals(buckets1.arrearsAmount().getValue(), new BigDecimal("3000000.00"));
         assertEquals(buckets1.creditAmount().getValue(), new BigDecimal("30000000.00"));
         assertEquals(buckets1.totalBalance().getValue(), new BigDecimal("300000000.00"));
-
     }
+
+    public void testCalculateAgingBuckets() {
+    }
+
 }

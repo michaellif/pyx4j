@@ -113,7 +113,7 @@ class ARTransactionManager {
         Collection<AgingBuckets> agingBucketsCollection = ARArrearsManager.getAgingBuckets(billingAccount);
 
         th.agingBuckets().addAll(agingBucketsCollection);
-        th.totalAgingBuckets().set(ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.createAgingBuckets(DebitType.total), agingBucketsCollection));
+        th.totalAgingBuckets().set(ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.initAgingBuckets(DebitType.total), agingBucketsCollection));
 
         return th;
     }

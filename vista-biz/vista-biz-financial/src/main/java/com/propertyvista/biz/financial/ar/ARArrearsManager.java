@@ -18,10 +18,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
@@ -38,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
@@ -48,54 +47,6 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ARArrearsManager {
-
-    private static LeaseArrearsSnapshot createArrearsSnapshot(InternalBillingAccount billingAccount) {
-        LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
-        arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
-        arrearsSnapshot.totalAgingBuckets().set(
-                ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.createAgingBuckets(DebitType.total), arrearsSnapshot.agingBuckets()));
-
-        arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
-
-        arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
-        return arrearsSnapshot;
-    }
-
-    private static BigDecimal unitRent(InternalBillingAccount billingAccount) {
-        return new BigDecimal("0.00"); // TODO how to fetch unit rent + taxes;
-    }
-
-    private static BigDecimal lastMonthRentDeposit(InternalBillingAccount billingAccount) {
-        return new BigDecimal("0.00");// TODO how to get last month rent deposit and taxes
-    }
-
-    private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
-        EntityQueryCriteria<InternalBillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(InternalBillingAccount.class);
-        billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
-        Iterator<InternalBillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
-
-        // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance         
-        BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
-        EnumMap<DebitType, AgingBuckets> agingBucketsAcc = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
-        for (DebitType debitType : DebitType.values()) {
-            agingBucketsAcc.put(debitType, ARArrearsManagerHelper.createAgingBuckets(debitType));
-        }
-
-        // accumulate
-        while (billingAccountsIter.hasNext()) {
-            ArrearsSnapshot arrearsSnapshot = createArrearsSnapshot(billingAccountsIter.next());
-            for (AgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
-                ARArrearsManagerHelper.addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
-            }
-            ARArrearsManagerHelper.addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
-        }
-
-        // put accumulated agingBuckets by category back to the general snapshot acccumulator
-        arrearsSnapshotAcc.agingBuckets().addAll(agingBucketsAcc.values());
-
-        return arrearsSnapshotAcc;
-    }
 
     static void updateArrearsHistory(InternalBillingAccount billingAccount) {
         // 1. createArrearsSnapshot for current time
@@ -108,7 +59,6 @@ public class ARArrearsManager {
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
         currentSnapshot.billingAccount().set(billingAccount);
         saveIfChanged(currentSnapshot, previousSnapshot);
-
     }
 
     static void updateArrearsHistory(Building building) {
@@ -187,68 +137,14 @@ public class ARArrearsManager {
 
     }
 
-    static Collection<AgingBuckets> getAgingBuckets(InternalBillingAccount billingAccount) {
-
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
-
-        Map<DebitType, AgingBuckets> agingBucketsMap = new HashMap<DebitType, AgingBuckets>();
-
-        LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(currentDate);
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-        LogicalDate firstDayOfCurrentMonth = new LogicalDate(calendar.getTime());
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, -30);
-        LogicalDate date30 = new LogicalDate(calendar.getTime());
-        calendar.add(Calendar.DATE, -30);
-        LogicalDate date60 = new LogicalDate(calendar.getTime());
-        calendar.add(Calendar.DATE, -30);
-        LogicalDate date90 = new LogicalDate(calendar.getTime());
-
-        for (InvoiceDebit debit : debits) {
-            if (!agingBucketsMap.containsKey(debit.debitType().getValue())) {
-                agingBucketsMap.put(debit.debitType().getValue(), ARArrearsManagerHelper.createAgingBuckets(debit.debitType().getValue()));
-            }
-            AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
-
-            if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(currentDate) < 0) {
-                agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
-            }
-
-            if (debit.dueDate().getValue().compareTo(currentDate) >= 0) {
-                agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(currentDate) < 0 && debit.dueDate().getValue().compareTo(date30) >= 0) {
-                agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(date30) < 0 && debit.dueDate().getValue().compareTo(date60) >= 0) {
-                agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(date60) < 0 && debit.dueDate().getValue().compareTo(date90) >= 0) {
-                agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(debit.outstandingDebit().getValue()));
-            } else {
-                agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(debit.outstandingDebit().getValue()));
-            }
-
-        }
-
-        // TODO calculate prepayments
-
-        for (AgingBuckets agingBuckets : agingBucketsMap.values()) {
-            BigDecimal arrearsAmount = agingBuckets.bucket30().getValue();
-            arrearsAmount = arrearsAmount.add(agingBuckets.bucket60().getValue());
-            arrearsAmount = arrearsAmount.add(agingBuckets.bucket90().getValue());
-            arrearsAmount = arrearsAmount.add(agingBuckets.bucketOver90().getValue());
-
-            agingBuckets.arrearsAmount().setValue(arrearsAmount);
-            agingBuckets.totalBalance().setValue(arrearsAmount.subtract(agingBuckets.creditAmount().getValue()));
-        }
-
-        return agingBucketsMap.values();
+    static Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
+        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+        return ARArrearsManagerHelper.calculateAgingBuckets(debits);
     }
 
     private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
         ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
-        snapshot.totalAgingBuckets().set(ARArrearsManagerHelper.createAgingBuckets(DebitType.total));
+        snapshot.totalAgingBuckets().set(ARArrearsManagerHelper.initAgingBuckets(DebitType.total));
         return snapshot;
     }
 
@@ -301,6 +197,54 @@ public class ARArrearsManager {
             currentSnapshot.toDate().setValue(OccupancyFacade.MAX_DATE);
             Persistence.service().persist(currentSnapshot);
         }
+    }
+
+    private static LeaseArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
+        LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
+        arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
+        arrearsSnapshot.totalAgingBuckets().set(
+                ARArrearsManagerHelper.addInPlace(ARArrearsManagerHelper.initAgingBuckets(DebitType.total), arrearsSnapshot.agingBuckets()));
+
+        arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
+
+        arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
+        return arrearsSnapshot;
+    }
+
+    private static BigDecimal unitRent(BillingAccount billingAccount) {
+        return new BigDecimal("0.00"); // TODO how to fetch unit rent + taxes;
+    }
+
+    private static BigDecimal lastMonthRentDeposit(BillingAccount billingAccount) {
+        return new BigDecimal("0.00");// TODO how to get last month rent deposit and taxes
+    }
+
+    private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
+        EntityQueryCriteria<InternalBillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(InternalBillingAccount.class);
+        billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
+        Iterator<InternalBillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
+
+        // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance         
+        BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
+        EnumMap<DebitType, AgingBuckets> agingBucketsAcc = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
+        for (DebitType debitType : DebitType.values()) {
+            agingBucketsAcc.put(debitType, ARArrearsManagerHelper.initAgingBuckets(debitType));
+        }
+
+        // accumulate
+        while (billingAccountsIter.hasNext()) {
+            ArrearsSnapshot arrearsSnapshot = createArrearsSnapshot(billingAccountsIter.next());
+            for (AgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
+                ARArrearsManagerHelper.addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
+            }
+            ARArrearsManagerHelper.addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
+        }
+
+        // put accumulated agingBuckets by category back to the general snapshot accumulator
+        arrearsSnapshotAcc.agingBuckets().addAll(agingBucketsAcc.values());
+
+        return arrearsSnapshotAcc;
     }
 
 }
