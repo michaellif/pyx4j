@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Stack;
@@ -67,7 +68,11 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     protected final CellStyle cellStyleDate;
 
-    protected final CellStyle dollarStyle;
+    protected final CellStyle cellStyleDollar;
+
+    protected final CellStyle cellStyleInteger;
+
+    protected final CellStyle cellStyleDouble;
 
     private Stack<GroupStart> groupRows = null;
 
@@ -113,12 +118,20 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         // Use text for now ...
 
         // Create currency style
-        this.dollarStyle = this.workbook.createCellStyle();
-        this.dollarStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+        this.cellStyleDollar = this.workbook.createCellStyle();
+        this.cellStyleDollar.setAlignment(CellStyle.ALIGN_RIGHT);
         //Not working
         //this.dollarStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("currency"));
         DataFormat format = workbook.createDataFormat();
-        this.dollarStyle.setDataFormat(format.getFormat("$* #,##0.00"));
+        this.cellStyleDollar.setDataFormat(format.getFormat("_-\"$\"* #,##0.00_-;\\-\"$\"* #,##0.00_-;_-\"$\"* \"-\"??_-;_-@_-"));
+
+        this.cellStyleInteger = this.workbook.createCellStyle();
+        this.cellStyleInteger.setFont(font);
+        this.cellStyleInteger.setDataFormat((short) BuiltinFormats.getBuiltinFormat("0"));
+
+        this.cellStyleDouble = this.workbook.createCellStyle();
+        this.cellStyleDouble.setFont(font);
+        this.cellStyleDouble.setDataFormat((short) BuiltinFormats.getBuiltinFormat("0.00"));
     }
 
     public boolean isAutosize() {
@@ -193,6 +206,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             cell((Date) value);
         } else if (value instanceof Boolean) {
             cell(((Boolean) value).booleanValue());
+        } else if (value instanceof BigDecimal) {
+            cell((BigDecimal) value);
         } else if (value instanceof Double) {
             cell(((Double) value).doubleValue());
         } else if (value instanceof Number) {
@@ -213,18 +228,25 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         cell.setCellValue(new XSSFRichTextString(value));
     }
 
+    public void cell(BigDecimal value) {
+        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        cell.setCellStyle(this.cellStyleDollar);
+        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellValue(value.doubleValue());
+    }
+
     public void cell(double value) {
         Cell cell = this.curentRow.createCell(this.cellIdx++);
-        cell.setCellStyle(this.cellStyleDefault);
-        cell.setCellValue(value);
+        cell.setCellStyle(this.cellStyleDouble);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellValue(value);
     }
 
     public void cell(long value) {
         Cell cell = this.curentRow.createCell(this.cellIdx++);
-        cell.setCellStyle(this.cellStyleDefault);
-        cell.setCellValue(value);
+        cell.setCellStyle(this.cellStyleInteger);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellValue(value);
     }
 
     public void cell(boolean value) {
@@ -258,7 +280,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     public void cellCurrency(double value) {
         Cell cell = this.curentRow.createCell(this.cellIdx++);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.dollarStyle);
+        cell.setCellStyle(this.cellStyleDollar);
         cell.setCellValue(value);
     }
 
