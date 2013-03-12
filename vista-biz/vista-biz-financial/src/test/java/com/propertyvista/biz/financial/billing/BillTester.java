@@ -62,7 +62,7 @@ public class BillTester extends Tester {
     }
 
     public BillTester billingCycleExecutionTargetDate(String date) {
-        assertEquals("Billing Run Execution Target Day", getDate(date), bill.billingCycle().executionTargetDate().getValue());
+        assertEquals("Billing Run Execution Target Day", getDate(date), bill.billingCycle().billExecutionDate().getValue());
         return this;
     }
 

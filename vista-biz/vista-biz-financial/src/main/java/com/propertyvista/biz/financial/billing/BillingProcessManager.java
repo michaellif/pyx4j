@@ -103,7 +103,7 @@ public class BillingProcessManager {
      */
     static void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billExecutionDate(), date));
         ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (billingCycleIterator.hasNext()) {
             runBilling(billingCycleIterator.next(), executionMonitor);
