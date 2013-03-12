@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -26,6 +27,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -42,8 +44,6 @@ public interface PadSimFile extends IEntity {
 
     public enum PadSimFileStatus {
 
-        Loaded,
-
         Acknowledged,
 
         ReconciliationSent;
@@ -54,7 +54,8 @@ public interface PadSimFile extends IEntity {
     IPrimitive<String> fileName();
 
     @ToString
-    IPrimitive<PadSimFileStatus> status();
+    @Editor(type = Editor.EditorType.label)
+    IPrimitiveSet<PadSimFileStatus> state();
 
     IPrimitive<String> companyId();
 
@@ -79,10 +80,12 @@ public interface PadSimFile extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @Format("yyyy-MM-dd HH:mm")
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> received();
 
     @Timestamp(Timestamp.Update.Updated)
     @Format("yyyy-MM-dd HH:mm")
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> updated();
 
     IPrimitive<Date> acknowledged();

@@ -67,7 +67,6 @@ public class PadSim {
 
         PadSimFile padFile = new PadSimFileParser().parsReport(file);
         padFile.fileName().setValue(file.getName());
-        padFile.status().setValue(PadSimFile.PadSimFileStatus.Loaded);
         padFile.batchRecordsCount().setValue(padFile.batches().size());
         Persistence.service().persist(padFile);
         for (PadSimBatch padBatch : padFile.batches()) {
@@ -117,7 +116,7 @@ public class PadSim {
 
     public void replyAcknowledgment(PadSimFile triggerStub) {
         PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
-        padFile.status().setValue(PadSimFile.PadSimFileStatus.Acknowledged);
+        padFile.state().add(PadSimFile.PadSimFileStatus.Acknowledged);
         padFile.acknowledged().setValue(SystemDateManager.getDate());
 
         Persistence.service().retrieveMember(padFile.batches());
@@ -218,7 +217,7 @@ public class PadSim {
         PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
         Persistence.service().retrieveMember(padFile.batches());
 
-        padFile.status().setValue(PadSimFile.PadSimFileStatus.ReconciliationSent);
+        padFile.state().add(PadSimFile.PadSimFileStatus.ReconciliationSent);
         padFile.reconciliationSent().setValue(SystemDateManager.getDate());
         updateReconciliation(padFile);
 

@@ -26,7 +26,7 @@ public class PadFileLister extends ListerBase<PadSimFile> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().fileName()).build(),
             new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
+            new MemberColumnDescriptor.Builder(proto().state()).build(),
             new MemberColumnDescriptor.Builder(proto().received()).build(),
             new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
             new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
