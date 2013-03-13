@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.billing.InvoiceCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
-public class ARArrearsManagerHelperTestBase extends TestCase {
+public class ARAbstractArrearsManagerTestBase extends TestCase {
 
     protected InvoiceDebit makeCharge(DebitType debitType, String amount, String outstandingDebit, String dueDate) {
         InvoiceCharge charge = EntityFactory.create(InvoiceCharge.class);

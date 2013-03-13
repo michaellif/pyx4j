@@ -15,11 +15,13 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import junit.framework.TestCase;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 
-public class ARArrearsManagerHelperTest extends ARArrearsManagerHelperTestBase {
+public class ARArrearsManagerUtilsTest extends TestCase {
 
     public void testAddInPlace() {
         AgingBuckets buckets1 = EntityFactory.create(AgingBuckets.class);
@@ -44,7 +46,7 @@ public class ARArrearsManagerHelperTest extends ARArrearsManagerHelperTestBase {
         buckets2.creditAmount().setValue(new BigDecimal("20000000.00"));
         buckets2.totalBalance().setValue(new BigDecimal("200000000.00"));
 
-        ARAbstractArrearsManager.addInPlace(buckets1, buckets2);
+        ARArreasManagerUtils.addInPlace(buckets1, buckets2);
         assertEquals(buckets1.bucketThisMonth().getValue(), new BigDecimal("3.00"));
         assertEquals(buckets1.bucketCurrent().getValue(), new BigDecimal("30.00"));
         assertEquals(buckets1.bucket30().getValue(), new BigDecimal("300.00"));
@@ -54,9 +56,6 @@ public class ARArrearsManagerHelperTest extends ARArrearsManagerHelperTestBase {
         assertEquals(buckets1.arrearsAmount().getValue(), new BigDecimal("3000000.00"));
         assertEquals(buckets1.creditAmount().getValue(), new BigDecimal("30000000.00"));
         assertEquals(buckets1.totalBalance().getValue(), new BigDecimal("300000000.00"));
-    }
-
-    public void testCalculateAgingBuckets() {
     }
 
 }

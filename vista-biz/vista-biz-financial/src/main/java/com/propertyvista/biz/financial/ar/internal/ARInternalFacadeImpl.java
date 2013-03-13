@@ -103,23 +103,28 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
-        return ARInternalArrearsManager.getArrearsSnapshot(buildingStub, asOf);
+        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshot(buildingStub, asOf);
+    }
+
+    @Override
+    public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
+        return ARInternalArrearsManager.getInstance().getAgingBuckets(billingAccount);
     }
 
     @Override
     public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
-        return ARInternalArrearsManager.getArrearsSnapshot(billingAccount, asOf);
+        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshot(billingAccount, asOf);
     }
 
     @Override
     public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
-        return ARInternalArrearsManager.getArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
     }
 
     @Override
     public void updateArrearsHistory(BillingAccount billingAccount) {
-        ARInternalArrearsManager.getInstance().updateArrearsHistory(billingAccount.<InternalBillingAccount> cast());
+        ARInternalArrearsManager.getInstance().updateArrearsHistory(billingAccount);
 
     }
 
@@ -142,11 +147,6 @@ public class ARInternalFacadeImpl implements ARFacade {
     public Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
-        return ARInternalArrearsManager.getInstance().getAgingBuckets(billingAccount);
     }
 
 }
