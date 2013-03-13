@@ -171,7 +171,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                 UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
                 PmcProcessContext context = new PmcProcessContext(new Date());
                 GregorianCalendar cal = new GregorianCalendar();
-                int numOfYearsBack = 3;
+                int numOfYearsBack = 1;
                 cal.add(Calendar.YEAR, -numOfYearsBack);
                 setProgress(0, numOfYearsBack * 12);
                 LogicalDate today = new LogicalDate();

@@ -290,7 +290,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     public TenantSureTenantInsuranceStatusDetailedDTO getStatus(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         if (insuranceTenantSure == null) {
-            throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
+            return null;
         }
 
         TenantSureTenantInsuranceStatusDetailedDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDetailedDTO.class);

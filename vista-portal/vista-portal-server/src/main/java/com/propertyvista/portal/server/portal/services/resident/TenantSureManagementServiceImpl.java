@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
@@ -36,7 +37,11 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
     public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
         TenantSureTenantInsuranceStatusDetailedDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
-        callback.onSuccess(status);
+        if (status != null) {
+            callback.onSuccess(status);
+        } else {
+            throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
+        }
     }
 
     @Override
