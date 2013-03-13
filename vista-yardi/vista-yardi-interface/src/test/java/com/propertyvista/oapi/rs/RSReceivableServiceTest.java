@@ -21,6 +21,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sun.jersey.api.client.ClientResponse;
@@ -74,6 +75,7 @@ public class RSReceivableServiceTest extends RSOapiTestBase {
     }
 
     @Test
+    @Ignore
     public void testReconcilePaymentRecords_MockPaymentRecordsList() {
         WebResource webResource = resource();
 
