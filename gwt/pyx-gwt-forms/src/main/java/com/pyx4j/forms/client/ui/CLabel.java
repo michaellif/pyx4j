@@ -20,48 +20,41 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public class CLabel<E> extends CComponent<E, NLabel<E>> {
-
-    private IFormat<E> format;
+public class CLabel<E> extends CTextFieldBase<E, NTextBox<E>> {
 
     public CLabel() {
         this(null);
-
     }
 
     public CLabel(String title) {
         super(title);
-        setWidth("100%");
-        setFormat(new IFormat<E>() {
-            @Override
-            public String format(E value) {
-                if (value == null) {
-                    return null;
-                } else {
-                    return value.toString();
-                }
-            }
-
-            @Override
-            public E parse(String string) {
-                return null;
-            }
-        });
+        setFormat(new LabelFormat());
+        setViewable(true);
     }
 
-    public void setFormat(IFormat<E> format) {
-        this.format = format;
-    }
-
-    public IFormat<E> getFormat() {
-        return format;
+    public CLabel(String title, boolean mandatory) {
+        this(title);
+        this.setMandatory(mandatory);
     }
 
     @Override
-    protected NLabel<E> createWidget() {
-        NLabel<E> widget = new NLabel<E>(this);
-//      widget.getElement().getStyle().setOverflowX(Overflow.AUTO);
-//        widget.setWordWrap(this.isWordWrap());
-        return widget;
+    protected NTextBox<E> createWidget() {
+        return new NTextBox<E>(this);
+    }
+
+    class LabelFormat implements IFormat<E> {
+        @Override
+        public String format(E value) {
+            if (value == null) {
+                return null;
+            } else {
+                return value.toString();
+            }
+        }
+
+        @Override
+        public E parse(String string) {
+            return null;
+        }
     }
 }

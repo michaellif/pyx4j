@@ -25,6 +25,7 @@ import java.text.ParseException;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.FocusWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -36,6 +37,8 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         HasNValueChangeHandlers<String> {
 
     private IFormat<DATA> format;
+
+    private boolean escapeHTML = true;
 
     public CTextFieldBase(String title) {
         super(title);
@@ -52,6 +55,20 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     public IFormat<DATA> getFormat() {
         return format;
+    }
+
+    public void setEscapeHTML(boolean escapeHTML) {
+        this.escapeHTML = escapeHTML;
+    }
+
+    public String format(DATA value) {
+        String text = null;
+        try {
+            text = getFormat().format(value);
+        } catch (Exception ignore) {
+        }
+        text = (text == null) ? "" : text;
+        return escapeHTML ? SafeHtmlUtils.fromString(text).asString() : text;
     }
 
     @Override
