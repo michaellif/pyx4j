@@ -38,6 +38,7 @@ SET search_path = '_admin_';
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE dev_card_service_simulation_transaction DROP CONSTRAINT dev_card_service_simulation_transaction_transaction_type_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
+        ALTER TABLE pad_sim_file DROP CONSTRAINT pad_sim_file_status_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
        
@@ -54,6 +55,19 @@ SET search_path = '_admin_';
         
         ALTER TABLE dev_card_service_simulation_transaction RENAME COLUMN transaction_type TO tp;
         
+        
+        -- pad_sim_file$state
+        
+        CREATE TABLE pad_sim_file$state
+        (
+                id                              BIGINT                  NOT NULL,
+                owner                           BIGINT,
+                value                           VARCHAR(50),
+                        CONSTRAINT      pad_sim_file$state_pk PRIMARY KEY(id)
+        );
+        
+        
+        ALTER TABLE pad_sim_file$state OWNER TO vista;
         
         -- scheduler_execution_report
        
@@ -89,7 +103,10 @@ SET search_path = '_admin_';
         ***
         ***     ========================================================================================================
         **/
-               
+        
+        -- Foreigh keys 
+        ALTER TABLE pad_sim_file$state ADD CONSTRAINT pad_sim_file$state_owner_fk FOREIGN KEY(owner) REFERENCES pad_sim_file(id);
+             
         -- Check constraints
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('field', 'prospectPortal', 'residentPortal', 'vistaCrm'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident'));
@@ -114,6 +131,7 @@ SET search_path = '_admin_';
         **/
         
         CREATE UNIQUE INDEX dev_card_service_simulation_transaction_reference_tp_idx ON dev_card_service_simulation_transaction USING btree (reference, tp);
+        CREATE INDEX pad_sim_file$state_owner_idx ON pad_sim_file$state USING btree (owner);
             
        
 
