@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -72,23 +73,33 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
 
     @Override
     protected BigDecimal getCurrentBallance(BillingAccount billingAccount) {
-        return calculateTotal(getYardiCharges(billingAccount), getYardiPayments(billingAccount));
+        return calculateTotal(getYardiCharges(billingAccount), getYardiCredits(billingAccount), getYardiPayments(billingAccount));
     }
 
     @Override
     protected TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
         List<YardiCharge> charges = getYardiCharges(billingAccount);
+        List<YardiCredit> credits = getYardiCredits(billingAccount);
         List<YardiPayment> payments = getYardiPayments(billingAccount);
         th.lineItems().addAll(charges);
+        th.lineItems().addAll(credits);
         th.lineItems().addAll(payments);
-        th.currentBalanceAmount().setValue(calculateTotal(charges, payments));
+        th.currentBalanceAmount().setValue(calculateTotal(charges, credits, payments));
         th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         return th;
     }
 
     private List<YardiCharge> getYardiCharges(BillingAccount billingAccount) {
         EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+        criteria.asc(criteria.proto().id());
+        return Persistence.service().query(criteria);
+    }
+
+    private List<YardiCredit> getYardiCredits(BillingAccount billingAccount) {
+        EntityQueryCriteria<YardiCredit> criteria = EntityQueryCriteria.create(YardiCredit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
         criteria.asc(criteria.proto().id());
@@ -103,9 +114,12 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         return Persistence.service().query(criteria);
     }
 
-    private BigDecimal calculateTotal(List<YardiCharge> charges, List<YardiPayment> payments) {
+    private BigDecimal calculateTotal(List<YardiCharge> charges, List<YardiCredit> credits, List<YardiPayment> payments) {
         BigDecimal total = BigDecimal.ZERO;
         for (InvoiceLineItem item : charges) {
+            total = total.add(item.amount().getValue());
+        }
+        for (InvoiceLineItem item : credits) {
             total = total.add(item.amount().getValue());
         }
         for (InvoiceLineItem item : payments) {

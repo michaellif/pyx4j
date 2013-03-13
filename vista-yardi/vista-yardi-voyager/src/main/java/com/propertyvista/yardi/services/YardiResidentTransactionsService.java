@@ -52,8 +52,8 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -256,7 +256,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     if (tr != null) {
                         if (tr.getCharge() != null) {
                             log.info("          Updating charge");
-                            YardiCharge charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
+                            InvoiceLineItem charge = YardiProcessorUtils.createCharge(account, tr.getCharge().getDetail());
                             Persistence.service().persist(charge);
                             state.addCharge(charge.amount().getValue());
                         }

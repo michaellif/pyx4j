@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -66,18 +67,26 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
         if (value != null) {
             List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
             List<YardiCharge> outstangingCharges = new ArrayList<YardiCharge>();
+            List<YardiCredit> accountCredits = new ArrayList<YardiCredit>();
 
             for (InvoiceLineItem invoiceLineItem : value.lineItems()) {
                 if (invoiceLineItem.isInstanceOf(YardiPayment.class)) {
-                    unappliedPayments.add(invoiceLineItem.duplicate(YardiPayment.class));
+                    unappliedPayments.add((YardiPayment) invoiceLineItem);
                 } else if (invoiceLineItem.isInstanceOf(YardiCharge.class)) {
-                    outstangingCharges.add(invoiceLineItem.duplicate(YardiCharge.class));
+                    outstangingCharges.add((YardiCharge) invoiceLineItem);
+                } else if (invoiceLineItem.isInstanceOf(YardiCredit.class)) {
+                    accountCredits.add((YardiCredit) invoiceLineItem);
                 }
             }
 
             int[] row = { -1 };
             contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
             renderLineItems(row, contentPanel, outstangingCharges, chargeFormat);
+
+            if (!accountCredits.isEmpty()) {
+                contentPanel.setH1(++row[0], 0, 3, i18n.tr("Account Credits"));
+                renderLineItems(row, contentPanel, accountCredits, paymentFormat);
+            }
 
             if (!unappliedPayments.isEmpty()) {
                 contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));

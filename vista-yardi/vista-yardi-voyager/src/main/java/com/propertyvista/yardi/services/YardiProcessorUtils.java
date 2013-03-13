@@ -36,8 +36,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -95,28 +97,36 @@ public class YardiProcessorUtils {
         return account;
     }
 
-    public static YardiCharge createCharge(YardiBillingAccount account, ChargeDetail detail) {
-        YardiCharge charge = EntityFactory.create(YardiCharge.class);
-        charge.billingAccount().set(account);
-        if (detail.getService() != null) {
-            try {
-                charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
-            } catch (Exception e) {
-                log.info("ERROR - unknown service type: " + e);
+    public static InvoiceLineItem createCharge(YardiBillingAccount account, ChargeDetail detail) {
+        BigDecimal amount = new BigDecimal(detail.getAmount());
+        InvoiceLineItem item = null;
+        if (amount.compareTo(BigDecimal.ZERO) >= 0) {
+            YardiCharge charge = EntityFactory.create(YardiCharge.class);
+            charge.chargeCode().setValue(detail.getChargeCode());
+            charge.debitType().setValue(new DebitTypeAdapter().getDebitType(new ProductItemTypeAdapter().findProductItemType(detail.getChargeCode())));
+            charge.transactionId().setValue(detail.getTransactionID());
+            charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
+            charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
+            charge.comment().setValue(detail.getComment());
+            charge.taxTotal().setValue(BigDecimal.ZERO);
+            if (detail.getService() != null) {
+                try {
+                    charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
+                } catch (Exception e) {
+                    log.info("ERROR - unknown service type: " + e);
+                }
             }
+            item = charge;
+        } else {
+            YardiCredit credit = EntityFactory.create(YardiCredit.class);
+            item = credit;
         }
-        charge.chargeCode().setValue(detail.getChargeCode());
-        charge.debitType().setValue(new DebitTypeAdapter().getDebitType(new ProductItemTypeAdapter().findProductItemType(detail.getChargeCode())));
-        charge.amount().setValue(new BigDecimal(detail.getAmount()));
-        charge.description().setValue(detail.getDescription());
-        charge.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
-        charge.transactionId().setValue(detail.getTransactionID());
-        charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
-        charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
-        charge.comment().setValue(detail.getComment());
-        charge.taxTotal().setValue(BigDecimal.ZERO);
+        item.billingAccount().set(account);
+        item.amount().setValue(amount);
+        item.description().setValue(detail.getDescription());
+        item.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
 
-        return charge;
+        return item;
     }
 
     /*
