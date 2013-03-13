@@ -23,6 +23,7 @@ import java.util.concurrent.Callable;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
@@ -45,11 +46,13 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class VistaBusinessStatsReport {
@@ -85,6 +88,11 @@ class VistaBusinessStatsReport {
             formatter.newRow();
         }
 
+        formatter.header("Date of the report");
+        formatter.newRow();
+        formatter.cell(new LogicalDate());
+        formatter.newRow();
+
         formatter.newRow();
         // Header for PMC data
         EntityReportFormatter<VistaBusinessStatsPmcData> er = new EntityReportFormatter<VistaBusinessStatsPmcData>(VistaBusinessStatsPmcData.class);
@@ -118,6 +126,8 @@ class VistaBusinessStatsReport {
             data.lastLogin().setValue(auditRecord.created().getValue());
             data.active().setValue(data.lastLogin().getValue().after(reportSince));
         }
+
+        data.country().setValue(pmc.features().countryOfOperation().getValue().toString());
 
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -213,15 +223,33 @@ class VistaBusinessStatsReport {
         }
 
         {
-            EntityQueryCriteria<LeaseParticipant> criteria = EntityQueryCriteria.create(LeaseParticipant.class);
-            List<Lease.Status> statuses = new ArrayList<Lease.Status>();
-            statuses.add(Lease.Status.ExistingLease);
-            statuses.add(Lease.Status.Active);
-            criteria.in(criteria.proto().lease().status(), statuses);
-            data.insurancePercent().setValue(data.insuranceCount().getValue() * 1.0 / Persistence.service().count(criteria));
+            EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
+            criteria.ge(criteria.proto().creditCheckDate(), monthlyPeriod);
+            data.processedReports().setValue(Persistence.service().count(criteria));
+        }
+
+        {
+
+            List<CrmUserCredential> users = Persistence.service().query(EntityQueryCriteria.create(CrmUserCredential.class));
+            CrmUserCredential crmUser = EntityFactory.create(CrmUserCredential.class);
+            userLoop: for (CrmUserCredential user : users) {
+                for (CrmRole role : user.roles()) {
+                    for (VistaCrmBehavior behaviour : role.behaviors()) {
+                        if (behaviour.equals(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+                            Persistence.service().retrieve(user.user());
+                            crmUser = user;
+                            break userLoop;
+                        }
+                    }
+                }
+            }
+
+            data.contactName().setValue(crmUser.user().name() != null ? crmUser.user().name().getValue() : null);
+            data.contactEmail().setValue(crmUser.user().email() != null ? crmUser.user().email().getValue() : null);
         }
 
         er.reportEntity(formatter, data);
+
     }
 
     static void completeStatsReport(ReportTableFormatter formater) {

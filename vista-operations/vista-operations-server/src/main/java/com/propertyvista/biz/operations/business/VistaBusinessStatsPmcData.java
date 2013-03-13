@@ -35,6 +35,8 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     // PMC stats
 
+    IPrimitive<String> country();
+
     IPrimitive<Integer> buildingCount();
 
     IPrimitive<Integer> newBuildingCount();
@@ -53,11 +55,7 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     IPrimitive<Integer> payingTenants();
 
-    IPrimitive<Double> payingTenantsPercent();
-
     IPrimitive<Integer> newPayingTenants();
-
-    IPrimitive<Double> newPayingTenantsPercent();
 
     IPrimitive<Integer> eChequeCount();
 
@@ -79,20 +77,22 @@ public interface VistaBusinessStatsPmcData extends IEntity {
 
     IPrimitive<Integer> insuranceCount();
 
-    IPrimitive<Double> insurancePercent();
-
     IPrimitive<Integer> newInsurance();
 
     IPrimitive<Integer> otherInsurance();
 
-    IPrimitive<Double> otherInsurancePercent();
-
-    IPrimitive<Integer> noInsurance();
-
-    IPrimitive<Double> noInsurancePercent();
-
     // Equifax
 
     IPrimitive<Integer> processedReports();
+
+    IPrimitive<BigDecimal> reportCost();
+
+    // Details
+
+    IPrimitive<String> contactName();
+
+    IPrimitive<String> contactEmail();
+
+    IPrimitive<String> contactPhone();
 
 }
