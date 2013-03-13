@@ -335,7 +335,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         assert (persistenceContext != null) : "Transaction Context was not started";
 
         if (PersistenceContext.traceTransaction) {
-            log.info("{} endTransaction", persistenceContext.txId());
+            log.info("{} endTransaction\n\tfrom:{}\t", persistenceContext.txId(), Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
         }
 
         if (persistenceContext.endTransaction()) {
