@@ -77,7 +77,6 @@ public class UpdateArrearsProcess implements PmcProcess {
                     context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                 } catch (Throwable t) {
                     log.error("failed to update arrears history", t);
-                    Persistence.service().rollback();
                     failed++;
                     context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
                 }
