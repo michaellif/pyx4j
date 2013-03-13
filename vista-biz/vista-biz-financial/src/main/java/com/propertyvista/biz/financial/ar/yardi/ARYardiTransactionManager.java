@@ -49,19 +49,12 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
 
     @Override
     protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+        List<InvoiceDebit> debits = new ArrayList<InvoiceDebit>();
+
         EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);
         criteria.eq(criteria.proto().billingAccount(), billingAccount);
         criteria.ge(criteria.proto().outstandingDebit(), BigDecimal.ZERO);
-
-        List<InvoiceDebit> debits = new ArrayList<InvoiceDebit>();
-        // TODO this check is required because today (2013-03-13) Yardi importer cannot be trusted 
-        for (YardiCharge charge : Persistence.service().query(criteria)) {
-            if (charge.amount().getValue().compareTo(BigDecimal.ZERO) >= 0) {
-                debits.add(charge);
-            } else {
-                throw new IllegalStateException("Wrong (negative) amount() in yardi charge (" + charge.getPrimaryKey() + ")");
-            }
-        }
+        debits.addAll(Persistence.service().query(criteria));
         return debits;
 
     }
