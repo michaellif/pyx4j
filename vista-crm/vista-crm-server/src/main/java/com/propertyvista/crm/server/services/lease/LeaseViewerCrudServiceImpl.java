@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
+import java.rmi.RemoteException;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -31,6 +32,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
@@ -208,7 +210,13 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
 
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(lease);
+        try {
+            ServerSideFactory.create(YardiProcessFacade.class).updateLease(lease);
+        } catch (RemoteException e) {
+            throw new UserRuntimeException(i18n.tr("Yardi connection problem"));
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(i18n.tr("Error updating lease form Yardi"));
+        }
 
         Persistence.service().commit();
         callback.onSuccess(null);

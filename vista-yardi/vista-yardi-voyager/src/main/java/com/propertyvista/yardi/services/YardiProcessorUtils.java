@@ -164,7 +164,7 @@ public class YardiProcessorUtils {
             reversalType.setType("Reverse");
         }
         detail.setReversal(reversalType);
-        detail.setDocumentNumber(pr.getPrimaryKey().toString());
+        detail.setDocumentNumber(pr.paymentMethod().type().getValue().toString() + ":" + pr.getPrimaryKey().toString());
         detail.setTransactionDate(pr.createdDate().getValue());
         detail.setCustomerID(reversal.billingAccount().lease().leaseId().getValue());
         detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());

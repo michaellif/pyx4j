@@ -710,7 +710,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         ServerSideFactory.create(ARFacade.class).removeHardLink(link);
     }
 
-    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
         Persistence.service().commit();
     }

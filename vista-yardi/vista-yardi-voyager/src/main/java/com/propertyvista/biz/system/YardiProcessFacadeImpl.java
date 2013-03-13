@@ -27,23 +27,15 @@ import com.propertyvista.yardi.services.YardiSystemBatchesService;
 public class YardiProcessFacadeImpl implements YardiProcessFacade {
 
     @Override
-    public void doAllImport(ExecutionMonitor executionMonitor) {
+    public void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential(), executionMonitor);
-        } catch (YardiServiceException e) {
-            throw new RuntimeException(e);
-        }
+        YardiResidentTransactionsService.getInstance().updateAll(VistaDeployment.getPmcYardiCredential(), executionMonitor);
     }
 
     @Override
-    public void updateLease(Lease lease) {
+    public void updateLease(Lease lease) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(), lease);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        YardiResidentTransactionsService.getInstance().updateLease(VistaDeployment.getPmcYardiCredential(), lease);
     }
 
     @Override
@@ -59,13 +51,9 @@ public class YardiProcessFacadeImpl implements YardiProcessFacade {
     }
 
     @Override
-    public void postReceiptReversal(YardiReceiptReversal reversal) {
+    public void postReceiptReversal(YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
-        try {
-            YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal);
     }
 
 }

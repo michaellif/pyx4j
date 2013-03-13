@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.ar.yardi;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
-import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,9 +60,9 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         Persistence.ensureRetrieve(paymentRecord.billingAccount(), AttachLevel.Attached);
         Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-        ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
 
         try {
+            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
             ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
         } catch (RemoteException e) {
             throw new ARException("Posting receipt to Yardi is failed due to communication failure", e);
@@ -74,7 +73,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
     }
 
     @Override
-    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
         YardiReceiptReversal reversal = EntityFactory.create(YardiReceiptReversal.class);
         reversal.paymentRecord().set(paymentRecord);
         reversal.amount().setValue(paymentRecord.amount().getValue());
@@ -89,9 +88,10 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         try {
             ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
-        } catch (Throwable e) {
-            log.debug("handling Yardi.postReceipt error", e);
-            Validate.isTrue(!reversal.claimed().getValue(), "postReceipt is schedule to nightly process");
+        } catch (RemoteException e) {
+            throw new ARException("Posting receipt reversal to Yardi is failed due to communication failure", e);
+        } catch (YardiServiceException e) {
+            throw new ARException("Posting receipt reversal to Yardi is failed", e);
         }
 
         try {

@@ -22,14 +22,14 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiProcessFacade {
 
-    void doAllImport(ExecutionMonitor executionMonitor);
+    void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 
-    void updateLease(Lease lease);
+    void updateLease(Lease lease) throws YardiServiceException, RemoteException;
 
     void validateReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 
     void postReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 
-    void postReceiptReversal(YardiReceiptReversal reversal);
+    void postReceiptReversal(YardiReceiptReversal reversal) throws YardiServiceException, RemoteException;
 
 }

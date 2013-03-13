@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.jobs;
 
+import java.rmi.RemoteException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
@@ -36,7 +39,13 @@ public class YardiImportProcess implements PmcProcess {
     public void executePmcJob(PmcProcessContext context) {
         ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         if (VistaFeatures.instance().yardiIntegration()) {
-            ServerSideFactory.create(YardiProcessFacade.class).doAllImport(executionMonitor);
+            try {
+                ServerSideFactory.create(YardiProcessFacade.class).doAllImport(executionMonitor);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            } catch (YardiServiceException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

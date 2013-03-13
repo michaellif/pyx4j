@@ -187,7 +187,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Persistence.service().merge(paymentRecord);
 
         if (incommingStatus == PaymentRecord.PaymentStatus.Queued) {
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+            try {
+                ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+            } catch (ARException e) {
+                throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"), e);
+            }
         }
 
         return paymentRecord;
@@ -242,16 +246,21 @@ public class PaymentFacadeImpl implements PaymentFacade {
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
 
-        switch (paymentRecord.paymentMethod().type().getValue()) {
-        case Check:
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
-            break;
-        case Cash:
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
-            break;
-        default:
-            throw new IllegalArgumentException("PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        try {
+            switch (paymentRecord.paymentMethod().type().getValue()) {
+            case Check:
+                ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
+                break;
+            case Cash:
+                ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+                break;
+            default:
+                throw new IllegalArgumentException("PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+            }
+        } catch (ARException e) {
+            throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"), e);
         }
+
         return paymentRecord;
     }
 

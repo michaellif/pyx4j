@@ -62,7 +62,7 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
         ARYardiPaymentManager.getInstance().rejectPayment(paymentRecord, applyNSF);
     }
 

@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -150,7 +151,11 @@ public class PadProcessor {
 
         Persistence.service().merge(paymentRecord);
 
-        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+        try {
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+        } catch (ARException e) {
+            throw new Error("Processed payment can't be rejected", e);
+        }
 
         log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
@@ -388,7 +393,12 @@ public class PadProcessor {
         Persistence.service().merge(paymentRecord);
         log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
-        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+        try {
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+        } catch (ARException e) {
+            throw new Error("Processed payment can't be rejected", e);
+        }
+
     }
 
     private void reconciliationClearedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
@@ -416,7 +426,12 @@ public class PadProcessor {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
-        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+
+        try {
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+        } catch (ARException e) {
+            throw new Error("Processed payment can't be returned", e);
+        }
 
         log.info("Payment {} {} Returned", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }

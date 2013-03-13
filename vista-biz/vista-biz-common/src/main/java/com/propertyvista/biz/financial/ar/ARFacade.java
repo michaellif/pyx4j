@@ -48,15 +48,15 @@ public interface ARFacade {
 
     void postPayment(PaymentRecord payment) throws ARException;
 
-    DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount);
-
-    void removeHardLink(DebitCreditLink link);
-
-    void rejectPayment(PaymentRecord payment, boolean applyNSF);
+    void rejectPayment(PaymentRecord payment, boolean applyNSF) throws ARException;
 
     void postImmediateAdjustment(LeaseAdjustment adjustment);
 
     public void postDepositRefund(Deposit deposit);
+
+    DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount);
+
+    void removeHardLink(DebitCreditLink link);
 
     List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
 
