@@ -44,4 +44,6 @@ public @interface MemberColumn {
     @SuppressWarnings("rawtypes")
     Class<? extends IndexAdapter> sortAdapter() default IndexAdapter.class;
 
+    Class<? extends ColumnId> value() default ColumnId.class;
+
 }
