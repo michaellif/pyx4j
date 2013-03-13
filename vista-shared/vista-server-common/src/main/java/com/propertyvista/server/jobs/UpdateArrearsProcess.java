@@ -28,10 +28,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class UpdateArrearsProcess implements PmcProcess {
 
@@ -52,39 +51,38 @@ public class UpdateArrearsProcess implements PmcProcess {
     }
 
     public void updateBillingAccountsArrears(PmcProcessContext context) {
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            log.info("Arrears Update for billing accounts started");
+        log.info("Arrears Update for billing accounts started");
 
-            EntityQueryCriteria<InternalBillingAccount> criteria = EntityQueryCriteria.create(InternalBillingAccount.class);
-            criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
-            final Iterator<InternalBillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
+        final Iterator<BillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
 
-            long currentBillingAccount = 0L;
-            long failed = 0L;
+        long currentBillingAccount = 0L;
+        long failed = 0L;
 
-            while (billingAccounts.hasNext()) {
-                ++currentBillingAccount;
+        while (billingAccounts.hasNext()) {
+            ++currentBillingAccount;
 
-                try {
-                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                        @Override
-                        public Void execute() {
-                            ServerSideFactory.create(ARFacade.class).updateArrearsHistory(billingAccounts.next());
-                            return null;
-                        }
-                    });
+            try {
+                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        ServerSideFactory.create(ARFacade.class).updateArrearsHistory(billingAccounts.next());
+                        return null;
+                    }
+                });
 
-                    context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
-                } catch (Throwable t) {
-                    log.error("failed to update arrears history", t);
-                    failed++;
-                    context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
-                }
-
+                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+            } catch (Throwable t) {
+                log.error("failed to update arrears history", t);
+                failed++;
+                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
             }
-            log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED",
-                    currentBillingAccount, failed));
+
         }
+        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED", currentBillingAccount,
+                failed));
+
     }
 
     public void updateBuildingArrears(PmcProcessContext context) {

@@ -115,27 +115,6 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
-            Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void updateArrearsHistory(BillingAccount billingAccount) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void updateArrearsHistory(Building building) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
         // get latest payments (for the last 3 months)
         Calendar cal = GregorianCalendar.getInstance();
@@ -155,14 +134,34 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
+    public void updateArrearsHistory(BillingAccount billingAccount) {
+        ARYardiArrearsManager.getInstance().updateArrearsHistory(billingAccount);
+    }
+
+    @Override
+    public void updateArrearsHistory(Building building) {
+        ARYardiArrearsManager.getInstance().updateArrearsHistory(building);
+    }
+
+    @Override
     public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
-        // TODO Auto-generated method stub
-        return null;
+        return ARYardiArrearsManager.getInstance().getAgingBuckets(billingAccount);
     }
 
     @Override
     public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
-        // TODO Auto-generated method stub
-        return null;
+        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshot(billingAccount, asOf);
     }
+
+    @Override
+    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
+        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshot(buildingStub, asOf);
+    }
+
+    @Override
+    public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
+            Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
+        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+    }
+
 }
