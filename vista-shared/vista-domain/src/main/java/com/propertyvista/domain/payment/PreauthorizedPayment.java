@@ -15,13 +15,24 @@ package com.propertyvista.domain.payment;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface PreauthorizedPayment extends IEntity {
 
@@ -33,6 +44,25 @@ public interface PreauthorizedPayment extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @Owner
+    @Detached
+    @NotNull
+    @MemberColumn(notNull = true)
+    @JoinColumn
+    Tenant leaseParticipant();
+
+    // internals:
+    interface OrderId extends ColumnId {
+    }
+
+    @Timestamp(Update.Created)
+    //TODO  @MemberColumn(OrderId.class)
+    IPrimitive<LogicalDate> creationDate();
+
+    @Deprecated
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
 
     @NotNull
     @ToString(index = 0)
@@ -47,4 +77,5 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Length(40)
     IPrimitive<String> comments();
+
 }
