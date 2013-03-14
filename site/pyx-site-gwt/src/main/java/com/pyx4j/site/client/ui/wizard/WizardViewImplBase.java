@@ -27,13 +27,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.client.ui.AbstractView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class WizardViewImplBase<E extends IEntity> extends ViewImplBase implements IWizardView<E> {
+public class WizardViewImplBase<E extends IEntity> extends AbstractView implements IWizardView<E> {
 
     private static final I18n i18n = I18n.get(WizardViewImplBase.class);
 

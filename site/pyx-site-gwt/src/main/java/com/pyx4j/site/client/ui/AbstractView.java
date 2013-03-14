@@ -29,15 +29,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public abstract class ViewImplBase extends DockLayoutPanel implements IView {
-
-    private static final I18n i18n = I18n.get(ViewImplBase.class);
+public abstract class AbstractView extends DockLayoutPanel implements IView {
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
 
@@ -63,7 +60,7 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
 
     private final IMemento memento = new MementoImpl();
 
-    public ViewImplBase() {
+    public AbstractView() {
         super(Unit.PX);
 
         SimplePanel headerCaption = new SimplePanel();

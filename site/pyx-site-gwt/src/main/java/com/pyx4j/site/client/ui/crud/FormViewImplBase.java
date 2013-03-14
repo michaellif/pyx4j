@@ -23,9 +23,9 @@ package com.pyx4j.site.client.ui.crud;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.client.ui.AbstractView;
 
-public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements IFormView<E> {
+public class FormViewImplBase<E extends IEntity> extends AbstractView implements IFormView<E> {
 
     private CrudEntityForm<E> form;
 
