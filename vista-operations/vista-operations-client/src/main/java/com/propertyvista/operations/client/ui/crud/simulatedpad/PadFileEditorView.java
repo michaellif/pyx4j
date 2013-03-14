@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 
-public interface PadFileEditorView extends IEditorView<PadSimFile> {
+public interface PadFileEditorView extends IEditor<PadSimFile> {
 
 }

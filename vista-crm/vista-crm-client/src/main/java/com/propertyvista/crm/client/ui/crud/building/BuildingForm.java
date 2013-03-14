@@ -36,7 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -65,7 +65,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
 
-    public BuildingForm(IFormView<BuildingDTO> view) {
+    public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
 
         Tab tab = null;

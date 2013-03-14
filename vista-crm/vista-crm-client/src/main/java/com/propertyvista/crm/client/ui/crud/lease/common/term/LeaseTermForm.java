@@ -39,8 +39,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IFormView;
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.IForm;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
@@ -76,7 +76,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     private Widget featuresHeader, concessionsHeader;
 
-    protected LeaseTermForm(IFormView<LeaseTermDTO> view) {
+    protected LeaseTermForm(IForm<LeaseTermDTO> view) {
         super(LeaseTermDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
@@ -166,7 +166,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter())
+                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter())
                                     .setSelectedBuilding(getSelectedItems().get(0));
                         }
                         return !getSelectedItems().isEmpty();
@@ -222,7 +222,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditorView<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems()
+                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems()
                                     .get(0));
                         }
                         return !getSelectedItems().isEmpty();

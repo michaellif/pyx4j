@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
@@ -32,7 +32,7 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
 
     private static final I18n i18n = I18n.get(DatesPolicyForm.class);
 
-    public DatesPolicyForm(IFormView<DatesPolicyDTO> view) {
+    public DatesPolicyForm(IForm<DatesPolicyDTO> view) {
         super(DatesPolicyDTO.class, view);
     }
 

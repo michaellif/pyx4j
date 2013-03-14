@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
@@ -27,7 +27,7 @@ public class LeaseTerminationPolicyForm extends PolicyDTOTabPanelBasedForm<Lease
 
     private static final I18n i18n = I18n.get(LeaseTerminationPolicyForm.class);
 
-    public LeaseTerminationPolicyForm(IFormView<LeaseTerminationPolicyDTO> view) {
+    public LeaseTerminationPolicyForm(IForm<LeaseTerminationPolicyDTO> view) {
         super(LeaseTerminationPolicyDTO.class, view);
     }
 

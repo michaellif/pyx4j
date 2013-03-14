@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
@@ -34,7 +34,7 @@ import com.propertyvista.dto.LeaseParticipantDTO;
 public abstract class LeaseParticipantEditorActivity<DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>, CS extends LeaseParticipantCrudServiceBase<DTO>>
         extends CrmEditorActivity<DTO> implements LeaseParticipantEditorPresenter<DTO> {
 
-    public LeaseParticipantEditorActivity(CrudAppPlace place, IEditorView<DTO> view, CS service, Class<DTO> dtoClass) {
+    public LeaseParticipantEditorActivity(CrudAppPlace place, IEditor<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);
     }
 

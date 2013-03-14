@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.role;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.security.CrmRole;
 
-public interface CrmRoleEditorView extends IEditorView<CrmRole> {
+public interface CrmRoleEditorView extends IEditor<CrmRole> {
 
 }

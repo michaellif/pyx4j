@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 
-public interface MerchantAccountViewerView extends IViewerView<PmcMerchantAccountDTO> {
+public interface MerchantAccountViewerView extends IViewer<PmcMerchantAccountDTO> {
 
 }

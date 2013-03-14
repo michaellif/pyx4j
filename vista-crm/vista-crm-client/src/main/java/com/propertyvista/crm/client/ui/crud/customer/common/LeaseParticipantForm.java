@@ -24,8 +24,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.IForm;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -48,7 +48,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     private final Class<P> rootClass;
 
-    public LeaseParticipantForm(Class<P> rootClass, IFormView<P> view) {
+    public LeaseParticipantForm(Class<P> rootClass, IForm<P> view) {
         super(rootClass, view);
         this.rootClass = rootClass;
     }
@@ -129,7 +129,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {
-                    ((LeaseParticipantEditorPresenter<P>) ((IEditorView<P>) getParentView()).getPresenter())
+                    ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                                 @Override
                                 public void onSuccess(AddressStructured result) {
@@ -144,7 +144,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             @SuppressWarnings("unchecked")
             @Override
             protected void getAllowedPaymentTypes(final AsyncCallback<EnumSet<PaymentType>> callback) {
-                ((LeaseParticipantEditorPresenter<P>) ((IEditorView<P>) getParentView()).getPresenter())
+                ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
                         .getAllowedPaymentTypes(new DefaultAsyncCallback<Vector<PaymentType>>() {
                             @Override
                             public void onSuccess(Vector<PaymentType> result) {

@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.padsimulation.batch;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 
-public interface PadBatchEditorView extends IEditorView<PadSimBatch> {
+public interface PadBatchEditorView extends IEditor<PadSimBatch> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
 
         void calculate();
     }

@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
@@ -56,7 +56,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     private IdUploaderFolder fileUpload;
 
-    public CustomerScreeningForm(IFormView<CustomerScreening> view) {
+    public CustomerScreeningForm(IForm<CustomerScreening> view) {
         super(CustomerScreening.class, view);
 
         Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));

@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public interface AggregatedTransferViewerView extends IViewerView<AggregatedTransfer> {
+public interface AggregatedTransferViewerView extends IViewer<AggregatedTransfer> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void cancelAction();
 

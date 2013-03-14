@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.dto.BuildingDTO;
 
-public interface BuildingEditorView extends IEditorView<BuildingDTO> {
+public interface BuildingEditorView extends IEditor<BuildingDTO> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
     }
 }

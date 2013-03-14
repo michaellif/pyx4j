@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -28,7 +28,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     private static final I18n i18n = I18n.get(AppointmentForm.class);
 
-    public AppointmentForm(IFormView<Appointment> view) {
+    public AppointmentForm(IForm<Appointment> view) {
         super(Appointment.class, view);
         selectTab(addTab(createGeneralTab(i18n.tr("General"))));
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());

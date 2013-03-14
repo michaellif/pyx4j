@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -24,7 +24,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
 
     private static final I18n i18n = I18n.get(PmcFormNewItem.class);
 
-    public PmcFormNewItem(IFormView<PmcDTO> view) {
+    public PmcFormNewItem(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

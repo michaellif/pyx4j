@@ -13,16 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
-public interface TriggerViewerView extends IViewerView<TriggerDTO> {
+public interface TriggerViewerView extends IViewer<TriggerDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void runImmediately();
 

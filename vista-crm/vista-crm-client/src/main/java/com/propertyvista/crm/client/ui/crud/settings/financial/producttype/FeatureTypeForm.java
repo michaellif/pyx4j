@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
@@ -32,7 +32,7 @@ public class FeatureTypeForm extends CrmEntityForm<FeatureItemType> implements H
 
     private ProductItemTypeYardiIntegrationForm yardiIntegrationMixin;
 
-    public FeatureTypeForm(IFormView<FeatureItemType> view) {
+    public FeatureTypeForm(IForm<FeatureItemType> view) {
         super(FeatureItemType.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

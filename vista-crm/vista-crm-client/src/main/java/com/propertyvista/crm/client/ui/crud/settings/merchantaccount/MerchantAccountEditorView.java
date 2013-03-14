@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 
-public interface MerchantAccountEditorView extends IEditorView<MerchantAccount> {
+public interface MerchantAccountEditorView extends IEditor<MerchantAccount> {
 
 }

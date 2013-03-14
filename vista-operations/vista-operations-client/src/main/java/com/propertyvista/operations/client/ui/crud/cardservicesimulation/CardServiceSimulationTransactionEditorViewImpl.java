@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
@@ -27,7 +27,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
 
     public static class CardServiceSimulationTransactionForm extends OperationsEntityForm<CardServiceSimulationTransaction> {
 
-        public CardServiceSimulationTransactionForm(IFormView<CardServiceSimulationTransaction> view) {
+        public CardServiceSimulationTransactionForm(IForm<CardServiceSimulationTransaction> view) {
             super(CardServiceSimulationTransaction.class, view);
 
             FormFlexPanel tabPanel = new FormFlexPanel("General Transaction Data");

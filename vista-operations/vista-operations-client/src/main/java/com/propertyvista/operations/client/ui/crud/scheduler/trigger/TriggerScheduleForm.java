@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
@@ -31,7 +31,7 @@ public class TriggerScheduleForm extends OperationsEntityForm<TriggerSchedule> {
 
     private static final I18n i18n = I18n.get(TriggerScheduleForm.class);
 
-    public TriggerScheduleForm(IFormView<TriggerSchedule> view) {
+    public TriggerScheduleForm(IForm<TriggerSchedule> view) {
         super(TriggerSchedule.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

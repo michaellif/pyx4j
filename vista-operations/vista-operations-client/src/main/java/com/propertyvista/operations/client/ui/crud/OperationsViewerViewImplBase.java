@@ -21,12 +21,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
+import com.pyx4j.site.client.ui.crud.form.BasicViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 
-public class OperationsViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
+public class OperationsViewerViewImplBase<E extends IEntity> extends BasicViewer<E> {
 
     private static final I18n i18n = I18n.get(OperationsViewerViewImplBase.class);
 

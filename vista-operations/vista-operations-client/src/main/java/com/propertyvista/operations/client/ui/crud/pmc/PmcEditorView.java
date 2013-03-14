@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.rpc.PmcDTO;
 
-public interface PmcEditorView extends IEditorView<PmcDTO> {
+public interface PmcEditorView extends IEditor<PmcDTO> {
 
 }

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-public interface DatesPolicyViewerView extends IViewerView<DatesPolicyDTO> {
+public interface DatesPolicyViewerView extends IViewer<DatesPolicyDTO> {
 
 }

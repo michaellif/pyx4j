@@ -14,13 +14,13 @@
 package com.propertyvista.operations.client.ui.crud.onboardingusers;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 
-public interface OnboardingUserViewerView extends IViewerView<OnboardingUserDTO> {
+public interface OnboardingUserViewerView extends IViewer<OnboardingUserDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void goToChangePassword(Key userId, String userName);
 

@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
@@ -36,7 +36,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
 
     private Condition isNewUserCondition;
 
-    public AdminUserForm(IFormView<OperationsUserDTO> view) {
+    public AdminUserForm(IForm<OperationsUserDTO> view) {
         super(OperationsUserDTO.class, view);
 
         conditionalVisibilityMap = new HashMap<CComponent<?, ?>, Condition>();

@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
@@ -39,7 +39,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     private Tab onlineStatusTab;
 
-    public LeaseApplicationForm(IFormView<LeaseApplicationDTO> view) {
+    public LeaseApplicationForm(IForm<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
 
         createCommonContent();

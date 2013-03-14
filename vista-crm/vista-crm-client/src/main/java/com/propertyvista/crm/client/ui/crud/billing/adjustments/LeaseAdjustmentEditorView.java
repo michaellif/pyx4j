@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public interface LeaseAdjustmentEditorView extends IEditorView<LeaseAdjustment> {
+public interface LeaseAdjustmentEditorView extends IEditor<LeaseAdjustment> {
 
-    interface Presenter extends IEditorView.Presenter, LeaseAdjustmentPresenter {
+    interface Presenter extends IEditor.Presenter, LeaseAdjustmentPresenter {
     }
 }

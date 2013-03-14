@@ -17,13 +17,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
 public abstract class CrmEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
-    public CrmEntityForm(Class<E> rootClass, IFormView<E> view) {
+    public CrmEntityForm(Class<E> rootClass, IForm<E> view) {
         super(rootClass, new VistaEditorsComponentFactory(), view);
     }
 

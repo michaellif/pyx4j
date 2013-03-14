@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
@@ -26,7 +26,7 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
 
     private static final I18n i18n = I18n.get(PadFileForm.class);
 
-    public PadFileForm(IFormView<PadSimFile> view) {
+    public PadFileForm(IForm<PadSimFile> view) {
         super(PadSimFile.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

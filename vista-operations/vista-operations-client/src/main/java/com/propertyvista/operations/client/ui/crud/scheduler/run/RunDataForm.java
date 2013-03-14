@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.lister.BasicLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -42,7 +42,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
     private final ExecutionReportSectionLister reportSectionLister;
 
-    public RunDataForm(IFormView<RunData> view) {
+    public RunDataForm(IForm<RunData> view) {
         super(RunData.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

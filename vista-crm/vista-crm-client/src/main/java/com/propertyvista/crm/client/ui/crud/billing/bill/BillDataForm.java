@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -27,7 +27,7 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
 
     private final boolean justPreviewBill;
 
-    public BillDataForm(IFormView<BillDataDTO> view, boolean justCurrentBill) {
+    public BillDataForm(IForm<BillDataDTO> view, boolean justCurrentBill) {
         super(BillDataDTO.class, view);
         setEditable(true);
         setViewable(false);

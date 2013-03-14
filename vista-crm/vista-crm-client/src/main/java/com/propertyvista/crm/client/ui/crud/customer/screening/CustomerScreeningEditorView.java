@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.tenant.CustomerScreening;
 
-public interface CustomerScreeningEditorView extends IEditorView<CustomerScreening> {
+public interface CustomerScreeningEditorView extends IEditor<CustomerScreening> {
 
 }

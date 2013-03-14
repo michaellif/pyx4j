@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -33,7 +33,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     private final Label noPaymentMethodsMessage;
 
-    public PmcPaymentMethodsForm(IFormView<PmcPaymentMethodsDTO> view) {
+    public PmcPaymentMethodsForm(IForm<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Payment Methods"));
         int row = -1;

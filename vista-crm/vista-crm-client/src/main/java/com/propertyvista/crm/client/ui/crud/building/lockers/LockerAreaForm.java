@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -28,7 +28,7 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
     private static final I18n i18n = I18n.get(LockerAreaForm.class);
 
-    public LockerAreaForm(IFormView<LockerAreaDTO> view) {
+    public LockerAreaForm(IForm<LockerAreaDTO> view) {
         super(LockerAreaDTO.class, view);
 
 //        tabPanel.add(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));

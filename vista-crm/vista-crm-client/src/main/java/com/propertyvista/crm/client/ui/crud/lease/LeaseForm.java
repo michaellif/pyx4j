@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -34,7 +34,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
     private Label noFinanicalHistoryLabel;
 
-    public LeaseForm(IFormView<LeaseDTO> view) {
+    public LeaseForm(IForm<LeaseDTO> view) {
         super(LeaseDTO.class, view);
 
         createCommonContent();

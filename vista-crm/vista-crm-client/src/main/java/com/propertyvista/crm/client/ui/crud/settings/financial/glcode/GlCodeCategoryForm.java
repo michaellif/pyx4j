@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCodeCategory;
@@ -24,7 +24,7 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
 
     private static final I18n i18n = I18n.get(GlCodeCategoryForm.class);
 
-    public GlCodeCategoryForm(IFormView<GlCodeCategory> view) {
+    public GlCodeCategoryForm(IForm<GlCodeCategory> view) {
         super(GlCodeCategory.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

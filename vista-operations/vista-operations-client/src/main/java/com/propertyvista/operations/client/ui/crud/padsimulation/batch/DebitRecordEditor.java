@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.padsimulation.batch;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
@@ -24,7 +24,7 @@ public class DebitRecordEditor extends OperationsEntityForm<PadSimDebitRecord> {
 
     private static final I18n i18n = I18n.get(DebitRecordEditor.class);
 
-    public DebitRecordEditor(IFormView<PadSimDebitRecord> view) {
+    public DebitRecordEditor(IForm<PadSimDebitRecord> view) {
         super(PadSimDebitRecord.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.legal.LegalDocument;
@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
 
-    public VistaTermsForm(IFormView<VistaTerms> view) {
+    public VistaTermsForm(IForm<VistaTerms> view) {
         super(VistaTerms.class, view);
 
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));

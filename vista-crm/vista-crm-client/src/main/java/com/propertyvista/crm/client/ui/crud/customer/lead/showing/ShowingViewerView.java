@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public interface ShowingViewerView extends IViewerView<ShowingDTO> {
+public interface ShowingViewerView extends IViewer<ShowingDTO> {
 
 }

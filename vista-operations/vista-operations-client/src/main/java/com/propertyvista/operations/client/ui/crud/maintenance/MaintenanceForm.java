@@ -20,7 +20,7 @@ import java.util.EnumSet;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
@@ -30,7 +30,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
     private static final I18n i18n = I18n.get(MaintenanceForm.class);
 
-    public MaintenanceForm(IFormView<VistaSystemMaintenanceState> view) {
+    public MaintenanceForm(IForm<VistaSystemMaintenanceState> view) {
         super(VistaSystemMaintenanceState.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -59,7 +59,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             new NodeType.Builder(Building.class).build()
     );//@formatter:on
 
-    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IFormView<POLICY_DTO> view) {
+    public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final IForm<POLICY_DTO> view) {
         super(policyDTOClass, view);
 
         selectTab(addTab(createScopeTab(i18n.tr("Scope"))));

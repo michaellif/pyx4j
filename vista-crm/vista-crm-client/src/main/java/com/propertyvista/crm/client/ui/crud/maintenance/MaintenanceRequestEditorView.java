@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface MaintenanceRequestEditorView extends IEditorView<MaintenanceRequestDTO> {
+public interface MaintenanceRequestEditorView extends IEditor<MaintenanceRequestDTO> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
     }
 }

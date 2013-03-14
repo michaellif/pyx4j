@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.gadgets;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
-public interface HomePageGadgetViewer extends IViewerView<HomePageGadget> {
+public interface HomePageGadgetViewer extends IViewer<HomePageGadget> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void viewGadget(Key id);
 

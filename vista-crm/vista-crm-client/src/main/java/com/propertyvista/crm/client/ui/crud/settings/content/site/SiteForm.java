@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -67,7 +67,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
-    public SiteForm(IFormView<SiteDescriptorDTO> view) {
+    public SiteForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

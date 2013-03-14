@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
-public interface ARPolicyEditorView extends IEditorView<ARPolicyDTO> {
+public interface ARPolicyEditorView extends IEditor<ARPolicyDTO> {
 
 }

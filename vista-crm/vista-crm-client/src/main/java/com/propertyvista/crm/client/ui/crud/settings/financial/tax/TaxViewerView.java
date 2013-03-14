@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.financial.tax.Tax;
 
-public interface TaxViewerView extends IViewerView<Tax> {
+public interface TaxViewerView extends IViewer<Tax> {
 
 }

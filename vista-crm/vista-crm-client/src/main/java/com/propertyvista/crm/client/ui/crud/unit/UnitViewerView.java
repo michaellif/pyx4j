@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
@@ -23,9 +23,9 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.dto.AptUnitDTO;
 
-public interface UnitViewerView extends IViewerView<AptUnitDTO> {
+public interface UnitViewerView extends IViewer<AptUnitDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void scopeOffMarket(OffMarketType type);
 

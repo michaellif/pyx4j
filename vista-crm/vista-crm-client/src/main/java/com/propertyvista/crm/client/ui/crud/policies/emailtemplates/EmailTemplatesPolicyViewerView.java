@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.emailtemplates;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
-public interface EmailTemplatesPolicyViewerView extends IViewerView<EmailTemplatesPolicyDTO> {
+public interface EmailTemplatesPolicyViewerView extends IViewer<EmailTemplatesPolicyDTO> {
 
 }

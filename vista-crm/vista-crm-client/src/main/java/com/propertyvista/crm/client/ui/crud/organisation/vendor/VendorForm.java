@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
@@ -26,7 +26,7 @@ public class VendorForm extends CrmEntityForm<Vendor> {
 
     private static final I18n i18n = I18n.get(VendorForm.class);
 
-    public VendorForm(IFormView<Vendor> view) {
+    public VendorForm(IForm<Vendor> view) {
         super(Vendor.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
@@ -60,7 +60,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
     private final static I18n i18n = I18n.get(EmailTemplatesPolicyForm.class);
 
-    public EmailTemplatesPolicyForm(IFormView<EmailTemplatesPolicyDTO> view) {
+    public EmailTemplatesPolicyForm(IForm<EmailTemplatesPolicyDTO> view) {
         super(EmailTemplatesPolicyDTO.class, view);
     }
 

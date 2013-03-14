@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 
-public interface LeaseTerminationPolicyEditorView extends IEditorView<LeaseTerminationPolicyDTO> {
+public interface LeaseTerminationPolicyEditorView extends IEditor<LeaseTerminationPolicyDTO> {
 
 }

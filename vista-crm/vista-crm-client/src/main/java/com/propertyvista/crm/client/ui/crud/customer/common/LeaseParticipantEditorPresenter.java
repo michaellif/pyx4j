@@ -17,14 +17,14 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> extends IEditorView.Presenter {
+public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> extends IEditor.Presenter {
 
     void deletePaymentMethod(LeasePaymentMethod paymentMethod);
 

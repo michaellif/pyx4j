@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
@@ -34,9 +34,9 @@ import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 
-public interface BuildingViewerView extends IViewerView<BuildingDTO> {
+public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
     }

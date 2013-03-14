@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
@@ -23,7 +23,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.wizards.Persona
 
 public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupRequestDTO> {
 
-    public EquifaxApprovalForm(IFormView<EquifaxSetupRequestDTO> view) {
+    public EquifaxApprovalForm(IForm<EquifaxSetupRequestDTO> view) {
         super(EquifaxSetupRequestDTO.class, view);
         this.setEditable(false);
 

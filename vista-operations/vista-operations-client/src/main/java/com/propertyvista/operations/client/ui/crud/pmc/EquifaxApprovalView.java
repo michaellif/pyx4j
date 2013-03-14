@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
 
-public interface EquifaxApprovalView extends IViewerView<EquifaxSetupRequestDTO> {
+public interface EquifaxApprovalView extends IViewer<EquifaxSetupRequestDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void approveAndSendToEquifax();
 

@@ -14,9 +14,9 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
+import com.pyx4j.site.client.ui.crud.form.BasicEditor;
 
-public class OperationsEditorViewImplBase<E extends IEntity> extends EditorViewImplBase<E> {
+public class OperationsEditorViewImplBase<E extends IEntity> extends BasicEditor<E> {
 
     public OperationsEditorViewImplBase() {
         super();

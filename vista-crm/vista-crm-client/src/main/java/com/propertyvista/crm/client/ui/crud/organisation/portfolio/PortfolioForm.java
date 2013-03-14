@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
@@ -41,7 +41,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
     private static final I18n i18n = I18n.get(PortfolioForm.class);
 
-    public PortfolioForm(IFormView<Portfolio> view) {
+    public PortfolioForm(IForm<Portfolio> view) {
         super(Portfolio.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

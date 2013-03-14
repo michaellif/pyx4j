@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
-public interface UnitOccupancyEditorView extends IEditorView<AptUnitOccupancySegment> {
+public interface UnitOccupancyEditorView extends IEditor<AptUnitOccupancySegment> {
 
 }

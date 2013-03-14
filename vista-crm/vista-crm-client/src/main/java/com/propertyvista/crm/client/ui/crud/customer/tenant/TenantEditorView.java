@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.dto.TenantDTO;
 
-public interface TenantEditorView extends IEditorView<TenantDTO> {
+public interface TenantEditorView extends IEditor<TenantDTO> {
 
 }

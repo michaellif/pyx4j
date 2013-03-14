@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -29,7 +29,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
 
     private static final I18n i18n = I18n.get(CustomerCreditCheckForm.class);
 
-    public CustomerCreditCheckForm(IFormView<CustomerCreditCheckDTO> view) {
+    public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

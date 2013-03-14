@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
-public interface DepositPolicyEditorView extends IEditorView<DepositPolicyDTO> {
+public interface DepositPolicyEditorView extends IEditor<DepositPolicyDTO> {
 
 }

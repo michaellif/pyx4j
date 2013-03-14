@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -24,7 +24,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
     private static final I18n i18n = I18n.get(MerchantAccountForm.class);
 
-    public MerchantAccountForm(IFormView<MerchantAccount> view) {
+    public MerchantAccountForm(IForm<MerchantAccount> view) {
         super(MerchantAccount.class, view);
 
         if (isEditable()) {

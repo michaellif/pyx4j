@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.onboardingusers;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 
-public interface OnboardingUserEditorView extends IEditorView<OnboardingUserDTO> {
+public interface OnboardingUserEditorView extends IEditor<OnboardingUserDTO> {
 
 }

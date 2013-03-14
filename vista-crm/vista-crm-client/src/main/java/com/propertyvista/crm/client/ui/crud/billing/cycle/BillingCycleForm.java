@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -35,7 +35,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     private static final I18n i18n = I18n.get(BillingCycleForm.class);
 
-    public BillingCycleForm(IFormView<BillingCycleDTO> view) {
+    public BillingCycleForm(IForm<BillingCycleDTO> view) {
         super(BillingCycleDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;

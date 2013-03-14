@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public interface LeaseAdjustmentViewerView extends IViewerView<LeaseAdjustment> {
+public interface LeaseAdjustmentViewerView extends IViewer<LeaseAdjustment> {
 
-    interface Presenter extends IViewerView.Presenter, LeaseAdjustmentPresenter {
+    interface Presenter extends IViewer.Presenter, LeaseAdjustmentPresenter {
 
         void submitAdjustment();
     }

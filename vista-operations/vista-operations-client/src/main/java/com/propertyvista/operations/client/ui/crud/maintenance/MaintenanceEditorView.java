@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.maintenance;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 
-public interface MaintenanceEditorView extends IEditorView<VistaSystemMaintenanceState> {
+public interface MaintenanceEditorView extends IEditor<VistaSystemMaintenanceState> {
 
 }

@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.site.CityIntroPage;
 
-public interface CityIntroPageViewer extends IViewerView<CityIntroPage> {
+public interface CityIntroPageViewer extends IViewer<CityIntroPage> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void viewPage(Key id);
 

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -39,7 +39,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
     private final ReturnBehaviour returnBehaviour;
 
-    public LeaseViewerActivityBase(CrudAppPlace place, IViewerView<DTO> view, AbstractCrudService<DTO> service) {
+    public LeaseViewerActivityBase(CrudAppPlace place, IViewer<DTO> view, AbstractCrudService<DTO> service) {
         super(place, view, service);
 
         if (service instanceof LeaseViewerCrudService) {

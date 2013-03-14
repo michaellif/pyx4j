@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.pet;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
-public interface PetPolicyViewerView extends IViewerView<PetPolicyDTO> {
+public interface PetPolicyViewerView extends IViewer<PetPolicyDTO> {
 
 }

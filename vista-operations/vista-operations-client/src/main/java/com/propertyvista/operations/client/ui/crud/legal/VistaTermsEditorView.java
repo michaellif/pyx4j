@@ -13,9 +13,9 @@
  */
 package com.propertyvista.operations.client.ui.crud.legal;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
 
-public interface VistaTermsEditorView extends IEditorView<VistaTerms> {
+public interface VistaTermsEditorView extends IEditor<VistaTerms> {
 }

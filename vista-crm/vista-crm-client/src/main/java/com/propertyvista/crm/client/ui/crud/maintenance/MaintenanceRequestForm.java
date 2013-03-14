@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -55,11 +55,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private CComponent<?, ?> comp1, comp2, comp3, comp4;
 
-    public MaintenanceRequestForm(Class<MaintenanceRequestDTO> rootClass, IFormView<MaintenanceRequestDTO> view) {
+    public MaintenanceRequestForm(Class<MaintenanceRequestDTO> rootClass, IForm<MaintenanceRequestDTO> view) {
         super(rootClass, view);
     }
 
-    public MaintenanceRequestForm(IFormView<MaintenanceRequestDTO> view) {
+    public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
 
         selectTab(addTab(createGeneralTab()));

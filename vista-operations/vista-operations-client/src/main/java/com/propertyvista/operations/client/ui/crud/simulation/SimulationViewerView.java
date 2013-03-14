@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulation;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.rpc.SimulationDTO;
 
-public interface SimulationViewerView extends IViewerView<SimulationDTO> {
+public interface SimulationViewerView extends IViewer<SimulationDTO> {
 
 }

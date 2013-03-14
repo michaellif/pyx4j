@@ -33,7 +33,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -196,7 +196,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 setCommand(new Command() {
                     @Override
                     public void execute() {
-                        ((LeaseApplicationViewerView.Presenter) ((IViewerView<?>) view).getPresenter())
+                        ((LeaseApplicationViewerView.Presenter) ((IViewer<?>) view).getPresenter())
                                 .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
 
                                     @Override

@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.dto.GuarantorDTO;
 
-public interface GuarantorViewerView extends IViewerView<GuarantorDTO> {
+public interface GuarantorViewerView extends IViewer<GuarantorDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void goToCreateScreening();
 

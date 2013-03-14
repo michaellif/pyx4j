@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -46,7 +46,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     private final Map<GadgetType, CComponent<?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?>>();
 
-    public HomePageGadgetForm(IFormView<HomePageGadget> view) {
+    public HomePageGadgetForm(IForm<HomePageGadget> view) {
         super(HomePageGadget.class, view);
         mainPanel = new SimplePanel();
         mainPanel.setSize("100%", "100%");

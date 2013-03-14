@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -45,7 +45,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
     private final static I18n i18n = I18n.get(LeaseAdjustmentPolicyForm.class);
 
-    public LeaseAdjustmentPolicyForm(IFormView<LeaseAdjustmentPolicyDTO> view) {
+    public LeaseAdjustmentPolicyForm(IForm<LeaseAdjustmentPolicyDTO> view) {
         super(LeaseAdjustmentPolicyDTO.class, view);
     }
 

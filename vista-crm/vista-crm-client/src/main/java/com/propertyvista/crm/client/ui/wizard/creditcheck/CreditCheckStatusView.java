@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 
-public interface CreditCheckStatusView extends IViewerView<CreditCheckStatusDTO> {
+public interface CreditCheckStatusView extends IViewer<CreditCheckStatusDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
     }
 
 }

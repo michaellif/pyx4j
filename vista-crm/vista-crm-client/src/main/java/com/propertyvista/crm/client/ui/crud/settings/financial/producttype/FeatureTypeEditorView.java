@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 
-public interface FeatureTypeEditorView extends IEditorView<FeatureItemType>, HasYardiIntegrationMode {
+public interface FeatureTypeEditorView extends IEditor<FeatureItemType>, HasYardiIntegrationMode {
 
 }

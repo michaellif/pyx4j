@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.restrictions;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 
-public interface RestrictionsPolicyViewerView extends IViewerView<RestrictionsPolicyDTO> {
+public interface RestrictionsPolicyViewerView extends IViewer<RestrictionsPolicyDTO> {
 
 }

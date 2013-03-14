@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.ParkingSpot;
@@ -24,7 +24,7 @@ public class ParkingSpotForm extends CrmEntityForm<ParkingSpot> {
 
     private static final I18n i18n = I18n.get(ParkingSpotForm.class);
 
-    public ParkingSpotForm(IFormView<ParkingSpot> view) {
+    public ParkingSpotForm(IForm<ParkingSpot> view) {
         super(ParkingSpot.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

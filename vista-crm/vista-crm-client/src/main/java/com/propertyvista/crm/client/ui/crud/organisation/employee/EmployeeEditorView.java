@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 
-public interface EmployeeEditorView extends IEditorView<EmployeeDTO> {
+public interface EmployeeEditorView extends IEditor<EmployeeDTO> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
     }
 
     void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEditor);

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.dto.GuarantorDTO;
@@ -23,7 +23,7 @@ public class GuarantorForm extends LeaseParticipantForm<GuarantorDTO> {
 
     private static final I18n i18n = I18n.get(GuarantorForm.class);
 
-    public GuarantorForm(IFormView<GuarantorDTO> view) {
+    public GuarantorForm(IForm<GuarantorDTO> view) {
         super(GuarantorDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.role;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.security.CrmRole;
 
-public interface CrmRoleViewerView extends IViewerView<CrmRole> {
+public interface CrmRoleViewerView extends IViewer<CrmRole> {
 
 }

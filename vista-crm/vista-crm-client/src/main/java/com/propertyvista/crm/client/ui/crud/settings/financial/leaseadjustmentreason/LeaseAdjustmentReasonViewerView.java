@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public interface LeaseAdjustmentReasonViewerView extends IViewerView<LeaseAdjustmentReason> {
+public interface LeaseAdjustmentReasonViewerView extends IViewer<LeaseAdjustmentReason> {
 
 }

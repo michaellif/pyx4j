@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 
-public interface VistaSystemDefaultsViewerView extends IViewerView<VistaSystemDefaultsDTO> {
+public interface VistaSystemDefaultsViewerView extends IViewer<VistaSystemDefaultsDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
     }
 }

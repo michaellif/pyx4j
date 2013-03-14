@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
-public interface TenantInsurancePolicyViewerView extends IViewerView<TenantInsurancePolicyDTO> {
+public interface TenantInsurancePolicyViewerView extends IViewer<TenantInsurancePolicyDTO> {
 
 }

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public interface UnitItemViewerView extends IViewerView<AptUnitItem> {
+public interface UnitItemViewerView extends IViewer<AptUnitItem> {
 
 }

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.floorplan;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.dto.FloorplanDTO;
 
-public interface FloorplanEditorView extends IEditorView<FloorplanDTO> {
+public interface FloorplanEditorView extends IEditor<FloorplanDTO> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
     }
 }

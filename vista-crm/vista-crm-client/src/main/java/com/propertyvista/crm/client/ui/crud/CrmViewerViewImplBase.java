@@ -29,14 +29,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
+import com.pyx4j.site.client.ui.crud.form.BasicViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
-public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
+public class CrmViewerViewImplBase<E extends IEntity> extends BasicViewer<E> {
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
 

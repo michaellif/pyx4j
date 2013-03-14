@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -89,7 +89,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentForm(IFormView<PaymentRecordDTO> view) {
+    public PaymentForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));

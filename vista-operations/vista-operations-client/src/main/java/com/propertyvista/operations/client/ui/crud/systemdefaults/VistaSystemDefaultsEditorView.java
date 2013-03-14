@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 
-public interface VistaSystemDefaultsEditorView extends IEditorView<VistaSystemDefaultsDTO> {
+public interface VistaSystemDefaultsEditorView extends IEditor<VistaSystemDefaultsDTO> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IEditor.Presenter {
 
     }
 

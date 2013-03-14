@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.domain.financial.offering.Concession;
 
-public interface ConcessionEditorView extends IEditorView<Concession> {
+public interface ConcessionEditorView extends IEditor<Concession> {
 
 }

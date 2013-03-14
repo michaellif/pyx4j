@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 
-public interface CardServiceSimulationTransactionEditorView extends IEditorView<CardServiceSimulationTransaction> {
+public interface CardServiceSimulationTransactionEditorView extends IEditor<CardServiceSimulationTransaction> {
 
 }

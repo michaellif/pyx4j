@@ -13,12 +13,12 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 
-public interface RunDataViewerView extends IViewerView<RunData> {
+public interface RunDataViewerView extends IViewer<RunData> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
     }
 }

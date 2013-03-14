@@ -13,11 +13,11 @@
  */
 package com.propertyvista.operations.client.ui.crud.legal;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
 
-public interface VistaTermsViewerView extends IViewerView<VistaTerms> {
-    interface Presenter extends IViewerView.Presenter {
+public interface VistaTermsViewerView extends IViewer<VistaTerms> {
+    interface Presenter extends IViewer.Presenter {
     }
 }

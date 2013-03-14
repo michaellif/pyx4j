@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.onboardingusers;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -28,7 +28,7 @@ public class OnboardingUserForm extends OperationsEntityForm<OnboardingUserDTO> 
 
     private final static I18n i18n = I18n.get(OnboardingUserForm.class);
 
-    public OnboardingUserForm(IFormView<OnboardingUserDTO> view) {
+    public OnboardingUserForm(IForm<OnboardingUserDTO> view) {
         super(OnboardingUserDTO.class, view);
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;

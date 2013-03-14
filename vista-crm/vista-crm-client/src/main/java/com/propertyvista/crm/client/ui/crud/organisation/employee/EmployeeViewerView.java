@@ -14,14 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.security.CrmUser;
 
-public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
+public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
+    interface Presenter extends IViewer.Presenter {
 
         void goToChangePassword(Key userId, String userName);
 

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.adminusers;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.form.IEditor;
 
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 
-public interface AdminUserEditorView extends IEditorView<OperationsUserDTO> {
+public interface AdminUserEditorView extends IEditor<OperationsUserDTO> {
 
 }

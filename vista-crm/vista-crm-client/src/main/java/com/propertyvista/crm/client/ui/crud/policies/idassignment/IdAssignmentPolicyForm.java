@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -39,7 +39,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
 
     private final static I18n i18n = I18n.get(IdAssignmentPolicyForm.class);
 
-    public IdAssignmentPolicyForm(IFormView<IdAssignmentPolicyDTO> view) {
+    public IdAssignmentPolicyForm(IForm<IdAssignmentPolicyDTO> view) {
         super(IdAssignmentPolicyDTO.class, view);
     }
 
