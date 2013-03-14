@@ -41,6 +41,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
     public LeaseApplicationForm(IFormView<LeaseApplicationDTO> view) {
         super(LeaseApplicationDTO.class, view);
+
         createCommonContent();
 
         addTab(createInfoTab());

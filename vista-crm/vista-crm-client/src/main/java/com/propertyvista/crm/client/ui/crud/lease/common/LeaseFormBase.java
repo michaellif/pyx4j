@@ -209,7 +209,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, proto().currentTerm().version().tenants().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder()));
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder(getParentView())));
 
         main.setH1(++row, 0, 2, proto().currentTerm().version().guarantors().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder()));

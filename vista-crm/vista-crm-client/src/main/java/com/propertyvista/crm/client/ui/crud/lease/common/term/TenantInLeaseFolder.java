@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.IView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -68,12 +69,15 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private boolean isPadEditable = false;
 
-    public TenantInLeaseFolder() {
-        this(false);
+    private final IView parentView;
+
+    public TenantInLeaseFolder(IView parentView) {
+        this(false, parentView);
     }
 
-    public TenantInLeaseFolder(boolean modifiable) {
+    public TenantInLeaseFolder(boolean modifiable, IView parentView) {
         super(LeaseTermTenant.class, modifiable);
+        this.parentView = parentView;
     }
 
     public boolean isPadEditable() {

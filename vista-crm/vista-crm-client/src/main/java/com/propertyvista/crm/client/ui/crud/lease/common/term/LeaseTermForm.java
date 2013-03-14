@@ -346,7 +346,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         main.setH1(++row, 0, 2, proto().version().tenants().getMeta().getCaption());
 
         TenantInLeaseFolder tf;
-        main.setWidget(++row, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable()) {
+        main.setWidget(++row, 0, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable(), getParentView()) {
             @Override
             protected Key getParentKey() {
                 return LeaseTermForm.this.getValue().version().getPrimaryKey();
