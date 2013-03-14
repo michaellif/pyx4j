@@ -75,8 +75,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
                 dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
             }
 
-            Persistence.service().retrieve(dto.currentTerm().version().tenants());
-            Persistence.service().retrieve(dto.currentTerm().version().guarantors());
+            Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
+            Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
         }
 
         Persistence.service().retrieve(dto.billingAccount());

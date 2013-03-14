@@ -41,6 +41,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -79,9 +80,9 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
     }
 
-    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<?> leaseParticipantId) {
-        LeaseTermParticipant<?> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(leaseParticipantId.getValueClass(),
-                leaseParticipantId.getPrimaryKey());
+    private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipantId) {
+        LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(
+                leaseParticipantId.getValueClass(), leaseParticipantId.getPrimaryKey());
 
         LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(lease, leaseParticipant, AttachLevel.Attached);
 
@@ -167,7 +168,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         dto.numberOfApplicants().setValue(0);
 
         for (LeaseTermTenant tenant : dto.currentTerm().version().tenants()) {
-            Persistence.service().retrieve(tenant);
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
             switch (tenant.role().getValue()) {
