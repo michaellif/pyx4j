@@ -97,7 +97,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     public IFolderItemDecorator<LeaseTermTenant> createItemDecorator() {
         BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
-        decor.setExpended(isPadEditable);
+        decor.setExpended(isEditable() || isPadEditable);
         return decor;
     }
 
@@ -107,10 +107,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         if (isPadEditable) {
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
-                @SuppressWarnings("unchecked")
                 @Override
                 public void execute() {
-                    ((BoxFolderItemDecorator<LeaseTermTenant>) item.getDecorator()).setExpended(true);
                     // TODO add call to PAP visor here... 
                 }
             });
@@ -289,7 +287,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
-//            preauthorizedPaymentsPanel.setVisible(!getValue().leaseParticipant().preauthorizedPayments().isEmpty());
+            preauthorizedPaymentsPanel.setVisible(!isEditable() /* && !getValue().leaseParticipant().preauthorizedPayments().isEmpty() */);
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
@@ -347,9 +345,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().amountType(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "20em"));
+                    new EntityFolderColumnDescriptor(proto().amountType(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"));
               //@formatter:on
         }
 
