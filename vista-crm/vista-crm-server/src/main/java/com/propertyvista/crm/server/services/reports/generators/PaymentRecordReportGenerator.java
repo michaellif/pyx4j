@@ -37,7 +37,7 @@ public class PaymentRecordReportGenerator implements ReportGenerator {
         if (!reportMetadata.until().isNull()) {
             criteria.le(criteria.proto().updated(), reportMetadata.until());
         }
-        if (reportMetadata.selectBuildings().isBooleanTrue()) {
+        if (reportMetadata.selectBuildings().isBooleanTrue() & !reportMetadata.selectedBuildings().isEmpty()) {
             criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
         }
         if (!reportMetadata.billingCycles().isEmpty()) {
