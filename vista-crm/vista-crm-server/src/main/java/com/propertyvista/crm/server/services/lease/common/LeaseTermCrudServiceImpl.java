@@ -119,6 +119,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
         for (LeaseTermTenant item : dto.version().tenants()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
+            Persistence.service().retrieveMember(item.leaseParticipant().preauthorizedPayments());
         }
 
         if (in.getPrimaryKey() != null) {

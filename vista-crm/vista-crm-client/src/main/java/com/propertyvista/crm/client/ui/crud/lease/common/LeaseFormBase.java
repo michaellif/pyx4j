@@ -64,6 +64,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     @Override
     protected void onValueSet(boolean populate) {
+        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
+        ((TenantInLeaseFolder) comp).setPadEditable(!getValue().status().getValue().isFormer());
+
         super.onValueSet(populate);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -91,9 +94,6 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
         }
-
-        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
-        ((TenantInLeaseFolder) comp).setEditablePAD(!getValue().status().getValue().isFormer());
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {

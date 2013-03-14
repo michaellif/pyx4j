@@ -49,6 +49,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieveMember(item.leaseParticipant().preauthorizedPayments());
         }
 
         for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {

@@ -14,10 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -30,8 +32,12 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -43,6 +49,10 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -56,7 +66,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
-    private boolean isEditablePAD = false;
+    private boolean isPadEditable = false;
 
     public TenantInLeaseFolder() {
         this(false);
@@ -66,12 +76,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         super(LeaseTermTenant.class, modifiable);
     }
 
-    public boolean isEditablePAD() {
-        return isEditablePAD;
+    public boolean isPadEditable() {
+        return isPadEditable;
     }
 
-    public void setEditablePAD(boolean isEditablePAD) {
-        this.isEditablePAD = isEditablePAD;
+    public void setPadEditable(boolean isPadEditable) {
+        this.isPadEditable = isPadEditable;
     }
 
     @Override
@@ -87,8 +97,26 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     public IFolderItemDecorator<LeaseTermTenant> createItemDecorator() {
         BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
-        decor.setExpended(false);
+        decor.setExpended(isPadEditable);
         return decor;
+    }
+
+    @Override
+    protected CEntityFolderItem<LeaseTermTenant> createItem(boolean first) {
+        final CEntityFolderItem<LeaseTermTenant> item = super.createItem(first);
+
+        if (isPadEditable) {
+            item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void execute() {
+                    ((BoxFolderItemDecorator<LeaseTermTenant>) item.getDecorator()).setExpended(true);
+                    // TODO add call to PAP visor here... 
+                }
+            });
+        }
+
+        return item;
     }
 
     @Override
@@ -176,6 +204,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private class TenantInLeaseEditor extends CEntityDecoratableForm<LeaseTermTenant> {
 
+        private final FormFlexPanel preauthorizedPaymentsPanel = new FormFlexPanel();
+
         public TenantInLeaseEditor() {
             super(LeaseTermTenant.class);
         }
@@ -237,12 +267,17 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 //                });
             }
 
+            preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
+            preauthorizedPaymentsPanel.setWidget(1, 0, inject(proto().leaseParticipant().preauthorizedPayments(), new PreauthorizedPayments()));
+
             // assemble main panel:
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
+            main.setWidget(1, 0, preauthorizedPaymentsPanel);
+            main.getFlexCellFormatter().setColSpan(1, 0, 2);
 
             main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
+            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width!
 
             return main;
         }
@@ -253,6 +288,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             super.onValueSet(populate);
 
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
+            get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
+//            preauthorizedPaymentsPanel.setVisible(!getValue().leaseParticipant().preauthorizedPayments().isEmpty());
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()
@@ -272,8 +309,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 //                    }
 //                }
             }
-
-            get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
         }
 
         @Override
@@ -299,6 +334,31 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().leaseParticipant().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
             get(proto().role()).setValue(LeaseTermParticipant.Role.Applicant);
             get(proto().percentage()).setValue(new BigDecimal(1));
+        }
+    }
+
+    // TODO intended for use in visor also -move to separate file. 
+    public static class PreauthorizedPayments extends VistaTableFolder<PreauthorizedPayment> {
+
+        public PreauthorizedPayments() {
+            super(PreauthorizedPayment.class);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().amountType(), "5em"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "5em"),
+                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "20em"));
+              //@formatter:on
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof LeasePaymentMethod) {
+                return new CEntityLabel<LeasePaymentMethod>();
+            }
+            return super.create(member);
         }
     }
 }

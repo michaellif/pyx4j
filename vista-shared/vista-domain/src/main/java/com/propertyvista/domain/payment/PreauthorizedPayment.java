@@ -45,25 +45,6 @@ public interface PreauthorizedPayment extends IEntity {
         }
     }
 
-    @Owner
-    @Detached
-    @NotNull
-    @MemberColumn(notNull = true)
-    @JoinColumn
-    Tenant leaseParticipant();
-
-    // internals:
-    interface OrderId extends ColumnId {
-    }
-
-    @Timestamp(Update.Created)
-    //TODO  @MemberColumn(OrderId.class)
-    IPrimitive<LogicalDate> creationDate();
-
-    @Deprecated
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderInParent();
-
     @NotNull
     @ToString(index = 0)
     IPrimitive<AmountType> amountType();
@@ -78,4 +59,23 @@ public interface PreauthorizedPayment extends IEntity {
     @Length(40)
     IPrimitive<String> comments();
 
+    // internals:
+
+    @Owner
+    @Detached
+    @NotNull
+    @JoinColumn
+    @MemberColumn(notNull = true)
+    Tenant leaseParticipant();
+
+    interface OrderId extends ColumnId {
+    }
+
+    @Timestamp(Update.Created)
+    //TODO  @MemberColumn(OrderId.class)
+    IPrimitive<LogicalDate> creationDate();
+
+    @Deprecated
+    @OrderColumn(OrderId.class)
+    IPrimitive<Integer> orderInParent();
 }
