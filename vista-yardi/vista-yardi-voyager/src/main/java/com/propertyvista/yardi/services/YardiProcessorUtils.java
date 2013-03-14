@@ -124,6 +124,8 @@ public class YardiProcessorUtils {
         item.billingAccount().set(account);
         item.amount().setValue(amount);
         item.description().setValue(detail.getDescription());
+
+        //TODO postDate should be null in Yardi case. dueDate should be calculated
         item.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
 
         return item;
