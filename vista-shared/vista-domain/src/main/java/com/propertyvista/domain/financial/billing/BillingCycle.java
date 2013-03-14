@@ -54,14 +54,23 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> billingCycleEndDate();
 
-    @ReadOnly(allowOverrideNull = true)
+    //TODO rename to targetBillExecutionDate();
     IPrimitive<LogicalDate> billExecutionDate();
 
-    @ReadOnly(allowOverrideNull = true)
+    //TODO rename to target
     IPrimitive<LogicalDate> padCalculationDate();
 
-    @ReadOnly(allowOverrideNull = true)
+    //TODO rename to target
     IPrimitive<LogicalDate> padExecutionDate();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<LogicalDate> actualBillExecutionDate();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<LogicalDate> actualPadCalculationDate();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<LogicalDate> actualPadExecutionDate();
 
     // Used as different entity to avoid transaction isolation problems in HDQLDB
     @Owned
