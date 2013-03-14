@@ -29,7 +29,7 @@ public interface SiteImages extends WidgetsImages {
 
     SiteImages INSTANCE = GWT.create(SiteImages.class);
 
-    @Source("back.png")
-    ImageResource backButton();
+    @Source("close.gif")
+    ImageResource closeButton();
 
 }

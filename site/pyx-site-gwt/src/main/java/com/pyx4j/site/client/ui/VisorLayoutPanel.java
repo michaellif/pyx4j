@@ -69,8 +69,8 @@ public class VisorLayoutPanel extends ComplexPanel implements RequiresResize, Pr
             if (visorPaneWidget != null) {
                 visorPaneLayer = (Layer) visorPaneWidget.asWidget().getLayoutData();
 
-                visorPaneLayer.setTopHeight(0.0, Unit.PCT, 100.0, Unit.PCT);
-                visorPaneLayer.setLeftWidth(-100.0, Unit.PCT, 100.0, Unit.PCT);
+                visorPaneLayer.setTopHeight(-100.0, Unit.PCT, 100.0, Unit.PCT);
+                visorPaneLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
                 setWidgetVisible(visorPaneWidget, visorPaneLayer, true);
             }
 
@@ -91,11 +91,11 @@ public class VisorLayoutPanel extends ComplexPanel implements RequiresResize, Pr
 
             if (previousVisorPaneLayer != null) {
                 if (visorPaneLayer == null) {
-                    previousVisorPaneLayer.setTopHeight(0.0, Unit.PCT, 100.0, Unit.PCT);
-                    previousVisorPaneLayer.setLeftWidth(-100.0, Unit.PCT, 100.0, Unit.PCT);
+                    previousVisorPaneLayer.setTopHeight(-100.0, Unit.PCT, 100.0, Unit.PCT);
+                    previousVisorPaneLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
                 } else {
-                    previousVisorPaneLayer.setTopHeight(0.0, Unit.PCT, 100.0, Unit.PCT);
-                    previousVisorPaneLayer.setLeftWidth(100.0, Unit.PCT, 100.0, Unit.PCT);
+                    previousVisorPaneLayer.setTopHeight(100.0, Unit.PCT, 100.0, Unit.PCT);
+                    previousVisorPaneLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
                 }
             }
         }

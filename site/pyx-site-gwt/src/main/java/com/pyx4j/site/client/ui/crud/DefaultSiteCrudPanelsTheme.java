@@ -32,7 +32,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     public static enum StyleName implements IStyleName {
         Header, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
 
-        Visor, VisorHeader, VisorBackButton, VisorCaption
+        Visor, VisorHeader, VisorCloseButton, VisorCaption
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -123,11 +123,12 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("background-color", ThemeColor.object1, 0.9);
         addStyle(style);
 
-        style = new Style(".", StyleName.VisorBackButton);
+        style = new Style(".", StyleName.VisorCloseButton);
         style.addProperty("height", "17px");
         style.addProperty("float", "right");
-        style.addProperty("margin", "4px");
+        style.addProperty("margin", "6px");
         style.addProperty("border-color", ThemeColor.object1, 1);
+        style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.VisorCaption);

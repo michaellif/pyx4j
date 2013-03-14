@@ -32,13 +32,13 @@ public class VisorDialogHolder extends AbstractVisorHolder {
     public VisorDialogHolder(IVisorDialog visor, String caption, final IView parent) {
         super(visor, caption, parent);
 
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), new Command() {
+        Button backButton = new Button(new Image(SiteImages.INSTANCE.closeButton()), new Command() {
             @Override
             public void execute() {
                 parent.hideVisor();
             }
         });
-        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorBackButton.name());
+        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCloseButton.name());
         getHeader().add(backButton);
 
     }

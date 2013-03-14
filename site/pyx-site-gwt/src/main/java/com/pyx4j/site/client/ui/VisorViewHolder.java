@@ -20,26 +20,49 @@
  */
 package com.pyx4j.site.client.ui;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.ImageFactory;
 
 public class VisorViewHolder extends AbstractVisorHolder {
 
     public VisorViewHolder(IVisorView visor, String caption, final IView parent) {
         super(visor, caption, parent);
 
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), new Command() {
+        final Image closeImage = new Image(ImageFactory.getImages().closeTab());
+        closeImage.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCloseButton.name());
+
+        closeImage.addClickHandler(new ClickHandler() {
             @Override
-            public void execute() {
+            public void onClick(ClickEvent event) {
                 parent.hideVisor();
             }
         });
-        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorBackButton.name());
-        getHeader().add(backButton);
+        closeImage.addMouseOverHandler(new MouseOverHandler() {
+
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                closeImage.setResource(ImageFactory.getImages().closeTabFocused());
+            }
+        });
+        closeImage.addMouseOutHandler(new MouseOutHandler() {
+
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                closeImage.setResource(ImageFactory.getImages().closeTab());
+            }
+        });
+
+        closeImage.setTitle("Close");
+
+        getHeader().add(closeImage);
 
     }
 
