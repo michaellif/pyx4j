@@ -14,10 +14,10 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -26,10 +26,15 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface PADPolicy extends Policy {
     public enum PADChargeType {
-        FixedAmount, LastPeriodServiceCharge, OwedServiceCharge
+        FixedAmount, OwingBalance
+    }
+
+    public enum OwingBalanceType {
+        LastBill, ToDateTotal
     }
 
     IPrimitive<PADChargeType> chargeType();
 
-    IPrimitiveSet<Feature.Type> chargeableService();
+    @Owned
+    IList<PADPolicyItem> debitBalanceTypes();
 }

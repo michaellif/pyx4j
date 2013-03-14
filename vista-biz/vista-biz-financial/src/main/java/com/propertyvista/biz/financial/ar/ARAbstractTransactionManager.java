@@ -15,7 +15,9 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -27,12 +29,18 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.policy.policies.PADPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
+import com.propertyvista.domain.policy.policies.PADPolicyItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class ARAbstractTransactionManager {
@@ -82,5 +90,34 @@ public abstract class ARAbstractTransactionManager {
     abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 
     abstract protected BigDecimal getCurrentBallance(BillingAccount billingAccount);
+
+    public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
+        BigDecimal balance = BigDecimal.ZERO;
+        // get PAD policy
+        PADPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
+        // create product map
+        Map<DebitType, OwingBalanceType> debitBalanceType = new HashMap<DebitType, OwingBalanceType>();
+        for (PADPolicyItem item : policy.debitBalanceTypes()) {
+            debitBalanceType.put(item.debitType().getValue(), item.owingBalanceType().getValue());
+        }
+        // get bill
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), cycle));
+        Bill bill = Persistence.service().retrieve(criteria);
+        switch (policy.chargeType().getValue()) {
+        case FixedAmount:
+            throw new Error("Not Implemented");
+        case OwingBalance:
+            for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
+                OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
+                if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.dueDate().getValue().equals(bill.dueDate().getValue())) {
+                    balance = balance.add(charge.outstandingDebit().getValue()).add(charge.taxTotal().getValue());
+                }
+            }
+            break;
+        }
+        return balance;
+    }
 
 }

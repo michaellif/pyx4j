@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.ar.internal;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
@@ -41,7 +40,6 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARInternalFacadeImpl implements ARFacade {
@@ -144,9 +142,8 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public Map<LeaseTermTenant, BigDecimal> getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        // TODO Auto-generated method stub
-        return null;
+    public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
+        return ARInternalTransactionManager.getInstance().getPADBalance(billingAccount, cycle);
     }
 
 }
