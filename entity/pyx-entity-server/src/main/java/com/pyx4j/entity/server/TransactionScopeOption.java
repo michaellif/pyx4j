@@ -28,9 +28,25 @@ package com.pyx4j.entity.server;
 public enum TransactionScopeOption {
 
     /**
-     * A transaction is required by the scope. It uses an ambient transaction if one already exists. Otherwise, it creates a new transaction before entering the
-     * scope. This is the default value.
+     * Start new transaction if not exists,
+     * Creates save point within existing transaction.
+     * 
+     * This is the default value.
      */
+    Nested,
+
+    /**
+     * @deprecated TODO VladS implement this
+     * 
+     *             A transaction is required by the scope. It uses an ambient transaction if one already exists. Otherwise, it creates a new transaction before
+     *             entering the
+     *             scope.
+     * 
+     *             Do not create save point if transaction exists.
+     * 
+     *             If started within another transaction commit is ignored.
+     */
+    @Deprecated
     Required,
 
     /**
@@ -50,4 +66,5 @@ public enum TransactionScopeOption {
      * This translates to JDBC auto-commit.
      */
     Suppress;
+
 }

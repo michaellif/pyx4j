@@ -241,11 +241,6 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public void enableSavepointAsNestedTransactions() {
-        // TODO
-    }
-
-    @Override
     public void setAssertTransactionManangementCallOrigin() {
         //TODO
     }

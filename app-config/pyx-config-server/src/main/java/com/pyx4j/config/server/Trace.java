@@ -98,7 +98,7 @@ public class Trace {
      */
     public static String getCallOriginMethod(Class<?> apiEntryClass) {
         StackTraceElement[] ste = new Throwable().getStackTrace();
-        for (int i = 0; i < ste.length - 1; i++) {
+        for (int i = ste.length - 1; i > 0; i--) {
             if (ste[i].getClassName().equals(apiEntryClass.getName())) {
                 return ste[i + 1].getClassName() + "." + ste[i + 1].getMethodName();
             }

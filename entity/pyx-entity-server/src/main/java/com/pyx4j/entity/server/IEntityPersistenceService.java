@@ -35,10 +35,11 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 public interface IEntityPersistenceService {
 
     /**
-     * Start short lived Online Transaction
+     * Start short lived Online Persistence Context with Transaction without nested transactions.
      * 
      * Usually called when on startRequest from Lifecycle.beginRequest
-     * TODO rename to startTransactionContext
+     * 
+     * ! TODO rename to startPersistenceContext
      */
     public void startTransaction();
 
@@ -58,8 +59,6 @@ public interface IEntityPersistenceService {
     public Boolean getTransactionScopeOption();
 
     public void setAssertTransactionManangementCallOrigin();
-
-    public void enableSavepointAsNestedTransactions();
 
     /**
      * Validate that Transaction is explicitly committed or rolled back and then close it.

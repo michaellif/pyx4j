@@ -100,15 +100,14 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction();
-        srv.enableSavepointAsNestedTransactions();
+        srv.startTransaction(TransactionScopeOption.Nested, false);
         {
             srv.persist(emp1);
 
             srv.persist(createEntity(setId, "1.1"));
 
             // Tx2
-            srv.startTransaction();
+            srv.startTransaction(TransactionScopeOption.Nested, false);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -143,8 +142,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction();
-        srv.enableSavepointAsNestedTransactions();
+        srv.startTransaction(TransactionScopeOption.Nested, false);
         {
             srv.persist(emp1);
             srv.commit();
@@ -153,7 +151,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             srv.rollback();
 
             // Tx2
-            srv.startTransaction();
+            srv.startTransaction(TransactionScopeOption.Nested, false);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -184,13 +182,12 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction();
-        srv.enableSavepointAsNestedTransactions();
+        srv.startTransaction(TransactionScopeOption.Nested, false);
         {
             srv.persist(emp1);
 
             // Tx2
-            srv.startTransaction();
+            srv.startTransaction(TransactionScopeOption.Nested, false);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -308,6 +305,31 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertExists(setId, "1.0");
         assertNotExists(setId, "2.0");
         assertExists(setId, "1.1");
+    }
+
+    public void testUnitOfWorkExternalTransactionIntegration() {
+        srv.endTransaction();
+        final String setId = uniqueString();
+
+        srv.startTransaction(TransactionScopeOption.RequiresNew, true);
+
+        srv.persist(createEntity(setId, "1.0"));
+
+        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                srv.persist(createEntity(setId, "2.0"));
+                return null;
+            }
+        });
+
+        srv.persist(createEntity(setId, "1.1"));
+
+        assertExists(setId, "1.0");
+        assertExists(setId, "2.0");
+        assertExists(setId, "1.1");
+
     }
 
     public void testUnitOfWorkManangementCallOrigin() {

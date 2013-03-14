@@ -83,7 +83,9 @@ public class PersistenceContext {
 
         SingelAPICallAutoCommit,
 
-        ExplicitTransaction,
+        JDBCPersistence,
+
+        Transaction,
 
         AutoCommit
     }
@@ -135,6 +137,9 @@ public class PersistenceContext {
         } else {
             options.push(new TransactionContextOptions(options()));
         }
+        if (isTransaction()) {
+            options().enableSavepointAsNestedTransactions = true;
+        }
     }
 
     boolean endTransaction() {
@@ -178,8 +183,12 @@ public class PersistenceContext {
         return transactionType == TransactionType.SingelAPICallAutoCommit;
     }
 
+    public boolean isTransaction() {
+        return transactionType == TransactionType.Transaction;
+    }
+
     public boolean isExplicitTransaction() {
-        return transactionType == TransactionType.ExplicitTransaction;
+        return transactionType == TransactionType.Transaction || transactionType == TransactionType.JDBCPersistence;
     }
 
     public boolean isBackgroundProcessTransaction() {
@@ -253,6 +262,7 @@ public class PersistenceContext {
     private void assertTransactionManangementCallOrigin() {
         if ((options().assertTransactionManangementCallOrigin != null)
                 && (!options().assertTransactionManangementCallOrigin.equals(Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class)))) {
+            log.error("CallOrigin {} != {}", Trace.getCallOriginMethod(EntityPersistenceServiceRDB.class), options().assertTransactionManangementCallOrigin);
             throw new IllegalAccessError(
                     "Transaction Management of this thread can only performed from "
                             + options().assertTransactionManangementCallOrigin //
@@ -298,18 +308,15 @@ public class PersistenceContext {
         }
     }
 
-    void enableSavepointAsNestedTransactions() {
-        assertTransactionManangementCallOrigin();
-        if (isExplicitTransaction()) {
-            options().enableSavepointAsNestedTransactions = true;
-        }
-    }
-
-    void savepointCreate() {
+    void starNestedContext(boolean enableSavepointAsNestedTransactions) {
         assertTransactionManangementCallOrigin();
         savepoints++;
-        if (options().enableSavepointAsNestedTransactions) {
-            transactionContexts.push(new TransactionContext(getConnection(), savepoints));
+        if (isExplicitTransaction()) {
+            options().enableSavepointAsNestedTransactions = enableSavepointAsNestedTransactions;
+
+            if (options().enableSavepointAsNestedTransactions) {
+                transactionContexts.push(new TransactionContext(getConnection(), savepoints));
+            }
         }
     }
 

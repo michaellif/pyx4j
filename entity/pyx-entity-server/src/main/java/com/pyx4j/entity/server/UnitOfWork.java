@@ -35,7 +35,7 @@ public class UnitOfWork {
      * Start short lived Online Transaction
      */
     public UnitOfWork() {
-        this(TransactionScopeOption.Required);
+        this(TransactionScopeOption.Nested);
     }
 
     /**
@@ -60,7 +60,6 @@ public class UnitOfWork {
         try {
             Persistence.service().startTransaction(transactionScopeOption, backgroundProcessTransaction);
             Persistence.service().setAssertTransactionManangementCallOrigin();
-            Persistence.service().enableSavepointAsNestedTransactions();
 
             try {
                 R rv = task.execute();

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
-import static com.pyx4j.entity.server.TransactionScopeOption.Required;
+import static com.pyx4j.entity.server.TransactionScopeOption.Nested;
 import static com.pyx4j.entity.server.TransactionScopeOption.RequiresNew;
 
 import java.rmi.server.ServerNotActiveException;
@@ -65,16 +65,16 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
 
     //===================== SUCESSFUL FLOWS =====================//
 
-    public void testUnitOfWorkCompensationHandler_Required_Required_Pass() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_Pass(Required, Required);
+    public void testUnitOfWorkCompensationHandler_Nested_Nested_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(Nested, Nested);
     }
 
-    public void testUnitOfWorkCompensationHandler_Required_RequiresNew_Pass() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_Pass(Required, RequiresNew);
+    public void testUnitOfWorkCompensationHandler_Nested_RequiresNew_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(Nested, RequiresNew);
     }
 
-    public void testUnitOfWorkCompensationHandler_RequiresNew_Required_Pass() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_Pass(RequiresNew, Required);
+    public void testUnitOfWorkCompensationHandler_RequiresNew_Nested_Pass() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_Pass(RequiresNew, Nested);
     }
 
     public void testUnitOfWorkCompensationHandler_RequiresNew_RequiresNew_Pass() throws ServerNotActiveException {
@@ -87,7 +87,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "");
+        executeUseCase1(setId, compensationHandlerOrder, Nested, Nested, Nested, "");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
@@ -105,16 +105,16 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
 
     //===================== EXCEPTION FLOWS =====================//
 
-    public void testUnitOfWorkCompensationHandler_Required_Required_1g() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_1g(Required, Required);
+    public void testUnitOfWorkCompensationHandler_Nested_Nested_1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(Nested, Nested);
     }
 
-    public void testUnitOfWorkCompensationHandler_Required_RequiresNew__1g() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_1g(Required, RequiresNew);
+    public void testUnitOfWorkCompensationHandler_Nested_RequiresNew__1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(Nested, RequiresNew);
     }
 
-    public void testUnitOfWorkCompensationHandler_RequiresNew_Required__1g() throws ServerNotActiveException {
-        testUnitOfWorkCompensationHandler_1g(RequiresNew, Required);
+    public void testUnitOfWorkCompensationHandler_RequiresNew_Nested__1g() throws ServerNotActiveException {
+        testUnitOfWorkCompensationHandler_1g(RequiresNew, Nested);
     }
 
     public void testUnitOfWorkCompensationHandler_RequiresNew_RequiresNew__1g() throws ServerNotActiveException {
@@ -127,7 +127,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "1.g");
+            executeUseCase1(setId, compensationHandlerOrder, Nested, Nested, Nested, "1.g");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -153,7 +153,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
         try {
-            executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.a", "1.c");
+            executeUseCase1(setId, compensationHandlerOrder, Nested, Nested, Nested, "2.a", "1.c");
             Assert.fail("Should throw Exception");
         } catch (ServerNotActiveException ok) {
         }
@@ -176,7 +176,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.a");
+        executeUseCase1(setId, compensationHandlerOrder, Nested, Nested, Nested, "2.a");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
@@ -197,7 +197,7 @@ public abstract class UnitOfWorkUseCase1TestCase extends DatastoreTestBase {
         final String setId = uniqueString();
         final List<String> compensationHandlerOrder = new ArrayList<String>();
 
-        executeUseCase1(setId, compensationHandlerOrder, Required, Required, Required, "2.b");
+        executeUseCase1(setId, compensationHandlerOrder, Nested, Nested, Nested, "2.b");
 
         assertExists(setId, "1.0");
         assertNotExists(setId, "1.0CH");
