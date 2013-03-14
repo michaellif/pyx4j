@@ -90,7 +90,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponentHolder);
-        style.addProperty("overflow", "hidden");
+        style.addProperty("word-wrap", "break-word");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponent);
