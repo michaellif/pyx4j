@@ -38,7 +38,7 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
         try {
             Lifecycle.startElevatedUserContext();
 
-            new UnitOfWork(TransactionScopeOption.Required, true).execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.Nested, true).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
                 public Void execute() {

@@ -168,7 +168,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         Persistence.service().endTransaction();
         Persistence.service().startBackgroundProcessTransaction();
-        Persistence.service().enableSavepointAsNestedTransactions();
         setSysDate("01-Jan-2000");
     }
 
