@@ -18,9 +18,14 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class ARDateUtils {
 
@@ -30,6 +35,7 @@ public class ARDateUtils {
         return calculateDueDate(billingAccount, new LogicalDate(SystemDateManager.getDate()));
     }
 
+    @Deprecated
     public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount, LogicalDate postDate) {
         LogicalDate dueDate = null;
 
@@ -55,6 +61,38 @@ public class ARDateUtils {
         }
 
         return dueDate;
+    }
+
+    public static LogicalDate calculateDueDate(BillingAccount account, LogicalDate postDate) {
+        EntityQueryCriteria<BillingCycle> cycleCrit = EntityQueryCriteria.create(BillingCycle.class);
+        cycleCrit.add(PropertyCriterion.eq(cycleCrit.proto().building(), account.lease().unit().building()));
+        cycleCrit.add(PropertyCriterion.le(cycleCrit.proto().billingCycleStartDate(), postDate));
+        cycleCrit.add(PropertyCriterion.ge(cycleCrit.proto().billingCycleEndDate(), postDate));
+        BillingCycle cycle = Persistence.service().retrieve(cycleCrit);
+
+        return getBillingCycleDueDate(account, cycle);
+    }
+
+    private static LogicalDate getBillingCycleDueDate(BillingAccount account, BillingCycle cycle) {
+        LogicalDate startDate;
+        int dueDateOffset;
+        if (cycle.billingCycleEndDate().getValue().before(account.lease().leaseTo().getValue())) {
+            // normal cycle
+            startDate = cycle.billingCycleStartDate().getValue();
+            dueDateOffset = account.paymentDueDayOffset().getValue();
+        } else {
+            // final cycle
+            startDate = account.lease().leaseTo().getValue();
+            dueDateOffset = account.finalDueDayOffset().getValue();
+        }
+        return getDateByOffset(dueDateOffset, startDate);
+    }
+
+    private static LogicalDate getDateByOffset(int offset, LogicalDate fromDate) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(fromDate);
+        calendar.add(Calendar.DATE, offset);
+        return new LogicalDate(calendar.getTime());
     }
 
 }

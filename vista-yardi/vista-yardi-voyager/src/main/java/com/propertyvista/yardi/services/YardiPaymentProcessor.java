@@ -91,7 +91,7 @@ public class YardiPaymentProcessor {
 
         // Create Payment transaction
         Transactions transactions = new Transactions();
-        transactions.setPayment(YardiProcessorUtils.getPayment(yp));
+        transactions.setPayment(YardiProcessorUtils.getPaymentReceipt(yp));
         return transactions;
     }
 

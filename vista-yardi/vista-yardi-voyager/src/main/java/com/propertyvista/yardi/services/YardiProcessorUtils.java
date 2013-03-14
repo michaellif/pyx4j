@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -110,6 +111,7 @@ public class YardiProcessorUtils {
             charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
             charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
+            charge.dueDate().setValue(ARDateUtils.calculateDueDate(account, new LogicalDate(detail.getTransactionDate().getTime())));
             if (detail.getService() != null) {
                 try {
                     charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
@@ -122,13 +124,10 @@ public class YardiProcessorUtils {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
             item = credit;
         }
+        // we don't have postDate
         item.billingAccount().set(account);
         item.amount().setValue(amount);
-
         item.description().setValue(detail.getDescription());
-
-        //TODO postDate should be null in Yardi case. dueDate should be calculated
-        item.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
 
         return item;
     }
@@ -136,27 +135,24 @@ public class YardiProcessorUtils {
     /*
      * PaymentProcessor utils
      */
-    public static Payment getPayment(YardiReceipt yp) {
+    public static YardiPayment createPayment(BillingAccount account, Payment payment) {
+        YardiPayment yp = EntityFactory.create(YardiPayment.class);
+
+        yp.billingAccount().set(account);
+        Detail detail = payment.getDetail();
+        yp.amount().setValue(new BigDecimal(detail.getAmount()).negate());
+        yp.description().setValue(detail.getDescription());
+        yp.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
+
+        return yp;
+    }
+
+    public static Payment getPaymentReceipt(YardiReceipt yp) {
         Payment payment = new Payment();
         payment.setType(getPaymentType(yp));
         payment.setChannel(YardiPaymentChannel.Online.name());
         payment.setDetail(getPaymentDetail(yp));
         return payment;
-    }
-
-    public static Detail getPaymentDetail(YardiReceipt yp) {
-        PaymentRecord pr = yp.paymentRecord();
-        Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
-
-        Detail detail = new Detail();
-        detail.setDocumentNumber(pr.paymentMethod().type().getValue().toString() + ":" + pr.getPrimaryKey().toString());
-        detail.setTransactionDate(pr.receivedDate().isNull() ? pr.createdDate().getValue() : pr.receivedDate().getValue());
-        detail.setCustomerID(yp.billingAccount().lease().leaseId().getValue());
-        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
-        detail.setAmount(pr.amount().getValue().toString());
-        detail.setPropertyPrimaryID(yp.billingAccount().lease().unit().building().propertyCode().getValue());
-        detail.setDescription(yp.description().getValue());
-        return detail;
     }
 
     public static Payment getReceiptReversal(YardiReceiptReversal reversal) {
@@ -166,10 +162,10 @@ public class YardiProcessorUtils {
         return payment;
     }
 
-    public static Detail getReceiptReversalDetail(YardiReceiptReversal reversal) {
-        PaymentRecord pr = reversal.paymentRecord();
-        Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
-
+    /*
+     * Internals
+     */
+    private static Detail getReceiptReversalDetail(YardiReceiptReversal reversal) {
         Detail detail = new Detail();
         PaymentDetailReversal reversalType = new PaymentDetailReversal();
         if (reversal.applyNSF().isBooleanTrue()) {
@@ -178,16 +174,18 @@ public class YardiProcessorUtils {
             reversalType.setType("Reverse");
         }
         detail.setReversal(reversalType);
-        detail.setDocumentNumber(pr.paymentMethod().type().getValue().toString() + ":" + pr.getPrimaryKey().toString());
-        detail.setTransactionDate(pr.createdDate().getValue());
-        detail.setCustomerID(reversal.billingAccount().lease().leaseId().getValue());
-        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
-        detail.setAmount(pr.amount().getValue().toString());
-        detail.setPropertyPrimaryID(reversal.billingAccount().lease().unit().building().propertyCode().getValue());
+        setPaymentInfo(detail, reversal.paymentRecord(), reversal.billingAccount().lease());
         return detail;
     }
 
-    public static String getPaymentType(YardiReceipt yp) {
+    private static Detail getPaymentDetail(YardiReceipt yp) {
+        Detail detail = new Detail();
+        detail.setDescription(yp.description().getValue());
+        setPaymentInfo(detail, yp.paymentRecord(), yp.billingAccount().lease());
+        return detail;
+    }
+
+    private static String getPaymentType(YardiReceipt yp) {
         switch (yp.paymentRecord().paymentMethod().type().getValue()) {
         case Cash:
             return YardiPaymentType.Cash.name();
@@ -205,15 +203,15 @@ public class YardiProcessorUtils {
         return null;
     }
 
-    public static YardiPayment createPayment(BillingAccount account, Payment payment) {
-        YardiPayment yp = EntityFactory.create(YardiPayment.class);
+    private static void setPaymentInfo(Detail detail, PaymentRecord pr, Lease lease) {
+        Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
-        yp.billingAccount().set(account);
-        Detail detail = payment.getDetail();
-        yp.amount().setValue(new BigDecimal(detail.getAmount()).negate());
-        yp.description().setValue(detail.getDescription());
-        yp.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
-
-        return yp;
+        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
+        // info below is used to uniquely identify transaction in yardi
+        detail.setCustomerID(lease.leaseId().getValue());
+        detail.setPropertyPrimaryID(lease.unit().building().propertyCode().getValue());
+        detail.setDocumentNumber(pr.paymentMethod().type().getValue().toString() + ":" + pr.getPrimaryKey().toString());
+        detail.setTransactionDate(pr.receivedDate().isNull() ? pr.createdDate().getValue() : pr.receivedDate().getValue());
+        detail.setAmount(pr.amount().getValue().toString());
     }
 }
