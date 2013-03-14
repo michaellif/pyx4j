@@ -27,9 +27,9 @@ import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.Button;
 
-public class VisorDialogHolder extends AbstractVisorHolder {
+public class VisorEditorHolder extends AbstractVisorHolder {
 
-    public VisorDialogHolder(IVisorDialog visor, String caption, final IView parent) {
+    public VisorEditorHolder(IVisorEditor visor, String caption, final IView parent) {
         super(visor, caption, parent);
 
         Button backButton = new Button(new Image(SiteImages.INSTANCE.closeButton()), new Command() {

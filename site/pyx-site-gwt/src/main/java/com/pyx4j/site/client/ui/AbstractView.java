@@ -116,10 +116,10 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
 
     @Override
     public void showVisor(IVisor visor, String caption) {
-        if (visor instanceof IVisorView) {
-            visorPane.showVisorPane(new VisorViewHolder((IVisorView) visor, caption, this));
-        } else if (visor instanceof IVisorDialog) {
-            visorPane.showVisorPane(new VisorDialogHolder((IVisorDialog) visor, caption, this));
+        if (visor instanceof IVisorViewer) {
+            visorPane.showVisorPane(new VisorViewerHolder((IVisorViewer) visor, caption, this));
+        } else if (visor instanceof IVisorEditor) {
+            visorPane.showVisorPane(new VisorEditorHolder((IVisorEditor) visor, caption, this));
         }
     }
 

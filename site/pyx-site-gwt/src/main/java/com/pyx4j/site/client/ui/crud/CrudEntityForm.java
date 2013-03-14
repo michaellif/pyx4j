@@ -35,25 +35,25 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    private IFormView<? extends IEntity> view;
+    private IForm<? extends IEntity> view;
 
     private final TabPanel tabPanel;
 
-    public CrudEntityForm(Class<E> rootClass, IFormView<? extends IEntity> view) {
+    public CrudEntityForm(Class<E> rootClass, IForm<? extends IEntity> view) {
         this(rootClass, null, view);
     }
 
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IFormView<? extends IEntity> view) {
+    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IForm<? extends IEntity> view) {
         super(rootClass, factory);
         this.view = view;
 
-        if (view instanceof IViewerView) {
+        if (view instanceof IViewer) {
             setEditable(false);
             setViewable(true);
         }
@@ -110,7 +110,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         tabPanel.setTabVisible(tab, show);
     }
 
-    public IFormView<? extends IEntity> getParentView() {
+    public IForm<? extends IEntity> getParentView() {
         assert (view != null);
         return view;
     }

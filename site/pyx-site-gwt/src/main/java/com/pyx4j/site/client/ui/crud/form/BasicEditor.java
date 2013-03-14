@@ -32,17 +32,17 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.FormViewImplBase;
+import com.pyx4j.site.client.ui.crud.BasicForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
+public class BasicEditor<E extends IEntity> extends BasicForm<E> implements IEditor<E> {
 
-    private static final I18n i18n = I18n.get(EditorViewImplBase.class);
+    private static final I18n i18n = I18n.get(BasicEditor.class);
 
-    private IEditorView.Presenter presenter;
+    private IEditor.Presenter presenter;
 
     protected String captionBase;
 
@@ -52,7 +52,7 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     protected EditMode mode;
 
-    public EditorViewImplBase() {
+    public BasicEditor() {
         super();
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
@@ -169,13 +169,13 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     }
 
     @Override
-    public void setPresenter(IEditorView.Presenter presenter) {
+    public void setPresenter(IEditor.Presenter presenter) {
         this.presenter = presenter;
         captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public IEditorView.Presenter getPresenter() {
+    public IEditor.Presenter getPresenter() {
         return presenter;
     }
 

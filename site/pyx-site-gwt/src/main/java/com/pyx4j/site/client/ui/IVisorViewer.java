@@ -21,6 +21,6 @@
 package com.pyx4j.site.client.ui;
 
 
-public interface IVisorDialog extends IVisor {
+public interface IVisorViewer extends IVisor {
 
 }

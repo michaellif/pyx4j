@@ -31,9 +31,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
-public class VisorViewHolder extends AbstractVisorHolder {
+public class VisorViewerHolder extends AbstractVisorHolder {
 
-    public VisorViewHolder(IVisorView visor, String caption, final IView parent) {
+    public VisorViewerHolder(IVisorViewer visor, String caption, final IView parent) {
         super(visor, caption, parent);
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());

@@ -22,9 +22,9 @@ package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.IView;
-import com.pyx4j.site.client.ui.crud.IFormView;
+import com.pyx4j.site.client.ui.crud.IForm;
 
-public interface IEditorView<E extends IEntity> extends IFormView<E> {
+public interface IEditor<E extends IEntity> extends IForm<E> {
 
     public interface Presenter extends IView.Presenter {
 

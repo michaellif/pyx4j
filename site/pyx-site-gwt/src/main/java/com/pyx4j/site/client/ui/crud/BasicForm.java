@@ -25,11 +25,11 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.AbstractView;
 
-public class FormViewImplBase<E extends IEntity> extends AbstractView implements IFormView<E> {
+public class BasicForm<E extends IEntity> extends AbstractView implements IForm<E> {
 
     private CrudEntityForm<E> form;
 
-    public FormViewImplBase() {
+    public BasicForm() {
         super();
     }
 

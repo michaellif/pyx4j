@@ -26,28 +26,28 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.FormViewImplBase;
+import com.pyx4j.site.client.ui.crud.BasicForm;
 
-public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IViewerView<E> {
+public class BasicViewer<E extends IEntity> extends BasicForm<E> implements IViewer<E> {
 
-    private static final I18n i18n = I18n.get(ViewerViewImplBase.class);
+    private static final I18n i18n = I18n.get(BasicViewer.class);
 
-    private IViewerView.Presenter presenter;
+    private IViewer.Presenter presenter;
 
     protected String captionBase;
 
-    public ViewerViewImplBase() {
+    public BasicViewer() {
         super();
     }
 
     @Override
-    public void setPresenter(IViewerView.Presenter presenter) {
+    public void setPresenter(IViewer.Presenter presenter) {
         this.presenter = presenter;
         captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 
     @Override
-    public IViewerView.Presenter getPresenter() {
+    public IViewer.Presenter getPresenter() {
         return presenter;
     }
 

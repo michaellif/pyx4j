@@ -32,12 +32,12 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewerView.Presenter {
+public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
 
-    private final IViewerView<E> view;
+    private final IViewer<E> view;
 
     private final AbstractCrudService<E> service;
 
@@ -47,7 +47,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private int tabIndex;
 
-    public ViewerActivityBase(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public ViewerActivityBase(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -72,7 +72,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         assert (entityId != null);
     }
 
-    public IViewerView<E> getView() {
+    public IViewer<E> getView() {
         return view;
     }
 
