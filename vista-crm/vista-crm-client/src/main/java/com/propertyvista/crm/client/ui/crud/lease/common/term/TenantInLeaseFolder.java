@@ -339,8 +339,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
     }
 
-    // TODO intended for use in visor also -move to separate file. 
-    public static class PreauthorizedPayments extends VistaTableFolder<PreauthorizedPayment> {
+    private class PreauthorizedPayments extends VistaTableFolder<PreauthorizedPayment> {
 
         public PreauthorizedPayments() {
             super(PreauthorizedPayment.class);
