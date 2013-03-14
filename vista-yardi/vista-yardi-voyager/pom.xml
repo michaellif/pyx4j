@@ -35,13 +35,13 @@
         	<artifactId>vista-server-common</artifactId>
         	<version>${project.version}</version>
         </dependency>
-        
+
          <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-equifax</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain</artifactId>
@@ -53,7 +53,7 @@
             <artifactId>vista-biz-financial</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>
@@ -99,14 +99,6 @@
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-tenant</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>com.propertyvista</groupId>
-            <artifactId>vista-biz-financial</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
             <optional>true</optional>
