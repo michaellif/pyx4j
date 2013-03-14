@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -32,6 +34,13 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
     public LeaseTermParticipantFolder(Class<E> clazz, boolean modifiable) {
         super(clazz, modifiable);
         setOrderable(false);
+    }
+
+    @Override
+    public IFolderItemDecorator<E> createItemDecorator() {
+        BoxFolderItemDecorator<E> decor = (BoxFolderItemDecorator<E>) super.createItemDecorator();
+        decor.setExpended(isEditable());
+        return decor;
     }
 
     @Override

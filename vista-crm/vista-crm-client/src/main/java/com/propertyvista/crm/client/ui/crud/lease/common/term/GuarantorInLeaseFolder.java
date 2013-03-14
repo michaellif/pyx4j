@@ -29,9 +29,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -74,13 +72,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    public IFolderItemDecorator<LeaseTermGuarantor> createItemDecorator() {
-        BoxFolderItemDecorator<LeaseTermGuarantor> decor = (BoxFolderItemDecorator<LeaseTermGuarantor>) super.createItemDecorator();
-        decor.setExpended(false);
-        return decor;
-    }
-
-    @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
             LeaseTermGuarantor newGuarantor = createGuarantor();
@@ -102,7 +93,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
 
-        assert (guarantor.leaseTermV().isNull());
+        assert (!guarantor.leaseTermV().isNull());
         return guarantor;
     }
 
