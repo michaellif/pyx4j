@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.client.ui.AbstractView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 
-public class EncryptedStorageViewImpl extends ViewImplBase implements EncryptedStorageView {
+public class EncryptedStorageViewImpl extends AbstractView implements EncryptedStorageView {
 
     private final EnryptedStorageForm form;
 

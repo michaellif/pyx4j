@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.client.ui.AbstractView;
 
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class DashboardViewImpl extends ViewImplBase implements DashboardView {
+public class DashboardViewImpl extends AbstractView implements DashboardView {
 
     private static final I18n i18n = I18n.get(DashboardViewImpl.class);
 
