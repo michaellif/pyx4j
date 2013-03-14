@@ -30,7 +30,9 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction, Visor, VisorHeader, VisorBackButton, VisorCaption
+        Header, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
+
+        Visor, VisorHeader, VisorBackButton, VisorCaption
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -80,7 +82,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         style = new Style(".", StyleName.Header);
         style.addProperty("background-color", ThemeColor.object1, 1);
-        style.addProperty("color", ThemeColor.foreground, 0);
+        style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("width", "100%");
         style.addProperty("padding", "0 1em");
         style.addProperty("white-space", "nowrap");
@@ -110,29 +112,32 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         style = new Style(".", StyleName.Visor);
         style.addGradient(ThemeColor.object1, 0, ThemeColor.object1, 0.15);
-        style.addProperty("border", "5px solid");
-        style.addProperty("border-color", ThemeColor.object1, 0.6);
+        style.addProperty("border", "4px solid");
+        style.addProperty("border-color", ThemeColor.object1, 1);
         style.addProperty("padding", "2px");
-        style.addProperty("margin", "15px");
+        style.addProperty("margin", "10px");
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
 
         style = new Style(".", StyleName.VisorHeader);
-        style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-color", ThemeColor.object1, 0.6);
+        style.addProperty("background-color", ThemeColor.object1, 0.9);
         addStyle(style);
 
         style = new Style(".", StyleName.VisorBackButton);
         style.addProperty("height", "17px");
         style.addProperty("float", "right");
-        style.addProperty("margin", "7px");
+        style.addProperty("margin", "4px");
+        style.addProperty("border-color", ThemeColor.object1, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.VisorCaption);
-        style.addProperty("font-size", "21px");
+        style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
-        style.addProperty("margin-left", "40%");
+        style.addProperty("margin-left", "10px");
         style.addProperty("line-height", "1.5em");
+        style.addProperty("float", "left");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("color", ThemeColor.object1, 0.1);
         addStyle(style);
 
     }

@@ -43,14 +43,16 @@ public class DefaultDialogTheme extends Theme {
     protected void initStyles() {
         Style style = new Style(".", StyleName.Dialog);
         style.addProperty("background-color", ThemeColor.object1, 1);
+        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
 
         style = new Style(".", StyleName.DialogCaption);
         style.addProperty("background", ThemeColor.object1, 0.8);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColor.object1, 0.2);
+        style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("font-weight", "bold");
+        style.addProperty("padding-left", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.DialogResizer);

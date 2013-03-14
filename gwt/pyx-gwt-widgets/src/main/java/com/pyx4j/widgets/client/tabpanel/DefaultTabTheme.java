@@ -65,12 +65,12 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("margin-left", "1px");
         style.addProperty("margin-top", "3px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
+        style.addProperty("border-right-color", ThemeColor.object1, 1);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
+        style.addProperty("border-left-color", ThemeColor.object1, 1);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
-        style.addProperty("background", ThemeColor.object1, 1);
+        style.addProperty("border-top-color", ThemeColor.object1, 1);
+        style.addProperty("background", ThemeColor.object1, 0.8);
         style.addProperty("-webkit-touch-callout", "none");
         style.addProperty("-webkit-user-select", "none");
         style.addProperty("-khtml-user-select", "none");
@@ -86,8 +86,11 @@ public class DefaultTabTheme extends Theme {
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.selected);
         style.addProperty("cursor", "default");
-        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.30);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("color", "#333");
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.disabled);

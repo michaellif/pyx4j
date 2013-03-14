@@ -22,21 +22,17 @@ package com.pyx4j.site.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class ViewImplBase extends DockLayoutPanel implements IView {
@@ -116,29 +112,7 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
 
     @Override
     public void showVisor(IsWidget widget, String caption) {
-        DockLayoutPanel visorHolder = new DockLayoutPanel(Unit.EM);
-        visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
-
-        FlowPanel header = new FlowPanel();
-        header.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorHeader.name());
-        visorHolder.addNorth(header, 3);
-
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), new Command() {
-            @Override
-            public void execute() {
-                hideVisor();
-            }
-        });
-        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorBackButton.name());
-        header.add(backButton);
-
-        Label captionLabel = new Label(caption);
-        captionLabel.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCaption.name());
-        header.add(captionLabel);
-
-        visorHolder.add(widget.asWidget());
-
-        visorPane.showVisorPane(visorHolder);
+        visorPane.showVisorPane(new ViewVisor(widget, caption, this));
     }
 
     @Override
