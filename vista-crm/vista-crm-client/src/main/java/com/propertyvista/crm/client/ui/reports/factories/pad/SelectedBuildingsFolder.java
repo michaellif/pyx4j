@@ -50,7 +50,12 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
             @Override
             public boolean onClickOk() {
                 for (Building building : getSelectedItems()) {
-                    addItem(building);
+                    Building b = EntityFactory.create(Building.class);
+                    b.setPrimaryKey(building.getPrimaryKey());
+                    for (EntityFolderColumnDescriptor c : COLUMNS) {
+                        b.setValue(c.getObject().getPath(), building.getValue(c.getObject().getPath()));
+                    }
+                    addItem(b);
                 }
                 return true;
             }
