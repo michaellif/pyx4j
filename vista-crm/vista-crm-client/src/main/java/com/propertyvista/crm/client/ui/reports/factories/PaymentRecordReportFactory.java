@@ -19,19 +19,18 @@ import java.util.Vector;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.client.ui.reports.factories.pad.PadReportForm;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.reports.PaymentRecordReportMetadata;
 
@@ -58,16 +57,7 @@ public class PaymentRecordReportFactory implements ReportFactory<PaymentRecordRe
 
     @Override
     public CEntityForm<PaymentRecordReportMetadata> getReportSettingsForm() {
-        CEntityDecoratableForm<PaymentRecordReportMetadata> form = new CEntityDecoratableForm<PaymentRecordReportMetadata>(PaymentRecordReportMetadata.class) {
-            @Override
-            public IsWidget createContent() {
-                FormFlexPanel panel = new FormFlexPanel();
-                int row = -1;
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().from())).build());
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().until())).build());
-                return panel;
-            }
-        };
+        CEntityDecoratableForm<PaymentRecordReportMetadata> form = new PadReportForm();
         form.initContent();
         return form;
     }

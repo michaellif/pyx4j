@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "Payment Record Report")
@@ -31,5 +32,9 @@ public interface PaymentRecordReportMetadata extends ReportMetadata {
     IPrimitive<LogicalDate> until();
 
     IList<BillingCycle> billingCycles();
+
+    IPrimitive<Boolean> selectBuildings();
+
+    IList<Building> selectedBuildings();
 
 }

@@ -31,6 +31,18 @@ public class PaymentRecordReportGenerator implements ReportGenerator {
         PaymentRecordReportMetadata reportMetadata = (PaymentRecordReportMetadata) metadata;
 
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        if (!reportMetadata.from().isNull()) {
+            criteria.ge(criteria.proto().updated(), reportMetadata.from());
+        }
+        if (!reportMetadata.until().isNull()) {
+            criteria.le(criteria.proto().updated(), reportMetadata.until());
+        }
+        if (reportMetadata.selectBuildings().isBooleanTrue()) {
+            criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
+        }
+        if (!reportMetadata.billingCycles().isEmpty()) {
+        }
+
         Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
         return paymentRecords;
     }
