@@ -42,6 +42,7 @@ public class ARDateUtils {
                 calendar.add(Calendar.DATE, 1);
                 dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             }
+            //TODO Use policy to calc duedate (policy should be copied to lease)
             dueDate = new LogicalDate(calendar.getTime());
             break;
         case Weekly:
