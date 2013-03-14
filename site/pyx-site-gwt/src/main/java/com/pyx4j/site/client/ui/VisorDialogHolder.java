@@ -39,7 +39,8 @@ public class VisorDialogHolder extends AbstractVisorHolder {
             }
         });
         backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCloseButton.name());
-        getHeader().add(backButton);
+
+        getHeaderCaption().add(backButton);
 
     }
 

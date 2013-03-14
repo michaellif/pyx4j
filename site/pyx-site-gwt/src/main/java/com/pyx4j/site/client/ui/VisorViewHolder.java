@@ -62,8 +62,7 @@ public class VisorViewHolder extends AbstractVisorHolder {
 
         closeImage.setTitle("Close");
 
-        getHeader().add(closeImage);
-
+        getHeaderCaption().add(closeImage);
     }
 
 }

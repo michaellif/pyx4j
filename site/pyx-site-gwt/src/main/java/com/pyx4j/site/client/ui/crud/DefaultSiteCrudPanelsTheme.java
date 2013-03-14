@@ -30,9 +30,9 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Header, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
+        Header, HeaderCaption, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
 
-        Visor, VisorHeader, VisorCloseButton, VisorCaption
+        Visor, VisorCloseButton
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -52,11 +52,26 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         initHighlightedButtonStyles("." + StyleName.HeaderToolbar);
 
-        Style style = new Style(".", StyleName.HeaderContainer);
+        Style style = new Style(".", StyleName.Header);
+        style.addProperty("background-color", ThemeColor.object1, 1);
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addProperty("width", "100%");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("line-height", "35px");
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderContainer);
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         style.addProperty("padding-top", "6px");
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderCaption);
+        style.addProperty("float", "left");
+        style.addProperty("padding", "0 1em");
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderToolbar);
@@ -78,17 +93,6 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("padding", "2px 0px");
         style.addProperty("border-top", "4px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
-        addStyle(style);
-
-        style = new Style(".", StyleName.Header);
-        style.addProperty("background-color", ThemeColor.object1, 1);
-        style.addProperty("color", ThemeColor.object1, 0.1);
-        style.addProperty("width", "100%");
-        style.addProperty("padding", "0 1em");
-        style.addProperty("white-space", "nowrap");
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("line-height", "35px");
-        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
@@ -119,26 +123,15 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
 
-        style = new Style(".", StyleName.VisorHeader);
-        style.addProperty("background-color", ThemeColor.object1, 0.9);
+        style = new Style(".", StyleName.Visor, " .", StyleName.Header);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
         addStyle(style);
 
         style = new Style(".", StyleName.VisorCloseButton);
-        style.addProperty("height", "17px");
         style.addProperty("float", "right");
-        style.addProperty("margin", "6px");
+        style.addProperty("margin", "11px");
         style.addProperty("border-color", ThemeColor.object1, 1);
         style.addProperty("cursor", "pointer");
-        addStyle(style);
-
-        style = new Style(".", StyleName.VisorCaption);
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("margin-left", "10px");
-        style.addProperty("line-height", "1.5em");
-        style.addProperty("float", "left");
-        style.addProperty("white-space", "nowrap");
-        style.addProperty("color", ThemeColor.object1, 0.1);
         addStyle(style);
 
     }

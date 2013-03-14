@@ -20,36 +20,15 @@
  */
 package com.pyx4j.site.client.ui;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
-public abstract class AbstractVisorHolder extends DockLayoutPanel {
+public abstract class AbstractVisorHolder extends AbstractView {
 
-    private final FlowPanel header;
-
-    public AbstractVisorHolder(IsWidget widget, String caption, final IView parent) {
-        super(Unit.EM);
+    public AbstractVisorHolder(IVisor visor, String caption, final IView parent) {
+        super();
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
-
-        header = new FlowPanel();
-        header.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorHeader.name());
-        addNorth(header, 2.5);
-
-        Label captionLabel = new Label(caption);
-        captionLabel.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCaption.name());
-        header.add(captionLabel);
-
-        add(widget.asWidget());
-
-    }
-
-    protected FlowPanel getHeader() {
-        return header;
+        setContentPane(visor);
+        setCaption(caption);
     }
 
 }

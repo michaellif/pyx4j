@@ -54,6 +54,8 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
 
     private final SimplePanel footerToolbarHolder;
 
+    private final FlowPanel headerCaption;
+
     private final int headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
@@ -63,9 +65,10 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
     public AbstractView() {
         super(Unit.PX);
 
-        SimplePanel headerCaption = new SimplePanel();
+        headerCaption = new FlowPanel();
         captionLabel = new Label();
-        headerCaption.setWidget(captionLabel);
+        captionLabel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderCaption.name());
+        headerCaption.add(captionLabel);
         headerCaption.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
         addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
@@ -92,6 +95,10 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
 
         visorPane = new VisorLayoutPanel();
         visorPane.setAnimationDuration(500);
+    }
+
+    protected FlowPanel getHeaderCaption() {
+        return headerCaption;
     }
 
     protected IsWidget getContentPane() {
@@ -169,4 +176,5 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
     @Override
     public void restoreState() {
     }
+
 }
