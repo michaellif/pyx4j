@@ -13,17 +13,10 @@
  */
 package com.propertyvista.crm.client.visor;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.site.client.ui.IView;
 
 public interface IVisorController {
 
-    IsWidget getView();
-
     void show(IView view);
 
-    void hide(IView view);
-
-    boolean isShown(IView view);
 }

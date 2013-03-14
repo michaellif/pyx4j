@@ -22,10 +22,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.IVisor;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.widgets.client.Label;
 
@@ -221,7 +221,7 @@ public class PmcAccountCreationProgressViewAltImpl extends Composite implements 
     }
 
     @Override
-    public void showVisor(IsWidget widget, String caption) {
+    public void showVisor(IVisor visor, String caption) {
         // TODO Auto-generated method stub
     }
 

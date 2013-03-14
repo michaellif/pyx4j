@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -33,40 +32,24 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     private final NotesAndAttachmentsCrudService service;
 
-    private final NotesAndAttachmentsVisorView view;
+    private final NotesAndAttachmentsVisorView visor;
 
     private final NotesParentId notesParentId;
 
     public NotesAndAttachmentsVisorController(NotesParentId notesParentId) {
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
-        view = new NotesAndAttachmentsVisorView(this);
+        visor = new NotesAndAttachmentsVisorView(this);
         this.notesParentId = notesParentId;
     }
 
     @Override
     public void show(final IView parentView) {
-        view.populate(new Command() {
+        visor.populate(new Command() {
             @Override
             public void execute() {
-                IsWidget visor = getView();
                 parentView.showVisor(visor, "Notes & Attachments");
             }
         });
-    }
-
-    @Override
-    public void hide(IView parentView) {
-        parentView.hideVisor();
-    }
-
-    @Override
-    public boolean isShown(IView parentView) {
-        return parentView.isVisorShown();
-    }
-
-    @Override
-    public IsWidget getView() {
-        return view;
     }
 
     public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {

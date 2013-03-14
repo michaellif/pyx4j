@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.visor.maintenance;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.IView;
@@ -28,13 +27,13 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestVisorController implements IVisorController {
 
-    private final MaintenanceRequestVisorView view;
+    private final MaintenanceRequestVisorView visor;
 
     private final Presenter<MaintenanceRequestDTO> lister;
 
     public MaintenanceRequestVisorController(Key tenantId) {
-        view = new MaintenanceRequestVisorView(this);
-        lister = ListerControllerFactory.create(view.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+        visor = new MaintenanceRequestVisorView(this);
+        lister = ListerControllerFactory.create(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class, VistaCrmBehavior.Maintenance);
         lister.setParent(tenantId);
     }
@@ -42,21 +41,7 @@ public class MaintenanceRequestVisorController implements IVisorController {
     @Override
     public void show(final IView parentView) {
         lister.populate();
-        parentView.showVisor(getView(), "Maintenance Requests");
+        parentView.showVisor(visor, "Maintenance Requests");
     }
 
-    @Override
-    public void hide(final IView parentView) {
-        parentView.hideVisor();
-    }
-
-    @Override
-    public boolean isShown(IView parentView) {
-        return parentView.isVisorShown();
-    }
-
-    @Override
-    public IsWidget getView() {
-        return view;
-    }
 }

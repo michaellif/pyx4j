@@ -16,11 +16,11 @@ package com.propertyvista.crm.client.visor.charges;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IVisor;
 
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
@@ -29,39 +29,23 @@ import com.propertyvista.dto.BillDTO;
 
 public class ChargesVisorController implements IVisorController {
 
-    private final ChargesVisorView view;
+    private final ChargesVisorView visor;
 
     private final Key leaseId;
 
     public ChargesVisorController(Key leaseId) {
         this.leaseId = leaseId;
-        view = new ChargesVisorView(this);
+        visor = new ChargesVisorView(this);
     }
 
     @Override
     public void show(final IView parentView) {
-        view.populate(new Command() {
+        visor.populate(new Command() {
             @Override
             public void execute() {
-                IsWidget visor = getView();
                 parentView.showVisor(visor, "Charges");
             }
         });
-    }
-
-    @Override
-    public void hide(final IView parentView) {
-        parentView.hideVisor();
-    }
-
-    @Override
-    public boolean isShown(IView parentView) {
-        return parentView.isVisorShown();
-    }
-
-    @Override
-    public IsWidget getView() {
-        return view;
     }
 
     public void populate(AsyncCallback<BillDTO> callback) {

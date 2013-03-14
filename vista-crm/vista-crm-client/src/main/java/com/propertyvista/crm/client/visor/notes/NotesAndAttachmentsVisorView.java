@@ -39,6 +39,7 @@ import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.ui.IVisorView;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -57,7 +58,7 @@ import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.misc.VistaTODO;
 
-public class NotesAndAttachmentsVisorView extends ScrollPanel {
+public class NotesAndAttachmentsVisorView extends ScrollPanel implements IVisorView {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
 

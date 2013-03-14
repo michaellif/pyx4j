@@ -17,7 +17,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
@@ -33,7 +32,7 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     private static final I18n i18n = I18n.get(DashboardVisorController.class);
 
-    private final DashboardVisorView view;
+    private final DashboardVisorView visor;
 
     private final DashboardMetadata dashboardStub;
 
@@ -45,12 +44,7 @@ public class DashboardVisorController implements IDashboardVisorController {
         service = GWT.create(DashboardMetadataService.class);
         dashboardStub = dashboardMetadataStringViewStub;
         buildings = buildingStringViewStubs;
-        view = new DashboardVisorView(this);
-    }
-
-    @Override
-    public IsWidget getView() {
-        return view;
+        visor = new DashboardVisorView(this);
     }
 
     @Override
@@ -59,18 +53,8 @@ public class DashboardVisorController implements IDashboardVisorController {
     }
 
     @Override
-    public void hide(final IView parentView) {
-        parentView.hideVisor();
-    }
-
-    @Override
-    public boolean isShown(IView parentView) {
-        return parentView.isVisorShown();
-    }
-
-    @Override
     public void saveDashboardMetadata() {
-        DashboardMetadata dm = view.getDashboardMetadata();
+        DashboardMetadata dm = visor.getDashboardMetadata();
 
         // the if statement is only for sake of defense programming, because a View shouldn't request save() when in ReadOnly mode
         if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dm.ownerUser().getPrimaryKey())) {
@@ -90,20 +74,20 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     @Override
     public void print() {
-        DashboardPrinterDialog.print(view.getDashboardMetadata(), view.getSelectedBuildingsStubs());
+        DashboardPrinterDialog.print(visor.getDashboardMetadata(), visor.getSelectedBuildingsStubs());
     }
 
     private void populate(final IView parentView) {
         service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata dashboardMetadata) {
-                view.setBuildings(buildings);
-                view.populate(dashboardMetadata);
+                visor.setBuildings(buildings);
+                visor.populate(dashboardMetadata);
 
                 boolean isReadOnly = !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dashboardMetadata.ownerUser().getPrimaryKey());
-                view.setReadOnly(isReadOnly);
+                visor.setReadOnly(isReadOnly);
                 String readOnlyWarning = isReadOnly ? " " + i18n.tr("(read only)") : "";
-                parentView.showVisor(getView(), dashboardStub.name().getValue() + readOnlyWarning);
+                parentView.showVisor(visor, dashboardStub.name().getValue() + readOnlyWarning);
             }
 
             @Override
