@@ -123,7 +123,7 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         header.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorHeader.name());
         visorHolder.addNorth(header, 3);
 
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), i18n.tr("Back"), new Command() {
+        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), new Command() {
             @Override
             public void execute() {
                 hideVisor();

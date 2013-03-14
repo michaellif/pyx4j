@@ -110,9 +110,11 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         style = new Style(".", StyleName.Visor);
         style.addGradient(ThemeColor.object1, 0, ThemeColor.object1, 0.15);
-        style.addProperty("border", "2px solid");
+        style.addProperty("border", "5px solid");
         style.addProperty("border-color", ThemeColor.object1, 0.6);
         style.addProperty("padding", "2px");
+        style.addProperty("margin", "15px");
+        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
 
         style = new Style(".", StyleName.VisorHeader);
@@ -122,8 +124,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         style = new Style(".", StyleName.VisorBackButton);
         style.addProperty("height", "17px");
-        style.addProperty("float", "left");
-        style.addProperty("margin", "4px");
+        style.addProperty("float", "right");
+        style.addProperty("margin", "7px");
         addStyle(style);
 
         style = new Style(".", StyleName.VisorCaption);
