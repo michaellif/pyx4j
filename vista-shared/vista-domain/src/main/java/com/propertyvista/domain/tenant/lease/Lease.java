@@ -111,7 +111,7 @@ public interface Lease extends IEntity {
         }
 
         public static EnumSet<Status> former() {
-            return EnumSet.of(Cancelled, Completed, Closed);
+            return EnumSet.of(Cancelled, Closed);
         }
 
         // states:

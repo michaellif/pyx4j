@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -90,6 +91,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
         }
+
+        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
+        ((TenantInLeaseFolder) comp).setEditablePAD(!getValue().status().getValue().isFormer());
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {

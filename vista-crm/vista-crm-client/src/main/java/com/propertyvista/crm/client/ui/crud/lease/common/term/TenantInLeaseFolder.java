@@ -56,12 +56,22 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
+    private boolean isEditablePAD = false;
+
     public TenantInLeaseFolder() {
         this(false);
     }
 
     public TenantInLeaseFolder(boolean modifiable) {
         super(LeaseTermTenant.class, modifiable);
+    }
+
+    public boolean isEditablePAD() {
+        return isEditablePAD;
+    }
+
+    public void setEditablePAD(boolean isEditablePAD) {
+        this.isEditablePAD = isEditablePAD;
     }
 
     @Override
@@ -113,18 +123,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             tenant.role().setValue(LeaseTermParticipant.Role.Applicant);
             tenant.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
         }
-        tenant.percentage().setValue(calcPercentage());
 
         assert (tenant.leaseTermV().isNull());
         return tenant;
-    }
-
-    private BigDecimal calcPercentage() {
-        BigDecimal prc = new BigDecimal(1);
-        for (LeaseTermTenant til : getValue()) {
-            prc = prc.subtract(til.percentage().isNull() ? BigDecimal.ZERO : til.percentage().getValue());
-        }
-        return (prc.signum() > 0 ? prc : BigDecimal.ZERO);
     }
 
     @Override
@@ -153,7 +154,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         }
                     }
                     if (!applicant) {
-                        return new ValidationError(component, i18n.tr("At least one Applicant should be present!"));
+                        return new ValidationError(component, i18n.tr("Applicant should be present!"));
                     }
                 }
                 return null;
@@ -164,17 +165,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             @Override
             public ValidationError isValid(CComponent<IList<LeaseTermTenant>, ?> component, IList<LeaseTermTenant> value) {
                 if (value != null) {
-                    if (!value.isEmpty()) {
-                        BigDecimal totalPrc = BigDecimal.ZERO;
-                        for (LeaseTermTenant item : value) {
-                            if (item.percentage().getValue() != null) {
-                                totalPrc = totalPrc.add(item.percentage().getValue());
-                            }
-                        }
-                        return (totalPrc.compareTo(new BigDecimal(1)) == 0 ? null : new ValidationError(component, i18n
-                                .tr("Sum of all percentages should be equal to 100%!")));
-                    } else {
-                        return new ValidationError(component, i18n.tr("At least one Applicant should be present!"));
+                    if (value.isEmpty()) {
+                        return new ValidationError(component, i18n.tr("At least one Tenant should be present!"));
                     }
                 }
                 return null;
@@ -206,7 +198,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
             left.setWidget(
                     ++row,
                     0,
@@ -224,10 +215,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
-                        if (event.getValue() == LeaseTermParticipant.Role.Dependent) {
-                            get(proto().percentage()).setValue(BigDecimal.ZERO);
-                        }
-                        get(proto().percentage()).setEditable(event.getValue() != LeaseTermParticipant.Role.Dependent);
                         get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
                     }
                 });
@@ -277,8 +264,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
                     role.setOptions(Role.tenantRelated());
                 }
-
-                get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseTermParticipant.Role.Dependent);
 
 // TODO: disable age restriction tweaks so far...                 
 //                if (!getValue().leaseParticipant().customer().person().birthDate().isNull()) {
