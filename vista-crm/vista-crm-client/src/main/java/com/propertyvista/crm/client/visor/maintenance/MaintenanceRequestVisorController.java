@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
@@ -26,6 +27,8 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestVisorController implements IVisorController {
+
+    private static final I18n i18n = I18n.get(MaintenanceRequestVisorController.class);
 
     private final MaintenanceRequestVisorView visor;
 
@@ -41,7 +44,7 @@ public class MaintenanceRequestVisorController implements IVisorController {
     @Override
     public void show(final IView parentView) {
         lister.populate();
-        parentView.showVisor(visor, "Maintenance Requests");
+        parentView.showVisor(visor, i18n.tr("Maintenance Requests"));
     }
 
 }

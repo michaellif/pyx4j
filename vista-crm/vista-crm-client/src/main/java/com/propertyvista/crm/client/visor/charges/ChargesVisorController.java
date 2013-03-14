@@ -19,8 +19,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IView;
-import com.pyx4j.site.client.ui.IVisor;
 
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
@@ -28,6 +28,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;
 
 public class ChargesVisorController implements IVisorController {
+
+    private static final I18n i18n = I18n.get(ChargesVisorController.class);
 
     private final ChargesVisorView visor;
 
@@ -43,7 +45,7 @@ public class ChargesVisorController implements IVisorController {
         visor.populate(new Command() {
             @Override
             public void execute() {
-                parentView.showVisor(visor, "Charges");
+                parentView.showVisor(visor, i18n.tr("Charges"));
             }
         });
     }

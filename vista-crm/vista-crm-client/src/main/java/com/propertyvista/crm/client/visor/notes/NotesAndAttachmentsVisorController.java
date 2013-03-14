@@ -20,6 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.IView;
 
@@ -29,6 +30,8 @@ import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.shared.NotesParentId;
 
 public class NotesAndAttachmentsVisorController implements IVisorController {
+
+    private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorController.class);
 
     private final NotesAndAttachmentsCrudService service;
 
@@ -47,7 +50,7 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         visor.populate(new Command() {
             @Override
             public void execute() {
-                parentView.showVisor(visor, "Notes & Attachments");
+                parentView.showVisor(visor, i18n.tr("Notes & Attachments"));
             }
         });
     }
