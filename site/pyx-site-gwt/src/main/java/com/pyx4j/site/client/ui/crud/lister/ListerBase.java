@@ -23,12 +23,12 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -138,7 +138,7 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
     }
 
     @Override
-    public void showVisor(IsWidget widget, String caption) {
+    public void showVisor(IVisor visor, String caption) {
         // TODO Auto-generated method stub
 
     }

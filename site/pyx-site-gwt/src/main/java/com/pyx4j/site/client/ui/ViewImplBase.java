@@ -66,11 +66,11 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
     public ViewImplBase() {
         super(Unit.PX);
 
-        SimplePanel headerHolder = new SimplePanel();
+        SimplePanel headerCaption = new SimplePanel();
         captionLabel = new Label();
-        headerHolder.setWidget(captionLabel);
-        headerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
-        addNorth(headerHolder, TOOLBAR_DEFAULT_HEIGHT);
+        headerCaption.setWidget(captionLabel);
+        headerCaption.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
+        addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
         headerContainer.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderContainer.name());
@@ -111,8 +111,12 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
     }
 
     @Override
-    public void showVisor(IsWidget widget, String caption) {
-        visorPane.showVisorPane(new ViewVisor(widget, caption, this));
+    public void showVisor(IVisor visor, String caption) {
+        if (visor instanceof IVisorView) {
+            visorPane.showVisorPane(new VisorViewHolder((IVisorView) visor, caption, this));
+        } else if (visor instanceof IVisorDialog) {
+            visorPane.showVisorPane(new VisorDialogHolder((IVisorDialog) visor, caption, this));
+        }
     }
 
     @Override

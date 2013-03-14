@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client.ui;
 
-public class DialogVisor {
+import com.google.gwt.user.client.ui.IsWidget;
+
+public interface IVisor extends IsWidget {
 
 }

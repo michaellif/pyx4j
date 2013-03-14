@@ -23,13 +23,13 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.site.client.ui.IVisor;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel implements IListerView<E> {
@@ -128,7 +128,7 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public void showVisor(IsWidget widget, String caption) {
+    public void showVisor(IVisor visor, String caption) {
         // TODO Auto-generated method stub
 
     }

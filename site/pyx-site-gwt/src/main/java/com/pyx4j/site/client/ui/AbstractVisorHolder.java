@@ -28,11 +28,11 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
-public abstract class AbstractVisor extends DockLayoutPanel {
+public abstract class AbstractVisorHolder extends DockLayoutPanel {
 
     private final FlowPanel header;
 
-    public AbstractVisor(IsWidget widget, String caption, final IView parent) {
+    public AbstractVisorHolder(IsWidget widget, String caption, final IView parent) {
         super(Unit.EM);
         setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
 

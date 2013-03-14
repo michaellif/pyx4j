@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * Copyright (C) 2008-2011 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,39 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-06-09
- * @author Vlad
+ * Created on Mar 14, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.site.client.ui;
 
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
-import com.pyx4j.site.rpc.AppPlace;
-
-public interface IView extends IsWidget {
-
-    public interface Presenter {
-
-        AppPlace getPlace();
-
-        void populate();
-
-        void refresh();
-    }
-
-    IMemento getMemento();
-
-    void storeState(Place place);
-
-    void restoreState();
-
-    void showVisor(IVisor visor, String caption);
-
-    void hideVisor();
-
-    boolean isVisorShown();
+public interface IVisorView extends IVisor {
 
 }
