@@ -107,6 +107,7 @@ public class YardiProcessorUtils {
             charge.transactionId().setValue(detail.getTransactionID());
             charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
             charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
+            charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
             charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
             if (detail.getService() != null) {
@@ -123,6 +124,7 @@ public class YardiProcessorUtils {
         }
         item.billingAccount().set(account);
         item.amount().setValue(amount);
+
         item.description().setValue(detail.getDescription());
 
         //TODO postDate should be null in Yardi case. dueDate should be calculated
