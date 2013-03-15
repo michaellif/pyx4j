@@ -67,7 +67,7 @@ public interface PreauthorizedPayment extends IEntity {
     @NotNull
     @JoinColumn
     @MemberColumn(notNull = true)
-    Tenant leaseParticipant();
+    Tenant tenant();
 
     interface OrderId extends ColumnId {
     }

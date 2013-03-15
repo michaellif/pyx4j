@@ -51,6 +51,8 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -263,7 +265,22 @@ public class LeaseLifecycleSimulator {
             Persistence.service().retrieveMember(lease.leaseParticipants());
 
             LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
-            mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
+
+            if (!mainTenant.leaseParticipant().customer().paymentMethods().isEmpty()) {
+                mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
+
+                // new approach:
+                PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+
+                pap.paymentMethod().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
+                pap.amountType().setValue(AmountType.Percent);
+                pap.amount().setValue(BigDecimal.ONE);
+                pap.comments().setValue("Default preauthorization...");
+
+                pap.tenant().set(mainTenant.leaseParticipant());
+                Persistence.service().persist(pap);
+            }
+
             Persistence.service().merge(mainTenant.leaseParticipant());
 
             for (LeaseTermTenant participant : lease.currentTerm().version().tenants()) {
