@@ -21,8 +21,10 @@
 package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -35,13 +37,27 @@ public class VisorEditorHolder extends AbstractVisorHolder {
 
     protected final Button btnSave;
 
-    public VisorEditorHolder(IVisorEditor visor, String caption, final IPane parent) {
+    public VisorEditorHolder(final IVisorEditor visor, String caption, final IPane parent) {
         super(visor, caption, parent);
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
             public void execute() {
-                System.out.println("Save");
+                visor.save(new AsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        //stay opened
+                    }
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        if (visor.onBeforeClose()) {
+                            parent.hideVisor();
+                        }
+                    }
+                });
+
             }
         });
         addFooterToolbarItem(btnSave);
@@ -49,7 +65,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
         btnApply = new Button(i18n.tr("Apply"), new Command() {
             @Override
             public void execute() {
-                System.out.println("Apply");
+                visor.apply();
             }
         });
         addFooterToolbarItem(btnApply);
@@ -57,7 +73,9 @@ public class VisorEditorHolder extends AbstractVisorHolder {
         Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                parent.hideVisor();
+                if (visor.onBeforeClose()) {
+                    parent.hideVisor();
+                }
             }
         });
         addFooterToolbarItem(btnCancel);
