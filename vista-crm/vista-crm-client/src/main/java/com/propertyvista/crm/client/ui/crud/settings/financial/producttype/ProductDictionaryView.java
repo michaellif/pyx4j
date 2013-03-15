@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;

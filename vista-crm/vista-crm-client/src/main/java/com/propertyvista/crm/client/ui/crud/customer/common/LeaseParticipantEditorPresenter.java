@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;

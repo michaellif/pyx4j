@@ -18,7 +18,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ViewerActivityBase;
-import com.pyx4j.site.client.ui.crud.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.CrudNavigateEvent;

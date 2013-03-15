@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 

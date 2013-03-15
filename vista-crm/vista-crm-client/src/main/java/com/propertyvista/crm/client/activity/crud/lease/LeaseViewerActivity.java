@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;

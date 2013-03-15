@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.activity.EditorActivityBase;
-import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class CrmEditorActivity<E extends IEntity> extends EditorActivityBase<E> {

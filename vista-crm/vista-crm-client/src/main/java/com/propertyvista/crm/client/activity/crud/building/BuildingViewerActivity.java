@@ -21,7 +21,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.ui.crud.lister.ILister.Presenter;
+import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.ListerControllerFactory;

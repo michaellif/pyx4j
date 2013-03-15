@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.crud.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;

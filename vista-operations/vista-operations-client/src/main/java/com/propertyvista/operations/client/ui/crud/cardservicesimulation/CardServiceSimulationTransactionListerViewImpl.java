@@ -14,8 +14,8 @@
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
-import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 

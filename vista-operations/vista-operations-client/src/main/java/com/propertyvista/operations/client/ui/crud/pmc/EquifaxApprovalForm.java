@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.form.IForm;
+import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;

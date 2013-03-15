@@ -26,8 +26,8 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase.CounterDetailsFactory;
 

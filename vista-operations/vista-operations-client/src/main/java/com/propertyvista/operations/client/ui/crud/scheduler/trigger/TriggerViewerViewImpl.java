@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ILister;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 

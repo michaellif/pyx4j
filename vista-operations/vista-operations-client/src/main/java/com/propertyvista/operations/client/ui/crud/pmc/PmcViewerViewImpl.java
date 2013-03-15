@@ -136,7 +136,7 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     }
 
     @Override
-    public void setPresenter(com.pyx4j.site.client.ui.crud.form.IViewer.Presenter presenter) {
+    public void setPresenter(com.pyx4j.site.client.ui.prime.form.IViewer.Presenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             ((PmcForm) getForm()).setOnboardingMerchantAccountsSource(((PmcViewerView.Presenter) presenter).getOnboardingMerchantAccountsSource());

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.domain.financial.MerchantAccount;

@@ -13,14 +13,14 @@
  */
 package com.propertyvista.operations.client.ui.crud.encryptedstorage;
 
-import com.pyx4j.site.client.ui.crud.ICrudPane;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
-public interface EncryptedStorageView extends ICrudPane {
+public interface EncryptedStorageView extends IPrimePane {
 
-    interface Presenter extends ICrudPane.Presenter {
+    interface Presenter extends IPrimePane.Presenter {
 
         // View actions:
         void activateCurrentKeyDecryption(char[] keyPassword);

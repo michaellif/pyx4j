@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;

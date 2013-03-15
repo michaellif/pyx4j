@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.form.AbstractViewer;
+import com.pyx4j.site.client.ui.prime.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;

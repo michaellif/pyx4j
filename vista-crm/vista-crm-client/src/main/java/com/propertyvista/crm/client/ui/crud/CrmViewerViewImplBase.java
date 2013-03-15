@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
-import com.pyx4j.site.client.ui.crud.form.AbstractViewer;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.prime.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
@@ -136,29 +136,29 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     public void setActionHighlighted(MenuItem action, boolean highlight) {
         if (highlight) {
-            action.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
-            actionsButton.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
+            action.addStyleName(DefaultPaneTheme.StyleName.HighlightedAction.name());
+            actionsButton.addStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
         } else {
-            action.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+            action.removeStyleName(DefaultPaneTheme.StyleName.HighlightedAction.name());
 
             boolean highlighted = false;
             for (MenuItem a : actionsMenu.getItems()) {
-                highlighted = a.getStyleName().contains(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+                highlighted = a.getStyleName().contains(DefaultPaneTheme.StyleName.HighlightedAction.name());
                 if (highlighted) {
                     break;
                 }
             }
             if (!highlighted) {
-                actionsButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
+                actionsButton.removeStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
             }
         }
     }
 
     public void resetActionHighlighting() {
         for (MenuItem action : actionsMenu.getItems()) {
-            action.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+            action.removeStyleName(DefaultPaneTheme.StyleName.HighlightedAction.name());
         }
-        actionsButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
+        actionsButton.removeStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
     }
 
     public void setNotesEnabled(boolean enabled) {
@@ -191,11 +191,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
                 finalizeMenu.setVisible(visible);
 
                 if (visible) {
-                    finalizeMenu.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
-                    versioningButton.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
+                    finalizeMenu.addStyleName(DefaultPaneTheme.StyleName.HighlightedAction.name());
+                    versioningButton.addStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
                 } else {
-                    finalizeMenu.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
-                    versioningButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
+                    finalizeMenu.removeStyleName(DefaultPaneTheme.StyleName.HighlightedAction.name());
+                    versioningButton.removeStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
                 }
             }
         }

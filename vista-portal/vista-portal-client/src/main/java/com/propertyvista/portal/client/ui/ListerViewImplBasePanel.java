@@ -23,9 +23,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.lister.ILister;
-import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements ILister<E> {

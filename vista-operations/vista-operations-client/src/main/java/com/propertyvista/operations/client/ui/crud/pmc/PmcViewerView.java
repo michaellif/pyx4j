@@ -13,8 +13,8 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.PmcDTO;

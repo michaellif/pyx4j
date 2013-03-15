@@ -23,7 +23,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;

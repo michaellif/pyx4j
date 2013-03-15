@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.EditorActivityBase;
-import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;

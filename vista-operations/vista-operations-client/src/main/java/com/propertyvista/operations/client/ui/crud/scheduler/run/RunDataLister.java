@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 

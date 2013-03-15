@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 

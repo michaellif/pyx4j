@@ -18,8 +18,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCollectionCrudHyperlink;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 

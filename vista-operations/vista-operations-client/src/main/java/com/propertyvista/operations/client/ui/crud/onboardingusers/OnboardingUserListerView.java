@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.onboardingusers;
 
-import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 

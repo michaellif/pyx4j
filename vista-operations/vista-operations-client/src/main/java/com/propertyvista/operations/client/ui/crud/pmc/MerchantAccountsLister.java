@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;

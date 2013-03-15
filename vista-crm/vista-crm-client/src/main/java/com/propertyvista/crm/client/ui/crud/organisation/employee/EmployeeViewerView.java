@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.security.CrmUser;

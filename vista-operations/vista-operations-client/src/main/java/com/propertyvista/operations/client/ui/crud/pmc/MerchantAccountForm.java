@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.form.IForm;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;

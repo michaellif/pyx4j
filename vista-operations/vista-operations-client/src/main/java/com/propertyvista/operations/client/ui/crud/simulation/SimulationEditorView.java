@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 
 import com.propertyvista.operations.rpc.SimulationDTO;
 
-import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 public interface SimulationEditorView extends IEditor<SimulationDTO> {
 

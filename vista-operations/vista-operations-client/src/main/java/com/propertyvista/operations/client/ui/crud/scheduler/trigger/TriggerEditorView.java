@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
-import com.pyx4j.site.client.ui.crud.form.IEditor;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.operations.rpc.TriggerDTO;
 

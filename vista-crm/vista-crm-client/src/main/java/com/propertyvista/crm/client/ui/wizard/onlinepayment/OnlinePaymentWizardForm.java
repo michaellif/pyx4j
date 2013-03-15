@@ -33,8 +33,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.wizard.IWizardView;
-import com.pyx4j.site.client.ui.wizard.WizardForm;
+import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -61,7 +61,7 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
 
     private Label companyNameLabel;
 
-    public OnlinePaymentWizardForm(IWizardView<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
+    public OnlinePaymentWizardForm(IWizard<OnlinePaymentSetupDTO> view, Command onTermsOfServiceDisplayRequest) {
         super(OnlinePaymentSetupDTO.class, view);
         this.onTermsOfServiceDisplayRequest = onTermsOfServiceDisplayRequest;
 
