@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.common;
 
 import java.util.EnumSet;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -37,11 +35,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 
     private static final I18n i18n = I18n.get(PaymentMethodFolder.class);
 
-    private final boolean showPreauthorized;
-
-    public PaymentMethodFolder(boolean modifiable, boolean showPreauthorized) {
+    public PaymentMethodFolder(boolean modifiable) {
         super(LeasePaymentMethod.class, modifiable);
-        this.showPreauthorized = showPreauthorized;
     }
 
     @Override
@@ -89,29 +84,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
             // tune-up:
             setPaymentTypeSelectionVisible(false);
             setBillingAddressVisible(false);
-            setIsPreauthorizedVisible(showPreauthorized);
 
             return w;
-        }
-
-        @Override
-        public void addValidations() {
-            super.addValidations();
-
-            get(proto().isPreauthorized()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue().booleanValue()) {
-                        for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                if (comp instanceof LeasePaymentMethodEditor && !comp.equals(LeasePaymentMethodEditor.this)) {
-                                    ((LeasePaymentMethodEditor) comp).get(proto().isPreauthorized()).setValue(false, false);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
         }
 
         @Override

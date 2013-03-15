@@ -32,7 +32,6 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
@@ -59,14 +58,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
         Persistence.service().retrieve(dto.customer().emergencyContacts());
 
-        // mark pre-authorized one:
-        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
-            if (paymentMethod.equals(entity.preauthorizedPayment())) {
-                paymentMethod.isPreauthorized().setValue(Boolean.TRUE);
-                break;
-            }
-        }
-
         dto.insuranceCertificates().addAll(retrieveInsuranceCertificates(entity));
         // unattach tenant related information since we don't want to send again
         for (InsuranceCertificate insuranceCertificate : dto.insuranceCertificates()) {
@@ -91,17 +82,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     @Override
     protected void persist(Tenant tenant, TenantDTO tenantDto) {
         super.persist(tenant, tenantDto);
-
-        // memorize pre-authorized method:
-        for (LeasePaymentMethod paymentMethod : tenantDto.paymentMethods()) {
-            if (paymentMethod.isPreauthorized().isBooleanTrue()) {
-                if (!paymentMethod.equals(tenant.preauthorizedPayment())) {
-                    tenant.preauthorizedPayment().set(paymentMethod);
-                    Persistence.service().merge(tenant);
-                    break;
-                }
-            }
-        }
 
         EntityQueryCriteria<InsuranceCertificate> oldInsuranceCertificatesCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
         oldInsuranceCertificatesCriteria.eq(oldInsuranceCertificatesCriteria.proto().tenant(), tenant.getPrimaryKey());
