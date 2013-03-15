@@ -38,7 +38,7 @@ public class ServerSideFactory {
         try {
             Class<FacadeFactory<T>> factoryKlass = (Class<FacadeFactory<T>>) Class.forName(factoryClassName);
             FacadeFactory<T> factory = factoryKlass.newInstance();
-            return factory.create();
+            return factory.getFacade();
         } catch (ClassNotFoundException ignore) {
 
         } catch (Throwable e) {

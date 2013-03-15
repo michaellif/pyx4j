@@ -22,6 +22,6 @@ package com.pyx4j.config.server;
 
 public interface FacadeFactory<E> {
 
-    public E create();
+    public E getFacade();
 
 }
