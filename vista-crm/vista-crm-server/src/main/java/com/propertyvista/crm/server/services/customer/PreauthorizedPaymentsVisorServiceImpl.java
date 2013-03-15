@@ -28,8 +28,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     public void retrieve(AsyncCallback<PreauthorizedPaymentsDTO> callback, Tenant tenantId) {
         PreauthorizedPaymentsDTO dto = EntityFactory.create(PreauthorizedPaymentsDTO.class);
         dto.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
-        dto.preauthorizedPayments().set(dto.tenant().preauthorizedPayments());
-        Persistence.service().retrieveMember(dto.preauthorizedPayments());
+        Persistence.service().retrieveMember(dto.tenant().preauthorizedPayments());
         callback.onSuccess(dto);
     }
 }

@@ -114,7 +114,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant()).show(parentView);
+                    new PreauthorizedPaymentsVisorController(EntityFactory.createIdentityStub(Tenant.class, item.getValue().leaseParticipant().getPrimaryKey()))
+                            .show(parentView);
                 }
             });
         }
