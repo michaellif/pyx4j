@@ -36,7 +36,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         public static final ARInternalPaymentManager INSTANCE = new ARInternalPaymentManager();
     }
 
-    static ARInternalPaymentManager getInstance() {
+    static ARInternalPaymentManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -52,7 +52,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
 
         Persistence.service().persist(payment);
 
-        ARInternalTransactionManager.getInstance().postInvoiceLineItem(payment);
+        ARInternalTransactionManager.instance().postInvoiceLineItem(payment);
     }
 
     @Override
@@ -68,10 +68,10 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
 
         Persistence.service().persist(backOut);
 
-        ARInternalTransactionManager.getInstance().postInvoiceLineItem(backOut);
+        ARInternalTransactionManager.instance().postInvoiceLineItem(backOut);
 
         if (applyNSF) {
-            ARInternalNSFManager.getInstance().applyNSFCharge(paymentRecord);
+            ARInternalNSFManager.instance().applyNSFCharge(paymentRecord);
         }
     }
 

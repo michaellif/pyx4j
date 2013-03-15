@@ -27,6 +27,7 @@ import java.util.Iterator;
 import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -38,8 +39,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.billing.internal.BillCreationResult;
 import com.propertyvista.biz.financial.billing.internal.BillingManager;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -47,7 +48,18 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingProcessManager {
 
-    static void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
+    private BillingProcessManager() {
+    }
+
+    private static class SingletonHolder {
+        public static final BillingProcessManager INSTANCE = new BillingProcessManager();
+    }
+
+    static BillingProcessManager instance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
         for (final BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
             try {
                 //TODO change to TransactionScopeOption.Readonly
@@ -95,7 +107,7 @@ public class BillingProcessManager {
      *            - executionTargetDate
      * @param dynamicStatisticsRecord
      */
-    static void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
+    void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billExecutionDate(), date));
         ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
@@ -104,7 +116,7 @@ public class BillingProcessManager {
         }
     }
 
-    static void runBilling(final BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
+    void runBilling(final BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().building(), billingCycle.building()));
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
@@ -115,26 +127,22 @@ public class BillingProcessManager {
             @Override
             public boolean accept(Lease lease) {
                 //Don't run bill on cycle that out of boundaries of lease end
-                if (billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) > 0) {
-                    return false;
-                } else {
-                    return BillingManager.validateBillingRunPreconditions(billingCycle, lease, false);
-                }
+                return billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) <= 0;
             }
         });
         runBilling(billingCycle, filteredLeaseIterator, executionMonitor);
     }
 
-    private static void runBilling(final BillingCycle billingCycle, final Iterator<Lease> leasesIterator, final ExecutionMonitor executionMonitor) {
+    private void runBilling(final BillingCycle billingCycle, final Iterator<Lease> leasesIterator, final ExecutionMonitor executionMonitor) {
         while (leasesIterator.hasNext()) {
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                     @Override
                     public Void execute() throws RuntimeException {
-                        BillCreationResult result = new BillCreationResult(BillingManager.produceBill(billingCycle, leasesIterator.next(), false));
-                        if (result.getStatus() == BillCreationResult.Status.created) {
-                            executionMonitor.addProcessedEvent("Bill", result.getTotalDueAmount(), null);
+                        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(leasesIterator.next(), billingCycle);
+                        if (bill.billStatus().getValue() == Bill.BillStatus.Finished) {
+                            executionMonitor.addProcessedEvent("Bill", bill.totalDueAmount().getValue(), null);
                         } else {
                             executionMonitor.addFailedEvent("Bill", "Bill failed");
                         }

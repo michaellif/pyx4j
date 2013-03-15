@@ -40,7 +40,7 @@ class ARInternalNSFManager {
         public static final ARInternalNSFManager INSTANCE = new ARInternalNSFManager();
     }
 
-    static ARInternalNSFManager getInstance() {
+    static ARInternalNSFManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -74,6 +74,6 @@ class ARInternalNSFManager {
 
         Persistence.service().persist(charge);
 
-        ARInternalTransactionManager.getInstance().postInvoiceLineItem(charge);
+        ARInternalTransactionManager.instance().postInvoiceLineItem(charge);
     }
 }

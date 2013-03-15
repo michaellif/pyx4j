@@ -32,7 +32,7 @@ class ARInternalDepositManager {
         public static final ARInternalDepositManager INSTANCE = new ARInternalDepositManager();
     }
 
-    static ARInternalDepositManager getInstance() {
+    static ARInternalDepositManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -52,7 +52,7 @@ class ARInternalDepositManager {
         refund.claimed().setValue(false);
         Persistence.service().persist(refund);
 
-        ARInternalTransactionManager.getInstance().postInvoiceLineItem(refund);
+        ARInternalTransactionManager.instance().postInvoiceLineItem(refund);
 
         deposit.lifecycle().status().setValue(DepositStatus.Refunded);
 

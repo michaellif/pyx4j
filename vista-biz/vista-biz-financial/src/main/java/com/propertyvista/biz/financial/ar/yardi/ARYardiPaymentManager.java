@@ -48,7 +48,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         public static final ARYardiPaymentManager INSTANCE = new ARYardiPaymentManager();
     }
 
-    static ARYardiPaymentManager getInstance() {
+    static ARYardiPaymentManager instance() {
         return SingletonHolder.INSTANCE;
     }
 

@@ -23,6 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
+import com.propertyvista.biz.financial.ar.ARArrearsManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -60,7 +61,7 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
-        ARInternalTransactionManager.getInstance().postInvoiceLineItem(invoiceLineItem);
+        ARInternalTransactionManager.instance().postInvoiceLineItem(invoiceLineItem);
     }
 
     @Override
@@ -70,84 +71,84 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
-        ARInternalPaymentManager.getInstance().postPayment(paymentRecord);
+        ARInternalPaymentManager.instance().postPayment(paymentRecord);
     }
 
     @Override
     public DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount) {
-        return ARInternalCreditDebitLinkManager.getInstance().createHardLink(paymentRecord, debit, amount);
+        return ARInternalCreditDebitLinkManager.instance().createHardLink(paymentRecord, debit, amount);
     }
 
     @Override
     public void removeHardLink(DebitCreditLink link) {
-        ARInternalCreditDebitLinkManager.getInstance().removeHardLink(link);
+        ARInternalCreditDebitLinkManager.instance().removeHardLink(link);
     }
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        ARInternalPaymentManager.getInstance().rejectPayment(paymentRecord, applyNSF);
+        ARInternalPaymentManager.instance().rejectPayment(paymentRecord, applyNSF);
     }
 
     @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
-        ARInternalLeaseAdjustmentManager.getInstance().postImmediateAdjustment(adjustment);
+        ARInternalLeaseAdjustmentManager.instance().postImmediateAdjustment(adjustment);
     }
 
     @Override
     public void postDepositRefund(Deposit deposit) {
-        ARInternalDepositManager.getInstance().postDepositRefund(deposit);
+        ARInternalDepositManager.instance().postDepositRefund(deposit);
     }
 
     @Override
     public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.getInstance().getTransactionHistory(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getTransactionHistory(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.getInstance().getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.getInstance().getNotConsumedCreditInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
     public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
-        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshot(buildingStub, asOf);
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(buildingStub, asOf);
     }
 
     @Override
     public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
-        return ARInternalArrearsManager.getInstance().getAgingBuckets(billingAccount);
+        return ARArrearsManager.instance().getAgingBuckets(billingAccount);
     }
 
     @Override
     public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
-        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshot(billingAccount, asOf);
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(billingAccount, asOf);
     }
 
     @Override
     public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
-        return ARInternalArrearsManager.getInstance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+        return ARArrearsManager.instance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
     }
 
     @Override
     public void updateArrearsHistory(BillingAccount billingAccount) {
-        ARInternalArrearsManager.getInstance().updateArrearsHistory(billingAccount);
+        ARArrearsManager.instance().updateArrearsHistory(billingAccount);
 
     }
 
     @Override
     public void updateArrearsHistory(Building building) {
-        ARInternalArrearsManager.getInstance().updateArrearsHistory(building);
+        ARArrearsManager.instance().updateArrearsHistory(building);
     }
 
     @Override
     public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.getInstance().getCurrentBallance(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getCurrentBallance(billingAccount.<InternalBillingAccount> cast());
     }
 
     @Override
@@ -157,7 +158,7 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        return ARInternalTransactionManager.getInstance().getPADBalance(billingAccount, cycle);
+        return ARInternalTransactionManager.instance().getPADBalance(billingAccount, cycle);
     }
 
     @Override

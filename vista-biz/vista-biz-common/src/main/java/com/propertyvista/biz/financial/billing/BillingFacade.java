@@ -29,6 +29,8 @@ public interface BillingFacade {
 
     Bill runBilling(Lease leaseId);
 
+    Bill runBilling(Lease leaseId, BillingCycle cycle);
+
     Bill runBillingPreview(Lease leaseId);
 
     Bill getBill(Lease lease, int billSequenceNumber);
@@ -54,4 +56,5 @@ public interface BillingFacade {
     BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm);
 
     void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy);
+
 }

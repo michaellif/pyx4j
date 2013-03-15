@@ -83,12 +83,12 @@ class ARInternalCreditDebitLinkManager {
         public static final ARInternalCreditDebitLinkManager INSTANCE = new ARInternalCreditDebitLinkManager();
     }
 
-    static ARInternalCreditDebitLinkManager getInstance() {
+    static ARInternalCreditDebitLinkManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
     InvoiceCredit consumeCredit(InvoiceCredit credit) {
-        List<InvoiceDebit> debits = ARInternalTransactionManager.getInstance().getNotCoveredDebitInvoiceLineItems(
+        List<InvoiceDebit> debits = ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(
                 credit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceDebit debit : debits) {
 
@@ -141,7 +141,7 @@ class ARInternalCreditDebitLinkManager {
             throw new BillingException(i18n.tr("Provided amount exceeds Payment"));
         }
 
-        InvoicePayment payment = ARInternalTransactionManager.getInstance().getCorrespodingCreditByPayment(
+        InvoicePayment payment = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(
                 paymentRecord.billingAccount().<InternalBillingAccount> cast(), paymentRecord);
 
         // check if amount covers all soft links paid by credit
@@ -238,7 +238,7 @@ class ARInternalCreditDebitLinkManager {
     }
 
     InvoiceDebit coverDebit(InvoiceDebit debit) {
-        List<InvoiceCredit> credits = ARInternalTransactionManager.getInstance().getNotConsumedCreditInvoiceLineItems(
+        List<InvoiceCredit> credits = ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(
                 debit.billingAccount().<InternalBillingAccount> cast());
         for (InvoiceCredit credit : credits) {
 
@@ -277,7 +277,7 @@ class ARInternalCreditDebitLinkManager {
     }
 
     void declinePayment(InvoicePaymentBackOut backOut) {
-        InvoicePayment invoicePaymentToReturn = ARInternalTransactionManager.getInstance().getCorrespodingCreditByPayment(
+        InvoicePayment invoicePaymentToReturn = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(
                 backOut.billingAccount().<InternalBillingAccount> cast(), backOut.paymentRecord());
         if (invoicePaymentToReturn == null) {
             throw new BillingException(i18n.tr("Cannot find Payment Record"));
@@ -296,7 +296,7 @@ class ARInternalCreditDebitLinkManager {
     private List<InvoiceCredit> restoreBackwardPayments(InternalBillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
 
         Collection<DebitCreditLink> itemsToRemove = new ArrayList<DebitCreditLink>();
-        List<InvoiceCredit> credits = ARInternalTransactionManager.getInstance().getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);
+        List<InvoiceCredit> credits = ARInternalTransactionManager.instance().getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);
         if (credits != null && credits.size() > 0) {
             for (InvoiceCredit credit : credits) {
                 Persistence.service().retrieve(credit.debitLinks());

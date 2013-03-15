@@ -43,7 +43,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         public static final ARYardiTransactionManager INSTANCE = new ARYardiTransactionManager();
     }
 
-    static ARYardiTransactionManager getInstance() {
+    static ARYardiTransactionManager instance() {
         return SingletonHolder.INSTANCE;
     }
 

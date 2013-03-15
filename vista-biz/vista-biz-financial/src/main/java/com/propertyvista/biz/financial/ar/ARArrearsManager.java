@@ -49,10 +49,17 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public abstract class ARAbstractArrearsManager {
+public class ARArrearsManager {
 
-    protected ARAbstractArrearsManager() {
+    private ARArrearsManager() {
+    }
 
+    private static class SingletonHolder {
+        public static final ARArrearsManager INSTANCE = new ARArrearsManager();
+    }
+
+    public static ARArrearsManager instance() {
+        return SingletonHolder.INSTANCE;
     }
 
     public LeaseArrearsSnapshot retrieveArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {

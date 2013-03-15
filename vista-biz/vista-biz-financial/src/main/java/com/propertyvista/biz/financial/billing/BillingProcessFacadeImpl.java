@@ -16,23 +16,22 @@ package com.propertyvista.biz.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.billing.BillingProcessFacade;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingProcessFacadeImpl implements BillingProcessFacade {
 
     @Override
     public void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
-        BillingProcessManager.initializeFutureBillingCycles(executionMonitor);
+        BillingProcessManager.instance().initializeFutureBillingCycles(executionMonitor);
     }
 
     @Override
     public void runBilling(LogicalDate date, ExecutionMonitor executionMonitor) {
-        BillingProcessManager.runBilling(date, executionMonitor);
+        BillingProcessManager.instance().runBilling(date, executionMonitor);
     }
 
     @Override
     public void runBilling(BillingCycle billingCycle, ExecutionMonitor executionMonitor) {
-        BillingProcessManager.runBilling(billingCycle, executionMonitor);
+        BillingProcessManager.instance().runBilling(billingCycle, executionMonitor);
     }
 }

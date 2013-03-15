@@ -75,14 +75,19 @@ public class BillingManager {
         }
 
         BillingCycle billingCycle = getNextBillingCycle(lease);
+        return runBilling(lease, billingCycle, preview);
+    }
+
+    static Bill runBilling(Lease lease, BillingCycle billingCycle, boolean preview) {
         if (validateBillingRunPreconditions(billingCycle, lease, preview)) {
-            return produceBill(billingCycle, lease, preview);
+            BillProducer producer = new BillProducer(billingCycle, lease, preview);
+            return producer.produceBill();
         } else {
             throw new BillingException(i18n.tr("Bill Run Precondition Validation failed"));
         }
     }
 
-    public static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
+    static boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         BillingCycle nextCycle = getNextBillingCycle(lease);
         if (!nextCycle.equals(billingCycle)) {
@@ -136,11 +141,6 @@ public class BillingManager {
         }
 
         return true;
-    }
-
-    public static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
-        BillProducer producer = new BillProducer(billingCycle, lease, preview);
-        return producer.produceBill();
     }
 
     static Bill confirmBill(Bill billStub) {

@@ -48,7 +48,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
         public static final ARInternalTransactionManager INSTANCE = new ARInternalTransactionManager();
     }
 
-    static ARInternalTransactionManager getInstance() {
+    static ARInternalTransactionManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -62,13 +62,13 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     private void manageCreditDebitLinks(InvoiceLineItem invoiceLineItem) {
         if (invoiceLineItem.isInstanceOf(InvoicePaymentBackOut.class)) {
             InvoicePaymentBackOut backOut = invoiceLineItem.cast();
-            ARInternalCreditDebitLinkManager.getInstance().declinePayment(backOut);
+            ARInternalCreditDebitLinkManager.instance().declinePayment(backOut);
         } else if (invoiceLineItem.isInstanceOf(InvoiceCredit.class)) {
             InvoiceCredit invoiceCredit = invoiceLineItem.cast();
 
             invoiceCredit.outstandingCredit().setValue(invoiceCredit.amount().getValue());
 
-            ARInternalCreditDebitLinkManager.getInstance().consumeCredit(invoiceCredit);
+            ARInternalCreditDebitLinkManager.instance().consumeCredit(invoiceCredit);
 
         } else if (invoiceLineItem.isInstanceOf(InvoiceDebit.class)) {
             InvoiceDebit invoiceDebit = invoiceLineItem.cast();
@@ -76,7 +76,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
             invoiceDebit.outstandingDebit().setValue(invoiceDebit.amount().getValue());
             invoiceDebit.outstandingDebit().setValue(invoiceDebit.outstandingDebit().getValue().add(invoiceDebit.taxTotal().getValue()));
 
-            ARInternalCreditDebitLinkManager.getInstance().coverDebit(invoiceDebit);
+            ARInternalCreditDebitLinkManager.instance().coverDebit(invoiceDebit);
 
         } else {
             throw new IllegalArgumentException();

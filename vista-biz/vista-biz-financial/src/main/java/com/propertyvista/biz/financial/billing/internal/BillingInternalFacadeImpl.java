@@ -58,6 +58,11 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
     }
 
     @Override
+    public Bill runBilling(Lease leaseId, BillingCycle cycle) {
+        return BillingManager.runBilling(leaseId, cycle, false);
+    }
+
+    @Override
     public Bill runBillingPreview(Lease leaseId) {
         return BillingManager.runBilling(leaseId, true);
     }

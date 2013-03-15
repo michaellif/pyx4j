@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.ar.ARArrearsManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -64,27 +65,27 @@ public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
     public boolean validatePayment(PaymentRecord paymentRecord) throws ARException {
-        return ARYardiPaymentManager.getInstance().validatePayment(paymentRecord);
+        return ARYardiPaymentManager.instance().validatePayment(paymentRecord);
     }
 
     @Override
     public void postPayment(PaymentRecord paymentRecord) throws ARException {
-        ARYardiPaymentManager.getInstance().postPayment(paymentRecord);
+        ARYardiPaymentManager.instance().postPayment(paymentRecord);
     }
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
-        ARYardiPaymentManager.getInstance().rejectPayment(paymentRecord, applyNSF);
+        ARYardiPaymentManager.instance().rejectPayment(paymentRecord, applyNSF);
     }
 
     @Override
     public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
-        return ARYardiTransactionManager.getInstance().getCurrentBallance(billingAccount);
+        return ARYardiTransactionManager.instance().getCurrentBallance(billingAccount);
     }
 
     @Override
     public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
-        return ARYardiTransactionManager.getInstance().getTransactionHistory(billingAccount);
+        return ARYardiTransactionManager.instance().getTransactionHistory(billingAccount);
     }
 
     @Override
@@ -117,12 +118,12 @@ public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
     public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARYardiTransactionManager.getInstance().getNotCoveredDebitInvoiceLineItems(billingAccount);
+        return ARYardiTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount);
     }
 
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
-        return ARYardiTransactionManager.getInstance().getNotConsumedCreditInvoiceLineItems(billingAccount);
+        return ARYardiTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(billingAccount);
     }
 
     @Override
@@ -140,38 +141,38 @@ public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
     public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        return ARYardiTransactionManager.getInstance().getPADBalance(billingAccount, cycle);
+        return ARYardiTransactionManager.instance().getPADBalance(billingAccount, cycle);
     }
 
     @Override
     public void updateArrearsHistory(BillingAccount billingAccount) {
-        ARYardiArrearsManager.getInstance().updateArrearsHistory(billingAccount);
+        ARArrearsManager.instance().updateArrearsHistory(billingAccount);
     }
 
     @Override
     public void updateArrearsHistory(Building building) {
-        ARYardiArrearsManager.getInstance().updateArrearsHistory(building);
+        ARArrearsManager.instance().updateArrearsHistory(building);
     }
 
     @Override
     public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
-        return ARYardiArrearsManager.getInstance().getAgingBuckets(billingAccount);
+        return ARArrearsManager.instance().getAgingBuckets(billingAccount);
     }
 
     @Override
     public LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate asOf) {
-        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshot(billingAccount, asOf);
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(billingAccount, asOf);
     }
 
     @Override
     public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
-        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshot(buildingStub, asOf);
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(buildingStub, asOf);
     }
 
     @Override
     public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
-        return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+        return ARArrearsManager.instance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
     }
 
     @Override

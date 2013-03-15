@@ -31,7 +31,7 @@ class ARInternalLeaseAdjustmentManager {
         public static final ARInternalLeaseAdjustmentManager INSTANCE = new ARInternalLeaseAdjustmentManager();
     }
 
-    static ARInternalLeaseAdjustmentManager getInstance() {
+    static ARInternalLeaseAdjustmentManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -55,7 +55,7 @@ class ARInternalLeaseAdjustmentManager {
             lineItem.claimed().setValue(false);
             Persistence.service().persist(lineItem);
 
-            ARInternalTransactionManager.getInstance().postInvoiceLineItem(lineItem);
+            ARInternalTransactionManager.instance().postInvoiceLineItem(lineItem);
 
         }
 
