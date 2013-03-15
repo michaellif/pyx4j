@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.visor;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 public interface IVisorController {
 
-    void show(IView view);
+    void show(IPane view);
 
 }

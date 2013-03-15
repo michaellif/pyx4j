@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.viewfactories.crud;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserEditorView;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserEditorViewImpl;
@@ -51,7 +51,7 @@ import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDef
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IPane> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceViewerView.class.equals(type)) {
                 map.put(type, new MaintenanceViewerViewImpl());

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
@@ -48,7 +48,7 @@ public class DashboardVisorController implements IDashboardVisorController {
     }
 
     @Override
-    public void show(IView parentView) {
+    public void show(IPane parentView) {
         populate(parentView);
     }
 
@@ -77,7 +77,7 @@ public class DashboardVisorController implements IDashboardVisorController {
         DashboardPrinterDialog.print(visor.getDashboardMetadata(), visor.getSelectedBuildingsStubs());
     }
 
-    private void populate(final IView parentView) {
+    private void populate(final IPane parentView) {
         service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata dashboardMetadata) {

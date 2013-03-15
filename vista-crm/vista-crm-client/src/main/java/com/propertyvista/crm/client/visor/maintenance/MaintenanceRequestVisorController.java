@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.crud.lister.ILister.Presenter;
 
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
@@ -42,7 +42,7 @@ public class MaintenanceRequestVisorController implements IVisorController {
     }
 
     @Override
-    public void show(final IView parentView) {
+    public void show(final IPane parentView) {
         lister.populate();
         parentView.showVisor(visor, i18n.tr("Maintenance Requests"));
     }

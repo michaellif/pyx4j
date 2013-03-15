@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorViewImpl;
@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewer
 
 public class MaintenanceViewFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IPane> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceRequestListerView.class.equals(type)) {
                 map.put(type, new MaintenanceRequestListerViewImpl());

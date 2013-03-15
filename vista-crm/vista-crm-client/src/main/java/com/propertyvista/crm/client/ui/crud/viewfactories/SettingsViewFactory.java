@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsEditorView;
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsEditorViewImpl;
@@ -85,7 +85,7 @@ import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusViewI
 
 public class SettingsViewFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IPane> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (SiteViewer.class.equals(type)) {
                 map.put(type, new SiteViewerImpl());

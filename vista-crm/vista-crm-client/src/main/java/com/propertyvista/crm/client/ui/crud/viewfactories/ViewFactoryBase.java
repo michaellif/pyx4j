@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 
 import java.util.HashMap;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
 public abstract class ViewFactoryBase {
 
-    protected static HashMap<Class<? extends IView>, IView> map = new HashMap<Class<? extends IView>, IView>();
+    protected static HashMap<Class<? extends IPane>, IPane> map = new HashMap<Class<? extends IPane>, IPane>();
 
 }
