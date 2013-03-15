@@ -24,13 +24,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
 public interface IView extends IsWidget {
 
     public interface Presenter {
-
-        AppPlace getPlace();
 
         void populate();
 

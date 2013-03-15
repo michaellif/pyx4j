@@ -28,13 +28,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.IVisor;
+import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class ListerBase<E extends IEntity> extends BasicLister<E> implements IListerView<E> {
+public abstract class AbstractLister<E extends IEntity> extends EntityDataTablePanel<E> implements ILister<E> {
 
-    private static final I18n i18n = I18n.get(ListerBase.class);
+    private static final I18n i18n = I18n.get(AbstractLister.class);
 
     public interface ItemSelectionHandler<E> {
         void onSelect(E selectedItem);
@@ -46,16 +46,16 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
 
     private boolean openEditor;
 
-    public ListerBase(Class<E> clazz) {
+    public AbstractLister(Class<E> clazz) {
         super(clazz);
     }
 
-    public ListerBase(Class<E> clazz, boolean allowAddNew) {
+    public AbstractLister(Class<E> clazz, boolean allowAddNew) {
         super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
 
-    public ListerBase(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
+    public AbstractLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
         super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew, allowDelete);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
@@ -124,7 +124,7 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
     }
 
     @Override
-    public ListerBase<E> getLister() {
+    public AbstractLister<E> getLister() {
         return this;
     }
 

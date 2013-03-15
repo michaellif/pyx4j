@@ -18,13 +18,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.widgets.client.Button;
 
 public class VisorEditorHolder extends AbstractVisorHolder {
@@ -38,7 +39,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
                 parent.hideVisor();
             }
         });
-        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCloseButton.name());
+        backButton.addStyleName(DefaultCrudPaneTheme.StyleName.VisorCloseButton.name());
 
         getHeaderCaption().add(backButton);
 

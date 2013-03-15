@@ -41,12 +41,12 @@ import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 
-public class BasicLister<E extends IEntity> extends VerticalPanel {
+public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public static enum MementoKeys {
         page, filterData, sortingData
@@ -72,9 +72,9 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
 
     private DataTable.ItemSelectionHandler zoomInHandler;
 
-    public BasicLister(Class<E> clazz) {
+    public EntityDataTablePanel(Class<E> clazz) {
         this.clazz = clazz;
-        setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Lister.name());
+        setStyleName(DefaultCrudPaneTheme.StyleName.Lister.name());
         dataTablePanel = new DataTablePanel<E>(clazz);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
@@ -130,7 +130,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
 
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
-        dataTablePanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.ListerListPanel.name());
+        dataTablePanel.setStyleName(DefaultCrudPaneTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
@@ -138,7 +138,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         add(dataTablePanel);
     }
 
-    public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
+    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
         this(clazz);
         setAllowZoomIn(allowZoomIn);
 
@@ -153,7 +153,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         }
     }
 
-    public BasicLister(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
+    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
         this(clazz, allowZoomIn, allowAddNew);
         // delete items stuff:
         if (allowDelete) {

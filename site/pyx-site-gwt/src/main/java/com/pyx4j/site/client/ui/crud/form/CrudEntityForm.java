@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.crud.form;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -35,7 +35,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.site.client.ui.crud.form.IViewer;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 

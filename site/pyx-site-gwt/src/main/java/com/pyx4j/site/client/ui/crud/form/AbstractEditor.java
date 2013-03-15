@@ -31,16 +31,14 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
-import com.pyx4j.site.client.ui.crud.BasicForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class BasicEditor<E extends IEntity> extends BasicForm<E> implements IEditor<E> {
+public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> implements IEditor<E> {
 
-    private static final I18n i18n = I18n.get(BasicEditor.class);
+    private static final I18n i18n = I18n.get(AbstractEditor.class);
 
     private IEditor.Presenter presenter;
 
@@ -52,7 +50,7 @@ public class BasicEditor<E extends IEntity> extends BasicForm<E> implements IEdi
 
     protected EditMode mode;
 
-    public BasicEditor() {
+    public AbstractEditor() {
         super();
 
         btnSave = new Button(i18n.tr("Save"), new Command() {

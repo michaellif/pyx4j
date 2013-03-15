@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultSiteCrudPanelsTheme extends Theme {
+public class DefaultCrudPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         Header, HeaderCaption, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
@@ -35,7 +35,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         Visor, VisorCloseButton
     }
 
-    public DefaultSiteCrudPanelsTheme() {
+    public DefaultCrudPaneTheme() {
         initStyles();
     }
 

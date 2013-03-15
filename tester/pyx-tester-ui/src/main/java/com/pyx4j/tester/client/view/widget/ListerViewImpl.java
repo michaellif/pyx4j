@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.ListerDataItem;
@@ -60,7 +60,7 @@ public class ListerViewImpl extends ScrollPanel implements ListerView {
         add(content);
     }
 
-    class TestLister extends BasicLister<ListerDataItem> {
+    class TestLister extends EntityDataTablePanel<ListerDataItem> {
         final int MAX_COLS = 10;
 
         public TestLister() {

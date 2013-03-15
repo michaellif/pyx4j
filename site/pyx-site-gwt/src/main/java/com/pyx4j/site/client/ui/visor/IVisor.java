@@ -18,9 +18,10 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.ui.visor;
 
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IVisorViewer extends IVisor {
+public interface IVisor extends IsWidget {
 
 }

@@ -18,17 +18,9 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client.ui.visor;
 
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
-public abstract class AbstractVisorHolder extends AbstractView {
-
-    public AbstractVisorHolder(IVisor visor, String caption, final IView parent) {
-        super();
-        setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
-        setContentPane(visor);
-        setCaption(caption);
-    }
+public interface IVisorEditor extends IVisor {
 
 }

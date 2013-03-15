@@ -32,17 +32,17 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class ListerController<E extends IEntity> implements IListerView.Presenter<E> {
+public class ListerController<E extends IEntity> implements ILister.Presenter<E> {
 
     private static final I18n i18n = I18n.get(ListerController.class);
 
-    private final IListerView<E> view;
+    private final ILister<E> view;
 
     private final ListerDataSource<E> dataSource;
 
@@ -52,7 +52,7 @@ public class ListerController<E extends IEntity> implements IListerView.Presente
 
     private Class<? extends IEntity> parentClass;
 
-    public ListerController(IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
+    public ListerController(ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -65,17 +65,12 @@ public class ListerController<E extends IEntity> implements IListerView.Presente
         view.setPresenter(this);
     }
 
-    public IListerView<E> getView() {
+    public ILister<E> getView() {
         return view;
     }
 
     public AbstractListService<E> getService() {
         return service;
-    }
-
-    @Override
-    public AppPlace getPlace() {
-        return null;
     }
 
     @Override
@@ -213,5 +208,10 @@ public class ListerController<E extends IEntity> implements IListerView.Presente
 
     protected void onDeleted(Key itemID, boolean isSuccessful) {
         view.onDeleted(itemID, isSuccessful);
+    }
+
+    @Override
+    public AppPlace getPlace() {
+        return null;
     }
 }

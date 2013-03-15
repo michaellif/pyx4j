@@ -26,12 +26,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.crud.ICrudPane;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public interface IListerView<E extends IEntity> extends IView {
+public interface ILister<E extends IEntity> extends ICrudPane {
 
-    public interface Presenter<E extends IEntity> extends IView.Presenter {
+    public interface Presenter<E extends IEntity> extends ICrudPane.Presenter {
 
         public ListerDataSource<E> getDataSource();
 
@@ -77,7 +77,7 @@ public interface IListerView<E extends IEntity> extends IView {
 
     Presenter<E> getPresenter();
 
-    ListerBase<E> getLister();
+    AbstractLister<E> getLister();
 
     int getPageSize();
 

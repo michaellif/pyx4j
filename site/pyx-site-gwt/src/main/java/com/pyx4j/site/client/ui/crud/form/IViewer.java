@@ -22,12 +22,10 @@ package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
-import com.pyx4j.site.client.ui.crud.IForm;
 
 public interface IViewer<E extends IEntity> extends IForm<E> {
 
-    public interface Presenter extends IView.Presenter {
+    public interface Presenter extends IForm.Presenter {
 
         boolean canEdit();
 

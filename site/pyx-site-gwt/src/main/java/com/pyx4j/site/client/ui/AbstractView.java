@@ -29,9 +29,15 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
+import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.VisorEditorHolder;
+import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
+import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class AbstractView extends DockLayoutPanel implements IView {
@@ -67,28 +73,28 @@ public abstract class AbstractView extends DockLayoutPanel implements IView {
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
-        captionLabel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderCaption.name());
         headerCaption.add(captionLabel);
-        headerCaption.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
+        headerCaption.setStyleName(DefaultCrudPaneTheme.StyleName.Header.name());
         addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
-        headerContainer.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderContainer.name());
+        headerContainer.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderContainer.name());
         addNorth(headerContainer, 0);
 
         headerToolbarHolder = new SimplePanel();
-        headerToolbarHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderToolbar.name());
+        headerToolbarHolder.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderToolbar.name());
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
 
         headerContainer.add(headerToolbarHolder);
 
         headerBreadcrumbHolder = new SimplePanel();
-        headerBreadcrumbHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderBreadcrumbs.name());
+        headerBreadcrumbHolder.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderBreadcrumbs.name());
         headerContainer.add(headerBreadcrumbHolder);
 
         footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
+        footerToolbarHolder.setStyleName(DefaultCrudPaneTheme.StyleName.FooterToolbar.name());
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);

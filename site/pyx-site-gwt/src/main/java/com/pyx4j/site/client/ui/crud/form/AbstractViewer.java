@@ -26,17 +26,16 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.BasicForm;
 
-public class BasicViewer<E extends IEntity> extends BasicForm<E> implements IViewer<E> {
+public abstract class AbstractViewer<E extends IEntity> extends AbstractForm<E> implements IViewer<E> {
 
-    private static final I18n i18n = I18n.get(BasicViewer.class);
+    private static final I18n i18n = I18n.get(AbstractViewer.class);
 
     private IViewer.Presenter presenter;
 
     protected String captionBase;
 
-    public BasicViewer() {
+    public AbstractViewer() {
         super();
     }
 

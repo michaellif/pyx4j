@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -43,7 +43,7 @@ public class ListerActivityBase<E extends IEntity> extends ListerController<E> i
 
     private List<Criterion> externalFilters;
 
-    public ListerActivityBase(Place place, IListerView<E> view, AbstractListService<E> service, Class<E> entityClass) {
+    public ListerActivityBase(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
         super(view, service, entityClass);
 
         this.place = (AppPlace) place;

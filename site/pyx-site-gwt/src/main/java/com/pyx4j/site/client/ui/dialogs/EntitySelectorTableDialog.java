@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTable.ItemSelectionHandler;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
@@ -188,7 +188,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         }
     }
 
-    protected class SelectEntityLister extends BasicLister<E> {
+    protected class SelectEntityLister extends EntityDataTablePanel<E> {
 
         private VersionDisplayMode versionDisplayMode = VersionDisplayMode.displayFinal;
 

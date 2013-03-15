@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.IVisorViewer;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class ReportSettingsManagementPanel extends Composite implements IVisorViewer {
