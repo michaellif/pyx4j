@@ -22,15 +22,22 @@ import com.pyx4j.site.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.reports.PaymentRecordReportMetadata;
+import com.propertyvista.domain.reports.PapReportMetadata;
 
-public class PaymentRecordReportGenerator implements ReportGenerator {
+public class PapReportGenerator implements ReportGenerator {
 
     @Override
     public Serializable generateReport(ReportMetadata metadata) {
-        PaymentRecordReportMetadata reportMetadata = (PaymentRecordReportMetadata) metadata;
+        PapReportMetadata reportMetadata = (PapReportMetadata) metadata;
+        EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
+        Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
+        return paymentRecords;
+    }
 
+    private EntityQueryCriteria<PaymentRecord> makeCriteria(PapReportMetadata reportMetadata) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+//        TODO criteria.isNotNull(PAD_FIELD)
+
         if (!reportMetadata.from().isNull()) {
             criteria.ge(criteria.proto().updated(), reportMetadata.from());
         }
@@ -42,9 +49,7 @@ public class PaymentRecordReportGenerator implements ReportGenerator {
         }
         if (!reportMetadata.billingCycles().isEmpty()) {
         }
-
-        Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
-        return paymentRecords;
+        return criteria;
     }
 
 }

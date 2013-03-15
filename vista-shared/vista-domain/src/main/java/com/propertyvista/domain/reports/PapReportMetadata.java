@@ -25,7 +25,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "Payment Record Report")
-public interface PaymentRecordReportMetadata extends ReportMetadata {
+public interface PapReportMetadata extends ReportMetadata {
 
     IPrimitive<LogicalDate> from();
 

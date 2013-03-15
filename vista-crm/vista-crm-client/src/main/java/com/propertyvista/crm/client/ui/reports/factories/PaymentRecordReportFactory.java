@@ -32,9 +32,9 @@ import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.factories.pad.PadReportForm;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.reports.PaymentRecordReportMetadata;
+import com.propertyvista.domain.reports.PapReportMetadata;
 
-public class PaymentRecordReportFactory implements ReportFactory<PaymentRecordReportMetadata> {
+public class PaymentRecordReportFactory implements ReportFactory<PapReportMetadata> {
 
     public static I18n i18n = I18n.get(PaymentRecordReportFactory.class);
 
@@ -56,8 +56,8 @@ public class PaymentRecordReportFactory implements ReportFactory<PaymentRecordRe
     }
 
     @Override
-    public CEntityForm<PaymentRecordReportMetadata> getReportSettingsForm() {
-        CEntityDecoratableForm<PaymentRecordReportMetadata> form = new PadReportForm();
+    public CEntityForm<PapReportMetadata> getReportSettingsForm() {
+        CEntityDecoratableForm<PapReportMetadata> form = new PadReportForm();
         form.initContent();
         return form;
     }
