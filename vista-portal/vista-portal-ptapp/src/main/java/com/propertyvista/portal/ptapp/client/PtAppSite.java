@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -99,7 +99,7 @@ public class PtAppSite extends VistaSite {
                 hideLoadingIndicator();
                 com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
                 Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
-                StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
+                StyleManager.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 obtainAuthenticationData();
             }
@@ -107,7 +107,7 @@ public class PtAppSite extends VistaSite {
             @Override
             public void onFailure(Throwable caught) {
                 hideLoadingIndicator();
-                StyleManger.installTheme(new PtAppTheme(), VistaPalette.getServerUnavailablePalette());
+                StyleManager.installTheme(new PtAppTheme(), VistaPalette.getServerUnavailablePalette());
                 super.onFailure(caught);
             }
 

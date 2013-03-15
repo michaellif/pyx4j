@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
@@ -54,7 +54,7 @@ public class OperationsPanel extends LayoutPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new OperationsTheme(), new OperationsPalette());
+        StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
         setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 

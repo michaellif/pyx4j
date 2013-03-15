@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
@@ -146,7 +146,7 @@ public class CrmSite extends VistaSite {
                 hideLoadingIndicator();
                 LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
                 Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
-                StyleManger.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
+                StyleManager.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
@@ -157,7 +157,7 @@ public class CrmSite extends VistaSite {
             @Override
             public void onFailure(Throwable caught) {
                 hideLoadingIndicator();
-                StyleManger.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
+                StyleManager.installTheme(new CrmTheme(), VistaPalette.getServerUnavailablePalette());
                 super.onFailure(caught);
             }
         }, ClientNavigUtils.getCurrentLocale());

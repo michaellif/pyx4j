@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -74,7 +74,7 @@ public class FieldSite extends VistaSite {
             }
         });
 
-        StyleManger.installTheme(new FieldTheme(), new FieldPalette());
+        StyleManager.installTheme(new FieldTheme(), new FieldPalette());
 
         obtainAuthenticationData();
     }

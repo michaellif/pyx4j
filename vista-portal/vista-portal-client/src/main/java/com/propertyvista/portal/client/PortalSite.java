@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
@@ -102,7 +102,7 @@ public class PortalSite extends VistaSite {
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
                 if (!descriptor.useCustomHtml().isBooleanTrue()) {
-                    StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                    StyleManager.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
                 }
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());

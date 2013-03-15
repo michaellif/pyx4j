@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.UncaughtHandler;
@@ -72,7 +72,7 @@ public class OnboardingSite extends VistaSite {
         });
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
-        StyleManger.installTheme(new OnboardingTheme(), new OnboardingPalette());
+        StyleManager.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
         createAndBindUI();
 
