@@ -81,10 +81,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         this.parentView = parentView;
     }
 
-    public boolean isPadEditable() {
-        return isPadEditable;
-    }
-
     public void setPadEditable(boolean isPadEditable) {
         this.isPadEditable = isPadEditable;
     }
@@ -114,8 +110,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    new PreauthorizedPaymentsVisorController(EntityFactory.createIdentityStub(Tenant.class, item.getValue().leaseParticipant().getPrimaryKey()))
-                            .show(parentView);
+                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey()).show(parentView);
                 }
             });
         }

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
@@ -27,8 +28,15 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     @Override
     public void retrieve(AsyncCallback<PreauthorizedPaymentsDTO> callback, Tenant tenantId) {
         PreauthorizedPaymentsDTO dto = EntityFactory.create(PreauthorizedPaymentsDTO.class);
+
         dto.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
         Persistence.service().retrieveMember(dto.tenant().preauthorizedPayments());
+
         callback.onSuccess(dto);
+    }
+
+    @Override
+    public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
+        // TODO Auto-generated method stub
     }
 }

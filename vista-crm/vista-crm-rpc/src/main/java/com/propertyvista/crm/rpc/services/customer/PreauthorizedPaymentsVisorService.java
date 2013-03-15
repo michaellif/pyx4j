@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services.customer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -23,4 +24,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface PreauthorizedPaymentsVisorService extends IService {
 
     void retrieve(AsyncCallback<PreauthorizedPaymentsDTO> callback, Tenant tenantId);
+
+    void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads);
 }

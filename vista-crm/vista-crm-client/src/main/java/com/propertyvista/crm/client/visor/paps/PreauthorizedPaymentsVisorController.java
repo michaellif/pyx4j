@@ -17,6 +17,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
 
@@ -31,9 +33,9 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
 
     private final PreauthorizedPaymentsVisorView visor = new PreauthorizedPaymentsVisorView(this);
 
-    private final Tenant tenantId;
+    private final Key tenantId;
 
-    public PreauthorizedPaymentsVisorController(Tenant tenantId) {
+    public PreauthorizedPaymentsVisorController(Key tenantId) {
         this.tenantId = tenantId;
     }
 
@@ -48,6 +50,7 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
     }
 
     public void populate(AsyncCallback<PreauthorizedPaymentsDTO> callback) {
-        GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class).retrieve(callback, tenantId);
+        GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class).retrieve(callback,
+                EntityFactory.createIdentityStub(Tenant.class, tenantId));
     }
 }

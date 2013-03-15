@@ -63,10 +63,15 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
+    protected DTO preprocessValue(DTO value, boolean fireEvent, boolean populate) {
         CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
-        ((TenantInLeaseFolder) comp).setPadEditable(!getValue().status().getValue().isFormer());
+        ((TenantInLeaseFolder) comp).setPadEditable(!value.status().getValue().isFormer());
 
+        return super.preprocessValue(value, fireEvent, populate);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
