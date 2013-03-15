@@ -43,6 +43,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.biz.financial.FinancialTestBase.TaskScheduler.Schedule;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -55,6 +56,7 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -97,6 +99,7 @@ import com.propertyvista.test.preloader.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.preloader.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
+import com.propertyvista.test.preloader.PADPolicyDataModel;
 import com.propertyvista.test.preloader.PmcDataModel;
 import com.propertyvista.test.preloader.PreloadConfig;
 import com.propertyvista.test.preloader.ProductItemTypesDataModel;
@@ -128,34 +131,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected Lease lease;
 
-    public interface Task {
-        void execute() throws Exception;
-    }
-
-    public class Schedule {
-        private final int[] fields = new int[Calendar.FIELD_COUNT];
-
-        public Schedule set(int field, int value) {
-            fields[field] = value;
-            return this;
-        }
-
-        public int[] getFields() {
-            return fields;
-        }
-
-        public boolean match(Calendar cal) {
-            int match = 0;
-            for (int field = 0; field < fields.length; field++) {
-                if (fields[field] == 0 || fields[field] == cal.get(field)) {
-                    match += 1;
-                }
-            }
-            return (match == fields.length);
-        }
-    }
-
-    private final HashMap<Schedule, Task> taskSchedule = new HashMap<Schedule, Task>();
+    private TaskScheduler scheduler;
 
     @Override
     protected void setUp() throws Exception {
@@ -169,6 +145,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().endTransaction();
         Persistence.service().startBackgroundProcessTransaction();
         setSysDate("01-Jan-2000");
+
+        scheduler = new TaskScheduler();
     }
 
     @Override
@@ -235,6 +213,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
         leaseBillingPolicyDataModel.generate();
+
+        new PADPolicyDataModel(config, pmcDataModel).generate();
 
         arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
         arPolicyDataModel.generate();
@@ -714,6 +694,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
+    protected BigDecimal getPADBalance(BillingCycle cycle) {
+        return ServerSideFactory.create(ARFacade.class).getPADBalance(retrieveLease().billingAccount(), cycle);
+    }
+
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
         if (lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
             return lease.currentTerm().version().leaseProducts().serviceItem();
@@ -772,50 +756,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return file.getAbsolutePath();
     }
 
-    protected void clearSchedle() {
-        taskSchedule.clear();
-    }
-
-    protected void scheduleTask(Task task, String... dates) {
-        for (String dateStr : dates) {
-            Schedule entry = new Schedule();
-            Calendar cal = GregorianCalendar.getInstance();
-            cal.setTime(DateUtils.detectDateformat(dateStr));
-            entry.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-            entry.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-            entry.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-            taskSchedule.put(entry, task);
-        }
-    }
-
-    protected void scheduleTask(Task task, Schedule entry) {
-        taskSchedule.put(entry, task);
-    }
-
-    protected void schedulePmcProcess(final PmcProcess pmcProcess, Schedule entry) {
-        taskSchedule.put(entry, new Task() {
-            @Override
-            public void execute() throws Exception {
-
-                try {
-                    Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
-                    Date runDate = getSysDate();
-                    PmcProcessContext sharedContext = new PmcProcessContext(runDate);
-                    if (pmcProcess.start(sharedContext)) {
-                        PmcProcessContext pmcContext = new PmcProcessContext(runDate);
-                        pmcProcess.executePmcJob(pmcContext);
-                        log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", getSysDate(), pmcProcess.getClass().getSimpleName(),
-                                pmcContext.getExecutionMonitor());
-                        pmcProcess.complete(sharedContext);
-                    }
-                } finally {
-                    Persistence.service().endTransaction();
-                }
-
-            }
-        });
-    }
-
     public static void setSysDate(Date date) {
         SystemDateManager.setDate(date);
     }
@@ -839,39 +779,117 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         calTo.setTime(setDate);
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTime(curDate);
-        while (cal.before(calTo)) {
-            cal.add(Calendar.DATE, 1);
-            for (Schedule entry : taskSchedule.keySet()) {
-                if (!entry.match(cal)) {
-                    continue;
-                }
-                Task task = taskSchedule.get(entry);
-                if (task != null) {
-                    setSysDate(cal.getTime());
-                    task.execute();
-                }
-            }
-        }
+        scheduler.runInterval(cal, calTo);
         setSysDate(setDate);
     }
 
     protected void setBillingBatchProcess() {
-        schedulePmcProcess(new BillingProcess(), new Schedule());
-        schedulePmcProcess(new FutureBillingCycleInitializationProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new BillingProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new FutureBillingCycleInitializationProcess(), new Schedule());
     }
 
     protected void setDepositBatchProcess() {
         // schedule deposit interest adjustment batch process to run on 1st of each month
-        schedulePmcProcess(new DepositInterestAdjustmentProcess(), new Schedule().set(Calendar.DAY_OF_MONTH, 1));
+        scheduler.schedulePmcProcess(new DepositInterestAdjustmentProcess(), new Schedule().set(Calendar.DAY_OF_MONTH, 1));
         // schedule deposit refund batch process to run every day
-        schedulePmcProcess(new DepositRefundProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new DepositRefundProcess(), new Schedule());
     }
 
     protected void setLeaseBatchProcess() {
         // schedule lease activation and completion process to run daily
-        schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
-        schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
-        schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
     }
 
+    public static class TaskScheduler {
+        public interface Task {
+            void execute() throws Exception;
+        }
+
+        public static class Schedule {
+            private final int[] fields = new int[Calendar.FIELD_COUNT];
+
+            public Schedule set(int field, int value) {
+                fields[field] = value;
+                return this;
+            }
+
+            public int[] getFields() {
+                return fields;
+            }
+
+            public boolean match(Calendar cal) {
+                int match = 0;
+                for (int field = 0; field < fields.length; field++) {
+                    if (fields[field] == 0 || fields[field] == cal.get(field)) {
+                        match += 1;
+                    }
+                }
+                return (match == fields.length);
+            }
+        }
+
+        private final HashMap<Schedule, Task> taskSchedule = new HashMap<Schedule, Task>();
+
+        protected void clearSchedule() {
+            taskSchedule.clear();
+        }
+
+        protected void scheduleTask(Task task, String... dates) {
+            for (String dateStr : dates) {
+                Schedule entry = new Schedule();
+                Calendar cal = GregorianCalendar.getInstance();
+                cal.setTime(DateUtils.detectDateformat(dateStr));
+                entry.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
+                entry.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+                entry.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+                taskSchedule.put(entry, task);
+            }
+        }
+
+        protected void scheduleTask(Task task, Schedule entry) {
+            taskSchedule.put(entry, task);
+        }
+
+        protected void schedulePmcProcess(final PmcProcess pmcProcess, Schedule entry) {
+            taskSchedule.put(entry, new Task() {
+                @Override
+                public void execute() throws Exception {
+
+                    try {
+                        Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
+                        Date runDate = getSysDate();
+                        PmcProcessContext sharedContext = new PmcProcessContext(runDate);
+                        if (pmcProcess.start(sharedContext)) {
+                            PmcProcessContext pmcContext = new PmcProcessContext(runDate);
+                            pmcProcess.executePmcJob(pmcContext);
+                            log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", getSysDate(), pmcProcess.getClass().getSimpleName(),
+                                    pmcContext.getExecutionMonitor());
+                            pmcProcess.complete(sharedContext);
+                        }
+                    } finally {
+                        Persistence.service().endTransaction();
+                    }
+
+                }
+            });
+        }
+
+        protected void runInterval(Calendar calFrom, Calendar calTo) throws Exception {
+            while (calFrom.before(calTo)) {
+                calFrom.add(Calendar.DATE, 1);
+                for (Schedule entry : taskSchedule.keySet()) {
+                    if (!entry.match(calFrom)) {
+                        continue;
+                    }
+                    Task task = taskSchedule.get(entry);
+                    if (task != null) {
+                        setSysDate(calFrom.getTime());
+                        task.execute();
+                    }
+                }
+            }
+        }
+    }
 }

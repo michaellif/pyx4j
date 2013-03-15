@@ -13,7 +13,13 @@
  */
 package com.propertyvista.test.preloader;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
+import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 
 public class PreloadConfig {
 
@@ -23,4 +29,18 @@ public class PreloadConfig {
 
     public boolean yardiIntegration = false;
 
+    public Map<DebitType, OwingBalanceType> padBalanceTypeMap;
+
+    public PADChargeType padChargeType;
+
+    public void setPadChargeType(PADChargeType type) {
+        padChargeType = type;
+    }
+
+    public void setPadBalanceType(DebitType charge, OwingBalanceType type) {
+        if (padBalanceTypeMap == null) {
+            padBalanceTypeMap = new HashMap<DebitType, OwingBalanceType>();
+        }
+        padBalanceTypeMap.put(charge, type);
+    }
 }

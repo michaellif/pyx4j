@@ -25,6 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -105,19 +106,22 @@ public abstract class ARAbstractTransactionManager {
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), cycle));
         Bill bill = Persistence.service().retrieve(criteria);
+        Persistence.ensureRetrieve(bill.lineItems(), AttachLevel.Attached);
         switch (policy.chargeType().getValue()) {
         case FixedAmount:
             throw new Error("Not Implemented");
         case OwingBalance:
             for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
                 OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
-                if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.dueDate().getValue().equals(bill.dueDate().getValue())) {
-                    balance = balance.add(charge.outstandingDebit().getValue()).add(charge.taxTotal().getValue());
+                if (balanceType == null) {
+                    continue;
+                }
+                if (balanceType.equals(OwingBalanceType.ToDateTotal) || bill.lineItems().contains(charge)) {
+                    balance = balance.add(charge.outstandingDebit().getValue());
                 }
             }
             break;
         }
         return balance;
     }
-
 }
