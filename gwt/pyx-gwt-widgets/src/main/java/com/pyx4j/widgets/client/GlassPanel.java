@@ -39,7 +39,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.config.shared.ApplicationMode;
 
 /**
@@ -68,11 +67,8 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
 
     protected GlassPanel() {
 
-        //        DOM.setInnerHTML(
-        //                getElement(),
-        //                "<center><div style='background-color:#FFFfff;width:10em'><b>loading...</b></div></center><table style=\"width: 100%;height: 100%;\"><tr><td>&nbsp;</td></tr></table>");
-
         setSize("100%", "100%");
+
         getElement().getStyle().setProperty("left", "0px");
         getElement().getStyle().setProperty("top", "0px");
         getElement().getStyle().setProperty("overflow", "hidden");
@@ -84,6 +80,9 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         getElement().getStyle().setDisplay(Display.NONE);
 
         glass = new SimplePanel();
+
+        glass.setStyleName(DefaultWidgetsTheme.StyleName.GlassPanel.name());
+
         glass.ensureDebugId("GlassPanel");
         glass.setSize("100%", "100%");
         add(glass, 0, 0);
@@ -101,6 +100,7 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
         }
 
         label = new HTML();
+        label.setStyleName(DefaultWidgetsTheme.StyleName.GlassPanelLabel.name());
         add(label, 0, 0);
 
     }
@@ -121,14 +121,13 @@ public class GlassPanel extends AbsolutePanel implements ResizeHandler {
             DOM.setCapture(glassPanel.getElement());
             switch (glassStyle) {
             case Transparent:
-                glassPanel.glass.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent.name());
-                glassPanel.label.setStyleName(CSSClass.pyx4j_GlassPanel_Transparent_Label.name());
+                glassPanel.glass.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.semitransparent.name());
                 break;
             case SemiTransparent:
-                glassPanel.glass.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent.name());
-                glassPanel.label.setStyleName(CSSClass.pyx4j_GlassPanel_SemiTransparent_Label.name());
+                glassPanel.glass.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.semitransparent.name());
                 break;
             }
+
             glassPanel.label.setHTML(message);
             glassPanel.label.setVisible(CommonsStringUtils.isStringSet(message));
             glassPanel.setGlassPanelSize();

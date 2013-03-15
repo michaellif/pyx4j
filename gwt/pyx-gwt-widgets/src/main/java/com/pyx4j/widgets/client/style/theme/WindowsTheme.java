@@ -54,7 +54,6 @@ public class WindowsTheme extends Theme {
         initButtonStyles();
         initTooltipStyle();
         initTreeStyle();
-        initGlassPanelStyle();
         initCheckBoxStyle();
         initDatePickerStyle();
         initHyperlinkStyle();
@@ -344,32 +343,6 @@ public class WindowsTheme extends Theme {
         style = new Style(".gwt-TreeItem-selected");
         style.addProperty("background", ThemeColor.contrast1);
         addStyle(style);
-    }
-
-    protected void initGlassPanelStyle() {
-        Style style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent);
-        style.addProperty("background-color", "#000");
-        style.addProperty("opacity", "0.2");
-        style.addProperty("filter", "alpha(opacity=20)");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent_Label);
-        style.addProperty("background-color", "#FFFBD3");
-        style.addProperty("opacity", "0.8");
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("padding", "3px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent_Label);
-        style.addProperty("background-color", "#FFFBD3");
-        style.addProperty("opacity", "0.8");
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("padding", "3px");
-        addStyle(style);
-
     }
 
     protected void initCheckBoxStyle() {

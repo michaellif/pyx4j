@@ -42,11 +42,13 @@ public class DefaultWidgetsTheme extends Theme {
 
         ImageGallery,
 
-        RadioGroup, RadioGroupItem
+        RadioGroup, RadioGroupItem,
+
+        GlassPanel, GlassPanelLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, disabled, pushed
+        watermark, hover, disabled, pushed, semitransparent
     }
 
     public DefaultWidgetsTheme() {
@@ -62,6 +64,7 @@ public class DefaultWidgetsTheme extends Theme {
         initRateItStyle();
         initImageGalleryStyle();
         initRadioGroupStyle();
+        initGlassPanelStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -221,6 +224,28 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.disabled);
         style.addProperty("color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+    }
+
+    protected void initGlassPanelStyle() {
+        Style style = new Style(".", StyleName.GlassPanel);
+        addStyle(style);
+
+        style = new Style(".", StyleName.GlassPanelLabel);
+        style.addProperty("color", "#652C02");
+        style.addProperty("background-color", "#EDD3AE");
+        style.addProperty("padding", "1px 7px");
+        style.addProperty("margin-top", "3px");
+        style.addProperty("top", "0");
+        style.addProperty("border", "1px solid #db5f03");
+        style.addProperty("border-radius", "5px 5px 5px 5px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.GlassPanel, "-", DefaultWidgetsTheme.StyleDependent.semitransparent);
+        style.addProperty("background-color", "#000");
+        style.addProperty("opacity", "0.2");
+        style.addProperty("filter", "alpha(opacity=20)");
         addStyle(style);
 
     }

@@ -45,8 +45,6 @@ public enum CSSClass {
     //Tooltip
     pyx4j_Tooltip, pyx4j_Tooltip_Shadow,
 
-    pyx4j_GlassPanel_Transparent, pyx4j_GlassPanel_SemiTransparent, pyx4j_GlassPanel_Transparent_Label, pyx4j_GlassPanel_SemiTransparent_Label,
-
     //CheckBox
     pyx4j_CheckBox,
 
