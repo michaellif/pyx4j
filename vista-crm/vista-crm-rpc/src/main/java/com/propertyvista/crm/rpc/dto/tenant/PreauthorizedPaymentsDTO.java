@@ -15,11 +15,15 @@ package com.propertyvista.crm.rpc.dto.tenant;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
 public interface PreauthorizedPaymentsDTO extends IEntity {
 
     Tenant tenant();
+
+    IList<LeasePaymentMethod> availablePaymentMethods();
 }

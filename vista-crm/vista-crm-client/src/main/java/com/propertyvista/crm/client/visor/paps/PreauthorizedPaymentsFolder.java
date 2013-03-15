@@ -22,31 +22,41 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 
 public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedPayment> {
 
-    public PreauthorizedPaymentsFolder() {
+    private static final I18n i18n = I18n.get(PreauthorizedPaymentsFolder.class);
+
+    private final CEntityForm<PreauthorizedPaymentsDTO> parent;
+
+    public PreauthorizedPaymentsFolder(CEntityForm<PreauthorizedPaymentsDTO> parent) {
         super(PreauthorizedPayment.class);
+        this.parent = parent;
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().amountType(), "10em"),
-                new EntityFolderColumnDescriptor(proto().amount(), "10em"),
+                new EntityFolderColumnDescriptor(proto().amountType(), "8em"),
+                new EntityFolderColumnDescriptor(proto().amount(), "5em"),
                 new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"));
           //@formatter:on
     }
@@ -68,18 +78,23 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().paymentMethod() == column.getObject()) {
-                return inject(proto().paymentMethod(), new CEntitySelectorHyperlink() {
+                return inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
 
                     @Override
                     protected AppPlace getTargetPlace() {
-                        // TODO Auto-generated method stub
-                        return null;
+                        return null; // not intended to navigate - just edit mode!
                     }
 
                     @Override
-                    protected AbstractEntitySelectorDialog getSelectorDialog() {
-                        // TODO Auto-generated method stub
-                        return null;
+                    protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
+                        return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, parent.getValue()
+                                .availablePaymentMethods()) {
+                            @Override
+                            public boolean onClickOk() {
+                                get(proto().paymentMethod()).setValue(getSelectedItems().iterator().next());
+                                return true;
+                            }
+                        };
                     }
                 });
             } else if (proto().amountType() == column.getObject()) {

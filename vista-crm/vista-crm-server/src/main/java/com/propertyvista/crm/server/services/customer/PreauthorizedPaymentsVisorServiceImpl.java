@@ -17,10 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPaymentsVisorService {
@@ -31,6 +34,13 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         dto.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
         Persistence.service().retrieveMember(dto.tenant().preauthorizedPayments());
+
+        EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), dto.tenant().customer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
+
+        dto.availablePaymentMethods().addAll(Persistence.service().query(criteria));
 
         callback.onSuccess(dto);
     }

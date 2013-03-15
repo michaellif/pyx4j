@@ -33,7 +33,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
-        main.setWidget(1, 0, inject(proto().tenant().preauthorizedPayments(), new PreauthorizedPaymentsFolder()));
+        main.setH4(1, 0, 1, proto().tenant().preauthorizedPayments().getMeta().getCaption());
+        main.setWidget(2, 0, inject(proto().tenant().preauthorizedPayments(), new PreauthorizedPaymentsFolder(this)));
 
         return main;
     }
