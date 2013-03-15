@@ -20,7 +20,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class OccupancyFacadeFactory implements FacadeFactory<OccupancyFacade> {
 
     @Override
-    public OccupancyFacade create() {
+    public OccupancyFacade getFacade() {
         if (VistaFeatures.instance().occupancyModel()) {
             return new OccupancyFacadeImpl();
         } else {

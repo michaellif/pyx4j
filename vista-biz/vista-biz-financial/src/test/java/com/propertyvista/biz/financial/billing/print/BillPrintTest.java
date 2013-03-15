@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
-import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.internal.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;

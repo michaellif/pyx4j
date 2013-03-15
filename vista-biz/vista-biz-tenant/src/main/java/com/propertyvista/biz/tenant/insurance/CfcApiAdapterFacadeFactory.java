@@ -26,7 +26,7 @@ public class CfcApiAdapterFacadeFactory implements FacadeFactory<CfcApiAdapterFa
     }
 
     @Override
-    public CfcApiAdapterFacade create() {
+    public CfcApiAdapterFacade getFacade() {
         TenantSureConfiguration cfgConfiguration = getTenantSureConfig();
         if (cfgConfiguration.useCfcApiAdapterMockup()) {
             return new CfcApiAdapterFacadeMockupImpl();

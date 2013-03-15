@@ -23,6 +23,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -80,4 +81,6 @@ public interface ARFacade {
     void updateArrearsHistory(Building building);
 
     List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount);
+
+    BillingFacade getBillingFacade();
 }

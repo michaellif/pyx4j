@@ -22,11 +22,11 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class ARFacadeFactory implements FacadeFactory<ARFacade> {
 
     @Override
-    public ARFacade create() {
+    public ARFacade getFacade() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return new ARYardiFacadeImpl();
+            return ARYardiFacadeImpl.instance();
         } else {
-            return new ARInternalFacadeImpl();
+            return ARInternalFacadeImpl.instance();
         }
     }
 

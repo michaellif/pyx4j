@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.ARAbstractTransactionManager;
 import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.internal.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;

@@ -25,7 +25,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
+import com.propertyvista.biz.financial.billing.internal.BillingUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -43,6 +45,18 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARInternalFacadeImpl implements ARFacade {
+
+    private static class SingletonHolder {
+        public static final ARInternalFacadeImpl INSTANCE = new ARInternalFacadeImpl();
+    }
+
+    public static ARInternalFacadeImpl instance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    private ARInternalFacadeImpl() {
+
+    }
 
     @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
@@ -144,6 +158,11 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
         return ARInternalTransactionManager.getInstance().getPADBalance(billingAccount, cycle);
+    }
+
+    @Override
+    public BillingFacade getBillingFacade() {
+        return BillingInternalFacadeImpl.instance();
     }
 
 }

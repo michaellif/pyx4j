@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -48,6 +49,18 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARYardiFacadeImpl implements ARFacade {
+
+    private static class SingletonHolder {
+        public static final ARYardiFacadeImpl INSTANCE = new ARYardiFacadeImpl();
+    }
+
+    public static ARYardiFacadeImpl instance() {
+        return SingletonHolder.INSTANCE;
+    }
+
+    private ARYardiFacadeImpl() {
+
+    }
 
     @Override
     public boolean validatePayment(PaymentRecord paymentRecord) throws ARException {
@@ -159,6 +172,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
         return ARYardiArrearsManager.getInstance().retrieveArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+    }
+
+    @Override
+    public BillingFacade getBillingFacade() {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -32,9 +32,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
-import com.propertyvista.biz.financial.billing.BillDateUtils;
-import com.propertyvista.biz.financial.billing.BillingManager;
-import com.propertyvista.biz.financial.billing.DateRange;
+import com.propertyvista.biz.financial.billing.internal.BillDateUtils;
+import com.propertyvista.biz.financial.billing.internal.BillingManager;
+import com.propertyvista.biz.financial.billing.internal.DateRange;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;

@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JRScriptletException;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.financial.billing.BillDateUtils;
+import com.propertyvista.biz.financial.billing.internal.BillDateUtils;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 

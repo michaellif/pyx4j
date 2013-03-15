@@ -24,9 +24,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.Filter;
 import com.pyx4j.commons.FilterIterator;
 import com.pyx4j.commons.LogicalDate;
@@ -39,19 +36,16 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.billing.internal.BillCreationResult;
+import com.propertyvista.biz.financial.billing.internal.BillingManager;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingProcessManager {
-
-    private static final I18n i18n = I18n.get(BillingProcessManager.class);
-
-    private final static Logger log = LoggerFactory.getLogger(BillingProcessManager.class);
 
     static void initializeFutureBillingCycles(final ExecutionMonitor executionMonitor) {
         for (final BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {

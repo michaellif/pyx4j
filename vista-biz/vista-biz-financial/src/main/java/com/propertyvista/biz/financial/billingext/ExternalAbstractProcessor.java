@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.financial.billingext;
 
-import com.propertyvista.biz.financial.billing.AbstractProcessor;
+import com.propertyvista.biz.financial.billing.internal.AbstractProcessor;
 
 public abstract class ExternalAbstractProcessor extends AbstractProcessor {
 

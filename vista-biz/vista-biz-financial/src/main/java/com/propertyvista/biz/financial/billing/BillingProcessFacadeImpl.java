@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.billing.BillingProcessFacade;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingProcessFacadeImpl implements BillingProcessFacade {
