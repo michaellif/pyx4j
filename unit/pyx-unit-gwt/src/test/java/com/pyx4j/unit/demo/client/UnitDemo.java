@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.widgets.client.style.theme.WindowsPalette;
 import com.pyx4j.widgets.client.style.theme.WindowsTheme;
@@ -35,7 +35,7 @@ public class UnitDemo implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
+        StyleManager.installTheme(new WindowsTheme(), new WindowsPalette());
 
         final Button startButton = new Button("Start Tests");
         RootPanel.get().add(startButton, 0, 0);

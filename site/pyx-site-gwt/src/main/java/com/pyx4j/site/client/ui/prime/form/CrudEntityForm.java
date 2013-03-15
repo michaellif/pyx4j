@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
@@ -139,7 +139,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         }
         StringBuilder html = new StringBuilder();
         //generate styles
-        html.append("<style>" + StyleManger.getThemeString() + "</style>");
+        html.append("<style>" + StyleManager.getThemeString() + "</style>");
         html.append("<body>" + printWidget.toString() + "</body>");
         return html.toString();
     }

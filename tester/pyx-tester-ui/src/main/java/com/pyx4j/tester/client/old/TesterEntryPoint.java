@@ -45,7 +45,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.images.Images;
@@ -85,7 +85,7 @@ public class TesterEntryPoint implements EntryPoint {
             }
         }.hideLoadingIndicator();
 
-        StyleManger.installTheme(new TesterTheme(), new TesterPalette());
+        StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
         ClientLogger.setDebugOn(true);
         ClientLogger.setTraceOn(true);

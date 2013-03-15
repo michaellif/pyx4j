@@ -43,7 +43,7 @@ public abstract class Property {
     protected String injectAlternativeHostForwarding(String value) {
         int urlIdx = value.indexOf("url(");
         if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
-            value = value.substring(0, urlIdx) + " url(" + StyleManger.getAlternativeHostname() + GWT.getModuleName() + "/" + value.substring(urlIdx + 4);
+            value = value.substring(0, urlIdx) + " url(" + StyleManager.getAlternativeHostname() + GWT.getModuleName() + "/" + value.substring(urlIdx + 4);
         }
         return value;
     }

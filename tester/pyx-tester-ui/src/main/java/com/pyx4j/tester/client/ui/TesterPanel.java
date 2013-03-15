@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
@@ -57,7 +57,7 @@ public class TesterPanel extends LayoutPanel {
 
         EventBus eventBus = AppSite.getEventBus();
 
-        StyleManger.installTheme(new TesterTheme(), new TesterPalette());
+        StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
         setStyleName(DEFAULT_STYLE_PREFIX);
 

@@ -22,14 +22,14 @@ package com.pyx4j.test.commons.css;
 
 import junit.framework.TestCase;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 
 public class StyleMangerTest extends TestCase {
 
     public void testAlternativeHostnames() {
-        StyleManger.setAlternativeHostnameSufix("www44.pyx4j.com", "www", "-a", "-b");
-        assertEquals("http://www-a.pyx4j.com/", StyleManger.getAlternativeHostname());
-        assertEquals("http://www-b.pyx4j.com/", StyleManger.getAlternativeHostname());
-        assertEquals("http://www-a.pyx4j.com/", StyleManger.getAlternativeHostname());
+        StyleManager.setAlternativeHostnameSufix("www44.pyx4j.com", "www", "-a", "-b");
+        assertEquals("http://www-a.pyx4j.com/", StyleManager.getAlternativeHostname());
+        assertEquals("http://www-b.pyx4j.com/", StyleManager.getAlternativeHostname());
+        assertEquals("http://www-a.pyx4j.com/", StyleManager.getAlternativeHostname());
     }
 }

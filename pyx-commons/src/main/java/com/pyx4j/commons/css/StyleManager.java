@@ -30,18 +30,18 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.StyleInjector;
 
-public class StyleManger {
+public class StyleManager {
 
-    private static final Logger log = LoggerFactory.getLogger(StyleManger.class);
+    private static final Logger log = LoggerFactory.getLogger(StyleManager.class);
 
     // add this class name to your not intended for print UI element:
     public static final String DO_NOT_PRINT_CLASS_NAME = "do-not-print";
 
     private static class SingletonHolder {
-        public static final StyleManger INSTANCE = new StyleManger();
+        public static final StyleManager INSTANCE = new StyleManager();
     }
 
-    public static StyleManger instance() {
+    public static StyleManager instance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -53,7 +53,7 @@ public class StyleManger {
 
     private static int alternativeHostnameIdx;
 
-    private StyleManger() {
+    private StyleManager() {
     }
 
     public static void setAlternativeHostnames(String... names) {

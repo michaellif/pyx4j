@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
@@ -54,7 +54,7 @@ public class TesterClientEntryPoint implements EntryPoint {
 
         ClientEntityFactory.ensureIEntityImplementations();
         UnrecoverableErrorHandlerDialog.register();
-        StyleManger.installTheme(new WindowsTheme(), new WindowsPalette());
+        StyleManager.installTheme(new WindowsTheme(), new WindowsPalette());
 
         ClientLogger.addAppender(new RPCAppender());
         ClientLogger.setDebugOn(true);

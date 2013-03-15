@@ -48,7 +48,7 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManger;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
@@ -67,7 +67,7 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     private Tab selectedTab;
 
     public TabPanel() {
-        double barHeight = StyleManger.getTheme().getTabHeight();
+        double barHeight = StyleManager.getTheme().getTabHeight();
         Unit barUnit = Unit.EM;
 
         LayoutPanel panel = new LayoutPanel();
