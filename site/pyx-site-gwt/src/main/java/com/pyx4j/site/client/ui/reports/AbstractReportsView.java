@@ -24,12 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.AbstractView;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
@@ -144,8 +146,13 @@ public abstract class AbstractReportsView extends AbstractView implements IRepor
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Print")));
-        addHeaderToolbarItem(new Button(i18n.tr("Export")));
+        addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
+            @Override
+            public void execute() {
+                print();
+            }
+        }));
+//        addHeaderToolbarItem(new Button(i18n.tr("Export")));
 
         resetCaption();
         setContentPane(new ScrollPanel(viewPanel));
@@ -198,6 +205,14 @@ public abstract class AbstractReportsView extends AbstractView implements IRepor
         MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
         settingsId = reportSettingsId;
         resetCaption();
+    }
+
+    public void print() {
+        print(DOM.clone(reportPanel.getElement(), true).getInnerHTML());
+    }
+
+    protected void print(String html) {
+        Print.preview(html);
     }
 
     private void setSettingsMode(boolean isAdvanced) {
