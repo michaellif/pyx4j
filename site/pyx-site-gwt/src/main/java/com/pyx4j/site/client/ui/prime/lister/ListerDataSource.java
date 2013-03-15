@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.prime.lister;
 
 import java.io.Serializable;
 import java.util.LinkedList;

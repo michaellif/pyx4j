@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.misc;
+package com.pyx4j.site.client.ui.prime.misc;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CTextFieldBase;

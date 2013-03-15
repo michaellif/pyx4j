@@ -18,14 +18,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.form;
+package com.pyx4j.site.client.ui.prime.form;
 
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
-public abstract class AbstractForm<E extends IEntity> extends AbstractView implements IForm<E> {
+public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane implements IForm<E> {
 
     private CrudEntityForm<E> form;
 

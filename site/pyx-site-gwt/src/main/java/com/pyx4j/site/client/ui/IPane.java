@@ -20,10 +20,8 @@
  */
 package com.pyx4j.site.client.ui;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.visor.IVisor;
 
 public interface IPane extends IsWidget {
@@ -34,12 +32,6 @@ public interface IPane extends IsWidget {
 
         void refresh();
     }
-
-    IMemento getMemento();
-
-    void storeState(Place place);
-
-    void restoreState();
 
     void showVisor(IVisor visor, String caption);
 

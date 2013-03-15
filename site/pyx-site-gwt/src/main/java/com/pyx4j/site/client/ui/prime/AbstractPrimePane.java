@@ -18,19 +18,29 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.ui.prime;
+
+import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.ui.AbstractView;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
+import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
-public abstract class AbstractVisorHolder extends AbstractView {
+public class AbstractPrimePane extends AbstractView implements IPrimePane {
 
-    public AbstractVisorHolder(IVisor visor, String caption, final IPane parent) {
-        super();
-        setStyleName(DefaultPaneTheme.StyleName.Visor.name());
-        setContentPane(visor);
-        setCaption(caption);
+    private final IMemento memento = new MementoImpl();
+
+    @Override
+    public IMemento getMemento() {
+        return memento;
     }
 
+    @Override
+    public void storeState(Place place) {
+        memento.setCurrentPlace(place);
+    }
+
+    @Override
+    public void restoreState() {
+    }
 }

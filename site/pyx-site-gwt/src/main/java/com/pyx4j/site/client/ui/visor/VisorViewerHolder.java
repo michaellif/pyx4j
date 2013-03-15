@@ -28,8 +28,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
 public class VisorViewerHolder extends AbstractVisorHolder {
@@ -38,7 +38,7 @@ public class VisorViewerHolder extends AbstractVisorHolder {
         super(visor, caption, parent);
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());
-        closeImage.addStyleName(DefaultCrudPaneTheme.StyleName.VisorCloseButton.name());
+        closeImage.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
 
         closeImage.addClickHandler(new ClickHandler() {
             @Override

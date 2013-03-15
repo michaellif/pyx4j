@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.wizard;
+package com.pyx4j.site.client.ui.prime.wizard;
 
 import java.util.List;
 
@@ -47,9 +47,9 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     private final WizardPanel wizardPanel;
 
-    private final IWizardView<? extends IEntity> view;
+    private final IWizard<? extends IEntity> view;
 
-    public WizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view) {
+    public WizardForm(Class<E> rootClass, final IWizard<? extends IEntity> view) {
         super(rootClass);
         this.view = view;
         wizardPanel = new WizardPanel();

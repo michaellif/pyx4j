@@ -33,8 +33,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
-import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
+import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.tester.client.domain.test.DomainFactory;
 import com.pyx4j.tester.client.domain.test.ListerDataItem;
 

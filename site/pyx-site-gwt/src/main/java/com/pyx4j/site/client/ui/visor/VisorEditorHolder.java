@@ -24,8 +24,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.resources.SiteImages;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.widgets.client.Button;
 
 public class VisorEditorHolder extends AbstractVisorHolder {
@@ -39,7 +39,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
                 parent.hideVisor();
             }
         });
-        backButton.addStyleName(DefaultCrudPaneTheme.StyleName.VisorCloseButton.name());
+        backButton.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
 
         getHeaderCaption().add(backButton);
 

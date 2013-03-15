@@ -21,7 +21,6 @@
 package com.pyx4j.site.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,9 +28,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
-import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.pyx4j.site.client.ui.visor.IVisorViewer;
@@ -66,35 +62,33 @@ public abstract class AbstractView extends DockLayoutPanel implements IPane {
 
     private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
-    private final IMemento memento = new MementoImpl();
-
     public AbstractView() {
         super(Unit.PX);
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
-        captionLabel.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
         headerCaption.add(captionLabel);
-        headerCaption.setStyleName(DefaultCrudPaneTheme.StyleName.Header.name());
+        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
         addNorth(headerCaption, TOOLBAR_DEFAULT_HEIGHT);
 
         headerContainer = new FlowPanel();
-        headerContainer.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderContainer.name());
+        headerContainer.setStyleName(DefaultPaneTheme.StyleName.HeaderContainer.name());
         addNorth(headerContainer, 0);
 
         headerToolbarHolder = new SimplePanel();
-        headerToolbarHolder.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderToolbar.name());
+        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
 
         headerContainer.add(headerToolbarHolder);
 
         headerBreadcrumbHolder = new SimplePanel();
-        headerBreadcrumbHolder.setStyleName(DefaultCrudPaneTheme.StyleName.HeaderBreadcrumbs.name());
+        headerBreadcrumbHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderBreadcrumbs.name());
         headerContainer.add(headerBreadcrumbHolder);
 
         footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.setStyleName(DefaultCrudPaneTheme.StyleName.FooterToolbar.name());
+        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
@@ -167,20 +161,6 @@ public abstract class AbstractView extends DockLayoutPanel implements IPane {
         if (footerToolbar.getWidgetCount() == 0) {
             setWidgetSize(footerToolbarHolder, footerToolbarHeight);
         }
-    }
-
-    @Override
-    public IMemento getMemento() {
-        return memento;
-    }
-
-    @Override
-    public void storeState(Place place) {
-        memento.setCurrentPlace(place);
-    }
-
-    @Override
-    public void restoreState() {
     }
 
 }

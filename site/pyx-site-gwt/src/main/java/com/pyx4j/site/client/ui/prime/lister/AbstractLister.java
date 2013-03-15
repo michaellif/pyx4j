@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.prime.lister;
 
 import java.util.List;
 

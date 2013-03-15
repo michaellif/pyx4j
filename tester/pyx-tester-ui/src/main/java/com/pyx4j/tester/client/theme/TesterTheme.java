@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -69,7 +69,7 @@ public class TesterTheme extends Theme {
             }
         });
 
-        addTheme(new DefaultCrudPaneTheme());
+        addTheme(new DefaultPaneTheme());
         addTheme(new DefaultDataTableTheme());
 
         addTheme(new DefaultDatePickerTheme());

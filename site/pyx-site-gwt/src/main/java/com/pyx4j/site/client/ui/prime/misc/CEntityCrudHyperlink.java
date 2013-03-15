@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.misc;
+package com.pyx4j.site.client.ui.prime.misc;
 
 import com.google.gwt.user.client.Command;
 

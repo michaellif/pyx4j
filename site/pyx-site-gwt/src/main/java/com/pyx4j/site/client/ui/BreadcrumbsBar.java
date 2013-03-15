@@ -35,12 +35,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 
 public class BreadcrumbsBar extends HorizontalPanel {
 
     public BreadcrumbsBar() {
-        setStyleName(DefaultCrudPaneTheme.StyleName.BreadcrumbsBar.name());
+        setStyleName(DefaultPaneTheme.StyleName.BreadcrumbsBar.name());
     }
 
     public void populate(Vector<IEntity> breadcrumbTrail) {
@@ -73,7 +72,7 @@ public class BreadcrumbsBar extends HorizontalPanel {
         private final Label anchor;
 
         public BreadcrumbAnchor(final IEntity breadcrumb) {
-            setStyleName(DefaultCrudPaneTheme.StyleName.BreadcrumbAnchor.name());
+            setStyleName(DefaultPaneTheme.StyleName.BreadcrumbAnchor.name());
 
             String label = !breadcrumb.getStringView().isEmpty() ? breadcrumb.getStringView() : breadcrumb.getEntityMeta().getCaption();
             anchor = new Label(label);

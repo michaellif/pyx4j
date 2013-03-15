@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.wizard;
+package com.pyx4j.site.client.ui.prime.wizard;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -27,25 +27,25 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class WizardViewImplBase<E extends IEntity> extends AbstractView implements IWizardView<E> {
+public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePane implements IWizard<E> {
 
-    private static final I18n i18n = I18n.get(WizardViewImplBase.class);
+    private static final I18n i18n = I18n.get(AbstractWizard.class);
 
     private WizardForm<E> form;
 
-    private IWizardView.Presenter presenter;
+    private IWizard.Presenter presenter;
 
     private final Button btnPrevious;
 
     private final Button btnNext;
 
-    public WizardViewImplBase(Class<? extends AppPlace> placeClass) {
+    public AbstractWizard(Class<? extends AppPlace> placeClass) {
         super();
         setCaption(placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
 
@@ -120,12 +120,12 @@ public class WizardViewImplBase<E extends IEntity> extends AbstractView implemen
     }
 
     @Override
-    public void setPresenter(IWizardView.Presenter presenter) {
+    public void setPresenter(IWizard.Presenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public IWizardView.Presenter getPresenter() {
+    public IWizard.Presenter getPresenter() {
         return presenter;
     }
 

@@ -14,37 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Created on 2011-06-09
+ * Created on 2011-05-17
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.wizard;
+package com.pyx4j.site.client.ui.prime.form;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IPane;
 
-public interface IWizardView<E extends IEntity> extends IPane {
+public interface IViewer<E extends IEntity> extends IForm<E> {
 
-    public interface Presenter extends IPane.Presenter {
+    public interface Presenter extends IForm.Presenter {
 
-        void finish();
+        boolean canEdit();
+
+        void edit();
 
         void cancel();
+
+        void view(Key entityId);
+
+        void approveFinal();
     }
-
-    void populate(E value);
-
-    void reset();
-
-    public E getValue();
-
-    public boolean isDirty();
 
     void setPresenter(Presenter presenter);
 
     Presenter getPresenter();
-
-    boolean onSaveFail(Throwable caught);
-
-    void onStepChange();
 }

@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.prime.lister;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.AbstractView;
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
 
 public class ListerViewImplBase<E extends IEntity> extends AbstractView implements ILister<E> {
 

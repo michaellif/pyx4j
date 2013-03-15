@@ -18,14 +18,23 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui.prime;
+
+import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface ICrudPane extends IPane {
+public interface IPrimePane extends IPane {
 
     public interface Presenter extends IPane.Presenter {
         AppPlace getPlace();
     }
+
+    IMemento getMemento();
+
+    void storeState(Place place);
+
+    void restoreState();
 }

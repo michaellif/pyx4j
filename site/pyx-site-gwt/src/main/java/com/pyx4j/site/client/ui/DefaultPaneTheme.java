@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud;
+package com.pyx4j.site.client.ui;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultCrudPaneTheme extends Theme {
+public class DefaultPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         Header, HeaderCaption, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
@@ -35,7 +35,7 @@ public class DefaultCrudPaneTheme extends Theme {
         Visor, VisorCloseButton
     }
 
-    public DefaultCrudPaneTheme() {
+    public DefaultPaneTheme() {
         initStyles();
     }
 

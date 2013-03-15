@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.prime.lister;
 
 import java.util.List;
 
@@ -26,12 +26,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.crud.ICrudPane;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public interface ILister<E extends IEntity> extends ICrudPane {
+public interface ILister<E extends IEntity> extends IPrimePane {
 
-    public interface Presenter<E extends IEntity> extends ICrudPane.Presenter {
+    public interface Presenter<E extends IEntity> extends IPrimePane.Presenter {
 
         public ListerDataSource<E> getDataSource();
 

@@ -18,12 +18,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.form;
+package com.pyx4j.site.client.ui.prime.form;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.crud.ICrudPane;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 
-public interface IForm<E extends IEntity> extends ICrudPane {
+public interface IForm<E extends IEntity> extends IPrimePane {
 
     void populate(E value);
 

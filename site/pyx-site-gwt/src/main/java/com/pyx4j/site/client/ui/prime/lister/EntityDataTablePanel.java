@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.crud.lister;
+package com.pyx4j.site.client.ui.prime.lister;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,10 +41,10 @@ import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
-import com.pyx4j.site.client.ui.crud.lister.AbstractLister.ItemSelectionHandler;
-import com.pyx4j.site.client.ui.crud.misc.IMemento;
-import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
+import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
 public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
@@ -74,7 +74,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public EntityDataTablePanel(Class<E> clazz) {
         this.clazz = clazz;
-        setStyleName(DefaultCrudPaneTheme.StyleName.Lister.name());
+        setStyleName(DefaultPaneTheme.StyleName.Lister.name());
         dataTablePanel = new DataTablePanel<E>(clazz);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
@@ -130,7 +130,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTablePanel.setPageSizeOptions(Arrays.asList(new Integer[] { PAGESIZE_SMALL, PAGESIZE_MEDIUM, PAGESIZE_LARGE }));
 
         dataTablePanel.setPageSize(ApplicationMode.isDevelopment() ? PAGESIZE_SMALL : PAGESIZE_MEDIUM);
-        dataTablePanel.setStyleName(DefaultCrudPaneTheme.StyleName.ListerListPanel.name());
+        dataTablePanel.setStyleName(DefaultPaneTheme.StyleName.ListerListPanel.name());
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
