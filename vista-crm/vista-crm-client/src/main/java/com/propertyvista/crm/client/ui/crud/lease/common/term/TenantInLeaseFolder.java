@@ -52,6 +52,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -113,7 +114,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    // TODO add call to PAP visor here... 
+                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant()).show(parentView);
                 }
             });
         }

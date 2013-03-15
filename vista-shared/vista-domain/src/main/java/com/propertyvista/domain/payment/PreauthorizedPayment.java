@@ -49,6 +49,7 @@ public interface PreauthorizedPayment extends IEntity {
     @ToString(index = 0)
     IPrimitive<AmountType> amountType();
 
+    @NotNull
     @ToString(index = 1)
     @Format("#,##0.00")
     IPrimitive<BigDecimal> amount();

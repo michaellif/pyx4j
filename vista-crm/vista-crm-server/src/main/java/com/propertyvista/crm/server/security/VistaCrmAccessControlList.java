@@ -71,6 +71,7 @@ import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
@@ -359,6 +360,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(TenantPasswordChangeService.class));
 
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PreauthorizedPaymentsVisorService.class));
 
 // - Billing
         grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));
