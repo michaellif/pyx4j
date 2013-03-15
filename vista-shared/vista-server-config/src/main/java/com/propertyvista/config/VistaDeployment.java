@@ -149,8 +149,6 @@ public class VistaDeployment {
             break;
         case resident:
             target = DnsNameTarget.residentPortal;
-        case field:
-            target = DnsNameTarget.field;
             break;
         default:
             throw new IllegalArgumentException();
@@ -176,8 +174,6 @@ public class VistaDeployment {
                     .getDefaultBaseURLresidentPortal(pmc.dnsName().getValue(), secure);
         case vistaCrm:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm(pmc.dnsName().getValue());
-        case field:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaField(pmc.dnsName().getValue());
         default:
             throw new IllegalArgumentException();
         }
