@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
-@Caption(name = "Payment Record Report")
+@Caption(name = "PAP Report")
 public interface PapReportMetadata extends ReportMetadata {
 
     IPrimitive<LogicalDate> from();

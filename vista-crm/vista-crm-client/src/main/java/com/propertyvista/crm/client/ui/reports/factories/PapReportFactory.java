@@ -34,9 +34,9 @@ import com.propertyvista.crm.client.ui.reports.factories.pad.PadReportForm;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.reports.PapReportMetadata;
 
-public class PaymentRecordReportFactory implements ReportFactory<PapReportMetadata> {
+public class PapReportFactory implements ReportFactory<PapReportMetadata> {
 
-    public static I18n i18n = I18n.get(PaymentRecordReportFactory.class);
+    public static I18n i18n = I18n.get(PapReportFactory.class);
 
     private static List<ColumnDescriptor> COLUMN_DESCRIPTORS;
     static {
