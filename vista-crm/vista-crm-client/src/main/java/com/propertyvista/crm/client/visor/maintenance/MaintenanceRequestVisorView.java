@@ -16,9 +16,9 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.IVisorViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.site.client.ui.visor.IVisorViewer;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -29,7 +29,7 @@ public class MaintenanceRequestVisorView extends ScrollPanel implements IVisorVi
 
     private final MaintenanceRequestVisorController controller;
 
-    private final IListerView<MaintenanceRequestDTO> lister;
+    private final ILister<MaintenanceRequestDTO> lister;
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
         this.controller = controller;
@@ -40,7 +40,7 @@ public class MaintenanceRequestVisorView extends ScrollPanel implements IVisorVi
         getElement().getStyle().setProperty("padding", "6px");
     }
 
-    public IListerView<MaintenanceRequestDTO> getLister() {
+    public ILister<MaintenanceRequestDTO> getLister() {
         return lister;
     }
 }

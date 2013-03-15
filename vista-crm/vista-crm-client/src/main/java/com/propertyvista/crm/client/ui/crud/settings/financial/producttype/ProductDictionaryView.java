@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -26,9 +26,9 @@ public interface ProductDictionaryView extends IViewer<ProductItemType> {
     public interface Presenter extends IViewer.Presenter {
     }
 
-    IListerView<ServiceItemType> getServiceListerView();
+    ILister<ServiceItemType> getServiceListerView();
 
-    IListerView<FeatureItemType> getFeatureListerView();
+    ILister<FeatureItemType> getFeatureListerView();
 
-    IListerView<Utility> getUtilityListerView();
+    ILister<Utility> getUtilityListerView();
 }

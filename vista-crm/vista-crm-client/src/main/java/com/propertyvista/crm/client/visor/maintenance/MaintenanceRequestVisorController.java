@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.client.ui.crud.lister.ILister.Presenter;
 
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.visor.IVisorController;

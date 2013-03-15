@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class LeaseAdjustmentLister extends ListerBase<LeaseAdjustment> {
+public class LeaseAdjustmentLister extends AbstractLister<LeaseAdjustment> {
 
     public LeaseAdjustmentLister() {
         super(LeaseAdjustment.class, true);

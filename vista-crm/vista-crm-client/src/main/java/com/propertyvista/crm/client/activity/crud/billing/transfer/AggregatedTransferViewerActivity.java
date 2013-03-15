@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -33,11 +33,11 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
 
-    private final IListerView.Presenter<PaymentRecord> paymentLister;
+    private final ILister.Presenter<PaymentRecord> paymentLister;
 
-    private final IListerView.Presenter<PaymentRecord> returnedPaymentLister;
+    private final ILister.Presenter<PaymentRecord> returnedPaymentLister;
 
-    private final IListerView.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
+    private final ILister.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
         super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT

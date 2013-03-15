@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Label;
 
@@ -97,7 +97,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
 
     private Label asOf;
 
-    private BasicLister<UnitAvailabilityStatusDTO> lister;
+    private EntityDataTablePanel<UnitAvailabilityStatusDTO> lister;
 
     public UnitAvailabilityGadget(UnitAvailabilityGadgetMetadata gmd) {
         super(gmd, UnitAvailabilityGadgetMetadata.class, new UnitAvailabilityGadgetMetatadaForm());
@@ -162,7 +162,7 @@ public class UnitAvailabilityGadget extends GadgetInstanceBase<UnitAvailabilityG
         gadgetPanel.add(initAsOfBannerPanel());
         gadgetPanel.add(initFilterDisplayPanel());
 
-        lister = new BasicLister<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
+        lister = new EntityDataTablePanel<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class);
         lister.setDataSource(new ListerDataSource<UnitAvailabilityStatusDTO>(UnitAvailabilityStatusDTO.class, GWT
                 .<UnitAvailabilityStatusListService> create(UnitAvailabilityStatusListService.class)));
         ListerUtils.bind(lister.getDataTablePanel())//@formatter:off

@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleLister extends ListerBase<DepositLifecycleDTO> {
+public class DepositLifecycleLister extends AbstractLister<DepositLifecycleDTO> {
 
     private final static I18n i18n = I18n.get(DepositLifecycleLister.class);
 

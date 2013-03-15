@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 
-public interface CardServiceSimulationCardListerView extends IListerView<CardServiceSimulationCard> {
+public interface CardServiceSimulationCardListerView extends ILister<CardServiceSimulationCard> {
 
 }

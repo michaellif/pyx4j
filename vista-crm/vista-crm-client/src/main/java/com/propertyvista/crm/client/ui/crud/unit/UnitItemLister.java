@@ -18,11 +18,11 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
-public class UnitItemLister extends ListerBase<AptUnitItem> {
+public class UnitItemLister extends AbstractLister<AptUnitItem> {
 
     public UnitItemLister() {
         super(AptUnitItem.class, true);

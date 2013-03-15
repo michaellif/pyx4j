@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 
-public class RunDataLister extends ListerBase<RunData> {
+public class RunDataLister extends AbstractLister<RunData> {
 
     public RunDataLister() {
         super(RunData.class, false);

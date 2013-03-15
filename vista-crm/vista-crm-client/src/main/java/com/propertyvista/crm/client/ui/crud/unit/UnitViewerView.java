@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.unit;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -36,9 +36,9 @@ public interface UnitViewerView extends IViewer<AptUnitDTO> {
         void makeVacant(LogicalDate vacantFrom);
     }
 
-    IListerView<AptUnitItem> getUnitItemsListerView();
+    ILister<AptUnitItem> getUnitItemsListerView();
 
-    IListerView<AptUnitOccupancySegment> getOccupanciesListerView();
+    ILister<AptUnitOccupancySegment> getOccupanciesListerView();
 
     void setCanScopeOffMarket(boolean canScopeOffMarket);
 

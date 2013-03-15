@@ -42,7 +42,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -85,13 +85,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    private final IListerView<DepositLifecycleDTO> depositLister;
+    private final ILister<DepositLifecycleDTO> depositLister;
 
-    private final IListerView<BillDataDTO> billLister;
+    private final ILister<BillDataDTO> billLister;
 
-    private final IListerView<PaymentRecordDTO> paymentLister;
+    private final ILister<PaymentRecordDTO> paymentLister;
 
-    private final IListerView<LeaseAdjustment> adjustmentLister;
+    private final ILister<LeaseAdjustment> adjustmentLister;
 
     private final MenuItem viewApplication;
 
@@ -474,22 +474,22 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     @Override
-    public IListerView<DepositLifecycleDTO> getDepositListerView() {
+    public ILister<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }
 
     @Override
-    public IListerView<BillDataDTO> getBillListerView() {
+    public ILister<BillDataDTO> getBillListerView() {
         return billLister;
     }
 
     @Override
-    public IListerView<PaymentRecordDTO> getPaymentListerView() {
+    public ILister<PaymentRecordDTO> getPaymentListerView() {
         return paymentLister;
     }
 
     @Override
-    public IListerView<LeaseAdjustment> getLeaseAdjustmentListerView() {
+    public ILister<LeaseAdjustment> getLeaseAdjustmentListerView() {
         return adjustmentLister;
     }
 

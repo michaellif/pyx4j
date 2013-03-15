@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 
-public interface LegalDocumentationPolicyListerView extends IListerView<LegalDocumentationPolicyDTO> {
+public interface LegalDocumentationPolicyListerView extends ILister<LegalDocumentationPolicyDTO> {
 
 }

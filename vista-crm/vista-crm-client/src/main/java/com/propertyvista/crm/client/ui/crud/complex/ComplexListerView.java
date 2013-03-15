@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.dto.ComplexDTO;
 
-public interface ComplexListerView extends IListerView<ComplexDTO> {
+public interface ComplexListerView extends ILister<ComplexDTO> {
 
 }

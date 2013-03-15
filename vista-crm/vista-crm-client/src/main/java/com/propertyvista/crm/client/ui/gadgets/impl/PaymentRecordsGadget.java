@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -79,7 +79,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
     private HTML titlePanel;
 
-    private BasicLister<PaymentRecordForReportDTO> lister;
+    private EntityDataTablePanel<PaymentRecordForReportDTO> lister;
 
     public PaymentRecordsGadget(PaymentRecordsGadgetMetadata gadgetMetadata) {
         super(gadgetMetadata, PaymentRecordsGadgetMetadata.class, new PaymentRecordsGadgetMetadataForm());
@@ -125,7 +125,7 @@ public class PaymentRecordsGadget extends GadgetInstanceBase<PaymentRecordsGadge
 
         contentPanel.add(initTitleWidget());
 
-        lister = new BasicLister<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
+        lister = new EntityDataTablePanel<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class);
         lister.setDataSource(new ListerDataSource<PaymentRecordForReportDTO>(PaymentRecordForReportDTO.class, GWT
                 .<PaymentRecordsGadgetListService> create(PaymentRecordsGadgetListService.class)));
         ListerUtils.bind(lister.getDataTablePanel())//@formatter:off

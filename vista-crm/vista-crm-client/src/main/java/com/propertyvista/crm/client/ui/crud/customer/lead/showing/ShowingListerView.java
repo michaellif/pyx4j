@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public interface ShowingListerView extends IListerView<ShowingDTO> {
+public interface ShowingListerView extends ILister<ShowingDTO> {
 
     void setAddNewVisible(boolean visible);
 }

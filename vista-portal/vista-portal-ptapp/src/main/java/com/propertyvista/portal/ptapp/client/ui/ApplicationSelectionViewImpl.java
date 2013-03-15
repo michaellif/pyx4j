@@ -26,8 +26,8 @@ import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase.ItemSelectionHandler;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
 
@@ -95,7 +95,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         this.presenter = presenter;
     }
 
-    private class ApplicationsLister extends BasicLister<OnlineApplicationContextDTO> {
+    private class ApplicationsLister extends EntityDataTablePanel<OnlineApplicationContextDTO> {
 
         public ApplicationsLister() {
             super(OnlineApplicationContextDTO.class, false, false);

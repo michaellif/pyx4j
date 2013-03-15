@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -30,11 +30,11 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     private static final I18n i18n = I18n.get(AggregatedTransferViewerViewImpl.class);
 
-    private final IListerView<PaymentRecord> paymentLister;
+    private final ILister<PaymentRecord> paymentLister;
 
-    private final IListerView<PaymentRecord> returnedPaymentLister;
+    private final ILister<PaymentRecord> returnedPaymentLister;
 
-    private final IListerView<PaymentRecord> rejectedBatchPaymentsLister;
+    private final ILister<PaymentRecord> rejectedBatchPaymentsLister;
 
     private final MenuItem cancelAction;
 
@@ -77,17 +77,17 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     }
 
     @Override
-    public IListerView<PaymentRecord> getPaymentsListerView() {
+    public ILister<PaymentRecord> getPaymentsListerView() {
         return paymentLister;
     }
 
     @Override
-    public IListerView<PaymentRecord> getReturnedPaymentsListerView() {
+    public ILister<PaymentRecord> getReturnedPaymentsListerView() {
         return returnedPaymentLister;
     }
 
     @Override
-    public IListerView<PaymentRecord> getRejectedBatchPaymentsListerView() {
+    public ILister<PaymentRecord> getRejectedBatchPaymentsListerView() {
         return rejectedBatchPaymentsLister;
     }
 }

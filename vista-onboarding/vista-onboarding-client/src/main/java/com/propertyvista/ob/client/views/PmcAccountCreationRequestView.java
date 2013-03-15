@@ -15,13 +15,13 @@ package com.propertyvista.ob.client.views;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.crud.ICrudPane;
 
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 
-public interface PmcAccountCreationRequestView extends IView {
+public interface PmcAccountCreationRequestView extends ICrudPane {
 
-    interface Presenter extends IView.Presenter {
+    interface Presenter extends ICrudPane.Presenter {
 
         void checkDns(AsyncCallback<Boolean> callback, String dnsName);
 

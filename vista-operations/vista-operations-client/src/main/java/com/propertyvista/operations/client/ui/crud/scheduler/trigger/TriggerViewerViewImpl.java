@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -36,7 +36,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
 
     private static final I18n i18n = I18n.get(TriggerEditorViewImpl.class);
 
-    private final IListerView<Run> runLister;
+    private final ILister<Run> runLister;
 
     private final Button runImmediately;
 
@@ -81,7 +81,7 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
     }
 
     @Override
-    public IListerView<Run> getRunListerView() {
+    public ILister<Run> getRunListerView() {
         return runLister;
     }
 

@@ -28,15 +28,15 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.BreadcrumbsBar;
-import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
-import com.pyx4j.site.client.ui.crud.form.BasicViewer;
+import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
+import com.pyx4j.site.client.ui.crud.form.AbstractViewer;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
-public class CrmViewerViewImplBase<E extends IEntity> extends BasicViewer<E> {
+public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> {
 
     private static final I18n i18n = I18n.get(CrmViewerViewImplBase.class);
 
@@ -136,29 +136,29 @@ public class CrmViewerViewImplBase<E extends IEntity> extends BasicViewer<E> {
 
     public void setActionHighlighted(MenuItem action, boolean highlight) {
         if (highlight) {
-            action.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-            actionsButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+            action.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+            actionsButton.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
         } else {
-            action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+            action.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
 
             boolean highlighted = false;
             for (MenuItem a : actionsMenu.getItems()) {
-                highlighted = a.getStyleName().contains(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+                highlighted = a.getStyleName().contains(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
                 if (highlighted) {
                     break;
                 }
             }
             if (!highlighted) {
-                actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                actionsButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
             }
         }
     }
 
     public void resetActionHighlighting() {
         for (MenuItem action : actionsMenu.getItems()) {
-            action.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
+            action.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
         }
-        actionsButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+        actionsButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
     }
 
     public void setNotesEnabled(boolean enabled) {
@@ -191,11 +191,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends BasicViewer<E> {
                 finalizeMenu.setVisible(visible);
 
                 if (visible) {
-                    finalizeMenu.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-                    versioningButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                    finalizeMenu.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+                    versioningButton.addStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
                 } else {
-                    finalizeMenu.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedAction.name());
-                    versioningButton.removeStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+                    finalizeMenu.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedAction.name());
+                    versioningButton.removeStyleName(DefaultCrudPaneTheme.StyleName.HighlightedButton.name());
                 }
             }
         }

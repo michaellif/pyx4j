@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.padsimulation.batch;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 
-public class PadBatchLister extends ListerBase<PadSimBatch> {
+public class PadBatchLister extends AbstractLister<PadSimBatch> {
 
     public PadBatchLister() {
         super(PadSimBatch.class, true);

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
 
 public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> implements RunViewerView {
 
-    private final IListerView<RunData> runDataLister;
+    private final ILister<RunData> runDataLister;
 
     public RunViewerViewImpl() {
         super(true);
@@ -34,7 +34,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     }
 
     @Override
-    public IListerView<RunData> getRunDataListerView() {
+    public ILister<RunData> getRunDataListerView() {
         return runDataLister;
     }
 

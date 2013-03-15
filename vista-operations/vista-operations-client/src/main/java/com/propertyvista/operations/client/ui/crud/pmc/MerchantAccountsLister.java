@@ -15,13 +15,13 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class MerchantAccountsLister extends BasicLister<PmcMerchantAccountDTO> {
+public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAccountDTO> {
 
     private Pmc parentPmc;
 

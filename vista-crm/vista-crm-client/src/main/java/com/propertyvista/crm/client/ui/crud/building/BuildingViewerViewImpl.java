@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -60,27 +60,27 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private static final I18n i18n = I18n.get(BuildingViewerViewImpl.class);
 
-    private final IListerView<FloorplanDTO> floorplanLister;
+    private final ILister<FloorplanDTO> floorplanLister;
 
-    private final IListerView<AptUnitDTO> unitLister;
+    private final ILister<AptUnitDTO> unitLister;
 
-    private final IListerView<ElevatorDTO> elevatorLister;
+    private final ILister<ElevatorDTO> elevatorLister;
 
-    private final IListerView<BoilerDTO> boilerLister;
+    private final ILister<BoilerDTO> boilerLister;
 
-    private final IListerView<RoofDTO> roofLister;
+    private final ILister<RoofDTO> roofLister;
 
-    private final IListerView<ParkingDTO> parkingLister;
+    private final ILister<ParkingDTO> parkingLister;
 
-    private final IListerView<LockerAreaDTO> lockerAreaLister;
+    private final ILister<LockerAreaDTO> lockerAreaLister;
 
-    private final IListerView<Service> serviceLister;
+    private final ILister<Service> serviceLister;
 
-    private final IListerView<Feature> featureLister;
+    private final ILister<Feature> featureLister;
 
-    private final IListerView<Concession> concessionLister;
+    private final ILister<Concession> concessionLister;
 
-    private final IListerView<BillingCycleDTO> billingCycleLister;
+    private final ILister<BillingCycleDTO> billingCycleLister;
 
     private final ButtonMenuBar dashboardsMenu;
 
@@ -113,57 +113,57 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public IListerView<FloorplanDTO> getFloorplanListerView() {
+    public ILister<FloorplanDTO> getFloorplanListerView() {
         return floorplanLister;
     }
 
     @Override
-    public IListerView<AptUnitDTO> getUnitListerView() {
+    public ILister<AptUnitDTO> getUnitListerView() {
         return unitLister;
     }
 
     @Override
-    public IListerView<ElevatorDTO> getElevatorListerView() {
+    public ILister<ElevatorDTO> getElevatorListerView() {
         return elevatorLister;
     }
 
     @Override
-    public IListerView<BoilerDTO> getBoilerListerView() {
+    public ILister<BoilerDTO> getBoilerListerView() {
         return boilerLister;
     }
 
     @Override
-    public IListerView<RoofDTO> getRoofListerView() {
+    public ILister<RoofDTO> getRoofListerView() {
         return roofLister;
     }
 
     @Override
-    public IListerView<ParkingDTO> getParkingListerView() {
+    public ILister<ParkingDTO> getParkingListerView() {
         return parkingLister;
     }
 
     @Override
-    public IListerView<LockerAreaDTO> getLockerAreaListerView() {
+    public ILister<LockerAreaDTO> getLockerAreaListerView() {
         return lockerAreaLister;
     }
 
     @Override
-    public IListerView<Service> getServiceListerView() {
+    public ILister<Service> getServiceListerView() {
         return serviceLister;
     }
 
     @Override
-    public IListerView<Feature> getFeatureListerView() {
+    public ILister<Feature> getFeatureListerView() {
         return featureLister;
     }
 
     @Override
-    public IListerView<Concession> getConcessionListerView() {
+    public ILister<Concession> getConcessionListerView() {
         return concessionLister;
     }
 
     @Override
-    public IListerView<BillingCycleDTO> getBillingCycleListerView() {
+    public ILister<BillingCycleDTO> getBillingCycleListerView() {
         return billingCycleLister;
     }
 

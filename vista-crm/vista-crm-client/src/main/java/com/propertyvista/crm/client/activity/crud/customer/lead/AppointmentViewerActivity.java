@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> implements AppointmentViewerView.Presenter {
 
-    private final IListerView.Presenter<ShowingDTO> showingsLister;
+    private final ILister.Presenter<ShowingDTO> showingsLister;
 
     public AppointmentViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(AppointmentViewerView.class), GWT.<AppointmentCrudService> create(AppointmentCrudService.class));

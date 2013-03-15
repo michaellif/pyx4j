@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.crud.CrudEntityForm;
+import com.pyx4j.site.client.ui.crud.form.CrudEntityForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.rpc.PmcDTO;

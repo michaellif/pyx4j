@@ -31,7 +31,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillListerController;
@@ -62,13 +62,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final IListerView.Presenter<DepositLifecycleDTO> depositLister;
+    private final ILister.Presenter<DepositLifecycleDTO> depositLister;
 
-    private final IListerView.Presenter<BillDataDTO> billLister;
+    private final ILister.Presenter<BillDataDTO> billLister;
 
-    private final IListerView.Presenter<PaymentRecordDTO> paymentLister;
+    private final ILister.Presenter<PaymentRecordDTO> paymentLister;
 
-    private final IListerView.Presenter<LeaseAdjustment> leaseAdjustmentLister;
+    private final ILister.Presenter<LeaseAdjustment> leaseAdjustmentLister;
 
     private LeaseDTO currentValue;
 

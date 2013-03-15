@@ -14,11 +14,11 @@
 package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 
-public class PadFileLister extends ListerBase<PadSimFile> {
+public class PadFileLister extends AbstractLister<PadSimFile> {
 
     public PadFileLister() {
         super(PadSimFile.class, false);

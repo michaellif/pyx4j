@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -39,9 +39,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final static I18n i18n = I18n.get(UnitViewerViewImpl.class);
 
-    private final IListerView<AptUnitItem> unitItemsLister;
+    private final ILister<AptUnitItem> unitItemsLister;
 
-    private final IListerView<AptUnitOccupancySegment> occupanciesLister;
+    private final ILister<AptUnitOccupancySegment> occupanciesLister;
 
     private final MenuItem existingLeaseAction;
 
@@ -141,12 +141,12 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     }
 
     @Override
-    public IListerView<AptUnitItem> getUnitItemsListerView() {
+    public ILister<AptUnitItem> getUnitItemsListerView() {
         return unitItemsLister;
     }
 
     @Override
-    public IListerView<AptUnitOccupancySegment> getOccupanciesListerView() {
+    public ILister<AptUnitOccupancySegment> getOccupanciesListerView() {
         return occupanciesLister;
     }
 

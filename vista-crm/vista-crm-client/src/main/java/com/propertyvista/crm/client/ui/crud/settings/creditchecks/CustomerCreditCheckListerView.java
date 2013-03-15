@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 
-public interface CustomerCreditCheckListerView extends IListerView<CustomerCreditCheckDTO> {
+public interface CustomerCreditCheckListerView extends ILister<CustomerCreditCheckDTO> {
 
 }

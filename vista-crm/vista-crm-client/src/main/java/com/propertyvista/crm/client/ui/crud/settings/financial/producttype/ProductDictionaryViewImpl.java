@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -24,11 +24,11 @@ import com.propertyvista.domain.property.asset.Utility;
 
 public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ProductDictionaryView {
 
-    private final IListerView<ServiceItemType> serviceLister;
+    private final ILister<ServiceItemType> serviceLister;
 
-    private final IListerView<FeatureItemType> featureLister;
+    private final ILister<FeatureItemType> featureLister;
 
-    private final IListerView<Utility> utilityLister;
+    private final ILister<Utility> utilityLister;
 
     public ProductDictionaryViewImpl() {
         super(true);
@@ -43,17 +43,17 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
     }
 
     @Override
-    public IListerView<ServiceItemType> getServiceListerView() {
+    public ILister<ServiceItemType> getServiceListerView() {
         return serviceLister;
     }
 
     @Override
-    public IListerView<FeatureItemType> getFeatureListerView() {
+    public ILister<FeatureItemType> getFeatureListerView() {
         return featureLister;
     }
 
     @Override
-    public IListerView<Utility> getUtilityListerView() {
+    public ILister<Utility> getUtilityListerView() {
         return utilityLister;
     }
 }

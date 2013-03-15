@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 
-public interface PadFileListerView extends IListerView<PadSimFile> {
+public interface PadFileListerView extends ILister<PadSimFile> {
 
-    interface Presenter extends IListerView.Presenter<PadSimFile> {
+    interface Presenter extends ILister.Presenter<PadSimFile> {
 
         void loadPadFile();
     }

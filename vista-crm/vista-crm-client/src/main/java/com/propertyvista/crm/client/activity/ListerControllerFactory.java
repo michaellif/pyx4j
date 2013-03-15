@@ -17,13 +17,13 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class ListerControllerFactory {
 
-    public static <E extends IEntity> ListerController<E> create(IListerView<E> view, AbstractListService<E> service, Class<E> entityClass,
+    public static <E extends IEntity> ListerController<E> create(ILister<E> view, AbstractListService<E> service, Class<E> entityClass,
             final VistaCrmBehavior... whoCanAdd) {
         return new ListerController<E>(view, service, entityClass) {
             @Override

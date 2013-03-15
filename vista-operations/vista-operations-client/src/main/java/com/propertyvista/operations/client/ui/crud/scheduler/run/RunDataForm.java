@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.IForm;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.form.IForm;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -82,7 +82,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
         reportSectionLister.restoreState();
     }
 
-    public class ExecutionReportSectionLister extends BasicLister<ExecutionReportSection> {
+    public class ExecutionReportSectionLister extends EntityDataTablePanel<ExecutionReportSection> {
 
         private final ExecutionReportMessageLister messageLister;
 
@@ -127,7 +127,7 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
     }
 
-    public class ExecutionReportMessageLister extends BasicLister<ExecutionReportMessage> {
+    public class ExecutionReportMessageLister extends EntityDataTablePanel<ExecutionReportMessage> {
 
         public ExecutionReportMessageLister() {
             super(ExecutionReportMessage.class);

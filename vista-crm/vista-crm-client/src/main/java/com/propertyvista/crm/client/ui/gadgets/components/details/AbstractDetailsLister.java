@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.gadgets.components.details;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.BasicLister;
+import com.pyx4j.site.client.ui.crud.lister.EntityDataTablePanel;
 
 /**
  * A lister that allows to zoom-in into details entry
  */
-public class AbstractDetailsLister<E extends IEntity> extends BasicLister<E> {
+public class AbstractDetailsLister<E extends IEntity> extends EntityDataTablePanel<E> {
 
     public AbstractDetailsLister(Class<E> clazz) {
         super(clazz, true, false);

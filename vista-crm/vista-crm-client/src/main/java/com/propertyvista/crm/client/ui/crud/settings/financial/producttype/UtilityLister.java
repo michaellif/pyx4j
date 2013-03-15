@@ -28,13 +28,13 @@ import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
 import com.propertyvista.domain.property.asset.Utility;
 
-public class UtilityLister extends ListerBase<Utility> {
+public class UtilityLister extends AbstractLister<Utility> {
 
     private static final I18n i18n = I18n.get(UtilityLister.class);
 

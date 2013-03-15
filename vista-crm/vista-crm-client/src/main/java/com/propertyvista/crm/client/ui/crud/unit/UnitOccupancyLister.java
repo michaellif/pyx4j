@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
+public class UnitOccupancyLister extends AbstractLister<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
         super(AptUnitOccupancySegment.class, false);

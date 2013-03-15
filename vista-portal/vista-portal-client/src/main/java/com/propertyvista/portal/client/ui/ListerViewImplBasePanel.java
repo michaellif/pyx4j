@@ -23,14 +23,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.site.client.ui.IVisor;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements IListerView<E> {
+public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implements ILister<E> {
 
-    protected ListerBase<E> lister = null;
+    protected AbstractLister<E> lister = null;
 
     private Widget header = null;
 
@@ -39,7 +39,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
         setSize("100%", "100%");
     }
 
-    public ListerViewImplBasePanel(ListerBase<E> lister) {
+    public ListerViewImplBasePanel(AbstractLister<E> lister) {
         this();
         setLister(lister);
     }
@@ -60,7 +60,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     /*
      * Should be called by descendant upon initialization.
      */
-    protected void setLister(ListerBase<E> lister) {
+    protected void setLister(AbstractLister<E> lister) {
         if (this.lister != null) {
             this.lister.removeFromParent();
         }
@@ -68,7 +68,7 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     }
 
     @Override
-    public ListerBase<E> getLister() {
+    public AbstractLister<E> getLister() {
         assert (lister != null);
         return lister;
     }

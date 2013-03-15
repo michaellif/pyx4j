@@ -21,12 +21,12 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantLister extends ListerBase<TenantDTO> {
+public class TenantLister extends AbstractLister<TenantDTO> {
 
     protected static final I18n i18n = I18n.get(TenantLister.class);
 

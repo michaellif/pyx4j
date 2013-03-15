@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
@@ -28,5 +28,5 @@ public interface PadFileViewerView extends IViewer<PadSimFile> {
         public void replyReconciliation();
     }
 
-    IListerView<PadSimBatch> getBatchListerView();
+    ILister<PadSimBatch> getBatchListerView();
 }

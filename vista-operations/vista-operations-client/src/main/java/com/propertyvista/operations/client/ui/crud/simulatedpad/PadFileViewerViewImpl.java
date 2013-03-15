@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulatedpad;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
@@ -29,7 +29,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
 
     private static final I18n i18n = I18n.get(PadFileEditorViewImpl.class);
 
-    private final IListerView<PadSimBatch> batchLister;
+    private final ILister<PadSimBatch> batchLister;
 
     public PadFileViewerViewImpl() {
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
@@ -55,7 +55,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
     }
 
     @Override
-    public IListerView<PadSimBatch> getBatchListerView() {
+    public ILister<PadSimBatch> getBatchListerView() {
         return batchLister;
     }
 }

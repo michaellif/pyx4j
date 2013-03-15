@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.crm.client.ui.crud.complex.ComplexListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -31,7 +31,7 @@ public class ComplexListerActivity extends ListerActivityBase<ComplexDTO> {
 
     @SuppressWarnings("unchecked")
     public ComplexListerActivity(Place place) {
-        super(place, (IListerView<ComplexDTO>) BuildingViewFactory.instance(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
+        super(place, (ILister<ComplexDTO>) BuildingViewFactory.instance(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
                 .create(ComplexCrudService.class), ComplexDTO.class);
     }
 

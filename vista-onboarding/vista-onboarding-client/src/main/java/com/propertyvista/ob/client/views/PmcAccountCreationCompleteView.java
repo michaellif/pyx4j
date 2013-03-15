@@ -13,13 +13,13 @@
  */
 package com.propertyvista.ob.client.views;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.crud.ICrudPane;
 
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
 
-public interface PmcAccountCreationCompleteView extends IView {
+public interface PmcAccountCreationCompleteView extends ICrudPane {
 
-    interface Presenter extends IView.Presenter {
+    interface Presenter extends ICrudPane.Presenter {
 
     }
 

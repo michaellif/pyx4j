@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 
-public interface RunListerView extends IListerView<Run> {
+public interface RunListerView extends ILister<Run> {
 
 }

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public interface AggregatedTransferListerView extends IListerView<AggregatedTransfer> {
+public interface AggregatedTransferListerView extends ILister<AggregatedTransfer> {
 
 }

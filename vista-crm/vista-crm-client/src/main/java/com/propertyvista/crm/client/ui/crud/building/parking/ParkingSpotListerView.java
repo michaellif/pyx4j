@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
-public interface ParkingSpotListerView extends IListerView<ParkingSpot> {
+public interface ParkingSpotListerView extends ILister<ParkingSpot> {
 
 }

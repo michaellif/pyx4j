@@ -18,11 +18,11 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.dto.FloorplanDTO;
 
-public class FloorplanLister extends ListerBase<FloorplanDTO> {
+public class FloorplanLister extends AbstractLister<FloorplanDTO> {
 
     public FloorplanLister() {
         super(FloorplanDTO.class, true);

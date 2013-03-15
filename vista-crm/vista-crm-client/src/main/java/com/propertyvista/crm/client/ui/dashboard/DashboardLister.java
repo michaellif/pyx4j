@@ -22,12 +22,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardLister extends ListerBase<DashboardMetadata> {
+public class DashboardLister extends AbstractLister<DashboardMetadata> {
 
     private static final I18n i18n = I18n.get(DashboardLister.class);
 

@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 import com.pyx4j.site.client.ui.crud.lister.ListerViewImplBase;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
@@ -22,7 +22,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 public class CardServiceSimulationTransactionListerViewImpl extends ListerViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionListerView {
 
-    private static class CardServiceSimulationTransactionLister extends ListerBase<CardServiceSimulationTransaction> {
+    private static class CardServiceSimulationTransactionLister extends AbstractLister<CardServiceSimulationTransaction> {
 
         public CardServiceSimulationTransactionLister() {
             super(CardServiceSimulationTransaction.class, false, true);

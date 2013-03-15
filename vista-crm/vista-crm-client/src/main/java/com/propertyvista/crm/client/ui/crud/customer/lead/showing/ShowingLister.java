@@ -18,11 +18,11 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public class ShowingLister extends ListerBase<ShowingDTO> {
+public class ShowingLister extends AbstractLister<ShowingDTO> {
 
     public ShowingLister() {
         super(ShowingDTO.class, true);

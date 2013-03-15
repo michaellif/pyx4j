@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.crud.lister.ListerBase;
+import com.pyx4j.site.client.ui.crud.lister.AbstractLister;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -25,7 +25,7 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
         setLister(new MerchantAccountLister());
     }
 
-    private static class MerchantAccountLister extends ListerBase<MerchantAccount> {
+    private static class MerchantAccountLister extends AbstractLister<MerchantAccount> {
 
         public MerchantAccountLister() {
             super(MerchantAccount.class, false);

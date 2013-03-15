@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -27,9 +27,9 @@ public interface AggregatedTransferViewerView extends IViewer<AggregatedTransfer
 
     }
 
-    IListerView<PaymentRecord> getPaymentsListerView();
+    ILister<PaymentRecord> getPaymentsListerView();
 
-    IListerView<PaymentRecord> getReturnedPaymentsListerView();
+    ILister<PaymentRecord> getReturnedPaymentsListerView();
 
-    IListerView<PaymentRecord> getRejectedBatchPaymentsListerView();
+    ILister<PaymentRecord> getRejectedBatchPaymentsListerView();
 }

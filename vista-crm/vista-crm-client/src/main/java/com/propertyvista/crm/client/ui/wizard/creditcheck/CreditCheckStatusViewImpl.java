@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.wizard.creditcheck;
 
-import com.pyx4j.site.client.ui.crud.form.BasicViewer;
+import com.pyx4j.site.client.ui.crud.form.AbstractViewer;
 
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 
-public class CreditCheckStatusViewImpl extends BasicViewer<CreditCheckStatusDTO> implements CreditCheckStatusView {
+public class CreditCheckStatusViewImpl extends AbstractViewer<CreditCheckStatusDTO> implements CreditCheckStatusView {
 
     public CreditCheckStatusViewImpl() {
         setForm(new CreditCheckStatusForm(this));

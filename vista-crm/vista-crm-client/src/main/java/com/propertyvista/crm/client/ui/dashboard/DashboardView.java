@@ -15,14 +15,14 @@ package com.propertyvista.crm.client.ui.dashboard;
 
 import java.util.Vector;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.crud.ICrudPane;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface DashboardView extends IView {
+public interface DashboardView extends ICrudPane {
 
-    public interface Presenter extends IView.Presenter {
+    public interface Presenter extends ICrudPane.Presenter {
 
         void save();
 

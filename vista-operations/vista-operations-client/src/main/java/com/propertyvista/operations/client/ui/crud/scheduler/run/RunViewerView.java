@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
@@ -25,7 +25,7 @@ public interface RunViewerView extends IViewer<Run> {
     interface Presenter extends IViewer.Presenter {
     }
 
-    IListerView<RunData> getRunDataListerView();
+    ILister<RunData> getRunDataListerView();
 
     void populateExecutionState(ExecutionStatusUpdateDTO result);
 }

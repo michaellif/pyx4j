@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
@@ -38,11 +38,11 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
 
     protected final ProductDictionaryView view;
 
-    IListerView.Presenter<ServiceItemType> serviceLister;
+    ILister.Presenter<ServiceItemType> serviceLister;
 
-    IListerView.Presenter<FeatureItemType> featureLister;
+    ILister.Presenter<FeatureItemType> featureLister;
 
-    IListerView.Presenter<Utility> utilityLister;
+    ILister.Presenter<Utility> utilityLister;
 
     public ProductDictionaryViewActivity(AppPlace place) {
         this.place = place;

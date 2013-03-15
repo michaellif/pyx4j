@@ -13,10 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.operations.rpc.TriggerDTO;
 
-public interface TriggerListerView extends IListerView<TriggerDTO> {
+public interface TriggerListerView extends ILister<TriggerDTO> {
 
 }

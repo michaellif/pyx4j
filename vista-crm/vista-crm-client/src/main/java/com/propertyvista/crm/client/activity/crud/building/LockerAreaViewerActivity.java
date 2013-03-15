@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.building;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.activity.ListerController;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> implements LockerAreaViewerView.Presenter {
 
-    private final IListerView.Presenter<?> lockerLister;
+    private final ILister.Presenter<?> lockerLister;
 
     public LockerAreaViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.List;
 
 import com.pyx4j.site.client.ui.crud.form.IViewer;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ILister;
 
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -41,25 +41,25 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
         IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
     }
 
-    IListerView<FloorplanDTO> getFloorplanListerView();
+    ILister<FloorplanDTO> getFloorplanListerView();
 
-    IListerView<AptUnitDTO> getUnitListerView();
+    ILister<AptUnitDTO> getUnitListerView();
 
-    IListerView<ElevatorDTO> getElevatorListerView();
+    ILister<ElevatorDTO> getElevatorListerView();
 
-    IListerView<BoilerDTO> getBoilerListerView();
+    ILister<BoilerDTO> getBoilerListerView();
 
-    IListerView<RoofDTO> getRoofListerView();
+    ILister<RoofDTO> getRoofListerView();
 
-    IListerView<ParkingDTO> getParkingListerView();
+    ILister<ParkingDTO> getParkingListerView();
 
-    IListerView<LockerAreaDTO> getLockerAreaListerView();
+    ILister<LockerAreaDTO> getLockerAreaListerView();
 
-    IListerView<Service> getServiceListerView();
+    ILister<Service> getServiceListerView();
 
-    IListerView<Feature> getFeatureListerView();
+    ILister<Feature> getFeatureListerView();
 
-    IListerView<Concession> getConcessionListerView();
+    ILister<Concession> getConcessionListerView();
 
-    IListerView<BillingCycleDTO> getBillingCycleListerView();
+    ILister<BillingCycleDTO> getBillingCycleListerView();
 }
