@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.billing.BillingCycle;

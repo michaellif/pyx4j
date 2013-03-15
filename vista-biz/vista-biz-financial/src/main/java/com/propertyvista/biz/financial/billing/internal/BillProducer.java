@@ -86,13 +86,13 @@ class BillProducer {
                 Persistence.service().persist(lease.billingAccount());
 
                 bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
-                bill.latestBillInCycle().setValue(true);
             }
 
             bill.billingCycle().set(billingCycle);
             BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);
 
             currentPeriodBill = BillingManager.getLatestConfirmedBill(lease);
+
             bill.previousCycleBill().set(currentPeriodBill);
             if (currentPeriodBill != null) {
                 Persistence.service().retrieve(currentPeriodBill.lineItems());

@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 
@@ -58,7 +59,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -82,7 +82,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -109,7 +108,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         previousChargeAdjustments("0.00").
         depositRefundAmount("0.00").
@@ -130,7 +128,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Final).
         previousChargeAdjustments("0.00").
         depositRefundAmount("-1091.82").
@@ -166,7 +163,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -190,7 +186,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -217,7 +212,6 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Final).
         previousChargeAdjustments("-1198.74").
         depositRefundAmount("-939.60").

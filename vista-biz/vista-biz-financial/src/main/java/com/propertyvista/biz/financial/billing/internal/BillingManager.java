@@ -409,8 +409,6 @@ public class BillingManager {
 
             if (previousBill != null) {
 
-                //Define previous bill as not the latest
-                previousBill.latestBillInCycle().setValue(false);
                 Persistence.service().persist(previousBill);
 
                 switch (previousBill.billStatus().getValue()) {

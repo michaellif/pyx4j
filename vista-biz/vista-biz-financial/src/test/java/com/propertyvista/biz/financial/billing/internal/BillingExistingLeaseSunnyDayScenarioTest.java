@@ -29,6 +29,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
@@ -57,7 +58,6 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         // @formatter:off
         new BillTester(getBill(1)).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -78,7 +78,6 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
@@ -103,7 +102,6 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").

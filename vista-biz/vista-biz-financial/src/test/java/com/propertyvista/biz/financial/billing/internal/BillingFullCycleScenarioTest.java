@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.test.preloader.PreloadConfig;
 
@@ -56,7 +57,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("28-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -85,7 +85,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         // @formatter:off
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Feb-2012").
         billingPeriodEndDate("14-Mar-2012").
@@ -114,7 +113,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Mar-2012").
         billingPeriodEndDate("14-Apr-2012").
@@ -142,7 +140,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Apr-2012").
         billingPeriodEndDate("14-May-2012").
@@ -171,7 +168,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(5).
-        previousBillSequenceNumber(4).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-May-2012").
         billingPeriodEndDate("14-Jun-2012").
@@ -198,7 +194,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         // @formatter:off 
         new BillTester(bill).
         billSequenceNumber(6).
-        previousBillSequenceNumber(5).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Jun-2012").
         billingPeriodEndDate("14-Jul-2012").
@@ -224,7 +219,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
 
         // @formatter:off 
         billSequenceNumber(7).
-        previousBillSequenceNumber(6).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Jul-2012").
         billingPeriodEndDate("14-Aug-2012").
@@ -249,7 +243,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         // @formatter:off 
         new BillTester(bill).
         billSequenceNumber(8).
-        previousBillSequenceNumber(7).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Aug-2012").
         billingPeriodEndDate("14-Sep-2012").
@@ -276,7 +269,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(9).
-        previousBillSequenceNumber(8).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Sep-2012").
         billingPeriodEndDate("14-Oct-2012").
@@ -301,7 +293,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(10).
-        previousBillSequenceNumber(9).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Oct-2012").
         billingPeriodEndDate("14-Nov-2012").
@@ -327,7 +318,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
           new BillTester(bill).
         
         billSequenceNumber(11).
-        previousBillSequenceNumber(10).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Nov-2012").
         billingPeriodEndDate("14-Dec-2012").
@@ -353,7 +343,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(12).
-        previousBillSequenceNumber(11).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Dec-2012").
         billingPeriodEndDate("14-Jan-2013").
@@ -379,7 +368,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(13).
-        previousBillSequenceNumber(12).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Jan-2013").
         billingPeriodEndDate("14-Feb-2013").
@@ -405,7 +393,6 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         
         billSequenceNumber(14).
-        previousBillSequenceNumber(13).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("15-Feb-2013").
         billingPeriodEndDate("16-Feb-2013").

@@ -26,6 +26,7 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
@@ -54,7 +55,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("01-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -69,7 +69,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -84,7 +83,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -99,7 +97,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -114,7 +111,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Final);
         // @formatter:on
 
@@ -137,7 +133,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getBill(1)).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -151,7 +146,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
@@ -166,7 +160,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
@@ -181,7 +174,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("31-Aug-2011").
@@ -195,7 +187,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(runBilling()).
         billSequenceNumber(5).
-        previousBillSequenceNumber(4).
         billType(Bill.BillType.Final);
         // @formatter:on
 
@@ -218,7 +209,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getBill(1)).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -233,7 +223,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(getLatestConfirmedBill()).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
@@ -247,7 +236,6 @@ public class BillExecutionWithManualApprovalTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(runBilling()).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Final);
         // @formatter:on
 

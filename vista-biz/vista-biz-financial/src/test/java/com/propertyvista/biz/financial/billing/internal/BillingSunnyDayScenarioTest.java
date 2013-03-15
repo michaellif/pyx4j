@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
@@ -64,8 +65,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(billPreview).
         billSequenceNumber(0).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
+        billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(3).
@@ -85,8 +86,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(billPreview).
         billSequenceNumber(0).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
+        billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(4).
@@ -104,8 +105,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
+        billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(4).
@@ -131,8 +132,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
+        billingCyclePeriodStartDate("01-Apr-2011").
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
@@ -160,8 +161,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
+        billingCyclePeriodStartDate("01-May-2011").
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(7).
@@ -193,8 +194,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
+        billingCyclePeriodStartDate("01-Jun-2011").
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(6).
@@ -220,8 +221,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(5).
-        previousBillSequenceNumber(4).
         billType(Bill.BillType.Regular).
+        billingCyclePeriodStartDate("01-Jul-2011").
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
@@ -244,8 +245,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(6).
-        previousBillSequenceNumber(5).
         billType(Bill.BillType.Regular).
+        billingCyclePeriodStartDate("01-Aug-2011").
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
@@ -262,8 +263,6 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceSysDate("05-Aug-2011");
 
-//-->        completeLease();
-
         addAccountCharge("140.00");
 
         bill = runBilling(true);
@@ -271,8 +270,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(7).
-        previousBillSequenceNumber(6).
         billType(Bill.BillType.Final).
+        billingCyclePeriodStartDate("01-Sep-2011").
         immediateAccountAdjustments("156.80").
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);

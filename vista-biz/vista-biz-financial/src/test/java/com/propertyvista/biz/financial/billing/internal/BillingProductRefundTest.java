@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -57,7 +58,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -83,7 +83,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -113,7 +112,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(3).
-        previousBillSequenceNumber(2).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -141,7 +139,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(4).
-        previousBillSequenceNumber(3).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
@@ -166,7 +163,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(5).
-        previousBillSequenceNumber(4).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
@@ -190,7 +186,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(6).
-        previousBillSequenceNumber(5).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
@@ -213,7 +208,6 @@ public class BillingProductRefundTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(7).
-        previousBillSequenceNumber(6).
         billType(Bill.BillType.Final).
         immediateAccountAdjustments("0.00").
         billingPeriodStartDate(null).

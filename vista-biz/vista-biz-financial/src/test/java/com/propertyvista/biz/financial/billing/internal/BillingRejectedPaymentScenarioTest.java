@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PaymentType;
@@ -51,7 +52,6 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -76,7 +76,6 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
         // @formatter:off
         new BillTester(bill).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").

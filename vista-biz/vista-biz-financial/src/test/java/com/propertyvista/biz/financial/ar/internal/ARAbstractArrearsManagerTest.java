@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 
 public class ARAbstractArrearsManagerTest extends ARAbstractArrearsManagerTestBase {

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
@@ -19,6 +19,7 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 
 public class ARArrearsManagerUtilsTest extends TestCase {

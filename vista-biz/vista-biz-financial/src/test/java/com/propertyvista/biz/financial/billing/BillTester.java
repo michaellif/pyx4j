@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
@@ -39,11 +39,6 @@ public class BillTester extends Tester {
 
     public BillTester billSequenceNumber(Integer sequenceNumber) {
         assertEquals("Bill Sequence number", sequenceNumber, bill.billSequenceNumber().getValue());
-        return this;
-    }
-
-    public BillTester previousBillSequenceNumber(Integer sequenceNumber) {
-        assertEquals("Previous Bill Sequence number", sequenceNumber, bill.previousCycleBill().billSequenceNumber().getValue());
         return this;
     }
 

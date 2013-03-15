@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
@@ -68,7 +69,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("15-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -111,7 +111,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("16-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -151,7 +150,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("17-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -190,7 +188,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("18-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -229,7 +226,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("19-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -268,7 +264,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("20-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -307,7 +302,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("21-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -346,7 +340,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("22-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -385,7 +378,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -424,7 +416,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("24-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -463,7 +454,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("25-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -502,7 +492,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("26-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -541,7 +530,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("27-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -580,7 +568,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("28-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -619,7 +606,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("29-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -658,7 +644,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("30-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -697,7 +682,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("31-Jan-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -736,7 +720,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("01-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -775,7 +758,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("02-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -814,7 +796,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("03-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -853,7 +834,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("04-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -892,7 +872,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("05-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -932,7 +911,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("06-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -971,7 +949,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("07-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1010,7 +987,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("08-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1049,7 +1025,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("09-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1088,7 +1063,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("10-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1127,7 +1101,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("11-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1166,7 +1139,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("12-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1205,7 +1177,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("13-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
@@ -1244,7 +1215,6 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
          
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("14-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").

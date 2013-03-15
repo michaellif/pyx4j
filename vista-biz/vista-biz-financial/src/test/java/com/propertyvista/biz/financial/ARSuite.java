@@ -16,11 +16,11 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.ar.ARCreditDebitLinkManagerTest;
-import com.propertyvista.biz.financial.ar.ARInvoiceDebitComparatorTest;
-import com.propertyvista.biz.financial.ar.ARNotCoveredDebitInvoiceLineItemListTest;
-import com.propertyvista.biz.financial.ar.ARSunnyDayScenarioTest;
-import com.propertyvista.biz.financial.ar.ARArrearsSnapshotTest;
+import com.propertyvista.biz.financial.ar.internal.ARArrearsSnapshotTest;
+import com.propertyvista.biz.financial.ar.internal.ARCreditDebitLinkManagerTest;
+import com.propertyvista.biz.financial.ar.internal.ARInvoiceDebitComparatorTest;
+import com.propertyvista.biz.financial.ar.internal.ARNotCoveredDebitInvoiceLineItemListTest;
+import com.propertyvista.biz.financial.ar.internal.ARSunnyDayScenarioTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ ARCreditDebitLinkManagerTest.class, ARInvoiceDebitComparatorTest.class, ARNotCoveredDebitInvoiceLineItemListTest.class,

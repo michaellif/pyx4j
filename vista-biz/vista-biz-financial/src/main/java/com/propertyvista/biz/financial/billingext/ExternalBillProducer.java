@@ -87,7 +87,6 @@ class ExternalBillProducer {
             Persistence.service().persist(lease.billingAccount());
 
             bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
-            bill.latestBillInCycle().setValue(true);
 
             bill.billingCycle().set(billingCycle);
             BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);

@@ -20,7 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.billing.internal.BillTester;
+import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
@@ -52,7 +52,6 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
-        previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("01-Mar-2012").
         billingPeriodEndDate("31-Mar-2012").
@@ -82,7 +81,6 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         // @formatter:off
         new BillTester(bill).
         billSequenceNumber(2).
-        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-Apr-2012").
         billingPeriodEndDate("30-Apr-2012").
