@@ -92,7 +92,7 @@ public class DefaultPaneTheme extends Theme {
         style = new Style(".", StyleName.FooterToolbar);
         style.addProperty("padding", "2px 0px");
         style.addProperty("border-top", "4px solid");
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
@@ -125,6 +125,10 @@ public class DefaultPaneTheme extends Theme {
 
         style = new Style(".", StyleName.Visor, " .", StyleName.Header);
         style.addProperty("background-color", ThemeColor.object1, 0.8);
+        addStyle(style);
+
+        style = new Style(".", StyleName.Visor, " .", StyleName.FooterToolbar);
+        style.addProperty("border-top-color", ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(".", StyleName.VisorCloseButton);

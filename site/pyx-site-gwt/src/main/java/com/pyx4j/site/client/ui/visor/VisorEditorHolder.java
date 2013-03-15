@@ -21,27 +21,46 @@
 package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 public class VisorEditorHolder extends AbstractVisorHolder {
 
+    private static final I18n i18n = I18n.get(VisorEditorHolder.class);
+
+    protected final Button btnApply;
+
+    protected final Button btnSave;
+
     public VisorEditorHolder(IVisorEditor visor, String caption, final IPane parent) {
         super(visor, caption, parent);
 
-        Button backButton = new Button(new Image(SiteImages.INSTANCE.closeButton()), new Command() {
+        btnSave = new Button(i18n.tr("Save"), new Command() {
+            @Override
+            public void execute() {
+                System.out.println("Save");
+            }
+        });
+        addFooterToolbarItem(btnSave);
+
+        btnApply = new Button(i18n.tr("Apply"), new Command() {
+            @Override
+            public void execute() {
+                System.out.println("Apply");
+            }
+        });
+        addFooterToolbarItem(btnApply);
+
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 parent.hideVisor();
             }
         });
-        backButton.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
-
-        getHeaderCaption().add(backButton);
+        addFooterToolbarItem(btnCancel);
 
     }
 
