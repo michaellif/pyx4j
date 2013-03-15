@@ -47,6 +47,9 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
     @Override
     public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
-        // TODO Auto-generated method stub
+        Persistence.service().merge(pads.tenant());
+        Persistence.service().commit();
+
+        callback.onSuccess(null);
     }
 }

@@ -14,12 +14,16 @@
 package com.propertyvista.crm.client.visor.paps;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 
@@ -27,18 +31,30 @@ public class PreauthorizedPaymentsVisorView extends ScrollPanel implements IViso
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorView.class);
 
-    private final PreauthorizedPaymentsVisorController controller;
-
     private final CEntityForm<PreauthorizedPaymentsDTO> form = new PreauthorizedPaymentsForm();
+
+    private final PreauthorizedPaymentsVisorController controller;
 
     public PreauthorizedPaymentsVisorView(PreauthorizedPaymentsVisorController controller) {
         this.controller = controller;
 
         // UI:
         form.initContent();
-        setWidget(form.asWidget());
-        getElement().getStyle().setProperty("padding", "6px");
+        Button btnSave = new Button(i18n.tr("Save"), new Command() {
+            @Override
+            public void execute() {
+                PreauthorizedPaymentsVisorView.this.controller.save(form.getValue());
+            }
+        });
 
+        FormFlexPanel content = new FormFlexPanel();
+
+        content.setWidget(0, 0, form.asWidget());
+        content.setWidget(0, 1, btnSave);
+        content.getCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT, HasVerticalAlignment.ALIGN_TOP);
+
+        setWidget(content);
+        getElement().getStyle().setProperty("padding", "6px");
     }
 
     public void populate(final Command onPopulate) {

@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.visor.IVisorController;
@@ -32,6 +34,8 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
 
     private final PreauthorizedPaymentsVisorView visor = new PreauthorizedPaymentsVisorView(this);
+
+    private final PreauthorizedPaymentsVisorService service = GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class);
 
     private final Key tenantId;
 
@@ -50,7 +54,15 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
     }
 
     public void populate(AsyncCallback<PreauthorizedPaymentsDTO> callback) {
-        GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class).retrieve(callback,
-                EntityFactory.createIdentityStub(Tenant.class, tenantId));
+        service.retrieve(callback, EntityFactory.createIdentityStub(Tenant.class, tenantId));
+    }
+
+    public void save(PreauthorizedPaymentsDTO pads) {
+        service.save(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        }, pads);
     }
 }
