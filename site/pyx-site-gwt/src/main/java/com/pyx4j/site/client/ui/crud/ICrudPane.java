@@ -20,12 +20,12 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface ICrudPane extends IView {
+public interface ICrudPane extends IPane {
 
-    public interface Presenter extends IView.Presenter {
+    public interface Presenter extends IPane.Presenter {
         AppPlace getPlace();
     }
 }

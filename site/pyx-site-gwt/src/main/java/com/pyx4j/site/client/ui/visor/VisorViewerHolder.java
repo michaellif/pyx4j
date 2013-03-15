@@ -28,13 +28,13 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
 public class VisorViewerHolder extends AbstractVisorHolder {
 
-    public VisorViewerHolder(IVisorViewer visor, String caption, final IView parent) {
+    public VisorViewerHolder(IVisorViewer visor, String caption, final IPane parent) {
         super(visor, caption, parent);
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());

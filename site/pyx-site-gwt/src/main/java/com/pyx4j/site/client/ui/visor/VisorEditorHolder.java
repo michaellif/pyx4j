@@ -24,13 +24,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.resources.SiteImages;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 import com.pyx4j.widgets.client.Button;
 
 public class VisorEditorHolder extends AbstractVisorHolder {
 
-    public VisorEditorHolder(IVisorEditor visor, String caption, final IView parent) {
+    public VisorEditorHolder(IVisorEditor visor, String caption, final IPane parent) {
         super(visor, caption, parent);
 
         Button backButton = new Button(new Image(SiteImages.INSTANCE.closeButton()), new Command() {

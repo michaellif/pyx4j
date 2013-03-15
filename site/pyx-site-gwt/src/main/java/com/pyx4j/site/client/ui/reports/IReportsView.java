@@ -22,10 +22,10 @@ package com.pyx4j.site.client.ui.reports;
 
 import java.util.List;
 
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public interface IReportsView extends IView {
+public interface IReportsView extends IPane {
 
     public interface Presenter {
 

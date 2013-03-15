@@ -21,12 +21,12 @@
 package com.pyx4j.site.client.ui.visor;
 
 import com.pyx4j.site.client.ui.AbstractView;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.crud.DefaultCrudPaneTheme;
 
 public abstract class AbstractVisorHolder extends AbstractView {
 
-    public AbstractVisorHolder(IVisor visor, String caption, final IView parent) {
+    public AbstractVisorHolder(IVisor visor, String caption, final IPane parent) {
         super();
         setStyleName(DefaultCrudPaneTheme.StyleName.Visor.name());
         setContentPane(visor);

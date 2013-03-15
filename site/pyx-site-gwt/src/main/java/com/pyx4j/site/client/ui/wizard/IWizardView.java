@@ -21,11 +21,11 @@
 package com.pyx4j.site.client.ui.wizard;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.IView;
+import com.pyx4j.site.client.ui.IPane;
 
-public interface IWizardView<E extends IEntity> extends IView {
+public interface IWizardView<E extends IEntity> extends IPane {
 
-    public interface Presenter extends IView.Presenter {
+    public interface Presenter extends IPane.Presenter {
 
         void finish();
 

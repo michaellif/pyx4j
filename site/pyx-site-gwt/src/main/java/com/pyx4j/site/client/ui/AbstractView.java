@@ -40,7 +40,7 @@ import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
 import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public abstract class AbstractView extends DockLayoutPanel implements IView {
+public abstract class AbstractView extends DockLayoutPanel implements IPane {
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
 
