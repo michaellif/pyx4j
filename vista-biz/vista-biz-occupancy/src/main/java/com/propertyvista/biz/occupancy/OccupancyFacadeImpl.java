@@ -874,7 +874,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     private void setUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
         unit._availableForRent().setValue(newAvaialbleFrom);
+
+        // TODO: unit price zeroed in ADNVANCE! - i.g. TODAY instead newAvaialbleFrom date!!!
         unit.financial()._unitRent().setValue(null);
+
         Persistence.secureSave(unit);
     }
 
