@@ -31,6 +31,8 @@ BEGIN
         --ALTER TABLE insurance_tenant_sure_tax DROP CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_ck;
         ALTER TABLE aging_buckets DROP CONSTRAINT aging_buckets_debit_type_e_ck;
         ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_debit_type_e_ck;
+        ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck;
+        ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_id_discriminator_ck;
         ALTER TABLE lease DROP CONSTRAINT lease_payment_frequency_e_ck;
 
         
@@ -65,7 +67,10 @@ BEGIN
         
         ALTER TABLE billing_billing_cycle       ADD COLUMN pad_calculation_date DATE,
                                                 ADD COLUMN pad_execution_date DATE,
-                                                ADD COLUMN bill_execution_date DATE;
+                                                ADD COLUMN bill_execution_date DATE,
+                                                ADD COLUMN actual_bill_execution_date DATE,
+                                                ADD COLUMN actual_pad_calculation_date DATE,
+                                                ADD COLUMN actual_pad_execution_date DATE;
                                                 
                                                 
         -- field_user
@@ -140,18 +145,6 @@ BEGIN
         
         ALTER TABLE lease_billing_type_policy_item OWNER TO vista;
         
-        -- lease_participant$preauthorized_payments
-        
-        CREATE TABLE lease_participant$preauthorized_payments
-        (
-                id                                      BIGINT                          NOT NULL,
-                owner                                   BIGINT,
-                value                                   BIGINT,
-                seq                                     INT,
-                        CONSTRAINT      lease_participant$preauthorized_payments_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE lease_participant$preauthorized_payments OWNER TO vista;
         
         -- padpolicy
         
@@ -167,17 +160,30 @@ BEGIN
         
         ALTER TABLE padpolicy OWNER TO vista;
         
-        -- padpolicy$chargeable_service
+        -- padpolicy_item
         
-        CREATE TABLE padpolicy$chargeable_service
+        CREATE TABLE padpolicy_item
+        (       
+                id                                      BIGINT                          NOT NULL,
+                debit_type                              VARCHAR(50),
+                owing_balance_type                      VARCHAR(50),
+                        CONSTRAINT      padpolicy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE padpolicy_item OWNER TO vista;
+        
+        -- padpolicy$debit_balance_types
+        
+        CREATE TABLE padpolicy$debit_balance_types
         (
                 id                                      BIGINT                          NOT NULL,
                 owner                                   BIGINT,
-                value                                   VARCHAR(50),
-                        CONSTRAINT      padpolicy$chargeable_service_pk PRIMARY KEY(id)
+                value                                   BIGINT,
+                seq                                     INT,
+                        CONSTRAINT      padpolicy$debit_balance_types_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE padpolicy$chargeable_service OWNER TO vista;
+        ALTER TABLE padpolicy$debit_balance_types OWNER TO vista;
         
         
         -- preauthorized_payment
@@ -190,6 +196,10 @@ BEGIN
                 payment_method_discriminator            VARCHAR(50),
                 payment_method                          BIGINT,
                 comments                                VARCHAR(40),
+                lease_participant_discriminator         VARCHAR(50)                     NOT NULL,
+                lease_participant                       BIGINT                          NOT NULL,
+                creation_date                           DATE,
+                order_in_parent                         INT,
                         CONSTRAINT      preauthorized_payment_pk PRIMARY KEY(id)
         );
         
@@ -261,9 +271,9 @@ BEGIN
                 REFERENCES lease_billing_policy(id);
         ALTER TABLE lease_billing_policy$available_billing_types ADD CONSTRAINT lease_billing_policy$available_billing_types_value_fk FOREIGN KEY(value) 
                 REFERENCES lease_billing_type_policy_item(id);
-        ALTER TABLE lease_participant$preauthorized_payments ADD CONSTRAINT lease_participant$preauthorized_payments_owner_fk FOREIGN KEY(owner) REFERENCES lease_participant(id);
-        ALTER TABLE lease_participant$preauthorized_payments ADD CONSTRAINT lease_participant$preauthorized_payments_value_fk FOREIGN KEY(value) REFERENCES preauthorized_payment(id);
-        ALTER TABLE padpolicy$chargeable_service ADD CONSTRAINT padpolicy$chargeable_service_owner_fk FOREIGN KEY(owner) REFERENCES padpolicy(id);
+        ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_owner_fk FOREIGN KEY(owner) REFERENCES padpolicy(id);
+        ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_value_fk FOREIGN KEY(value) REFERENCES padpolicy_item(id);
+        ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_lease_participant_fk FOREIGN KEY(lease_participant) REFERENCES lease_participant(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_owner_fk FOREIGN KEY(owner) REFERENCES product_item_type(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_value_fk FOREIGN KEY(value) REFERENCES yardi_charge_code(id);
@@ -276,13 +286,25 @@ BEGIN
                 CHECK ((payment_frequency) IN ('Annually', 'BiWeekly', 'Monthly', 'SemiAnnyally', 'SemiMonthly', 'Weekly'));
         ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_debit_type_e_ck 
                 CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'target', 'total', 'unknown', 'utility'));
+        ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck 
+                CHECK ((credit_item_discriminator) IN ('AccountCredit', 'CarryforwardCredit', 'DepositRefund', 'Payment', 'ProductCredit', 'YardiCredit', 
+                'YardiPayment', 'YardiReceipt'));
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('AccountCharge', 'AccountCredit', 'CarryforwardCharge', 'CarryforwardCredit', 'Deposit', 'DepositRefund', 
+                'LatePaymentFee', 'NSF', 'Payment', 'PaymentBackOut', 'ProductCharge', 'ProductCredit', 'Withdrawal', 'YardiCharge', 'YardiCredit', 
+                'YardiPayment', 'YardiReceipt', 'YardiReversal'));
         ALTER TABLE lease_billing_type_policy_item ADD CONSTRAINT lease_billing_type_policy_item_payment_frequency_e_ck 
                 CHECK ((payment_frequency) IN ('Annually', 'BiWeekly', 'Monthly', 'SemiAnnyally', 'SemiMonthly', 'Weekly'));
-        ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'LastPeriodServiceCharge', 'OwedServiceCharge'));
+        ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
+        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_debit_type_e_ck 
+                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 
+                'pet', 'target', 'total', 'unknown', 'utility'));
+        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_owing_balance_type_e_ck CHECK ((owing_balance_type) IN ('LastBill', 'ToDateTotal'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_amount_type_e_ck CHECK ((amount_type) IN ('Percent', 'Value'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
+        ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_lease_participant_discriminator_d_ck CHECK (lease_participant_discriminator = 'Tenant');
 
 
         
@@ -297,8 +319,7 @@ BEGIN
         CREATE INDEX field_user_name_idx ON field_user USING btree (name);
         CREATE UNIQUE INDEX field_user_email_idx ON field_user USING btree (LOWER(email));
         CREATE INDEX lease_billing_policy$available_billing_types_owner_idx ON lease_billing_policy$available_billing_types USING btree (owner);
-        CREATE INDEX lease_participant$preauthorized_payments_owner_idx ON lease_participant$preauthorized_payments USING btree (owner);
-        CREATE INDEX padpolicy$chargeable_service_owner_idx ON padpolicy$chargeable_service USING btree (owner);
+        CREATE INDEX padpolicy$debit_balance_types_owner_idx ON padpolicy$debit_balance_types USING btree (owner);
         CREATE INDEX product_item_type$yardi_charge_codes_owner_idx ON product_item_type$yardi_charge_codes USING btree (owner);
                
         
