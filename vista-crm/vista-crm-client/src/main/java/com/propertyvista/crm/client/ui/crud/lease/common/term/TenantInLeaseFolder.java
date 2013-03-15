@@ -33,8 +33,13 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
@@ -55,6 +60,7 @@ import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -353,10 +359,60 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof LeasePaymentMethod) {
-                return new CEntityLabel<LeasePaymentMethod>();
+            if (member instanceof PreauthorizedPayment) {
+                return new PreauthorizedPaymentEditor();
             }
             return super.create(member);
+        }
+
+        private class PreauthorizedPaymentEditor extends CEntityFolderRowEditor<PreauthorizedPayment> {
+
+            public PreauthorizedPaymentEditor() {
+                super(PreauthorizedPayment.class, columns());
+            }
+
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (proto().paymentMethod() == column.getObject()) {
+                    return inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>());
+                } else if (proto().amount() == column.getObject()) {
+                    return inject(proto().amount(), new CLabel<BigDecimal>());
+                }
+
+                return super.createCell(column);
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                bindAmountEditor(getValue().amountType().getValue(), populate);
+            }
+
+            private void bindAmountEditor(AmountType valueType, boolean repopulate) {
+                CComponent<?, ?> comp = null;
+                if (valueType != null) {
+                    switch (valueType) {
+                    case Value:
+                        comp = new CMoneyField();
+                        break;
+                    case Percent:
+                        comp = new CPercentageField();
+                        break;
+                    }
+                }
+
+                if (comp != null) {
+                    @SuppressWarnings("unchecked")
+                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().amount())).getDecorator();
+                    unbind(proto().amount());
+                    inject(proto().amount(), comp);
+                    comp.setDecorator(decor);
+
+                    if (repopulate) {
+                        get(proto().amount()).populate(getValue().amount().getValue(BigDecimal.ZERO));
+                    }
+                }
+            }
         }
     }
 }

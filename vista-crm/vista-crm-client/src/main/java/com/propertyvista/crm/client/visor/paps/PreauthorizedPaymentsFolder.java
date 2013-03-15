@@ -83,6 +83,7 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
                     }
                 });
             } else if (proto().amountType() == column.getObject()) {
+                @SuppressWarnings("unchecked")
                 CComponent<AmountType, ?> comp = (CComponent<AmountType, ?>) super.createCell(column);
                 comp.addValueChangeHandler(new ValueChangeHandler<AmountType>() {
                     @Override
@@ -118,9 +119,9 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
             }
 
             if (comp != null) {
-                IDecorator<CComponent<?, ?>> decor = get((proto().amount())).getDecorator();
+                @SuppressWarnings("unchecked")
+                IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().amount())).getDecorator();
                 unbind(proto().amount());
-
                 inject(proto().amount(), comp);
                 comp.setDecorator(decor);
 
