@@ -431,32 +431,6 @@ public class VistaTheme extends Theme {
         addStyle(style);
     }
 
-    protected void initGlassPanelStyle() {
-        Style style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent);
-        style.addProperty("background-color", "#000");
-        style.addProperty("opacity", "0.2");
-        style.addProperty("filter", "alpha(opacity=20)");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent);
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_SemiTransparent_Label);
-        style.addProperty("background-color", "#FFFBD3");
-        style.addProperty("opacity", "0.8");
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("padding", "3px");
-        addStyle(style);
-
-        style = new Style(CSSClass.pyx4j_GlassPanel_Transparent_Label);
-        style.addProperty("background-color", "#FFFBD3");
-        style.addProperty("opacity", "0.8");
-        style.addProperty("filter", "alpha(opacity=80)");
-        style.addProperty("padding", "3px");
-        addStyle(style);
-
-    }
-
     protected void initCheckBoxStyle() {
         Style style = new Style(".", DefaultEntityFolderTheme.StyleName.EntityFolderRowItemDecorator, " .", CSSClass.pyx4j_CheckBox);
         style.addProperty("margin-left", "45%");
