@@ -26,15 +26,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
-import com.propertyvista.biz.financial.billing.internal.BillDateUtils;
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.internal.BillingManager;
 import com.propertyvista.biz.financial.billing.internal.DateRange;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -70,7 +72,7 @@ class ExternalBillProducer {
             lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
-        BillingCycle billingCycle = BillingManager.getNextBillingCycle(lease);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease);
         return new ExternalBillProducer(billingCycle, lease).produceBill();
     }
 
@@ -89,7 +91,7 @@ class ExternalBillProducer {
             bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
 
             bill.billingCycle().set(billingCycle);
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Running, true);
 
             bill.executionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
@@ -110,7 +112,7 @@ class ExternalBillProducer {
 
             calculateTotals();
 
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Confirmed, true);
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Confirmed, true);
             for (InvoiceLineItem invoiceLineItem : bill.lineItems()) {
                 if (!invoiceLineItem.postDate().isNull()) {
                     invoiceLineItem.claimed().setValue(true);
@@ -122,7 +124,7 @@ class ExternalBillProducer {
 
         } catch (Throwable e) {
             log.error("Bill run error", e);
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Failed, true);
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Failed, true);
             String billCreationError = i18n.tr("Bill run error");
             if (BillingException.class.isAssignableFrom(e.getClass())) {
                 billCreationError = e.getMessage();

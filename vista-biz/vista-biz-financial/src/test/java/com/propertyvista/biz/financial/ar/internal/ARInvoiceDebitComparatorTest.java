@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
-import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
@@ -79,10 +78,10 @@ public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
 
     private void compareBucketAge(String date1, String date2, int expected) {
         InvoiceDebit lineItem1 = EntityFactory.create(InvoiceAccountCharge.class);
-        lineItem1.dueDate().setValue(FinancialTestsUtils.getDate(date1));
+        lineItem1.dueDate().setValue(getDate(date1));
 
         InvoiceDebit lineItem2 = EntityFactory.create(InvoiceAccountCharge.class);
-        lineItem2.dueDate().setValue(FinancialTestsUtils.getDate(date2));
+        lineItem2.dueDate().setValue(getDate(date2));
 
         assertEquals("", expected, InvoiceDebitComparator.compareBucketAge(lineItem1, lineItem2));
 

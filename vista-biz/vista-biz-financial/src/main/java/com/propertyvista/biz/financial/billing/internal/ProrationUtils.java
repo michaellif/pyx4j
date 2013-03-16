@@ -23,10 +23,10 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class ProrationUtils {
@@ -38,15 +38,15 @@ public class ProrationUtils {
         if (billingCycle.billingCycleStartDate().getValue().after(from) || billingCycle.billingCycleEndDate().getValue().before(to)) {
             throw new BillingException(i18n.tr("Proration days are out of cycle boundaries"));
         }
-        if (PaymentFrequency.Monthly == billingCycle.billingType().paymentFrequency().getValue()) {
+        if (BillingPeriod.Monthly == billingCycle.billingType().billingPeriod().getValue()) {
             LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingCycle.building(),
                     LeaseBillingPolicy.class);
             return prorateMonthlyPeriod(from, to, billingCycle.billingCycleStartDate().getValue(), leaseBillingPolicy.prorationMethod().getValue());
-        } else if (PaymentFrequency.SemiMonthly == billingCycle.billingType().paymentFrequency().getValue()) {
+        } else if (BillingPeriod.SemiMonthly == billingCycle.billingType().billingPeriod().getValue()) {
             //TODO
             throw new Error("NOT IMPLEMENTED");
         } else {
-            return prorateNormalPeriod(from, to, billingCycle.billingType().paymentFrequency().getValue().getNumOfCycles());
+            return prorateNormalPeriod(from, to, billingCycle.billingType().billingPeriod().getValue().getNumOfCycles());
         }
     }
 

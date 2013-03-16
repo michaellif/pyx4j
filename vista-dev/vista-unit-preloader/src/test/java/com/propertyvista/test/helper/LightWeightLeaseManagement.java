@@ -17,11 +17,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -44,7 +44,7 @@ public class LightWeightLeaseManagement {
 
         InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
         lease.billingAccount().set(billingAccount);
-        lease.billingAccount().paymentFrequency().setValue(PaymentFrequency.Monthly);
+        lease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
 
         lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);

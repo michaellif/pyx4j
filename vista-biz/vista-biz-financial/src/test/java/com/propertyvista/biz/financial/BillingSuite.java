@@ -21,7 +21,6 @@ import com.propertyvista.biz.financial.billing.internal.BillExecutionWithManualA
 import com.propertyvista.biz.financial.billing.internal.BillableItemAdjustmentTest;
 import com.propertyvista.biz.financial.billing.internal.BillingAllFeaturesAdjustmentsFirstMonthProrationTest;
 import com.propertyvista.biz.financial.billing.internal.BillingBulkRunTest;
-import com.propertyvista.biz.financial.billing.internal.BillingCycleTest;
 import com.propertyvista.biz.financial.billing.internal.BillingExistingLeaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.billing.internal.BillingFeatureEagerScenarioTest;
 import com.propertyvista.biz.financial.billing.internal.BillingFirstMonthProrationScenarioTest;
@@ -38,6 +37,7 @@ import com.propertyvista.biz.financial.billing.internal.DateUtilsTest;
 import com.propertyvista.biz.financial.billing.internal.LatePaymentCalculationTest;
 import com.propertyvista.biz.financial.billing.internal.ProrationTest;
 import com.propertyvista.biz.financial.billing.print.BillPrintTest;
+import com.propertyvista.biz.financial.billingcycle.BillingTypeWithSameDayAsLeaseStartDayPolicyTest;
 import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
 
 @RunWith(Suite.class)
@@ -46,7 +46,7 @@ import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
         BillableItemAdjustmentTest.class, 
         BillingAllFeaturesAdjustmentsFirstMonthProrationTest.class, 
         BillingBulkRunTest.class, 
-        BillingCycleTest.class,
+        BillingTypeWithSameDayAsLeaseStartDayPolicyTest.class,
         BillingExistingLeaseSunnyDayScenarioTest.class, 
         BillingFeatureEagerScenarioTest.class,
         BillingFirstMonthProrationScenarioTest.class, 

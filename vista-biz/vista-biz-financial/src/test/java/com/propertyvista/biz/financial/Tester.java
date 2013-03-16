@@ -15,6 +15,9 @@ package com.propertyvista.biz.financial;
 
 import junit.framework.AssertionFailedError;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.gwt.server.DateUtils;
+
 public class Tester {
 
     private final boolean continueOnError;
@@ -61,5 +64,16 @@ public class Tester {
 
     public void assertFalse(String message, boolean condition) {
         assertTrue(message, !condition);
+    }
+
+    protected static LogicalDate getDate(String date) {
+        if (date == null) {
+            return null;
+        }
+        try {
+            return new LogicalDate(DateUtils.detectDateformat(date));
+        } catch (Exception e) {
+            throw new Error("Failed to parse date " + date);
+        }
     }
 }

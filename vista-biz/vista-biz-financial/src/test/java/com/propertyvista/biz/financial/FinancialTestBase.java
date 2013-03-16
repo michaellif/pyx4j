@@ -65,6 +65,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -211,7 +212,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         tenantDataModel = new TenantDataModel(config);
         tenantDataModel.generate();
 
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
         leaseBillingPolicyDataModel.generate();
 
         new PADPolicyDataModel(config, pmcDataModel).generate();
@@ -219,6 +220,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
         arPolicyDataModel.generate();
 
+    }
+
+    protected Building getBuilding() {
+        return buildingDataModel.getBuilding();
     }
 
     protected Bill runBilling() {
@@ -290,8 +295,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
         }
 
-        lease.currentTerm().termFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
-        lease.currentTerm().termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+        lease.currentTerm().termFrom().setValue(getDate(leaseDateFrom));
+        lease.currentTerm().termTo().setValue(getDate(leaseDateTo));
+
+        ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
 
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
 
@@ -318,7 +325,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {
         LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(lease, leaseTermType);
-        term.termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+        term.termTo().setValue(getDate(leaseDateTo));
         ServerSideFactory.create(LeaseFacade.class).acceptOffer(lease, term);
     }
 
@@ -435,7 +442,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         assert (billableItem != null);
 
-        billableItem.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
+        billableItem.expirationDate().setValue(getDate(expirationDate));
 
         Persistence.service().merge(billableItem);
         Persistence.service().commit();
@@ -447,8 +454,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         assert (billableItem != null);
 
-        billableItem.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
-        billableItem.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
+        billableItem.effectiveDate().setValue(getDate(effectiveDate));
+        billableItem.expirationDate().setValue(getDate(expirationDate));
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
         Persistence.service().commit();
@@ -460,7 +467,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate) {
-        return addBillableItem(featureType, FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate));
+        return addBillableItem(featureType, getDate(effectiveDate), getDate(expirationDate));
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
@@ -542,7 +549,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType, String effectiveDate, String expirationDate) {
         Lease lease = retrieveLease();
         return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
-                FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate));
+                getDate(effectiveDate), getDate(expirationDate));
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
@@ -560,8 +567,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
             String effectiveDate, String expirationDate) {
-        return addBillableItemAdjustment(billableItemId, value, adjustmentType, FinancialTestsUtils.getDate(effectiveDate),
-                FinancialTestsUtils.getDate(expirationDate));
+        return addBillableItemAdjustment(billableItemId, value, adjustmentType, getDate(effectiveDate), getDate(expirationDate));
     }
 
     protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
@@ -594,8 +600,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         BillableItemAdjustment billableItemAdjustment = findBillableItemAdjustment(billableItemAdjustmentId, lease);
 
-        billableItemAdjustment.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
-        billableItemAdjustment.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
+        billableItemAdjustment.effectiveDate().setValue(getDate(effectiveDate));
+        billableItemAdjustment.expirationDate().setValue(getDate(expirationDate));
 
         ServerSideFactory.create(LeaseFacade.class).finalize(lease.currentTerm());
         Persistence.service().commit();
@@ -646,8 +652,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().retrieve(leaseParticipant);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.createdDate().setValue(FinancialTestsUtils.getDate(receivedDate));
-        paymentRecord.receivedDate().setValue(FinancialTestsUtils.getDate(receivedDate));
+        paymentRecord.createdDate().setValue(getDate(receivedDate));
+        paymentRecord.receivedDate().setValue(getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());
@@ -891,5 +897,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 }
             }
         }
+    }
+
+    protected LogicalDate getDate(String date) {
+        if (date == null) {
+            return null;
+        }
+        return new LogicalDate(DateUtils.detectDateformat(date));
     }
 }

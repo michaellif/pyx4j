@@ -50,6 +50,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
@@ -57,7 +58,6 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBillingPolicyDTO> {
 
@@ -197,7 +197,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     class LeaseBillingTypeFolder extends VistaBoxFolder<LeaseBillingTypePolicyItem> {
 
-        private final Set<PaymentFrequency> usedFrequencies = new HashSet<PaymentFrequency>();
+        private final Set<BillingPeriod> usedFrequencies = new HashSet<BillingPeriod>();
 
         public LeaseBillingTypeFolder() {
             super(LeaseBillingTypePolicyItem.class);
@@ -212,7 +212,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         private void updateUsedFrequencies() {
             usedFrequencies.clear();
             for (LeaseBillingTypePolicyItem item : getValue()) {
-                usedFrequencies.add(item.paymentFrequency().getValue());
+                usedFrequencies.add(item.billingPeriod().getValue());
             }
         }
 
@@ -225,11 +225,11 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         @Override
         protected void addItem() {
-            new PaymentFrequencySelectorDialog(usedFrequencies, new ValueChangeHandler<PaymentFrequency>() {
+            new PaymentFrequencySelectorDialog(usedFrequencies, new ValueChangeHandler<BillingPeriod>() {
                 @Override
-                public void onValueChange(ValueChangeEvent<PaymentFrequency> event) {
+                public void onValueChange(ValueChangeEvent<BillingPeriod> event) {
                     LeaseBillingTypePolicyItem item = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-                    item.paymentFrequency().setValue(event.getValue());
+                    item.billingPeriod().setValue(event.getValue());
                     LeaseBillingTypeFolder.super.addItem(item);
                 }
             }).show();
@@ -274,7 +274,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CLabel<PaymentFrequency>()), 15).labelWidth(20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriod(), new CLabel<BillingPeriod>()), 15).labelWidth(20).build());
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDay(), startDay), 15).labelWidth(20).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentDueDayOffset(), dueDayOffset), 15).labelWidth(20).build());
@@ -309,7 +309,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             @Override
             protected void onValueSet(boolean populate) {
                 if (getValue() != null) {
-                    int cycles = getValue().paymentFrequency().getValue().getNumOfCycles();
+                    int cycles = getValue().billingPeriod().getValue().getNumOfCycles();
                     startDay.setOptions(makeList(1, cycles));
                     int maxOffset = cycles - 1;
                     dueDayOffset.setOptions(makeList(0, maxOffset / 2));
@@ -333,19 +333,19 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         class PaymentFrequencySelectorDialog extends Dialog implements CancelOption {
-            public PaymentFrequencySelectorDialog(final Set<PaymentFrequency> usedFrequencies, final ValueChangeHandler<PaymentFrequency> selectHandler) {
+            public PaymentFrequencySelectorDialog(final Set<BillingPeriod> usedFrequencies, final ValueChangeHandler<BillingPeriod> selectHandler) {
                 super(i18n.tr("Select Payment Frequency"));
                 setDialogOptions(this);
 
-                CComboBox<PaymentFrequency> selector = new CComboBox<PaymentFrequency>();
+                CComboBox<BillingPeriod> selector = new CComboBox<BillingPeriod>();
                 selector.setMandatory(true);
-                Set<PaymentFrequency> options = EnumSet.allOf(PaymentFrequency.class);
+                Set<BillingPeriod> options = EnumSet.allOf(BillingPeriod.class);
                 options.removeAll(usedFrequencies);
                 selector.setOptions(options);
 
-                selector.addValueChangeHandler(new ValueChangeHandler<PaymentFrequency>() {
+                selector.addValueChangeHandler(new ValueChangeHandler<BillingPeriod>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<PaymentFrequency> event) {
+                    public void onValueChange(ValueChangeEvent<BillingPeriod> event) {
                         selectHandler.onValueChange(event);
                         hide();
                     }

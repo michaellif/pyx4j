@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -89,9 +90,9 @@ class BillProducer {
             }
 
             bill.billingCycle().set(billingCycle);
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Running, true);
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Running, true);
 
-            currentPeriodBill = BillingManager.getLatestConfirmedBill(lease);
+            currentPeriodBill = BillingManager.instance().getLatestConfirmedBill(lease);
 
             bill.previousCycleBill().set(currentPeriodBill);
             if (currentPeriodBill != null) {
@@ -116,7 +117,7 @@ class BillProducer {
 
             prepareAccumulators();
 
-            Bill lastBill = BillingManager.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
+            Bill lastBill = BillingManager.instance().getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
             if (lastBill != null) {
                 nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
             } else {
@@ -131,7 +132,7 @@ class BillProducer {
             calculateTotals();
 
             if (!preview) {
-                BillingManager.setBillStatus(bill, Bill.BillStatus.Finished, true);
+                BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Finished, true);
 
                 Persistence.service().persist(bill.lineItems());
                 Persistence.service().persist(bill);
@@ -140,13 +141,13 @@ class BillProducer {
                         LeaseBillingPolicy.class);
 
                 if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
-                    bill = BillingManager.confirmBill(bill);
+                    bill = BillingManager.instance().confirmBill(bill);
                 }
             }
 
         } catch (Throwable e) {
             log.error("Bill run error", e);
-            BillingManager.setBillStatus(bill, Bill.BillStatus.Failed, true);
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Failed, true);
             String billCreationError = i18n.tr("Bill run error");
             if (BillingException.class.isAssignableFrom(e.getClass())) {
                 billCreationError = e.getMessage();
@@ -291,7 +292,7 @@ class BillProducer {
             }
             return Bill.BillType.First;
         case Approved: // first bill should be issued
-            if (BillingManager.getLatestConfirmedBill(lease) != null) {
+            if (BillingManager.instance().getLatestConfirmedBill(lease) != null) {
                 return Bill.BillType.Regular;
             } else {
                 if (lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().isNull()) {

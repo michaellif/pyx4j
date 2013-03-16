@@ -25,6 +25,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.test.preloader.BuildingDataModel;
 import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.preloader.LocationsDataModel;
@@ -75,7 +76,10 @@ public class YardiTestBase {
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
         productItemTypesDataModel.generate();
 
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, pmcDataModel);
+        BuildingDataModel buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
+        buildingDataModel.generate();
+
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
         leaseBillingPolicyDataModel.generate();
 
         IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);

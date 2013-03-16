@@ -7,22 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 1, 2012
- * @author michaellif
+ * Created on Mar 15, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial;
+package com.propertyvista.biz.financial.billingcycle;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.gwt.server.DateUtils;
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class FinancialTestsUtils {
+public interface BillingCycleFacade {
 
-    public static LogicalDate getDate(String date) {
-        if (date == null) {
-            return null;
-        }
-        return new LogicalDate(DateUtils.detectDateformat(date));
-    }
+    BillingType getBillingType(Lease lease);
+
+    BillingCycle getNextBillBillingCycle(Lease lease);
+
+    BillingCycle getSubsiquentBillingCycle(BillingCycle billingCycle);
 
 }

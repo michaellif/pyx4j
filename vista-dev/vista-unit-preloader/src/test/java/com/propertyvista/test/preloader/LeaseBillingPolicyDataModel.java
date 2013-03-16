@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -25,7 +26,6 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class LeaseBillingPolicyDataModel {
 
@@ -33,11 +33,12 @@ public class LeaseBillingPolicyDataModel {
 
     private final PreloadConfig config;
 
-    private final PmcDataModel pmcDataModel;
+    private final BuildingDataModel buildingDataModel;
 
-    public LeaseBillingPolicyDataModel(PreloadConfig config, PmcDataModel pmcDataModel) {
+    public LeaseBillingPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
         this.config = config;
-        this.pmcDataModel = pmcDataModel;
+        this.buildingDataModel = buildingDataModel;
+
     }
 
     public void generate() {
@@ -69,17 +70,55 @@ public class LeaseBillingPolicyDataModel {
 
         policy.confirmationMethod().setValue(config.billConfirmationMethod);
 
-        policy.node().set(pmcDataModel.getOrgNode());
+        policy.node().set(buildingDataModel.getBuilding());
 
-        LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
-        billingType.paymentDueDayOffset().setValue(0);
-        billingType.finalDueDayOffset().setValue(15);
-        billingType.billExecutionDayOffset().setValue(-15);
-        billingType.padCalculationDayOffset().setValue(-3);
-        billingType.padExecutionDayOffset().setValue(0);
-        policy.availableBillingTypes().add(billingType);
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.Monthly);
+            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-15);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.SemiMonthly);
+            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-7);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.BiWeekly);
+            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-7);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.Weekly);
+            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-3);
+            billingType.padCalculationDayOffset().setValue(-1);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
 
         Persistence.service().persist(policy);
     }

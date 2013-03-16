@@ -15,31 +15,31 @@ package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class PaymentFrequencyIO implements PrimitiveIO<PaymentFrequency> {
+public class PaymentFrequencyIO implements PrimitiveIO<BillingPeriod> {
 
-    private PaymentFrequency value;
+    private BillingPeriod value;
 
     private Action action;
 
     public PaymentFrequencyIO() {
     }
 
-    public PaymentFrequencyIO(PaymentFrequency value) {
+    public PaymentFrequencyIO(BillingPeriod value) {
         this.value = value;
     }
 
     @Override
     @XmlValue
-    public PaymentFrequency getValue() {
+    public BillingPeriod getValue() {
         return value;
     }
 
     @Override
-    public void setValue(PaymentFrequency value) {
+    public void setValue(BillingPeriod value) {
         this.value = value;
     }
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,27 +20,18 @@ import java.util.GregorianCalendar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.billing.internal.DateRange;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillDateUtils {
 
     private static final I18n i18n = I18n.get(BillDateUtils.class);
-
-    private static final long MILIS_IN_DAY = 1000 * 60 * 60 * 24;
-
-    /**
-     * Use 1-Jan-2012 as odd week Sunday ref to calculate odd/even week
-     */
-    private static final long REF_SUNDAY = new LogicalDate(112, 0, 1).getTime();
 
     public static final DateRange getOverlappingRange(DateRange range1, DateRange range2) {
         LogicalDate fromDate1 = range1.getFromDate() == null ? new LogicalDate(0) : range1.getFromDate();
@@ -71,103 +62,10 @@ public class BillDateUtils {
         return new DateRange(fromDate, toDate);
     }
 
-    /**
-     * For @see BillingPeriodCorrelationMethod.LeaseStart
-     * 
-     * When billing period required to start on lease start date we have one special case:
-     * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
-     * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
-     */
-    static int calculateBillingTypeStartDay(PaymentFrequency frequency, LogicalDate leaseStartDate) {
-        int billingPeriodStartDay = 0;
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(leaseStartDate);
-        switch (frequency) {
-        case Monthly:
-            billingPeriodStartDay = calendar.get(Calendar.DAY_OF_MONTH);
-            if (billingPeriodStartDay > 28) {
-                billingPeriodStartDay = 1;
-            }
-            break;
-        case Weekly:
-            billingPeriodStartDay = calendar.get(Calendar.DAY_OF_WEEK);
-            break;
-        case BiWeekly:
-            billingPeriodStartDay = calendar.get(Calendar.DAY_OF_WEEK);
-            if ((leaseStartDate.getTime() - REF_SUNDAY) / MILIS_IN_DAY % 14 >= 7) {
-                billingPeriodStartDay += 7;
-            }
-            break;
-        case SemiMonthly:
-            billingPeriodStartDay = calendar.get(Calendar.DAY_OF_MONTH);
-            if (billingPeriodStartDay > 28) {
-                billingPeriodStartDay = 1;
-            } else if (billingPeriodStartDay > 14) {
-                billingPeriodStartDay = billingPeriodStartDay - 14;
-            }
-            break;
-        case SemiAnnyally:
-        case Annually:
-            throw new Error("Not implemented");
-        }
-        return billingPeriodStartDay;
-    }
-
-    static LogicalDate calculateInitialBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate) {
-        LogicalDate billingCycleStartDate = null;
-        switch (billingType.paymentFrequency().getValue()) {
-        case Monthly:
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(leaseStartDate);
-            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            if (billingType.billingCycleStartDay().getValue() < 1 || billingType.billingCycleStartDay().getValue() > 28) {
-                throw new BillingException("Wrong billing period start day");
-            }
-            while (dayOfMonth != billingType.billingCycleStartDay().getValue()) {
-                calendar.add(Calendar.DATE, -1);
-                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            }
-            billingCycleStartDate = new LogicalDate(calendar.getTime());
-            break;
-        case Weekly:
-        case BiWeekly:
-        case SemiMonthly:
-        case SemiAnnyally:
-        case Annually:
-            //TODO
-            throw new Error("Not implemented");
-        }
-        return billingCycleStartDate;
-    }
-
-    public static LogicalDate calculateSubsiquentBillingCycleStartDate(PaymentFrequency frequency, LogicalDate previousBillingCycleStartDate) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(calculateBillingCycleEndDate(frequency, previousBillingCycleStartDate));
-        calendar.add(Calendar.DATE, 1);
-        return new LogicalDate(calendar.getTime());
-    }
-
     public static LogicalDate calculateBillingCycleDateByOffset(int offset, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
         calendar.add(Calendar.DATE, offset);
-        return new LogicalDate(calendar.getTime());
-    }
-
-    public static LogicalDate calculateBillingCycleEndDate(PaymentFrequency frequency, LogicalDate billingCycleStartDate) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(billingCycleStartDate);
-        switch (frequency) {
-        case Monthly:
-            calendar.add(Calendar.MONTH, 1);
-            break;
-        case Weekly:
-        case BiWeekly:
-        case SemiMonthly:
-        case Annually:
-            throw new Error("Not implemented");
-        }
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
         return new LogicalDate(calendar.getTime());
     }
 

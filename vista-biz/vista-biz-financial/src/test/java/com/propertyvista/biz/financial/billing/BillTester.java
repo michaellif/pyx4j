@@ -15,9 +15,6 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
-
-import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.biz.financial.billing.internal.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -155,18 +152,6 @@ public class BillTester extends Tester {
     public BillTester pastDueAmount(String value) {
         assertEquals("Past Due Amount", new BigDecimal(value), bill.pastDueAmount().getValue());
         return this;
-    }
-
-    protected static LogicalDate getDate(String date) {
-        if (date == null) {
-            return null;
-        }
-        try {
-            return FinancialTestsUtils.getDate(date);
-        } catch (Exception e) {
-            throw new Error("Failed to parse date " + date);
-        }
-
     }
 
 }

@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 
 /**
  * Defines bill day and billing period, for now created by request
@@ -36,7 +36,7 @@ public interface BillingType extends IEntity {
     @NotNull
     @MemberColumn(notNull = true)
     @Indexed(uniqueConstraint = true, group = { "A,1" })
-    IPrimitive<PaymentFrequency> paymentFrequency();
+    IPrimitive<BillingPeriod> billingPeriod();
 
     @ToString
     @NotNull

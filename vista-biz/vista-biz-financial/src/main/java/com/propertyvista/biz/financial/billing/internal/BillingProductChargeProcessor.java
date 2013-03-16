@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.TaxUtils;
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -61,8 +62,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         reviseChargeForPeriod(service, InvoiceProductCharge.Period.current);
         reviseChargeForPeriod(service, InvoiceProductCharge.Period.previous);
 
-        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
-                .featureItems()) {
+        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }
@@ -78,9 +78,12 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
         createChargeForNextPeriod(billableItem);
 
-//        reviseChargeForCurrentPeriod(billableItem);
+        //TODO
+        if (false) {
+            reviseChargeForCurrentPeriod(billableItem);
 
-//        reviseChargeForPreviousPeriod(billableItem);
+            reviseChargeForPreviousPeriod(billableItem);
+        }
     }
 
     private void createChargeForNextPeriod(BillableItem billableItem) {

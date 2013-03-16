@@ -135,6 +135,7 @@ public class BillExecutionWithAutoApprovalTest extends FinancialTestBase {
         new BillTester(getBill(1)).
         billSequenceNumber(1).
         billType(Bill.BillType.ZeroCycle).
+        billingCyclePeriodStartDate("1-May-2011").
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(1);

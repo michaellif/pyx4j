@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -26,7 +27,6 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBillingPolicy> {
@@ -68,7 +68,7 @@ public class MockupLeaseBillingPolicyPreloader extends AbstractPolicyPreloader<L
         policy.confirmationMethod().setValue(BillConfirmationMethod.manual);
 
         LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingPeriod().setValue(BillingPeriod.Monthly);
         billingType.billingCycleStartDay().setValue(1);
         billingType.paymentDueDayOffset().setValue(0);
         billingType.finalDueDayOffset().setValue(15);

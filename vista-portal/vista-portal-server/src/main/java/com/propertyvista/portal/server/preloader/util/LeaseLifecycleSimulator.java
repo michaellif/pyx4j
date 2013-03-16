@@ -40,6 +40,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -353,7 +354,7 @@ public class LeaseLifecycleSimulator {
         private void queueReccurentBilling() {
             Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
-            LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextCycleExecutionDate(lastBill.billingCycle());
+            LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).billExecutionDate().getValue();
 
             queueEvent(billingRunDay, new RunBillingRecurrent(lease));
 
@@ -480,7 +481,8 @@ public class LeaseLifecycleSimulator {
                         return;
                     }
 
-                    LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextCycleExecutionDate(lastBill.billingCycle());
+                    LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).billExecutionDate()
+                            .getValue();
 
                     if (now().equals(billingRunDay)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);

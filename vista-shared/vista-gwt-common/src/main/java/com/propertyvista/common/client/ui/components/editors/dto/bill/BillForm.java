@@ -64,7 +64,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
-            infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().paymentFrequency())).build());
+            infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
             infoPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billExecutionDate())).build());
 
             infoPanel.setH1(++row, 0, 2, i18n.tr("Status"));

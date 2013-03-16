@@ -18,11 +18,12 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 
+//TODO Find a better name
 public interface LeaseBillingTypePolicyItem extends IEntity {
 
-    IPrimitive<PaymentFrequency> paymentFrequency();
+    IPrimitive<BillingPeriod> billingPeriod();
 
     @Caption(description = "First day of Billing Cycle for selected Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();

@@ -39,7 +39,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.billing.internal.BillingManager;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
@@ -85,7 +85,7 @@ public class BillingProcessManager {
                             createUntill.add(Calendar.MONTH, 1);
 
                             while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {
-                                latestBillingCycle = BillingManager.getSubsiquentBillingCycle(latestBillingCycle);
+                                latestBillingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsiquentBillingCycle(latestBillingCycle);
                             }
 
                         }

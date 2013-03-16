@@ -39,13 +39,44 @@ import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface BillingAccount extends IEntity {
 
     final static Logger log = LoggerFactory.getLogger(BillingAccount.class);
+
+    @I18n(context = "Payment Frequency")
+    @XmlType(name = "PaymentFrequency")
+    public enum BillingPeriod {
+
+        Monthly(28),
+
+        Weekly(7),
+
+        SemiMonthly(14),
+
+        BiWeekly(14),
+
+        SemiAnnyally(182),
+
+        Annually(365);
+
+        private final int numOfCycles;
+
+        BillingPeriod(int numOfCycles) {
+            this.numOfCycles = numOfCycles;
+        }
+
+        public int getNumOfCycles() {
+            return numOfCycles;
+        }
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @I18n(context = "Payment Accepted")
     @XmlType(name = "PaymentAccepted")
@@ -107,7 +138,7 @@ public interface BillingAccount extends IEntity {
     ISet<InvoiceLineItem> invoiceLineItems();
 
     @NotNull
-    IPrimitive<PaymentFrequency> paymentFrequency();
+    IPrimitive<BillingPeriod> billingPeriod();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @ReadOnly(allowOverrideNull = true)

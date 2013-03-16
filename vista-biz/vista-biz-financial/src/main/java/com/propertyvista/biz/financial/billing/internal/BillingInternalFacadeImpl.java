@@ -25,16 +25,16 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
@@ -54,73 +54,52 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
 
     @Override
     public Bill runBilling(Lease leaseId) {
-        return BillingManager.runBilling(leaseId, false);
+        return BillingManager.instance().runBilling(leaseId, false);
     }
 
     @Override
     public Bill runBilling(Lease leaseId, BillingCycle cycle) {
-        return BillingManager.runBilling(leaseId, cycle, false);
+        return BillingManager.instance().runBilling(leaseId, cycle, false);
     }
 
     @Override
     public Bill runBillingPreview(Lease leaseId) {
-        return BillingManager.runBilling(leaseId, true);
+        return BillingManager.instance().runBilling(leaseId, true);
     }
 
     @Override
     public Bill getBill(Lease lease, int billSequenceNumber) {
-        return BillingManager.getBill(lease, billSequenceNumber);
+        return BillingManager.instance().getBill(lease, billSequenceNumber);
     }
 
     @Override
     public Bill getLatestConfirmedBill(Lease lease) {
-        return BillingManager.getLatestConfirmedBill(lease);
+        return BillingManager.instance().getLatestConfirmedBill(lease);
     }
 
     @Override
     public Bill getLatestBill(Lease lease) {
-        return BillingManager.getLatestBill(lease);
+        return BillingManager.instance().getLatestBill(lease);
     }
 
     @Override
     public boolean isLatestBill(Bill bill) {
-        return BillingManager.isLatestBill(bill);
+        return BillingManager.instance().isLatestBill(bill);
     }
 
     @Override
     public Bill confirmBill(Bill bill) {
-        return BillingManager.confirmBill(bill);
+        return BillingManager.instance().confirmBill(bill);
     }
 
     @Override
     public Bill rejectBill(Bill bill, String reason) {
-        return BillingManager.rejectBill(bill, reason);
-    }
-
-    @Override
-    public BillingType ensureBillingType(Lease lease) {
-        return BillingManager.ensureBillingType(lease);
+        return BillingManager.instance().rejectBill(bill, reason);
     }
 
     @Override
     public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
-        BillingManager.updateLeaseAdjustmentTax(adjustment);
-    }
-
-    @Override
-    public LogicalDate getNextCycleExecutionDate(BillingCycle cycle) {
-        LogicalDate startDate = BillDateUtils.calculateSubsiquentBillingCycleStartDate(cycle.billingType().paymentFrequency().getValue(), cycle
-                .billingCycleStartDate().getValue());
-        // get execution day offset from policy
-        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(cycle.building(), LeaseBillingPolicy.class);
-        Integer execOffset = null;
-        for (LeaseBillingTypePolicyItem item : leaseBillingPolicy.availableBillingTypes()) {
-            if (item.paymentFrequency().getValue().equals(cycle.billingType().paymentFrequency().getValue())) {
-                execOffset = item.billExecutionDayOffset().getValue();
-                break;
-            }
-        }
-        return BillDateUtils.calculateBillingCycleDateByOffset(execOffset, startDate);
+        BillingManager.instance().updateLeaseAdjustmentTax(adjustment);
     }
 
     @Override
@@ -137,13 +116,13 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
         }
 
         // update future BillingCycles if execution dates have changed
-        Map<PaymentFrequency, LeaseBillingTypePolicyItem> policyMap = new HashMap<PaymentFrequency, LeaseBillingTypePolicyItem>();
+        Map<BillingPeriod, LeaseBillingTypePolicyItem> policyMap = new HashMap<BillingPeriod, LeaseBillingTypePolicyItem>();
         for (LeaseBillingTypePolicyItem item : newPolicy.availableBillingTypes()) {
-            policyMap.put(item.paymentFrequency().getValue(), item);
+            policyMap.put(item.billingPeriod().getValue(), item);
         }
 
         for (LeaseBillingTypePolicyItem oldItem : oldPolicy.availableBillingTypes()) {
-            LeaseBillingTypePolicyItem newItem = policyMap.get(oldItem.paymentFrequency().getValue());
+            LeaseBillingTypePolicyItem newItem = policyMap.get(oldItem.billingPeriod().getValue());
             if (// @formatter:off
                 oldItem.billExecutionDayOffset().getValue() == newItem.billExecutionDayOffset().getValue() &&
                 oldItem.padCalculationDayOffset().getValue() == newItem.padCalculationDayOffset().getValue() &&
@@ -155,7 +134,7 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
             // iterate over future billing cycles
             EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().paymentFrequency(), oldItem.paymentFrequency()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), oldItem.billingPeriod()));
             criteria.add(PropertyCriterion.gt(criteria.proto().billExecutionDate(), SystemDateManager.getDate()));
             for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
                 // Only update cycle if all new dates are in the future

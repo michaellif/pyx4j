@@ -37,8 +37,8 @@ public class ExternalTestBase extends FinancialTestBase {
         charge.amount().setValue(new BigDecimal(amount));
         charge.description().setValue(description);
         charge.transactionDate().setValue(new LogicalDate());
-        charge.fromDate().setValue(FinancialTestsUtils.getDate(fromDate));
-        charge.toDate().setValue(FinancialTestsUtils.getDate(toDate));
+        charge.fromDate().setValue(getDate(fromDate));
+        charge.toDate().setValue(getDate(toDate));
 
         ServerSideFactory.create(ExternalBillingFacade.class).postCharge(charge, retrieveLease().leaseId().getValue());
     }

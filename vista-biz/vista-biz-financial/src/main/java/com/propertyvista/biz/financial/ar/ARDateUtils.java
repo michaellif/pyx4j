@@ -39,7 +39,7 @@ public class ARDateUtils {
     public static LogicalDate calculateDueDate(InternalBillingAccount billingAccount, LogicalDate postDate) {
         LogicalDate dueDate = null;
 
-        switch (billingAccount.billingType().paymentFrequency().getValue()) {
+        switch (billingAccount.billingType().billingPeriod().getValue()) {
         case Monthly:
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(postDate);

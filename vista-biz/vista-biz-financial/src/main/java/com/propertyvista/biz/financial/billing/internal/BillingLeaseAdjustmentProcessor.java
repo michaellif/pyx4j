@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;

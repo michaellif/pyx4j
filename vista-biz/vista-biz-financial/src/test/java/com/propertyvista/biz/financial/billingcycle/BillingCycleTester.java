@@ -11,10 +11,12 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial.billingcycle;
 
 import com.propertyvista.biz.financial.Tester;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class BillingCycleTester extends Tester {
 
@@ -27,6 +29,25 @@ public class BillingCycleTester extends Tester {
 
     public BillingCycleTester(BillingCycle billingCycle) {
         this(billingCycle, false);
+    }
+
+    public BillingCycleTester(Building building, BillingPeriod billingPeriod, String leaseStartDate) {
+        this(BillingCycleManager.instance().getBillingCycle(building, billingPeriod, getDate(leaseStartDate)));
+    }
+
+    public BillingCycleTester billingCycleStartDate(String date) {
+        assertEquals("Billing Cycle Start Date", getDate(date), billingCycle.billingCycleStartDate().getValue());
+        return this;
+    }
+
+    public BillingCycleTester billingCycleEndDate(String date) {
+        assertEquals("Billing Cycle End Date", getDate(date), billingCycle.billingCycleEndDate().getValue());
+        return this;
+    }
+
+    public BillingCycleTester billExecutionDate(String date) {
+        assertEquals("Bill Execution Date", getDate(date), billingCycle.billExecutionDate().getValue());
+        return this;
     }
 
     public BillingCycleTester notConfirmedBills(Long ammount) {
