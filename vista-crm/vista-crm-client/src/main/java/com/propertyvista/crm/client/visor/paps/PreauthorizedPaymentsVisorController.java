@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.IPane;
 
@@ -57,12 +56,7 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
         service.retrieve(callback, EntityFactory.createIdentityStub(Tenant.class, tenantId));
     }
 
-    public void save(PreauthorizedPaymentsDTO pads) {
-        service.save(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                // TODO Auto-generated method stub
-            }
-        }, pads);
+    public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
+        service.save(callback, pads);
     }
 }
