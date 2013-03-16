@@ -47,6 +47,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -116,7 +117,18 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey()).show(parentView);
+                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey(),
+                            new DefaultAsyncCallback<List<PreauthorizedPayment>>() {
+                                @Override
+                                public void onSuccess(List<PreauthorizedPayment> result) {
+                                    for (CComponent<?, ?> comp : item.getComponents()) {
+                                        if (comp instanceof TenantInLeaseEditor) {
+                                            ((TenantInLeaseEditor) comp).get((((TenantInLeaseEditor) comp).proto().leaseParticipant().preauthorizedPayments()))
+                                                    .setValue(result);
+                                        }
+                                    }
+                                }
+                            }).show(parentView);
                 }
             });
         }
@@ -385,10 +397,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-                bindAmountEditor(getValue().amountType().getValue(), populate);
+                bindAmountEditor(getValue().amountType().getValue());
             }
 
-            private void bindAmountEditor(AmountType valueType, boolean repopulate) {
+            private void bindAmountEditor(AmountType valueType) {
                 CComponent<?, ?> comp = null;
                 if (valueType != null) {
                     switch (valueType) {
@@ -408,9 +420,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     inject(proto().amount(), comp);
                     comp.setDecorator(decor);
 
-                    if (repopulate) {
-                        get(proto().amount()).populate(getValue().amount().getValue(BigDecimal.ZERO));
-                    }
+                    get(proto().amount()).populate(getValue().amount().getValue(BigDecimal.ZERO));
                 }
             }
         }

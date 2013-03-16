@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.visor.paps;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,6 +28,7 @@ import com.pyx4j.site.client.ui.IPane;
 import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class PreauthorizedPaymentsVisorController implements IVisorController {
@@ -38,8 +41,11 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
 
     private final Key tenantId;
 
-    public PreauthorizedPaymentsVisorController(Key tenantId) {
+    private final AsyncCallback<List<PreauthorizedPayment>> savedCloseCallback;
+
+    public PreauthorizedPaymentsVisorController(Key tenantId, AsyncCallback<List<PreauthorizedPayment>> savedCloseCallback) {
         this.tenantId = tenantId;
+        this.savedCloseCallback = savedCloseCallback;
     }
 
     @Override
@@ -58,5 +64,11 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
 
     public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
         service.save(callback, pads);
+    }
+
+    public void onSavedClose(List<PreauthorizedPayment> pads) {
+        if (savedCloseCallback != null) {
+            savedCloseCallback.onSuccess(pads);
+        }
     }
 }

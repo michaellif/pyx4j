@@ -63,8 +63,10 @@ public class PreauthorizedPaymentsVisorView extends ScrollPanel implements IViso
     }
 
     @Override
-    public boolean onBeforeClose() {
-        // TODO Auto-generated method stub
+    public boolean onBeforeClose(boolean saved) {
+        if (saved) {
+            controller.onSavedClose(form.getValue().tenant().preauthorizedPayments());
+        }
         return true;
     }
 }
