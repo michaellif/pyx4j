@@ -172,7 +172,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     public interface RunBillData extends IEntity {
 
         @NotNull
-        IPrimitive<BillingPeriod> paymentFrequency();
+        IPrimitive<BillingPeriod> billingPeriod();
 
         @NotNull
         IPrimitive<LogicalDate> billingPeriodStartDate();

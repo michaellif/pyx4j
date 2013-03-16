@@ -137,11 +137,11 @@ class BillingCycleManager {
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
      * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
      */
-    int getBillingCycleStartDay(BillingPeriod paymentFrequency, LogicalDate leaseStartDate) {
+    int getBillingCycleStartDay(BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
         int billingCycleStartDay = 0;
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(leaseStartDate);
-        switch (paymentFrequency) {
+        switch (billingPeriod) {
         case Monthly:
             billingCycleStartDay = calendar.get(Calendar.DAY_OF_MONTH);
             if (billingCycleStartDay > 28) {
