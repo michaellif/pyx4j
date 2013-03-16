@@ -93,6 +93,8 @@ public class PMSiteContentManager implements Serializable {
 
     private final SiteDescriptor siteDescriptor;
 
+    private PMSiteCssManager cssManager;
+
     private Map<AvailableLocale, List<News>> news;
 
     private Map<AvailableLocale, List<Testimonial>> testimonials;
@@ -139,6 +141,13 @@ public class PMSiteContentManager implements Serializable {
             descriptor._path().add(parent);
             createPath(descriptor);
         }
+    }
+
+    public PMSiteCssManager getCssManager() {
+        if (cssManager == null) {
+            cssManager = new PMSiteCssManager(this);
+        }
+        return cssManager;
     }
 
     public List<HomePageGadget> getNarrowAreaGadgets() {

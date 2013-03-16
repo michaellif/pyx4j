@@ -115,6 +115,9 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        if (ApplicationMode.isDevelopment()) {
+            response.renderCSSReference(cm.getCssManager().getCssReference("test"));
+        }
         if (!cm.isCustomResidentsContentEnabled()) {
             String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
             String fileCSS = skin + "/" + "main.css";
