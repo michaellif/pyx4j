@@ -58,7 +58,7 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
         });
     }
 
-    public void populate(AsyncCallback<PreauthorizedPaymentsDTO> callback) {
+    public void retrieve(AsyncCallback<PreauthorizedPaymentsDTO> callback) {
         service.retrieve(callback, EntityFactory.createIdentityStub(Tenant.class, tenantId));
     }
 

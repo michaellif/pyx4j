@@ -43,7 +43,7 @@ public class PreauthorizedPaymentsVisorView extends ScrollPanel implements IViso
     }
 
     public void populate(final Command onPopulate) {
-        controller.populate(new DefaultAsyncCallback<PreauthorizedPaymentsDTO>() {
+        controller.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentsDTO>() {
             @Override
             public void onSuccess(PreauthorizedPaymentsDTO result) {
                 form.populate(result);
