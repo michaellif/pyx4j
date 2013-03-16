@@ -113,7 +113,7 @@ class BillingCycleManager {
 
     BillingType getBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
 
-        //try to find existing billing cycle
+        // Try to find existing billing type
         EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), billingPeriod));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
@@ -182,11 +182,9 @@ class BillingCycleManager {
 
     BillingCycle getBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
 
-        // Avoid transaction isolation problems in HDQLDB, retrieve "stats" in different transaction.
-        // The @Detached(level = AttachLevel.Detached) on billingCycle.stats() would be a better option
-
         BillingType billingType = getBillingType(building, billingPeriod, billingPeriodStartDate);
 
+        // Try to find existing billing cycle
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
         criteria.add(PropertyCriterion.le(criteria.proto().billingCycleStartDate(), billingPeriodStartDate));
@@ -205,19 +203,9 @@ class BillingCycleManager {
                     return createBillingCycle(building, billingPeriod, billingPeriodStartDate);
                 }
             });
-
-// Can't initialize this table here! HDQLDB will lock. TODO fix HDQLDB
-//                    billingCycle.stats().notConfirmed().setValue(0L);
-//                    billingCycle.stats().failed().setValue(0L);
-//                    billingCycle.stats().rejected().setValue(0L);
-//                    billingCycle.stats().confirmed().setValue(0L);
-
         } else {
             throw new Error("Duplication of Billing Cycles");
         }
-
-        //? If @Detached(level = AttachLevel.Detached) on billingCycle.stats()
-        //Persistence.service().retrieveMember(billingCycle.stats(), AttachLevel.Attached);
 
         if (billingCycle.isValueDetached()) {
             return Persistence.service().retrieve(BillingCycle.class, billingCycle.getPrimaryKey());
