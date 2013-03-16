@@ -30,6 +30,5 @@ public interface IVisorEditor extends IVisor {
 
     void apply();
 
-    boolean onBeforeClose();
-
+    boolean onBeforeClose(boolean saved);
 }

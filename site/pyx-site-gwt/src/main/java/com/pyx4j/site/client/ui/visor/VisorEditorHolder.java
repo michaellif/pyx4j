@@ -52,7 +52,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
 
                     @Override
                     public void onSuccess(VoidSerializable result) {
-                        if (visor.onBeforeClose()) {
+                        if (visor.onBeforeClose(true)) {
                             parent.hideVisor();
                         }
                     }
@@ -73,7 +73,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
         Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                if (visor.onBeforeClose()) {
+                if (visor.onBeforeClose(false)) {
                     parent.hideVisor();
                 }
             }
