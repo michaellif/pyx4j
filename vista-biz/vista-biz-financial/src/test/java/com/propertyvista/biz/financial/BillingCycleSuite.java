@@ -20,8 +20,8 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartD
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartDayPolicy1Test;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForDefaultStartDayPolicy28Test;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleForSameDayAsLeaseStartDayPolicyTest;
-import com.propertyvista.biz.financial.billingcycle.BillingTypeWithDefaultStartDayPolicyTest;
-import com.propertyvista.biz.financial.billingcycle.BillingTypeWithSameDayAsLeaseStartDayPolicyTest;
+import com.propertyvista.biz.financial.billingcycle.BillingTypeForDefaultStartDayPolicyTest;
+import com.propertyvista.biz.financial.billingcycle.BillingTypeForSameDayAsLeaseStartDayPolicyTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -30,8 +30,8 @@ import com.propertyvista.biz.financial.billingcycle.BillingTypeWithSameDayAsLeas
     BillingCycleForDefaultStartDayPolicy1Test.class, 
     BillingCycleForDefaultStartDayPolicy28Test.class, 
     BillingCycleForSameDayAsLeaseStartDayPolicyTest.class, 
-    BillingTypeWithDefaultStartDayPolicyTest.class, 
-    BillingTypeWithSameDayAsLeaseStartDayPolicyTest.class, 
+    BillingTypeForDefaultStartDayPolicyTest.class, 
+    BillingTypeForSameDayAsLeaseStartDayPolicyTest.class, 
     //@formatter:on
 
 })

@@ -82,7 +82,6 @@ public class PmcDataModel {
             @Override
             public Void call() {
                 Persistence.service().persist(pmc);
-                Persistence.service().commit();
                 return null;
             }
         });

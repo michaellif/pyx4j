@@ -35,8 +35,10 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
@@ -162,63 +164,65 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData() {
-        boolean ok = false;
-        PreloadConfig config = new PreloadConfig();
-        try {
-            preloadData(config);
-        } finally {
-            Persistence.service().commit();
-        }
-
+        preloadData(new PreloadConfig());
     }
 
-    protected void preloadData(PreloadConfig config) {
+    protected void preloadData(final PreloadConfig config) {
         this.config = config;
 
-        setSysDate("01-Jan-2010");
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-        pmcDataModel = new PmcDataModel(config);
-        pmcDataModel.generate();
+            @Override
+            public Void execute() {
 
-        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate();
+                setSysDate("01-Jan-2010");
 
-        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-        taxesDataModel.generate();
+                pmcDataModel = new PmcDataModel(config);
+                pmcDataModel.generate();
 
-        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-        productItemTypesDataModel.generate();
+                LocationsDataModel locationsDataModel = new LocationsDataModel(config);
+                locationsDataModel.generate();
 
-        leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
-        leaseAdjustmentReasonDataModel.generate();
+                TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
+                taxesDataModel.generate();
 
-        buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
-        buildingDataModel.generate();
+                ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
+                productItemTypesDataModel.generate();
 
-        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
-        idAssignmentPolicyDataModel.generate();
+                leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
+                leaseAdjustmentReasonDataModel.generate();
 
-        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
-                buildingDataModel);
-        productTaxPolicyDataModel.generate();
+                buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
+                buildingDataModel.generate();
 
-        DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
-        depositPolicyDataModel.generate();
+                IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
+                idAssignmentPolicyDataModel.generate();
 
-        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
-                taxesDataModel, buildingDataModel);
-        leaseAdjustmentPolicyDataModel.generate();
+                ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
+                        buildingDataModel);
+                productTaxPolicyDataModel.generate();
 
-        tenantDataModel = new TenantDataModel(config);
-        tenantDataModel.generate();
+                DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
+                depositPolicyDataModel.generate();
 
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-        leaseBillingPolicyDataModel.generate();
+                LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
+                        taxesDataModel, buildingDataModel);
+                leaseAdjustmentPolicyDataModel.generate();
 
-        new PADPolicyDataModel(config, pmcDataModel).generate();
+                tenantDataModel = new TenantDataModel(config);
+                tenantDataModel.generate();
 
-        arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
-        arPolicyDataModel.generate();
+                LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
+                leaseBillingPolicyDataModel.generate();
+
+                new PADPolicyDataModel(config, pmcDataModel).generate();
+
+                arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
+                arPolicyDataModel.generate();
+
+                return null;
+            }
+        });
 
     }
 

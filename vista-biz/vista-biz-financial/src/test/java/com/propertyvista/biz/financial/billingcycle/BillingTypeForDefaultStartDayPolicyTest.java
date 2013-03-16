@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.test.preloader.PreloadConfig;
 
 @Category(FunctionalTests.class)
-public class BillingTypeWithDefaultStartDayPolicyTest extends FinancialTestBase {
+public class BillingTypeForDefaultStartDayPolicyTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

@@ -105,7 +105,7 @@ class BillingCycleManager {
 
         if (policy.billingCycleStartDay().isNull()) { // According to Lease start day
             return getBillingType(billingPeriod, getBillingCycleStartDay(billingPeriod, leaseStartDate));
-        } else {
+        } else { // According to policy default start day
             return getBillingType(billingPeriod, policy.billingCycleStartDay().getValue());
         }
 

@@ -15,10 +15,14 @@ package com.propertyvista.biz.financial.billingcycle;
 
 import java.text.ParseException;
 
+import org.junit.experimental.categories.Category;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.test.preloader.PreloadConfig;
 
+@Category(FunctionalTests.class)
 public class BillingCycleForDefaultStartDayPolicy15Test extends FinancialTestBase {
 
     @Override
