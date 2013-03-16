@@ -120,14 +120,14 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
 
-        <gwtVersion>2.5.0</gwtVersion>
+        <gwtVersion>2.5.1</gwtVersion>
         <gaeVersion>1.7.5</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
 
         <jettyVersion>8.1.8.v20121106</jettyVersion>
 
         <jasperreportsVersion>4.5.1</jasperreportsVersion>
-        <quartzVersion>2.1.6</quartzVersion>
+        <quartzVersion>2.1.7</quartzVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
