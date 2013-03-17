@@ -27,11 +27,14 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Stack;
 
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,6 +52,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     private static final long serialVersionUID = 7937142277508559591L;
 
     private static final I18n i18n = I18n.get(ReportTableXLSXFormatter.class);
+
+    private final boolean xlsx;
 
     private final Workbook workbook;
 
@@ -68,6 +73,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     protected final CellStyle cellStyleDate;
 
+    protected final CellStyle cellStyleDateTime;
+
     protected final CellStyle cellStyleDollar;
 
     protected final CellStyle cellStyleInteger;
@@ -83,7 +90,16 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     private int rowCount = 0;
 
     public ReportTableXLSXFormatter() {
-        workbook = new XSSFWorkbook();
+        this(true);
+    }
+
+    public ReportTableXLSXFormatter(boolean xlsx) {
+        this.xlsx = xlsx;
+        if (xlsx) {
+            workbook = new XSSFWorkbook();
+        } else {
+            workbook = new HSSFWorkbook();
+        }
 
         //Create column heading0 font.
         Font columnHeading2Font = this.workbook.createFont();
@@ -108,14 +124,15 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellStyleDefault = this.workbook.createCellStyle();
         this.cellStyleDefault.setFont(font);
 
+        // N.B. "mm/dd/yyyy" is not working because it is not build in Excel
+
         this.cellStyleDate = this.workbook.createCellStyle();
         this.cellStyleDate.setFont(font);
         this.cellStyleDate.setDataFormat((short) BuiltinFormats.getBuiltinFormat("m/d/yy"));
 
-        // N.B. "mm/dd/yyyy" is not working because it is not build in Excel
-        // format.
-        // cellStyleDate.setDataFormat(HSSFDataFormat.getFormat("m/d/yy"));
-        // Use text for now ...
+        this.cellStyleDateTime = this.workbook.createCellStyle();
+        this.cellStyleDateTime.setFont(font);
+        this.cellStyleDateTime.setDataFormat((short) BuiltinFormats.getBuiltinFormat("m/d/yy h:mm"));
 
         // Create currency style
         this.cellStyleDollar = this.workbook.createCellStyle();
@@ -142,6 +159,14 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.autosize = autosize;
     }
 
+    protected RichTextString createRichTextString(String text) {
+        if (xlsx) {
+            return new XSSFRichTextString(text);
+        } else {
+            return new HSSFRichTextString(text);
+        }
+    }
+
     @Override
     public void header(String text) {
         if (!CommonsStringUtils.isStringSet(text)) {
@@ -153,7 +178,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
         Cell cell = this.curentRow.createCell(this.cellIdx++);
         cell.setCellStyle(this.cellStyleColumnHeading);
-        cell.setCellValue(new XSSFRichTextString(text));
+        cell.setCellValue(createRichTextString(text));
     }
 
     public void header2Cell(String text) {
@@ -163,7 +188,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
         Cell cell = this.curentRow.createCell(this.cellIdx++);
         cell.setCellStyle(this.cellStyleColumnHeading2);
-        cell.setCellValue(new XSSFRichTextString(text));
+        cell.setCellValue(createRichTextString(text));
     }
 
     public void newSheet(String sheetName) {
@@ -202,6 +227,8 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             cellEmpty();
         } else if (value instanceof String) {
             cell((String) value);
+        } else if (value instanceof java.sql.Date) {
+            cell((java.sql.Date) value);
         } else if (value instanceof Date) {
             cell((Date) value);
         } else if (value instanceof Boolean) {
@@ -225,7 +252,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         Cell cell = this.curentRow.createCell(this.cellIdx++);
         cell.setCellStyle(this.cellStyleDefault);
         cell.setCellType(Cell.CELL_TYPE_STRING);
-        cell.setCellValue(new XSSFRichTextString(value));
+        cell.setCellValue(createRichTextString(value));
     }
 
     public void cell(BigDecimal value) {
@@ -263,10 +290,15 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         return i18n.tr("Yes");
     }
 
+    public void cell(java.sql.Date value) {
+        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        cell.setCellStyle(this.cellStyleDate);
+        cell.setCellValue(value);
+    }
+
     public void cell(Date value) {
         Cell cell = this.curentRow.createCell(this.cellIdx++);
-        // TODO: fix cellStyleDate
-        cell.setCellStyle(this.cellStyleDate);
+        cell.setCellStyle(this.cellStyleDateTime);
         cell.setCellValue(value);
     }
 
@@ -312,7 +344,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     @Override
     public String getContentType() {
-        return MimeMap.getContentType(DownloadFormat.XLSX);
+        return MimeMap.getContentType(xlsx ? DownloadFormat.XLSX : DownloadFormat.XLS);
     }
 
     protected void verify() throws Error {

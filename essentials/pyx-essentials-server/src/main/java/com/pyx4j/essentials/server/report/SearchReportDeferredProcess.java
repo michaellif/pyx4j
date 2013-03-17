@@ -159,9 +159,13 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         formatter.newRow();
     }
 
+    protected EntityMeta headerEntityMeta() {
+        return EntityFactory.getEntityMeta(entityClass);
+    }
+
     protected void createHeader() {
         selectedMemberNames = new Vector<String>();
-        EntityMeta em = EntityFactory.getEntityMeta(entityClass);
+        EntityMeta em = headerEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (em.getMemberMeta(memberName).isRpcTransient()) {
@@ -183,6 +187,10 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             }
         }
         createHeaderEnds();
+    }
+
+    protected int getCount() {
+        return fetchCount;
     }
 
     protected boolean reportMember(E entity, String memberName, MemberMeta memberMeta) {
@@ -234,10 +242,6 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
             }
             return r;
         }
-    }
-
-    protected int getCount() {
-        return fetchCount;
     }
 
 }

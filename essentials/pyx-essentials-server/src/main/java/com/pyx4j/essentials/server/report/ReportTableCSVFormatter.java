@@ -54,6 +54,14 @@ public class ReportTableCSVFormatter implements ReportTableFormatter {
         }
     }
 
+    public void setDateFormatPattern(String pattern) {
+        dateFormat = new SimpleDateFormat(pattern);
+    }
+
+    public void setDateTimeFormatPattern(String pattern) {
+        dateTimeFormat = new SimpleDateFormat(pattern);
+    }
+
     @Override
     public byte[] getBinaryData() {
         byte[] b = dataBuilder.getBinaryData();
