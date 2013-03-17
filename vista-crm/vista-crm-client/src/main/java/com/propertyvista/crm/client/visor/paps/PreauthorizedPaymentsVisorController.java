@@ -31,7 +31,7 @@ import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorSer
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public class PreauthorizedPaymentsVisorController implements IVisorController {
+public abstract class PreauthorizedPaymentsVisorController implements IVisorController {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
 
@@ -41,11 +41,8 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
 
     private final Key tenantId;
 
-    private final AsyncCallback<List<PreauthorizedPayment>> savedCloseCallback;
-
-    public PreauthorizedPaymentsVisorController(Key tenantId, AsyncCallback<List<PreauthorizedPayment>> savedCloseCallback) {
+    public PreauthorizedPaymentsVisorController(Key tenantId) {
         this.tenantId = tenantId;
-        this.savedCloseCallback = savedCloseCallback;
     }
 
     @Override
@@ -66,9 +63,12 @@ public class PreauthorizedPaymentsVisorController implements IVisorController {
         service.save(callback, pads);
     }
 
-    public void onSavedClose(List<PreauthorizedPayment> pads) {
-        if (savedCloseCallback != null) {
-            savedCloseCallback.onSuccess(pads);
-        }
-    }
+    /**
+     * Implement in caller to get editing result.
+     * 
+     * @param pads
+     *            - edited PADs
+     * @return - allow/disable visor close
+     */
+    public abstract boolean onClose(List<PreauthorizedPayment> pads);
 }

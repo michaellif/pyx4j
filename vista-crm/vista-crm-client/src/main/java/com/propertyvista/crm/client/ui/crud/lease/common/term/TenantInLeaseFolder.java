@@ -47,7 +47,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -117,18 +116,18 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey(),
-                            new DefaultAsyncCallback<List<PreauthorizedPayment>>() {
-                                @Override
-                                public void onSuccess(List<PreauthorizedPayment> result) {
-                                    for (CComponent<?, ?> comp : item.getComponents()) {
-                                        if (comp instanceof TenantInLeaseEditor) {
-                                            ((TenantInLeaseEditor) comp).get((((TenantInLeaseEditor) comp).proto().leaseParticipant().preauthorizedPayments()))
-                                                    .setValue(result);
-                                        }
-                                    }
+                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey()) {
+                        @Override
+                        public boolean onClose(List<PreauthorizedPayment> pads) {
+                            for (CComponent<?, ?> comp : item.getComponents()) {
+                                if (comp instanceof TenantInLeaseEditor) {
+                                    ((TenantInLeaseEditor) comp).get((((TenantInLeaseEditor) comp).proto().leaseParticipant().preauthorizedPayments()))
+                                            .setValue(pads);
                                 }
-                            }).show(parentView);
+                            }
+                            return true;
+                        }
+                    }.show(parentView);
                 }
             });
         }
