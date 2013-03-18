@@ -42,11 +42,11 @@ public class LegalTermsDialog extends OkDialog {
     public LegalTermsDialog(TermsType paymentType) {
         super(i18n.tr("Review"));
         setBody(createBody(paymentType));
-        getOkButton().setText(i18n.tr("I Agree"));
     }
 
     private IsWidget createBody(TermsType type) {
         CLabel<String> legalTerms = new CLabel<String>();
+        legalTerms.setEscapeHTML(false);
         switch (type) {
         case TermsAndConditions:
             legalTerms.setValue(VistaResources.INSTANCE.termsAndConditions().getText());
