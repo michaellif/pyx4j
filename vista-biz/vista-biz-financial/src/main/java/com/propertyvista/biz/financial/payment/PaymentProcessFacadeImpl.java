@@ -13,10 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.EnumSet;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -33,22 +30,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -64,10 +52,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     private static final String PROCESSED = "Processed";
 
     private static final String REJECTED = "Rejected";
-
-    private static final String RETURNED = "Returned";
-
-    private static final String DUPLICATE = "Duplicate";
 
     private static final String ERRED = "Erred";
 
@@ -249,106 +233,12 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void createPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        // Find Bills
-        //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
-        Calendar c = new GregorianCalendar();
-        c.setTime(runDate);
-
-        // For now we do the same day payments.  No Policy!
-
-        //c.add(Calendar.DAY_OF_YEAR, 4);
-
-        LogicalDate dueDate = new LogicalDate(c.getTime());
-
-        EntityQueryCriteria<Bill> billCriteria = EntityQueryCriteria.create(Bill.class);
-        billCriteria.add(PropertyCriterion.eq(billCriteria.proto().dueDate(), dueDate));
-        billCriteria.add(PropertyCriterion.eq(billCriteria.proto().billStatus(), Bill.BillStatus.Confirmed));
-
-        ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
-        try {
-            while (billIterator.hasNext()) {
-                createPreauthorisedPayment(billIterator.next(), executionMonitor);
-            }
-        } finally {
-            billIterator.completeRetrieval();
-        }
-
+        new PreauthorisedPaymentsManager().createPreauthorisedPayments(executionMonitor, runDate);
     }
 
-    private void createPreauthorisedPayment(final Bill bill, final ExecutionMonitor executionMonitor) {
-        try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
-
-                @Override
-                public Void execute() throws PaymentException {
-                    //Check this bill is latest
-                    if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
-                        return null;
-                    }
-                    Persistence.service().retrieve(bill.billingAccount());
-                    Persistence.service().retrieve(bill.billingAccount().lease());
-
-                    // call AR facade to get current balance for dueDate
-                    BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
-                    if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
-                        return null;
-                    }
-
-                    Lease lease = bill.billingAccount().lease();
-                    Persistence.service().retrieve(lease.currentTerm().version().tenants());
-
-                    tanantLoop: for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-                        // do pre-authorized payments for main applicant for now
-                        switch (tenant.role().getValue()) {
-                        case Applicant:
-                            LeasePaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
-                            if (method != null) {
-                                createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
-                                executionMonitor.addProcessedEvent(//@formatter:off
-                                        PROCESSED,
-                                        currentBalance,
-                                        SimpleMessageFormat.format("Preauthorized payment created")
-                                );//@formatter:on
-                            }
-                            break tanantLoop;
-                        case CoApplicant:
-                            //TODO Payment split
-                            break;
-                        default:
-                            break;
-                        }
-
-                    }
-                    return null;
-                }
-            });
-        } catch (PaymentException e) {
-            log.error("Preauthorised payment creation failed", e);
-            executionMonitor.addErredEvent(ERRED, e);
-        }
-    }
-
-    private void createPreAuthorizedPayment(LeaseTermParticipant leaseParticipant, BigDecimal amount, InternalBillingAccount billingAccount,
-            LeasePaymentMethod method) throws PaymentException {
-        PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.billingAccount().set(billingAccount);
-        paymentRecord.leaseTermParticipant().set(leaseParticipant);
-        paymentRecord.amount().setValue(amount);
-        paymentRecord.paymentMethod().set(method);
-
-        switch (method.type().getValue()) {
-        case Echeck:
-            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
-            break;
-        case CreditCard:
-            paymentRecord.targetDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-            ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
-            break;
-        default:
-            throw new IllegalArgumentException("Invalid PreAuthorized Payment Method:" + paymentRecord.paymentMethod().type().getStringView());
-        }
+    @Override
+    public void updateScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
+        new PreauthorisedPaymentsManager().updateScheduledPreauthorisedPayments(executionMonitor, runDate);
     }
 
     @Override

@@ -42,6 +42,8 @@ public interface PaymentProcessFacade {
 
     void createPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 
+    void updateScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
+
     void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType);
 
 }

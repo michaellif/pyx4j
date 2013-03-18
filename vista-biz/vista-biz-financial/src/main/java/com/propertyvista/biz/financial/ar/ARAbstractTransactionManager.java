@@ -93,7 +93,6 @@ public abstract class ARAbstractTransactionManager {
     abstract protected BigDecimal getCurrentBallance(BillingAccount billingAccount);
 
     public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        BigDecimal balance = BigDecimal.ZERO;
         // get PAD policy
         PADPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
         // create product map
@@ -106,6 +105,10 @@ public abstract class ARAbstractTransactionManager {
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), cycle));
         Bill bill = Persistence.service().retrieve(criteria);
+        if (bill == null) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal balance = BigDecimal.ZERO;
         Persistence.ensureRetrieve(bill.lineItems(), AttachLevel.Attached);
         switch (policy.chargeType().getValue()) {
         case FixedAmount:

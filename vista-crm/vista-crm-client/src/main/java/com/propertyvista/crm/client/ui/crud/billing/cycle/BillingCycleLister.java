@@ -36,7 +36,11 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), 
             new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(),  
             new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), 
-            new MemberColumnDescriptor.Builder(proto().total()).build()           
+            new MemberColumnDescriptor.Builder(proto().total()).build(),
+            new MemberColumnDescriptor.Builder(proto().targetPadGenerationDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().actualPadGenerationDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().actualBillExecutionDate()).build()
         );//@formatter:on
     }
 

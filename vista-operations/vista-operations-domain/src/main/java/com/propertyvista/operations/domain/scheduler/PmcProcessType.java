@@ -29,6 +29,9 @@ public enum PmcProcessType implements Serializable {
     @Translate("Issue PreAuthorized Payments")
     paymentsIssue(true),
 
+    @Translate("Update PreAuthorized Payments")
+    paymentsUpdate(true),
+
     @Translate("Process Scheduled CreditCards Payments")
     paymentsScheduledCreditCards,
 
