@@ -26,4 +26,13 @@ public interface VistaResources extends ClientBundleWithLookup {
 
     @Source("Pre-AuthorizationLegalPAD.html")
     TextResource paymentPreauthorisedPAD();
+
+    @Source("LT_BillingAndRefundPolicy.html")
+    TextResource billingAndRefundPolicy();
+
+    @Source("LT_PrivacyPolicy.html")
+    TextResource privacyPolicy();
+
+    @Source("LT_TermsAndConditions.html")
+    TextResource termsAndConditions();
 }

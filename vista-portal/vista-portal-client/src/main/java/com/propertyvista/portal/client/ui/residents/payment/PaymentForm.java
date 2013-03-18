@@ -17,10 +17,16 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,6 +43,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -48,6 +55,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
+import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
 
 public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
@@ -94,9 +102,16 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, createDetailsPanel());
+
         main.setH1(1, 0, 1, i18n.tr("Payment Method"));
         paymentMethodEditorSeparator = main.getWidget(1, 0);
+
         main.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+
+        main.setBR(3, 0, 1);
+        main.setHR(4, 0, 1);
+        main.setWidget(5, 0, createLegalTermsPanel());
+        main.getFlexCellFormatter().setAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -346,9 +361,38 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     }
 
     private Widget createLegalTermsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+        FlowPanel panel = new FlowPanel();
 
-        panel.setWidget(1, 0, new HTML(i18n.tr("By pressing Submit you are acknowledgeing our...")));
+        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our ")));
+        panel.add(new Anchor(i18n.tr("Terms and Conditions"), new Command() {
+            @Override
+            public void execute() {
+                new LegalTermsDialog(TermsType.TermsAndConditions).show();
+            }
+        }));
+
+        panel.add(new HTML(",&nbsp"));
+        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        panel.add(new Anchor(i18n.tr("Privacy Policy"), new Command() {
+            @Override
+            public void execute() {
+                new LegalTermsDialog(TermsType.PrivacyPolicy).show();
+            }
+        }));
+
+        panel.add(new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
+        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        panel.add(new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
+            @Override
+            public void execute() {
+                new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
+            }
+        }));
+
+        panel.setWidth("80%");
+        panel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         return panel;
     }
