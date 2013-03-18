@@ -23,7 +23,8 @@ public class TenantSureOptionalExtrasFormatter implements ITenantSureOptionalExt
     public String formatOptionalExtras(TenantSureCoverageDTO coverageRequest, Tenant tenant) {
         StringBuilder optionalExtras = new StringBuilder();
 
-        optionalExtras.append(format("MonthlyRevenue", tenant.lease().unit().financial()._unitRent().getValue().toPlainString()));
+        optionalExtras.append(format("MonthlyRevenue", tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()
+                .toPlainString()));
         optionalExtras.append(format("Deductible", TenantSureDeductibleOption.deductibleOf(coverageRequest.deductible().getValue()).amount().toPlainString()));
         optionalExtras.append(format("Smoker", String.valueOf(coverageRequest.smoker().isBooleanTrue())));
         optionalExtras.append(format("Claims", String.valueOf(String.valueOf(coverageRequest.numberOfPreviousClaims().getValue().numericValue()))));

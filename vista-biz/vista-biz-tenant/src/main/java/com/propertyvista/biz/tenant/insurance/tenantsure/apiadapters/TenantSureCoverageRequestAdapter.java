@@ -74,7 +74,7 @@ public class TenantSureCoverageRequestAdapter {
         optionQuote.setActivityCode(TENANT_SURE_INSURED_ACTIVITY_CODE);
         optionQuote.setClientID(tenantSureClient.clientReferenceNumber().getValue());
         optionQuote.setInceptionDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));
-        optionQuote.setRevenue(tenantSureClient.tenant().lease().unit().financial()._unitRent().getValue());
+        optionQuote.setRevenue(tenantSureClient.tenant().lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
         optionQuote.setEmployeeCount(countNumberOfTenants(tenantSureClient.tenant().lease().currentTerm()));
         optionQuote.setUsExposure(BigDecimal.ZERO);
         optionQuote.setRetroDate(dataTypeFactory.newXMLGregorianCalendar(new GregorianCalendar()));

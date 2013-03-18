@@ -51,7 +51,7 @@ public class TenantSureOptionalExtrasFormatterTest {
         coverageRequest.smoker().setValue(false);
 
         tenant = EntityFactory.create(Tenant.class);
-        tenant.lease().unit().financial()._unitRent().setValue(new BigDecimal("500.55634"));
+        tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal("500.55634"));
         tenant.lease().unit().building().info().hasFireAlarm().setValue(true);
         tenant.lease().unit().building().info().hasSprinklers().setValue(true);
         tenant.lease().unit().building().info().hasEarthquakes().setValue(false);
@@ -59,10 +59,10 @@ public class TenantSureOptionalExtrasFormatterTest {
 
     @Test
     public void monthlyRevenue() {
-        tenant.lease().unit().financial()._unitRent().setValue(new BigDecimal("100"));
+        tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal("100"));
         Assert.assertThat(optionalExtras(), hasOption("MonthlyRevenue", "100"));
 
-        tenant.lease().unit().financial()._unitRent().setValue(new BigDecimal("567"));
+        tenant.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal("567"));
         Assert.assertThat(optionalExtras(), hasOption("MonthlyRevenue", "567"));
     }
 
