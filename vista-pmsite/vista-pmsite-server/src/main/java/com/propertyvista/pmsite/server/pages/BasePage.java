@@ -45,6 +45,7 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
+import com.propertyvista.pmsite.server.skins.PMSiteSkin;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
 public abstract class BasePage extends WebPage {
@@ -116,7 +117,11 @@ public abstract class BasePage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         if (ApplicationMode.isDevelopment()) {
-            response.renderCSSReference(cm.getCssManager().getCssReference("test"));
+            try {
+                response.renderCSSReference(cm.getCssManager().getCssReference(PMSiteSkin.Stylesheet.Main));
+            } catch (Exception e) {
+                throw new Error(e);
+            }
         }
         if (!cm.isCustomResidentsContentEnabled()) {
             String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();

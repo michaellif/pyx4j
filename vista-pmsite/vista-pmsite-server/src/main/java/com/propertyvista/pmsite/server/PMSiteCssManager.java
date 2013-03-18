@@ -14,9 +14,7 @@
 package com.propertyvista.pmsite.server;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.request.resource.ByteArrayResource;
@@ -32,41 +30,35 @@ import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
+import com.propertyvista.pmsite.server.skins.PMSiteSkin;
 
 public class PMSiteCssManager {
     // TODO - to be removed when a better way to handle old resource removal is found
     private static Map<String, Key> cssResourceKeyCache = new HashMap<String, Key>();
 
-    private final Set<Theme> installedThemes;
-
     private final PMSiteContentManager cm;
 
     public PMSiteCssManager(PMSiteContentManager cm) {
-        installedThemes = new HashSet<Theme>();
         this.cm = cm;
-
-        if (ApplicationMode.isDevelopment()) {
-            installTestTheme();
-        }
     }
 
-    public PMSiteCssManager installTheme(Theme theme) {
-        installedThemes.add(theme);
-        return this;
-    }
-
-    public ResourceReference getCssReference(String cssName) {
-        final String css = getCssString(getCssPalette());
-        String scope = TemplateResources.class.getName();
-        String name = NamespaceManager.getNamespace() + "-" + cssName + ".css";
+    public ResourceReference getCssReference(PMSiteSkin.Stylesheet style) throws Exception {
+        String pkg = this.getClass().getPackage().getName();
+        // create theme instance
+        String className = pkg + ".skins." + cm.getSiteDescriptor().skin().getValue().toString().toLowerCase() + "." + style.name();
+        Class<?> themeClass = Class.forName(className);
+        Theme theme = (Theme) themeClass.newInstance();
+        // generate resource registry key
+        final String css = getCssString(theme, getCssPalette());
         String var = DigestUtils.md5Hex(css);
+        String scope = TemplateResources.class.getName();
+        String name = cm.getSiteSkin() + "/" + style.name() + ".css";
         Key key = new Key(scope, name, null, null, var);
+        // see if resource has changed
         Key oldKey = cssResourceKeyCache.get(name);
         ResourceReferenceRegistry registry = PMSiteApplication.get().getResourceReferenceRegistry();
         ResourceReference ref;
@@ -90,17 +82,6 @@ public class PMSiteCssManager {
             ref = registry.getResourceReference(key, true, false);
         }
         return ref;
-    }
-
-    // TODO - remove this method once dust has settled!!
-    public void installTestTheme() {
-        installedThemes.clear();
-        Theme testTheme = new Theme();
-        Style testStyle = new Style(".TestClass");
-        testStyle.addProperty("color", "WHITE");
-        testStyle.addProperty("display", "NONE");
-        testTheme.addStyle(testStyle);
-        installTheme(testTheme);
     }
 
     private Palette getCssPalette() {
@@ -136,12 +117,10 @@ public class PMSiteCssManager {
         return palette;
     }
 
-    private String getCssString(Palette palette) {
+    private String getCssString(Theme theme, Palette palette) {
         StringBuilder stylesString = new StringBuilder();
-        for (Theme theme : installedThemes) {
-            for (Style style : theme.getAllStyles()) {
-                stylesString.append(style.toString(theme, palette));
-            }
+        for (Style style : theme.getAllStyles()) {
+            stylesString.append(style.toString(theme, palette));
         }
         return stylesString.toString();
     }
