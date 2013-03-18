@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.visor.paps;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -32,10 +33,11 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
+        main.setWidget(0, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
         main.setH4(1, 0, 1, proto().tenant().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(2, 0, inject(proto().tenant().preauthorizedPayments(), new PreauthorizedPaymentsFolder(this)));
 
+        main.getWidget(0, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
         return main;
     }
 }

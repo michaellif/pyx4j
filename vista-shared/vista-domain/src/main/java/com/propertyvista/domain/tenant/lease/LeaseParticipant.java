@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -37,7 +36,6 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.Customer;
 
-@ToStringFormat("{0}")
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -45,23 +43,23 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
 
     @Owner
     @NotNull
-    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @JoinColumn
+    @MemberColumn(notNull = true)
     @Indexed(uniqueConstraint = true, group = { "discriminator+lc,1" })
     Lease lease();
 
     @NotNull
-    @MemberColumn(notNull = true)
     @ReadOnly
     @ToString(index = 0)
+    @MemberColumn(notNull = true)
     @Indexed(uniqueConstraint = true, group = { "discriminator+lc,2" })
     Customer customer();
 
     @NotNull
-    @Caption(name = "Id")
     @Length(14)
+    @Caption(name = "Id")
     @Indexed(uniqueConstraint = true, group = { "discriminator+id,1" })
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();

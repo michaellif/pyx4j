@@ -44,7 +44,7 @@ public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<MaintenanceRequest> _MaintenanceRequests();
+    ISet<MaintenanceRequest> maintenanceRequests();
 
     //TODO move
     @Override
