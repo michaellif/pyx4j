@@ -274,11 +274,11 @@ class BillingCycleManager {
 
         LeaseBillingTypePolicyItem policy = retreiveLeaseBillingTypePolicyItem(building, billingPeriod);
 
-        billingCycle.billExecutionDate().setValue(
+        billingCycle.targetBillExecutionDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.billExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
-        billingCycle.padCalculationDate().setValue(
+        billingCycle.targetPadGenerationDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.padCalculationDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
-        billingCycle.padExecutionDate().setValue(
+        billingCycle.targetPadExecutionDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.padExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
 
         Persistence.service().persist(billingCycle);

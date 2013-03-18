@@ -30,7 +30,7 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().billingType()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().billExecutionDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(),
             new MemberColumnDescriptor.Builder(proto().notRun()).build(),      
             new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(),        
             new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), 
@@ -42,6 +42,6 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().billExecutionDate().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().targetBillExecutionDate().getPath().toString(), false));
     }
 }

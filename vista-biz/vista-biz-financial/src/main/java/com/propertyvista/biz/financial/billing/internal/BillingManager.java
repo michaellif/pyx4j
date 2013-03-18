@@ -130,7 +130,7 @@ public class BillingManager {
             boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0;
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
-            if (!isPreviousConfirmedBillTheLast && SystemDateManager.getDate().compareTo(billingCycle.billExecutionDate().getValue()) < 0) {
+            if (!isPreviousConfirmedBillTheLast && SystemDateManager.getDate().compareTo(billingCycle.targetBillExecutionDate().getValue()) < 0) {
                 log.warn(i18n.tr("Regular billing can't run before target execution date"));
                 return false;
             }

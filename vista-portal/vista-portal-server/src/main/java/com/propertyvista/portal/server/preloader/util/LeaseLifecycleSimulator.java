@@ -354,7 +354,7 @@ public class LeaseLifecycleSimulator {
         private void queueReccurentBilling() {
             Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
-            LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).billExecutionDate().getValue();
+            LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
 
             queueEvent(billingRunDay, new RunBillingRecurrent(lease));
 
@@ -481,7 +481,7 @@ public class LeaseLifecycleSimulator {
                         return;
                     }
 
-                    LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).billExecutionDate()
+                    LogicalDate billingRunDay = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate()
                             .getValue();
 
                     if (now().equals(billingRunDay)) {

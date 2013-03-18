@@ -46,7 +46,7 @@ public class BillingCycleTester extends Tester {
     }
 
     public BillingCycleTester billExecutionDate(String date) {
-        assertEquals("Bill Execution Date", getDate(date), billingCycle.billExecutionDate().getValue());
+        assertEquals("Bill Execution Date", getDate(date), billingCycle.targetBillExecutionDate().getValue());
         return this;
     }
 

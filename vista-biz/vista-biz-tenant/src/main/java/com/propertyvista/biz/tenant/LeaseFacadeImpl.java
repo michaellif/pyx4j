@@ -430,7 +430,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
                 Bill bill = billingFacade.getLatestBill(lease);
                 LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
-                LogicalDate nextExecDate = billingCycleFacade.getNextBillBillingCycle(lease).billExecutionDate().getValue();
+                LogicalDate nextExecDate = billingCycleFacade.getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
                 if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
                     billingFacade.runBilling(lease);
                 }

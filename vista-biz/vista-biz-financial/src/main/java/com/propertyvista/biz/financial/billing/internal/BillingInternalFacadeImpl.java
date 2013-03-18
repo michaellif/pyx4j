@@ -136,7 +136,7 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
             EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
             criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), oldItem.billingPeriod()));
-            criteria.add(PropertyCriterion.gt(criteria.proto().billExecutionDate(), SystemDateManager.getDate()));
+            criteria.add(PropertyCriterion.gt(criteria.proto().targetBillExecutionDate(), SystemDateManager.getDate()));
             for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
                 // Only update cycle if all new dates are in the future
                 LogicalDate startDate = billingCycle.billingCycleStartDate().getValue();
@@ -156,9 +156,9 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
                     continue;
                 }
 
-                billingCycle.billExecutionDate().setValue(billExecDate);
-                billingCycle.padCalculationDate().setValue(padCalcDate);
-                billingCycle.padExecutionDate().setValue(padExecDate);
+                billingCycle.targetBillExecutionDate().setValue(billExecDate);
+                billingCycle.targetPadGenerationDate().setValue(padCalcDate);
+                billingCycle.targetPadExecutionDate().setValue(padExecDate);
 
                 Persistence.service().persist(billingCycle);
             }

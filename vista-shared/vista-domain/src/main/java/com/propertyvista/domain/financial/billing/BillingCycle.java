@@ -54,20 +54,17 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> billingCycleEndDate();
 
-    //TODO rename to targetBillExecutionDate();
-    IPrimitive<LogicalDate> billExecutionDate();
+    IPrimitive<LogicalDate> targetBillExecutionDate();
 
-    //TODO rename to target
-    IPrimitive<LogicalDate> padCalculationDate();
+    IPrimitive<LogicalDate> targetPadGenerationDate();
 
-    //TODO rename to target
-    IPrimitive<LogicalDate> padExecutionDate();
+    IPrimitive<LogicalDate> targetPadExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<LogicalDate> actualBillExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
-    IPrimitive<LogicalDate> actualPadCalculationDate();
+    IPrimitive<LogicalDate> actualPadGenerationDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<LogicalDate> actualPadExecutionDate();
