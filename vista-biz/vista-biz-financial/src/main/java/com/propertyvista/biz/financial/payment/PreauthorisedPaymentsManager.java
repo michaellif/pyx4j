@@ -73,8 +73,7 @@ class PreauthorisedPaymentsManager {
         }
         try {
             while (billingCycleIterator.hasNext()) {
-                //TODO
-                //updateScheduledBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
+                updateBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
             }
         } finally {
             billingCycleIterator.completeRetrieval();
@@ -188,5 +187,96 @@ class PreauthorisedPaymentsManager {
         paymentRecord.targetDate().setValue(billingCycle.targetPadExecutionDate().getValue());
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+    }
+
+    private void updateBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor) {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+                ICursorIterator<BillingAccount> billingAccountIterator;
+                { //TODO->Closure
+                    EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+                    // TODO verify with Misha
+                    criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
+                    criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                    billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+                }
+                try {
+                    while (billingAccountIterator.hasNext()) {
+                        updateBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor);
+                    }
+                } finally {
+                    billingAccountIterator.completeRetrieval();
+                }
+                return null;
+            }
+        });
+    }
+
+    private void updateBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount, ExecutionMonitor executionMonitor) {
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        List<PaymentRecord> paymentRecords = Persistence.service().query(criteria);
+        if (paymentRecords.size() == 0) {
+            //Nothing to update
+            return;
+        }
+
+        BigDecimal currentBalance = null;
+
+        Persistence.service().retrieve(billingAccount.lease());
+        Lease lease = billingAccount.lease();
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        BigDecimal percentTotal = BigDecimal.ZERO;
+        BigDecimal percentAmountTotal = BigDecimal.ZERO;
+
+        for (LeaseTermTenant leaseParticipant : lease.currentTerm().version().tenants()) {
+            Persistence.service().retrieveMember(leaseParticipant.leaseParticipant().preauthorizedPayments());
+            for (PreauthorizedPayment pap : leaseParticipant.leaseParticipant().preauthorizedPayments()) {
+
+                Validate.isTrue(PaymentType.schedulable().contains(pap.paymentMethod().type().getValue()));
+
+                BigDecimal amount;
+
+                PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
+                paymentRecord.leaseTermParticipant().set(leaseParticipant);
+                paymentRecord.paymentMethod().set(pap.paymentMethod());
+
+                switch (pap.amountType().getValue()) {
+                case Percent:
+                    if (currentBalance == null) {
+                        // Lazy currentBalance initialization
+                        currentBalance = ServerSideFactory.create(ARFacade.class).getPADBalance(billingAccount, billingCycle);
+                    }
+                    percentTotal = percentTotal.add(pap.amount().getValue());
+                    amount = DomainUtil.roundMoney(currentBalance.multiply(pap.amount().getValue()));
+                    percentAmountTotal = percentAmountTotal.add(amount);
+                    break;
+                case Value:
+                    amount = pap.amount().getValue();
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
+//                paymentRecord.amount().setValue(amount);
+//                paymentRecords.add(paymentRecord);
+            }
+        }
+//
+//        // Percent rounding case of total 100%  e.g. 33% + 66%
+//        if (percentTotal.compareTo(BigDecimal.ONE) == 0) {
+//            BigDecimal unapidBalance = currentBalance.subtract(percentAmountTotal);
+//            // Make the fist to  pay fractions
+//            paymentRecords.get(0).amount().setValue(paymentRecords.get(0).amount().getValue().add(unapidBalance));
+//        }
+//
+//        for (PaymentRecord paymentRecord : paymentRecords) {
+//            schedulePreAuthorizedPaymentRecord(billingCycle, billingAccount, paymentRecord);
+//            executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
+//        }
+
     }
 }
