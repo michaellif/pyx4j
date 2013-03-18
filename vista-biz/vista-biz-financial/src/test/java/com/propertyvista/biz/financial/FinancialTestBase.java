@@ -386,7 +386,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         } else {
             asOf = new LogicalDate(DateUtils.detectDateformat(asOfDate));
         }
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
         lease.leaseTo().setValue(asOf);
         lease.completion().setValue(reason);
         Persistence.service().persist(lease);
@@ -404,10 +404,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLeaseDraft() {
-        return ServerSideFactory.create(LeaseFacade.class).load(lease, true);
-    }
-
-    protected Lease retrieveLeaseForEdit() {
         return ServerSideFactory.create(LeaseFacade.class).load(lease, true);
     }
 
@@ -453,7 +449,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate) {
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
 
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         assert (billableItem != null);
@@ -475,7 +471,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
 
         // correct agreed price for existing leases:
         BigDecimal agreedPrice = null;
@@ -535,7 +531,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setDeposit(String billableItemId, DepositType depositType) {
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         assert (billableItem != null);
 
@@ -577,7 +573,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
             LogicalDate effectiveDate, LogicalDate expirationDate) {
 
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
         assert (actualBillableItem != null);
 
@@ -600,7 +596,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void changeBillableItemAdjustment(String billableItemAdjustmentId, String effectiveDate, String expirationDate) {
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
 
         BillableItemAdjustment billableItemAdjustment = findBillableItemAdjustment(billableItemAdjustmentId, lease);
 

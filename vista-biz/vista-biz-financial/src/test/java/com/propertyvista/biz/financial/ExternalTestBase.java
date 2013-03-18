@@ -73,7 +73,7 @@ public class ExternalTestBase extends FinancialTestBase {
 
     @Override
     protected void activateLease() {
-        Lease lease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseDraft();
 
         lease.status().setValue(Lease.Status.Approved);
         ServerSideFactory.create(LeaseFacade.class).finalize(lease);
