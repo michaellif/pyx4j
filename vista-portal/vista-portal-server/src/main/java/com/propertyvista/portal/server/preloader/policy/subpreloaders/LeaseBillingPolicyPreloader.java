@@ -15,8 +15,8 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy.BillConfirmationMethod;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
@@ -31,7 +31,7 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
     @Override
     protected LeaseBillingPolicy createPolicy(StringBuilder log) {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
-        policy.prorationMethod().setValue(ProrationMethod.Actual);
+        policy.prorationMethod().setValue(BillingAccount.ProrationMethod.Actual);
         policy.confirmationMethod().setValue(BillConfirmationMethod.manual);
 
         LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);

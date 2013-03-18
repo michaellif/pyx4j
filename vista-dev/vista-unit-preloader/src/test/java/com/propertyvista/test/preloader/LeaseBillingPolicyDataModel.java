@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
@@ -44,7 +44,7 @@ public class LeaseBillingPolicyDataModel {
     public void generate() {
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        policy.prorationMethod().setValue(ProrationMethod.Actual);
+        policy.prorationMethod().setValue(BillingAccount.ProrationMethod.Actual);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
         lateFee.baseFee().setValue(new BigDecimal(50.00));

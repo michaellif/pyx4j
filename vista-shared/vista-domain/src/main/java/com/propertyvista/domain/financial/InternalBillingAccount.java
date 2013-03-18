@@ -38,10 +38,6 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 @DiscriminatorValue("Internal")
 public interface InternalBillingAccount extends BillingAccount {
 
-    enum ProrationMethod {
-        Actual, Standard, Annual
-    }
-
     @Override
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
@@ -66,8 +62,6 @@ public interface InternalBillingAccount extends BillingAccount {
     @Owned(cascade = {})
     @Detached
     IList<DepositLifecycle> deposits();
-
-    IPrimitive<ProrationMethod> prorationMethod();
 
     //Should have deposit value field
 

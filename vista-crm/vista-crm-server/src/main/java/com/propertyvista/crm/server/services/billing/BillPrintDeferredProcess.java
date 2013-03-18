@@ -23,7 +23,7 @@ import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.billing.internal.BillingUtils;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.domain.financial.billing.Bill;
 

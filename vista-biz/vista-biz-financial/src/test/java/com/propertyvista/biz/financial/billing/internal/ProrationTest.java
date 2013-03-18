@@ -20,6 +20,7 @@ import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.billing.ProrationUtils;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.portal.rpc.shared.BillingException;
 

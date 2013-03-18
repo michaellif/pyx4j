@@ -94,11 +94,6 @@ public class PaymentTestBase extends FinancialTestBase {
     protected LeasePaymentMethod createPaymentMethod(PaymentType type) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
         paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
-        createPaymentMethodDetails(paymentMethod, type);
-        return paymentMethod;
-    }
-
-    private void createPaymentMethodDetails(AbstractPaymentMethod paymentMethod, PaymentType type) {
         paymentMethod.type().setValue(type);
         switch (type) {
         case Echeck: {
@@ -117,6 +112,7 @@ public class PaymentTestBase extends FinancialTestBase {
             throw new IllegalArgumentException();
         }
 
+        return paymentMethod;
     }
 
     protected void setNewPaymentMethodDetails(AbstractPaymentMethod paymentMethod) {

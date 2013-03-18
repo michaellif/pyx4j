@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivit
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
-import com.propertyvista.domain.financial.InternalBillingAccount.ProrationMethod;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
 public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<LeaseBillingPolicyDTO> {
@@ -39,7 +39,7 @@ public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<L
 
             @Override
             public void onSuccess(LeaseBillingPolicyDTO entity) {
-                entity.prorationMethod().setValue(ProrationMethod.Standard);
+                entity.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);
 
                 callback.onSuccess(entity);
             }

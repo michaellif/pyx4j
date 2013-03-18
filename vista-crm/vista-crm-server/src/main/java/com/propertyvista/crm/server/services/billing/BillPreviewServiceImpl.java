@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.internal.BillingUtils;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;

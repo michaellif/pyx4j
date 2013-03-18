@@ -49,7 +49,7 @@ import com.propertyvista.biz.financial.FinancialTestBase.TaskScheduler.Schedule;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.internal.BillingUtils;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;

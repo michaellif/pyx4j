@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade.ProductTerm;
 import com.propertyvista.domain.financial.billing.Bill;

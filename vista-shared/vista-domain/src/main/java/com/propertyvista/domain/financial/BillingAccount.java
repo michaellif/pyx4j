@@ -78,6 +78,10 @@ public interface BillingAccount extends IEntity {
         }
     }
 
+    public enum ProrationMethod {
+        Actual, Standard, Annual
+    }
+
     @I18n(context = "Payment Accepted")
     @XmlType(name = "PaymentAccepted")
     public enum PaymentAccepted {
@@ -149,6 +153,8 @@ public interface BillingAccount extends IEntity {
     IPrimitive<Integer> paymentDueDayOffset();
 
     IPrimitive<Integer> finalDueDayOffset();
+
+    IPrimitive<ProrationMethod> prorationMethod();
 
     // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @Owned(cascade = {})

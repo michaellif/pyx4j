@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import java.util.List;
 
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,8 +23,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.portal.rpc.shared.BillingException;
@@ -50,7 +50,7 @@ public class ProrationUtils {
         }
     }
 
-    static BigDecimal prorateMonthlyPeriod(LogicalDate from, LogicalDate to, LogicalDate cycleStartDate, InternalBillingAccount.ProrationMethod method) {
+    public static BigDecimal prorateMonthlyPeriod(LogicalDate from, LogicalDate to, LogicalDate cycleStartDate, BillingAccount.ProrationMethod method) {
         assert from != null && to != null && cycleStartDate != null;
         Calendar calendarFrom = new GregorianCalendar();
         calendarFrom.setTime(cycleStartDate);
@@ -83,7 +83,7 @@ public class ProrationUtils {
 
     }
 
-    static BigDecimal prorateNormalPeriod(LogicalDate from, LogicalDate to, int cycleLength) {
+    public static BigDecimal prorateNormalPeriod(LogicalDate from, LogicalDate to, int cycleLength) {
         BigDecimal proration = new BigDecimal(cycleLength);
         return new BigDecimal(daysBetween(from, to)).divide(proration, 6, RoundingMode.HALF_UP);
     }

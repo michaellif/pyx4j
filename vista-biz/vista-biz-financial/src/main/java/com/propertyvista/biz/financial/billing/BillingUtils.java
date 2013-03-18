@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing.internal;
+package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
