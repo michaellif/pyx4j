@@ -123,7 +123,7 @@ public class LandingPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() && false) {
             try {
                 response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.Landing));
             } catch (Exception e) {
