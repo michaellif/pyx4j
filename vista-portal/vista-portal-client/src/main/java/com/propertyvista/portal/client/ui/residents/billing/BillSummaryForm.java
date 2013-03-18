@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -77,6 +78,9 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+
+        // tweak UI:
+        payButton.getElement().getStyle().setFloat(Float.NONE);
 
         return content;
     }
