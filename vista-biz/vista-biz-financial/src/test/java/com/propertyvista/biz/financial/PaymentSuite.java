@@ -16,10 +16,11 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PadTransactionUtilsTest.class })
+@Suite.SuiteClasses({ PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class })
 public class PaymentSuite {
 
 }

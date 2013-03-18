@@ -28,11 +28,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billing.BillDateUtils;
-import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -77,26 +75,19 @@ class BillingCycleManager {
         return getBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
     }
 
-    protected BillingCycle getNextBillBillingCycle(Lease lease) {
-        Bill previousBill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(lease);
+    protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         InternalBillingAccount billingAccount = Persistence.service().retrieve(InternalBillingAccount.class, lease.billingAccount().getPrimaryKey());
-        Persistence.service().retrieve(lease.unit());
-
-        if (previousBill == null) {
-            BillingCycle firstBillBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
-                    .leaseFrom().getValue());
-            if (billingAccount.carryforwardBalance().isNull()) {
-                return firstBillBillingCycle;
-            } else {
-                if (!lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
-                    throw new BillingException("Existing lease start date should be earlier than creation date");
-                }
-                BillingCycle nextBillBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
-                        .creationDate().getValue());
-                return nextBillBillingCycle;
-            }
+        BillingCycle firstBillBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
+                .leaseFrom().getValue());
+        if (billingAccount.carryforwardBalance().isNull()) {
+            return firstBillBillingCycle;
         } else {
-            return getSubsiquentBillingCycle(previousBill.billingCycle());
+            if (!lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
+                throw new BillingException("Existing lease start date should be earlier than creation date");
+            }
+            BillingCycle nextBillBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
+                    .creationDate().getValue());
+            return nextBillBillingCycle;
         }
     }
 

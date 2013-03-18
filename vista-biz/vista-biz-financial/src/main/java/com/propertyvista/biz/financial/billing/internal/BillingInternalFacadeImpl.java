@@ -99,6 +99,11 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
     }
 
     @Override
+    public BillingCycle getNextBillBillingCycle(Lease lease) {
+        return BillingManager.instance().getNextBillBillingCycle(lease);
+    }
+
+    @Override
     public void updateLeaseAdjustmentTax(LeaseAdjustment adjustment) {
         BillingManager.instance().updateLeaseAdjustmentTax(adjustment);
     }

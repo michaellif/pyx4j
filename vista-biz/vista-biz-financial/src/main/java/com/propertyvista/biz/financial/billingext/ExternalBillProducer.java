@@ -34,9 +34,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.internal.BillingManager;
 import com.propertyvista.biz.financial.billing.internal.DateRange;
-import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -72,7 +72,7 @@ class ExternalBillProducer {
             lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease);
         return new ExternalBillProducer(billingCycle, lease).produceBill();
     }
 

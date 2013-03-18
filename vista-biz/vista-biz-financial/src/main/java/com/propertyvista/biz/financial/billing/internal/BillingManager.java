@@ -77,7 +77,7 @@ public class BillingManager {
             lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease);
+        BillingCycle billingCycle = getNextBillBillingCycle(lease);
         return runBilling(lease, billingCycle, preview);
     }
 
@@ -92,7 +92,7 @@ public class BillingManager {
 
     boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
-        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getNextBillBillingCycle(lease);
+        BillingCycle nextCycle = getNextBillBillingCycle(lease);
         if (!nextCycle.equals(billingCycle)) {
             log.warn(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(), nextCycle
                     .billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
@@ -174,6 +174,15 @@ public class BillingManager {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
         }
         return bill;
+    }
+
+    protected BillingCycle getNextBillBillingCycle(Lease lease) {
+        Bill previousBill = getLatestConfirmedBill(lease);
+        if (previousBill == null) {
+            return ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(lease);
+        } else {
+            return ServerSideFactory.create(BillingCycleFacade.class).getSubsiquentBillingCycle(previousBill.billingCycle());
+        }
     }
 
     private void claimExistingLineItems(List<InvoiceLineItem> lineItems) {

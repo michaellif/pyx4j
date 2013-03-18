@@ -42,6 +42,8 @@ public interface BillingFacade {
 
     Bill rejectBill(Bill billStub, String reason);
 
+    BillingCycle getNextBillBillingCycle(Lease lease);
+
     // Unitls:
 
     void updateLeaseAdjustmentTax(LeaseAdjustment adjustment);

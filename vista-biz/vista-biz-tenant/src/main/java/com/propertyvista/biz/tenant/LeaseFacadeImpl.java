@@ -392,7 +392,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // Billing-related stuff:
         BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
-        BillingCycleFacade billingCycleFacade = ServerSideFactory.create(BillingCycleFacade.class);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             Bill bill = billingFacade.runBilling(lease);
@@ -430,7 +429,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
                 Bill bill = billingFacade.getLatestBill(lease);
                 LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
-                LogicalDate nextExecDate = billingCycleFacade.getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
+                LogicalDate nextExecDate = billingFacade.getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
                 if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
                     billingFacade.runBilling(lease);
                 }

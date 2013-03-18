@@ -21,7 +21,7 @@ public interface BillingCycleFacade {
 
     BillingType getBillingType(Lease lease);
 
-    BillingCycle getNextBillBillingCycle(Lease lease);
+    BillingCycle getLeaseFirstBillingCycle(Lease lease);
 
     BillingCycle getSubsiquentBillingCycle(BillingCycle billingCycle);
 

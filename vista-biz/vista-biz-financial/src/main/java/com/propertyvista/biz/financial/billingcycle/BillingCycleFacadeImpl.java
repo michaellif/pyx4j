@@ -30,8 +30,7 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     }
 
     @Override
-    public BillingCycle getNextBillBillingCycle(Lease lease) {
-        return BillingCycleManager.instance().getNextBillBillingCycle(lease);
+    public BillingCycle getLeaseFirstBillingCycle(Lease lease) {
+        return BillingCycleManager.instance().getLeaseFirstBillingCycle(lease);
     }
-
 }
