@@ -11,19 +11,23 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins.starlight;
+package com.propertyvista.pmsite.server.skins.base;
 
-import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
+import com.pyx4j.commons.css.ClassBasedThemeId;
+import com.pyx4j.commons.css.ThemeId;
 
-public class PMSiteStarlightTheme extends PMSiteTheme {
+import com.propertyvista.pmsite.server.skins.PMSiteThemeBase;
 
-    public PMSiteStarlightTheme(Stylesheet stylesheet) {
-        super(stylesheet);
+public class DefaultAptDetailsTheme extends PMSiteThemeBase {
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     @Override
     public void initStyle() {
-        super.initStyle();
-    }
+        // TODO Auto-generated method stub
 
+    }
 }

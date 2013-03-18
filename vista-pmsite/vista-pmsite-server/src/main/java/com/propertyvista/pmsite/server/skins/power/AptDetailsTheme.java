@@ -13,7 +13,7 @@
  */
 package com.propertyvista.pmsite.server.skins.power;
 
-import com.propertyvista.pmsite.server.skins.DefaultAptDetailsTheme;
+import com.propertyvista.pmsite.server.skins.base.DefaultAptDetailsTheme;
 
 public class AptDetailsTheme extends DefaultAptDetailsTheme {
 

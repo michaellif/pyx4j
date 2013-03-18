@@ -38,7 +38,7 @@ import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
 import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchGadgetPanel;
 import com.propertyvista.pmsite.server.panels.TestimGadgetPanel;
-import com.propertyvista.pmsite.server.skins.PMSiteTheme;
+import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 
 public class LandingPage extends BasePage {
 
@@ -123,7 +123,7 @@ public class LandingPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (ApplicationMode.isDevelopment() && false) {
+        if (ApplicationMode.isDevelopment()) {
             try {
                 response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.Landing));
             } catch (Exception e) {

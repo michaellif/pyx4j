@@ -27,14 +27,15 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
-import com.propertyvista.pmsite.server.skins.PMSiteTheme;
+import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
+import com.propertyvista.pmsite.server.skins.future.PMSiteFutureTheme;
+import com.propertyvista.pmsite.server.skins.power.PMSitePowerTheme;
+import com.propertyvista.pmsite.server.skins.starlight.PMSiteStarlightTheme;
 
 public class PMSiteCssManager {
     // TODO - to be removed when a better way to handle old resource removal is found
@@ -47,13 +48,20 @@ public class PMSiteCssManager {
     }
 
     public ResourceReference getCssReference(PMSiteTheme.Stylesheet style) throws Exception {
-        String pkg = this.getClass().getPackage().getName();
-        // create theme instance
-        String className = pkg + ".skins." + cm.getSiteDescriptor().skin().getValue().toString().toLowerCase() + "." + style.name();
-        Class<?> themeClass = Class.forName(className);
-        Theme theme = (Theme) themeClass.newInstance();
+        PMSiteTheme theme = null;
+        switch (cm.getSiteDescriptor().skin().getValue()) {
+        case skin1:
+            theme = new PMSiteStarlightTheme(style);
+            break;
+        case skin2:
+            theme = new PMSitePowerTheme(style);
+            break;
+        case skin5:
+            theme = new PMSiteFutureTheme(style);
+            break;
+        }
         // generate resource registry key
-        final String css = getCssString(theme, getCssPalette());
+        final String css = theme.getCssString(getCssPalette());
         String var = DigestUtils.md5Hex(css);
         String scope = TemplateResources.class.getName();
         String name = cm.getSiteSkin() + "/" + style.name() + ".css";
@@ -115,13 +123,5 @@ public class PMSiteCssManager {
                         (float) skin.getColorProperties()[11] / 100));
 
         return palette;
-    }
-
-    private String getCssString(Theme theme, Palette palette) {
-        StringBuilder stylesString = new StringBuilder();
-        for (Style style : theme.getAllStyles()) {
-            stylesString.append(style.toString(theme, palette));
-        }
-        return stylesString.toString();
     }
 }

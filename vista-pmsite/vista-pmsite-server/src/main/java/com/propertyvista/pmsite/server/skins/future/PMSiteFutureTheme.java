@@ -11,19 +11,20 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins.starlight;
+package com.propertyvista.pmsite.server.skins.future;
 
 import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 
-public class PMSiteStarlightTheme extends PMSiteTheme {
+public class PMSiteFutureTheme extends PMSiteTheme {
 
-    public PMSiteStarlightTheme(Stylesheet stylesheet) {
+    public PMSiteFutureTheme(Stylesheet stylesheet) {
         super(stylesheet);
     }
 
     @Override
     public void initStyle() {
         super.initStyle();
+        // TODO - do all modification to common style here
     }
 
 }

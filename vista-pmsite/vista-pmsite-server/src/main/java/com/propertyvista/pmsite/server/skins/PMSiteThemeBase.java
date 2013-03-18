@@ -8,11 +8,28 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Mar 18, 2013
- * @author michaellif
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.skins;
 
-public class DefaultAptDetailsTheme {
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
 
+public abstract class PMSiteThemeBase extends Theme {
+
+    public PMSiteThemeBase() {
+        initStyle();
+    }
+
+    public abstract void initStyle();
+
+    public String getCssString(Palette palette) {
+        StringBuilder stylesString = new StringBuilder();
+        for (Style style : getAllStyles()) {
+            stylesString.append(style.toString(this, palette));
+        }
+        return stylesString.toString();
+    }
 }

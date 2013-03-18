@@ -11,16 +11,17 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins;
+package com.propertyvista.pmsite.server.skins.base;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
 
-public class DefaultSiteHeaderTheme extends Theme {
+import com.propertyvista.pmsite.server.skins.PMSiteThemeBase;
+
+public class DefaultSiteHeaderTheme extends PMSiteThemeBase {
 
     public static enum StyleName implements IStyleName {
         Header
@@ -39,7 +40,8 @@ public class DefaultSiteHeaderTheme extends Theme {
         return new ClassBasedThemeId(getClass());
     }
 
-    protected void initStyle() {
+    @Override
+    public void initStyle() {
         Style style = new Style(".", StyleName.Header);
         style.addProperty("width", "100%");
         addStyle(style);

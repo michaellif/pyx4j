@@ -13,9 +13,7 @@
  */
 package com.propertyvista.pmsite.server.skins.power;
 
-import com.propertyvista.pmsite.server.skins.PMSiteTheme;
-import com.propertyvista.pmsite.server.skins.PMSiteTheme.Stylesheet;
-
+import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 
 public class PMSitePowerTheme extends PMSiteTheme {
 
@@ -24,8 +22,9 @@ public class PMSitePowerTheme extends PMSiteTheme {
     }
 
     @Override
-    protected void initStyles() {
-
+    public void initStyle() {
+        super.initStyle();
+        // TODO - do all modification to common style here
     }
 
 }

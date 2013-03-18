@@ -11,24 +11,30 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins;
+package com.propertyvista.pmsite.server.skins.base;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeDescriminator;
 import com.pyx4j.commons.css.ThemeId;
 
-public abstract class PMSiteTheme extends Theme {
+import com.propertyvista.pmsite.server.skins.PMSiteStyleFactory;
+import com.propertyvista.pmsite.server.skins.PMSiteThemeBase;
+
+public abstract class PMSiteTheme extends PMSiteThemeBase {
 
     public static enum Stylesheet implements ThemeDescriminator {
         AptDetails, AptList, BuildingInfoPanel, CityPage, Error, FindApt, FloorplanInfoPanel, Inquiry, InquiryOk, InquiryPanel, Landing, Resident, Static, Terms, UnitDetails
     }
 
     public PMSiteTheme(Stylesheet stylesheet) {
+        super();
 
-        initStyles();
-
+        try {
+            addTheme(PMSiteStyleFactory.create(getClass(), stylesheet));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
 
     @Override
@@ -36,7 +42,8 @@ public abstract class PMSiteTheme extends Theme {
         return new ClassBasedThemeId(getClass());
     }
 
-    protected void initStyles() {
+    @Override
+    public void initStyle() {
 
         initCommonStyle();
     }
