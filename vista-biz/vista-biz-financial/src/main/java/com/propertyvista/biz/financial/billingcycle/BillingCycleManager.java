@@ -77,10 +77,10 @@ class BillingCycleManager {
 
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         InternalBillingAccount billingAccount = Persistence.service().retrieve(InternalBillingAccount.class, lease.billingAccount().getPrimaryKey());
-        BillingCycle firstBillBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
+        BillingCycle leaseFirstBillingCycle = getBillingCycle(lease.unit().building(), billingAccount.billingType().billingPeriod().getValue(), lease
                 .leaseFrom().getValue());
         if (billingAccount.carryforwardBalance().isNull()) {
-            return firstBillBillingCycle;
+            return leaseFirstBillingCycle;
         } else {
             if (!lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
                 throw new BillingException("Existing lease start date should be earlier than creation date");
