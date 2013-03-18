@@ -22,26 +22,37 @@ package com.pyx4j.commons.css;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-public class Theme {
+public abstract class Theme {
 
-    private final String discriminator;
+    private final ThemeDescriminator discriminator;
 
     private final List<Style> styles;
+
+    private final HashMap<ThemeId, Theme> mixinThemes;
 
     public Theme() {
         this(null);
     }
 
-    public Theme(String discriminator) {
+    public Theme(ThemeDescriminator discriminator) {
         this.discriminator = discriminator;
+
         styles = new ArrayList<Style>();
+        mixinThemes = new HashMap<ThemeId, Theme>();
     }
 
+    public abstract ThemeId getId();
+
     public List<Style> getAllStyles() {
-        return styles;
+        List<Style> retValue = new ArrayList<Style>(styles);
+        for (Theme theme : mixinThemes.values()) {
+            retValue.addAll(theme.getAllStyles());
+        }
+        return retValue;
     }
 
     public List<Style> getStyles(String selector) {
@@ -63,7 +74,7 @@ public class Theme {
     }
 
     public void addTheme(Theme theme) {
-        styles.addAll(theme.getAllStyles());
+        mixinThemes.put(theme.getId(), theme);
     }
 
     @Override
@@ -74,7 +85,7 @@ public class Theme {
         return false;
     }
 
-    public String getDiscriminator() {
+    public ThemeDescriminator getDiscriminator() {
         return discriminator;
     }
 

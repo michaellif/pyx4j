@@ -20,11 +20,13 @@
  */
 package com.pyx4j.forms.client.ui.datatable;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultDataTableTheme extends Theme {
@@ -41,6 +43,11 @@ public class DefaultDataTableTheme extends Theme {
 
     public DefaultDataTableTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {

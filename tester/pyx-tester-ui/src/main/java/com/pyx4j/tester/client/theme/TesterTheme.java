@@ -21,10 +21,12 @@
 package com.pyx4j.tester.client.theme;
 
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -40,6 +42,11 @@ public class TesterTheme extends Theme {
 
     public TesterTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {

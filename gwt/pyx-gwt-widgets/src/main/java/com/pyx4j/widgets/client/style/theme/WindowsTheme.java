@@ -23,10 +23,12 @@ package com.pyx4j.widgets.client.style.theme;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
@@ -37,6 +39,11 @@ public class WindowsTheme extends Theme {
 
     public WindowsTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {

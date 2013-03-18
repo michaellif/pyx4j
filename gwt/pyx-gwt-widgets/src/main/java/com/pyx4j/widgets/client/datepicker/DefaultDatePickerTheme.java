@@ -20,11 +20,13 @@
  */
 package com.pyx4j.widgets.client.datepicker;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 
 public class DefaultDatePickerTheme extends Theme {
 
@@ -42,6 +44,11 @@ public class DefaultDatePickerTheme extends Theme {
 
     public DefaultDatePickerTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {

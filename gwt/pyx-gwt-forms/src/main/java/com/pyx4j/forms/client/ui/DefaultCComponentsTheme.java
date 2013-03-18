@@ -20,11 +20,13 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultCComponentsTheme extends Theme {
@@ -39,6 +41,11 @@ public class DefaultCComponentsTheme extends Theme {
 
     public DefaultCComponentsTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {

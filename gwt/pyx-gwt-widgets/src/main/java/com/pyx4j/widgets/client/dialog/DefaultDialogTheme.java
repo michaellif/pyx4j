@@ -20,11 +20,13 @@
  */
 package com.pyx4j.widgets.client.dialog;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 
 public class DefaultDialogTheme extends Theme {
 
@@ -38,6 +40,11 @@ public class DefaultDialogTheme extends Theme {
 
     public DefaultDialogTheme() {
         initStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initStyles() {
