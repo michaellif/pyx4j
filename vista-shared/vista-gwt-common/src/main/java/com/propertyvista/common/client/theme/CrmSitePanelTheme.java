@@ -13,10 +13,12 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 
 public class CrmSitePanelTheme extends Theme {
 
@@ -78,5 +80,10 @@ public class CrmSitePanelTheme extends Theme {
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewAction.name(), " a:hover");
         style.addProperty("text-decoration", "underline");
         addStyle(style);
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }

@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutViewImpl;
@@ -49,6 +51,11 @@ public class TenantSureTheme extends Theme {
         initTenantSureAboutViewStyles();
         initSureFaqViewStyles();
         initOther();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     private void initDecoratorStyles() {

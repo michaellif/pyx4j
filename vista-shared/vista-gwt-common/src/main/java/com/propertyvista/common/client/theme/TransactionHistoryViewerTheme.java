@@ -13,9 +13,11 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 public class TransactionHistoryViewerTheme extends Theme {
 
@@ -63,5 +65,10 @@ public class TransactionHistoryViewerTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }

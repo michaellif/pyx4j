@@ -34,7 +34,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
-import com.propertyvista.pmsite.server.skins.PMSiteSkin;
+import com.propertyvista.pmsite.server.skins.PMSiteTheme;
 
 public class PMSiteCssManager {
     // TODO - to be removed when a better way to handle old resource removal is found
@@ -46,7 +46,7 @@ public class PMSiteCssManager {
         this.cm = cm;
     }
 
-    public ResourceReference getCssReference(PMSiteSkin.Stylesheet style) throws Exception {
+    public ResourceReference getCssReference(PMSiteTheme.Stylesheet style) throws Exception {
         String pkg = this.getClass().getPackage().getName();
         // create theme instance
         String className = pkg + ".skins." + cm.getSiteDescriptor().skin().getValue().toString().toLowerCase() + "." + style.name();

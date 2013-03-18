@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 public class CommunicationCenterTheme extends Theme {
 
@@ -99,5 +101,10 @@ public class CommunicationCenterTheme extends Theme {
         style.addProperty("border-right", "1px solid black");
         style.addProperty("border-bottom", "1px solid black");
         addStyle(style);
+    }
+    
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }

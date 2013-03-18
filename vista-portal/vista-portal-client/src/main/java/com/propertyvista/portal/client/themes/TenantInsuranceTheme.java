@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 // TODO merge with TenantSureTheme
 public class TenantInsuranceTheme extends Theme {
@@ -35,6 +37,11 @@ public class TenantInsuranceTheme extends Theme {
     public TenantInsuranceTheme() {
         initTenantSureCommon();
         initTenantSureManagementView();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     private void initTenantSureCommon() {

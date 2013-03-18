@@ -14,10 +14,12 @@
 package com.propertyvista.common.client.theme;
 
 import com.pyx4j.commons.css.CSSClass;
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
@@ -36,6 +38,11 @@ public class VistaTheme extends Theme {
 
     public VistaTheme() {
 
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     protected void initGeneralStyles() {

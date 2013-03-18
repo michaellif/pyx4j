@@ -15,9 +15,11 @@ package com.propertyvista.ob.client.themes;
 
 import com.google.gwt.canvas.dom.client.CssColor;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -45,6 +47,7 @@ public class OnboardingTheme extends Theme {
     private final static String COLOR_SPECIAL_FOREGROUND = "#607280";
 
     public OnboardingTheme() {
+
         addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
@@ -78,6 +81,11 @@ public class OnboardingTheme extends Theme {
         initPmcAccountCreationProgressViewStyles();
         initPmcAccountCreationCompleteStyles();
         initRuntimeErrorViewStyles();
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     private void initCommonStuff() {

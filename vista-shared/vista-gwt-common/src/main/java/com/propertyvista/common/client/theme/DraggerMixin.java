@@ -13,9 +13,11 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 
 public class DraggerMixin extends Theme {
 
@@ -29,6 +31,11 @@ public class DraggerMixin extends Theme {
         style.addProperty("background", ThemeColor.object1, 1);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
 }

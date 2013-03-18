@@ -7,19 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 17, 2013
- * @author stanp
+ * Created on Mar 18, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins;
+package com.propertyvista.pmsite.server.skins.power;
 
+import com.propertyvista.pmsite.server.skins.DefaultAptDetailsTheme;
 
-public class PMSiteSkin {
-    public enum Stylesheet {
-        AptDetails, AptList, BuildingInfoPanel, CityPage, Error, FindApt, FloorplanInfoPanel, Inquiry, InquiryOk, InquiryPanel, Landing, Main, Resident, Static, Terms, UnitDetails
-    }
+public class AptDetailsTheme extends DefaultAptDetailsTheme {
 
-    public enum Styles {
-        Header, Footer, Navigation
-    }
 }

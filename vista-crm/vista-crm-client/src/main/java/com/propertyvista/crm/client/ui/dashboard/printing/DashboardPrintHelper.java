@@ -23,9 +23,11 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 
@@ -82,6 +84,11 @@ public class DashboardPrintHelper {
             style.addProperty("font-weight", "bold");
             addStyle(style);
         }
+
+        @Override
+        public final ThemeId getId() {
+            return new ClassBasedThemeId(getClass());
+        }
     }
 
     private static String printTheme;
@@ -137,4 +144,5 @@ public class DashboardPrintHelper {
     private static native boolean hasDefinedType(JavaScriptObject n) /*-{
 		return n != null && n.nodeType != undefined;
     }-*/;
+
 }

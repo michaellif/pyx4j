@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 
 public class TenantDashboardTheme extends Theme {
 
@@ -81,5 +83,10 @@ public class TenantDashboardTheme extends Theme {
         style.addProperty("padding-left", "0.5em");
         style.addProperty("padding-right", "0.5em");
         addStyle(style);
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }

@@ -11,23 +11,37 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins.future;
+package com.propertyvista.pmsite.server.skins;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeDescriminator;
+import com.pyx4j.commons.css.ThemeId;
 
-import com.propertyvista.pmsite.server.skins.PMSiteSkin;
+public abstract class PMSiteTheme extends Theme {
 
-public class Main extends Theme {
-
-    public Main() {
-        initCommonTagStyles();
-        // TODO - add other common portal styles/themes as needed
-        // ...
-        initStyle();
+    public static enum Stylesheet implements ThemeDescriminator {
+        AptDetails, AptList, BuildingInfoPanel, CityPage, Error, FindApt, FloorplanInfoPanel, Inquiry, InquiryOk, InquiryPanel, Landing, Resident, Static, Terms, UnitDetails
     }
 
-    protected void initCommonTagStyles() {
+    public PMSiteTheme(Stylesheet stylesheet) {
+
+        initStyles();
+
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
+    }
+
+    protected void initStyles() {
+
+        initCommonStyle();
+    }
+
+    private void initCommonStyle() {
         Style style = new Style("img,form,fieldset");
         style.addProperty("border", "medium none");
         addStyle(style);
@@ -62,9 +76,4 @@ public class Main extends Theme {
         addStyle(style);
     }
 
-    public void initStyle() {
-        Style style = new Style(".", PMSiteSkin.Styles.Header);
-        style.addProperty("width", "100%");
-        addStyle(style);
-    }
 }

@@ -37,7 +37,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import templates.TemplateResources;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -45,14 +44,11 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FooterPanel;
 import com.propertyvista.pmsite.server.panels.HeaderPanel;
-import com.propertyvista.pmsite.server.skins.PMSiteSkin;
 
 //http://www.google.com/codesearch#ah7E8QWg9kg/trunk/src/main/java/com/jianfeiliao/portfolio/panel/content/StuffPanel.java&type=cs
 public abstract class BasePage extends WebPage {
 
     private static final long serialVersionUID = 1L;
-
-    private static final I18n i18n = I18n.get(BasePage.class);
 
     public static final String META_TITLE = "pageTitle";
 
@@ -116,13 +112,6 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (ApplicationMode.isDevelopment()) {
-            try {
-                response.renderCSSReference(cm.getCssManager().getCssReference(PMSiteSkin.Stylesheet.Main));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        }
         if (!cm.isCustomResidentsContentEnabled()) {
             String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
             String fileCSS = skin + "/" + "main.css";

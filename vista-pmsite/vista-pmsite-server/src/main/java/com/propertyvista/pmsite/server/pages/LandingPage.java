@@ -22,6 +22,8 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import templates.TemplateResources;
 
+import com.pyx4j.config.shared.ApplicationMode;
+
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.site.gadgets.GadgetContent;
@@ -36,6 +38,7 @@ import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
 import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchGadgetPanel;
 import com.propertyvista.pmsite.server.panels.TestimGadgetPanel;
+import com.propertyvista.pmsite.server.skins.PMSiteTheme;
 
 public class LandingPage extends BasePage {
 
@@ -120,6 +123,13 @@ public class LandingPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        if (ApplicationMode.isDevelopment()) {
+            try {
+                response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.Landing));
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
         String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
         String fileCSS = skin + "/" + "landing.css";
         VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",

@@ -13,10 +13,12 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class NewPaymentMethodEditorTheme extends Theme {
@@ -101,5 +103,10 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("height", "20em");
         addStyle(style);
 
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }

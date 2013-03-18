@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.client.themes;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 
 /**
  * Defines style names and CSS for the public portal pages as login, sign-up, password reset etc...
@@ -166,6 +168,11 @@ public class LandingPagesTheme extends Theme {
         style.addProperty("text-align", "right");
         addStyle(style);
 
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
     private void overrideCommonStyles() {

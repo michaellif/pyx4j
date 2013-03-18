@@ -13,9 +13,11 @@
  */
 package com.propertyvista.common.client.theme;
 
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 
 public class BillingTheme extends Theme {
@@ -40,6 +42,7 @@ public class BillingTheme extends Theme {
     }
 
     public BillingTheme() {
+
         Style style = new Style(".", StyleName.BillingLineItem);
         style.addProperty("color", "#B3B3B3");
         style.addProperty("font-weight", "bold");
@@ -104,5 +107,10 @@ public class BillingTheme extends Theme {
         style.addProperty("border-top", "2px solid #bbb");
         style.addProperty("padding-top", "4px");
         addStyle(style);
+    }
+
+    @Override
+    public final ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 }
