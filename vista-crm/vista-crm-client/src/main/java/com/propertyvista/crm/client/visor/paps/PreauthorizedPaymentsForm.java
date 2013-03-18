@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.visor.paps;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -21,7 +22,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
-import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
 
@@ -33,11 +33,16 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        main.setWidget(0, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
-        main.setH4(1, 0, 1, proto().tenant().preauthorizedPayments().getMeta().getCaption());
+        main.setWidget(0, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
+        main.setH3(1, 0, 1, proto().tenant().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(2, 0, inject(proto().tenant().preauthorizedPayments(), new PreauthorizedPaymentsFolder(this)));
 
+        main.getWidget(0, 0).setWidth("50em");
+        main.getWidget(0, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
+        main.getWidget(0, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
         main.getWidget(0, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
+
         return main;
     }
 }

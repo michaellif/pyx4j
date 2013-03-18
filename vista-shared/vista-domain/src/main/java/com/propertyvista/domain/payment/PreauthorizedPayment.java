@@ -54,6 +54,7 @@ public interface PreauthorizedPayment extends IEntity {
     @Format("#,##0.00")
     IPrimitive<BigDecimal> amount();
 
+    @NotNull
     @ToString(index = 2)
     LeasePaymentMethod paymentMethod();
 

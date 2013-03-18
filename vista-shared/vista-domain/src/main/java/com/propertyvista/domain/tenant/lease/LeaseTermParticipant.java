@@ -75,11 +75,11 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
     interface LeaseParticipantHolderId extends ColumnId {
     }
 
-    @JoinColumn(LeaseParticipantHolderId.class)
     @NotNull
-    @MemberColumn(notNull = true)
     @ReadOnly
     @ToString(index = 0)
+    @MemberColumn(notNull = true)
+    @JoinColumn(LeaseParticipantHolderId.class)
     LC leaseParticipant();
 
     @NotNull
@@ -89,11 +89,11 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
 
     @Owner
     @NotNull
-    @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
     @Indexed
     @JoinColumn
+    @MemberColumn(notNull = true)
     @Caption(name = "Lease Agreement")
     LeaseTermV leaseTermV();
 

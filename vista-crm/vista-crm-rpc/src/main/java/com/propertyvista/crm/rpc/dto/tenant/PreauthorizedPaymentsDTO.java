@@ -13,17 +13,34 @@
  */
 package com.propertyvista.crm.rpc.dto.tenant;
 
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
 public interface PreauthorizedPaymentsDTO extends IEntity {
 
     Tenant tenant();
+
+    @ToStringFormat("{0}, {1}")
+    interface TenantInfo extends IEntity {
+
+        @ToString(index = 0)
+        Name name();
+
+        @ToString(index = 2)
+        IPrimitive<Role> role();
+    }
+
+    TenantInfo tenantInfo();
 
     IList<LeasePaymentMethod> availablePaymentMethods();
 }

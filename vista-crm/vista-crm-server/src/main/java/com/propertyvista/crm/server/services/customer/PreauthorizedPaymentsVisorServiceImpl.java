@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.customer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -24,6 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPaymentsVisorService {
@@ -42,7 +44,23 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         dto.availablePaymentMethods().addAll(Persistence.service().query(criteria));
 
+        fillTenantInfo(dto, dto.tenant());
+
         callback.onSuccess(dto);
+    }
+
+    private void fillTenantInfo(PreauthorizedPaymentsDTO pads, Tenant tenant) {
+        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+
+        pads.tenantInfo().name().set(tenant.customer().person().name());
+
+        EntityListCriteria<LeaseTermParticipant> criteria = new EntityListCriteria<LeaseTermParticipant>(LeaseTermParticipant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV().holder(), tenant.lease().currentTerm()));
+        LeaseTermParticipant<?> ltp = Persistence.service().retrieve(criteria);
+        if (ltp != null) {
+            pads.tenantInfo().role().setValue(ltp.role().getValue());
+        }
     }
 
     @Override
