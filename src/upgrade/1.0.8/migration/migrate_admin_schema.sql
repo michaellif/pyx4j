@@ -117,8 +117,9 @@ SET search_path = '_admin_';
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 
                 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadReceiveAcknowledgment', 
                 'paymentsPadReceiveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 
-                'paymentsTenantSure', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 
-                'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'yardiBatchProcess', 'yardiImportProcess'));
+                'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 
+                'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
+                'yardiBatchProcess', 'yardiImportProcess'));
 
               
 

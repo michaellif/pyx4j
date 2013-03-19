@@ -67,9 +67,10 @@ BEGIN
                                         
         -- billing_billing_cycle
         
-        ALTER TABLE billing_billing_cycle       ADD COLUMN pad_calculation_date DATE,
-                                                ADD COLUMN pad_execution_date DATE,
-                                                ADD COLUMN bill_execution_date DATE,
+        ALTER TABLE billing_billing_cycle       ADD COLUMN target_pad_generation_date DATE,
+                                                ADD COLUMN target_bill_execution_date DATE,
+                                                ADD COLUMN target_pad_execution_date DATE,
+                                                ADD COLUMN actual_pad_generation_date DATE,
                                                 ADD COLUMN actual_bill_execution_date DATE,
                                                 ADD COLUMN actual_pad_calculation_date DATE,
                                                 ADD COLUMN actual_pad_execution_date DATE;
@@ -192,6 +193,10 @@ BEGIN
         ALTER TABLE padpolicy$debit_balance_types OWNER TO vista;
         
         
+        -- payment_record
+        
+        ALTER TABLE payment_record ADD COLUMN pad_billing_cycle BIGINT;
+        
         -- preauthorized_payment
         
         CREATE TABLE preauthorized_payment
@@ -224,6 +229,18 @@ BEGIN
         );
         
         ALTER TABLE product_item_type$yardi_charge_codes OWNER TO vista;
+        
+        -- tenant_info
+        
+        CREATE TABLE tenant_info
+        (
+                id                                      BIGINT                          NOT NULL,
+                name                                    BIGINT,
+                role                                    VARCHAR(50),
+                        CONSTRAINT      tenant_info_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE tenant_info OWNER TO vista;
         
         -- yardi_charge_code
         
@@ -279,10 +296,12 @@ BEGIN
                 REFERENCES lease_billing_type_policy_item(id);
         ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_owner_fk FOREIGN KEY(owner) REFERENCES padpolicy(id);
         ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_value_fk FOREIGN KEY(value) REFERENCES padpolicy_item(id);
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_pad_billing_cycle_fk FOREIGN KEY(pad_billing_cycle) REFERENCES billing_billing_cycle(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_owner_fk FOREIGN KEY(owner) REFERENCES product_item_type(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_value_fk FOREIGN KEY(value) REFERENCES yardi_charge_code(id);
+        ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_name_fk FOREIGN KEY(name) REFERENCES name(id);
 
                 
         -- Check constraints
@@ -313,6 +332,7 @@ BEGIN
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_amount_type_e_ck CHECK ((amount_type) IN ('Percent', 'Value'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck CHECK (tenant_discriminator= 'Tenant');
+        ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
 
 
         
