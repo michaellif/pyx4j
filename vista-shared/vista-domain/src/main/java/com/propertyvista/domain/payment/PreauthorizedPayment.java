@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface PreauthorizedPayment extends IEntity {
 
     public enum AmountType {
+
         Percent, Value;
 
         @Override
@@ -47,15 +49,18 @@ public interface PreauthorizedPayment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
+    @ReadOnly
     IPrimitive<AmountType> amountType();
 
     @NotNull
     @ToString(index = 1)
     @Format("#,##0.00")
+    @ReadOnly
     IPrimitive<BigDecimal> amount();
 
     @NotNull
     @ToString(index = 2)
+    @ReadOnly
     LeasePaymentMethod paymentMethod();
 
     @Length(40)
@@ -64,6 +69,7 @@ public interface PreauthorizedPayment extends IEntity {
     // internals:
 
     @Owner
+    @ReadOnly
     @Detached
     @NotNull
     @JoinColumn

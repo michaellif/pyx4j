@@ -17,13 +17,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -46,14 +41,6 @@ import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
-
-    private static final Logger log = LoggerFactory.getLogger(PaymentProcessFacadeImpl.class);
-
-    private static final String PROCESSED = "Processed";
-
-    private static final String REJECTED = "Rejected";
-
-    private static final String ERRED = "Erred";
 
     @Override
     public PadFile preparePadFile() {
@@ -243,49 +230,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType) {
-        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
-        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), SystemDateManager.getDate()));
-
-        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        try {
-            while (paymentRecordIterator.hasNext()) {
-                processScheduledPayment(paymentRecordIterator.next(), executionMonitor);
-            }
-        } finally {
-            paymentRecordIterator.completeRetrieval();
-        }
-    }
-
-    private void processScheduledPayment(final PaymentRecord paymentRecord, final ExecutionMonitor executionMonitor) {
-        try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
-
-                @Override
-                public Void execute() throws PaymentException {
-                    PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
-
-                    if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                        executionMonitor.addFailedEvent(//@formatter:off
-                                REJECTED,
-                                processedPaymentRecord.amount().getValue(),
-                                SimpleMessageFormat.format("Payment was rejected")
-                        );//@formatter:on
-                    } else {
-                        executionMonitor.addProcessedEvent(//@formatter:off
-                                PROCESSED,
-                                processedPaymentRecord.amount().getValue(),
-                                SimpleMessageFormat.format("Payment was processed")
-                        );//@formatter:on
-                    }
-                    return null;
-                }
-            });
-        } catch (PaymentException e) {
-            log.error("Preauthorised payment creation failed", e);
-            executionMonitor.addErredEvent(ERRED, e);
-        }
+        new ScheduledPaymentsManager().processScheduledPayments(executionMonitor, paymentType);
     }
 
 }
