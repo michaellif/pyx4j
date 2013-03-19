@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
@@ -49,7 +49,7 @@ public interface LeaseBillingPolicy extends Policy {
     IList<LeaseBillingTypePolicyItem> availableBillingTypes();
 
     @NotNull
-    IPrimitive<InternalBillingAccount.ProrationMethod> prorationMethod();
+    IPrimitive<BillingAccount.ProrationMethod> prorationMethod();
 
     @Owned
     LateFeeItem lateFee();
