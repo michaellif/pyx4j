@@ -43,7 +43,9 @@ import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPreviewService;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
@@ -368,6 +370,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillCrudService.class));
         grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingExecutionService.class));
         grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleCrudService.class));
+        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleBillListService.class));
+        grant(VistaCrmBehavior.Billing, new IServiceExecutePermission(BillingCycleLeaseListService.class));
 
         grant(VistaCrmBehavior.Tenants, new IServiceExecutePermission(BillPreviewService.class));
 

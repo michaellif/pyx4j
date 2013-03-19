@@ -18,14 +18,11 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
-
-    private static final I18n i18n = I18n.get(PaymentLister.class);
 
     public PaymentLister() {
         super(PaymentRecordDTO.class, true);
@@ -49,6 +46,6 @@ public class PaymentLister extends AbstractLister<PaymentRecordDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().id().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().id(), true));
     }
 }

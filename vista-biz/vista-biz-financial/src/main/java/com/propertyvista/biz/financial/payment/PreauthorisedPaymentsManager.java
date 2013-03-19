@@ -169,7 +169,6 @@ class PreauthorisedPaymentsManager {
         BigDecimal percentAmountTotal = BigDecimal.ZERO;
 
         PreauthorizedAmount recordLargest = null;
-        BigDecimal percentAmountLargest = BigDecimal.ZERO;
 
         for (LeaseTermTenant leaseParticipant : lease.currentTerm().version().tenants()) {
             Persistence.service().retrieveMember(leaseParticipant.leaseParticipant().preauthorizedPayments());
@@ -191,8 +190,7 @@ class PreauthorisedPaymentsManager {
                     record.amount = DomainUtil.roundMoney(currentBalance.multiply(pap.amount().getValue()));
                     percentAmountTotal = percentAmountTotal.add(record.amount);
 
-                    if (record.amount.compareTo(percentAmountLargest) > 0) {
-                        percentAmountLargest = record.amount;
+                    if ((recordLargest == null) || (record.amount.compareTo(recordLargest.amount) > 0)) {
                         recordLargest = record;
                     }
                     break;
