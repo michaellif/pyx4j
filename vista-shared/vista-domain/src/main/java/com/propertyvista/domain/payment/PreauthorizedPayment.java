@@ -59,6 +59,9 @@ public interface PreauthorizedPayment extends IEntity {
     IPrimitive<BigDecimal> amount();
 
     @NotNull
+    IPrimitive<Boolean> isDeleted();
+
+    @NotNull
     @ToString(index = 2)
     @ReadOnly
     LeasePaymentMethod paymentMethod();
