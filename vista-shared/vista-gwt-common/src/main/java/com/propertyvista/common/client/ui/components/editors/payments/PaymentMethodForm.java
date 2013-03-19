@@ -15,8 +15,9 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -40,7 +41,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
-    private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
+    private final FlowPanel paymentTypeImages = new FlowPanel();
 
     private final boolean twoColumns;
 
@@ -55,11 +56,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel container = new FormFlexPanel();
-        container.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
-
-        int row = -1;
-        paymentTypeImagesPanel.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
+        paymentTypeImages.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
         Image paymentTypeImage;
         FlowPanel holder;
 
@@ -81,26 +78,29 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             if (paymentTypeImage != null) {
                 holder = new FlowPanel();
                 holder.add(paymentTypeImage);
-                paymentTypeImagesPanel.add(holder);
+                paymentTypeImages.add(holder);
             }
         }
 
-        container.setWidget(++row, 0, paymentTypeImagesPanel);
-        container.setWidget(row, 1,
-                inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
+        HorizontalPanel paymentMethods = new HorizontalPanel();
+        paymentMethods.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
+        paymentMethods.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        paymentMethods.setWidth("100%");
 
-        ComplexPanel instrumentsPanel = new FlowPanel();
-        instrumentsPanel.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
-        instrumentsPanel.add(paymentDetailsHolder);
-        container.setWidget(row, 2, instrumentsPanel);
+        paymentMethods.add(paymentTypeImages);
+        paymentMethods.add(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
+        paymentMethods.add(paymentDetailsHolder);
 
-        container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
-        billingAddressHeader = container.getWidget(row, 0);
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
-        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+        paymentDetailsHolder.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
 
-        container.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
-        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+        // Form content pane:
+        FormFlexPanel content = new FormFlexPanel();
+        int row = -1;
+        content.setWidget(++row, 0, paymentMethods);
+        content.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
+        billingAddressHeader = content.getWidget(row, 0);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
 
         // tweaks:
         get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
@@ -124,12 +124,12 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.viewable) {
-                    paymentTypeImagesPanel.setVisible(!isViewable());
+                    paymentTypeImages.setVisible(!isViewable());
                 }
             }
         });
 
-        return container;
+        return content;
     }
 
     @Override
