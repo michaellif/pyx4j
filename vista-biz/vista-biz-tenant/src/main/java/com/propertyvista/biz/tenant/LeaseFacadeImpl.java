@@ -16,6 +16,7 @@ package com.propertyvista.biz.tenant;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -391,17 +393,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         finalize(lease);
 
         // Billing-related stuff:
-        BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
-
         if (!VistaFeatures.instance().yardiIntegration()) {
-            Bill bill = billingFacade.runBilling(lease);
+            Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
             if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
                 throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
             }
 
             if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-                billingFacade.confirmBill(bill);
+                ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
             }
         }
 
@@ -427,11 +427,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case ExistingLease:
             if (!VistaFeatures.instance().yardiIntegration()) {
                 // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
-                Bill bill = billingFacade.getLatestBill(lease);
+                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
                 LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
-                LogicalDate nextExecDate = billingFacade.getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
+                LogicalDate nextExecDate = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
                 if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
-                    billingFacade.runBilling(lease);
+                    ServerSideFactory.create(BillingFacade.class).runBilling(lease);
                 }
             }
 
@@ -441,6 +441,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         updateUnitRentPrice(lease);
+
+        // create historical billing cycles for imported leases
+        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(lease);
+        Date now = SystemDateManager.getDate();
+        while (cycle.billingCycleStartDate().getValue().before(now)) {
+            cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
+        }
     }
 
     // TODO review code here
@@ -840,6 +847,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
             lease.billingAccount().paymentDueDayOffset().set(billingType.paymentDueDayOffset());
             lease.billingAccount().finalDueDayOffset().set(billingType.finalDueDayOffset());
+            lease.billingAccount().billingPeriod().set(billingType.billingPeriod());
 
             updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
 

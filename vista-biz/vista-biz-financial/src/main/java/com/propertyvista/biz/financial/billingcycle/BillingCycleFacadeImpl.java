@@ -30,7 +30,7 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     }
 
     @Override
-    public BillingCycle getSubsiquentBillingCycle(BillingCycle billingCycle) {
+    public BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle) {
         return BillingCycleManager.instance().getSubsiquentBillingCycle(billingCycle);
     }
 

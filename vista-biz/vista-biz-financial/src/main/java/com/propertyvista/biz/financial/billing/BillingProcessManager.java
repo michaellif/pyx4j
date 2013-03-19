@@ -85,7 +85,7 @@ public class BillingProcessManager {
                             createUntill.add(Calendar.MONTH, 1);
 
                             while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {
-                                latestBillingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsiquentBillingCycle(latestBillingCycle);
+                                latestBillingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(latestBillingCycle);
                             }
 
                         }

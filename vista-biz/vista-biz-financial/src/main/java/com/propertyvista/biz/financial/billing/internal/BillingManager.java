@@ -181,7 +181,7 @@ public class BillingManager {
         if (previousBill == null) {
             return ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(lease);
         } else {
-            return ServerSideFactory.create(BillingCycleFacade.class).getSubsiquentBillingCycle(previousBill.billingCycle());
+            return ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(previousBill.billingCycle());
         }
     }
 

@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -64,6 +65,10 @@ public class ARDateUtils {
     }
 
     public static LogicalDate calculateDueDate(BillingAccount account, LogicalDate postDate) {
+        Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(account.lease().unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(account.lease().unit().building(), AttachLevel.Attached);
+
         EntityQueryCriteria<BillingCycle> cycleCrit = EntityQueryCriteria.create(BillingCycle.class);
         cycleCrit.add(PropertyCriterion.eq(cycleCrit.proto().building(), account.lease().unit().building()));
         cycleCrit.add(PropertyCriterion.le(cycleCrit.proto().billingCycleStartDate(), postDate));

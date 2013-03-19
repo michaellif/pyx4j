@@ -23,6 +23,6 @@ public interface BillingCycleFacade {
 
     BillingCycle getLeaseFirstBillingCycle(Lease lease);
 
-    BillingCycle getSubsiquentBillingCycle(BillingCycle billingCycle);
+    BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 
 }
