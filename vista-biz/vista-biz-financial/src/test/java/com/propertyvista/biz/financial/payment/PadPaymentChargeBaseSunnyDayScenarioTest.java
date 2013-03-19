@@ -54,6 +54,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         setLeaseBatchProcess();
         setDepositBatchProcess();
+        setPaymentBatchProcess();
 
         //==================== RUN 1 ======================//
 

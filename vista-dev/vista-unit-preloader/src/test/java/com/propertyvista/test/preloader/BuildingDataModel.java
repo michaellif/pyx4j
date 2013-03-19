@@ -53,24 +53,14 @@ public class BuildingDataModel {
 
     private Building building;
 
+    private final List<ProductItem> serviceItems = new ArrayList<ProductItem>();
+
     private Service standardResidentialService;
 
     public BuildingDataModel(PreloadConfig config, LocationsDataModel locationsDataModel, ProductItemTypesDataModel productItemTypesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
         this.locationsDataModel = locationsDataModel;
         createServiceMeta();
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
-
-    public AptUnit generateResidentialUnit() {
-        AptUnit unit = EntityFactory.create(AptUnit.class);
-        unit.building().set(building);
-
-        ServerSideFactory.create(BuildingFacade.class).persist(unit);
-        return unit;
     }
 
     public void generate() {
@@ -92,6 +82,37 @@ public class BuildingDataModel {
         generateCatalog();
 
         Persistence.service().persist(building);
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public ProductItem addResidentialUnitServiceItem(BigDecimal price) {
+        standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
+
+        ProductItem productItem = EntityFactory.create(ProductItem.class);
+        productItem.type().set(serviceMeta.get(Service.ServiceType.residentialUnit).get(0));
+        productItem.element().set(generateResidentialUnit());
+        productItem.price().setValue(price);
+        productItem.description().setValue(productItem.type().name().getValue());
+
+        standardResidentialService.version().items().add(productItem);
+        Persistence.service().persist(standardResidentialService);
+        serviceItems.add(productItem);
+        return productItem;
+    }
+
+    public ProductItem getResidentialUnitServiceItem(int index) {
+        return serviceItems.get(index);
+    }
+
+    private AptUnit generateResidentialUnit() {
+        AptUnit unit = EntityFactory.create(AptUnit.class);
+        unit.building().set(building);
+
+        ServerSideFactory.create(BuildingFacade.class).persist(unit);
+        return unit;
     }
 
     private void generateParking() {
@@ -147,21 +168,6 @@ public class BuildingDataModel {
 
         Persistence.service().persist(standardResidentialService);
 
-    }
-
-    public ProductItem generateResidentialUnitServiceItem() {
-        standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
-
-        ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(serviceMeta.get(Service.ServiceType.residentialUnit).get(0));
-        productItem.element().set(generateResidentialUnit());
-        productItem.price().setValue(new BigDecimal("930.30"));
-        productItem.description().setValue(productItem.type().name().getValue());
-
-        standardResidentialService.version().items().add(productItem);
-        Persistence.service().persist(standardResidentialService);
-
-        return productItem;
     }
 
     private void generateFeatures() {

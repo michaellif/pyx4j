@@ -38,13 +38,13 @@ public class DefaultLandingTheme extends PMSiteThemeBase {
 
     @Override
     public void initStyle() {
-        Style style = new Style("." + StyleName.Banner.name());
+        Style style = new Style(".", StyleName.Banner.name());
         style.addProperty("height", "375px");
         style.addProperty("width", "960px");
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style("." + StyleName.BannerImg.name());
+        style = new Style(".", StyleName.BannerImg.name());
         style.addProperty("height", "430px");
         style.addProperty("width", "960px");
         style.addProperty("float", "left");

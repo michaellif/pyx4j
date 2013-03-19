@@ -17,18 +17,23 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -41,6 +46,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class PaymentFacadeImpl implements PaymentFacade {
+
+    private final static Logger log = LoggerFactory.getLogger(PaymentFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(PaymentFacadeImpl.class);
 
@@ -110,7 +117,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
@@ -162,6 +169,19 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             try {
                 ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                    @Override
+                    public Void execute() {
+                        log.error("Unable to cancel posted Receipt Batch to Yardi; {}", paymentRecord);
+
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {}",
+                                paymentRecord);
+
+                        return null;
+                    }
+                });
+
             } catch (ARException e) {
                 throw new PaymentException("Failed to post payment to AR while processing payment", e);
             }

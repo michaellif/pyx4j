@@ -44,7 +44,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods().size());
 
         LeasePaymentMethod paymentMethod = createPaymentMethod(type);
-        paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
+        paymentMethod.customer().set(customerDataModel.addCustomer());
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
 
@@ -64,7 +64,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
 
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(tenantDataModel.getTenantCustomer());
+        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customerDataModel.getCustomer(0));
         Assert.assertEquals(0, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods().size());
@@ -83,7 +83,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
 
         {
             LeasePaymentMethod paymentMethod = createPaymentMethod(type);
-            paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
+            paymentMethod.customer().set(customerDataModel.addCustomer());
             paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(buildingDataModel.getBuilding(), paymentMethod);
         }
@@ -102,7 +102,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods().size());
 
         {
-            profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(tenantDataModel.getTenantCustomer());
+            profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customerDataModel.getCustomer(0));
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             {
                 switch (paymentMethodUpdate.type().getValue()) {
@@ -190,7 +190,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(buildingDataModel.getBuilding(), paymentMethodUpdate);
         }
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(tenantDataModel.getTenantCustomer());
+        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customerDataModel.getCustomer(0));
         Assert.assertEquals(1, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods().size());

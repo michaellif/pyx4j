@@ -59,13 +59,13 @@ public class PaymentTestBase extends FinancialTestBase {
 
     public List<LeasePaymentMethod> retrieveAllPaymentMethods() {
         EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenantDataModel.getTenantCustomer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customerDataModel.addCustomer()));
         return Persistence.service().query(criteria);
     }
 
     protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable() {
         List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                tenantDataModel.getTenantCustomer());
+                customerDataModel.addCustomer());
         RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
         return profileMethods;
     }
@@ -93,7 +93,7 @@ public class PaymentTestBase extends FinancialTestBase {
 
     protected LeasePaymentMethod createPaymentMethod(PaymentType type) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
-        paymentMethod.customer().set(tenantDataModel.getTenantCustomer());
+        paymentMethod.customer().set(customerDataModel.addCustomer());
         paymentMethod.type().setValue(type);
         switch (type) {
         case Echeck: {

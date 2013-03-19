@@ -92,10 +92,14 @@ import com.propertyvista.server.jobs.FutureBillingCycleInitializationProcess;
 import com.propertyvista.server.jobs.LeaseActivationProcess;
 import com.propertyvista.server.jobs.LeaseCompletionProcess;
 import com.propertyvista.server.jobs.LeaseRenewalProcess;
+import com.propertyvista.server.jobs.PaymentsIssueProcess;
+import com.propertyvista.server.jobs.PaymentsScheduledProcess;
+import com.propertyvista.server.jobs.PaymentsUpdateProcess;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.test.preloader.ARPolicyDataModel;
 import com.propertyvista.test.preloader.BuildingDataModel;
+import com.propertyvista.test.preloader.CustomerDataModel;
 import com.propertyvista.test.preloader.DepositPolicyDataModel;
 import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.preloader.LeaseAdjustmentPolicyDataModel;
@@ -108,7 +112,6 @@ import com.propertyvista.test.preloader.PreloadConfig;
 import com.propertyvista.test.preloader.ProductItemTypesDataModel;
 import com.propertyvista.test.preloader.ProductTaxPolicyDataModel;
 import com.propertyvista.test.preloader.TaxesDataModel;
-import com.propertyvista.test.preloader.TenantDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -128,7 +131,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected ARPolicyDataModel arPolicyDataModel;
 
-    protected TenantDataModel tenantDataModel;
+    protected CustomerDataModel customerDataModel;
 
     protected PreloadConfig config;
 
@@ -209,8 +212,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                         taxesDataModel, buildingDataModel);
                 leaseAdjustmentPolicyDataModel.generate();
 
-                tenantDataModel = new TenantDataModel(config);
-                tenantDataModel.generate();
+                customerDataModel = new CustomerDataModel(config);
+                customerDataModel.generate();
 
                 LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
                 leaseBillingPolicyDataModel.generate();
@@ -290,7 +293,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        ProductItem serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
+        ProductItem serviceItem = buildingDataModel.addResidentialUnitServiceItem(new BigDecimal("930.30"));
 
         if (carryforwardBalance != null) {
             lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
@@ -315,7 +318,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(tenantDataModel.getTenantCustomer());
+        tenantInLease.leaseParticipant().customer().set(customerDataModel.addCustomer());
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
@@ -806,6 +809,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         scheduler.schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
         scheduler.schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
         scheduler.schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
+    }
+
+    protected void setPaymentBatchProcess() {
+        // schedule payment process to run daily
+        scheduler.schedulePmcProcess(new PaymentsIssueProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new PaymentsUpdateProcess(), new Schedule());
+        scheduler.schedulePmcProcess(new PaymentsScheduledProcess(PaymentType.Echeck), new Schedule());
     }
 
     public static class TaskScheduler {

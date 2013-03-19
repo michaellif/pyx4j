@@ -157,16 +157,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                         executionMonitor.addProcessedEvent("Unit");
                         try {
                             LeaseFinancialState stats = importLease(building.propertyCode().getValue(), rtCustomer);
-                            executionMonitor.addProcessedEvent(//@formatter:off
-                                    "Charges",
-                                    stats.getCharges(),
-                                    SimpleMessageFormat.format("Charges for {0}", rtCustomer.getCustomerID())
-                            );//@formatter:on
-                            executionMonitor.addProcessedEvent(//@formatter:off
-                                    "Payments",
-                                    stats.getPayments(),
-                                    SimpleMessageFormat.format("Payments for {0}", rtCustomer.getCustomerID())
-                            );//@formatter:on
+                            executionMonitor.addProcessedEvent("Charges", stats.getCharges(),
+                                    SimpleMessageFormat.format("Charges for {0}", rtCustomer.getCustomerID()));
+                            executionMonitor.addProcessedEvent("Payments", stats.getPayments(),
+                                    SimpleMessageFormat.format("Payments for {0}", rtCustomer.getCustomerID()));
                             executionMonitor.addProcessedEvent("Lease");
                         } catch (YardiServiceException e) {
                             executionMonitor.addFailedEvent("Lease", e);
