@@ -96,6 +96,21 @@ SET search_path = '_admin_';
         SET     trigger_type = 'paymentsPadReceiveReconciliation'
         WHERE   trigger_type = 'paymentsPadReciveReconciliation';
         
+        
+        
+        /**
+        ***     ==========================================================================================================
+        ***
+        ***             DROP TABLES AND COLUMNS
+        ***
+        ***     ==========================================================================================================
+        **/
+        
+        -- pad_sim_file
+        
+        ALTER TABLE pad_sim_file DROP COLUMN status;
+        
+        
         /**
         ***     ========================================================================================================
         ***

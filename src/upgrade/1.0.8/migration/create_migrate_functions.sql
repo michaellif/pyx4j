@@ -69,11 +69,9 @@ BEGIN
         
         ALTER TABLE billing_billing_cycle       ADD COLUMN target_pad_generation_date DATE,
                                                 ADD COLUMN target_bill_execution_date DATE,
-                                                ADD COLUMN target_pad_execution_date DATE,
                                                 ADD COLUMN actual_pad_generation_date DATE,
                                                 ADD COLUMN actual_bill_execution_date DATE,
-                                                ADD COLUMN actual_pad_calculation_date DATE,
-                                                ADD COLUMN actual_pad_execution_date DATE;
+                                                ADD COLUMN pad_execution_date DATE;
                                                 
         -- billing_billing_type
         
@@ -195,7 +193,8 @@ BEGIN
         
         -- payment_record
         
-        ALTER TABLE payment_record ADD COLUMN pad_billing_cycle BIGINT;
+        ALTER TABLE payment_record      ADD COLUMN pad_billing_cycle BIGINT,
+                                        ADD COLUMN preauthorized_payment BIGINT;
         
         -- preauthorized_payment
         
@@ -204,6 +203,7 @@ BEGIN
                 id                                      BIGINT                          NOT NULL,
                 amount_type                             VARCHAR(50),
                 amount                                  NUMERIC(18,2),
+                is_deleted                              BOOLEAN,
                 payment_method_discriminator            VARCHAR(50),
                 payment_method                          BIGINT,
                 comments                                VARCHAR(40),
@@ -279,6 +279,16 @@ BEGIN
                 ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
                 ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';   
         
+        
+        /**
+        ***     ==========================================================================================================
+        ***
+        ***             DROP TABLES AND COLUMNS
+        ***
+        ***     ==========================================================================================================
+        **/
+        
+        
          
         /**
         ***     ======================================================================================================
@@ -297,6 +307,7 @@ BEGIN
         ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_owner_fk FOREIGN KEY(owner) REFERENCES padpolicy(id);
         ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_value_fk FOREIGN KEY(value) REFERENCES padpolicy_item(id);
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_pad_billing_cycle_fk FOREIGN KEY(pad_billing_cycle) REFERENCES billing_billing_cycle(id);
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) REFERENCES preauthorized_payment(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_owner_fk FOREIGN KEY(owner) REFERENCES product_item_type(id);
