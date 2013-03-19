@@ -69,7 +69,7 @@ class PreauthorisedPaymentsManager {
                 createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
             }
         } finally {
-            billingCycleIterator.completeRetrieval();
+            billingCycleIterator.close();
         }
     }
 
@@ -87,7 +87,7 @@ class PreauthorisedPaymentsManager {
                 updateBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
             }
         } finally {
-            billingCycleIterator.completeRetrieval();
+            billingCycleIterator.close();
         }
     }
 
@@ -111,7 +111,7 @@ class PreauthorisedPaymentsManager {
                         createBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor);
                     }
                 } finally {
-                    billingAccountIterator.completeRetrieval();
+                    billingAccountIterator.close();
                 }
 
                 billingCycle.actualPadGenerationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -237,7 +237,7 @@ class PreauthorisedPaymentsManager {
                         updateBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor);
                     }
                 } finally {
-                    billingAccountIterator.completeRetrieval();
+                    billingAccountIterator.close();
                 }
                 return null;
             }

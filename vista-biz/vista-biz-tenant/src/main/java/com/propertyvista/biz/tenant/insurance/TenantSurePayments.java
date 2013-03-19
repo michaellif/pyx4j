@@ -206,7 +206,7 @@ class TenantSurePayments {
                 }
             }
         } finally {
-            iterator.completeRetrieval();
+            iterator.close();
         }
     }
 

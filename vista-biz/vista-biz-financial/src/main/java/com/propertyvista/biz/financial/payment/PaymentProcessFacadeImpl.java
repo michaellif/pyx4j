@@ -86,7 +86,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
             }
         } finally {
-            paymentRecordIterator.completeRetrieval();
+            paymentRecordIterator.close();
         }
     }
 

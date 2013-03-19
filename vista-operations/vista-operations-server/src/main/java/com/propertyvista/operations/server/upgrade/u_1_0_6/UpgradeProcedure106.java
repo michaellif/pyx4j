@@ -72,7 +72,7 @@ public class UpgradeProcedure106 implements UpgradeProcedure {
                 }
             }
         } finally {
-            cursor.completeRetrieval();
+            cursor.close();
         }
     }
 

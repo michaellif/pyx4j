@@ -75,7 +75,7 @@ public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer
                             progress.addAndGet(1);
                         }
                     } finally {
-                        cursor.completeRetrieval();
+                        cursor.close();
                     }
                 }
 
@@ -97,7 +97,7 @@ public class EncryptedStorageConsumerEquifax implements EncryptedStorageConsumer
                             progress.addAndGet(1);
                         }
                     } finally {
-                        cursor.completeRetrieval();
+                        cursor.close();
                     }
                 }
                 return count;

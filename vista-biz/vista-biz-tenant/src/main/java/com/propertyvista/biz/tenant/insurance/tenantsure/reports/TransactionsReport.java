@@ -100,7 +100,7 @@ public class TransactionsReport implements Report {
                     }
 
                 } finally {
-                    transactions.completeRetrieval();
+                    transactions.close();
                 }
                 return null;
             }

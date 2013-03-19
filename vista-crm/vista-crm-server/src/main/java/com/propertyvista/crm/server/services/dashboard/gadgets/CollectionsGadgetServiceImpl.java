@@ -135,7 +135,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
                 sum = sum.add(i.next().amount().getValue());
             }
         } finally {
-            i.completeRetrieval();
+            i.close();
         }
         member.setValue(sum);
 

@@ -69,7 +69,7 @@ public class LeaseActivationProcess implements PmcProcess {
                 }
                 log.info(context.getExecutionMonitor().toString());
             } finally {
-                i.completeRetrieval();
+                i.close();
             }
             log.info(context.getExecutionMonitor().toString());
         }

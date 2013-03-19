@@ -107,7 +107,7 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
                     fetchCount++;
                 }
             } finally {
-                buildings.completeRetrieval();
+                buildings.close();
             }
 
             XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));

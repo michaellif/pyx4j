@@ -113,7 +113,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         } catch (Throwable error) {
             log.error("failed to process cancellations due to: ", error);
         } finally {
-            iterator.completeRetrieval();
+            iterator.close();
         }
 
         log.info("processing TenantSure cancellation due to skipped payment");
@@ -141,7 +141,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
                 }
             }
         } finally {
-            skippedIterator.completeRetrieval();
+            skippedIterator.close();
         }
     }
 

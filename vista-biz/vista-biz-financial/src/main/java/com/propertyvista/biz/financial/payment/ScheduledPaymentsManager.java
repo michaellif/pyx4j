@@ -50,7 +50,7 @@ class ScheduledPaymentsManager {
                 processScheduledPayment(paymentRecordIterator.next(), executionMonitor);
             }
         } finally {
-            paymentRecordIterator.completeRetrieval();
+            paymentRecordIterator.close();
         }
     }
 

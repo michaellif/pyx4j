@@ -129,7 +129,7 @@ public final class PaymentsSummaryHelper {
                 amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
             }
         } finally {
-            i.completeRetrieval();
+            i.close();
         }
 
         summary.status().setValue(paymentStatus);
@@ -165,7 +165,7 @@ public final class PaymentsSummaryHelper {
                 amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
             }
         } finally {
-            i.completeRetrieval();
+            i.close();
         }
 
         summary.status().setValue(paymentStatus);

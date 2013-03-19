@@ -97,7 +97,7 @@ public class InsuranceStatusReport implements Report {
                 );//@formatter:on
             }
         } finally {
-            iterator.completeRetrieval();
+            iterator.close();
         }
     }
 

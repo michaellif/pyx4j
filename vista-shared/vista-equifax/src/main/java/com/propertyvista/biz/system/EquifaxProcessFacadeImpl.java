@@ -60,7 +60,7 @@ public class EquifaxProcessFacadeImpl implements EquifaxProcessFacade {
                         moved++;
                     }
                 } finally {
-                    cur.completeRetrieval();
+                    cur.close();
                 }
             }
 

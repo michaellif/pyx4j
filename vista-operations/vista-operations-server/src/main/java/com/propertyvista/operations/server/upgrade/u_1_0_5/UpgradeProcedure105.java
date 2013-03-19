@@ -72,7 +72,7 @@ public class UpgradeProcedure105 implements UpgradeProcedure {
                 Persistence.service().merge(lease);
             }
         } finally {
-            cursor.completeRetrieval();
+            cursor.close();
         }
     }
 }
