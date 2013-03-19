@@ -86,7 +86,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
     private List<YardiCharge> getYardiCharges(BillingAccount billingAccount) {
         EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().dueDate()));
         criteria.asc(criteria.proto().id());
         return Persistence.service().query(criteria);
     }

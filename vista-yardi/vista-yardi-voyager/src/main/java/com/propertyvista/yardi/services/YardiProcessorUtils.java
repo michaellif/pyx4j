@@ -111,6 +111,7 @@ public class YardiProcessorUtils {
             charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
             charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
+            // This calculation assumes that TransactionDate is set to start date of cycle
             charge.dueDate().setValue(ARDateUtils.calculateDueDate(account, new LogicalDate(detail.getTransactionDate().getTime())));
             if (detail.getService() != null) {
                 try {
@@ -122,6 +123,7 @@ public class YardiProcessorUtils {
             item = charge;
         } else {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
+            credit.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
             item = credit;
         }
         // we don't have postDate

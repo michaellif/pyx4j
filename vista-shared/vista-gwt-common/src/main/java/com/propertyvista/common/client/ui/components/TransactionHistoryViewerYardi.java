@@ -116,7 +116,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             BigDecimal totalAmount = new BigDecimal("0.00");
 
             for (E item : items) {
-                LogicalDate date = item.postDate().getValue();
+                LogicalDate date = item.isInstanceOf(YardiCharge.class) ? ((YardiCharge) item).dueDate().getValue() : item.postDate().getValue();
                 HTML dateHtml = date != null ? new HTML(dateFormat.format(date)) : new HTML("&nbsp;");
 
                 String description = !item.description().isNull() ? item.description().getValue() : "";
