@@ -11,10 +11,12 @@
  * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.customer;
+package com.propertyvista.interfaces.importer.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -36,8 +38,11 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.interfaces.importer.model.PadFileModel;
 
 public class TenantPadParser {
 
@@ -45,8 +50,20 @@ public class TenantPadParser {
 
     private static final I18n i18n = I18n.get(TenantPadParser.class);
 
-    public void parse(byte[] data, DownloadFormat format) {
+    private List<PadFileModel> pads = new ArrayList<PadFileModel>();
+
+    public String persistPads(byte[] data, DownloadFormat format) {
         TenantPadCounter counters = new TenantPadCounter();
+        pads = parsePads(data, format);
+        counters.add(savePads(pads));
+
+        String message = SimpleMessageFormat.format("{0} payment methods created, {1} skipped, {2} amounts updated", counters.imported, counters.skipped,
+                counters.updated);
+        log.info(message);
+        return message;
+    }
+
+    private List<PadFileModel> parsePads(byte[] data, DownloadFormat format) {
         if ((format != DownloadFormat.XLS) && (format != DownloadFormat.XLSX)) {
             throw new IllegalArgumentException();
         }
@@ -72,20 +89,24 @@ public class TenantPadParser {
                 log.error("XLSLoad error", e);
                 throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
             }
-            counters.add(convertUnits(receiver.getEntities()));
+            pads.addAll(receiver.getEntities());
         }
-        log.info(SimpleMessageFormat.format("{0} payment methods created, {1} skipped", counters.imported, counters.skipped));
+        return pads;
+
     }
 
-    private TenantPadCounter convertUnits(List<PadFileModel> entities) {
+    private TenantPadCounter savePads(List<PadFileModel> entities) {
         TenantPadCounter counters = new TenantPadCounter();
-        for (PadFileModel entity : entities) {
-            LeaseTermParticipant<?> leaseTermParticipant = EntityFactory.create(LeaseTermParticipant.class);
+        padFileModel: for (PadFileModel entity : entities) {
+            LeaseTermTenant leaseTermTenant = EntityFactory.create(LeaseTermTenant.class);
             {
-                @SuppressWarnings("rawtypes")
-                EntityQueryCriteria<LeaseTermParticipant> criteria = EntityQueryCriteria.create(LeaseTermParticipant.class);
+                EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
                 criteria.eq(criteria.proto().leaseParticipant().participantId(), entity.tenantId());
-                leaseTermParticipant = Persistence.service().query(criteria).get(0);
+                for (LeaseTermTenant participant : Persistence.service().query(criteria)) {
+                    if (participant.leaseParticipant().isInstanceOf(Tenant.class)) {
+                        leaseTermTenant = participant;
+                    }
+                }
             }
 
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
@@ -94,10 +115,30 @@ public class TenantPadParser {
             details.branchTransitNumber().setValue(entity.transitNumber().getValue());
             details.nameOn().setValue(entity.name().getValue());
 
-            Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().customer());
-            Persistence.service().retrieveMember(leaseTermParticipant.leaseParticipant().customer().paymentMethods());
-            if (padExists(leaseTermParticipant.leaseParticipant().customer(), details)) {
-                counters.skipped++;
+            Persistence.service().retrieve(leaseTermTenant.leaseParticipant().customer());
+            Persistence.service().retrieveMember(leaseTermTenant.leaseParticipant().customer().paymentMethods());
+            LeasePaymentMethod existingPaymentMethod = retrievePaymentMethod(leaseTermTenant.leaseParticipant().customer(), details);
+            if (existingPaymentMethod != null) {
+                List<PreauthorizedPayment> payments = new ArrayList<PreauthorizedPayment>();
+                {
+                    EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                    criteria.eq(criteria.proto().paymentMethod(), existingPaymentMethod);
+                    criteria.eq(criteria.proto().tenant(), leaseTermTenant.leaseParticipant());
+                    payments = Persistence.service().query(criteria);
+                }
+                for (PreauthorizedPayment payment : payments) {
+                    if (!payment.isDeleted().getValue()) {
+                        if (payment.amount().getValue().equals(new BigDecimal(entity.charge().getValue()))) {
+                            counters.skipped++;
+                            continue padFileModel;
+                        }
+                        payment.isDeleted().setValue(Boolean.TRUE);
+                        Persistence.service().persist(payment);
+                    }
+                }
+                Persistence.service().persist(createPayment(existingPaymentMethod, entity, leaseTermTenant));
+                Persistence.service().commit();
+                counters.updated++;
                 continue;
             }
 
@@ -107,20 +148,30 @@ public class TenantPadParser {
             method.sameAsCurrent().setValue(Boolean.TRUE);
             method.type().setValue(PaymentType.Echeck);
             method.details().set(details);
-            method.customer().set(leaseTermParticipant.leaseParticipant().customer());
+            method.customer().set(leaseTermTenant.leaseParticipant().customer());
+            method.billingAddress().set(getAddress(leaseTermTenant));
 
-            method.billingAddress().set(getAddress(leaseTermParticipant));
+            Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease());
+            Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease().unit());
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(leaseTermTenant.leaseParticipant().lease().unit().building(), method);
 
-            Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().lease());
-            Persistence.service().retrieve(leaseTermParticipant.leaseParticipant().lease().unit());
-
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(leaseTermParticipant.leaseParticipant().lease().unit().building(),
-                    method);
+            if (!entity.charge().getValue().isEmpty()) {
+                Persistence.service().persist(createPayment(method, entity, leaseTermTenant));
+            }
             Persistence.service().commit();
             counters.imported++;
         }
 
         return counters;
+    }
+
+    private PreauthorizedPayment createPayment(LeasePaymentMethod method, PadFileModel entity, LeaseTermTenant leaseTermTenant) {
+        PreauthorizedPayment payment = EntityFactory.create(PreauthorizedPayment.class);
+        payment.paymentMethod().set(method);
+        BigDecimal amount = new BigDecimal(entity.charge().getValue());
+        payment.amount().setValue(amount);
+        payment.tenant().set(leaseTermTenant.leaseParticipant());
+        return payment;
     }
 
     private static class PadFileCSVReciver extends EntityCSVReciver<PadFileModel> {
@@ -147,28 +198,28 @@ public class TenantPadParser {
 
     }
 
-    private boolean padExists(Customer customer, EcheckInfo newInfo) {
+    private LeasePaymentMethod retrievePaymentMethod(Customer customer, EcheckInfo newInfo) {
         for (LeasePaymentMethod method : customer.paymentMethods()) {
             if (method.type().getValue().equals(PaymentType.Echeck)) {
                 EcheckInfo info = method.details().duplicate(EcheckInfo.class);
                 if (info.bankId().getValue().equals(newInfo.bankId().getValue())
                         && info.branchTransitNumber().getValue().equals(newInfo.branchTransitNumber().getValue())
                         && info.accountNo().number().getValue().equals(newInfo.accountNo().newNumber().getValue())) {
-                    return true;
+                    return method;
                 }
             }
         }
-        return false;
+        return null;
     }
 
-    private AddressStructured getAddress(LeaseTermParticipant<?> leaseTermParticipant) {
-        Persistence.service().retrieve(leaseTermParticipant.leaseTermV());
-        Persistence.service().retrieve(leaseTermParticipant.leaseTermV().holder().lease());
-        Persistence.service().retrieve(leaseTermParticipant.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(leaseTermParticipant.leaseTermV().holder().lease().unit().building());
+    private AddressStructured getAddress(LeaseTermTenant leaseTermTenant) {
+        Persistence.service().retrieve(leaseTermTenant.leaseTermV());
+        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease());
+        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease().unit().building());
 
-        AddressStructured address = leaseTermParticipant.leaseTermV().holder().lease().unit().building().info().address().duplicate();
-        address.suiteNumber().set(leaseTermParticipant.leaseTermV().holder().lease().unit().info().number());
+        AddressStructured address = leaseTermTenant.leaseTermV().holder().lease().unit().building().info().address().duplicate();
+        address.suiteNumber().set(leaseTermTenant.leaseTermV().holder().lease().unit().info().number());
 
         return address;
     }
@@ -179,14 +230,18 @@ public class TenantPadParser {
 
         public int skipped;
 
+        public int updated;
+
         public TenantPadCounter() {
             this.imported = 0;
             this.skipped = 0;
+            this.updated = 0;
         }
 
         public void add(TenantPadCounter counters) {
             this.imported += counters.imported;
             this.skipped += counters.skipped;
+            this.updated += counters.updated;
         }
     }
 }

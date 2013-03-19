@@ -24,6 +24,7 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
+import com.propertyvista.interfaces.importer.parser.TenantPadParser;
 
 public class TenantPadFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements TenantPadFileUploadService {
 
@@ -42,7 +43,7 @@ public class TenantPadFileUploadServiceImpl extends AbstractUploadServiceImpl<IE
     @Override
     public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
             UploadResponse<IEntity> response) {
-        new TenantPadParser().parse(data.data, DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
+        response.message = new TenantPadParser().persistPads(data.data, DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
         return ProcessingStatus.completed;
     }
 

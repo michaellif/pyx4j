@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -47,7 +47,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> implemen
 
     @Override
     public boolean canCreateNewItem() {
-        return false; // disable creation of the new stand-alone Tenant - just from within the Lease!.. 
+        return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> implemen
         ) {
             @Override
             protected void onUploadComplete(com.pyx4j.gwt.rpc.upload.UploadResponse<IEntity> serverUploadResponse) {
-                MessageDialog.info("", i18n.tr("PAD file has been uploaded sucessfully"));
+                MessageDialog.info("", i18n.tr(serverUploadResponse.message));
             };
         }.show();//@formatter:on
     }

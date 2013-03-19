@@ -11,7 +11,7 @@
  * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.customer;
+package com.propertyvista.interfaces.importer.model;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
 
-import com.propertyvista.interfaces.importer.model.ImportInformation;
 
 @Transient
 public interface PadFileModel extends IEntity {
