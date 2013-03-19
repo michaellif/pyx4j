@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.server;
 
+import java.io.Closeable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public interface IEntityPersistenceService {
 
     public void setTransactionUserKey(Key currentUserKey);
 
-    public interface ICursorIterator<T> extends Iterator<T> {
+    public interface ICursorIterator<T> extends Iterator<T>, Closeable {
 
         /**
          * @see com.google.appengine.api.datastore.Cursor#toWebSafeString()
@@ -86,7 +87,8 @@ public interface IEntityPersistenceService {
          */
         public String encodedCursorReference();
 
-        public void completeRetrieval();
+        @Override
+        public void close();
 
     }
 

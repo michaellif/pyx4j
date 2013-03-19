@@ -65,7 +65,7 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
             emps0.next();
             Assert.assertFalse("has no More", emps0.hasNext());
         } finally {
-            emps0.completeRetrieval();
+            emps0.close();
         }
 
         criteria.setPageNumber(2);
@@ -79,7 +79,7 @@ public abstract class QueryLimitsTestCase extends DatastoreTestBase {
             }
             Assert.assertFalse("has no More", emps0.hasNext());
         } finally {
-            emps2.completeRetrieval();
+            emps2.close();
         }
 
     }

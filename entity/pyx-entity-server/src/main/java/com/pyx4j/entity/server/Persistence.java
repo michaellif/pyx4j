@@ -72,7 +72,7 @@ public class Persistence {
             r.setEncodedCursorReference(unfiltered.encodedCursorReference());
             r.hasMoreData(unfiltered.hasNext());
         } finally {
-            unfiltered.completeRetrieval();
+            unfiltered.close();
         }
 
         r.setTotalRows(service().count(criteria));

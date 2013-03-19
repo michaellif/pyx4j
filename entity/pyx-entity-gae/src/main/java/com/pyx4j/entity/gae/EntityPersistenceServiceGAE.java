@@ -1557,7 +1557,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             @Override
-            public void completeRetrieval() {
+            public void close() {
                 aggregator.complete();
             }
 
@@ -1649,7 +1649,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
             }
 
             @Override
-            public void completeRetrieval() {
+            public void close() {
 
             }
 

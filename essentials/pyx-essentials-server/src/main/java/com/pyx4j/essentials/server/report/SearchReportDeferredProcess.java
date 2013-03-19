@@ -130,7 +130,7 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
                         }
                     }
                 } finally {
-                    it.completeRetrieval();
+                    it.close();
                 }
                 log.debug("fetch complete rows {}; characters {}", fetchCount, formatter.getBinaryDataSize());
                 fetchCompleate = true;

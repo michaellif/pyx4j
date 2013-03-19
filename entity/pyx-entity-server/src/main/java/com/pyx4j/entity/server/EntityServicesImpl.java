@@ -144,7 +144,7 @@ public class EntityServicesImpl {
         // The position is important, hasMoreData may retrieve one more row. 
         r.setEncodedCursorReference(it.encodedCursorReference());
         r.hasMoreData(it.hasMoreData());
-        it.completeRetrieval();
+        it.close();
 
         long duration = System.nanoTime() - start;
         int callsCount = PersistenceServicesFactory.getPersistenceService().getDatastoreCallCount() - initCount;

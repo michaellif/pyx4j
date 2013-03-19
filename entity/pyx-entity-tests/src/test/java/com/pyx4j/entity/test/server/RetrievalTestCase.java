@@ -181,7 +181,7 @@ public abstract class RetrievalTestCase extends DatastoreTestBase {
             while (empsC.hasNext()) {
                 emps.add(empsC.next());
             }
-            empsC.completeRetrieval();
+            empsC.close();
         }
 
         if (agregate) {

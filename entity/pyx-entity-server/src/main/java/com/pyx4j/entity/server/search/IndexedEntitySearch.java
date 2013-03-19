@@ -447,8 +447,8 @@ public class IndexedEntitySearch<E extends IEntity> {
             }
 
             @Override
-            public void completeRetrieval() {
-                unfiltered.completeRetrieval();
+            public void close() {
+                unfiltered.close();
             }
         };
 

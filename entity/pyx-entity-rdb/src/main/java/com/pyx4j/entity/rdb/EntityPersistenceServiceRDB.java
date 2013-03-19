@@ -1597,7 +1597,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
 
                 @Override
-                public void completeRetrieval() {
+                public void close() {
                     iterable.close();
                     endCallContext();
                 }
@@ -1662,7 +1662,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
 
                 @Override
-                public void completeRetrieval() {
+                public void close() {
                     iterable.close();
                     endCallContext();
                 }
@@ -1697,7 +1697,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             return it.hasNext();
         } finally {
-            it.completeRetrieval();
+            it.close();
         }
     }
 
