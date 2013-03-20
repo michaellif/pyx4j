@@ -13,17 +13,28 @@
  */
 package com.propertyvista.test.mock;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.server.DateUtils;
 
-public abstract class MockDataModel {
+public abstract class MockDataModel<E extends IEntity> {
 
     private MockManager mockManager;
 
+    private final List<E> items;
+
+    private E currentItem;
+
     protected abstract void generate();
+
+    public MockDataModel() {
+        items = new ArrayList<E>();
+    }
 
     public void setMockManager(MockManager mockManager) {
         this.mockManager = mockManager;
@@ -33,8 +44,24 @@ public abstract class MockDataModel {
         return mockManager.getConfig();
     }
 
-    public <E extends MockDataModel> E getDataModel(Class<E> modelClass) {
+    public <T extends MockDataModel<?>> T getDataModel(Class<T> modelClass) {
         return mockManager.getDataModel(modelClass);
+    }
+
+    protected void addItem(E item) {
+        items.add(item);
+    }
+
+    protected List<E> getAllItems() {
+        return items;
+    }
+
+    public E getCurrentItem() {
+        return currentItem;
+    }
+
+    public void setCurrentItem(E item) {
+        currentItem = item;
     }
 
     protected static LogicalDate parseDate(String date) {

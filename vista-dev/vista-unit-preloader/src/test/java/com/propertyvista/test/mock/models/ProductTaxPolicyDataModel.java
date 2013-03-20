@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class ProductTaxPolicyDataModel extends MockDataModel {
+public class ProductTaxPolicyDataModel extends MockDataModel<ProductTaxPolicy> {
 
     private ProductItemTypesDataModel productItemTypesDataModel;
 
@@ -49,7 +49,7 @@ public class ProductTaxPolicyDataModel extends MockDataModel {
             policy.policyItems().add(item);
         }
 
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(buildingDataModel.getCurrentItem());
 
         Persistence.service().persist(policy);
     }

@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -38,70 +40,68 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class BuildingDataModel extends MockDataModel {
+public class BuildingDataModel extends MockDataModel<Building> {
 
     enum Usage {
         available, used
     }
 
-    private Map<Service.ServiceType, List<ServiceItemType>> serviceMeta;
+    private static Map<Service.ServiceType, List<ServiceItemType>> serviceMeta;
 
     private Map<Feature.Type, List<FeatureItemType>> featureMeta;
 
-    private Building building;
-
-    private final List<ProductItem> serviceItems;
-
-    private Service standardResidentialService;
+    private final Map<Building, Service> standardResidentialServices;
 
     public BuildingDataModel() {
-        serviceItems = new ArrayList<ProductItem>();
+        standardResidentialServices = new HashMap<Building, Service>();
     }
 
     @Override
     protected void generate() {
         createServiceMeta();
 
-        building = EntityFactory.create(Building.class);
+        Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
 
         building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode("ON"));
 
-        generateParking();
-        generateLockerArea();
+        generateParking(building);
+        generateLockerArea(building);
 
         Persistence.service().persist(building);
 
-        generateCatalog();
+        Service standardResidentialService = generateCatalog(building);
+
+        standardResidentialServices.put(building, standardResidentialService);
 
         Persistence.service().persist(building);
+        addItem(building);
+        super.setCurrentItem(building);
     }
 
-    public Building getBuilding() {
-        return building;
+    @Override
+    public void setCurrentItem(Building item) {
+        throw new NotImplementedException();
     }
 
     public ProductItem addResidentialUnitServiceItem(BigDecimal price) {
+        Service standardResidentialService = standardResidentialServices.get(getCurrentItem());
+
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(serviceMeta.get(Service.ServiceType.residentialUnit).get(0));
-        productItem.element().set(generateResidentialUnit());
+        productItem.element().set(generateResidentialUnit(getCurrentItem()));
         productItem.price().setValue(price);
         productItem.description().setValue(productItem.type().name().getValue());
 
         standardResidentialService.version().items().add(productItem);
         Persistence.service().persist(standardResidentialService);
 
-        serviceItems.add(productItem);
         return productItem;
     }
 
-    public ProductItem getResidentialUnitServiceItem(int index) {
-        return serviceItems.get(index);
-    }
-
-    private AptUnit generateResidentialUnit() {
+    private AptUnit generateResidentialUnit(Building building) {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.building().set(building);
 
@@ -109,13 +109,13 @@ public class BuildingDataModel extends MockDataModel {
         return unit;
     }
 
-    private void generateParking() {
+    private void generateParking(Building building) {
         Parking parking = EntityFactory.create(Parking.class);
         building.parkings().setAttachLevel(AttachLevel.Attached);
         building.parkings().add(parking);
     }
 
-    private void generateLockerArea() {
+    private void generateLockerArea(Building building) {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
         building.lockerAreas().setAttachLevel(AttachLevel.Attached);
         building.lockerAreas().add(lockerArea);
@@ -140,37 +140,38 @@ public class BuildingDataModel extends MockDataModel {
         }
     }
 
-    private void generateCatalog() {
+    private Service generateCatalog(Building building) {
 
         ServerSideFactory.create(DefaultProductCatalogFacade.class).createFor(building);
         ServerSideFactory.create(DefaultProductCatalogFacade.class).persistFor(building);
 
-        generateResidentialUnitService();
+        Service standardResidentialService = generateResidentialUnitService(building);
 
-        generateFeatures();
+        generateFeatures(building, standardResidentialService);
 
-        generateConcessions();
+        generateConcessions(building);
 
+        return standardResidentialService;
     }
 
-    private void generateResidentialUnitService() {
-        standardResidentialService = EntityFactory.create(Service.class);
+    private Service generateResidentialUnitService(Building building) {
+        Service standardResidentialService = EntityFactory.create(Service.class);
         standardResidentialService.catalog().set(building.productCatalog());
         standardResidentialService.serviceType().setValue(Service.ServiceType.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
         Persistence.service().persist(standardResidentialService);
-
+        return standardResidentialService;
     }
 
-    private void generateFeatures() {
+    private void generateFeatures(Building building, Service standardResidentialService) {
         for (Feature.Type serviceType : featureMeta.keySet()) {
-            generateFeature(serviceType);
+            generateFeature(building, standardResidentialService, serviceType);
         }
     }
 
-    private void generateFeature(Feature.Type type) {
+    private void generateFeature(Building building, Service standardResidentialService, Feature.Type type) {
         Feature feature = EntityFactory.create(Feature.class);
 
         feature.catalog().set(building.productCatalog());
@@ -284,7 +285,7 @@ public class BuildingDataModel extends MockDataModel {
         feature.version().items().add(productItem);
     }
 
-    private void generateConcessions() {
+    private void generateConcessions(Building building) {
         // TODO Auto-generated method stub
 
     }

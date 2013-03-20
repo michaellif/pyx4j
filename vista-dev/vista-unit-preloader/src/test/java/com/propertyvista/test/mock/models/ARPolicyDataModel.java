@@ -13,32 +13,31 @@
  */
 package com.propertyvista.test.mock.models;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class ARPolicyDataModel extends MockDataModel {
-
-    private BuildingDataModel buildingDataModel;
-
-    private ARPolicy policy;
+public class ARPolicyDataModel extends MockDataModel<ARPolicy> {
 
     public ARPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        buildingDataModel = getDataModel(BuildingDataModel.class);
-
-        policy = EntityFactory.create(ARPolicy.class);
+        ARPolicy policy = EntityFactory.create(ARPolicy.class);
         policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    public ARPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(ARPolicy item) {
+        throw new NotImplementedException();
     }
 }

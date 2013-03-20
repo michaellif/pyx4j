@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseAdjustmentPolicyDataModel extends MockDataModel {
+public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmentPolicy> {
 
     private LeaseAdjustmentPolicy policy;
 
@@ -41,7 +41,7 @@ public class LeaseAdjustmentPolicyDataModel extends MockDataModel {
             policy.policyItems().add(item);
         }
 
-        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         Persistence.service().persist(policy);
     }

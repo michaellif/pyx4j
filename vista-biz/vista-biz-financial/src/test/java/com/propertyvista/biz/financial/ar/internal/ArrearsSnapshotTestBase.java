@@ -158,7 +158,7 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
     }
 
     private InternalBillingAccount billingAccount() {
-        return Persistence.service().<Lease> retrieve(Lease.class, lease.getPrimaryKey()).billingAccount().<InternalBillingAccount> cast();
+        return Persistence.service().<Lease> retrieve(Lease.class, getLease().getPrimaryKey()).billingAccount().<InternalBillingAccount> cast();
     }
 
 }

@@ -89,6 +89,6 @@ public class RSOapiTestBase extends JerseyTest {
     }
 
     protected Building getBuilding() {
-        return mockManager.getDataModel(BuildingDataModel.class).getBuilding();
+        return mockManager.getDataModel(BuildingDataModel.class).getCurrentItem();
     }
 }

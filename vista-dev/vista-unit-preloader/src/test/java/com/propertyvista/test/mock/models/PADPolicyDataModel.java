@@ -25,7 +25,7 @@ import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class PADPolicyDataModel extends MockDataModel {
+public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
     private PADPolicy policy;
 
     private PmcDataModel pmcDataModel;

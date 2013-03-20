@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssign
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class IdAssignmentPolicyDataModel extends MockDataModel {
+public class IdAssignmentPolicyDataModel extends MockDataModel<IdAssignmentPolicy> {
 
     private IdAssignmentPolicy policy;
 

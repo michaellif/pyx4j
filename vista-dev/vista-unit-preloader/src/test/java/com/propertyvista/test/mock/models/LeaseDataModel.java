@@ -14,7 +14,6 @@
 package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,12 +33,10 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseDataModel extends MockDataModel {
-
-    private final List<Lease> leases;
+public class LeaseDataModel extends MockDataModel<Lease> {
 
     public LeaseDataModel() {
-        leases = new ArrayList<Lease>();
+
     }
 
     @Override
@@ -98,10 +95,6 @@ public class LeaseDataModel extends MockDataModel {
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
         return lease;
-    }
-
-    public Lease getLease(int index) {
-        return leases.get(index);
     }
 
 }

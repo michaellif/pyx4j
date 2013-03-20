@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class TaxesDataModel extends MockDataModel {
+public class TaxesDataModel extends MockDataModel<Tax> {
 
     private List<Tax> taxes;
 

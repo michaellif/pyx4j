@@ -28,7 +28,7 @@ import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyIte
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseBillingPolicyDataModel extends MockDataModel {
+public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolicy> {
 
     private LeaseBillingPolicy policy;
 
@@ -66,7 +66,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel {
 
         policy.confirmationMethod().setValue(getConfig().billConfirmationMethod);
 
-        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);

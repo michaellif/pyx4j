@@ -27,7 +27,7 @@ import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueTy
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class DepositPolicyDataModel extends MockDataModel {
+public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
     private DepositPolicy policy;
 
@@ -89,7 +89,7 @@ public class DepositPolicyDataModel extends MockDataModel {
             }
         }
 
-        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         Persistence.service().persist(policy);
     }

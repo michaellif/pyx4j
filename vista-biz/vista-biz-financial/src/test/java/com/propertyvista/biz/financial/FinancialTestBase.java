@@ -126,7 +126,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     private MockManager mockManager;
 
-    protected Lease lease;
+    private Lease lease;
 
     private TaskScheduler scheduler;
 
@@ -155,6 +155,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             SystemDateManager.resetDate();
             super.tearDown();
         }
+    }
+
+    protected Lease getLease() {
+        return lease;
     }
 
     protected void preloadData() {
@@ -206,7 +210,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Building getBuilding() {
-        return mockManager.getDataModel(BuildingDataModel.class).getBuilding();
+        return mockManager.getDataModel(BuildingDataModel.class).getCurrentItem();
     }
 
     protected Bill runBilling() {

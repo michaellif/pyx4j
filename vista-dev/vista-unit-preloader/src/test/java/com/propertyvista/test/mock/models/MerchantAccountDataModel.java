@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class MerchantAccountDataModel extends MockDataModel {
+public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
 
     private static int id = 0;
 
@@ -69,7 +69,7 @@ public class MerchantAccountDataModel extends MockDataModel {
 
         BuildingMerchantAccount bma = EntityFactory.create(BuildingMerchantAccount.class);
         bma.merchantAccount().set(merchantAccount);
-        bma.building().set(getDataModel(BuildingDataModel.class).getBuilding());
+        bma.building().set(getDataModel(BuildingDataModel.class).getCurrentItem());
         Persistence.service().persist(bma);
     }
 }

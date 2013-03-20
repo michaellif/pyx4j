@@ -82,7 +82,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
                 .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //
-        ARPolicy policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
+        ARPolicy policy = getMockManager().getDataModel(ARPolicyDataModel.class).getCurrentItem();
         policy.creditDebitRule().setValue(CreditDebitRule.byDueDate);
         Persistence.service().persist(policy);
         Persistence.service().commit();
@@ -90,14 +90,14 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(
                 retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
-        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
+        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getCurrentItem();
         policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
         debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
-        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
+        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getCurrentItem();
         policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
