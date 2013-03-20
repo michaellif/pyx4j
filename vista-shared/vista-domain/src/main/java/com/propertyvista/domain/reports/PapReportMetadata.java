@@ -20,20 +20,21 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "PAP Report")
 public interface PapReportMetadata extends ReportMetadata {
 
+    @Caption(name = "Filter by Target Date")
+    IPrimitive<Boolean> filterByTargetDate();
+
     IPrimitive<LogicalDate> from();
 
     IPrimitive<LogicalDate> until();
 
-    IList<BillingCycle> billingCycles();
-
-    IPrimitive<Boolean> selectBuildings();
+    @Caption(name = "Filter by Buildings")
+    IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> selectedBuildings();
 

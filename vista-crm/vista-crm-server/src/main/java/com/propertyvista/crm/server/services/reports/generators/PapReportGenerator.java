@@ -36,19 +36,27 @@ public class PapReportGenerator implements ReportGenerator {
 
     private EntityQueryCriteria<PaymentRecord> makeCriteria(PapReportMetadata reportMetadata) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-//        TODO criteria.isNotNull(PAD_FIELD)
+        criteria.desc(criteria.proto().padBillingCycle().billingType());
+        criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
 
-        if (!reportMetadata.from().isNull()) {
-            criteria.ge(criteria.proto().updated(), reportMetadata.from());
+        criteria.isNotNull(criteria.proto().padBillingCycle());
+
+        if (reportMetadata.filterByTargetDate().isBooleanTrue()) {
+            if (!reportMetadata.from().isNull()) {
+                criteria.ge(criteria.proto().targetDate(), reportMetadata.from());
+            }
+            if (!reportMetadata.until().isNull()) {
+                criteria.le(criteria.proto().targetDate(), reportMetadata.until());
+            }
         }
-        if (!reportMetadata.until().isNull()) {
-            criteria.le(criteria.proto().updated(), reportMetadata.until());
+        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
+            if (!reportMetadata.selectedBuildings().isEmpty()) {
+                criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
+            } else {
+                criteria.isNull(criteria.proto().billingAccount().lease().unit().building());
+            }
         }
-        if (reportMetadata.selectBuildings().isBooleanTrue() & !reportMetadata.selectedBuildings().isEmpty()) {
-            criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
-        }
-        if (!reportMetadata.billingCycles().isEmpty()) {
-        }
+
         return criteria;
     }
 

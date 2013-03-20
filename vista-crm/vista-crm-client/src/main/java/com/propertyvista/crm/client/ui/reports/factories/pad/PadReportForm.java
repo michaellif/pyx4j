@@ -32,22 +32,35 @@ public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByTargetDate())).componentWidth(10).build());
+        get(proto().filterByTargetDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().from()).setVisible(event.getValue());
+                get(proto().until()).setVisible(event.getValue());
+            }
+        });
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().from())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().until())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectBuildings())).build());
-        get(proto().selectBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+        row = -1;
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
+        get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().selectedBuildings()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
+        panel.setWidget(++row, 1, inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
         return panel;
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().selectedBuildings()).setVisible((getValue().selectBuildings().isBooleanTrue()));
+        get(proto().from()).setVisible(getValue().filterByTargetDate().isBooleanTrue());
+        get(proto().until()).setVisible(getValue().filterByTargetDate().isBooleanTrue());
+
+        get(proto().selectedBuildings()).setVisible((getValue().filterByBuildings().isBooleanTrue()));
     }
 }

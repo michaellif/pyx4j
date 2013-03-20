@@ -43,15 +43,16 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
         PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
 
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.id()).build(),
-                new MemberColumnDescriptor.Builder(proto.amount()).build(),
+                new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build(),
+                new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build(),
+                new MemberColumnDescriptor.Builder(proto.amount()).build(),               
                 new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build(),
+                new MemberColumnDescriptor.Builder(proto.paymentStatus()).build(),
                 new MemberColumnDescriptor.Builder(proto.createdDate()).build(),
                 new MemberColumnDescriptor.Builder(proto.receivedDate()).build(),
                 new MemberColumnDescriptor.Builder(proto.lastStatusChangeDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.targetDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.paymentStatus()).build(),
-                new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build()
+                new MemberColumnDescriptor.Builder(proto.targetDate()).build()
+                
         );//@formatter:on
     }
 
@@ -79,7 +80,7 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
 
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
                 bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
-                bb.appendEscaped(i18n.tr("Payment Record Record"));
+                bb.appendEscaped(i18n.tr("PAP Report"));
                 bb.appendHtmlConstant("</div>");
                 bb.appendHtmlConstant("<div>");
                 bb.appendHtmlConstant("</div>");
