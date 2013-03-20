@@ -48,10 +48,6 @@ public class BuildingDataModel extends MockDataModel {
 
     private Map<Feature.Type, List<FeatureItemType>> featureMeta;
 
-    private ProductItemTypesDataModel productItemTypesDataModel;
-
-    private LocationsDataModel locationsDataModel;
-
     private Building building;
 
     private final List<ProductItem> serviceItems;
@@ -64,19 +60,12 @@ public class BuildingDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
-        locationsDataModel = getDataModel(LocationsDataModel.class);
         createServiceMeta();
 
-        generate(String.valueOf(System.currentTimeMillis()).substring(5));
-    }
-
-    public void generate(String propertyCode) {
-
         building = EntityFactory.create(Building.class);
-        building.propertyCode().setValue(propertyCode);
+        building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
 
-        building.info().address().province().set(locationsDataModel.getProvinceByCode("ON"));
+        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode("ON"));
 
         generateParking();
         generateLockerArea();
@@ -136,14 +125,14 @@ public class BuildingDataModel extends MockDataModel {
         serviceMeta = new HashMap<Service.ServiceType, List<ServiceItemType>>();
         featureMeta = new HashMap<Feature.Type, List<FeatureItemType>>();
 
-        for (ServiceItemType serviceItemType : productItemTypesDataModel.getServiceItemTypes()) {
+        for (ServiceItemType serviceItemType : getDataModel(ProductItemTypesDataModel.class).getServiceItemTypes()) {
             if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
                 serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ServiceItemType>());
             }
             serviceMeta.get(serviceItemType.serviceType().getValue()).add(serviceItemType);
         }
 
-        for (FeatureItemType featureItemType : productItemTypesDataModel.getFeatureItemTypes()) {
+        for (FeatureItemType featureItemType : getDataModel(ProductItemTypesDataModel.class).getFeatureItemTypes()) {
             if (!featureMeta.containsKey(featureItemType.featureType().getValue())) {
                 featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<FeatureItemType>());
             }

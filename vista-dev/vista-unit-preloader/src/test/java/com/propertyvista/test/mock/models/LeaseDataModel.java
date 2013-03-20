@@ -34,10 +34,6 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseDataModel extends MockDataModel {
 
-    private BuildingDataModel buildingDataModel;
-
-    private CustomerDataModel customerDataModel;
-
     private final List<Lease> leases;
 
     public LeaseDataModel() {
@@ -46,17 +42,13 @@ public class LeaseDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-        buildingDataModel = getDataModel(BuildingDataModel.class);
-        customerDataModel = getDataModel(CustomerDataModel.class);
-
     }
 
     public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
 
+        ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("1500.00"));
+
         Lease lease;
-
-        ProductItem serviceItem = buildingDataModel.addResidentialUnitServiceItem(new BigDecimal("1500.00"));
-
         if (carryforwardBalance != null) {
             lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
         } else {
@@ -80,7 +72,7 @@ public class LeaseDataModel extends MockDataModel {
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(customerDataModel.addCustomer());
+        tenantInLease.leaseParticipant().customer().set(getDataModel(CustomerDataModel.class).addCustomer());
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 

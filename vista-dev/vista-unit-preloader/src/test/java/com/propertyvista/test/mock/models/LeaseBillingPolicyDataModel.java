@@ -32,14 +32,11 @@ public class LeaseBillingPolicyDataModel extends MockDataModel {
 
     private LeaseBillingPolicy policy;
 
-    private BuildingDataModel buildingDataModel;
-
     public LeaseBillingPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        buildingDataModel = getDataModel(BuildingDataModel.class);
 
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
@@ -69,7 +66,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel {
 
         policy.confirmationMethod().setValue(getConfig().billConfirmationMethod);
 
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
 
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);

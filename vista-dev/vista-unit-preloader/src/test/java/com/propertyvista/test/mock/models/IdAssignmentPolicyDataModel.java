@@ -26,14 +26,11 @@ public class IdAssignmentPolicyDataModel extends MockDataModel {
 
     private IdAssignmentPolicy policy;
 
-    private PmcDataModel pmcDataModel;
-
     public IdAssignmentPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        pmcDataModel = getDataModel(PmcDataModel.class);
         policy = EntityFactory.create(IdAssignmentPolicy.class);
 
         policy.items().clear();
@@ -49,7 +46,7 @@ public class IdAssignmentPolicyDataModel extends MockDataModel {
             policy.items().add(item);
         }
 
-        policy.node().set(pmcDataModel.getOrgNode());
+        policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
         Persistence.service().persist(policy);
     }

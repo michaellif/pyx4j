@@ -23,12 +23,6 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseAdjustmentPolicyDataModel extends MockDataModel {
 
-    private LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
-
-    private TaxesDataModel taxesDataModel;
-
-    private BuildingDataModel buildingDataModel;
-
     private LeaseAdjustmentPolicy policy;
 
     public LeaseAdjustmentPolicyDataModel() {
@@ -36,21 +30,18 @@ public class LeaseAdjustmentPolicyDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-        leaseAdjustmentReasonDataModel = getDataModel(LeaseAdjustmentReasonDataModel.class);
-        taxesDataModel = getDataModel(TaxesDataModel.class);
-        buildingDataModel = getDataModel(BuildingDataModel.class);
 
         policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
         for (LeaseAdjustmentReasonDataModel.Reason reason : LeaseAdjustmentReasonDataModel.Reason.values()) {
-            LeaseAdjustmentReason lar = leaseAdjustmentReasonDataModel.getReason(reason);
+            LeaseAdjustmentReason lar = getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(reason);
             LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
             item.leaseAdjustmentReason().set(lar);
-            item.taxes().add(taxesDataModel.getTaxes().get(0));
+            item.taxes().add(getDataModel(TaxesDataModel.class).getTaxes().get(0));
             policy.policyItems().add(item);
         }
 
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
 
         Persistence.service().persist(policy);
     }

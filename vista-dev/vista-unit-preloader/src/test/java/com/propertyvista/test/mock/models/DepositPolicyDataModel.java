@@ -29,10 +29,6 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class DepositPolicyDataModel extends MockDataModel {
 
-    private ProductItemTypesDataModel productItemTypesDataModel;
-
-    private BuildingDataModel buildingDataModel;
-
     private DepositPolicy policy;
 
     public DepositPolicyDataModel() {
@@ -40,12 +36,9 @@ public class DepositPolicyDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
-        buildingDataModel = getDataModel(BuildingDataModel.class);
-
         policy = EntityFactory.create(DepositPolicy.class);
 
-        for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {
+        for (ProductItemType type : getDataModel(ProductItemTypesDataModel.class).getProductItemTypes()) {
             DepositPolicyItem item = null;
             String product = null;
             if (type instanceof ServiceItemType) {
@@ -96,7 +89,7 @@ public class DepositPolicyDataModel extends MockDataModel {
             }
         }
 
-        policy.node().set(buildingDataModel.getBuilding());
+        policy.node().set(getDataModel(BuildingDataModel.class).getBuilding());
 
         Persistence.service().persist(policy);
     }
