@@ -15,6 +15,8 @@ package com.propertyvista.common.client.ui.components.folders;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -25,14 +27,24 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
     private final boolean twoColumns;
 
+    private final boolean collapsed;
+
     public EmergencyContactFolder(boolean modifyable) {
-        this(modifyable, true);
+        this(modifyable, true, false);
     }
 
-    public EmergencyContactFolder(boolean modifyable, boolean twoColumns) {
+    public EmergencyContactFolder(boolean modifyable, boolean twoColumns, boolean collapsed) {
         super(EmergencyContact.class, modifyable);
         this.modifyable = modifyable;
         this.twoColumns = twoColumns;
+        this.collapsed = collapsed;
+    }
+
+    @Override
+    public IFolderItemDecorator<EmergencyContact> createItemDecorator() {
+        BoxFolderItemDecorator<EmergencyContact> decor = (BoxFolderItemDecorator<EmergencyContact>) super.createItemDecorator();
+        decor.setExpended(isEditable() && !collapsed);
+        return decor;
     }
 
     @Override
