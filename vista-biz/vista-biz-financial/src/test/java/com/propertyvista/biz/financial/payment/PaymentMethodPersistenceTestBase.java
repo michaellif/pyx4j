@@ -51,7 +51,6 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
 
         LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
-        paymentMethod.customer().set(customer);
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod,
                 getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
@@ -84,7 +83,6 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
         {
             LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
-            paymentMethod.customer().set(getMockManager().getDataModel(CustomerDataModel.class).addCustomer());
             paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod,
                     getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
@@ -104,8 +102,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods(customer).size());
 
         {
-            profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                    getMockManager().getDataModel(CustomerDataModel.class).getCustomer(0));
+            profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             {
                 switch (paymentMethodUpdate.type().getValue()) {
