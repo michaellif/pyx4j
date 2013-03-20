@@ -37,6 +37,6 @@ public interface PmcFacade {
 
     public boolean reservedDnsName(String dnsName, String onboardingAccountId);
 
-    public MerchantAccount persistMerchantAccount(Pmc pmc, MerchantAccount requestAcc);
+    public void persistMerchantAccount(Pmc pmc, MerchantAccount merchantAccount);
 
 }

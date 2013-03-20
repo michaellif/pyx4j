@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
@@ -44,7 +43,6 @@ import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 import com.propertyvista.portal.server.preloader.PmcCreator;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -215,34 +213,7 @@ public class PmcFacadeImpl implements PmcFacade {
     }
 
     @Override
-    public MerchantAccount persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
-        PmcMerchantAccountIndex pmcMerchantAccountIndex = null;
-        if (!merchantAccount.id().isNull()) {
-            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), merchantAccount.getPrimaryKey()));
-            pmcMerchantAccountIndex = Persistence.service().retrieve(criteria);
-            if (pmcMerchantAccountIndex == null) {
-                throw new Error("MerchantAccount integrity broken");
-            }
-        }
-        if (pmcMerchantAccountIndex == null) {
-            pmcMerchantAccountIndex = EntityFactory.create(PmcMerchantAccountIndex.class);
-            pmcMerchantAccountIndex.pmc().set(pmc);
-        }
-
-        TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
-            @Override
-            public Void call() {
-                Persistence.service().persist(merchantAccount);
-                return null;
-            }
-        });
-
-        pmcMerchantAccountIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
-        pmcMerchantAccountIndex.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
-        Persistence.service().persist(pmcMerchantAccountIndex);
-        return merchantAccount;
-
+    public void persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
+        new MerchantAccountManager().persistMerchantAccount(pmc, merchantAccount);
     }
 }

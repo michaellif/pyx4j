@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.PmcFacade_TEMP;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -56,7 +56,7 @@ public class MerchantAccountDataModel extends MockDataModel {
             NamespaceManager.runInTargetNamespace(VistaNamespace.operationsNamespace, new Callable<Void>() {
                 @Override
                 public Void call() {
-                    ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, createMerchantAccount);
+                    ServerSideFactory.create(PmcFacade_TEMP.class).persistMerchantAccount(pmc, createMerchantAccount);
                     Persistence.service().commit();
                     return null;
                 }
