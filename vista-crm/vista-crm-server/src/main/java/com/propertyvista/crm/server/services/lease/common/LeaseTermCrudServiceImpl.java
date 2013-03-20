@@ -289,6 +289,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {
         item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
+        item.leaseParticipant().preauthorizedPayments().clear();
         item.leaseParticipant().preauthorizedPayments()
                 .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
     }

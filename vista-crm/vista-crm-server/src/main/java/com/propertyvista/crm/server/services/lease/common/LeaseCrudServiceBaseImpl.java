@@ -114,6 +114,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {
         item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
+        item.leaseParticipant().preauthorizedPayments().clear();
         item.leaseParticipant().preauthorizedPayments()
                 .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
     }
