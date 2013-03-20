@@ -46,7 +46,7 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     }
 
     @OrderColumn(OrderId.class)
-    IPrimitive<Long> orderInParent();
+    IPrimitive<Integer> orderInParent();
 
     IPrimitive<BillingPeriod> billingPeriod();
 
