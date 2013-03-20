@@ -43,6 +43,7 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
         PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
 
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.id()).build(),
                 new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build(),
                 new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build(),
                 new MemberColumnDescriptor.Builder(proto.amount()).build(),               
