@@ -136,8 +136,7 @@ public class PaymentTestBase extends FinancialTestBase {
         details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
     }
 
-    protected PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
-        Lease lease = retrieveLease();
+    protected PaymentRecord createPaymentRecord(Lease lease, LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
         LeaseTermParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().iterator().next();
 

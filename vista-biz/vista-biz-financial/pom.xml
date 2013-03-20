@@ -118,7 +118,7 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -176,7 +176,9 @@
                     <includes>
                         <include>**/RegressionSuite.java</include>
                         <include>**/FunctionalSuite.java</include>
+                        <include>**/PaymentMethodPersistenceCardsTest.java</include>
                     </includes>
+                    <forkMode>always</forkMode>
                 </configuration>
             </plugin>
         </plugins>

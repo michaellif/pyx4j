@@ -18,9 +18,10 @@ import org.junit.runners.Suite;
 
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
+import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class })
+@Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class })
 public class PaymentSuite {
 
 }

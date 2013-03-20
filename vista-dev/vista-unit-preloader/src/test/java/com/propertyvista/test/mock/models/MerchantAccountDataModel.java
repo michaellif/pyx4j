@@ -31,6 +31,10 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class MerchantAccountDataModel extends MockDataModel {
 
+    private static int id = 0;
+
+    private static int caledonId = 0;
+
     @Override
     protected void generate() {
 
@@ -40,7 +44,13 @@ public class MerchantAccountDataModel extends MockDataModel {
             final Pmc pmc = VistaDeployment.getCurrentPmc();
 
             final MerchantAccount createMerchantAccount = EntityFactory.create(MerchantAccount.class);
-            createMerchantAccount.merchantTerminalId().setValue("BIRCHTT1");
+
+            if (getConfig().useCaledonMerchantAccounts) {
+                assert (caledonId <= 5);
+                createMerchantAccount.merchantTerminalId().setValue("BIRCHTT" + (++caledonId));
+            } else {
+                createMerchantAccount.merchantTerminalId().setValue("MA" + (++id));
+            }
             createMerchantAccount.bankId().setValue("9");
             createMerchantAccount.branchTransitNumber().setValue("54685");
             createMerchantAccount.accountNumber().setValue("548758665");

@@ -18,24 +18,23 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.experimental.categories.Category;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 
-@Category({ FunctionalTests.class })
-public class PaymentMethodPersistenceTest extends PaymentTestBase {
+public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
+
+    private Lease lease;
 
     private Customer customer;
 
@@ -48,7 +47,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         lease = getMockManager().getDataModel(LeaseDataModel.class).addLease("01-Feb-2012", "01-Sep-2012", new BigDecimal(100), null, customer);
     }
 
-    private void testPersistPaymentMethod(PaymentType type) throws PaymentException {
+    protected void testPersistPaymentMethod(PaymentType type) throws PaymentException {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
 
         LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
@@ -63,7 +62,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = createPaymentRecord(profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = createPaymentRecord(lease, profileMethods.get(0), "100");
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
 
@@ -80,15 +79,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods(customer).size());
     }
 
-    public void testPersistPaymentMethodEcheck() throws PaymentException {
-        testPersistPaymentMethod(PaymentType.Echeck);
-    }
-
-    public void testPersistPaymentMethodCreditCard() throws PaymentException {
-        testPersistPaymentMethod(PaymentType.CreditCard);
-    }
-
-    public void testUpdatePaymentMethod(PaymentType type) throws PaymentException {
+    protected void testUpdatePaymentMethod(PaymentType type) throws PaymentException {
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
 
         {
@@ -105,7 +96,7 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = createPaymentRecord(profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = createPaymentRecord(lease, profileMethods.get(0), "100");
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         Persistence.service().commit();
@@ -213,13 +204,5 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         Assert.assertEquals(1, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods(customer).size());
-    }
-
-    public void testUpdatePaymentMethodEcheck() throws PaymentException {
-        testUpdatePaymentMethod(PaymentType.Echeck);
-    }
-
-    public void testUpdatePaymentMethodCreditCard() throws PaymentException {
-        testUpdatePaymentMethod(PaymentType.CreditCard);
     }
 }

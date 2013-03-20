@@ -33,6 +33,8 @@ public class MockConfig {
 
     public PADChargeType padChargeType;
 
+    public boolean useCaledonMerchantAccounts = false;
+
     public void setPadChargeType(PADChargeType type) {
         padChargeType = type;
     }
