@@ -46,6 +46,10 @@ public class LeaseDataModel extends MockDataModel {
     protected void generate() {
     }
 
+    protected void addLease(String leaseDateFrom, String leaseDateTo) {
+        addLease(leaseDateFrom, leaseDateTo, null, null);
+    }
+
     public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
         return this.addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance,
                 Arrays.asList(new Customer[] { getDataModel(CustomerDataModel.class).addCustomer() }));
@@ -57,7 +61,7 @@ public class LeaseDataModel extends MockDataModel {
 
     public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, List<Customer> customers) {
 
-        ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("1500.00"));
+        ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("930.30"));
 
         Lease lease;
         if (carryforwardBalance != null) {

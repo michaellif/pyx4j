@@ -54,7 +54,6 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
-import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -70,7 +69,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
@@ -84,9 +82,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.jobs.BillingProcess;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
@@ -273,41 +269,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        ProductItem serviceItem = mockManager.getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("930.30"));
-
-        if (carryforwardBalance != null) {
-            lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
-        } else {
-            lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
-            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
-        }
-
-        lease.currentTerm().termFrom().setValue(getDate(leaseDateFrom));
-        lease.currentTerm().termTo().setValue(getDate(leaseDateTo));
-
-        ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
-
-        lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
-
-        if (agreedPrice != null) {
-            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
-        } else if (serviceItem.price().getValue().compareTo(BigDecimal.ZERO) != 0) {
-            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
-        } else {
-            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-        }
-
-        LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(mockManager.getDataModel(CustomerDataModel.class).addCustomer());
-        tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
-        lease.currentTerm().version().tenants().add(tenantInLease);
-
-        lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(carryforwardBalance);
-
-        lease.creationDate().setValue(new LogicalDate(getSysDate()));
-
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
-        Persistence.service().commit();
+        lease = getMockManager().getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
     }
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {
