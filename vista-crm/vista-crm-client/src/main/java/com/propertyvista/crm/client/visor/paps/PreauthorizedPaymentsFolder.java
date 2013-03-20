@@ -131,6 +131,8 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             bindAmountEditor(getValue().amountType().getValue(), populate);
+
+            setEditable(getValue().getPrimaryKey() == null);
         }
 
         private void bindAmountEditor(AmountType valueType, boolean repopulate) {
