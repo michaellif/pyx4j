@@ -153,7 +153,7 @@ public class TenantPadParser {
 
             Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease());
             Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease().unit());
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(leaseTermTenant.leaseParticipant().lease().unit().building(), method);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, leaseTermTenant.leaseParticipant().lease().unit().building());
 
             if (!entity.charge().getValue().isEmpty()) {
                 Persistence.service().persist(createPayment(method, entity, leaseTermTenant));

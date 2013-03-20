@@ -18,6 +18,7 @@ import java.util.List;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -27,7 +28,9 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface PaymentMethodFacade {
 
-    LeasePaymentMethod persistLeasePaymentMethod(Building building, LeasePaymentMethod paymentMethod);
+    // Lease:
+
+    LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building);
 
     void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethod);
 
@@ -35,11 +38,23 @@ public interface PaymentMethodFacade {
 
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer);
 
+    // Insurance:
+
     InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId);
 
     InsurancePaymentMethod retrieveInsurancePaymentMethod(Tenant tenantId);
 
+    // PMC:
+
     PmcPaymentMethod persistPmcPaymentMethod(CreditCardInfo creditCardInfo, Pmc pmc);
 
     PmcPaymentMethod persistPmcPaymentMethod(PmcPaymentMethod paymentMethod);
+
+    // PAP:
+
+    PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId);
+
+    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment);
+
+    List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 }

@@ -48,8 +48,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
         LeasePaymentMethod paymentMethod = createPaymentMethod(type);
         paymentMethod.customer().set(getMockManager().getDataModel(CustomerDataModel.class).addCustomer());
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(getMockManager().getDataModel(BuildingDataModel.class).getBuilding(),
-                paymentMethod);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod,
+                getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
 
         List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable();
         assertRpcTransientMemebers(profileMethods);
@@ -89,8 +89,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
             LeasePaymentMethod paymentMethod = createPaymentMethod(type);
             paymentMethod.customer().set(getMockManager().getDataModel(CustomerDataModel.class).addCustomer());
             paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(getMockManager().getDataModel(BuildingDataModel.class).getBuilding(),
-                    paymentMethod);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod,
+                    getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
         }
 
         List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable();
@@ -124,8 +124,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
                     throw new IllegalArgumentException();
                 }
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(
-                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding(), paymentMethodUpdate);
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
                     Assert.fail("Obfuscated Account numbers should be validated during save");
                 } catch (IllegalArgumentException ok) {
                     Persistence.service().rollback();
@@ -137,8 +137,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(
-                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding(), paymentMethodUpdate);
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
                     Assert.fail("token changes should be validated during save");
                 } catch (Error ok) {
                     Persistence.service().rollback();
@@ -153,8 +153,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
             profileMethods = retrieveProfilePaymentMethodsSerializable();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             // Nothing changed, save will not change anything
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(getMockManager().getDataModel(BuildingDataModel.class).getBuilding(),
-                    paymentMethodUpdate);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                    getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
         }
 
         {
@@ -173,8 +173,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
                 throw new IllegalArgumentException();
             }
             try {
-                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(
-                        getMockManager().getDataModel(BuildingDataModel.class).getBuilding(), paymentMethodUpdate);
+                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                        getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
                 Assert.fail("Obfuscated Account numbers should be validated during save");
             } catch (IllegalArgumentException ok) {
                 Persistence.service().rollback();
@@ -185,8 +185,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(
-                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding(), paymentMethodUpdate);
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                            getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
                     Assert.fail("token changes should be validated during save");
                 } catch (Error ok) {
                     Persistence.service().rollback();
@@ -198,8 +198,8 @@ public class PaymentMethodPersistenceTest extends PaymentTestBase {
             profileMethods = retrieveProfilePaymentMethodsSerializable();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             setNewPaymentMethodDetails(paymentMethodUpdate);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(getMockManager().getDataModel(BuildingDataModel.class).getBuilding(),
-                    paymentMethodUpdate);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
+                    getMockManager().getDataModel(BuildingDataModel.class).getBuilding());
         }
 
         profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(

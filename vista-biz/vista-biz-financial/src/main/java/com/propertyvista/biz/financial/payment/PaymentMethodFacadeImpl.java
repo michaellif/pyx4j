@@ -26,6 +26,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -36,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
-    public LeasePaymentMethod persistLeasePaymentMethod(Building building, LeasePaymentMethod paymentMethod) {
+    public LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building) {
         return PaymentMethodPersister.persistLeasePaymentMethod(building, paymentMethod);
     }
 
@@ -92,5 +93,27 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public PmcPaymentMethod persistPmcPaymentMethod(PmcPaymentMethod paymentMethod) {
         return PaymentMethodPersister.persistPmcPaymentMethod(paymentMethod);
+    }
+
+    @Override
+    public PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
+        preauthorizedPayment.tenant().set(tenantId);
+        Persistence.service().persist(preauthorizedPayment);
+        return null;
+    }
+
+    @Override
+    public void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment) {
+        Persistence.service().retrieve(preauthorizedPayment);
+        preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+        Persistence.service().merge(preauthorizedPayment);
+    }
+
+    @Override
+    public List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
+        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        criteria.eq(criteria.proto().tenant(), tenantId);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        return Persistence.service().query(criteria);
     }
 }

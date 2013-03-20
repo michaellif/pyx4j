@@ -31,8 +31,6 @@ import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -108,30 +106,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                 public void execute() {
                     presenter.removePaymentMethod(item.getValue());
                     PaymentMethodFolder.super.removeItem(item);
-                }
-            });
-        }
-
-        @Override
-        public void addValidations() {
-            super.addValidations();
-
-            this.addValueValidator(new EditableValueValidator<List<LeasePaymentMethod>>() {
-                @Override
-                public ValidationError isValid(CComponent<List<LeasePaymentMethod>, ?> component, List<LeasePaymentMethod> value) {
-                    if (value != null && !value.isEmpty()) {
-                        boolean primaryFound = false;
-                        for (LeasePaymentMethod item : value) {
-                            if (item.isPreauthorized().isBooleanTrue()) {
-                                primaryFound = true;
-                                break;
-                            }
-                        }
-                        if (!primaryFound) {
-                            return new ValidationError(component, i18n.tr("Default payment should be selected"));
-                        }
-                    }
-                    return null;
                 }
             });
         }

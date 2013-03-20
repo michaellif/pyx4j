@@ -94,7 +94,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
             entity.isOneTimePayment().setValue(Boolean.FALSE);
 
             ServerSideFactory.create(PaymentMethodFacade.class)
-                    .persistLeasePaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
+                    .persistLeasePaymentMethod(entity, tenantInLease.leaseTermV().holder().lease().unit().building());
 
             if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.leaseParticipant().preauthorizedPayment().isNull()) {
                 if (!tenantInLease.leaseParticipant().preauthorizedPayment().equals(entity)) {
