@@ -33,6 +33,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
+import com.propertyvista.pmsite.server.skins.blacknight.PMSiteBlackNightTheme;
 import com.propertyvista.pmsite.server.skins.future.PMSiteFutureTheme;
 import com.propertyvista.pmsite.server.skins.power.PMSitePowerTheme;
 import com.propertyvista.pmsite.server.skins.starlight.PMSiteStarlightTheme;
@@ -58,6 +59,9 @@ public class PMSiteCssManager {
             break;
         case skin5:
             theme = new PMSiteFutureTheme(style);
+            break;
+        case skin6:
+            theme = new PMSiteBlackNightTheme(style);
             break;
         }
         // generate resource registry key
