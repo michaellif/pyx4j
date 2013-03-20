@@ -31,6 +31,7 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     Tenant tenant();
 
+    @Transient
     @ToStringFormat("{0}, {1}")
     interface TenantInfo extends IEntity {
 
