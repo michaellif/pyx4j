@@ -20,7 +20,11 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,11 +36,15 @@ import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 public class EntityReportFormatter<E extends IEntity> {
 
-    private final Class<E> entityClass;
+    private final Class<? extends E> entityClass;
 
     private List<String> selectedMemberNames;
 
-    public EntityReportFormatter(Class<E> entityClass) {
+    private final Set<String> ignoreMembers = new HashSet<String>();
+
+    private final Map<String, String> customMemberCaptions = new HashMap<String, String>();
+
+    public EntityReportFormatter(Class<? extends E> entityClass) {
         this.entityClass = entityClass;
     }
 
@@ -64,11 +72,24 @@ public class EntityReportFormatter<E extends IEntity> {
     }
 
     protected boolean acceptMember(String memberName, MemberMeta memberMeta) {
-        return true;
+        return (!ignoreMembers.contains(memberName));
+    }
+
+    public void addIgnoreMember(String memberName) {
+        ignoreMembers.add(memberName);
+    }
+
+    public void addMemberCaption(String memberName, String caption) {
+        customMemberCaptions.put(memberName, caption);
     }
 
     protected String getMemberCaption(String memberName, MemberMeta memberMeta) {
-        return memberMeta.getCaption();
+        String caption = customMemberCaptions.get(memberName);
+        if (caption != null) {
+            return caption;
+        } else {
+            return memberMeta.getCaption();
+        }
     }
 
     protected void createHeaderEnds(ReportTableFormatter formatter) {
