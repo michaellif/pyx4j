@@ -110,6 +110,7 @@ import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
+import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
@@ -200,6 +201,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(PADPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
+        models.add(LeaseDataModel.class);
         return models;
     }
 

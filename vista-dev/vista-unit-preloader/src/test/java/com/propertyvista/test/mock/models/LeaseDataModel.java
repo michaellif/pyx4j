@@ -15,6 +15,7 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -27,6 +28,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -45,6 +47,15 @@ public class LeaseDataModel extends MockDataModel {
     }
 
     public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
+        return this.addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance,
+                Arrays.asList(new Customer[] { getDataModel(CustomerDataModel.class).addCustomer() }));
+    }
+
+    public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, Customer customer) {
+        return this.addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance, Arrays.asList(new Customer[] { customer }));
+    }
+
+    public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, List<Customer> customers) {
 
         ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("1500.00"));
 
@@ -72,7 +83,7 @@ public class LeaseDataModel extends MockDataModel {
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(getDataModel(CustomerDataModel.class).addCustomer());
+        tenantInLease.leaseParticipant().customer().set(customers.get(0));
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 

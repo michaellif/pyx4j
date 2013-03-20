@@ -36,17 +36,15 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 
 public class PaymentTestBase extends FinancialTestBase {
-
-    protected MerchantAccountDataModel merchantAccountDataModel;
 
     @Override
     protected List<Class<? extends MockDataModel>> getMockModelTypes() {
@@ -55,15 +53,14 @@ public class PaymentTestBase extends FinancialTestBase {
         return models;
     }
 
-    public List<LeasePaymentMethod> retrieveAllPaymentMethods() {
+    public List<LeasePaymentMethod> retrieveAllPaymentMethods(Customer customer) {
         EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), getMockManager().getDataModel(CustomerDataModel.class).addCustomer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
         return Persistence.service().query(criteria);
     }
 
-    protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable() {
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                getMockManager().getDataModel(CustomerDataModel.class).addCustomer());
+    protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable(Customer customer) {
+        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
         RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
         return profileMethods;
     }
@@ -89,9 +86,9 @@ public class PaymentTestBase extends FinancialTestBase {
         }
     }
 
-    protected LeasePaymentMethod createPaymentMethod(PaymentType type) {
+    protected LeasePaymentMethod createPaymentMethod(PaymentType type, Customer customer) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
-        paymentMethod.customer().set(getMockManager().getDataModel(CustomerDataModel.class).addCustomer());
+        paymentMethod.customer().set(customer);
         paymentMethod.type().setValue(type);
         switch (type) {
         case Echeck: {

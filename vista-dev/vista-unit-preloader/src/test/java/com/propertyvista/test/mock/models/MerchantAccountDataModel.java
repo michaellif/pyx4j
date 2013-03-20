@@ -31,15 +31,8 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class MerchantAccountDataModel extends MockDataModel {
 
-    private BuildingDataModel buildingDataModel;
-
-    public MerchantAccountDataModel() {
-
-    }
-
     @Override
     protected void generate() {
-        buildingDataModel = getDataModel(BuildingDataModel.class);
 
         MerchantAccount merchantAccount = Persistence.service().retrieve(EntityQueryCriteria.create(MerchantAccount.class));
 
@@ -66,7 +59,7 @@ public class MerchantAccountDataModel extends MockDataModel {
 
         BuildingMerchantAccount bma = EntityFactory.create(BuildingMerchantAccount.class);
         bma.merchantAccount().set(merchantAccount);
-        bma.building().set(buildingDataModel.getBuilding());
+        bma.building().set(getDataModel(BuildingDataModel.class).getBuilding());
         Persistence.service().persist(bma);
     }
 }

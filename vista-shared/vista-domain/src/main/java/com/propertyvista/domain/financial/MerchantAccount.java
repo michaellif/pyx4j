@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -76,6 +77,7 @@ public interface MerchantAccount extends AbstractMerchantAccount {
     @Editor(type = Editor.EditorType.label)
     IPrimitive<MerchantAccountPaymentsStatus> paymentsStatus();
 
+    @NotNull
     IPrimitive<Boolean> invalid();
 
     @Timestamp(Timestamp.Update.Created)
