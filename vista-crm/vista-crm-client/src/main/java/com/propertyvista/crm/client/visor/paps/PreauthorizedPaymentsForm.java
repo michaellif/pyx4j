@@ -34,8 +34,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
-        main.setH3(1, 0, 1, proto().tenant().preauthorizedPayments().getMeta().getCaption());
-        main.setWidget(2, 0, inject(proto().tenant().preauthorizedPayments(), new PreauthorizedPaymentsFolder(this)));
+        main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
+        main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentsFolder(this)));
 
         main.getWidget(0, 0).setWidth("50em");
         main.getWidget(0, 0).getElement().getStyle().setMargin(0.5, Unit.EM);

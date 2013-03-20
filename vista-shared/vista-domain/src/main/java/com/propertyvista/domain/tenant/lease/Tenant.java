@@ -34,7 +34,7 @@ public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
     @Deprecated
     LeasePaymentMethod preauthorizedPayment();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PreauthorizedPayment.OrderId.class)
     IList<PreauthorizedPayment> preauthorizedPayments();

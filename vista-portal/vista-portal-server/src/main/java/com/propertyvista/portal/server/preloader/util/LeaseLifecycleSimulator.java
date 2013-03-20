@@ -277,11 +277,8 @@ public class LeaseLifecycleSimulator {
                 pap.amount().setValue(BigDecimal.ONE);
                 pap.comments().setValue("Default preauthorization...");
 
-//                pap.tenant().set(mainTenant.leaseParticipant());
-//                Persistence.service().persist(pap);
-
-                mainTenant.leaseParticipant().preauthorizedPayments().add(pap);
-                Persistence.service().merge(mainTenant);
+                pap.tenant().set(mainTenant.leaseParticipant());
+                Persistence.service().persist(pap);
             }
 
             Persistence.service().merge(mainTenant.leaseParticipant());
