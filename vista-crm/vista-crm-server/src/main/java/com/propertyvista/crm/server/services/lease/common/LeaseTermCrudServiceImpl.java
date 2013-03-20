@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -119,7 +120,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
         for (LeaseTermTenant item : dto.version().tenants()) {
             LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
-            Persistence.service().retrieveMember(item.leaseParticipant().preauthorizedPayments());
+            fillPreauthorizedPayments(item);
         }
 
         if (in.getPrimaryKey() != null) {
@@ -284,6 +285,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         for (ProductItem item : currentValue.selectedServiceItems()) {
             Persistence.service().retrieve(item, AttachLevel.ToStringMembers);
         }
+    }
+
+    private void fillPreauthorizedPayments(LeaseTermTenant item) {
+        item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
+        item.leaseParticipant().preauthorizedPayments()
+                .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
     }
 
     private void updateAdjustments(LeaseTerm leaseTerm) {

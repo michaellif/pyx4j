@@ -16,11 +16,13 @@ package com.propertyvista.crm.server.services.lease.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -49,7 +51,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
-            Persistence.service().retrieveMember(item.leaseParticipant().preauthorizedPayments());
+            fillPreauthorizedPayments(item);
         }
 
         for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {
@@ -110,4 +112,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
     }
 
+    private void fillPreauthorizedPayments(LeaseTermTenant item) {
+        item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
+        item.leaseParticipant().preauthorizedPayments()
+                .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
+    }
 }
