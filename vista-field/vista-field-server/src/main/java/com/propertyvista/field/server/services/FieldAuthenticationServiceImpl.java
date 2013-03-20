@@ -15,17 +15,17 @@ package com.propertyvista.field.server.services;
 
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.domain.security.FieldUser;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.field.rpc.services.FieldAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.security.FieldUserCredential;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
-public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<FieldUser, FieldUserCredential> implements FieldAuthenticationService {
+public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CrmUser, CrmUserCredential> implements FieldAuthenticationService {
 
     public FieldAuthenticationServiceImpl() {
-        super(FieldUser.class, FieldUserCredential.class);
+        super(CrmUser.class, CrmUserCredential.class);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesI
     }
 
     @Override
-    protected void sendPasswordRetrievalToken(FieldUser user) {
+    protected void sendPasswordRetrievalToken(CrmUser user) {
 //        ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
 //        Persistence.service().commit();
     }
