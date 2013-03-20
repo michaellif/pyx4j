@@ -288,7 +288,26 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- billing_bill
         
+        ALTER TABLE billing_bill DROP COLUMN latest_bill_in_cycle;
+        
+        -- billing_billing_cycle
+        
+        ALTER TABLE billing_billing_cycle DROP COLUMN execution_target_date;
+        
+        -- billing_billing_type
+        
+        ALTER TABLE billing_billing_type DROP COLUMN billing_cycle_target_day;
+        
+        -- lease
+        
+        ALTER TABLE lease DROP COLUMN payment_frequency;
+        
+        -- lease_billing_policy
+        
+        ALTER TABLE lease_billing_policy        DROP COLUMN default_billing_cycle_sart_day,
+                                                DROP COLUMN use_default_billing_cycle_sart_day;
          
         /**
         ***     ======================================================================================================
