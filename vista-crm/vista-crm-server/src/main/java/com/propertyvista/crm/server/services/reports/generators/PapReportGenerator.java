@@ -31,6 +31,10 @@ public class PapReportGenerator implements ReportGenerator {
         PapReportMetadata reportMetadata = (PapReportMetadata) metadata;
         EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
         Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
+        for (PaymentRecord paymentRecord : paymentRecords) {
+            Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
+            Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease()); // this is for lease id
+        }
         return paymentRecords;
     }
 
@@ -42,13 +46,9 @@ public class PapReportGenerator implements ReportGenerator {
         criteria.ne(criteria.proto().preauthorizedPayment().isDeleted(), true);
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
-        if (reportMetadata.filterByTargetDate().isBooleanTrue()) {
-            if (!reportMetadata.from().isNull()) {
-                criteria.ge(criteria.proto().targetDate(), reportMetadata.from());
-            }
-            if (!reportMetadata.until().isNull()) {
-                criteria.le(criteria.proto().targetDate(), reportMetadata.until());
-            }
+        if (reportMetadata.filterByBillingCycle().isBooleanTrue()) {
+            criteria.ge(criteria.proto().padBillingCycle().billingType().billingPeriod(), reportMetadata.billingPeriod());
+            criteria.le(criteria.proto().padBillingCycle().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
         }
         if (reportMetadata.filterByBuildings().isBooleanTrue()) {
             if (!reportMetadata.selectedBuildings().isEmpty()) {

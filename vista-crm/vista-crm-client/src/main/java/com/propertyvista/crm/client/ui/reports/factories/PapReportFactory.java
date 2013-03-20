@@ -43,17 +43,14 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
         PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
 
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.id()).build(),
                 new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build(),
                 new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build(),
+                new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build(),
+                new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().participantId()).columnTitle("Participant Id").build(),
+                new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().customer()).build(),
                 new MemberColumnDescriptor.Builder(proto.amount()).build(),               
                 new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build(),
-                new MemberColumnDescriptor.Builder(proto.paymentStatus()).build(),
-                new MemberColumnDescriptor.Builder(proto.createdDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.receivedDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.lastStatusChangeDate()).build(),
-                new MemberColumnDescriptor.Builder(proto.targetDate()).build()
-                
+                new MemberColumnDescriptor.Builder(proto.paymentStatus()).build()
         );//@formatter:on
     }
 

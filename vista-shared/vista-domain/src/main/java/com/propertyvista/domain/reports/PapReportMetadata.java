@@ -16,22 +16,26 @@ package com.propertyvista.domain.reports;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "PAP Report")
 public interface PapReportMetadata extends ReportMetadata {
 
-    @Caption(name = "Filter by Target Date")
-    IPrimitive<Boolean> filterByTargetDate();
+    @Caption(name = "Filter by Billing Cycle")
+    IPrimitive<Boolean> filterByBillingCycle();
 
-    IPrimitive<LogicalDate> from();
+    @NotNull
+    IPrimitive<BillingPeriod> billingPeriod();
 
-    IPrimitive<LogicalDate> until();
+    @NotNull
+    IPrimitive<LogicalDate> billingCycleStartDate();
 
     @Caption(name = "Filter by Buildings")
     IPrimitive<Boolean> filterByBuildings();

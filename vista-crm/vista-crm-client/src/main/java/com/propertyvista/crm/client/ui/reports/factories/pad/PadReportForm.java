@@ -32,16 +32,16 @@ public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByTargetDate())).componentWidth(10).build());
-        get(proto().filterByTargetDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(10).build());
+        get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().from()).setVisible(event.getValue());
-                get(proto().until()).setVisible(event.getValue());
+                get(proto().billingPeriod()).setVisible(event.getValue());
+                get(proto().billingCycleStartDate()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().from())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().until())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriod())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(10).build());
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
@@ -58,8 +58,8 @@ public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        get(proto().from()).setVisible(getValue().filterByTargetDate().isBooleanTrue());
-        get(proto().until()).setVisible(getValue().filterByTargetDate().isBooleanTrue());
+        get(proto().billingPeriod()).setVisible(getValue().filterByBillingCycle().isBooleanTrue());
+        get(proto().billingCycleStartDate()).setVisible(getValue().filterByBillingCycle().isBooleanTrue());
 
         get(proto().selectedBuildings()).setVisible((getValue().filterByBuildings().isBooleanTrue()));
     }
