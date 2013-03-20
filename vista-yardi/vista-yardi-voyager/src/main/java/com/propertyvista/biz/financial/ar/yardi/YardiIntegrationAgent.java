@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.biz.financial.ar.yardi;
 
 import java.math.BigDecimal;
 
@@ -46,9 +46,10 @@ import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.yardi.services.ProductItemTypeAdapter;
 
-public class YardiProcessorUtils {
-    private final static Logger log = LoggerFactory.getLogger(YardiProcessorUtils.class);
+public class YardiIntegrationAgent {
+    private final static Logger log = LoggerFactory.getLogger(YardiIntegrationAgent.class);
 
     public enum YardiReversalType {
         NSF, Chargeback, Adjustment, Other

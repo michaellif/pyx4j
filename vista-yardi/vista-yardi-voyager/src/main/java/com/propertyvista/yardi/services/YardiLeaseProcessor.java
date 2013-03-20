@@ -30,6 +30,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
@@ -48,7 +49,7 @@ public class YardiLeaseProcessor {
     public void updateLeases(ResidentTransactions transaction) {
         for (Property property : transaction.getProperty()) {
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                String propertyCode = YardiProcessorUtils.getPropertyId(property.getPropertyID().get(0));
+                String propertyCode = YardiIntegrationAgent.getPropertyId(property.getPropertyID().get(0));
                 if (isSkipped(rtCustomer)) {
                     log.info("Lease {} skipped, did not meet criteria.", rtCustomer.getCustomerID());
                     continue;
@@ -66,7 +67,7 @@ public class YardiLeaseProcessor {
                 }
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-                criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
+                criteria.eq(criteria.proto().info().number(), YardiIntegrationAgent.getUnitId(rtCustomer));
                 AptUnit unit = Persistence.service().query(criteria).get(0);
 
                 try {
@@ -92,7 +93,7 @@ public class YardiLeaseProcessor {
         }
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().info().number(), YardiProcessorUtils.getUnitId(rtCustomer));
+        criteria.eq(criteria.proto().info().number(), YardiIntegrationAgent.getUnitId(rtCustomer));
         AptUnit unit = Persistence.service().query(criteria).get(0);
 
         return createLease(rtCustomer, unit, propertyCode);
