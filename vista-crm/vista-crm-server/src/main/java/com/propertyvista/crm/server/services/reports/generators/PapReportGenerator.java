@@ -39,6 +39,7 @@ public class PapReportGenerator implements ReportGenerator {
         criteria.desc(criteria.proto().padBillingCycle().billingType());
         criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
 
+        criteria.ne(criteria.proto().preauthorizedPayment().isDeleted(), true);
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
         if (reportMetadata.filterByTargetDate().isBooleanTrue()) {
