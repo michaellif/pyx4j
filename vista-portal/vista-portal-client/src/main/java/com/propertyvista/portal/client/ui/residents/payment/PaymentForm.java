@@ -362,38 +362,40 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private Widget createLegalTermsPanel() {
         FlowPanel panel = new FlowPanel();
+        Widget w;
 
-        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our" + "&nbsp")));
-        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our")));
 
-        panel.add(new Anchor(i18n.tr("Terms Of Use"), new Command() {
+        panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {
                 new LegalTermsDialog(TermsType.TermsOfUse).show();
             }
         }));
 
-        panel.add(new HTML(",&nbsp"));
-        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        panel.add(w = new HTML(",&nbsp"));
+        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        panel.add(new Anchor(i18n.tr("Privacy Policy"), new Command() {
+        panel.add(w = new Anchor(i18n.tr("Privacy Policy"), new Command() {
             @Override
             public void execute() {
                 new LegalTermsDialog(TermsType.PrivacyPolicy).show();
             }
         }));
 
-        panel.add(new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        panel.add(w = new HTML("&nbsp"));
+        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        panel.add(w = new HTML(i18n.tr("and") + "&nbsp"));
+        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        panel.add(new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
+        panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
             @Override
             public void execute() {
                 new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
             }
         }));
 
-        panel.setWidth("60%");
+        panel.setWidth("70%");
         panel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         return panel;
