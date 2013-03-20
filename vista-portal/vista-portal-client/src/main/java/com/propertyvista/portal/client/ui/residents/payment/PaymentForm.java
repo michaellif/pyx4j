@@ -364,10 +364,10 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         FlowPanel panel = new FlowPanel();
 
         panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our ")));
-        panel.add(new Anchor(i18n.tr("Terms and Conditions"), new Command() {
+        panel.add(new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {
-                new LegalTermsDialog(TermsType.TermsAndConditions).show();
+                new LegalTermsDialog(TermsType.TermsOfUse).show();
             }
         }));
 

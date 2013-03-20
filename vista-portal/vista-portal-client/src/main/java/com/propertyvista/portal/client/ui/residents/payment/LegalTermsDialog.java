@@ -31,7 +31,7 @@ public class LegalTermsDialog extends OkDialog {
 
     @com.pyx4j.i18n.annotations.I18n
     public enum TermsType {
-        TermsAndConditions, PrivacyPolicy, BillingAndRefundPolicy;
+        TermsOfUse, PrivacyPolicy, BillingAndRefundPolicy;
 
         @Override
         public String toString() {
@@ -48,7 +48,7 @@ public class LegalTermsDialog extends OkDialog {
         CLabel<String> legalTerms = new CLabel<String>();
         legalTerms.setEscapeHTML(false);
         switch (type) {
-        case TermsAndConditions:
+        case TermsOfUse:
             legalTerms.setValue(VistaResources.INSTANCE.termsAndConditions().getText());
             break;
         case PrivacyPolicy:
