@@ -11,6 +11,9 @@
  * @author igor
  * @version $Id$
  */
+
+//TODO See VISTA-2605 for comments
+
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
