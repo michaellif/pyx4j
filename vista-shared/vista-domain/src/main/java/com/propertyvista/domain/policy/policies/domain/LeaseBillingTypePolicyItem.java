@@ -21,6 +21,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 
 //TODO Find a better name
+
+//TODO See VISTA-2605 for comments
+
 public interface LeaseBillingTypePolicyItem extends IEntity {
 
     IPrimitive<BillingPeriod> billingPeriod();
