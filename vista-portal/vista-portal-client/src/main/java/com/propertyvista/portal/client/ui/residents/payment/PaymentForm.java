@@ -363,7 +363,9 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     private Widget createLegalTermsPanel() {
         FlowPanel panel = new FlowPanel();
 
-        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our ")));
+        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our" + "&nbsp")));
+        panel.getWidget(panel.getWidgetCount() - 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
         panel.add(new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {
@@ -391,7 +393,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             }
         }));
 
-        panel.setWidth("80%");
+        panel.setWidth("60%");
         panel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         return panel;
