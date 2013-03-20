@@ -104,14 +104,6 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    public void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod paymentMethod) {
-        Persistence.service().retrieve(paymentMethod);
-        ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
-        Persistence.service().commit();
-        callback.onSuccess(Boolean.TRUE);
-    }
-
-    @Override
     public void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId) {
         DBO leaseParticipant = Persistence.service().retrieve(dboClass, participantId.getPrimaryKey());
         Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);

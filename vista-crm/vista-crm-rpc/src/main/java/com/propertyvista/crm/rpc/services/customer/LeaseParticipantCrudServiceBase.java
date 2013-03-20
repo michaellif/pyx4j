@@ -20,14 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
 
 public interface LeaseParticipantCrudServiceBase<DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>> extends AbstractCrudService<DTO> {
-
-    void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod paymentMethod);
 
     void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId);
 

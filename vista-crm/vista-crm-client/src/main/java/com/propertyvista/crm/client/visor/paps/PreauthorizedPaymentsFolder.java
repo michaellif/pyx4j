@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -27,6 +28,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,6 +36,7 @@ import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
@@ -59,6 +62,16 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
                 new EntityFolderColumnDescriptor(proto().amount(), "5em"),
                 new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"));
           //@formatter:on
+    }
+
+    @Override
+    protected void removeItem(final CEntityFolderItem<PreauthorizedPayment> item) {
+        MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
+            @Override
+            public void execute() {
+                PreauthorizedPaymentsFolder.super.removeItem(item);
+            }
+        });
     }
 
     @Override

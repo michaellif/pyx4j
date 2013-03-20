@@ -26,7 +26,6 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
@@ -36,16 +35,6 @@ public abstract class LeaseParticipantEditorActivity<DTO extends LeaseParticipan
 
     public LeaseParticipantEditorActivity(CrudAppPlace place, IEditor<DTO> view, CS service, Class<DTO> dtoClass) {
         super(place, view, service, dtoClass);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void deletePaymentMethod(LeasePaymentMethod paymentMethod) {
-        ((CS) getService()).deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-            }
-        }, paymentMethod);
     }
 
     @SuppressWarnings("unchecked")

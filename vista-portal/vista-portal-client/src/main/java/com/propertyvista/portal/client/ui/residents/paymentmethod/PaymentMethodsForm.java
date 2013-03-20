@@ -100,11 +100,10 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
         @Override
         protected void removeItem(final CEntityFolderItem<LeasePaymentMethod> item) {
-
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
                 @Override
                 public void execute() {
-                    presenter.removePaymentMethod(item.getValue());
+                    presenter.deletePaymentMethod(item.getValue());
                     PaymentMethodFolder.super.removeItem(item);
                 }
             });

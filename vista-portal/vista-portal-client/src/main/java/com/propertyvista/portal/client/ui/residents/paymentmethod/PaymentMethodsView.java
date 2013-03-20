@@ -29,7 +29,7 @@ public interface PaymentMethodsView extends IsWidget {
 
         void savePaymentMethod(LeasePaymentMethod paymentMethod);
 
-        void removePaymentMethod(LeasePaymentMethod paymentMethod);
+        void deletePaymentMethod(LeasePaymentMethod paymentMethod);
     }
 
     void populate(List<LeasePaymentMethod> paymentMethods);

@@ -79,7 +79,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     }
 
     @Override
-    public void removePaymentMethod(LeasePaymentMethod paymentMethod) {
+    public void deletePaymentMethod(LeasePaymentMethod paymentMethod) {
         srv.delete(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
