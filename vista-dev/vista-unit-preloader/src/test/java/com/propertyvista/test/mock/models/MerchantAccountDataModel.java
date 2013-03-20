@@ -57,7 +57,6 @@ public class MerchantAccountDataModel extends MockDataModel {
                 @Override
                 public Void call() {
                     ServerSideFactory.create(PmcFacade_TEMP.class).persistMerchantAccount(pmc, createMerchantAccount);
-                    Persistence.service().commit();
                     return null;
                 }
             });
