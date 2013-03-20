@@ -98,7 +98,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         preauthorizedPayment.tenant().set(tenantId);
-        Persistence.service().persist(preauthorizedPayment);
+        Persistence.service().merge(preauthorizedPayment);
         return null;
     }
 
