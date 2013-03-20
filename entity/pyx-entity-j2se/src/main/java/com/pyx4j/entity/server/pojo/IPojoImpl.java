@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
@@ -56,6 +57,14 @@ public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
     @Override
     public void setEntityValue(E entity) {
         this.entity = entity;
+    }
+
+    public Key getId() {
+        return this.entity.id().getValue();
+    }
+
+    public void setStatus(Key id) {
+        this.entity.id().setValue(id);
     }
 
     protected static final <T extends IEntity> IPojo<T>[] toArray(IPojo<T>[] pojoArray, ICollection<T, ?> entityList) {
