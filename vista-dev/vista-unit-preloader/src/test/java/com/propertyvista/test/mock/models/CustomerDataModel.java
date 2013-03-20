@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,9 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class CustomerDataModel {
+public class CustomerDataModel extends MockDataModel {
 
     private static Object[][] customersMeta = new Object[][] {
 
@@ -42,11 +43,12 @@ public class CustomerDataModel {
 
     private final List<Customer> customers;
 
-    public CustomerDataModel(PreloadConfig config) {
+    public CustomerDataModel() {
         customers = new ArrayList<Customer>();
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
     }
 
     public Customer getCustomer(int index) {

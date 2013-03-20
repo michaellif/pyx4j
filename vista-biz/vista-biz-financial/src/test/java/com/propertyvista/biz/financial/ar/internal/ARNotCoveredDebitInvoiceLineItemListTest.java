@@ -34,6 +34,7 @@ import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
+import com.propertyvista.test.mock.models.ARPolicyDataModel;
 
 @Category(FunctionalTests.class)
 public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase {
@@ -81,7 +82,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
                 .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
 
         //
-        ARPolicy policy = arPolicyDataModel.getPolicy();
+        ARPolicy policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byDueDate);
         Persistence.service().persist(policy);
         Persistence.service().commit();
@@ -89,14 +90,14 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(
                 retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
-        policy = arPolicyDataModel.getPolicy();
+        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
         debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
-        policy = arPolicyDataModel.getPolicy();
+        policy = getMockManager().getDataModel(ARPolicyDataModel.class).getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();

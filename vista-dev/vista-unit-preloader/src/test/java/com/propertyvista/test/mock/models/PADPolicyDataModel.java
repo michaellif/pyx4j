@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
 
@@ -23,38 +23,40 @@ import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class PADPolicyDataModel {
+public class PADPolicyDataModel extends MockDataModel {
     private PADPolicy policy;
 
-    private final PreloadConfig config;
+    private PmcDataModel pmcDataModel;
 
-    private final PmcDataModel pmcDataModel;
+    public PADPolicyDataModel() {
 
-    public PADPolicyDataModel(PreloadConfig config, PmcDataModel pmcDataModel) {
-        this.config = config;
-        this.pmcDataModel = pmcDataModel;
     }
 
-    public void generate() {
-        policy = EntityFactory.create(PADPolicy.class);
-        if (config.padChargeType == null) {
-            config.padChargeType = PADChargeType.OwingBalance;
-        }
-        policy.chargeType().setValue(config.padChargeType);
+    @Override
+    protected void generate() {
 
-        if (config.padChargeType == PADChargeType.OwingBalance) {
+        pmcDataModel = getDataModel(PmcDataModel.class);
+
+        policy = EntityFactory.create(PADPolicy.class);
+        if (getConfig().padChargeType == null) {
+            getConfig().padChargeType = PADChargeType.OwingBalance;
+        }
+        policy.chargeType().setValue(getConfig().padChargeType);
+
+        if (getConfig().padChargeType == PADChargeType.OwingBalance) {
             policy.chargeType().setValue(PADChargeType.OwingBalance);
-            if (config.padBalanceTypeMap == null) {
-                config.padBalanceTypeMap = new HashMap<DebitType, OwingBalanceType>();
-                config.padBalanceTypeMap.put(DebitType.lease, OwingBalanceType.LastBill);
-                config.padBalanceTypeMap.put(DebitType.parking, OwingBalanceType.ToDateTotal);
-                config.padBalanceTypeMap.put(DebitType.locker, OwingBalanceType.ToDateTotal);
+            if (getConfig().padBalanceTypeMap == null) {
+                getConfig().padBalanceTypeMap = new HashMap<DebitType, OwingBalanceType>();
+                getConfig().padBalanceTypeMap.put(DebitType.lease, OwingBalanceType.LastBill);
+                getConfig().padBalanceTypeMap.put(DebitType.parking, OwingBalanceType.ToDateTotal);
+                getConfig().padBalanceTypeMap.put(DebitType.locker, OwingBalanceType.ToDateTotal);
             }
-            for (DebitType debitType : config.padBalanceTypeMap.keySet()) {
+            for (DebitType debitType : getConfig().padBalanceTypeMap.keySet()) {
                 PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
                 item.debitType().setValue(debitType);
-                item.owingBalanceType().setValue(config.padBalanceTypeMap.get(debitType));
+                item.owingBalanceType().setValue(getConfig().padBalanceTypeMap.get(debitType));
                 policy.debitBalanceTypes().add(item);
             }
         }

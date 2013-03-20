@@ -13,26 +13,41 @@
  */
 package com.propertyvista.yardi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.test.preloader.BuildingDataModel;
-import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
-import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
-import com.propertyvista.test.preloader.LocationsDataModel;
-import com.propertyvista.test.preloader.PmcDataModel;
-import com.propertyvista.test.preloader.PreloadConfig;
-import com.propertyvista.test.preloader.ProductItemTypesDataModel;
-import com.propertyvista.test.preloader.TaxesDataModel;
+import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.ARPolicyDataModel;
+import com.propertyvista.test.mock.models.BuildingDataModel;
+import com.propertyvista.test.mock.models.CustomerDataModel;
+import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
+import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
+import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
+import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
+import com.propertyvista.test.mock.models.LocationsDataModel;
+import com.propertyvista.test.mock.models.PADPolicyDataModel;
+import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.ProductItemTypesDataModel;
+import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
+import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public class YardiTestBase {
 
@@ -60,33 +75,46 @@ public class YardiTestBase {
     }
 
     protected void preloadData() {
+        preloadData(new MockConfig());
+    }
 
-        PreloadConfig config = new PreloadConfig();
+    protected void preloadData(final MockConfig config) {
+
         config.yardiIntegration = true;
 
-        PmcDataModel pmcDataModel = new PmcDataModel(config);
-        pmcDataModel.generate();
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
 
-        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate();
+            @Override
+            public MockManager execute() {
 
-        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-        taxesDataModel.generate();
+                MockManager mockManager = new MockManager(config);
+                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                    mockManager.addModel(modelType);
+                }
 
-        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-        productItemTypesDataModel.generate();
+                return mockManager;
+            }
+        });
 
-        BuildingDataModel buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
-        buildingDataModel.generate();
+    }
 
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-        leaseBillingPolicyDataModel.generate();
-
-        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
-        idAssignmentPolicyDataModel.generate();
-
-        Persistence.service().commit();
-
+    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
+        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+        models.add(PmcDataModel.class);
+        models.add(LocationsDataModel.class);
+        models.add(TaxesDataModel.class);
+        models.add(ProductItemTypesDataModel.class);
+        models.add(LeaseAdjustmentReasonDataModel.class);
+        models.add(BuildingDataModel.class);
+        models.add(IdAssignmentPolicyDataModel.class);
+        models.add(ProductTaxPolicyDataModel.class);
+        models.add(DepositPolicyDataModel.class);
+        models.add(LeaseAdjustmentPolicyDataModel.class);
+        models.add(CustomerDataModel.class);
+        models.add(LeaseBillingPolicyDataModel.class);
+        models.add(PADPolicyDataModel.class);
+        models.add(ARPolicyDataModel.class);
+        return models;
     }
 
 }

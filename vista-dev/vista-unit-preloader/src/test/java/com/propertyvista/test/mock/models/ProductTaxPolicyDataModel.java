@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -19,25 +19,27 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class ProductTaxPolicyDataModel {
+public class ProductTaxPolicyDataModel extends MockDataModel {
 
-    private final ProductItemTypesDataModel productItemTypesDataModel;
+    private ProductItemTypesDataModel productItemTypesDataModel;
 
-    private final TaxesDataModel taxesDataModel;
+    private TaxesDataModel taxesDataModel;
 
-    private final BuildingDataModel buildingDataModel;
+    private BuildingDataModel buildingDataModel;
 
     private ProductTaxPolicy policy;
 
-    public ProductTaxPolicyDataModel(PreloadConfig config, ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel,
-            BuildingDataModel buildingDataModel) {
-        this.productItemTypesDataModel = productItemTypesDataModel;
-        this.taxesDataModel = taxesDataModel;
-        this.buildingDataModel = buildingDataModel;
+    public ProductTaxPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
+        taxesDataModel = getDataModel(TaxesDataModel.class);
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         policy = EntityFactory.create(ProductTaxPolicy.class);
 
         for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {

@@ -31,7 +31,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -57,8 +60,10 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.helper.LightWeightLeaseManagement;
-import com.propertyvista.test.preloader.PmcDataModel;
-import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.PmcDataModel;
 
 public class AptUnitOccupancyManagerTestBase {
 
@@ -80,8 +85,8 @@ public class AptUnitOccupancyManagerTestBase {
         TestLifecycle.beginRequest();
 
         SystemDateManager.setDate(asDate("1900-01-01"));
-        PmcDataModel pmcDataModel = new PmcDataModel(new PreloadConfig());
-        pmcDataModel.generate();
+
+        preloadData();
 
         generateIdAssignmentPolicy();
 
@@ -117,6 +122,34 @@ public class AptUnitOccupancyManagerTestBase {
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
         Persistence.service().commit();
         SystemDateManager.resetDate();
+    }
+
+    protected void preloadData() {
+        preloadData(new MockConfig());
+    }
+
+    protected void preloadData(final MockConfig config) {
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
+
+            @Override
+            public MockManager execute() {
+
+                MockManager mockManager = new MockManager(config);
+                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                    mockManager.addModel(modelType);
+                }
+
+                return mockManager;
+            }
+        });
+
+    }
+
+    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
+        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+        models.add(PmcDataModel.class);
+        return models;
     }
 
     protected void generateIdAssignmentPolicy() {

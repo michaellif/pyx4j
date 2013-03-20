@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,8 +36,9 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class BuildingDataModel {
+public class BuildingDataModel extends MockDataModel {
 
     enum Usage {
         available, used
@@ -47,23 +48,26 @@ public class BuildingDataModel {
 
     private Map<Feature.Type, List<FeatureItemType>> featureMeta;
 
-    private final ProductItemTypesDataModel productItemTypesDataModel;
+    private ProductItemTypesDataModel productItemTypesDataModel;
 
-    private final LocationsDataModel locationsDataModel;
+    private LocationsDataModel locationsDataModel;
 
     private Building building;
 
-    private final List<ProductItem> serviceItems = new ArrayList<ProductItem>();
+    private final List<ProductItem> serviceItems;
 
     private Service standardResidentialService;
 
-    public BuildingDataModel(PreloadConfig config, LocationsDataModel locationsDataModel, ProductItemTypesDataModel productItemTypesDataModel) {
-        this.productItemTypesDataModel = productItemTypesDataModel;
-        this.locationsDataModel = locationsDataModel;
-        createServiceMeta();
+    public BuildingDataModel() {
+        serviceItems = new ArrayList<ProductItem>();
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
+        locationsDataModel = getDataModel(LocationsDataModel.class);
+        createServiceMeta();
+
         generate(String.valueOf(System.currentTimeMillis()).substring(5));
     }
 
@@ -99,6 +103,7 @@ public class BuildingDataModel {
 
         standardResidentialService.version().items().add(productItem);
         Persistence.service().persist(standardResidentialService);
+
         serviceItems.add(productItem);
         return productItem;
     }

@@ -20,7 +20,7 @@ import org.junit.experimental.categories.Category;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.mock.MockConfig;
 
 @Category(FunctionalTests.class)
 public class BillingCycleForDefaultStartDayPolicy1Test extends FinancialTestBase {
@@ -28,7 +28,7 @@ public class BillingCycleForDefaultStartDayPolicy1Test extends FinancialTestBase
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        PreloadConfig config = new PreloadConfig();
+        MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = 1;
         preloadData(config);
     }

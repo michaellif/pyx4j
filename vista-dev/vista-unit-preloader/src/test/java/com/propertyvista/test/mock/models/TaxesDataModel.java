@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,19 +21,22 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class TaxesDataModel {
+public class TaxesDataModel extends MockDataModel {
 
-    private final List<Tax> taxes;
+    private List<Tax> taxes;
 
-    private final LocationsDataModel locationsDataModel;
+    private LocationsDataModel locationsDataModel;
 
-    public TaxesDataModel(PreloadConfig config, LocationsDataModel locationsDataModel) {
-        this.locationsDataModel = locationsDataModel;
-        taxes = new ArrayList<Tax>();
+    public TaxesDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        this.locationsDataModel = getDataModel(LocationsDataModel.class);
+        taxes = new ArrayList<Tax>();
+
         generateTax("HST", "BC", new BigDecimal("0.12"), false);
 
         generateTax("GST", "AB", new BigDecimal("0.05"), false);

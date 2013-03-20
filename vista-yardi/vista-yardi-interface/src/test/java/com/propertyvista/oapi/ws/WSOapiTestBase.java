@@ -15,6 +15,8 @@ package com.propertyvista.oapi.ws;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.ws.Endpoint;
 
@@ -23,9 +25,16 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
+
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.test.preloader.LocationsDataModel;
-import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.LocationsDataModel;
+import com.propertyvista.test.mock.models.PmcDataModel;
 
 public class WSOapiTestBase {
 
@@ -86,45 +95,30 @@ public class WSOapiTestBase {
     }
 
     protected void preloadData() {
-        PreloadConfig config = new PreloadConfig();
-        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate();
-
-//        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-//        taxesDataModel.generate();
-//
-//        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-//        productItemTypesDataModel.generate();
-//
-//        LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
-//        leaseAdjustmentReasonDataModel.generate();
-//
-//        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
-//        buildingDataModel.generate();
-//
-//        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
-//        idAssignmentPolicyDataModel.generate();
-//
-//        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
-//                buildingDataModel);
-//        productTaxPolicyDataModel.generate();
-//
-//        DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
-//        depositPolicyDataModel.generate();
-//
-//        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
-//                taxesDataModel, buildingDataModel);
-//        leaseAdjustmentPolicyDataModel.generate();
-//
-//        TenantDataModel tenantDataModel = new TenantDataModel(config);
-//        tenantDataModel.generate();
-//
-//        //TODO if commented - check exception
-//        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-//        leaseBillingPolicyDataModel.generate();
-//
-//        ARPolicyDataModel arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
-//        arPolicyDataModel.generate();
+        preloadData(new MockConfig());
     }
 
+    protected void preloadData(final MockConfig config) {
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
+
+            @Override
+            public MockManager execute() {
+
+                MockManager mockManager = new MockManager(config);
+                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                    mockManager.addModel(modelType);
+                }
+
+                return mockManager;
+            }
+        });
+    }
+
+    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
+        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+        models.add(PmcDataModel.class);
+        models.add(LocationsDataModel.class);
+        return models;
+    }
 }

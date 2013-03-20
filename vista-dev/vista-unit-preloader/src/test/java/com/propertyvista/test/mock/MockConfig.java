@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 
-public class PreloadConfig {
+public class MockConfig {
 
     public Integer defaultBillingCycleSartDay = 1;
 

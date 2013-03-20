@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.concurrent.Callable;
 
@@ -27,16 +27,20 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class MerchantAccountDataModel {
+public class MerchantAccountDataModel extends MockDataModel {
 
-    private final BuildingDataModel buildingDataModel;
+    private BuildingDataModel buildingDataModel;
 
-    public MerchantAccountDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
-        this.buildingDataModel = buildingDataModel;
+    public MerchantAccountDataModel() {
+
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         MerchantAccount merchantAccount = Persistence.service().retrieve(EntityQueryCriteria.create(MerchantAccount.class));
 
         if (merchantAccount == null) {

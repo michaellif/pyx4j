@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -19,25 +19,27 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseAdjustmentPolicyDataModel {
+public class LeaseAdjustmentPolicyDataModel extends MockDataModel {
 
-    private final LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
+    private LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
 
-    private final TaxesDataModel taxesDataModel;
+    private TaxesDataModel taxesDataModel;
 
-    private final BuildingDataModel buildingDataModel;
+    private BuildingDataModel buildingDataModel;
 
     private LeaseAdjustmentPolicy policy;
 
-    public LeaseAdjustmentPolicyDataModel(PreloadConfig config, LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel, TaxesDataModel taxesDataModel,
-            BuildingDataModel buildingDataModel) {
-        this.leaseAdjustmentReasonDataModel = leaseAdjustmentReasonDataModel;
-        this.taxesDataModel = taxesDataModel;
-        this.buildingDataModel = buildingDataModel;
+    public LeaseAdjustmentPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        leaseAdjustmentReasonDataModel = getDataModel(LeaseAdjustmentReasonDataModel.class);
+        taxesDataModel = getDataModel(TaxesDataModel.class);
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
         for (LeaseAdjustmentReasonDataModel.Reason reason : LeaseAdjustmentReasonDataModel.Reason.values()) {

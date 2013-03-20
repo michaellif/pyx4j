@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +24,21 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class ProductItemTypesDataModel {
+public class ProductItemTypesDataModel extends MockDataModel {
 
     public final List<ServiceItemType> serviceItemTypes;
 
     public final List<FeatureItemType> featureItemTypes;
 
-    public ProductItemTypesDataModel(PreloadConfig config) {
+    public ProductItemTypesDataModel() {
         serviceItemTypes = new ArrayList<ServiceItemType>();
         featureItemTypes = new ArrayList<FeatureItemType>();
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
         generateChargeItemType("Regular Residential Unit", Service.ServiceType.residentialUnit);
         generateChargeItemType("Ocean View Residential Unit", Service.ServiceType.residentialUnit);
         generateChargeItemType("Regular Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit);

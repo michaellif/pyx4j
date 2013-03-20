@@ -24,10 +24,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,21 +99,23 @@ import com.propertyvista.server.jobs.PaymentsScheduledProcess;
 import com.propertyvista.server.jobs.PaymentsUpdateProcess;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
-import com.propertyvista.test.preloader.ARPolicyDataModel;
-import com.propertyvista.test.preloader.BuildingDataModel;
-import com.propertyvista.test.preloader.CustomerDataModel;
-import com.propertyvista.test.preloader.DepositPolicyDataModel;
-import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
-import com.propertyvista.test.preloader.LeaseAdjustmentPolicyDataModel;
-import com.propertyvista.test.preloader.LeaseAdjustmentReasonDataModel;
-import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
-import com.propertyvista.test.preloader.LocationsDataModel;
-import com.propertyvista.test.preloader.PADPolicyDataModel;
-import com.propertyvista.test.preloader.PmcDataModel;
-import com.propertyvista.test.preloader.PreloadConfig;
-import com.propertyvista.test.preloader.ProductItemTypesDataModel;
-import com.propertyvista.test.preloader.ProductTaxPolicyDataModel;
-import com.propertyvista.test.preloader.TaxesDataModel;
+import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.ARPolicyDataModel;
+import com.propertyvista.test.mock.models.BuildingDataModel;
+import com.propertyvista.test.mock.models.CustomerDataModel;
+import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
+import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
+import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
+import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
+import com.propertyvista.test.mock.models.LocationsDataModel;
+import com.propertyvista.test.mock.models.PADPolicyDataModel;
+import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.ProductItemTypesDataModel;
+import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
+import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -123,17 +127,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     public interface RegressionTests extends FunctionalTests {
     }
 
-    protected PmcDataModel pmcDataModel;
-
-    protected BuildingDataModel buildingDataModel;
-
-    protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
-
-    protected ARPolicyDataModel arPolicyDataModel;
-
-    protected CustomerDataModel customerDataModel;
-
-    protected PreloadConfig config;
+    private MockManager mockManager;
 
     protected Lease lease;
 
@@ -167,70 +161,54 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData() {
-        preloadData(new PreloadConfig());
+        preloadData(new MockConfig());
     }
 
-    protected void preloadData(final PreloadConfig config) {
-        this.config = config;
+    protected void preloadData(final MockConfig config) {
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+        mockManager = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
 
             @Override
-            public Void execute() {
+            public MockManager execute() {
 
                 setSysDate("01-Jan-2010");
 
-                pmcDataModel = new PmcDataModel(config);
-                pmcDataModel.generate();
+                MockManager mockManager = new MockManager(config);
+                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                    mockManager.addModel(modelType);
+                }
 
-                LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-                locationsDataModel.generate();
-
-                TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-                taxesDataModel.generate();
-
-                ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-                productItemTypesDataModel.generate();
-
-                leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
-                leaseAdjustmentReasonDataModel.generate();
-
-                buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
-                buildingDataModel.generate();
-
-                IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config, pmcDataModel);
-                idAssignmentPolicyDataModel.generate();
-
-                ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
-                        buildingDataModel);
-                productTaxPolicyDataModel.generate();
-
-                DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
-                depositPolicyDataModel.generate();
-
-                LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
-                        taxesDataModel, buildingDataModel);
-                leaseAdjustmentPolicyDataModel.generate();
-
-                customerDataModel = new CustomerDataModel(config);
-                customerDataModel.generate();
-
-                LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-                leaseBillingPolicyDataModel.generate();
-
-                new PADPolicyDataModel(config, pmcDataModel).generate();
-
-                arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
-                arPolicyDataModel.generate();
-
-                return null;
+                return mockManager;
             }
         });
 
     }
 
+    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
+        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+        models.add(PmcDataModel.class);
+        models.add(LocationsDataModel.class);
+        models.add(TaxesDataModel.class);
+        models.add(ProductItemTypesDataModel.class);
+        models.add(LeaseAdjustmentReasonDataModel.class);
+        models.add(BuildingDataModel.class);
+        models.add(IdAssignmentPolicyDataModel.class);
+        models.add(ProductTaxPolicyDataModel.class);
+        models.add(DepositPolicyDataModel.class);
+        models.add(LeaseAdjustmentPolicyDataModel.class);
+        models.add(CustomerDataModel.class);
+        models.add(LeaseBillingPolicyDataModel.class);
+        models.add(PADPolicyDataModel.class);
+        models.add(ARPolicyDataModel.class);
+        return models;
+    }
+
+    public MockManager getMockManager() {
+        return mockManager;
+    }
+
     protected Building getBuilding() {
-        return buildingDataModel.getBuilding();
+        return mockManager.getDataModel(BuildingDataModel.class).getBuilding();
     }
 
     protected Bill runBilling() {
@@ -293,7 +271,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        ProductItem serviceItem = buildingDataModel.addResidentialUnitServiceItem(new BigDecimal("930.30"));
+        ProductItem serviceItem = mockManager.getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("930.30"));
 
         if (carryforwardBalance != null) {
             lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
@@ -318,7 +296,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(customerDataModel.addCustomer());
+        tenantInLease.leaseParticipant().customer().set(mockManager.getDataModel(CustomerDataModel.class).addCustomer());
         tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
@@ -615,7 +593,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
+        return addLeaseAdjustment(amount,
+                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
     }
 
     protected LeaseAdjustment addAccountCharge(String amount) {
@@ -623,7 +602,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addAccountCharge(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
+        return addLeaseAdjustment(amount,
+                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
     }
 
     private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, boolean immediate) {

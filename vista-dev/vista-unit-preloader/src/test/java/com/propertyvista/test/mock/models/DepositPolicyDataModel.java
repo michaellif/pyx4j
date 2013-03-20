@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
@@ -25,21 +25,24 @@ import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class DepositPolicyDataModel {
+public class DepositPolicyDataModel extends MockDataModel {
 
-    private final ProductItemTypesDataModel productItemTypesDataModel;
+    private ProductItemTypesDataModel productItemTypesDataModel;
 
-    private final BuildingDataModel buildingDataModel;
+    private BuildingDataModel buildingDataModel;
 
     private DepositPolicy policy;
 
-    public DepositPolicyDataModel(PreloadConfig config, ProductItemTypesDataModel productItemTypesDataModel, BuildingDataModel buildingDataModel) {
-        this.productItemTypesDataModel = productItemTypesDataModel;
-        this.buildingDataModel = buildingDataModel;
+    public DepositPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         policy = EntityFactory.create(DepositPolicy.class);
 
         for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {

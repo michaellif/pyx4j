@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
 
@@ -19,8 +19,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseAdjustmentReasonDataModel {
+public class LeaseAdjustmentReasonDataModel extends MockDataModel {
 
     public enum Reason {
         goodWill("Good Will Credit", LeaseAdjustmentReason.ActionType.credit), accountCharge("Account Charge", LeaseAdjustmentReason.ActionType.charge);
@@ -46,11 +47,12 @@ public class LeaseAdjustmentReasonDataModel {
 
     public final HashMap<Reason, LeaseAdjustmentReason> reasons;
 
-    public LeaseAdjustmentReasonDataModel(PreloadConfig config) {
+    public LeaseAdjustmentReasonDataModel() {
         reasons = new HashMap<Reason, LeaseAdjustmentReason>();
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
 
         for (Reason reason : Reason.values()) {
             generateReason(reason);

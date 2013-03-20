@@ -11,7 +11,7 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
@@ -26,22 +26,21 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseBillingPolicyDataModel {
+public class LeaseBillingPolicyDataModel extends MockDataModel {
 
     private LeaseBillingPolicy policy;
 
-    private final PreloadConfig config;
+    private BuildingDataModel buildingDataModel;
 
-    private final BuildingDataModel buildingDataModel;
-
-    public LeaseBillingPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
-        this.config = config;
-        this.buildingDataModel = buildingDataModel;
-
+    public LeaseBillingPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
         policy.prorationMethod().setValue(BillingAccount.ProrationMethod.Actual);
@@ -68,14 +67,14 @@ public class LeaseBillingPolicyDataModel {
         nsfItem.fee().setValue(new BigDecimal(30.00));
         policy.nsfFees().add(nsfItem);
 
-        policy.confirmationMethod().setValue(config.billConfirmationMethod);
+        policy.confirmationMethod().setValue(getConfig().billConfirmationMethod);
 
         policy.node().set(buildingDataModel.getBuilding());
 
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
             billingType.billingPeriod().setValue(BillingPeriod.Monthly);
-            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.billingCycleStartDay().setValue(getConfig().defaultBillingCycleSartDay);
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-15);
@@ -87,7 +86,7 @@ public class LeaseBillingPolicyDataModel {
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
             billingType.billingPeriod().setValue(BillingPeriod.SemiMonthly);
-            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.billingCycleStartDay().setValue(getConfig().defaultBillingCycleSartDay);
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-7);
@@ -99,7 +98,7 @@ public class LeaseBillingPolicyDataModel {
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
             billingType.billingPeriod().setValue(BillingPeriod.BiWeekly);
-            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.billingCycleStartDay().setValue(getConfig().defaultBillingCycleSartDay);
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-7);
@@ -111,7 +110,7 @@ public class LeaseBillingPolicyDataModel {
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
             billingType.billingPeriod().setValue(BillingPeriod.Weekly);
-            billingType.billingCycleStartDay().setValue(config.defaultBillingCycleSartDay);
+            billingType.billingCycleStartDay().setValue(getConfig().defaultBillingCycleSartDay);
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-3);

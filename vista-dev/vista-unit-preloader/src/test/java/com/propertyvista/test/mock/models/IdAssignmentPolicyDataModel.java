@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -20,19 +20,22 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class IdAssignmentPolicyDataModel {
+public class IdAssignmentPolicyDataModel extends MockDataModel {
 
-    final private IdAssignmentPolicy policy;
+    private IdAssignmentPolicy policy;
 
-    private final PmcDataModel pmcDataModel;
+    private PmcDataModel pmcDataModel;
 
-    public IdAssignmentPolicyDataModel(PreloadConfig config, PmcDataModel pmcDataModel) {
-        policy = EntityFactory.create(IdAssignmentPolicy.class);
-        this.pmcDataModel = pmcDataModel;
+    public IdAssignmentPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        pmcDataModel = getDataModel(PmcDataModel.class);
+        policy = EntityFactory.create(IdAssignmentPolicy.class);
+
         policy.items().clear();
         for (IdTarget target : IdTarget.values()) {
             if (target == IdTarget.accountNumber) {

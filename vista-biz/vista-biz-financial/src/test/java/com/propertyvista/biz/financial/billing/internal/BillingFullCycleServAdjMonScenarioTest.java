@@ -30,7 +30,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
-import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.mock.MockConfig;
 
 @Category(FunctionalTests.class)
 public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
@@ -38,7 +38,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        PreloadConfig config = new PreloadConfig();
+        MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = 15;
         preloadData(config);
     }

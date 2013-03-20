@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,19 +25,19 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class LocationsDataModel {
+public class LocationsDataModel extends MockDataModel {
 
     final HashMap<String, Province> provincesMap;
 
-    public LocationsDataModel(PreloadConfig config) {
+    public LocationsDataModel() {
         provincesMap = new HashMap<String, Province>();
     }
 
-    public void generate() {
-
+    @Override
+    protected void generate() {
         List<Country> countries = createCountries();
-
         Persistence.service().persist(countries);
     }
 

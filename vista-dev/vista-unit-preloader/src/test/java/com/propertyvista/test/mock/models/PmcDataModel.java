@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import java.util.concurrent.Callable;
 
@@ -29,18 +29,17 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.server.config.DevYardiCredentials;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class PmcDataModel {
-
-    private final PreloadConfig config;
+public class PmcDataModel extends MockDataModel {
 
     private OrganizationPoliciesNode orgNode;
 
-    public PmcDataModel(PreloadConfig config) {
-        this.config = config;
+    public PmcDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
         if (VistaDeployment.getCurrentPmc() != null) {
             return;
         }
@@ -69,7 +68,7 @@ public class PmcDataModel {
 
         pmc.status().setValue(PmcStatus.Active);
 
-        if (config.yardiIntegration) {
+        if (getConfig().yardiIntegration) {
             pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
             pmc.features().occupancyModel().setValue(Boolean.FALSE);

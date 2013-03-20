@@ -11,29 +11,30 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.test.preloader;
+package com.propertyvista.test.mock.models;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.test.mock.MockDataModel;
 
-public class ARPolicyDataModel {
-    private final BuildingDataModel buildingDataModel;
+public class ARPolicyDataModel extends MockDataModel {
+
+    private BuildingDataModel buildingDataModel;
 
     private ARPolicy policy;
 
-    public ARPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
-        this.buildingDataModel = buildingDataModel;
+    public ARPolicyDataModel() {
     }
 
-    public void generate() {
+    @Override
+    protected void generate() {
+        buildingDataModel = getDataModel(BuildingDataModel.class);
+
         policy = EntityFactory.create(ARPolicy.class);
-
         policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
-
         policy.node().set(buildingDataModel.getBuilding());
-
         Persistence.service().persist(policy);
     }
 

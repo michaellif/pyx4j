@@ -13,21 +13,34 @@
  */
 package com.propertyvista.oapi.rs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.test.framework.JerseyTest;
 
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
+
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.test.preloader.BuildingDataModel;
-import com.propertyvista.test.preloader.LocationsDataModel;
-import com.propertyvista.test.preloader.PreloadConfig;
-import com.propertyvista.test.preloader.ProductItemTypesDataModel;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockDataModel;
+import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.BuildingDataModel;
+import com.propertyvista.test.mock.models.LocationsDataModel;
+import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.models.ProductItemTypesDataModel;
 
 public class RSOapiTestBase extends JerseyTest {
 
     private static final Logger log = LoggerFactory.getLogger(RSOapiTestBase.class);
+
+    private MockManager mockManager;
 
     public RSOapiTestBase(String... packages) {
         super(packages);
@@ -45,57 +58,37 @@ public class RSOapiTestBase extends JerseyTest {
     }
 
     protected void preloadData() {
-        PreloadConfig config = new PreloadConfig();
-        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate();
-
-//        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-//        taxesDataModel.generate();
-//
-//        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-//        productItemTypesDataModel.generate();
-//
-//        LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
-//        leaseAdjustmentReasonDataModel.generate();
-//
-//        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
-//        buildingDataModel.generate();
-//
-//        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
-//        idAssignmentPolicyDataModel.generate();
-//
-//        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
-//                buildingDataModel);
-//        productTaxPolicyDataModel.generate();
-//
-//        DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
-//        depositPolicyDataModel.generate();
-//
-//        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
-//                taxesDataModel, buildingDataModel);
-//        leaseAdjustmentPolicyDataModel.generate();
-//
-//        TenantDataModel tenantDataModel = new TenantDataModel(config);
-//        tenantDataModel.generate();
-//
-//        //TODO if commented - check exception
-//        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-//        leaseBillingPolicyDataModel.generate();
-//
-//        ARPolicyDataModel arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
-//        arPolicyDataModel.generate();
+        preloadData(new MockConfig());
     }
 
-    protected void preloadBuilding(String propertyCode) {
-        PreloadConfig config = new PreloadConfig();
+    protected void preloadData(final MockConfig config) {
 
-        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate();
+        mockManager = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
 
-        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-        productItemTypesDataModel.generate();
+            @Override
+            public MockManager execute() {
 
-        BuildingDataModel buildingDataModel = new BuildingDataModel(config, locationsDataModel, productItemTypesDataModel);
-        buildingDataModel.generate(propertyCode);
+                MockManager mockManager = new MockManager(config);
+                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                    mockManager.addModel(modelType);
+                }
+
+                return mockManager;
+            }
+        });
+
+    }
+
+    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
+        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+        models.add(PmcDataModel.class);
+        models.add(LocationsDataModel.class);
+        models.add(ProductItemTypesDataModel.class);
+        models.add(BuildingDataModel.class);
+        return models;
+    }
+
+    protected Building getBuilding() {
+        return mockManager.getDataModel(BuildingDataModel.class).getBuilding();
     }
 }

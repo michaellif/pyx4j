@@ -28,7 +28,7 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.shared.BillingException;
-import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.mock.MockConfig;
 
 @Category(FunctionalTests.class)
 public class BillingPeriodsTest extends FinancialTestBase {
@@ -232,7 +232,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws Exception {
 
-        PreloadConfig config = new PreloadConfig();
+        MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = null;
         preloadData(config);
 
@@ -391,7 +391,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws Exception {
 
-        PreloadConfig config = new PreloadConfig();
+        MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = null;
         preloadData(config);
 

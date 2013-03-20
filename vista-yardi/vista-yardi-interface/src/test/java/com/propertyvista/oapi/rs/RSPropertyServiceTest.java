@@ -75,10 +75,8 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
 
     //@Test
     public void testUpdateBuilding() {
-        preloadBuilding("testCode");
         WebResource webResource = resource();
-
-        BuildingIO building = new BuildingIO("testCode");
+        BuildingIO building = new BuildingIO(getBuilding().propertyCode().getValue());
         ClientResponse response = webResource.path("buildings/updateBuilding").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, building);
         Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
     }
