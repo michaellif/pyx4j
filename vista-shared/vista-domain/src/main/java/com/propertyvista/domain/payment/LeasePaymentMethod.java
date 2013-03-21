@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.payment;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -21,9 +20,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -48,12 +45,4 @@ public interface LeasePaymentMethod extends PaymentMethod {
      */
     @NotNull
     IPrimitive<Boolean> isProfiledMethod();
-
-    /**
-     * Run-time data - used for setup of Tenant's pre-authorized payment method.
-     */
-    @Transient
-    @ToString(index = 2)
-    @Caption(name = "Pre-authorized")
-    IPrimitive<Boolean> isPreauthorized();
 }
