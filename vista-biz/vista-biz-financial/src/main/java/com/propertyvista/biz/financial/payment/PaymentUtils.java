@@ -29,7 +29,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -37,7 +36,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 class PaymentUtils {
 
@@ -128,13 +126,4 @@ class PaymentUtils {
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
     }
 
-    public static LeasePaymentMethod retrievePreAuthorizedPaymentMethod(LeaseTermTenant tenant) {
-        LeasePaymentMethod method = tenant.leaseParticipant().preauthorizedPayment();
-        if (method.isNull()) {
-            return null;
-        } else {
-            Persistence.service().retrieve(method);
-            return method;
-        }
-    }
 }

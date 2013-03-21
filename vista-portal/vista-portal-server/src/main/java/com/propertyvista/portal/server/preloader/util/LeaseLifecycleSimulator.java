@@ -267,8 +267,6 @@ public class LeaseLifecycleSimulator {
             LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);
 
             if (!mainTenant.leaseParticipant().customer().paymentMethods().isEmpty()) {
-                mainTenant.leaseParticipant().preauthorizedPayment().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
-
                 // new approach:
                 PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
 

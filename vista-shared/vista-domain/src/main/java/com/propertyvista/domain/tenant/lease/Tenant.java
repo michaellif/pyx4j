@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
@@ -31,7 +32,9 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 @DiscriminatorValue("Tenant")
 public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
 
+    //TODO remove
     @Deprecated
+    @Transient
     LeasePaymentMethod preauthorizedPayment();
 
     @Owned(cascade = {})

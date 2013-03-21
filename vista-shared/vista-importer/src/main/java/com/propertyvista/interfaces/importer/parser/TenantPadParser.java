@@ -143,7 +143,6 @@ public class TenantPadParser {
             }
 
             LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
-            method.isPreauthorized().setValue(Boolean.FALSE);
             method.isOneTimePayment().setValue(Boolean.FALSE);
             method.sameAsCurrent().setValue(Boolean.TRUE);
             method.type().setValue(PaymentType.Echeck);
