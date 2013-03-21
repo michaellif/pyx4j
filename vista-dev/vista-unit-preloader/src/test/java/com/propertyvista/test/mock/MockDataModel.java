@@ -52,7 +52,7 @@ public abstract class MockDataModel<E extends IEntity> {
         items.add(item);
     }
 
-    protected List<E> getAllItems() {
+    public List<E> getAllItems() {
         return items;
     }
 

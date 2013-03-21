@@ -15,6 +15,8 @@ package com.propertyvista.test.mock.models;
 
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -71,5 +73,12 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
         bma.merchantAccount().set(merchantAccount);
         bma.building().set(getDataModel(BuildingDataModel.class).getCurrentItem());
         Persistence.service().persist(bma);
+        addItem(merchantAccount);
+        super.setCurrentItem(merchantAccount);
+    }
+
+    @Override
+    public void setCurrentItem(MerchantAccount item) {
+        throw new NotImplementedException();
     }
 }

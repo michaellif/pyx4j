@@ -102,6 +102,7 @@ import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.FeatureItemTypeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
@@ -110,8 +111,8 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
-import com.propertyvista.test.mock.models.ProductItemTypesDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
+import com.propertyvista.test.mock.models.ServiceItemTypeDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
@@ -125,8 +126,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private MockManager mockManager;
-
-    private Lease lease;
 
     private TaskScheduler scheduler;
 
@@ -158,7 +157,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease getLease() {
-        return lease;
+        return getMockManager().getDataModel(LeaseDataModel.class).getCurrentItem();
     }
 
     protected void preloadData() {
@@ -185,12 +184,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     }
 
-    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
-        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
+        List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
-        models.add(ProductItemTypesDataModel.class);
+        models.add(ServiceItemTypeDataModel.class);
+        models.add(FeatureItemTypeDataModel.class);
         models.add(LeaseAdjustmentReasonDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);
@@ -273,13 +273,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        lease = getMockManager().getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
+        Lease lease = getMockManager().getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
+        getMockManager().getDataModel(LeaseDataModel.class).setCurrentItem(lease);
     }
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {
-        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(lease, leaseTermType);
+        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(getLease(), leaseTermType);
         term.termTo().setValue(getDate(leaseDateTo));
-        ServerSideFactory.create(LeaseFacade.class).acceptOffer(lease, term);
+        ServerSideFactory.create(LeaseFacade.class).acceptOffer(getLease(), term);
     }
 
     protected Bill getBill(int billSequenceNumber) {
@@ -349,11 +350,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLease() {
-        return ServerSideFactory.create(LeaseFacade.class).load(lease, false);
+        return ServerSideFactory.create(LeaseFacade.class).load(getLease(), false);
     }
 
     protected Lease retrieveLeaseDraft() {
-        return ServerSideFactory.create(LeaseFacade.class).load(lease, true);
+        return ServerSideFactory.create(LeaseFacade.class).load(getLease(), true);
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
@@ -561,8 +562,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount,
-                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
+        return addLeaseAdjustment(amount, mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class)
+                .getItem(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
     }
 
     protected LeaseAdjustment addAccountCharge(String amount) {
@@ -571,7 +572,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected LeaseAdjustment addAccountCharge(String amount, boolean immediate) {
         return addLeaseAdjustment(amount,
-                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
+                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getItem(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
     }
 
     private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, boolean immediate) {

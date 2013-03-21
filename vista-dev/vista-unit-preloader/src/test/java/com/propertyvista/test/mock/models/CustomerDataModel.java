@@ -13,9 +13,6 @@
  */
 package com.propertyvista.test.mock.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,7 +22,9 @@ import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class CustomerDataModel extends MockDataModel {
+public class CustomerDataModel extends MockDataModel<Customer> {
+
+    private static int counter = 0;
 
     private static Object[][] customersMeta = new Object[][] {
 
@@ -41,22 +40,16 @@ public class CustomerDataModel extends MockDataModel {
 
     { "Molly", "Doe", Sex.Female, "647-666-6666", "647-333-6666", "1-Feb-1960" } };
 
-    private final List<Customer> customers;
-
     public CustomerDataModel() {
-        customers = new ArrayList<Customer>();
+
     }
 
     @Override
     protected void generate() {
     }
 
-    public Customer getCustomer(int index) {
-        return customers.get(index);
-    }
-
     public Customer addCustomer() {
-        Object[] customerMeta = customersMeta[customers.size()];
+        Object[] customerMeta = customersMeta[counter++ % customersMeta.length];
         Customer customer = EntityFactory.create(Customer.class);
         customer.person().name().firstName().setValue((String) customerMeta[0]);
         customer.person().name().lastName().setValue((String) customerMeta[1]);
@@ -64,8 +57,8 @@ public class CustomerDataModel extends MockDataModel {
         customer.person().mobilePhone().setValue((String) customerMeta[3]);
         customer.person().homePhone().setValue((String) customerMeta[4]);
         customer.person().birthDate().setValue(new LogicalDate(DateUtils.detectDateformat((String) customerMeta[5])));
-        customers.add(customer);
         Persistence.service().persist(customer);
+        addItem(customer);
         return customer;
     }
 }

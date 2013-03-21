@@ -18,8 +18,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -38,6 +36,7 @@ import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.FeatureItemTypeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
@@ -45,13 +44,11 @@ import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
-import com.propertyvista.test.mock.models.ProductItemTypesDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
+import com.propertyvista.test.mock.models.ServiceItemTypeDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public class YardiTestBase {
-
-    private static final Logger log = LoggerFactory.getLogger(YardiTestBase.class);
 
     @Before
     public void init() throws Exception {
@@ -88,7 +85,7 @@ public class YardiTestBase {
             public MockManager execute() {
 
                 MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
                     mockManager.addModel(modelType);
                 }
 
@@ -98,12 +95,13 @@ public class YardiTestBase {
 
     }
 
-    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
-        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
+        List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
-        models.add(ProductItemTypesDataModel.class);
+        models.add(ServiceItemTypeDataModel.class);
+        models.add(FeatureItemTypeDataModel.class);
         models.add(LeaseAdjustmentReasonDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);

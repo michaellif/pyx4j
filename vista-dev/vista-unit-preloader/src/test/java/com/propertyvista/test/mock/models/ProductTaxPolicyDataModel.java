@@ -13,48 +13,49 @@
  */
 package com.propertyvista.test.mock.models;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class ProductTaxPolicyDataModel extends MockDataModel<ProductTaxPolicy> {
 
-    private ProductItemTypesDataModel productItemTypesDataModel;
-
-    private TaxesDataModel taxesDataModel;
-
-    private BuildingDataModel buildingDataModel;
-
-    private ProductTaxPolicy policy;
-
     public ProductTaxPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        productItemTypesDataModel = getDataModel(ProductItemTypesDataModel.class);
-        taxesDataModel = getDataModel(TaxesDataModel.class);
-        buildingDataModel = getDataModel(BuildingDataModel.class);
+        ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
 
-        policy = EntityFactory.create(ProductTaxPolicy.class);
-
-        for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {
+        for (ServiceItemType type : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
             ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
             item.productItemType().set(type);
-            item.taxes().add(taxesDataModel.getTaxes().get(0));
+            item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
             policy.policyItems().add(item);
         }
 
-        policy.node().set(buildingDataModel.getCurrentItem());
+        for (FeatureItemType type : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
+            ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
+            item.productItemType().set(type);
+            item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
+            policy.policyItems().add(item);
+        }
+
+        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    ProductTaxPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(ProductTaxPolicy item) {
+        throw new NotImplementedException();
     }
 }

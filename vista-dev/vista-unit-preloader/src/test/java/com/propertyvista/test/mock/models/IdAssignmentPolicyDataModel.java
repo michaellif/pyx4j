@@ -13,6 +13,8 @@
  */
 package com.propertyvista.test.mock.models;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -24,14 +26,12 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class IdAssignmentPolicyDataModel extends MockDataModel<IdAssignmentPolicy> {
 
-    private IdAssignmentPolicy policy;
-
     public IdAssignmentPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        policy = EntityFactory.create(IdAssignmentPolicy.class);
+        IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
 
         policy.items().clear();
         for (IdTarget target : IdTarget.values()) {
@@ -49,9 +49,12 @@ public class IdAssignmentPolicyDataModel extends MockDataModel<IdAssignmentPolic
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    IdAssignmentPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(IdAssignmentPolicy item) {
+        throw new NotImplementedException();
     }
 }

@@ -36,18 +36,20 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
     private Lease lease;
 
-    private Customer customer;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
         setSysDate("01-Feb-2012");
-        customer = getMockManager().getDataModel(CustomerDataModel.class).addCustomer();
+        Customer customer = getMockManager().getDataModel(CustomerDataModel.class).addCustomer();
+        getMockManager().getDataModel(CustomerDataModel.class).setCurrentItem(customer);
         lease = getMockManager().getDataModel(LeaseDataModel.class).addLease("01-Feb-2012", "01-Sep-2012", new BigDecimal(100), null, customer);
     }
 
     protected void testPersistPaymentMethod(PaymentType type) throws PaymentException {
+
+        Customer customer = getMockManager().getDataModel(CustomerDataModel.class).getCurrentItem();
+
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
 
         LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
@@ -71,14 +73,15 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                getMockManager().getDataModel(CustomerDataModel.class).getCustomer(0));
+        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
         Assert.assertEquals(0, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods(customer).size());
     }
 
     protected void testUpdatePaymentMethod(PaymentType type) throws PaymentException {
+        Customer customer = getMockManager().getDataModel(CustomerDataModel.class).getCurrentItem();
+
         Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
 
         {
@@ -196,8 +199,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
                     getMockManager().getDataModel(BuildingDataModel.class).getCurrentItem());
         }
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                getMockManager().getDataModel(CustomerDataModel.class).getCustomer(0));
+        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
         Assert.assertEquals(1, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods(customer).size());

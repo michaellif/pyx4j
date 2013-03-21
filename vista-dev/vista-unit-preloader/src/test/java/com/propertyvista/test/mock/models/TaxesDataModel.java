@@ -14,8 +14,8 @@
 package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.lang.NotImplementedException;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,63 +25,59 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class TaxesDataModel extends MockDataModel<Tax> {
 
-    private List<Tax> taxes;
-
-    private LocationsDataModel locationsDataModel;
-
     public TaxesDataModel() {
     }
 
     @Override
     protected void generate() {
-        this.locationsDataModel = getDataModel(LocationsDataModel.class);
-        taxes = new ArrayList<Tax>();
 
-        generateTax("HST", "BC", new BigDecimal("0.12"), false);
+        addItem(generateTax("HST", "BC", new BigDecimal("0.12"), false));
 
-        generateTax("GST", "AB", new BigDecimal("0.05"), false);
+        addItem(generateTax("GST", "AB", new BigDecimal("0.05"), false));
 
-        generateTax("GST", "SK", new BigDecimal("0.05"), false);
-        generateTax("PST", "SK", new BigDecimal("0.05"), false);
+        addItem(generateTax("GST", "SK", new BigDecimal("0.05"), false));
+        addItem(generateTax("PST", "SK", new BigDecimal("0.05"), false));
 
-        generateTax("GST", "MB", new BigDecimal("0.05"), false);
-        generateTax("PST", "MB", new BigDecimal("0.07"), false);
+        addItem(generateTax("GST", "MB", new BigDecimal("0.05"), false));
+        addItem(generateTax("PST", "MB", new BigDecimal("0.07"), false));
 
-        generateTax("HST", "ON", new BigDecimal("0.05"), false);
+        addItem(generateTax("HST", "ON", new BigDecimal("0.05"), false));
 
-        generateTax("QST", "QC", new BigDecimal("0.05"), false);
-        generateTax("PST", "QC", new BigDecimal("0.095"), false);
+        addItem(generateTax("QST", "QC", new BigDecimal("0.05"), false));
+        addItem(generateTax("PST", "QC", new BigDecimal("0.095"), false));
 
-        generateTax("HST", "NL", new BigDecimal("0.13"), false);
+        addItem(generateTax("HST", "NL", new BigDecimal("0.13"), false));
 
-        generateTax("HST", "NS", new BigDecimal("0.15"), false);
+        addItem(generateTax("HST", "NS", new BigDecimal("0.15"), false));
 
-        generateTax("HST", "NB", new BigDecimal("0.13"), false);
+        addItem(generateTax("HST", "NB", new BigDecimal("0.13"), false));
 
-        generateTax("GST", "PE", new BigDecimal("0.05"), false);
-        generateTax("PST", "PE", new BigDecimal("0.1"), false);
+        addItem(generateTax("GST", "PE", new BigDecimal("0.05"), false));
+        addItem(generateTax("PST", "PE", new BigDecimal("0.1"), false));
 
-        generateTax("GST", "NT", new BigDecimal("0.05"), false);
+        addItem(generateTax("GST", "NT", new BigDecimal("0.05"), false));
 
-        generateTax("GST", "NU", new BigDecimal("0.05"), false);
+        addItem(generateTax("GST", "NU", new BigDecimal("0.05"), false));
 
-        generateTax("GST", "YT", new BigDecimal("0.05"), false);
+        addItem(generateTax("GST", "YT", new BigDecimal("0.05"), false));
 
-        Persistence.service().persist(taxes);
+        Persistence.service().persist(getAllItems());
+
     }
 
-    private void generateTax(String name, String authority, BigDecimal rate, Boolean compound) {
+    @Override
+    public void setCurrentItem(Tax item) {
+        throw new NotImplementedException();
+    }
+
+    private Tax generateTax(String name, String authority, BigDecimal rate, Boolean compound) {
         Tax tax = EntityFactory.create(Tax.class);
         tax.name().setValue(name);
         tax.authority().setValue(authority);
-        tax.policyNode().set(locationsDataModel.provincesMap.get(authority));
+        tax.policyNode().set(getDataModel(LocationsDataModel.class).provincesMap.get(authority));
         tax.rate().setValue(rate);
         tax.compound().setValue(compound);
-        taxes.add(tax);
-    }
-
-    public List<Tax> getTaxes() {
-        return taxes;
+        return tax;
     }
 
 }

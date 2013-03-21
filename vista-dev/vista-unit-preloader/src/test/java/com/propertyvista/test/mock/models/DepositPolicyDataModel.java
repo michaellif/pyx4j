@@ -15,11 +15,12 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
@@ -29,56 +30,66 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
-    private DepositPolicy policy;
-
     public DepositPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        policy = EntityFactory.create(DepositPolicy.class);
+        DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        for (ProductItemType type : getDataModel(ProductItemTypesDataModel.class).getProductItemTypes()) {
+        for (FeatureItemType type : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
             DepositPolicyItem item = null;
             String product = null;
-            if (type instanceof ServiceItemType) {
-                ServiceItemType serviceItemType = (ServiceItemType) type;
-                product = serviceItemType.serviceType().getStringView();
 
-                switch (serviceItemType.serviceType().getValue()) {
-                case residentialUnit:
-                    item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.LastMonthDeposit);
-                    item.valueType().setValue(ValueType.Percentage);
-                    item.value().setValue(new BigDecimal("1.0"));
-                    break;
-                default:
-                    break;
-                }
-            } else if (type instanceof FeatureItemType) {
-                FeatureItemType featureItemType = (FeatureItemType) type;
-                product = featureItemType.featureType().getStringView();
+            FeatureItemType featureItemType = type;
+            product = featureItemType.featureType().getStringView();
 
-                switch (featureItemType.featureType().getValue()) {
-                case parking:
-                    item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.Percentage);
-                    item.value().setValue(new BigDecimal("1.0"));
-                    break;
-                case locker:
-                    item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.Percentage);
-                    item.value().setValue(new BigDecimal("1.0"));
-                    break;
-                case pet:
-                    item = EntityFactory.create(DepositPolicyItem.class);
-                    item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.Monetary);
-                    item.value().setValue(new BigDecimal("200.00"));
-                    break;
-                }
+            switch (featureItemType.featureType().getValue()) {
+            case parking:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.valueType().setValue(ValueType.Percentage);
+                item.value().setValue(new BigDecimal("1.0"));
+                break;
+            case locker:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.valueType().setValue(ValueType.Percentage);
+                item.value().setValue(new BigDecimal("1.0"));
+                break;
+            case pet:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.SecurityDeposit);
+                item.valueType().setValue(ValueType.Monetary);
+                item.value().setValue(new BigDecimal("200.00"));
+                break;
+            default:
+                break;
+            }
+
+            if (item != null) {
+                item.productType().set(type);
+                item.annualInterestRate().setValue(new BigDecimal("0.12"));
+                item.description().setValue(item.depositType().getStringView() + ", " + product);
+                policy.policyItems().add(item);
+            }
+        }
+
+        for (ServiceItemType type : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
+            DepositPolicyItem item = null;
+            String product = null;
+            ServiceItemType serviceItemType = type;
+            product = serviceItemType.serviceType().getStringView();
+
+            switch (serviceItemType.serviceType().getValue()) {
+            case residentialUnit:
+                item = EntityFactory.create(DepositPolicyItem.class);
+                item.depositType().setValue(DepositType.LastMonthDeposit);
+                item.valueType().setValue(ValueType.Percentage);
+                item.value().setValue(new BigDecimal("1.0"));
+                break;
+            default:
+                break;
             }
 
             if (item != null) {
@@ -92,9 +103,12 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
         policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    DepositPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(DepositPolicy item) {
+        throw new NotImplementedException();
     }
 }

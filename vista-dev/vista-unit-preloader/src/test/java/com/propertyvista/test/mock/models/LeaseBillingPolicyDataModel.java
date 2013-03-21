@@ -15,6 +15,8 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -117,9 +119,12 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
         }
 
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    LeaseBillingPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(LeaseBillingPolicy item) {
+        throw new NotImplementedException();
     }
 }

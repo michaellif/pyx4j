@@ -13,6 +13,8 @@
  */
 package com.propertyvista.test.mock.models;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -23,30 +25,31 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmentPolicy> {
 
-    private LeaseAdjustmentPolicy policy;
-
     public LeaseAdjustmentPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
 
-        policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
+        LeaseAdjustmentPolicy policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
         for (LeaseAdjustmentReasonDataModel.Reason reason : LeaseAdjustmentReasonDataModel.Reason.values()) {
-            LeaseAdjustmentReason lar = getDataModel(LeaseAdjustmentReasonDataModel.class).getReason(reason);
+            LeaseAdjustmentReason lar = getDataModel(LeaseAdjustmentReasonDataModel.class).getItem(reason);
             LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
             item.leaseAdjustmentReason().set(lar);
-            item.taxes().add(getDataModel(TaxesDataModel.class).getTaxes().get(0));
+            item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
             policy.policyItems().add(item);
         }
 
         policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
 
         Persistence.service().persist(policy);
+        addItem(policy);
+        super.setCurrentItem(policy);
     }
 
-    LeaseAdjustmentPolicy getPolicy() {
-        return policy;
+    @Override
+    public void setCurrentItem(LeaseAdjustmentPolicy item) {
+        throw new NotImplementedException();
     }
 }

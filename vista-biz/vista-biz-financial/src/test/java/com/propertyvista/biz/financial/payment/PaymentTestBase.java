@@ -47,8 +47,8 @@ import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 public class PaymentTestBase extends FinancialTestBase {
 
     @Override
-    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
-        List<Class<? extends MockDataModel>> models = super.getMockModelTypes();
+    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
+        List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
         models.add(MerchantAccountDataModel.class);
         return models;
     }

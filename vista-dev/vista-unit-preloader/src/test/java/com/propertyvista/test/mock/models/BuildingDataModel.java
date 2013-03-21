@@ -125,14 +125,14 @@ public class BuildingDataModel extends MockDataModel<Building> {
         serviceMeta = new HashMap<Service.ServiceType, List<ServiceItemType>>();
         featureMeta = new HashMap<Feature.Type, List<FeatureItemType>>();
 
-        for (ServiceItemType serviceItemType : getDataModel(ProductItemTypesDataModel.class).getServiceItemTypes()) {
+        for (ServiceItemType serviceItemType : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
             if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
                 serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ServiceItemType>());
             }
             serviceMeta.get(serviceItemType.serviceType().getValue()).add(serviceItemType);
         }
 
-        for (FeatureItemType featureItemType : getDataModel(ProductItemTypesDataModel.class).getFeatureItemTypes()) {
+        for (FeatureItemType featureItemType : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
             if (!featureMeta.containsKey(featureItemType.featureType().getValue())) {
                 featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<FeatureItemType>());
             }

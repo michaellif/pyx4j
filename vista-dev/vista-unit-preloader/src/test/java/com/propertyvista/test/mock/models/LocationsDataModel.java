@@ -27,7 +27,7 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LocationsDataModel extends MockDataModel {
+public class LocationsDataModel extends MockDataModel<Country> {
 
     final HashMap<String, Province> provincesMap;
 
@@ -37,12 +37,6 @@ public class LocationsDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-        List<Country> countries = createCountries();
-        Persistence.service().persist(countries);
-    }
-
-    private List<Country> createCountries() {
-
         List<Province> provinces = loadProvincesFromFile();
 
         Map<String, Country> countriesByName = new HashMap<String, Country>();
@@ -59,8 +53,7 @@ public class LocationsDataModel extends MockDataModel {
 
             provincesMap.put(province.code().getValue(), province);
         }
-
-        return countries;
+        Persistence.service().persist(countries);
     }
 
     private static List<Province> loadProvincesFromFile() {

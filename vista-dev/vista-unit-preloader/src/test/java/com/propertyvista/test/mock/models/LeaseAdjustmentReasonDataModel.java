@@ -15,13 +15,15 @@ package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class LeaseAdjustmentReasonDataModel extends MockDataModel {
+public class LeaseAdjustmentReasonDataModel extends MockDataModel<LeaseAdjustmentReason> {
 
     public enum Reason {
         goodWill("Good Will Credit", LeaseAdjustmentReason.ActionType.credit), accountCharge("Account Charge", LeaseAdjustmentReason.ActionType.charge);
@@ -53,23 +55,27 @@ public class LeaseAdjustmentReasonDataModel extends MockDataModel {
 
     @Override
     protected void generate() {
-
         for (Reason reason : Reason.values()) {
-            generateReason(reason);
+            LeaseAdjustmentReason adjustmentReason = generateReason(reason);
+            addItem(adjustmentReason);
+            reasons.put(reason, adjustmentReason);
         }
-
         Persistence.service().persist(reasons.values());
     }
 
-    private void generateReason(Reason reason) {
+    private LeaseAdjustmentReason generateReason(Reason reason) {
         LeaseAdjustmentReason adjustmentReason = EntityFactory.create(LeaseAdjustmentReason.class);
         adjustmentReason.name().setValue(reason.getDescription());
         adjustmentReason.actionType().setValue(reason.getActionType());
-        reasons.put(reason, adjustmentReason);
+        return adjustmentReason;
     }
 
-    public LeaseAdjustmentReason getReason(Reason reason) {
+    public LeaseAdjustmentReason getItem(Reason reason) {
         return reasons.get(reason);
     }
 
+    @Override
+    public void setCurrentItem(LeaseAdjustmentReason item) {
+        throw new NotImplementedException();
+    }
 }
