@@ -24,7 +24,6 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE pad_sim_file$state_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE padpolicy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE preauthorized_payment_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
- CREATE SEQUENCE product_item_type$yardi_charge_codes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE yardi_charge_code_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
 
@@ -35,7 +34,6 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE pad_sim_file$state_seq OWNER TO vista ;
  ALTER SEQUENCE padpolicy_item_seq OWNER TO vista ;
  ALTER SEQUENCE preauthorized_payment_seq OWNER TO vista ;
- ALTER SEQUENCE product_item_type$yardi_charge_codes_seq OWNER TO vista ;
  ALTER SEQUENCE yardi_charge_code_seq OWNER TO vista ;
 
  

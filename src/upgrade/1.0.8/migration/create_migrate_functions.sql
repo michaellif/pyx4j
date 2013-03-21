@@ -75,6 +75,10 @@ BEGIN
         ALTER TABLE billing_billing_type RENAME COLUMN payment_frequency TO billing_period;
                                                 
        
+       -- billing_invoice_line_item
+       
+       ALTER TABLE billing_invoice_line_item ADD COLUMN billing_cycle BIGINT;
+       
                                              
         -- insurance_certificate
         ALTER TABLE insurance_certificate ADD COLUMN total_anniversary_first_month_payable NUMERIC(18,2);
@@ -156,7 +160,7 @@ BEGIN
                 tenant_discriminator                    VARCHAR(50)                     NOT NULL,
                 tenant                                  BIGINT                          NOT NULL,
                 creation_date                           DATE,
-                order_in_parent                         INT,
+               -- order_in_parent                         INT,
                         CONSTRAINT      preauthorized_payment_pk PRIMARY KEY(id)
         );
         
@@ -184,6 +188,8 @@ BEGIN
         CREATE TABLE yardi_charge_code
         (
                 id                                      BIGINT                          NOT NULL,
+                product_item_type_discriminator         VARCHAR(50)                     NOT NULL,
+                product_item_type                       BIGINT                          NOT NULL,
                 yardi_charge_code                       VARCHAR(500),
                         CONSTRAINT      yardi_charge_code_pk PRIMARY KEY(id)
         );
@@ -209,14 +215,37 @@ BEGIN
         
         EXECUTE 'INSERT INTO lease_billing_type_policy_item (id,lease_billing_policy,order_in_parent,billing_period,billing_cycle_start_day,'
                 ||'bill_execution_day_offset,payment_due_day_offset,final_due_day_offset,pad_calculation_day_offset,pad_execution_day_offset) '
-                ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, b.id AS lease_billing_policy,0 AS order_in_parent,b.billing_period, '
+                ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, l.id AS lease_billing_policy,0 AS order_in_parent,b.billing_period, '
                 ||'l.default_billing_cycle_sart_day AS billing_cycle_start_day,-15 AS bill_execution_day_offset,'
                 ||'0 AS payment_due_day_offset,15 AS final_due_day_offset, -3 AS pad_calculation_day_offset,'
                 ||'0 AS pad_execution_day_offset '
                 ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
                 ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';  
                 
-          
+       
+        -- billing_invoice_line_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item AS a '
+                ||'SET billing_cycle = b.billing_cycle '
+                ||'FROM         (SELECT  li.id,b.billing_cycle '
+                ||'             FROM    '||v_schema_name||'.billing_invoice_line_item li '
+                ||'             JOIN    '||v_schema_name||'.billing_bill$line_items bb ON (bb.value = li.id) '
+                ||'             JOIN    '||v_schema_name||'.billing_bill b ON (bb.owner = b.id) '
+                ||'             WHERE   b.bill_status = ''Confirmed'' ) AS b '
+                ||'WHERE  a.id = b.id ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item AS a '
+                ||'SET billing_cycle = b.billing_cycle '
+                ||'FROM         (SELECT  li.id, MIN(bc.id) AS billing_cycle '
+                ||'             FROM     '||v_schema_name||'.billing_invoice_line_item li ' 
+                ||'             JOIN     '||v_schema_name||'.billing_billing_cycle bc ON (li.post_date <= bc.billing_cycle_start_date) '
+                ||'             WHERE   li.billing_cycle IS NULL '
+                ||'             AND     li.post_date IS NOT NULL '
+                ||'             GROUP BY li.id ) AS b '
+                ||'WHERE  a.id = b.id ';
+                
+        
         -- Add padpolicy  
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.padpolicy (id,updated,node_discriminator,node,charge_type) '
@@ -259,6 +288,10 @@ BEGIN
         
         ALTER TABLE billing_billing_type DROP COLUMN billing_cycle_target_day;
         
+        -- billing_invoice_line_item
+        
+        ALTER TABLE billing_invoice_line_item DROP COLUMN claimed;
+        
         -- lease
         
         ALTER TABLE lease DROP COLUMN payment_frequency;
@@ -268,6 +301,7 @@ BEGIN
         ALTER TABLE lease_billing_policy        DROP COLUMN default_billing_cycle_sart_day,
                                                 DROP COLUMN use_default_billing_cycle_sart_day;
                                                 
+        
         -- lease_participant
         
         ALTER TABLE lease_participant           DROP COLUMN preauthorized_payment,
@@ -282,12 +316,14 @@ BEGIN
         **/
         
         -- Foreign keys
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_billing_cycle_fk FOREIGN KEY(billing_cycle) REFERENCES billing_billing_cycle(id);
         ALTER TABLE lease_billing_type_policy_item ADD CONSTRAINT lease_billing_type_policy_item_lease_billing_policy_fk FOREIGN KEY(lease_billing_policy) REFERENCES lease_billing_policy(id);
         ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_padpolicy_fk FOREIGN KEY(padpolicy) REFERENCES padpolicy(id);       
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_pad_billing_cycle_fk FOREIGN KEY(pad_billing_cycle) REFERENCES billing_billing_cycle(id);
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) REFERENCES preauthorized_payment(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
+        ALTER TABLE yardi_charge_code ADD CONSTRAINT yardi_charge_code_product_item_type_fk FOREIGN KEY(product_item_type) REFERENCES product_item_type(id);
         
 
                 
@@ -319,6 +355,7 @@ BEGIN
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_amount_type_e_ck CHECK ((amount_type) IN ('Percent', 'Value'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck CHECK (tenant_discriminator= 'Tenant');
+        ALTER TABLE yardi_charge_code ADD CONSTRAINT yardi_charge_code_product_item_type_discriminator_d_ck CHECK ((product_item_type_discriminator) IN ('feature', 'service'));
         
 
 
