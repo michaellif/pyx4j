@@ -20,21 +20,18 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
-
+        
         -- Foreign keys
-        --ALTER TABLE insurance_tenant_sure_details DROP CONSTRAINT insurance_tenant_sure_details_insurance_fk;
-        --ALTER TABLE insurance_tenant_sure_tax DROP CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_fk;
+        ALTER TABLE lease_participant DROP CONSTRAINT lease_participant_preauthorized_payment_fk;
 
         -- Check constraints
-        --ALTER TABLE insurance_tenant_sure_details DROP CONSTRAINT insurance_tenant_sure_details_insurance_discriminator_d_ck;
-        --ALTER TABLE insurance_tenant_sure_tax DROP CONSTRAINT insurance_tenant_sure_tax_id_discriminator_ck;
-        --ALTER TABLE insurance_tenant_sure_tax DROP CONSTRAINT insurance_tenant_sure_tax_tenant_sure_details_ck;
         ALTER TABLE aging_buckets DROP CONSTRAINT aging_buckets_debit_type_e_ck;
         ALTER TABLE billing_billing_type DROP CONSTRAINT billing_billing_type_payment_frequency_e_ck;
         ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_debit_type_e_ck;
         ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck;
         ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_id_discriminator_ck;
         ALTER TABLE lease DROP CONSTRAINT lease_payment_frequency_e_ck;
+        ALTER TABLE lease_participant DROP CONSTRAINT lease_participant_preauthorized_payment_discriminator_d_ck;
 
         
         
@@ -77,63 +74,11 @@ BEGIN
         
         ALTER TABLE billing_billing_type RENAME COLUMN payment_frequency TO billing_period;
                                                 
-        /*                                        
-        -- field_user
-        
-        CREATE TABLE field_user 
-        (
-                id                                      BIGINT                          NOT NULL,
-                updated                                 TIMESTAMP,
-                email                                   VARCHAR(64),
-                created                                 TIMESTAMP,
-                name                                    VARCHAR(500),
-                        CONSTRAINT      field_user_pk PRIMARY KEY(id)
-        );
-        
-        
-        ALTER TABLE field_user OWNER TO vista;   
-        
-        
-        -- field_user_credential
-        
-        CREATE TABLE field_user_credential
-        (
-                id                                      BIGINT                          NOT NULL,
-                security_answer                         VARCHAR(500),
-                access_key                              VARCHAR(500),
-                credential_updated                      TIMESTAMP,
-                usr                                     BIGINT,
-                security_question                       VARCHAR(500),
-                enabled                                 BOOLEAN,
-                required_password_change_on_next_log_in BOOLEAN,
-                recovery_email                          VARCHAR(500),
-                password_updated                        TIMESTAMP,
-                credential                              VARCHAR(500),
-                access_key_expire                       TIMESTAMP,
-                        CONSTRAINT      field_user_credential_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE field_user_credential OWNER TO vista;                           
-        
-        */
-        
+       
                                              
         -- insurance_certificate
         ALTER TABLE insurance_certificate ADD COLUMN total_anniversary_first_month_payable NUMERIC(18,2);
         
-        
-        -- lease_billing_policy$available_billing_types
-        
-        CREATE TABLE lease_billing_policy$available_billing_types
-        (
-                id                                      BIGINT                          NOT NULL,
-                owner                                   BIGINT,
-                value                                   BIGINT,
-                seq                                     INT,
-                        CONSTRAINT      lease_billing_policy$available_billing_types_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE lease_billing_policy$available_billing_types OWNER TO vista;
         
         
         -- lease_billing_type_policy_item
@@ -141,6 +86,8 @@ BEGIN
         CREATE TABLE lease_billing_type_policy_item
         (
                 id                                      BIGINT                          NOT NULL,
+                lease_billing_policy                    BIGINT                          NOT NULL,
+                order_in_parent                         INT,
                 billing_period                          VARCHAR(50),
                 billing_cycle_start_day                 INT,
                 bill_execution_day_offset               INT,
@@ -173,6 +120,8 @@ BEGIN
         CREATE TABLE padpolicy_item
         (       
                 id                                      BIGINT                          NOT NULL,
+                padpolicy                               BIGINT                          NOT NULL,
+                order_in_parent                         INT,
                 debit_type                              VARCHAR(50),
                 owing_balance_type                      VARCHAR(50),
                         CONSTRAINT      padpolicy_item_pk PRIMARY KEY(id)
@@ -180,19 +129,13 @@ BEGIN
         
         ALTER TABLE padpolicy_item OWNER TO vista;
         
-        -- padpolicy$debit_balance_types
+        -- payment_information
         
-        CREATE TABLE padpolicy$debit_balance_types
-        (
-                id                                      BIGINT                          NOT NULL,
-                owner                                   BIGINT,
-                value                                   BIGINT,
-                seq                                     INT,
-                        CONSTRAINT      padpolicy$debit_balance_types_pk PRIMARY KEY(id)
-        );
+        ALTER TABLE payment_information RENAME COLUMN payment_method_is_one_time_payment TO payment_method_is_profiled_method;
         
-        ALTER TABLE padpolicy$debit_balance_types OWNER TO vista;
+        -- payment_method
         
+        ALTER TABLE payment_method RENAME COLUMN is_one_time_payment TO is_profiled_method;
         
         -- payment_record
         
@@ -220,6 +163,7 @@ BEGIN
         ALTER TABLE preauthorized_payment OWNER TO vista;
         
         
+        /*
         -- product_item_type$yardi_charge_codes
         
         CREATE TABLE product_item_type$yardi_charge_codes
@@ -233,20 +177,7 @@ BEGIN
         
         ALTER TABLE product_item_type$yardi_charge_codes OWNER TO vista;
         
-        /*
-        -- tenant_info
-        
-        CREATE TABLE tenant_info
-        (
-                id                                      BIGINT                          NOT NULL,
-                name                                    BIGINT,
-                role                                    VARCHAR(50),
-                        CONSTRAINT      tenant_info_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE tenant_info OWNER TO vista;
-        
-        */
+       */
         
         -- yardi_charge_code
         
@@ -275,7 +206,7 @@ BEGIN
                 ||'WHERE b.id = l.billing_account ';
                 
         -- Create lease_billing_type_policy_items 
-        
+        /*
         EXECUTE 'INSERT INTO lease_billing_type_policy_item (id,billing_period,billing_cycle_start_day,'
                 ||'bill_execution_day_offset,payment_due_day_offset,final_due_day_offset,pad_calculation_day_offset,pad_execution_day_offset) '
                 ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, b.billing_period, '
@@ -285,13 +216,27 @@ BEGIN
                 ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
                 ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';  
                 
-                
+        */        
         -- Add padpolicy  
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.padpolicy (id,updated,node_discriminator,node,charge_type) '
                 ||'(SELECT nextval(''public.padpolicy_seq'') AS id, DATE_TRUNC(''sec'',current_timestamp) AS updated, '
                 ||'''OrganizationPoliciesNode'' AS node_discriminator, id AS node, ''FixedAmount'' AS charge_type '
                 ||'FROM         '||v_schema_name||'.organization_policies_node )'; 
+                
+        
+        -- Update payment_information
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_information '
+                ||'SET payment_method_is_profiled_method = '
+                ||'CASE WHEN payment_method_is_profiled_method = TRUE THEN FALSE '
+                ||'WHEN payment_method_is_profiled_method = FALSE THEN TRUE END ';
+                
+        -- Update payment_method
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method '
+                ||'SET is_profiled_method = '
+                ||'CASE WHEN is_profiled_method = TRUE THEN FALSE '
+                ||'WHEN is_profiled_method = FALSE THEN TRUE END'; 
         
         
         /**
@@ -322,6 +267,11 @@ BEGIN
         
         ALTER TABLE lease_billing_policy        DROP COLUMN default_billing_cycle_sart_day,
                                                 DROP COLUMN use_default_billing_cycle_sart_day;
+                                                
+        -- lease_participant
+        
+        ALTER TABLE lease_participant           DROP COLUMN preauthorized_payment,
+                                                DROP COLUMN preauthorized_payment_discriminator;
          
         /**
         ***     ======================================================================================================
@@ -332,20 +282,13 @@ BEGIN
         **/
         
         -- Foreign keys
-        -- ALTER TABLE field_user_credential ADD CONSTRAINT field_user_credential_usr_fk FOREIGN KEY(usr) REFERENCES field_user(id);
-        ALTER TABLE lease_billing_policy$available_billing_types ADD CONSTRAINT lease_billing_policy$available_billing_types_owner_fk FOREIGN KEY(owner) 
-                REFERENCES lease_billing_policy(id);
-        ALTER TABLE lease_billing_policy$available_billing_types ADD CONSTRAINT lease_billing_policy$available_billing_types_value_fk FOREIGN KEY(value) 
-                REFERENCES lease_billing_type_policy_item(id);
-        ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_owner_fk FOREIGN KEY(owner) REFERENCES padpolicy(id);
-        ALTER TABLE padpolicy$debit_balance_types ADD CONSTRAINT padpolicy$debit_balance_types_value_fk FOREIGN KEY(value) REFERENCES padpolicy_item(id);
+        ALTER TABLE lease_billing_type_policy_item ADD CONSTRAINT lease_billing_type_policy_item_lease_billing_policy_fk FOREIGN KEY(lease_billing_policy) REFERENCES lease_billing_policy(id);
+        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_padpolicy_fk FOREIGN KEY(padpolicy) REFERENCES padpolicy(id);       
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_pad_billing_cycle_fk FOREIGN KEY(pad_billing_cycle) REFERENCES billing_billing_cycle(id);
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) REFERENCES preauthorized_payment(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id);
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
-        ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_owner_fk FOREIGN KEY(owner) REFERENCES product_item_type(id);
-        ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_value_fk FOREIGN KEY(value) REFERENCES yardi_charge_code(id);
-        -- ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_name_fk FOREIGN KEY(name) REFERENCES name(id);
+        
 
                 
         -- Check constraints
@@ -376,7 +319,7 @@ BEGIN
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_amount_type_e_ck CHECK ((amount_type) IN ('Percent', 'Value'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck CHECK (tenant_discriminator= 'Tenant');
-        -- ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
+        
 
 
         
@@ -393,12 +336,8 @@ BEGIN
         
         -- Create indexes
         CREATE UNIQUE INDEX billing_billing_type_billing_period_billing_cycle_start_day_idx ON billing_billing_type USING btree (billing_period, billing_cycle_start_day);
-        -- CREATE INDEX field_user_name_idx ON field_user USING btree (name);
-        -- CREATE UNIQUE INDEX field_user_email_idx ON field_user USING btree (LOWER(email));
-        CREATE INDEX lease_billing_policy$available_billing_types_owner_idx ON lease_billing_policy$available_billing_types USING btree (owner);
-        CREATE INDEX padpolicy$debit_balance_types_owner_idx ON padpolicy$debit_balance_types USING btree (owner);
-        CREATE INDEX product_item_type$yardi_charge_codes_owner_idx ON product_item_type$yardi_charge_codes USING btree (owner);
-               
+        CREATE INDEX lease_billing_type_policy_item_lease_billing_policy_idx ON lease_billing_type_policy_item USING btree (lease_billing_policy) ;
+                      
         
 END;
 $$

@@ -71,8 +71,10 @@ SET search_path = '_admin_';
         
         -- scheduler_execution_report
        
+        /*
         ALTER TABLE scheduler_execution_report  DROP COLUMN amount_failed,
                                                 DROP COLUMN amount_processed;
+        */
        
        
         /**
