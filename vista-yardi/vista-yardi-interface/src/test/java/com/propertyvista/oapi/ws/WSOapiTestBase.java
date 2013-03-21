@@ -106,7 +106,7 @@ public class WSOapiTestBase {
             public MockManager execute() {
 
                 MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
                     mockManager.addModel(modelType);
                 }
 
@@ -115,8 +115,8 @@ public class WSOapiTestBase {
         });
     }
 
-    protected List<Class<? extends MockDataModel>> getMockModelTypes() {
-        List<Class<? extends MockDataModel>> models = new ArrayList<Class<? extends MockDataModel>>();
+    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
+        List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         return models;

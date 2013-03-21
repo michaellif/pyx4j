@@ -156,8 +156,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
     }
 
+    public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {
+        return mockManager.getDataModel(modelClass);
+    }
+
     protected Lease getLease() {
-        return getMockManager().getDataModel(LeaseDataModel.class).getCurrentItem();
+        return getDataModel(LeaseDataModel.class).getCurrentItem();
     }
 
     protected void preloadData() {
@@ -174,7 +178,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 setSysDate("01-Jan-2010");
 
                 MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel> modelType : getMockModelTypes()) {
+                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
                     mockManager.addModel(modelType);
                 }
 
@@ -203,10 +207,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         models.add(ARPolicyDataModel.class);
         models.add(LeaseDataModel.class);
         return models;
-    }
-
-    public MockManager getMockManager() {
-        return mockManager;
     }
 
     protected Building getBuilding() {
@@ -273,8 +273,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        Lease lease = getMockManager().getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
-        getMockManager().getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+        Lease lease = getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
+        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
     }
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {

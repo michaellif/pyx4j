@@ -18,18 +18,18 @@ import java.util.Map;
 
 public class MockManager {
 
-    private final Map<Class<? extends MockDataModel>, MockDataModel> models;
+    private final Map<Class<? extends MockDataModel<?>>, MockDataModel<?>> models;
 
     private final MockConfig config;
 
     public MockManager(MockConfig config) {
         this.config = config;
-        models = new LinkedHashMap<Class<? extends MockDataModel>, MockDataModel>();
+        models = new LinkedHashMap<Class<? extends MockDataModel<?>>, MockDataModel<?>>();
     }
 
-    public void addModel(Class<? extends MockDataModel> modelType) {
+    public void addModel(Class<? extends MockDataModel<?>> modelType) {
         try {
-            MockDataModel model = modelType.newInstance();
+            MockDataModel<?> model = modelType.newInstance();
             model.setMockManager(this);
             model.generate();
             models.put(modelType, model);
@@ -43,7 +43,7 @@ public class MockManager {
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends MockDataModel> E getDataModel(Class<E> modelClass) {
+    public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {
         E model = (E) models.get(modelClass);
         if (model == null) {
             throw new Error("Failed to find Mock Model " + modelClass.getSimpleName() + ". Most likely required Model is not yet added to MockManager.");
