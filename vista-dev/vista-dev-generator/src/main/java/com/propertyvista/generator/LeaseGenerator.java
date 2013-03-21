@@ -134,7 +134,7 @@ public class LeaseGenerator extends DataGenerator {
     private void addPreathorisedPaymentMethod(LeaseTermTenant tenant) {
         LeasePaymentMethod m = EntityFactory.create(LeasePaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
-        m.isOneTimePayment().setValue(Boolean.FALSE);
+        m.isProfiledMethod().setValue(Boolean.TRUE);
         m.isDeleted().setValue(Boolean.FALSE);
 
         // create new payment method details:

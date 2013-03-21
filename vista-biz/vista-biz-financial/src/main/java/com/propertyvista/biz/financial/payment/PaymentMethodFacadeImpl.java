@@ -45,7 +45,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethod) {
         Persistence.service().retrieve(paymentMethod);
         paymentMethod.isDeleted().setValue(Boolean.TRUE);
-        paymentMethod.isOneTimePayment().setValue(Boolean.TRUE);
+        paymentMethod.isProfiledMethod().setValue(Boolean.FALSE);
         Persistence.service().merge(paymentMethod);
     }
 
@@ -59,7 +59,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer) {
         EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 
         List<LeasePaymentMethod> methods = Persistence.service().query(criteria);

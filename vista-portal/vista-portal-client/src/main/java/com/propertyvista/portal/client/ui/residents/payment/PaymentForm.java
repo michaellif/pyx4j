@@ -183,7 +183,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 
-                        paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
+                        paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
@@ -257,14 +257,14 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             }
         });
 
-        if (getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
+        if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
+            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
+        } else {
             paymentMethodEditor.setVisible(true);
             paymentMethodEditor.setViewable(false);
             paymentMethodEditorSeparator.setVisible(true);
             get(proto().addThisPaymentMethodToProfile()).setVisible(true);
             setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
-        } else {
-            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
         }
 
         // TODO : this is the HACK - check CComponent.setVisible implementation!!!

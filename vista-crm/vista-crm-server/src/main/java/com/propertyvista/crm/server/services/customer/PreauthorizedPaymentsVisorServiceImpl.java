@@ -67,7 +67,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant.customer()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 
         pads.availablePaymentMethods().addAll(Persistence.service().query(criteria));

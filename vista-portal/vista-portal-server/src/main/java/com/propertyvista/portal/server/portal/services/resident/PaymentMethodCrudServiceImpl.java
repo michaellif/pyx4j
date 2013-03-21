@@ -50,7 +50,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     @Override
     protected void enhanceListCriteria(EntityListCriteria<LeasePaymentMethod> dbCriteria, EntityListCriteria<LeasePaymentMethod> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isOneTimePayment(), Boolean.FALSE));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isProfiledMethod(), Boolean.TRUE));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
 
         // filter out not allowed payment types:
@@ -91,7 +91,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
         // save just allowed methods here:
         if (allowedPaymentTypes.contains(entity.type().getValue())) {
-            entity.isOneTimePayment().setValue(Boolean.FALSE);
+            entity.isProfiledMethod().setValue(Boolean.TRUE);
 
             ServerSideFactory.create(PaymentMethodFacade.class)
                     .persistLeasePaymentMethod(entity, tenantInLease.leaseTermV().holder().lease().unit().building());

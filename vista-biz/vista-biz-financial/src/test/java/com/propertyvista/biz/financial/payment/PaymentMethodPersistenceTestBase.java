@@ -47,63 +47,62 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
     protected void testPersistPaymentMethod(PaymentType type) throws PaymentException {
 
-        Customer customer = getDataModel(CustomerDataModel.class).getCurrentItem();
+        getDataModel(CustomerDataModel.class).deleteAllPaymentMethods();
 
-        Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
+        Assert.assertEquals("No PaymentMethods should be present now", 0, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
 
-        LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
-        paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
+        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).createPaymentMethod(type);
+        paymentMethod.isProfiledMethod().setValue(Boolean.TRUE);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, getDataModel(BuildingDataModel.class).getCurrentItem());
 
-        List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable(customer);
+        List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
         assertRpcTransientMemebers(profileMethods);
 
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = createPaymentRecord(getDataModel(LeaseDataModel.class).getCurrentItem(), profileMethods.get(0), "100");
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(profileMethods.get(0), "100");
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
 
-        Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods(customer).size());
+        Assert.assertEquals("Just one PaymentMethod remains", 1, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
 
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
+        profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
         Assert.assertEquals(0, profileMethods.size());
 
-        Assert.assertEquals("PaymentMethod remains in DB", 1, retrieveAllPaymentMethods(customer).size());
+        Assert.assertEquals("PaymentMethod remains in DB", 1, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
     }
 
     protected void testUpdatePaymentMethod(PaymentType type) throws PaymentException {
-        Customer customer = getDataModel(CustomerDataModel.class).getCurrentItem();
 
-        Assert.assertEquals("Preload should have no PaymentMethods", 0, retrieveAllPaymentMethods(customer).size());
+        getDataModel(CustomerDataModel.class).deleteAllPaymentMethods();
+
+        Assert.assertEquals("No PaymentMethods should be present now", 0, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
 
         {
-            LeasePaymentMethod paymentMethod = createPaymentMethod(type, customer);
-            paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
+            LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).createPaymentMethod(type);
+            paymentMethod.isProfiledMethod().setValue(Boolean.TRUE);
             ServerSideFactory.create(PaymentMethodFacade.class)
                     .persistLeasePaymentMethod(paymentMethod, getDataModel(BuildingDataModel.class).getCurrentItem());
         }
 
-        List<LeasePaymentMethod> profileMethods = retrieveProfilePaymentMethodsSerializable(customer);
+        List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
         assertRpcTransientMemebers(profileMethods);
 
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = createPaymentRecord(getDataModel(LeaseDataModel.class).getCurrentItem(), profileMethods.get(0), "100");
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(profileMethods.get(0), "100");
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         Persistence.service().commit();
 
-        Assert.assertEquals("Just one PaymentMethod remains", 1, retrieveAllPaymentMethods(customer).size());
+        Assert.assertEquals("Just one PaymentMethod remains", 1, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
 
         {
-            profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
+            profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             {
                 switch (paymentMethodUpdate.type().getValue()) {
@@ -128,7 +127,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
             }
 
             if (paymentMethodUpdate.type().getValue() == PaymentType.CreditCard) {
-                paymentMethodUpdate = retrieveProfilePaymentMethodsSerializable(customer).get(0);
+                paymentMethodUpdate = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods().get(0);
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
@@ -145,7 +144,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Persistence.service().commit();
 
         {
-            profileMethods = retrieveProfilePaymentMethodsSerializable(customer);
+            profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             // Nothing changed, save will not change anything
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
@@ -153,7 +152,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         }
 
         {
-            profileMethods = retrieveProfilePaymentMethodsSerializable(customer);
+            profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             switch (paymentMethodUpdate.type().getValue()) {
             case Echeck:
@@ -176,7 +175,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
             }
 
             if (paymentMethodUpdate.type().getValue() == PaymentType.CreditCard) {
-                paymentMethodUpdate = retrieveProfilePaymentMethodsSerializable(customer).get(0);
+                paymentMethodUpdate = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods().get(0);
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
@@ -190,16 +189,16 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         }
 
         {
-            profileMethods = retrieveProfilePaymentMethodsSerializable(customer);
+            profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
-            setNewPaymentMethodDetails(paymentMethodUpdate);
+            getDataModel(CustomerDataModel.class).updatePaymentMethod(paymentMethodUpdate);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
                     getDataModel(BuildingDataModel.class).getCurrentItem());
         }
 
-        profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
+        profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods();
         Assert.assertEquals(1, profileMethods.size());
 
-        Assert.assertEquals("PaymentMethod in DB", 2, retrieveAllPaymentMethods(customer).size());
+        Assert.assertEquals("PaymentMethod in DB", 2, getDataModel(CustomerDataModel.class).retrieveAllPaymentMethods().size());
     }
 }

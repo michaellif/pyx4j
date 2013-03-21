@@ -13,34 +13,14 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 import junit.framework.Assert;
 
-import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.RpcEntityServiceFilter;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
 import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.generator.util.RandomUtil;
-import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 
@@ -51,18 +31,6 @@ public class PaymentTestBase extends FinancialTestBase {
         List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
         models.add(MerchantAccountDataModel.class);
         return models;
-    }
-
-    public List<LeasePaymentMethod> retrieveAllPaymentMethods(Customer customer) {
-        EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
-        return Persistence.service().query(criteria);
-    }
-
-    protected List<LeasePaymentMethod> retrieveProfilePaymentMethodsSerializable(Customer customer) {
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
-        RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
-        return profileMethods;
     }
 
     public void assertRpcTransientMemebers(List<LeasePaymentMethod> methods) {
@@ -86,68 +54,4 @@ public class PaymentTestBase extends FinancialTestBase {
         }
     }
 
-    protected LeasePaymentMethod createPaymentMethod(PaymentType type, Customer customer) {
-        LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
-        paymentMethod.customer().set(customer);
-        paymentMethod.type().setValue(type);
-        switch (type) {
-        case Echeck: {
-            EcheckInfo details = EntityFactory.create(EcheckInfo.class);
-            setEcheckInfoDetails(details);
-            paymentMethod.details().set(details);
-        }
-            break;
-        case CreditCard: {
-            CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
-            setCreditCardDetails(details);
-            paymentMethod.details().set(details);
-        }
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-
-        return paymentMethod;
-    }
-
-    protected void setNewPaymentMethodDetails(AbstractPaymentMethod paymentMethod) {
-        switch (paymentMethod.type().getValue()) {
-        case Echeck:
-            setEcheckInfoDetails((EcheckInfo) paymentMethod.details().cast());
-            break;
-        case CreditCard:
-            setCreditCardDetails((CreditCardInfo) paymentMethod.details().cast());
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-
-    }
-
-    private void setEcheckInfoDetails(EcheckInfo details) {
-        details.bankId().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(999), 3));
-        details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(RandomUtil.randomInt(99999), 5));
-        details.accountNo().newNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
-    }
-
-    private void setCreditCardDetails(CreditCardInfo details) {
-        details.cardType().setValue(CreditCardType.Visa);
-        details.card().newNumber().setValue(CreditCardNumberGenerator.generateCardNumber(details.cardType().getValue()));
-        details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
-    }
-
-    protected PaymentRecord createPaymentRecord(Lease lease, LeasePaymentMethod paymentMethod, String amount) {
-        // Just use the first tenant
-        LeaseTermParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().iterator().next();
-
-        PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.amount().setValue(new BigDecimal(amount));
-        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
-        paymentRecord.billingAccount().set(lease.billingAccount());
-        paymentRecord.leaseTermParticipant().set(leaseParticipant);
-
-        paymentRecord.paymentMethod().set(paymentMethod);
-
-        return paymentRecord;
-    }
 }

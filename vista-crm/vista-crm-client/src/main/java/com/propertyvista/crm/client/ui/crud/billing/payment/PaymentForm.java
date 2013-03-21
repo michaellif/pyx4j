@@ -226,7 +226,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
 
-                        paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
+                        paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
@@ -325,14 +325,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     }
                 });
 
-                if (getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
+                if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
+                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
+                } else {
                     paymentMethodEditor.setVisible(true);
                     paymentMethodEditor.setViewable(false);
                     paymentMethodEditorSeparator.setVisible(true);
                     get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
-                } else {
-                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
                 }
 
                 // TODO : this is the HACK - check CComponent.setVisible implementation!!!
@@ -344,12 +344,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         } else { // view mode:
 
-            if (getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
-                paymentMethodEditor.setVisible(true);
-                paymentMethodEditorSeparator.setVisible(true);
-            } else {
+            if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
                 profiledPaymentMethodsCombo.setVisible(true);
                 profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
+            } else {
+                paymentMethodEditor.setVisible(true);
+                paymentMethodEditorSeparator.setVisible(true);
             }
 
             boolean transactionResult = getValue().paymentMethod().isNull() ? false

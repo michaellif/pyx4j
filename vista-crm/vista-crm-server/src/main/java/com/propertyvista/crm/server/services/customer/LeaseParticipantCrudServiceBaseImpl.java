@@ -96,7 +96,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
         // save new/edited ones:
         for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.customer());
-            paymentMethod.isOneTimePayment().setValue(false);
+            paymentMethod.isProfiledMethod().setValue(true);
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 

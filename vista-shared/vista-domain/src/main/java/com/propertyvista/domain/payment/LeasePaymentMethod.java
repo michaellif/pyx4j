@@ -44,11 +44,10 @@ public interface LeasePaymentMethod extends PaymentMethod {
     IPrimitive<Integer> orderId();
 
     /**
-     * Indicates if this method is one-time usage only.
-     * TODO: rename to isProfiledMethod (inverse logic!)
+     * Indicates if this method is in profile.
      */
     @NotNull
-    IPrimitive<Boolean> isOneTimePayment();
+    IPrimitive<Boolean> isProfiledMethod();
 
     /**
      * Run-time data - used for setup of Tenant's pre-authorized payment method.

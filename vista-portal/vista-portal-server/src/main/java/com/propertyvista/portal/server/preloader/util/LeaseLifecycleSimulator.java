@@ -448,7 +448,7 @@ public class LeaseLifecycleSimulator {
             m.details().set(details);
 
             m.customer().set(tenant.leaseParticipant().customer());
-            m.isOneTimePayment().setValue(Boolean.TRUE);
+            m.isProfiledMethod().setValue(Boolean.FALSE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());
 

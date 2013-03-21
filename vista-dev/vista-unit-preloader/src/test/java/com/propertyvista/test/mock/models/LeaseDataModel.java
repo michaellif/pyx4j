@@ -25,7 +25,9 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -96,6 +98,21 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
         addItem(lease);
         return lease;
+    }
+
+    public PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
+        // Just use the first tenant
+        LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().iterator().next();
+
+        PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
+        paymentRecord.amount().setValue(new BigDecimal(amount));
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
+        paymentRecord.billingAccount().set(getCurrentItem().billingAccount());
+        paymentRecord.leaseTermParticipant().set(leaseParticipant);
+
+        paymentRecord.paymentMethod().set(paymentMethod);
+
+        return paymentRecord;
     }
 
 }

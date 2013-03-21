@@ -13,13 +13,29 @@
  */
 package com.propertyvista.test.mock.models;
 
+import java.io.Serializable;
+import java.util.List;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.RpcEntityServiceFilter;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class CustomerDataModel extends MockDataModel<Customer> {
@@ -60,5 +76,77 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         Persistence.service().persist(customer);
         addItem(customer);
         return customer;
+    }
+
+    public LeasePaymentMethod createPaymentMethod(PaymentType type) {
+        LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
+        paymentMethod.customer().set(getCurrentItem());
+        paymentMethod.type().setValue(type);
+        switch (type) {
+        case Echeck: {
+            EcheckInfo details = EntityFactory.create(EcheckInfo.class);
+            setEcheckInfoDetails(details);
+            paymentMethod.details().set(details);
+        }
+            break;
+        case CreditCard: {
+            CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
+            setCreditCardDetails(details);
+            paymentMethod.details().set(details);
+        }
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
+        return paymentMethod;
+    }
+
+    public void updatePaymentMethod(LeasePaymentMethod paymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            setEcheckInfoDetails((EcheckInfo) paymentMethod.details().cast());
+            break;
+        case CreditCard:
+            setCreditCardDetails((CreditCardInfo) paymentMethod.details().cast());
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    public void deletePaymentMethod(LeasePaymentMethod paymentMethod) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
+    }
+
+    public void deleteAllPaymentMethods() {
+        for (LeasePaymentMethod paymentMethod : retrieveAllPaymentMethods()) {
+            ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
+        }
+    }
+
+    private void setEcheckInfoDetails(EcheckInfo details) {
+        details.bankId().setValue(CommonsStringUtils.paddZerro(DataGenerator.randomInt(999), 3));
+        details.branchTransitNumber().setValue(CommonsStringUtils.paddZerro(DataGenerator.randomInt(99999), 5));
+        details.accountNo().newNumber().setValue(Integer.toString(DataGenerator.randomInt(99999)) + Integer.toString(DataGenerator.randomInt(999999)));
+    }
+
+    private void setCreditCardDetails(CreditCardInfo details) {
+        details.cardType().setValue(CreditCardType.Visa);
+        details.card().newNumber().setValue(CreditCardNumberGenerator.generateCardNumber(details.cardType().getValue()));
+        details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
+    }
+
+    public List<LeasePaymentMethod> retrieveAllPaymentMethods() {
+        EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), getCurrentItem()));
+        return Persistence.service().query(criteria);
+    }
+
+    public List<LeasePaymentMethod> retrieveSerializableProfilePaymentMethods() {
+        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(getCurrentItem());
+        RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
+        return profileMethods;
     }
 }

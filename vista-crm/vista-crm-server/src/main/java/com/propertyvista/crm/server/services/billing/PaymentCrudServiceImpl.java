@@ -91,7 +91,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseStatus().set(dto.billingAccount().lease().status());
         dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
-        dto.addThisPaymentMethodToProfile().setValue(!entity.paymentMethod().isOneTimePayment().getValue());
+        dto.addThisPaymentMethodToProfile().setValue(entity.paymentMethod().isProfiledMethod().getValue());
     }
 
     @Override
@@ -101,14 +101,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {
             if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
-                entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
             }
 
             // some corrections for particular method types:
             if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
 
