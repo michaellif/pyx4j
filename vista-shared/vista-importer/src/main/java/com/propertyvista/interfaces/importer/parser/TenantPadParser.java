@@ -98,22 +98,28 @@ public class TenantPadParser {
     private TenantPadCounter savePads(List<PadFileModel> entities) {
         TenantPadCounter counters = new TenantPadCounter();
         padFileModel: for (PadFileModel entity : entities) {
+            String tenantId = entity.tenantId().getValue().trim();
             LeaseTermTenant leaseTermTenant = EntityFactory.create(LeaseTermTenant.class);
             {
                 EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-                criteria.eq(criteria.proto().leaseParticipant().participantId(), entity.tenantId());
+                criteria.eq(criteria.proto().leaseParticipant().participantId(), tenantId);
+                boolean isFound = false;
                 for (LeaseTermTenant participant : Persistence.service().query(criteria)) {
                     if (participant.leaseParticipant().isInstanceOf(Tenant.class)) {
                         leaseTermTenant = participant;
+                        isFound = true;
                     }
+                }
+                if (!isFound) {
+                    throw new UserRuntimeException(i18n.tr("Tenant Id ''{0}'' not found in database, row {1}", tenantId, entity._import().row().getValue()));
                 }
             }
 
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
-            details.accountNo().newNumber().setValue(entity.accountNumber().getValue());
-            details.bankId().setValue(entity.bankId().getValue());
-            details.branchTransitNumber().setValue(entity.transitNumber().getValue());
-            details.nameOn().setValue(entity.name().getValue());
+            details.accountNo().newNumber().setValue(entity.accountNumber().getValue().trim());
+            details.bankId().setValue(entity.bankId().getValue().trim());
+            details.branchTransitNumber().setValue(entity.transitNumber().getValue().trim());
+            details.nameOn().setValue(entity.name().getValue().trim());
 
             Persistence.service().retrieve(leaseTermTenant.leaseParticipant().customer());
             Persistence.service().retrieveMember(leaseTermTenant.leaseParticipant().customer().paymentMethods());
