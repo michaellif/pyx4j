@@ -74,14 +74,23 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         customer.person().homePhone().setValue((String) customerMeta[4]);
         customer.person().birthDate().setValue(new LogicalDate(DateUtils.detectDateformat((String) customerMeta[5])));
         Persistence.service().persist(customer);
+
+        createPaymentMethod(customer, PaymentType.Echeck);
+
         addItem(customer);
         return customer;
     }
 
-    public LeasePaymentMethod createPaymentMethod(PaymentType type) {
+    public LeasePaymentMethod addPaymentMethod(PaymentType type) {
+        return createPaymentMethod(getCurrentItem(), type);
+    }
+
+    private LeasePaymentMethod createPaymentMethod(Customer customer, PaymentType type) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
-        paymentMethod.customer().set(getCurrentItem());
+        paymentMethod.customer().set(customer);
         paymentMethod.type().setValue(type);
+        paymentMethod.isProfiledMethod().setValue(Boolean.TRUE);
+
         switch (type) {
         case Echeck: {
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
@@ -98,6 +107,8 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         default:
             throw new IllegalArgumentException();
         }
+
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, getDataModel(BuildingDataModel.class).getCurrentItem());
 
         return paymentMethod;
     }
@@ -122,7 +133,7 @@ public class CustomerDataModel extends MockDataModel<Customer> {
 
     public void deleteAllPaymentMethods() {
         for (LeasePaymentMethod paymentMethod : retrieveAllPaymentMethods()) {
-            ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
+            deletePaymentMethod(paymentMethod);
         }
     }
 

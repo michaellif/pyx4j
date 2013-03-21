@@ -21,17 +21,8 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 
 public class PaymentTestBase extends FinancialTestBase {
-
-    @Override
-    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
-        List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
-        models.add(MerchantAccountDataModel.class);
-        return models;
-    }
 
     public void assertRpcTransientMemebers(List<LeasePaymentMethod> methods) {
         for (LeasePaymentMethod method : methods) {
