@@ -22,6 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -85,10 +86,16 @@ public class LeaseDataModel extends MockDataModel<Lease> {
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(new BigDecimal(500 + DataGenerator.randomInt(500)));
         }
 
-        LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-        tenantInLease.leaseParticipant().customer().set(customers.get(0));
-        tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
-        lease.currentTerm().version().tenants().add(tenantInLease);
+        for (int i = 0; i < customers.size(); i++) {
+            LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
+            tenantInLease.leaseParticipant().customer().set(customers.get(i));
+            if (i == 0) {
+                tenantInLease.role().setValue(LeaseTermParticipant.Role.Applicant);
+            } else {
+                tenantInLease.role().setValue(LeaseTermParticipant.Role.CoApplicant);
+            }
+            lease.currentTerm().version().tenants().add(tenantInLease);
+        }
 
         lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(carryforwardBalance);
 
@@ -100,7 +107,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
         return lease;
     }
 
-    public PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
+    public PaymentRecord addPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
         LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().iterator().next();
 
@@ -112,6 +119,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
         paymentRecord.paymentMethod().set(paymentMethod);
 
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         return paymentRecord;
     }
 
