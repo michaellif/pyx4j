@@ -205,18 +205,18 @@ BEGIN
                 ||'FROM '||v_schema_name||'.lease AS l '
                 ||'WHERE b.id = l.billing_account ';
                 
-        -- Create lease_billing_type_policy_items 
-        /*
-        EXECUTE 'INSERT INTO lease_billing_type_policy_item (id,billing_period,billing_cycle_start_day,'
+        -- Create lease_billing_type_policy_item 
+        
+        EXECUTE 'INSERT INTO lease_billing_type_policy_item (id,lease_billing_policy,order_in_parent,billing_period,billing_cycle_start_day,'
                 ||'bill_execution_day_offset,payment_due_day_offset,final_due_day_offset,pad_calculation_day_offset,pad_execution_day_offset) '
-                ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, b.billing_period, '
+                ||'(SELECT nextval(''public.lease_billing_type_policy_item_seq'') AS id, b.id AS lease_billing_policy,0 AS order_in_parent,b.billing_period, '
                 ||'l.default_billing_cycle_sart_day AS billing_cycle_start_day,-15 AS bill_execution_day_offset,'
                 ||'0 AS payment_due_day_offset,15 AS final_due_day_offset, -3 AS pad_calculation_day_offset,'
                 ||'0 AS pad_execution_day_offset '
                 ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
                 ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';  
                 
-        */        
+          
         -- Add padpolicy  
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.padpolicy (id,updated,node_discriminator,node,charge_type) '
