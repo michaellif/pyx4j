@@ -143,7 +143,7 @@ public class TableModelCollections {
 
             sql.append(")");
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int seq = 0;
@@ -261,7 +261,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {}", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString(), ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
@@ -373,7 +373,7 @@ public class TableModelCollections {
                 sql.append(" ORDER BY ").append(member.sqlOrderColumnName());
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
@@ -448,7 +448,7 @@ public class TableModelCollections {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             // zero means there is no limit, Need for pooled connections 
@@ -497,7 +497,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.setLong(1, primaryKey.asLong());
@@ -531,7 +531,7 @@ public class TableModelCollections {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
-                log.debug(Trace.id() + " {} ", sql);
+                log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
             }
             stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             int pkSize = 0;

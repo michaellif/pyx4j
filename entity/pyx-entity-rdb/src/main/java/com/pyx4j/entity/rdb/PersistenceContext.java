@@ -167,7 +167,7 @@ public class PersistenceContext {
         return options.peek();
     }
 
-    String txId() {
+    public String txId() {
         return "TX" + options().txId;
     }
 
