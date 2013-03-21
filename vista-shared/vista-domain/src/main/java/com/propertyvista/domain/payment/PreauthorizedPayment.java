@@ -15,10 +15,11 @@ package com.propertyvista.domain.payment;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -46,6 +47,12 @@ public interface PreauthorizedPayment extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    // TODO use @OrderBy(PrimaryKey.class) in Tenant
+    @Override
+    @Indexed
+    @OrderColumn
+    IPrimitive<Key> id();
 
     @NotNull
     @ToString(index = 0)
@@ -79,14 +86,7 @@ public interface PreauthorizedPayment extends IEntity {
     @MemberColumn(notNull = true)
     Tenant tenant();
 
-    interface OrderId extends ColumnId {
-    }
-
     @Timestamp(Update.Created)
-    //TODO  @MemberColumn(OrderId.class)
     IPrimitive<LogicalDate> creationDate();
 
-    @Deprecated
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderInParent();
 }

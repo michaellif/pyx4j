@@ -45,6 +45,7 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Date> updated();
 
     @Owned
+    //TODO add explicit @OrderBy(PrimaryKey.class)
     IList<YardiChargeCode> yardiChargeCodes();
 
 }

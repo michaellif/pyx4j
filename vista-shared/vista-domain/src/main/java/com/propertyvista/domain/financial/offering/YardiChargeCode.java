@@ -13,11 +13,33 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface YardiChargeCode extends IEntity {
+
+    // TODO remove and  use @OrderBy(PrimaryKey.class) in ProductItemType
+    @Override
+    @Indexed
+    @OrderColumn
+    IPrimitive<Key> id();
+
+    @Owner
+    @ReadOnly
+    @Detached
+    @NotNull
+    @JoinColumn
+    @MemberColumn(notNull = true)
+    ProductItemType productItemType();
 
     // TODO maybe a link to yardi account
 
