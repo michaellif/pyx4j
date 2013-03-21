@@ -77,7 +77,7 @@ BEGIN
         
         ALTER TABLE billing_billing_type RENAME COLUMN payment_frequency TO billing_period;
                                                 
-                                                
+        /*                                        
         -- field_user
         
         CREATE TABLE field_user 
@@ -114,7 +114,10 @@ BEGIN
         );
         
         ALTER TABLE field_user_credential OWNER TO vista;                           
-                                                
+        
+        */
+        
+                                             
         -- insurance_certificate
         ALTER TABLE insurance_certificate ADD COLUMN total_anniversary_first_month_payable NUMERIC(18,2);
         
@@ -138,7 +141,7 @@ BEGIN
         CREATE TABLE lease_billing_type_policy_item
         (
                 id                                      BIGINT                          NOT NULL,
-                billing_period                       VARCHAR(50),
+                billing_period                          VARCHAR(50),
                 billing_cycle_start_day                 INT,
                 bill_execution_day_offset               INT,
                 payment_due_day_offset                  INT,
@@ -230,6 +233,7 @@ BEGIN
         
         ALTER TABLE product_item_type$yardi_charge_codes OWNER TO vista;
         
+        /*
         -- tenant_info
         
         CREATE TABLE tenant_info
@@ -241,6 +245,8 @@ BEGIN
         );
         
         ALTER TABLE tenant_info OWNER TO vista;
+        
+        */
         
         -- yardi_charge_code
         
@@ -277,7 +283,15 @@ BEGIN
                 ||'0 AS payment_due_day_offset,15 AS final_due_day_offset, -3 AS pad_calculation_day_offset,'
                 ||'0 AS pad_execution_day_offset '
                 ||'FROM         '||v_schema_name||'.lease_billing_policy l, '
-                ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';   
+                ||'             (SELECT DISTINCT billing_period FROM '||v_schema_name||'.billing_account ) AS b )';  
+                
+                
+        -- Add padpolicy  
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.padpolicy (id,updated,node_discriminator,node,charge_type) '
+                ||'(SELECT nextval(''public.padpolicy_seq'') AS id, DATE_TRUNC(''sec'',current_timestamp) AS updated, '
+                ||'''OrganizationPoliciesNode'' AS node_discriminator, id AS node, ''FixedAmount'' AS charge_type '
+                ||'FROM         '||v_schema_name||'.organization_policies_node )'; 
         
         
         /**
@@ -318,7 +332,7 @@ BEGIN
         **/
         
         -- Foreign keys
-        ALTER TABLE field_user_credential ADD CONSTRAINT field_user_credential_usr_fk FOREIGN KEY(usr) REFERENCES field_user(id);
+        -- ALTER TABLE field_user_credential ADD CONSTRAINT field_user_credential_usr_fk FOREIGN KEY(usr) REFERENCES field_user(id);
         ALTER TABLE lease_billing_policy$available_billing_types ADD CONSTRAINT lease_billing_policy$available_billing_types_owner_fk FOREIGN KEY(owner) 
                 REFERENCES lease_billing_policy(id);
         ALTER TABLE lease_billing_policy$available_billing_types ADD CONSTRAINT lease_billing_policy$available_billing_types_value_fk FOREIGN KEY(value) 
@@ -331,7 +345,7 @@ BEGIN
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_fk FOREIGN KEY(payment_method) REFERENCES payment_method(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_owner_fk FOREIGN KEY(owner) REFERENCES product_item_type(id);
         ALTER TABLE product_item_type$yardi_charge_codes ADD CONSTRAINT product_item_type$yardi_charge_codes_value_fk FOREIGN KEY(value) REFERENCES yardi_charge_code(id);
-        ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_name_fk FOREIGN KEY(name) REFERENCES name(id);
+        -- ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_name_fk FOREIGN KEY(name) REFERENCES name(id);
 
                 
         -- Check constraints
@@ -362,7 +376,7 @@ BEGIN
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_amount_type_e_ck CHECK ((amount_type) IN ('Percent', 'Value'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck CHECK (tenant_discriminator= 'Tenant');
-        ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
+        -- ALTER TABLE tenant_info ADD CONSTRAINT tenant_info_role_e_ck CHECK ((role) IN ('Applicant', 'CoApplicant', 'Dependent', 'Guarantor'));
 
 
         
@@ -379,8 +393,8 @@ BEGIN
         
         -- Create indexes
         CREATE UNIQUE INDEX billing_billing_type_billing_period_billing_cycle_start_day_idx ON billing_billing_type USING btree (billing_period, billing_cycle_start_day);
-        CREATE INDEX field_user_name_idx ON field_user USING btree (name);
-        CREATE UNIQUE INDEX field_user_email_idx ON field_user USING btree (LOWER(email));
+        -- CREATE INDEX field_user_name_idx ON field_user USING btree (name);
+        -- CREATE UNIQUE INDEX field_user_email_idx ON field_user USING btree (LOWER(email));
         CREATE INDEX lease_billing_policy$available_billing_types_owner_idx ON lease_billing_policy$available_billing_types USING btree (owner);
         CREATE INDEX padpolicy$debit_balance_types_owner_idx ON padpolicy$debit_balance_types USING btree (owner);
         CREATE INDEX product_item_type$yardi_charge_codes_owner_idx ON product_item_type$yardi_charge_codes USING btree (owner);
