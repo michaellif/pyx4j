@@ -73,7 +73,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
                 // account for PAD payments posted after due date
                 // TODO - need to ensure that corresponding PAD execution has actually happened
                 InvoicePayment payment = (InvoicePayment) item;
-                if (payment.paymentRecord().paymentMethod().isPreauthorized().isBooleanTrue()) {
+                if (!payment.paymentRecord().preauthorizedPayment().isNull()) {
                     overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));
                 }
             }
