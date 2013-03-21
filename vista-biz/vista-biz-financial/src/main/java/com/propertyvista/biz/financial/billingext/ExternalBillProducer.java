@@ -41,7 +41,6 @@ import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.BillingException;
@@ -113,11 +112,6 @@ class ExternalBillProducer {
             calculateTotals();
 
             BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Confirmed, true);
-            for (InvoiceLineItem invoiceLineItem : bill.lineItems()) {
-                if (!invoiceLineItem.postDate().isNull()) {
-                    invoiceLineItem.claimed().setValue(true);
-                }
-            }
 
             Persistence.service().persist(bill.lineItems());
             Persistence.service().persist(bill);

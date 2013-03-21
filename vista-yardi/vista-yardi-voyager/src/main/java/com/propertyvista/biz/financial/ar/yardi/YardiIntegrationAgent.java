@@ -27,6 +27,7 @@ import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -35,8 +36,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
@@ -101,6 +104,9 @@ public class YardiIntegrationAgent {
 
     public static InvoiceLineItem createCharge(YardiBillingAccount account, ChargeDetail detail) {
         BigDecimal amount = new BigDecimal(detail.getAmount());
+        // TODO - This calculation assumes that TransactionDate is set to or shortly after start date of cycle
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(account.lease(),
+                new LogicalDate(detail.getTransactionDate().getTime()));
         InvoiceLineItem item = null;
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiCharge charge = EntityFactory.create(YardiCharge.class);
@@ -112,8 +118,7 @@ public class YardiIntegrationAgent {
             charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
             charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
-            // This calculation assumes that TransactionDate is set to start date of cycle
-            charge.dueDate().setValue(ARDateUtils.calculateDueDate(account, new LogicalDate(detail.getTransactionDate().getTime())));
+            charge.dueDate().setValue(ARDateUtils.getBillingCycleDueDate(account, billingCycle));
             if (detail.getService() != null) {
                 try {
                     charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
@@ -131,6 +136,7 @@ public class YardiIntegrationAgent {
         item.billingAccount().set(account);
         item.amount().setValue(amount);
         item.description().setValue(detail.getDescription());
+        item.billingCycle().set(billingCycle);
 
         return item;
     }
@@ -146,6 +152,8 @@ public class YardiIntegrationAgent {
         yp.amount().setValue(new BigDecimal(detail.getAmount()).negate());
         yp.description().setValue(detail.getDescription());
         yp.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(account.lease(), yp.postDate().getValue());
+        yp.billingCycle().set(billingCycle);
 
         return yp;
     }

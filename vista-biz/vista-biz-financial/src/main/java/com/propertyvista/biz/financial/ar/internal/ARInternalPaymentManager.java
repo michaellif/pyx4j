@@ -48,7 +48,6 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         payment.amount().setValue(paymentRecord.amount().getValue().negate());
         payment.billingAccount().set(paymentRecord.billingAccount());
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
-        payment.claimed().setValue(false);
 
         Persistence.service().persist(payment);
 
@@ -64,7 +63,6 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         backOut.billingAccount().set(paymentRecord.billingAccount());
         backOut.description().setValue(i18n.tr("Payment from ''{0}'' was rejected", paymentRecord.createdDate().getValue().toString()));
         backOut.taxTotal().setValue(BigDecimal.ZERO);
-        backOut.claimed().setValue(false);
 
         Persistence.service().persist(backOut);
 

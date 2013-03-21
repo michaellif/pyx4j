@@ -33,7 +33,7 @@ public class ExternalChargeProcessor extends ExternalAbstractProcessor {
 
     private void attachPaymentRecords() {
         Bill bill = getBillProducer().getCurrentBill();
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getCurrentBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(bill.billingAccount(), bill.billingCycle());
         for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(items, InvoiceProductCharge.class)) {
             bill.lineItems().add(charge);
             bill.recurringFeatureCharges().setValue(bill.recurringFeatureCharges().getValue().add(charge.amount().getValue()));

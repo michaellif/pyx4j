@@ -78,7 +78,7 @@ public class ARDateUtils {
         return getBillingCycleDueDate(account, cycle);
     }
 
-    private static LogicalDate getBillingCycleDueDate(BillingAccount account, BillingCycle cycle) {
+    public static LogicalDate getBillingCycleDueDate(BillingAccount account, BillingCycle cycle) {
         LogicalDate startDate;
         int dueDateOffset;
         if (cycle.billingCycleEndDate().getValue().before(account.lease().leaseTo().getValue())) {

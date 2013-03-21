@@ -69,7 +69,6 @@ class ARInternalNSFManager {
         charge.dueDate().setValue(ARDateUtils.calculateDueDate(paymentRecord.billingAccount().<InternalBillingAccount> cast()));
         charge.description().setValue(i18n.tr("NSF fee"));
         charge.taxTotal().setValue(BigDecimal.ZERO);
-        charge.claimed().setValue(false);
         charge.paymentRecord().set(paymentRecord);
 
         Persistence.service().persist(charge);

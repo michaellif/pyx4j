@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -26,10 +28,13 @@ import com.propertyvista.biz.financial.ar.ARAbstractTransactionManager;
 import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -54,7 +59,12 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
 
     @Override
     protected void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
-        super.postInvoiceLineItem(invoiceLineItem);
+        postInvoiceLineItem(invoiceLineItem, null);
+    }
+
+    @Override
+    protected void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle) {
+        super.postInvoiceLineItem(invoiceLineItem, billingCycle);
         manageCreditDebitLinks(invoiceLineItem);
 
     }
@@ -153,10 +163,16 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
         }
 
         BigDecimal currentBallanceAmount = bill.totalDueAmount().getValue();
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(billingAccount);
 
-        for (InvoiceLineItem item : items) {
-            currentBallanceAmount = currentBallanceAmount.add(BillingUtils.calculateTotal(item));
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        if (prevCycle != null) {
+            BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);
+            List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems((InternalBillingAccount) billingAccount, nextCycle);
+
+            for (InvoiceLineItem item : items) {
+                currentBallanceAmount = currentBallanceAmount.add(BillingUtils.calculateTotal(item));
+            }
         }
         return currentBallanceAmount;
     }

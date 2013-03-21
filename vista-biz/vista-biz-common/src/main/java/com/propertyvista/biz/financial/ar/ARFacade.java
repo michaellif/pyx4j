@@ -43,6 +43,8 @@ public interface ARFacade {
 
     void postInvoiceLineItem(InvoiceLineItem invoiceLineItem);
 
+    void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle);
+
     boolean validatePayment(PaymentRecord payment) throws ARException;
 
     void postPayment(PaymentRecord payment) throws ARException;

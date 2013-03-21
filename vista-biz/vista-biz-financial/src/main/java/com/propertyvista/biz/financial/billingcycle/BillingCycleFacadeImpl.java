@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -27,6 +29,11 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     @Override
     public BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         return BillingCycleManager.instance().getLeaseFirstBillingCycle(lease);
+    }
+
+    @Override
+    public BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date) {
+        return BillingCycleManager.instance().getLeaseBillingCycleForDate(lease, date);
     }
 
     @Override

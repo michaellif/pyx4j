@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,23 +122,5 @@ public class YardiPaymentProcessor {
         batch.getProperty().add(property);
 
         return batch;
-    }
-
-    public List<YardiReceiptReversal> getAllReceiptReversals() {
-        EntityQueryCriteria<YardiReceiptReversal> nsfReversals = EntityQueryCriteria.create(YardiReceiptReversal.class);
-        nsfReversals.add(PropertyCriterion.eq(nsfReversals.proto().claimed(), false));
-        return Persistence.service().query(nsfReversals);
-    }
-
-    public void onPostReceiptSuccess(YardiReceipt receipt) {
-        // mark reversal as posted
-        receipt.claimed().setValue(true);
-        Persistence.service().persist(receipt);
-    }
-
-    public void onPostReceiptReversalSuccess(YardiReceiptReversal reversal) {
-        // mark reversal as posted
-        reversal.claimed().setValue(true);
-        Persistence.service().persist(reversal);
     }
 }

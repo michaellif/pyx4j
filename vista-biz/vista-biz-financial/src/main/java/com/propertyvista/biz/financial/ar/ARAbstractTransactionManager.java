@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -47,6 +48,10 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 public abstract class ARAbstractTransactionManager {
 
     protected void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
+        postInvoiceLineItem(invoiceLineItem, null);
+    }
+
+    protected void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle) {
         Validate.isTrue(invoiceLineItem.postDate().isNull(), "The LineItem is already posted");
 
         if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
@@ -54,7 +59,21 @@ public abstract class ARAbstractTransactionManager {
             return;
         }
 
-        invoiceLineItem.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        LogicalDate postDate = new LogicalDate(SystemDateManager.getDate());
+        if (billingCycle == null) {
+            Persistence.ensureRetrieve(invoiceLineItem.billingAccount(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(invoiceLineItem.billingAccount().lease(), AttachLevel.Attached);
+            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(invoiceLineItem.billingAccount().lease(), postDate);
+            if (billingCycle == null) {
+                billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(invoiceLineItem.billingAccount().lease());
+            } else {
+                billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+            }
+        }
+
+        invoiceLineItem.billingCycle().set(billingCycle);
+        invoiceLineItem.postDate().setValue(postDate);
+
         Persistence.service().persist(invoiceLineItem);
     }
 

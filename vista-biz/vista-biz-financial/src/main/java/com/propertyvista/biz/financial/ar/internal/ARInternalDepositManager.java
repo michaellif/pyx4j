@@ -49,7 +49,6 @@ class ARInternalDepositManager {
         refund.amount().setValue(deposit.lifecycle().currentAmount().getValue().negate());
         refund.billingAccount().set(deposit.lifecycle().billingAccount());
         refund.description().setValue(i18n.tr("Deposit Refund"));
-        refund.claimed().setValue(false);
         Persistence.service().persist(refund);
 
         ARInternalTransactionManager.instance().postInvoiceLineItem(refund);

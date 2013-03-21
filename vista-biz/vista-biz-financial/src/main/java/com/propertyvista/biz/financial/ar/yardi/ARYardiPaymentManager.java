@@ -29,9 +29,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.YardiProcessFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 
@@ -80,9 +82,14 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         reversal.billingAccount().set(paymentRecord.billingAccount());
         reversal.description().setValue(i18n.tr("Payment from ''{0}'' was rejected", paymentRecord.createdDate().getValue().toString()));
         reversal.taxTotal().setValue(BigDecimal.ZERO);
-        reversal.claimed().setValue(false);
-        reversal.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         reversal.applyNSF().setValue(applyNSF);
+
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+
+        reversal.billingCycle().set(nextCycle);
+        reversal.postDate().setValue(now);
 
         Persistence.service().persist(reversal);
 
@@ -108,8 +115,13 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         receipt.amount().setValue(paymentRecord.amount().getValue().negate());
         receipt.billingAccount().set(paymentRecord.billingAccount());
         receipt.description().setValue(i18n.tr("Payment Received - Thank You"));
-        receipt.claimed().setValue(false);
-        receipt.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+
+        receipt.billingCycle().set(nextCycle);
+        receipt.postDate().setValue(now);
 
         return receipt;
     }

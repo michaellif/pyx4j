@@ -58,8 +58,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     private void createInvoiceDeposits() {
         createInvoiceDeposit(getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
-        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
-                .featureItems()) {
+        for (BillableItem billableItem : getBillProducer().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().featureItems()) {
             createInvoiceDeposit(billableItem);
         }
     }
@@ -113,7 +112,8 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void attachDepositRefunds() {
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
+        Bill bill = getBillProducer().getNextPeriodBill();
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(bill.billingAccount(), bill.billingCycle());
         for (InvoiceDepositRefund payment : BillingUtils.getLineItemsForType(items, InvoiceDepositRefund.class)) {
             addDepositRefund(payment);
         }

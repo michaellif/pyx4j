@@ -89,7 +89,6 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
         addReceiptsToBatch(client, yc, batchId, residentTransactions);
-        paymentProcessor.onPostReceiptSuccess(receipt);
         postReceiptBatch(client, yc, batchId);
     }
 

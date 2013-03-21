@@ -137,8 +137,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
 
         importResidentTransactions(client, yc, reversalTransactions);
-
-        paymentProcessor.onPostReceiptReversalSuccess(reversal);
     }
 
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {

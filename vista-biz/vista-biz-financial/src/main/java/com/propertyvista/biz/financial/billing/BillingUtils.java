@@ -28,13 +28,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -74,11 +78,31 @@ public class BillingUtils {
         return isFeature(product) && !((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }
 
-    public static List<InvoiceLineItem> getUnclaimedLineItems(BillingAccount billingAccount) {
+    public static List<InvoiceLineItem> getUnclaimedLineItems(InternalBillingAccount billingAccount, BillingCycle cycle) {
+        // 1. get cycle from last approved bill and retrieve all items from that cycle that are not in the bill
+        List<InvoiceLineItem> lineItems = new ArrayList<InvoiceLineItem>();
+        Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
+        Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().claimed(), false));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        return Persistence.service().query(criteria);
+        if (lastBill == null) {
+            // just grab everything
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+            return Persistence.service().query(criteria);
+        }
+        // 2. loop through subsequent cycles and grab all their items
+        BillingCycle nextCycle = lastBill.billingCycle();
+        do {
+            if (cycle.billingCycleStartDate().getValue().before(nextCycle.billingCycleStartDate().getValue())) {
+                break;
+            }
+            criteria.resetCriteria();
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), nextCycle));
+            lineItems.addAll(Persistence.service().query(criteria));
+        } while ((nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextCycle)) != null);
+        // remove items accounted in last bill
+        lineItems.removeAll(lastBill.lineItems());
+        return lineItems;
     }
 
     public static <E extends InvoiceLineItem> List<E> getLineItemsForType(Bill bill, Class<E> type) {

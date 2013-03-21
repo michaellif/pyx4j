@@ -52,7 +52,6 @@ class ARInternalLeaseAdjustmentManager {
             }
 
             lineItem.billingAccount().set(adjustment.billingAccount());
-            lineItem.claimed().setValue(false);
             Persistence.service().persist(lineItem);
 
             ARInternalTransactionManager.instance().postInvoiceLineItem(lineItem);

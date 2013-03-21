@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -29,6 +31,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -61,7 +64,12 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
-        ARInternalTransactionManager.instance().postInvoiceLineItem(invoiceLineItem);
+        postInvoiceLineItem(invoiceLineItem, null);
+    }
+
+    @Override
+    public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle) {
+        ARInternalTransactionManager.instance().postInvoiceLineItem(invoiceLineItem, billingCycle);
     }
 
     @Override
@@ -153,7 +161,10 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
-        return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast());
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);
+        return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast(), nextCycle);
     }
 
     @Override

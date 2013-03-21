@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,9 +27,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARDateUtils;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.Period;
@@ -55,9 +58,15 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         charge.fromDate().set(chargeDTO.fromDate());
         charge.toDate().set(chargeDTO.toDate());
         charge.period().setValue(Period.next);
-        charge.claimed().setValue(false);
-        charge.dueDate().setValue(ARDateUtils.calculateDueDate(billingAccount));
-        charge.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+
+        charge.billingCycle().set(nextCycle);
+        charge.dueDate().setValue(ARDateUtils.getBillingCycleDueDate(billingAccount, nextCycle));
+        charge.postDate().setValue(now);
+
         Persistence.service().persist(charge);
 
         return true;
@@ -75,8 +84,14 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         payment.paymentRecord().set(getPaymentRecord(paymentDTO.transactionId().getValue()));
         payment.amount().setValue(paymentDTO.amount().getValue().negate());
         payment.description().set(paymentDTO.description());
-        payment.claimed().setValue(false);
-        payment.postDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+
+        payment.billingCycle().set(nextCycle);
+        payment.postDate().setValue(now);
+
         Persistence.service().persist(payment);
 
         return true;

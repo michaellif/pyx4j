@@ -21,7 +21,6 @@
 package com.propertyvista.biz.financial.billing.internal;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
@@ -93,7 +93,7 @@ public class BillingManager {
     boolean validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         BillingCycle nextCycle = getNextBillBillingCycle(lease);
-        if (!nextCycle.equals(billingCycle)) {
+        if (!billingCycle.equals(nextCycle)) {
             log.warn(i18n.tr("Invalid billing cycle: {0}; expected: {1}; lease end: {2}", billingCycle.billingCycleStartDate().getValue(), nextCycle
                     .billingCycleStartDate().getValue(), lease.leaseTo().getValue()));
             return false;
@@ -164,8 +164,7 @@ public class BillingManager {
 
             if (BillStatus.Confirmed == billStatus) {
                 Persistence.service().retrieve(bill.lineItems());
-                claimExistingLineItems(bill.lineItems());
-                postNewLineItems(bill.lineItems());
+                postNewLineItems(bill);
                 ServerSideFactory.create(DepositFacade.class).onConfirmedBill(bill);
             }
 
@@ -185,19 +184,11 @@ public class BillingManager {
         }
     }
 
-    private void claimExistingLineItems(List<InvoiceLineItem> lineItems) {
-        for (InvoiceLineItem invoiceLineItem : lineItems) {
-            if (!invoiceLineItem.postDate().isNull()) {
-                invoiceLineItem.claimed().setValue(true);
-                Persistence.service().persist(invoiceLineItem);
-            }
-        }
-    }
-
-    private void postNewLineItems(List<InvoiceLineItem> lineItems) {
-        for (InvoiceLineItem invoiceLineItem : lineItems) {
+    private void postNewLineItems(Bill bill) {
+        Persistence.ensureRetrieve(bill.lineItems(), AttachLevel.Attached);
+        for (InvoiceLineItem invoiceLineItem : bill.lineItems()) {
             if (invoiceLineItem.postDate().isNull() && invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) != 0) {
-                ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem);
+                ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem, bill.billingCycle());
             }
         }
     }

@@ -94,6 +94,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
+    public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
         throw new UnsupportedOperationException();
 

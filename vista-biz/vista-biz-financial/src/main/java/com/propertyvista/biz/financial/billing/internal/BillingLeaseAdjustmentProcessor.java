@@ -44,8 +44,8 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
                     && LeaseAdjustment.ExecutionType.pending == adjustment.executionType().getValue()) {
                 // Find if adjustment effective date fails on current or next billing period 
                 DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(getBillProducer().getPreviousPeriodBill().billingPeriodStartDate()
-                        .getValue(), getBillProducer().getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate()
-                        .getValue(), adjustment.targetDate().getValue()));
+                        .getValue(), getBillProducer().getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(
+                        adjustment.targetDate().getValue(), adjustment.targetDate().getValue()));
                 if (overlap != null) {
                     //Check if that adjustment is already presented in previous bills
                     boolean attachedToPreviousBill = false;
@@ -80,7 +80,8 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachImmediateLeaseAdjustments() {
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
+        Bill bill = getBillProducer().getNextPeriodBill();
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(bill.billingAccount(), bill.billingCycle());
         for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(items, InvoiceAccountCredit.class)) {
             attachImmediateCredit(credit);
         }

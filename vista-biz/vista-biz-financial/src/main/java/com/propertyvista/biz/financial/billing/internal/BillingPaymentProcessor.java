@@ -34,8 +34,8 @@ public class BillingPaymentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachPaymentRecords() {
-
-        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillProducer().getNextPeriodBill().billingAccount());
+        Bill bill = getBillProducer().getNextPeriodBill();
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(bill.billingAccount(), bill.billingCycle());
 
         for (InvoicePayment payment : BillingUtils.getLineItemsForType(items, InvoicePayment.class)) {
             attachPayment(payment);
