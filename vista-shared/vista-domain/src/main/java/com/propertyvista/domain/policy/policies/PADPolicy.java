@@ -25,6 +25,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 @DiscriminatorValue("PADPolicy")
 @LowestApplicableNode(value = Building.class)
 public interface PADPolicy extends Policy {
+
     public enum PADChargeType {
         FixedAmount, OwingBalance
     }

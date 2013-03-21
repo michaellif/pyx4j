@@ -13,6 +13,12 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,6 +27,18 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 
 public interface PADPolicyItem extends IEntity {
+
+    @Owner
+    @NotNull
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    PADPolicy PADPolicy();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInParent();
+
     @NotNull
     IPrimitive<DebitType> debitType();
 
