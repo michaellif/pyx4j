@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor.paps;
+package com.propertyvista.common.client.ui.components.folders;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -23,7 +23,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
@@ -38,21 +37,16 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 
-public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedPayment> {
+public abstract class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedPayment> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsFolder.class);
 
-    private final CEntityForm<PreauthorizedPaymentsDTO> parent;
-
-    public PreauthorizedPaymentsFolder(CEntityForm<PreauthorizedPaymentsDTO> parent) {
+    public PreauthorizedPaymentsFolder() {
         super(PreauthorizedPayment.class);
-        this.parent = parent;
     }
 
     @Override
@@ -82,6 +76,8 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
         return super.create(member);
     }
 
+    public abstract List<LeasePaymentMethod> getAvailablePaymentMethods();
+
     private class PreauthorizedPaymentEditor extends CEntityFolderRowEditor<PreauthorizedPayment> {
 
         public PreauthorizedPaymentEditor() {
@@ -100,8 +96,7 @@ public class PreauthorizedPaymentsFolder extends VistaTableFolder<PreauthorizedP
 
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
-                        return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, parent.getValue()
-                                .availablePaymentMethods()) {
+                        return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, getAvailablePaymentMethods()) {
                             @Override
                             public boolean onClickOk() {
                                 get(proto().paymentMethod()).setValue(getSelectedItems().iterator().next());
