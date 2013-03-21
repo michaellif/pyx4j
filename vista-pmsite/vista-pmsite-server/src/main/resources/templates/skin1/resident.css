@@ -157,10 +157,6 @@
     cursor: default;
 }
 
-.EntityFolderRowItemDecorator table td:FIRST-CHILD{
-	width: 683px;
-}
-
 .TenantDashboardSection td {
     vertical-align: middle !important;
 }

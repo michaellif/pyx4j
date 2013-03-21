@@ -265,7 +265,3 @@
     text-decoration: none;
     cursor: default;
 }
-
-.EntityFolderRowItemDecorator table td:FIRST-CHILD{
-	width: 683px;
-}
