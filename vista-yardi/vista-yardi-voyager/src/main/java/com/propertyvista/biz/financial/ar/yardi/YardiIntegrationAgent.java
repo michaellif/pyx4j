@@ -107,6 +107,9 @@ public class YardiIntegrationAgent {
         // TODO - This calculation assumes that TransactionDate is set to or shortly after start date of cycle
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(account.lease(),
                 new LogicalDate(detail.getTransactionDate().getTime()));
+        if (billingCycle == null) {
+            throw new IllegalStateException("failed to create charge for yurid account = " + account.getPrimaryKey() + ": billing cycle was not found");
+        }
         InvoiceLineItem item = null;
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiCharge charge = EntityFactory.create(YardiCharge.class);
