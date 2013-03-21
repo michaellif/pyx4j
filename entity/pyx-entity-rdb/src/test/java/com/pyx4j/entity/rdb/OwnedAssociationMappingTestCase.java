@@ -33,6 +33,8 @@ import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToM
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyAutoParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParent;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyUnmaintainedOrderChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyUnmaintainedOrderParent;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedParent;
@@ -920,6 +922,200 @@ public abstract class OwnedAssociationMappingTestCase extends AssociationMapping
         // Verify number of children
         {
             BidirectionalOneToManyParent parent = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 3, parent.children().size());
+
+            EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+            List<BidirectionalOneToManyChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 3, children.size());
+        }
+    }
+
+    public void XtestBidirectionalOneToManyUnmaintainedOrderPersist() {
+        testBidirectionalOneToManyUnmaintainedOrderSave(TestCaseMethod.Persist);
+    }
+
+    public void XtestBidirectionalOneToManyUnmaintainedOrderMerge() {
+        testBidirectionalOneToManyUnmaintainedOrderSave(TestCaseMethod.Merge);
+    }
+
+    public void testBidirectionalOneToManyUnmaintainedOrderSave(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        BidirectionalOneToManyUnmaintainedOrderParent o = EntityFactory.create(BidirectionalOneToManyUnmaintainedOrderParent.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        o.children().add(EntityFactory.create(BidirectionalOneToManyUnmaintainedOrderChild.class));
+        o.children().add(EntityFactory.create(BidirectionalOneToManyUnmaintainedOrderChild.class));
+
+        o.children().get(0).testId().setValue(testId);
+        o.children().get(0).name().setValue("c0-" + uniqueString());
+
+        o.children().get(1).testId().setValue(testId);
+        o.children().get(1).name().setValue("c1-" + uniqueString());
+
+        // Save child and owner
+        srvSave(o, testCaseMethod);
+
+        Assert.assertNotNull("Id Assigned", o.children().get(0).getPrimaryKey());
+        Assert.assertNotNull("Id Assigned", o.children().get(1).getPrimaryKey());
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("child data size", o.children().size(), parent.children().size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), parent.children().get(1).name());
+            for (BidirectionalOneToManyUnmaintainedOrderChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToManyChild child = srv.retrieve(BidirectionalOneToManyChild.class, o.children().get(0).getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), child.name());
+        }
+
+        // update child and owner
+        o.name().setValue(uniqueString());
+        o.children().get(0).name().setValue("c0u-" + uniqueString());
+        srvSave(o, testCaseMethod);
+
+        // Get Parent and see that Child is retrieved, then verify values
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", parent);
+            Assert.assertEquals("correct data retrieved", o.name(), parent.name());
+            Assert.assertEquals("child data retrieved", AttachLevel.Attached, parent.children().getAttachLevel());
+            Assert.assertEquals("child data size", o.children().size(), parent.children().size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parent.children().get(0).name());
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), parent.children().get(1).name());
+        }
+
+        // Get Child and see that child is retrieved, then verify values
+        {
+            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, o.children().get(1)
+                    .getPrimaryKey());
+            Assert.assertNotNull("data retrieved ", child);
+            Assert.assertEquals("correct data retrieved", o.children().get(1).name(), child.name());
+        }
+
+        // Add Child v1 via owner
+        BidirectionalOneToManyUnmaintainedOrderChild c2 = EntityFactory.create(BidirectionalOneToManyUnmaintainedOrderChild.class);
+        c2.parent().set(o);
+        c2.testId().setValue(testId);
+        c2.name().setValue("c2-" + uniqueString());
+        o.children().add(c2);
+        srvSave(o, testCaseMethod);
+
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 3, parent.children().size());
+            for (BidirectionalOneToManyUnmaintainedOrderChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
+        }
+
+        // Add Child v2
+        BidirectionalOneToManyUnmaintainedOrderChild c3 = EntityFactory.create(BidirectionalOneToManyUnmaintainedOrderChild.class);
+        c3.parent().set(o);
+        c3.testId().setValue(testId);
+        c3.name().setValue("c3" + uniqueString());
+        srvSave(c3, testCaseMethod);
+
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 4, parent.children().size());
+            for (BidirectionalOneToManyUnmaintainedOrderChild child : o.children()) {
+                Assert.assertEquals("correct data retrieved", o.id(), child.parent().id());
+                Assert.assertEquals("correct data retrieved", o.name(), child.parent().name());
+            }
+        }
+
+        // Query Parent By Child
+        {
+            EntityQueryCriteria<BidirectionalOneToManyUnmaintainedOrderParent> criteria = EntityQueryCriteria
+                    .create(BidirectionalOneToManyUnmaintainedOrderParent.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().children().$().name(), o.children().get(0).name()));
+
+            List<BidirectionalOneToManyUnmaintainedOrderParent> parents = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, parents.size());
+            Assert.assertEquals("correct data retrieved", o.children().get(0).name(), parents.get(0).children().get(0).name());
+        }
+
+        // Query Child By Parent id
+        {
+            EntityQueryCriteria<BidirectionalOneToManyUnmaintainedOrderChild> criteria = EntityQueryCriteria
+                    .create(BidirectionalOneToManyUnmaintainedOrderChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+
+            List<BidirectionalOneToManyUnmaintainedOrderChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 4, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
+
+        // Query Child By Parent filed
+        {
+            EntityQueryCriteria<BidirectionalOneToManyUnmaintainedOrderChild> criteria = EntityQueryCriteria
+                    .create(BidirectionalOneToManyUnmaintainedOrderChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent().name(), o.name()));
+
+            List<BidirectionalOneToManyUnmaintainedOrderChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 4, children.size());
+            Assert.assertEquals("correct data retrieved", o.name(), children.get(0).parent().name());
+        }
+
+        // Get Child, change and save independently
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            BidirectionalOneToManyUnmaintainedOrderChild child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, parent.children().get(1)
+                    .getPrimaryKey());
+            child.name().setValue(uniqueString());
+            srvSave(child, testCaseMethod);
+
+            BidirectionalOneToManyUnmaintainedOrderChild childR1 = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderChild.class, parent.children().get(1)
+                    .getPrimaryKey());
+            Assert.assertEquals("child update", child.name(), childR1.name());
+
+            BidirectionalOneToManyParent parentR1 = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child update", child.name(), parentR1.children().get(1).name());
+        }
+
+        // Verify number of children
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 4, parent.children().size());
+
+            EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().parent(), o));
+            List<BidirectionalOneToManyChild> children = srv.query(criteria);
+            Assert.assertEquals("result set size", 4, children.size());
+        }
+
+        // remove child and update owner
+        o = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
+        Key oldchildKey = o.children().get(1).getPrimaryKey();
+        o.children().remove(o.children().get(1));
+        srvSave(o, testCaseMethod);
+
+        // See that Child was removed
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent child = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, oldchildKey);
+            Assert.assertNull("child NOT removed", child);
+        }
+
+        // Verify number of children
+        {
+            BidirectionalOneToManyUnmaintainedOrderParent parent = srv.retrieve(BidirectionalOneToManyUnmaintainedOrderParent.class, o.getPrimaryKey());
             Assert.assertEquals("child data size", 3, parent.children().size());
 
             EntityQueryCriteria<BidirectionalOneToManyChild> criteria = EntityQueryCriteria.create(BidirectionalOneToManyChild.class);

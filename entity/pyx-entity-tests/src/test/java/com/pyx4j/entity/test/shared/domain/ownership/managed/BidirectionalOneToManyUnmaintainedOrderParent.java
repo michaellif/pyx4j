@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,15 +28,17 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 /**
- * The order is materialized in the database.
- * The @OrderColumn is found and updated when persisting collections
+ * Order is not materialized in the database.
+ * 
+ * When list retrieved the OrderBy column is used for sort.
  * 
  */
 @Table(prefix = "test")
-public interface BidirectionalOneToManyParent extends IEntity {
+public interface BidirectionalOneToManyUnmaintainedOrderParent extends IEntity {
 
     @Owned
-    IList<BidirectionalOneToManyChild> children();
+    @OrderBy(PrimaryKey.class)
+    IList<BidirectionalOneToManyUnmaintainedOrderChild> children();
 
     IPrimitive<String> testId();
 

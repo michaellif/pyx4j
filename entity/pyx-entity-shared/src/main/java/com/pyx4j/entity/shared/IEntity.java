@@ -27,7 +27,9 @@ import java.util.Map;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.Printable;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.validator.Validator;
 import com.pyx4j.i18n.annotations.I18n;
@@ -52,7 +54,11 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
 
     public void setPrimaryKey(Key pk);
 
+    interface PrimaryKey extends ColumnId {
+    }
+
     @Indexed
+    @MemberColumn(PrimaryKey.class)
     public IPrimitive<Key> id();
 
     public IPrimitive<IEntity> instanceValueClass();

@@ -14,28 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 8, 2012
+ * Created on Feb 8, 2012
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.annotations;
+package com.pyx4j.entity.test.shared.domain.ownership.managed;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-/**
- * Specifies location of the member that provides index for sorting.
- * 
- * If it points to:
- * 
- * @OrderColumn The order is materialized in the database.
- * @MemberColumn The order is not materialized in the database
- */
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface OrderBy {
+@Table(prefix = "test")
+public interface BidirectionalOneToManyUnmaintainedOrderChild extends IEntity {
 
-    Class<? extends ColumnId> value();
+    @Owner
+    @JoinColumn
+    BidirectionalOneToManyUnmaintainedOrderParent parent();
+
+    IPrimitive<String> testId();
+
+    IPrimitive<String> name();
+
 }

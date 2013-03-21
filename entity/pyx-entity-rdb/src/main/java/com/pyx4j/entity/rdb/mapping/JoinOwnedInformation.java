@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.rdb.dialect.Dialect;
@@ -60,7 +61,7 @@ public class JoinOwnedInformation extends JoinInformation {
             MemberMeta orderMemberMeta = findOrderMember(childEntityMeta);
             if (orderMemberMeta == null) {
                 throw new AssertionError("Unmapped @OrderBy member in table " + childEntityClass.getName() + " for '" + memberMeta.getFieldName() + "' in "
-                        + entityMeta.getEntityClass().getName() + "\n add @OrderColumn to " + childEntityClass);
+                        + entityMeta.getEntityClass().getName() + "\n add @OrderColumn or @MemberColumn to " + childEntityClass);
             }
             sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
             orderMemberName = orderMemberMeta.getFieldName();
@@ -106,7 +107,7 @@ public class JoinOwnedInformation extends JoinInformation {
                 OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
                 if (orderColumnMatch(joinTableOrderColumn, orderColumn)) {
                     if (orderMemberMeta != null) {
-                        throw new AssertionError("Duplicate orderColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
+                        throw new AssertionError("Duplicate @OrderColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
                                 + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
 
@@ -115,6 +116,15 @@ public class JoinOwnedInformation extends JoinInformation {
                                 + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
                     orderMemberMeta = jmemberMeta;
+                } else {
+                    MemberColumn joinTableMemberColumn = jmemberMeta.getAnnotation(MemberColumn.class);
+                    if ((joinTableMemberColumn != null) && (orderColumn != ColumnId.class) && (orderColumn == joinTableMemberColumn.value())) {
+                        if (orderMemberMeta != null) {
+                            throw new AssertionError("Duplicate @MemberColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
+                                    + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
+                        }
+                        orderMemberMeta = jmemberMeta;
+                    }
                 }
 
             }
