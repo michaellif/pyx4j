@@ -42,7 +42,6 @@ import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
@@ -89,11 +88,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent())).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
-        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
-            main.setBR(++row, 0, 1);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(((LeasePaymentMethod) proto()).isPreauthorized())).build());
-            get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(false);
-        }
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
@@ -270,19 +264,17 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return get(proto().sameAsCurrent()).isEnabled();
     }
 
-    /** In case of PmcPaymentmethod enables the checkbox for activating the payment method, in LeasePayment method controls the visibility of isPreauthorized() */
+    /**
+     * In case of PmcPaymentmethod enables the checkbox for activating the payment method, in LeasePayment method controls the visibility of isPreauthorized()
+     */
     public void setIsPreauthorizedVisible(boolean visible) {
-        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
-            get(((LeasePaymentMethod) proto()).isPreauthorized()).setVisible(visible);
-        } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
+        if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(visible);
         }
     }
 
     public boolean isIsPreauthorizedVisible() {
-        if (paymentEntityClass.equals(LeasePaymentMethod.class)) {
-            return get(((LeasePaymentMethod) proto()).isPreauthorized()).isVisible();
-        } else if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
+        if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             return get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).isVisible();
         } else {
             return false;
