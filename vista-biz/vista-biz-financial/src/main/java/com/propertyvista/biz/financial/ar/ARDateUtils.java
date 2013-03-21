@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARDateUtils {
 
@@ -81,13 +82,14 @@ public class ARDateUtils {
     public static LogicalDate getBillingCycleDueDate(BillingAccount account, BillingCycle cycle) {
         LogicalDate startDate;
         int dueDateOffset;
-        if (cycle.billingCycleEndDate().getValue().before(account.lease().leaseTo().getValue())) {
+        Lease lease = Persistence.service().retrieve(Lease.class, account.lease().getPrimaryKey());
+        if (cycle.billingCycleEndDate().getValue().before(lease.leaseTo().getValue())) {
             // normal cycle
             startDate = cycle.billingCycleStartDate().getValue();
             dueDateOffset = account.paymentDueDayOffset().getValue();
         } else {
             // final cycle
-            startDate = account.lease().leaseTo().getValue();
+            startDate = lease.leaseTo().getValue();
             dueDateOffset = account.finalDueDayOffset().getValue();
         }
         return getDateByOffset(dueDateOffset, startDate);

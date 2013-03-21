@@ -92,7 +92,8 @@ class BillingCycleManager {
         return getBillingCycle(lease.unit().building(), billingAccount.billingPeriod().getValue(), firstCycleStartDate);
     }
 
-    protected BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date) {
+    protected BillingCycle getLeaseBillingCycleForDate(Lease leaseIn, LogicalDate date) {
+        Lease lease = leaseIn.isValueDetached() ? Persistence.service().retrieve(Lease.class, leaseIn.getPrimaryKey()) : leaseIn.<Lease> duplicate();
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
