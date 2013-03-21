@@ -131,8 +131,9 @@ class BillProducer {
 
             calculateTotals();
 
+            BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Finished, true);
+
             if (!preview) {
-                BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Finished, true);
 
                 Persistence.service().persist(bill.lineItems());
                 Persistence.service().persist(bill);
@@ -144,7 +145,6 @@ class BillProducer {
                     bill = BillingManager.instance().confirmBill(bill);
                 }
             }
-
         } catch (Throwable e) {
             log.error("Bill run error", e);
             BillingManager.instance().setBillStatus(bill, Bill.BillStatus.Failed, true);

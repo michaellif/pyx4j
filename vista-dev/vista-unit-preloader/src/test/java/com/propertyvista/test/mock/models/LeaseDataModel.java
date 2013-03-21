@@ -23,17 +23,23 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseDataModel extends MockDataModel<Lease> {
@@ -109,7 +115,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
     public PaymentRecord addPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
-        LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().iterator().next();
+        LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().get(0);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.amount().setValue(new BigDecimal(amount));
@@ -121,6 +127,38 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
         return paymentRecord;
+    }
+
+    /**
+     * 
+     * Set Preauthorized Payment to first found tenant with Echeck payment method, otherwise returns false
+     */
+    public boolean setPreauthorizedPayment(BigDecimal value) {
+        while (getCurrentItem().leaseParticipants().iterator().hasNext()) {
+            Tenant tenant = getCurrentItem().leaseParticipants().iterator().next().cast();
+
+            List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods(tenant.customer());
+
+            for (LeasePaymentMethod paymentMethod : profileMethods) {
+                if (paymentMethod.type().getValue() == PaymentType.Echeck) {
+                    PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+                    pap.paymentMethod().set(paymentMethod);
+
+                    PADPolicy policy = getDataModel(PADPolicyDataModel.class).getCurrentItem();
+                    if (policy.chargeType().getValue() == PADPolicy.PADChargeType.OwingBalance) {
+                        pap.amountType().setValue(AmountType.Percent);
+                    } else {
+                        pap.amountType().setValue(AmountType.Value);
+                    }
+                    pap.amount().setValue(value);
+                    pap.comments().setValue("Preauthorized Payment");
+
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

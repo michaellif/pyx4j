@@ -67,8 +67,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-//-->        activateLease();
-
         advanceSysDate("19-Mar-2012");
 
         bill = runBilling(true);
@@ -260,8 +258,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-//-->        activateLease();
-
         advanceSysDate("10-Apr-2012");
 
         bill = runBilling(true);
@@ -420,8 +416,6 @@ public class BillingPeriodsTest extends FinancialTestBase {
         String billingTypeId = bill.billingCycle().billingType().id().toString();
 
         //==================== RUN 2 ======================//
-
-//-->        activateLease();
 
         advanceSysDate("18-Mar-2012");
 

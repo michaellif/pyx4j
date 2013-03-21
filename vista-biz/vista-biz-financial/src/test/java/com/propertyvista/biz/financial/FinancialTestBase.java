@@ -598,6 +598,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
+    protected void setPreauthorizedPayment(BigDecimal value) {
+        getDataModel(LeaseDataModel.class).setPreauthorizedPayment(value);
+    }
+
     protected PaymentRecord receivePayment(String receivedDate, String amount, PaymentType type) {
         Lease lease = retrieveLease();
 

@@ -69,8 +69,6 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 - SECOND PARKING DEPOSIT TAKEN ======================//
 
-//-->        activateLease();
-
         advanceSysDate("01-Mar-2012");
         receiveAndPostPayment("01-Mar-2012", "2491.44");
 
