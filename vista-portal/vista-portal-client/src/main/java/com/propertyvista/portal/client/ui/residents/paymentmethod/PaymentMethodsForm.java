@@ -16,15 +16,12 @@ package com.propertyvista.portal.client.ui.residents.paymentmethod;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
@@ -80,8 +77,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
                     new EntityFolderColumnDescriptor(proto().type(), "15em"), 
-                    new EntityFolderColumnDescriptor(proto().details(), "20em"),
-                    new EntityFolderColumnDescriptor(proto().isPreauthorized(), "5em")
+                    new EntityFolderColumnDescriptor(proto().details(), "25em")
             ); //@formatter:on
         }
 
@@ -126,50 +122,10 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                         }
                     });
                     comp.setViewable(true);
-                } else if (member.equals(proto().isPreauthorized())) {
-                    comp = new CCheckBox();
-                    comp.inheritViewable(false);
-                    comp.setViewable(false);
                 } else {
                     comp = super.create(member);
                 }
                 return comp;
-            }
-
-            @Override
-            public void addValidations() {
-                super.addValidations();
-
-                get(proto().isPreauthorized()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Boolean> event) {
-                        if (event.getValue().booleanValue()) {
-                            new PaymentMethodPreauthorizationAgreementDialog(get(proto().type()).getValue()) {
-                                @Override
-                                public boolean onClickOk() { // Confirmation:
-                                    presenter.savePaymentMethod(LeasePaymentMethodEditor.this.getValue());
-
-                                    for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
-                                        for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                            if (comp instanceof LeasePaymentMethodEditor && !comp.equals(LeasePaymentMethodEditor.this)) {
-                                                ((LeasePaymentMethodEditor) comp).get(proto().isPreauthorized()).setValue(false, false);
-                                                presenter.savePaymentMethod(((LeasePaymentMethodEditor) comp).getValue());
-                                            }
-                                        }
-                                    }
-
-                                    return true;
-                                }
-
-                                @Override
-                                public boolean onClickCancel() { // Declining:
-                                    get(proto().isPreauthorized()).setValue(false, false);
-                                    return true;
-                                }
-                            }.show();
-                        }
-                    }
-                });
             }
 
             @Override
@@ -179,7 +135,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                 // disable non-allowed items:
                 if (!PortalPaymentTypesUtil.getAllowedPaymentTypes().contains(getValue().type().getValue())) {
                     get(proto().details()).setEnabled(false);
-                    get(proto().isPreauthorized()).setEnabled(false);
                 }
             }
         }
