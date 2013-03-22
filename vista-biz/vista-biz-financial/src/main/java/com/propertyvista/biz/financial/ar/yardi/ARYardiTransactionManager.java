@@ -15,9 +15,11 @@ package com.propertyvista.biz.financial.ar.yardi;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,9 +27,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARAbstractTransactionManager;
+import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
@@ -80,6 +86,10 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         th.lineItems().addAll(payments);
         th.currentBalanceAmount().setValue(calculateTotal(charges, credits, payments));
         th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        Collection<AgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
+        th.agingBuckets().addAll(agingBucketsCollection);
+        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(DebitType.total), agingBucketsCollection));
         return th;
     }
 
