@@ -93,7 +93,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     public TenantSurePurchaseViewImpl() {
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
-        viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
+        viewDecorator.setCompensationDisclosureStatement(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
         viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
 
         FormFlexPanel viewPanel = new FormFlexPanel();

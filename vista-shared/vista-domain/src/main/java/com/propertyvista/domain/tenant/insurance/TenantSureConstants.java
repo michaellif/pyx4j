@@ -27,6 +27,6 @@ public class TenantSureConstants {
 
     public static final String HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF = "http://highcourtpartners.com/privacy-policy.html";
 
-    public static final String HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF = "http://highcourtpartners.com/client-portal.html";
+    public static final String HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF = "http://highcourtpartners.com/client-portal.html";
 
 }

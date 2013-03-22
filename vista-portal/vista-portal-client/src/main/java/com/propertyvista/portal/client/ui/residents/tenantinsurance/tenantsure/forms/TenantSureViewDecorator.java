@@ -32,7 +32,7 @@ public class TenantSureViewDecorator extends Composite {
 
     private final Anchor privacyPolicyAnchor;
 
-    private final Anchor billingAndCancellationsPolicyAnchor;
+    private final Anchor compensationDisclosureStatementAnchor;
 
     public TenantSureViewDecorator() {
         FlowPanel tenantSureDecoratorPanel = new FlowPanel();
@@ -63,9 +63,9 @@ public class TenantSureViewDecorator extends Composite {
         billingAndCancellationsPolicyAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
         billingAndCancellationsPolicyAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
 
-        billingAndCancellationsPolicyAnchor = new Anchor(i18n.tr("Billing and Cancellations Policy"));
-        billingAndCancellationsPolicyAnchor.setTarget("_blank");
-        billingAndCancellationsPolicyAnchorHolder.setWidget(billingAndCancellationsPolicyAnchor);
+        compensationDisclosureStatementAnchor = new Anchor(i18n.tr("Compensation Disclosure Statement"));
+        compensationDisclosureStatementAnchor.setTarget("_blank");
+        billingAndCancellationsPolicyAnchorHolder.setWidget(compensationDisclosureStatementAnchor);
         footer.add(billingAndCancellationsPolicyAnchorHolder);
 
         tenantSureDecoratorPanel.add(footer);
@@ -77,8 +77,8 @@ public class TenantSureViewDecorator extends Composite {
         privacyPolicyAnchor.setHref(href);
     }
 
-    public final void setBillingAndCancellationsPolicyAddress(String href) {
-        billingAndCancellationsPolicyAnchor.setHref(href);
+    public final void setCompensationDisclosureStatement(String href) {
+        compensationDisclosureStatementAnchor.setHref(href);
     }
 
     public final void setContent(Widget contentWidget) {

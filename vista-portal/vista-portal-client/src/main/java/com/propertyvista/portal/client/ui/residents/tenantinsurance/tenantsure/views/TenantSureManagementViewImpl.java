@@ -110,7 +110,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     public TenantSureManagementViewImpl() {
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
         viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
-        viewDecorator.setBillingAndCancellationsPolicyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_BILLING_AND_REFUND_POLICY_HREF);
+        viewDecorator.setCompensationDisclosureStatement(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
 
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.add(makeGreetingPanel());
