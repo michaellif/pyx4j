@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.operations.business;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +23,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,6 +37,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailMessage;
@@ -57,8 +63,19 @@ import com.propertyvista.server.jobs.TaskRunner;
 
 class VistaBusinessStatsReport {
 
+    private final static Logger log = LoggerFactory.getLogger(VistaBusinessStatsReport.class);
+
     static ReportTableFormatter startStatsReport() {
-        ReportTableFormatter formatter = new ReportTableXLSXFormatter();
+
+        ReportTableFormatter formatter;
+        try {
+            String fileName = IOUtils.resourceFileName("BusinessStatisticsReport.xlsx", VistaBusinessStatsReport.class);
+            InputStream fileIs = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+            formatter = new ReportTableXLSXFormatter(fileIs, true);
+        } catch (IOException e) {
+            log.error("Error", e);
+            throw new UserRuntimeException("The workbook could not be retrieved", e);
+        }
         {
             formatter.header("PMC Total");
             formatter.newRow();
