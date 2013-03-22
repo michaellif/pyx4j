@@ -244,7 +244,17 @@ BEGIN
                 ||'             AND     li.post_date IS NOT NULL '
                 ||'             GROUP BY li.id ) AS b '
                 ||'WHERE  a.id = b.id ';
+         
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item '
+                ||'SET  due_date = post_date '
+                ||'WHERE  id_discriminator = ''YardiCharge'' ';
                 
+       
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item '
+                ||'SET  post_date = NULL '
+                ||'WHERE  id_discriminator = ''YardiCharge'' '; 
+        
         
         -- Add padpolicy  
         
@@ -266,6 +276,14 @@ BEGIN
                 ||'SET is_profiled_method = '
                 ||'CASE WHEN is_profiled_method = TRUE THEN FALSE '
                 ||'WHEN is_profiled_method = FALSE THEN TRUE END'; 
+        
+        
+        -- billing_billing_cycle
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle '
+                ||'SET  target_pad_generation_date = billing_cycle_start_date -3 ';
+                
+        -- 
         
         
         /**
