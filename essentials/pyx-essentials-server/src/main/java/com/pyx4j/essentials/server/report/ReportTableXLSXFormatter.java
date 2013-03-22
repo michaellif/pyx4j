@@ -22,6 +22,7 @@ package com.pyx4j.essentials.server.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -93,13 +94,17 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this(true);
     }
 
+    public ReportTableXLSXFormatter(InputStream is, boolean xlsx) throws IOException {
+        this(loadWorkbook(is, xlsx), xlsx);
+    }
+
     public ReportTableXLSXFormatter(boolean xlsx) {
+        this(xlsx ? new XSSFWorkbook() : new HSSFWorkbook(), xlsx);
+    }
+
+    private ReportTableXLSXFormatter(Workbook workbook, boolean xlsx) {
         this.xlsx = xlsx;
-        if (xlsx) {
-            workbook = new XSSFWorkbook();
-        } else {
-            workbook = new HSSFWorkbook();
-        }
+        this.workbook = workbook;
 
         //Create column heading0 font.
         Font columnHeading2Font = this.workbook.createFont();
@@ -198,7 +203,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     @Override
     public void newRow() {
         if (this.curentSheet == null) {
-            newSheet("new sheet");
+            newSheet("Data");
         }
         this.curentRow = curentSheet.createRow(rowIdx++);
         if (columnsCount < this.cellIdx) {
@@ -206,6 +211,14 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         }
         this.cellIdx = 0;
         rowCount++;
+    }
+
+    public static Workbook loadWorkbook(InputStream is, boolean xlsx) throws IOException {
+        if (xlsx) {
+            return new XSSFWorkbook(is);
+        } else {
+            return new HSSFWorkbook(is);
+        }
     }
 
     @Override
