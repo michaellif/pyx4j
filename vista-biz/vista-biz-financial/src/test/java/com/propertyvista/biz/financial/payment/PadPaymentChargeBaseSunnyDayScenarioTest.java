@@ -17,8 +17,11 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
@@ -35,7 +38,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         setSysDate("10-Mar-2011");
 
-        createLease("1-Apr-2011", "31-Aug-2011");
+        createLease("1-Apr-2011", "31-Mar-2012");
         addParking();
         addLocker();
 
@@ -67,7 +70,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         advanceSysDate("20-Mar-2011");
 
-        receiveAndPostPayment("20-Mar-2011", "2269.04");
+        receiveAndPostPayment("20-Mar-2011", "2269.04"); //2269.04 - 1198.74
 
         setPreauthorizedPayment(new BigDecimal("1"));
 
@@ -112,6 +115,78 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         taxes("128.44").
         totalDueAmount("1198.74");
         // @formatter:on
+
+        addBooking("25-May-2011");
+        finalizeLeaseAdendum();
+
+        advanceSysDate("18-Jun-2011");
+
+        confirmBill(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(4).
+        billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("1-Jul-2011").
+        billingPeriodStartDate("1-Jul-2011").
+        billingPeriodEndDate("31-Jul-2011").
+        numOfProductCharges(4).
+        paymentReceivedAmount("-1198.74").
+        serviceCharge("930.30").
+        recurringFeatureCharges("140.00").
+        oneTimeFeatureCharges("100.00").
+        taxes("140.44").
+        totalDueAmount("1310.74");
+        // @formatter:on
+
+        advanceSysDate("18-Jul-2011");
+
+        confirmBill(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(5).
+        billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("1-Aug-2011").
+        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodEndDate("31-Aug-2011").
+        numOfProductCharges(3).
+        paymentReceivedAmount("-1198.74").
+        serviceCharge("930.30").
+        recurringFeatureCharges("140.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("128.44").
+        totalDueAmount("1360.74");
+        // @formatter:on
+
+        receiveAndPostPayment("18-Jul-2011", "162.00");
+
+        advanceSysDate("18-Aug-2011");
+
+        confirmBill(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(6).
+        billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("1-Sep-2011").
+        billingPeriodStartDate("1-Sep-2011").
+        billingPeriodEndDate("30-Sep-2011").
+        numOfProductCharges(3).
+        //TODO AR submitted part of one time payment for booking and late payment against lease (lease is oldest arrears)
+        //paymentReceivedAmount("-1360.74").
+        serviceCharge("930.30").
+        recurringFeatureCharges("140.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("128.44");
+        //TODO see above 
+        //totalDueAmount("1198.74");
+        // @formatter:on
+
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 }

@@ -57,7 +57,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         int row = -1;
         if (value != null) {
             content.setH1(++row, 0, 1, i18n.tr("Transactions History"));
-            content.setWidget(++row, 0, createLineItems(value.lineItems(), value.balanceForwardAmount().getValue()));
+            content.setWidget(++row, 0, createLineItems(value.lineItems()));
 
             content.setBR(++row, 0, 1);
             content.setH1(++row, 0, 1, i18n.tr("Arrears"));
@@ -67,7 +67,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         return content;
     }
 
-    private IsWidget createLineItems(List<InvoiceLineItem> items, BigDecimal balanceForward) {
+    private IsWidget createLineItems(List<InvoiceLineItem> items) {
         FormFlexPanel lineItemsView = new FormFlexPanel();
         int row = 0;
 
@@ -95,7 +95,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         lineItemsView.getCellFormatter().addStyleName(row, COL_CREDIT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
         lineItemsView.getCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
-        BigDecimal balance = balanceForward != null ? balanceForward : new BigDecimal("0.0");
+        BigDecimal balance = new BigDecimal("0.0");
 
         ++row;
 

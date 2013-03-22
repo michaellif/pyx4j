@@ -268,7 +268,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void printTransactionHistory(TransactionHistoryDTO transactionHistory) {
+        printTransactionHistory(transactionHistory, false);
+    }
+
+    protected void printTransactionHistory(TransactionHistoryDTO transactionHistory, boolean copyToSystemOut) {
         TransactionHistoryPrinter.printTransactionHistory(transactionHistory, transactionHistoryFileName(transactionHistory, getClass().getSimpleName()));
+        if (copyToSystemOut) {
+            TransactionHistoryPrinter.printTransactionHistory(transactionHistory);
+        }
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo) {

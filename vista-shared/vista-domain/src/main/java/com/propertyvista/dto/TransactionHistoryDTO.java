@@ -30,13 +30,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 @Transient
 public interface TransactionHistoryDTO extends IEntity {
 
-    IPrimitive<LogicalDate> fromDate();
-
     IPrimitive<LogicalDate> issueDate();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> balanceForwardAmount();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

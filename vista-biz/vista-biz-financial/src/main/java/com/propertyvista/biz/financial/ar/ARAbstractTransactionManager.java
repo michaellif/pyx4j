@@ -78,22 +78,14 @@ public abstract class ARAbstractTransactionManager {
     }
 
     protected TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
-        return getTransactionHistory(billingAccount, null);
-    }
-
-    TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount, LogicalDate fromDate) {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
-        if (fromDate != null) {
-            criteria.add(PropertyCriterion.ge(criteria.proto().postDate(), fromDate));
-        }
         criteria.asc(criteria.proto().id());
 
         List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
         th.lineItems().addAll(lineItems);
-        th.fromDate().setValue(fromDate);
         th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         th.currentBalanceAmount().setValue(getCurrentBallance(billingAccount));
 

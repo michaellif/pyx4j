@@ -16,6 +16,8 @@ package com.propertyvista.biz.financial;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 
 import com.pyx4j.gwt.server.IOUtils;
 
@@ -27,6 +29,15 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class TransactionHistoryPrinter {
 
+    private BigDecimal balanceAmount = BigDecimal.ZERO;
+
+    protected TransactionHistoryPrinter() {
+    }
+
+    protected static void printTransactionHistory(TransactionHistoryDTO transactionHistory) {
+        new TransactionHistoryPrinter().printTransactionHistory(transactionHistory, new OutputStreamWriter(System.out));
+    }
+
     protected static void printTransactionHistory(TransactionHistoryDTO transactionHistory, String fileName) {
         FileWriter fstream;
         try {
@@ -34,17 +45,22 @@ public class TransactionHistoryPrinter {
         } catch (IOException e) {
             throw new Error(e);
         }
+        new TransactionHistoryPrinter().printTransactionHistory(transactionHistory, fstream);
+    }
+
+    private void printTransactionHistory(TransactionHistoryDTO transactionHistory, OutputStreamWriter writer) {
+
         try {
-            BufferedWriter out = new BufferedWriter(fstream);
+            BufferedWriter out = new BufferedWriter(writer);
             out.write("Transaction History");
             out.newLine();
-            out.write("\nFrom Date: " + transactionHistory.fromDate().getValue());
+
             out.write("\nIssue Date: " + transactionHistory.issueDate().getValue());
             out.write("\nCurrent Balance: " + transactionHistory.currentBalanceAmount().getValue());
             out.newLine();
             out.newLine();
             out.write(convertToCell("Post Date", 14, true) + convertToCell("Due Date", 14, true) + convertToCell("Description", 60, true)
-                    + convertToCell("Debits", 14, true) + convertToCell("Credits", 14, true));
+                    + convertToCell("Debits", 14, true) + convertToCell("Credits", 14, true) + convertToCell("Balance", 14, true));
             out.newLine();
 
             for (InvoiceLineItem lineItem : transactionHistory.lineItems()) {
@@ -68,19 +84,22 @@ public class TransactionHistoryPrinter {
         } catch (IOException e) {
             throw new Error(e);
         } finally {
-            IOUtils.closeQuietly(fstream);
+            IOUtils.closeQuietly(writer);
         }
 
     }
 
-    private static String createLineItem(InvoiceLineItem lineItem) {
+    private String createLineItem(InvoiceLineItem lineItem) {
 
         String debits = null;
         String credits = null;
         String dueDate = null;
+        String balance = null;
         if (lineItem.isInstanceOf(InvoiceDebit.class)) {
             InvoiceDebit invoiceDebit = lineItem.cast();
-            debits = convertToCell(lineItem.amount().getValue().add(invoiceDebit.taxTotal().getValue()).toString(), 14, true);
+            BigDecimal value = lineItem.amount().getValue().add(invoiceDebit.taxTotal().getValue());
+            debits = convertToCell(value.toString(), 14, true);
+            balanceAmount = balanceAmount.add(value);
             credits = convertToCell("", 14, true);
             if (invoiceDebit.dueDate().getValue() == null) {
                 dueDate = convertToCell("N/A", 14, true);
@@ -89,13 +108,17 @@ public class TransactionHistoryPrinter {
             }
         } else if (lineItem.isInstanceOf(InvoiceCredit.class)) {
             debits = convertToCell("", 14, true);
-            credits = convertToCell(lineItem.amount().getValue().negate().toString(), 14, true);
+            BigDecimal value = lineItem.amount().getValue();
+            credits = convertToCell(value.negate().toString(), 14, true);
+            balanceAmount = balanceAmount.add(value);
             dueDate = convertToCell("", 14, true);
         } else {
             throw new IllegalArgumentException();
         }
+        balance = convertToCell(balanceAmount.toString(), 14, true);
+
         return convertToCell(lineItem.postDate().getValue().toString(), 14, true) + dueDate
-                + convertToCell(lineItem.description().isNull() ? "" : lineItem.description().getValue().toString(), 60, true) + debits + credits;
+                + convertToCell(lineItem.description().isNull() ? "" : lineItem.description().getValue().toString(), 60, true) + debits + credits + balance;
     }
 
     private static String createAgingBucketsLine(AgingBuckets agingBuckets) {
