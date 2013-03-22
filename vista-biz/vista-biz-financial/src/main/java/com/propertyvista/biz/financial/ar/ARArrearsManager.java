@@ -40,7 +40,6 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -225,9 +224,9 @@ public class ARArrearsManager {
     }
 
     private BuildingArrearsSnapshot takeArrearsSnapshot(Building building) {
-        EntityQueryCriteria<InternalBillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(InternalBillingAccount.class);
+        EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
         billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
-        Iterator<InternalBillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
+        Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance
 
