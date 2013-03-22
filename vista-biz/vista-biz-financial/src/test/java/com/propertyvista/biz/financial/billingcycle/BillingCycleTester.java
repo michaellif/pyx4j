@@ -22,13 +22,9 @@ public class BillingCycleTester extends Tester {
 
     private final BillingCycle billingCycle;
 
-    public BillingCycleTester(BillingCycle billingCycle, boolean continueOnError) {
-        super(continueOnError);
-        this.billingCycle = billingCycle;
-    }
-
     public BillingCycleTester(BillingCycle billingCycle) {
-        this(billingCycle, false);
+        super();
+        this.billingCycle = billingCycle;
     }
 
     public BillingCycleTester(Building building, BillingPeriod billingPeriod, String leaseStartDate) {

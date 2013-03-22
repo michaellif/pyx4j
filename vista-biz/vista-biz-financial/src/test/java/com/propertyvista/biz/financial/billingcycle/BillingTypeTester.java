@@ -22,13 +22,8 @@ public class BillingTypeTester extends Tester {
 
     private final BillingType billingType;
 
-    public BillingTypeTester(BillingType billingType, boolean continueOnError) {
-        super(continueOnError);
-        this.billingType = billingType;
-    }
-
     public BillingTypeTester(BillingType billingType) {
-        this(billingType, false);
+        this.billingType = billingType;
     }
 
     public BillingTypeTester(Building building, BillingPeriod billingPeriod, String leaseStartDate) {

@@ -155,6 +155,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             SystemDateManager.resetDate();
             super.tearDown();
         }
+        assertTrue("Running with Tester.continueOnError = true", !Tester.continueOnError);
     }
 
     public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {

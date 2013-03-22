@@ -45,7 +45,7 @@ public class ExternalBillingTest extends ExternalTestBase {
         Bill bill = runExternalBilling();
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         billType(Bill.BillType.External).
         billingPeriodStartDate("1-Oct-2011").

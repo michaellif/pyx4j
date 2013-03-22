@@ -36,6 +36,8 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         setSysDate("10-Mar-2011");
 
         createLease("1-Apr-2011", "31-Aug-2011");
+        addParking();
+        addLocker();
 
         setBillingBatchProcess();
         setLeaseBatchProcess();
@@ -54,18 +56,18 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         billingCyclePeriodStartDate("01-Apr-2011").
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
-        numOfProductCharges(1).
+        numOfProductCharges(3).
         paymentReceivedAmount("0.00").
         serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
+        recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
-        taxes("111.64").
-        totalDueAmount("1972.24");
+        taxes("128.44").
+        totalDueAmount("2269.04");
         // @formatter:on
 
         advanceSysDate("20-Mar-2011");
 
-        receiveAndPostPayment("20-Mar-2011", "1972.24");
+        receiveAndPostPayment("20-Mar-2011", "2269.04");
 
         setPreauthorizedPayment(new BigDecimal("1"));
 
@@ -81,13 +83,13 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         billingCyclePeriodStartDate("01-May-2011").
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
-        numOfProductCharges(1).
-        paymentReceivedAmount("-1972.24").
+        numOfProductCharges(3).
+        paymentReceivedAmount("-2269.04").
         serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
+        recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
-        taxes("111.64").
-        totalDueAmount("1041.94");
+        taxes("128.44").
+        totalDueAmount("1198.74");
         // @formatter:on
 
         advanceSysDate("18-May-2011");
@@ -102,13 +104,13 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         billingCyclePeriodStartDate("01-Jun-2011").
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
-        numOfProductCharges(1).
-        paymentReceivedAmount("-1041.94").
+        numOfProductCharges(3).
+        paymentReceivedAmount("-1198.74").
         serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
+        recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
-        taxes("111.64").
-        totalDueAmount("1041.94");
+        taxes("128.44").
+        totalDueAmount("1198.74");
         // @formatter:on
 
     }

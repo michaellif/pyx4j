@@ -24,13 +24,8 @@ public class BillTester extends Tester {
 
     private final Bill bill;
 
-    public BillTester(Bill bill, boolean continueOnError) {
-        super(continueOnError);
-        this.bill = bill;
-    }
-
     public BillTester(Bill bill) {
-        this(bill, false);
+        this.bill = bill;
     }
 
     public BillTester billSequenceNumber(Integer sequenceNumber) {

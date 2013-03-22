@@ -20,14 +20,9 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class Tester {
 
-    private final boolean continueOnError;
-
-    public Tester(boolean continueOnError) {
-        this.continueOnError = continueOnError;
-    }
+    public static boolean continueOnError = false;
 
     public Tester() {
-        this(false);
     }
 
     protected Object ifNull(Object in, Object out) {
@@ -42,8 +37,7 @@ public class Tester {
             return;
         }
         if (continueOnError) {
-            System.out.println(format(message, expected, actual));
-            Thread.dumpStack();
+            System.out.println(new StringBuilder().append(format(message, expected, actual)).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
         } else {
             throw new AssertionFailedError(format(message, expected, actual));
         }
@@ -58,7 +52,11 @@ public class Tester {
 
     public void assertTrue(String message, boolean condition) {
         if (!(condition)) {
-            new AssertionFailedError(message);
+            if (continueOnError) {
+                System.out.println(new StringBuilder().append(message).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
+            } else {
+                throw new AssertionFailedError(message);
+            }
         }
     }
 
