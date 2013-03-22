@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
@@ -134,6 +135,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      * Set Preauthorized Payment to first found tenant with Echeck payment method, otherwise returns false
      */
     public boolean setPreauthorizedPayment(BigDecimal value) {
+        Persistence.service().retrieveMember(getCurrentItem().leaseParticipants());
         while (getCurrentItem().leaseParticipants().iterator().hasNext()) {
             Tenant tenant = getCurrentItem().leaseParticipants().iterator().next().cast();
 

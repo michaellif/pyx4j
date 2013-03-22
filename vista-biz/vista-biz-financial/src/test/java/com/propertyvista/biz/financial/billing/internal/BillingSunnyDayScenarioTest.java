@@ -57,15 +57,17 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         BillableItem locker1 = addLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
+        setBillingBatchProcess();
         setLeaseBatchProcess();
         setDepositBatchProcess();
+
         //==================== RUN 1 ======================//
 
-        Bill billPreview = runBillingPreview();
         // @formatter:off
-        new BillTester(billPreview).
+        new BillTester(runBillingPreview()).
         billSequenceNumber(0).
         billType(Bill.BillType.First).
+        billStatus(Bill.BillStatus.Finished).
         billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -82,11 +84,11 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         BillableItem pet1 = addPet();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
-        billPreview = runBillingPreview();
         // @formatter:off
-        new BillTester(billPreview).
+        new BillTester(runBillingPreview()).
         billSequenceNumber(0).
         billType(Bill.BillType.First).
+        billStatus(Bill.BillStatus.Finished).
         billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -100,12 +102,11 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         totalDueAmount("1603.05");
         // @formatter:on
 
-        Bill bill = approveApplication(true);
-
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(approveApplication(true)).
         billSequenceNumber(1).
         billType(Bill.BillType.First).
+        billStatus(Bill.BillStatus.Confirmed).
         billingCyclePeriodStartDate("01-Mar-2011").
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
@@ -125,14 +126,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         receiveAndPostPayment("18-Mar-2011", "1603.05");
 
-//-->        activateLease();
+        //TODO that bill should be triggered by approval process instead of implicit call to run?!
+        runBilling();
 
-        bill = runBilling(true);
+        confirmBill(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(2).
         billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
         billingCyclePeriodStartDate("01-Apr-2011").
         billingPeriodStartDate("01-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
@@ -150,18 +153,19 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        advanceSysDate("18-Apr-2011");
-
         addBooking("25-Apr-2011");
         addBooking("5-May-2011");
         finalizeLeaseAdendum();
 
-        bill = runBilling(true);
+        advanceSysDate("18-Apr-2011");
+
+        confirmBill(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(3).
         billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
         billingCyclePeriodStartDate("01-May-2011").
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
@@ -184,17 +188,20 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("20.00", false);
         addGoodWillCredit("30.00");
 
-        advanceSysDate("18-May-2011");
-
         addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
 
-        bill = runBilling(true);
+        advanceSysDate("20-May-2011");
+
+        confirmBill(true);
+
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(4).
         billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
         billingCyclePeriodStartDate("01-Jun-2011").
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
@@ -211,15 +218,15 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        advanceSysDate("18-Jun-2011");
-
         addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
 
-        bill = runBilling(true);
+        advanceSysDate("18-Jun-2011");
+
+        confirmBill(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(5).
         billType(Bill.BillType.Regular).
         billingCyclePeriodStartDate("01-Jul-2011").
@@ -240,10 +247,10 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceSysDate("18-Jul-2011");
 
-        bill = runBilling(true);
+        confirmBill(true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(getLatestBill()).
         billSequenceNumber(6).
         billType(Bill.BillType.Regular).
         billingCyclePeriodStartDate("01-Aug-2011").
@@ -265,10 +272,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addAccountCharge("140.00");
 
-        bill = runBilling(true);
-
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(runBilling(true)).
         billSequenceNumber(7).
         billType(Bill.BillType.Final).
         billingCyclePeriodStartDate("01-Sep-2011").

@@ -15,13 +15,13 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.billing.BillTester;
+import com.propertyvista.domain.financial.billing.Bill;
 
-@Ignore
 @Category(RegressionTests.class)
 public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase {
 
@@ -33,19 +33,83 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
     public void testScenario() throws Exception {
 
-        setSysDate("17-Mar-2011");
+        setSysDate("10-Mar-2011");
 
-        createLease("23-Mar-2011", "03-Aug-2011");
-
-        setPreauthorizedPayment(new BigDecimal("1"));
+        createLease("1-Apr-2011", "31-Aug-2011");
 
         setBillingBatchProcess();
         setLeaseBatchProcess();
         setDepositBatchProcess();
         setPaymentBatchProcess();
 
-        advanceSysDate("18-Mar-2011");
+        advanceSysDate("12-Mar-2011");
+
+        approveApplication(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(1).
+        billType(Bill.BillType.First).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("01-Apr-2011").
+        billingPeriodStartDate("01-Apr-2011").
+        billingPeriodEndDate("30-Apr-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("0.00").
+        serviceCharge("930.30").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("111.64").
+        totalDueAmount("1972.24");
+        // @formatter:on
+
+        advanceSysDate("20-Mar-2011");
+
+        receiveAndPostPayment("20-Mar-2011", "1972.24");
+
+        setPreauthorizedPayment(new BigDecimal("1"));
+
+        advanceSysDate("18-Apr-2011");
+
+        confirmBill(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(2).
+        billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("01-May-2011").
+        billingPeriodStartDate("01-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("-1972.24").
+        serviceCharge("930.30").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("111.64").
+        totalDueAmount("1041.94");
+        // @formatter:on
+
+        advanceSysDate("18-May-2011");
+
+        confirmBill(true);
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        billSequenceNumber(3).
+        billType(Bill.BillType.Regular).
+        billStatus(Bill.BillStatus.Confirmed).
+        billingCyclePeriodStartDate("01-Jun-2011").
+        billingPeriodStartDate("1-Jun-2011").
+        billingPeriodEndDate("30-Jun-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("-1041.94").
+        serviceCharge("930.30").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("111.64").
+        totalDueAmount("1041.94");
+        // @formatter:on
 
     }
-
 }

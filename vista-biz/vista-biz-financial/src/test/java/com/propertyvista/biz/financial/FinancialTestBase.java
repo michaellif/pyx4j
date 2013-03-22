@@ -594,12 +594,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         if (immediate) {
             ServerSideFactory.create(ARFacade.class).postImmediateAdjustment(adjustment);
+            Persistence.service().commit();
         }
         return adjustment;
     }
 
     protected void setPreauthorizedPayment(BigDecimal value) {
         getDataModel(LeaseDataModel.class).setPreauthorizedPayment(value);
+        Persistence.service().commit();
     }
 
     protected PaymentRecord receivePayment(String receivedDate, String amount, PaymentType type) {
