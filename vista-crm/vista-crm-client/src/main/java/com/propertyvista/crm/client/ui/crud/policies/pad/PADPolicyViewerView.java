@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 30, 2012
- * @author ArtyomB
+ * Created on 2013-03-21
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.pad;

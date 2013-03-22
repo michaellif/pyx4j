@@ -78,6 +78,12 @@ import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerView;
@@ -219,6 +225,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(PaymentTypeSelectionPolicyEditorView.class, new PaymentTypeSelectionPolicyEditorViewImpl());
             } else if (PaymentTypeSelectionPolicyViewerView.class.equals(type)) {
                 map.put(PaymentTypeSelectionPolicyViewerView.class, new PaymentTypeSelectionPolicyViewerViewImpl());
+
+            } else if (PADPolicyListerView.class.equals(type)) {
+                map.put(PADPolicyListerView.class, new PADPolicyListerViewImpl());
+            } else if (PADPolicyEditorView.class.equals(type)) {
+                map.put(PADPolicyEditorView.class, new PADPolicyEditorViewImpl());
+            } else if (PADPolicyViewerView.class.equals(type)) {
+                map.put(PADPolicyViewerView.class, new PADPolicyViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

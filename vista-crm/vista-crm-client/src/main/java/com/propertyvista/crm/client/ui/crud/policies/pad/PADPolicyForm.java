@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 30, 2012
- * @author ArtyomB
+ * Created on 2013-03-21
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.policies.pad;
@@ -103,7 +103,7 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
                 }
             }
 
-            new SelectEnumDialog<DebitType>(i18n.tr("Select Debit Type"), EnumSet.copyOf(alreadySelectedTypes)) {
+            new SelectEnumDialog<DebitType>(i18n.tr("Select Debit Type"), EnumSet.complementOf(EnumSet.copyOf(alreadySelectedTypes))) {
                 @Override
                 public boolean onClickOk() {
                     PADPolicyItem newItem = EntityFactory.create(PADPolicyItem.class);

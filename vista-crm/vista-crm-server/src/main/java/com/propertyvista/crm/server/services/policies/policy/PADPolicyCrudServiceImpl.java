@@ -11,12 +11,17 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.pad;
+package com.propertyvista.crm.server.services.policies.policy;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-
+import com.propertyvista.crm.rpc.services.policies.policy.PADPolicyCrudService;
+import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PADPolicyDTO;
+import com.propertyvista.domain.policy.policies.PADPolicy;
 
-public interface PADPolicyListerView extends ILister<PADPolicyDTO> {
+public class PADPolicyCrudServiceImpl extends GenericPolicyCrudService<PADPolicy, PADPolicyDTO> implements PADPolicyCrudService {
+
+    public PADPolicyCrudServiceImpl() {
+        super(PADPolicy.class, PADPolicyDTO.class);
+    }
 
 }

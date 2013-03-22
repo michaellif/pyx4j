@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -34,6 +35,7 @@ public interface PADPolicy extends Policy {
         LastBill, ToDateTotal
     }
 
+    @NotNull
     IPrimitive<PADChargeType> chargeType();
 
     @Owned
