@@ -21,7 +21,7 @@
 package com.pyx4j.site.client.ui.dialogs;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Collection;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
@@ -46,7 +46,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
 
     private final SingleSelectionModel<E> selectionModel;
 
-    public SelectEnumDialog(String caption, EnumSet<E> values) {
+    public SelectEnumDialog(String caption, Collection<E> values) {
         super(caption);
         assert !values.isEmpty() : "The set of values must not be empty";
         this.selectionModel = new SingleSelectionModel<E>();
@@ -54,7 +54,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         setWidth(defineWidth());
     }
 
-    protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, EnumSet<E> values, String height) {
+    protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, Collection<E> values, String height) {
         CellList<E> list = new CellList<E>(new AbstractCell<E>() {
             @Override
             public void render(com.google.gwt.cell.client.Cell.Context context, E value, SafeHtmlBuilder sb) {
