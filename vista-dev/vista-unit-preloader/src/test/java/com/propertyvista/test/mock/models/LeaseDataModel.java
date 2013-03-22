@@ -27,6 +27,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -82,6 +83,8 @@ public class LeaseDataModel extends MockDataModel<Lease> {
         lease.currentTerm().termTo().setValue(parseDate(leaseDateTo));
 
         ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
+
+        lease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
 
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
 
