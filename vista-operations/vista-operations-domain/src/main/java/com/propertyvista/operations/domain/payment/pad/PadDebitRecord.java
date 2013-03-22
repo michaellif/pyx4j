@@ -15,13 +15,11 @@ package com.propertyvista.operations.domain.payment.pad;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,11 +38,6 @@ public interface PadDebitRecord extends IEntity {
     @JoinColumn
     @Indexed
     PadBatch padBatch();
-
-    @Override
-    @Indexed
-    @OrderColumn
-    IPrimitive<Key> id();
 
     // A unique value to represent the client/cardholder
     @Length(29)

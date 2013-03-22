@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -45,7 +46,7 @@ public interface ProductItemType extends IEntity {
     IPrimitive<Date> updated();
 
     @Owned
-    //TODO add explicit @OrderBy(PrimaryKey.class)
+    @OrderBy(PrimaryKey.class)
     IList<YardiChargeCode> yardiChargeCodes();
 
 }

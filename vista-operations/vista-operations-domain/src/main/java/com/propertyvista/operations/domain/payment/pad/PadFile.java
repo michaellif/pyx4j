@@ -18,6 +18,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -99,6 +100,7 @@ public interface PadFile extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
     IList<PadBatch> batches();
 
     IPrimitive<Date> sent();

@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -94,6 +95,7 @@ public interface PadSimFile extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
     IList<PadSimBatch> batches();
 
 }

@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -42,11 +42,6 @@ import com.propertyvista.domain.VistaNamespace;
 @GwtBlacklist
 public interface PadBatch extends IEntity {
 
-    @Override
-    @Indexed
-    @OrderColumn
-    IPrimitive<Key> id();
-
     @Owner
     @JoinColumn
     @Indexed
@@ -57,6 +52,7 @@ public interface PadBatch extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
     IList<PadDebitRecord> records();
 
     @Indexed(group = { "m,1" })

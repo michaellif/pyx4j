@@ -13,13 +13,11 @@
  */
 package com.propertyvista.operations.domain.payment.pad.sim;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -29,17 +27,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimBatch extends IEntity {
-
-    @Override
-    @Indexed
-    @OrderColumn
-    IPrimitive<Key> id();
 
     @Owner
     @MemberColumn(notNull = true)
