@@ -79,7 +79,7 @@ class PreauthorisedPaymentsManager {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.lt(criteria.proto().targetPadGenerationDate(), runDate);
             criteria.gt(criteria.proto().padExecutionDate(), runDate);
-            criteria.isNull(criteria.proto().actualPadGenerationDate());
+            criteria.isNotNull(criteria.proto().actualPadGenerationDate());
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {
