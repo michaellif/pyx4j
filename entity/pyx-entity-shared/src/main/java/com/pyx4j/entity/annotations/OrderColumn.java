@@ -27,9 +27,10 @@ import java.lang.annotation.Target;
 
 /**
  * Member of type IPrimitive<Integer> for sorting IList collections.
+ * The order of Collection is materialized in the database.
  * 
- * OrderColumn can be set on id(PK) then order would be unchangeable and governed by insertion order,
- * Better style is to use @OrderBy(PrimaryKey.class) in owned IList declaration.
+ * If you don't need Persistence to maintain order then use <tt>@OrderBy(PrimaryKey.class)</tt> in owned IList declaration,
+ * order would be unchangeable and governed by insertion order,
  * 
  * Analog of org.hibernate.annotations.IndexColumn
  * 

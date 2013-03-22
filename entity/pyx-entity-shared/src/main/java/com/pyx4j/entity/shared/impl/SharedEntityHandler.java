@@ -620,6 +620,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
 
     @Override
     public IObject<?> getMember(String memberName) {
+        assert (memberName != null);
         if (members == null) {
             members = new HashMap<String, IObject<?>>();
         }
@@ -645,6 +646,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
      */
     @Override
     public Serializable getMemberValue(String memberName) {
+        assert (memberName != null);
         // Like Elvis operator
         Map<String, Serializable> v = getValue(true);
         if (v == null) {
@@ -746,6 +748,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
      */
     @Override
     public void setMemberValue(String memberName, Serializable value) {
+        assert (memberName != null);
         ensureValue(true).put(memberName, value);
     }
 

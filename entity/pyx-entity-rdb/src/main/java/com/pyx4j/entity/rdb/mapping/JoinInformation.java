@@ -48,9 +48,7 @@ abstract class JoinInformation {
 
     String sqlOwnerName = null;
 
-    String sqlOrderColumnName = null;
-
-    String orderMemberName = null;
+    MemberCollectionOrderMeta collectionOrderMeta = null;
 
     String sqlChildJoinContition = null;
 

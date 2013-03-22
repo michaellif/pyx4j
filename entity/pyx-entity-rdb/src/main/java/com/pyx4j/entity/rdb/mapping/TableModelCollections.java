@@ -186,6 +186,9 @@ public class TableModelCollections {
         }
     }
 
+    /**
+     * Remove records or update collection order
+     */
     @SuppressWarnings("unchecked")
     public static void update(Mappings mappings, PersistenceContext persistenceContext, IEntity entity, MemberCollectionOperationsMeta member,
             List<IEntity> cascadeRemove) {
@@ -235,7 +238,7 @@ public class TableModelCollections {
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(", ").append(dialect.getNamingConvention().sqlNameSpaceColumnName());
             }
-            if (isList) {
+            if (isList && member.isOrderMaterialized()) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
             sql.append(" FROM ");
@@ -281,7 +284,7 @@ public class TableModelCollections {
                 int valueIdx = allData.indexOf(value);
                 if (valueIdx != -1) {
                     insertData.remove(value);
-                    if (isList) {
+                    if (isList && member.isOrderMaterialized()) {
                         if (valueIdx != rs.getInt(member.sqlOrderColumnName())) {
                             if (EntityPersistenceServiceRDB.trace) {
                                 log.info(Trace.id() + "update {} (" + entity.getPrimaryKey() + ", " + value + ", " + rs.getInt(member.sqlOrderColumnName())

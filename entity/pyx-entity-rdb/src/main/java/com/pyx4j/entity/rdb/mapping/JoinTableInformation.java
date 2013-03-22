@@ -23,8 +23,6 @@ package com.pyx4j.entity.rdb.mapping;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -68,14 +66,13 @@ class JoinTableInformation extends JoinInformation {
         sqlOwnerName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(ownerMemberMeta));
         ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, rootEntityMeta, ownerMemberMeta);
 
-        MemberMeta orderMemberMeta = findOrderMember(joinEntityMeta);
+        MemberMeta orderMemberMeta = MemberCollectionOrderMeta.findOrderMember(entityMeta, memberMeta, true, joinEntityMeta);
 
         if (orderMemberMeta == null && memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
             throw new AssertionError("Unmapped @OrderBy member in join table " + joinEntityMeta.getEntityClass().getName() + " for '"
                     + memberMeta.getFieldName() + "' in " + entityMeta.getEntityClass().getName());
         } else if (orderMemberMeta != null) {
-            sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
-            orderMemberName = orderMemberMeta.getFieldName();
+            collectionOrderMeta = new MemberCollectionOrderMeta(dialect, orderMemberMeta);
         }
     }
 
@@ -140,34 +137,6 @@ class JoinTableInformation extends JoinInformation {
         } else {
             return valueMemberMeta;
         }
-    }
-
-    private MemberMeta findOrderMember(EntityMeta joinEntityMeta) {
-        Class<? extends ColumnId> orderColumn = null;
-        OrderBy orderBy = memberMeta.getAnnotation(OrderBy.class);
-        if (orderBy != null) {
-            orderColumn = orderBy.value();
-        }
-
-        MemberMeta orderMemberMeta = null;
-        for (String jmemberName : joinEntityMeta.getMemberNamesWithPk()) {
-            MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
-                if ((joinTableOrderColumn != null) && (orderColumn == joinTableOrderColumn.value())) {
-                    if (orderMemberMeta != null) {
-                        throw new AssertionError("Duplicate orderColumn member in join table '" + joinEntityMeta.getCaption() + "' for "
-                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
-                    }
-                    if ((!jmemberMeta.getValueClass().equals(Integer.class)) && (!jmemberMeta.getFieldName().equals(IEntity.PRIMARY_KEY))) {
-                        throw new AssertionError("Expected Integer orderColumn in join table '" + joinEntityMeta.getCaption() + "' for "
-                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
-                    }
-                    orderMemberMeta = jmemberMeta;
-                }
-            }
-        }
-        return orderMemberMeta;
     }
 
 }

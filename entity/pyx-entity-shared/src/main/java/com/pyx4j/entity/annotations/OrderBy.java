@@ -30,8 +30,13 @@ import java.lang.annotation.Target;
  * 
  * If it points to:
  * 
- * @OrderColumn The order is materialized in the database.
- * @MemberColumn The order is not materialized in the database
+ * <tt>@OrderColumn</tt> The order is materialized in the database.
+ * 
+ * <tt>@MemberColumn</tt> The order is not materialized in the database
+ * 
+ * If you don't need Persistence to maintain order then use <tt>@OrderBy(PrimaryKey.class)</tt> in owned IList declaration, order would be unchangeable and
+ * governed by insertion order,
+ * 
  */
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

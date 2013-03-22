@@ -23,11 +23,7 @@ package com.pyx4j.entity.rdb.mapping;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderBy;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,14 +33,8 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class JoinOwnedInformation extends JoinInformation {
 
-    private final MemberMeta memberMeta;
-
-    private final EntityMeta entityMeta;
-
     // Relationship is managed in CHILD table using PARENT column.
     public JoinOwnedInformation(Dialect dialect, EntityMeta entityMeta, MemberMeta memberMeta, MemberMeta ownerMemberMeta) {
-        this.entityMeta = entityMeta;
-        this.memberMeta = memberMeta;
         @SuppressWarnings("unchecked")
         Class<? extends IEntity> childEntityClass = (Class<IEntity>) memberMeta.getValueClass();
         EntityMeta childEntityMeta = EntityFactory.getEntityMeta(childEntityClass);
@@ -58,88 +48,39 @@ public class JoinOwnedInformation extends JoinInformation {
         ownerValueAdapter = EntityOperationsMeta.createEntityValueAdapter(dialect, entityMeta, ownerMemberMeta);
 
         if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
-            MemberMeta orderMemberMeta = findOrderMember(childEntityMeta);
+            MemberMeta orderMemberMeta = MemberCollectionOrderMeta.findOrderMember(entityMeta, memberMeta, false, childEntityMeta);
             if (orderMemberMeta == null) {
                 throw new AssertionError("Unmapped @OrderBy member in table " + childEntityClass.getName() + " for '" + memberMeta.getFieldName() + "' in "
                         + entityMeta.getEntityClass().getName() + "\n add @OrderColumn or @MemberColumn to " + childEntityClass);
             }
-            sqlOrderColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(orderMemberMeta));
-            orderMemberName = orderMemberMeta.getFieldName();
+            collectionOrderMeta = new MemberCollectionOrderMeta(dialect, orderMemberMeta);
+        }
 
-            if (EntityFactory.getEntityMeta(childEntityClass).getPersistableSuperClass() != null) {
-                List<String> discriminatorStrings = new ArrayList<String>();
-                for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(childEntityClass)) {
-                    DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
-                    if (discriminator != null) {
-                        discriminatorStrings.add(discriminator.value());
-                    }
-                }
-                if (discriminatorStrings.size() == 1) {
-                    sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " = '" + discriminatorStrings.get(0) + "'";
-                } else {
-                    sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " IN (";
-                    boolean first = true;
-                    for (String desc : discriminatorStrings) {
-                        if (first) {
-                            first = false;
-                        } else {
-                            sqlChildJoinContition += ",";
-                        }
-                        sqlChildJoinContition += "'" + desc + "'";
-                    }
-                    sqlChildJoinContition += ") ";
+        if (EntityFactory.getEntityMeta(childEntityClass).getPersistableSuperClass() != null) {
+            List<String> discriminatorStrings = new ArrayList<String>();
+            for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(childEntityClass)) {
+                DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
+                if (discriminator != null) {
+                    discriminatorStrings.add(discriminator.value());
                 }
             }
-
-        }
-    }
-
-    private MemberMeta findOrderMember(EntityMeta childEntityMeta) {
-        Class<? extends ColumnId> orderColumn = null;
-        OrderBy orderBy = memberMeta.getAnnotation(OrderBy.class);
-        if (orderBy != null) {
-            orderColumn = orderBy.value();
-        }
-        MemberMeta orderMemberMeta = null;
-        for (String jmemberName : childEntityMeta.getMemberNamesWithPk()) {
-            MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
-            if (!jmemberMeta.isTransient()) {
-                OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
-                if (orderColumnMatch(joinTableOrderColumn, orderColumn)) {
-                    if (orderMemberMeta != null) {
-                        throw new AssertionError("Duplicate @OrderColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
-                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
+            if (discriminatorStrings.size() == 1) {
+                sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " = '" + discriminatorStrings.get(0) + "'";
+            } else {
+                sqlChildJoinContition = dialect.sqlDiscriminatorColumnName() + " IN (";
+                boolean first = true;
+                for (String desc : discriminatorStrings) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sqlChildJoinContition += ",";
                     }
-
-                    if ((!jmemberMeta.getValueClass().equals(Integer.class)) && (!jmemberMeta.getFieldName().equals(IEntity.PRIMARY_KEY))) {
-                        throw new AssertionError("Expected Integer orderColumn in table " + childEntityMeta.getEntityClass().getName() + " for "
-                                + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
-                    }
-                    orderMemberMeta = jmemberMeta;
-                } else {
-                    MemberColumn joinTableMemberColumn = jmemberMeta.getAnnotation(MemberColumn.class);
-                    if ((joinTableMemberColumn != null) && (orderColumn != ColumnId.class) && (orderColumn == joinTableMemberColumn.value())) {
-                        if (orderMemberMeta != null) {
-                            throw new AssertionError("Duplicate @MemberColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
-                                    + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
-                        }
-                        orderMemberMeta = jmemberMeta;
-                    }
+                    sqlChildJoinContition += "'" + desc + "'";
                 }
-
+                sqlChildJoinContition += ") ";
             }
         }
-        return orderMemberMeta;
+
     }
 
-    private static boolean orderColumnMatch(OrderColumn joinTableOrderColumn, Class<? extends ColumnId> orderColumn) {
-        if (joinTableOrderColumn == null) {
-            return false;
-        } else if (orderColumn == joinTableOrderColumn.value()) {
-            return true;
-        } else if ((orderColumn == null) && (joinTableOrderColumn.value() == ColumnId.class)) {
-            return true;
-        }
-        return false;
-    }
 }
