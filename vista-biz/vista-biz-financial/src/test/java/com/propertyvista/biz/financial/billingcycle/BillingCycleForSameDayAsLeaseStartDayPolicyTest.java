@@ -35,37 +35,37 @@ public class BillingCycleForSameDayAsLeaseStartDayPolicyTest extends FinancialTe
 
     public void testBillingCycleCreation() throws ParseException {
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "28-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "28-Apr-2013")).
         billingCycleStartDate("28-Apr-2013").
         billingCycleEndDate("27-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "29-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "29-Apr-2013")).
         billingCycleStartDate("1-Apr-2013").
         billingCycleEndDate("30-Apr-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "30-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "30-Apr-2013")).
         billingCycleStartDate("1-Apr-2013").
         billingCycleEndDate("30-Apr-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "01-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "01-May-2013")).
         billingCycleStartDate("1-May-2013").
         billingCycleEndDate("31-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "05-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "05-May-2013")).
         billingCycleStartDate("5-May-2013").
         billingCycleEndDate("4-Jun-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "27-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "27-May-2013")).
         billingCycleStartDate("27-May-2013").
         billingCycleEndDate("26-Jun-2013");
         // @formatter:on

@@ -60,7 +60,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         charge.period().setValue(Period.next);
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
         charge.billingCycle().set(nextCycle);
@@ -86,7 +86,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         payment.description().set(paymentDTO.description());
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
         payment.billingCycle().set(nextCycle);

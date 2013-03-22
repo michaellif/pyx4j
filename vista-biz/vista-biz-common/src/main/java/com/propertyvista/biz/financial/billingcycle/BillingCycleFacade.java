@@ -25,7 +25,7 @@ public interface BillingCycleFacade {
 
     BillingCycle getLeaseFirstBillingCycle(Lease lease);
 
-    BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date);
+    BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date);
 
     BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 

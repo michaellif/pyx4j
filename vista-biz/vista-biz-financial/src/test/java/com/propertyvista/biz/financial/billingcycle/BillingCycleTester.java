@@ -13,10 +13,13 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingCycleTester extends Tester {
 
@@ -27,8 +30,12 @@ public class BillingCycleTester extends Tester {
         this.billingCycle = billingCycle;
     }
 
-    public BillingCycleTester(Building building, BillingPeriod billingPeriod, String leaseStartDate) {
-        this(BillingCycleManager.instance().getBillingCycle(building, billingPeriod, getDate(leaseStartDate)));
+    public static BillingCycle ensureBillingCycle(Building building, BillingPeriod billingPeriod, String leaseStartDate) {
+        return BillingCycleManager.instance().ensureBillingCycle(building, billingPeriod, getDate(leaseStartDate));
+    }
+
+    public static BillingCycle getBillingCycleForDate(Lease lease, String date) {
+        return ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, getDate(date));
     }
 
     public BillingCycleTester billingCycleStartDate(String date) {

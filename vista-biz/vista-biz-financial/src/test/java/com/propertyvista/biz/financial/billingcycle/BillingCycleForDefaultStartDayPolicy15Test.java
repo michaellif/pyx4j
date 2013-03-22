@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
-import java.text.ParseException;
-
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -33,43 +31,53 @@ public class BillingCycleForDefaultStartDayPolicy15Test extends FinancialTestBas
         preloadData(config);
     }
 
-    public void testBillingCycleCreation() throws ParseException {
+    public void testBillingCycleCreation() {
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "28-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "28-Apr-2013")).
         billingCycleStartDate("15-Apr-2013").
         billingCycleEndDate("14-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "29-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "29-Apr-2013")).
         billingCycleStartDate("15-Apr-2013").
         billingCycleEndDate("14-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "30-Apr-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "30-Apr-2013")).
         billingCycleStartDate("15-Apr-2013").
         billingCycleEndDate("14-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "01-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "01-May-2013")).
         billingCycleStartDate("15-Apr-2013").
         billingCycleEndDate("14-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "05-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "05-May-2013")).
         billingCycleStartDate("15-Apr-2013").
         billingCycleEndDate("14-May-2013");
         // @formatter:on
 
         // @formatter:off
-        new BillingCycleTester(getBuilding(),BillingPeriod.Monthly,  "27-May-2013").
+        new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(),BillingPeriod.Monthly,  "27-May-2013")).
         billingCycleStartDate("15-May-2013").
         billingCycleEndDate("14-Jun-2013");
         // @formatter:on
 
+    }
+
+    public void testBillingForDate() {
+        createLease("23-Mar-2013", "03-Aug-2013");
+
+        // @formatter:off
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "27-May-2013")).
+        billingCycleStartDate("15-May-2013").
+        billingCycleEndDate("14-Jun-2013");
+        // @formatter:on
     }
 
 }

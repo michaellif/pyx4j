@@ -162,7 +162,7 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount) {
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(billingAccount.lease(), now);
+        BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);
         return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast(), nextCycle);
     }

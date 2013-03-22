@@ -32,8 +32,8 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     }
 
     @Override
-    public BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date) {
-        return BillingCycleManager.instance().getLeaseBillingCycleForDate(lease, date);
+    public BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
+        return BillingCycleManager.instance().getBillingCycleForDate(lease, date);
     }
 
     @Override

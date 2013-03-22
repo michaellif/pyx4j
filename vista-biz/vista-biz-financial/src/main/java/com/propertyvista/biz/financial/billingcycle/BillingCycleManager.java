@@ -23,7 +23,6 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -74,7 +73,7 @@ class BillingCycleManager {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycle.billingCycleEndDate().getValue());
         calendar.add(Calendar.DAY_OF_MONTH, 1);
-        return getBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
+        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
     }
 
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
@@ -89,20 +88,12 @@ class BillingCycleManager {
         } else {
             firstCycleStartDate = lease.leaseFrom().getValue();
         }
-        return getBillingCycle(lease.unit().building(), billingAccount.billingPeriod().getValue(), firstCycleStartDate);
+        return ensureBillingCycle(lease.unit().building(), billingAccount.billingPeriod().getValue(), firstCycleStartDate);
     }
 
-    protected BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date) {
-        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-
-        EntityQueryCriteria<BillingCycle> cycleCrit = EntityQueryCriteria.create(BillingCycle.class);
-        cycleCrit.add(PropertyCriterion.eq(cycleCrit.proto().building(), lease.unit().building()));
-        cycleCrit.add(PropertyCriterion.eq(cycleCrit.proto().billingType(), lease.billingAccount().billingType()));
-        cycleCrit.add(PropertyCriterion.le(cycleCrit.proto().billingCycleStartDate(), date));
-        cycleCrit.add(PropertyCriterion.ge(cycleCrit.proto().billingCycleEndDate(), date));
-        return Persistence.service().retrieve(cycleCrit);
+    protected BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
+        LogicalDate startDate = calculateBillingCycleStartDate(lease.billingAccount().billingType(), date);
+        return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingPeriod().getValue(), startDate);
     }
 
     BillingType getBillingType(Building building, BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
@@ -185,7 +176,7 @@ class BillingCycleManager {
         return billingType;
     }
 
-    BillingCycle getBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
+    BillingCycle ensureBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
 
         BillingType billingType = getBillingType(building, billingPeriod, billingPeriodStartDate);
 

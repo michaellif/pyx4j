@@ -85,7 +85,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         reversal.applyNSF().setValue(applyNSF);
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
         reversal.billingCycle().set(nextCycle);
@@ -117,7 +117,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         receipt.description().setValue(i18n.tr("Payment Received - Thank You"));
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
         receipt.billingCycle().set(nextCycle);

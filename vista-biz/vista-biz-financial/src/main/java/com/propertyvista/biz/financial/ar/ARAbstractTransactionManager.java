@@ -62,7 +62,7 @@ public abstract class ARAbstractTransactionManager {
         if (billingCycle == null) {
             Persistence.ensureRetrieve(invoiceLineItem.billingAccount(), AttachLevel.Attached);
             Persistence.ensureRetrieve(invoiceLineItem.billingAccount().lease(), AttachLevel.Attached);
-            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseBillingCycleForDate(invoiceLineItem.billingAccount().lease(), postDate);
+            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(invoiceLineItem.billingAccount().lease(), postDate);
             if (billingCycle == null) {
                 billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(invoiceLineItem.billingAccount().lease());
             } else {
