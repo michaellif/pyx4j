@@ -58,6 +58,7 @@ import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
@@ -141,6 +142,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.billingAccount().isNull()) {
             if (VistaFeatures.instance().yardiIntegration()) {
                 YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
+                billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
                 lease.billingAccount().set(billingAccount);
             } else {
                 InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
@@ -840,21 +842,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
             lease.unit().set(unit);
 
+            // set LeaseBillingPolicy offsets
             LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
-            // TODO - need to clarify the work flow: for more than one available type, the policy item should probably be selected in UI
-            LeaseBillingTypePolicyItem billingType = billingPolicy.availableBillingTypes().get(0);
-            lease.billingAccount().billingPeriod().set(billingType.billingPeriod());
-            lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
-            lease.billingAccount().paymentDueDayOffset().set(billingType.paymentDueDayOffset());
-            lease.billingAccount().finalDueDayOffset().set(billingType.finalDueDayOffset());
-            lease.billingAccount().billingPeriod().set(billingType.billingPeriod());
+            boolean policyFound = false;
+            for (LeaseBillingTypePolicyItem billingType : billingPolicy.availableBillingTypes()) {
+                if (billingType.billingPeriod().getValue().equals(lease.billingAccount().billingPeriod().getValue())) {
+                    lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
+                    lease.billingAccount().paymentDueDayOffset().set(billingType.paymentDueDayOffset());
+                    lease.billingAccount().finalDueDayOffset().set(billingType.finalDueDayOffset());
+                    policyFound = true;
+                    break;
+                }
+            }
+            if (!policyFound) {
+                throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
+            }
+            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
 
             updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
-
-            if (lease.billingAccount().isInstanceOf(InternalBillingAccount.class)) {
-                lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
-            }
-
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid Lease/Term pair supplied"));
         }

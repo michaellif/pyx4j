@@ -92,8 +92,8 @@ class BillingCycleManager {
         return getBillingCycle(lease.unit().building(), billingAccount.billingPeriod().getValue(), firstCycleStartDate);
     }
 
-    protected BillingCycle getLeaseBillingCycleForDate(Lease leaseIn, LogicalDate date) {
-        Lease lease = leaseIn.isValueDetached() ? Persistence.service().retrieve(Lease.class, leaseIn.getPrimaryKey()) : leaseIn.<Lease> duplicate();
+    protected BillingCycle getLeaseBillingCycleForDate(Lease lease, LogicalDate date) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
@@ -212,11 +212,7 @@ class BillingCycleManager {
             throw new Error("Duplication of Billing Cycles");
         }
 
-        if (billingCycle.isValueDetached()) {
-            return Persistence.service().retrieve(BillingCycle.class, billingCycle.getPrimaryKey());
-        } else {
-            return billingCycle;
-        }
+        return billingCycle;
     }
 
     private LogicalDate calculateBillingCycleStartDate(BillingType billingType, LogicalDate date) {
