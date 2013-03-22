@@ -282,6 +282,9 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle '
                 ||'SET  target_pad_generation_date = billing_cycle_start_date -3 ';
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle '
+                ||'SET  pad_execution_date = billing_cycle_start_date ';
                 
         -- 
         
@@ -392,6 +395,10 @@ BEGIN
         -- Create indexes
         CREATE UNIQUE INDEX billing_billing_type_billing_period_billing_cycle_start_day_idx ON billing_billing_type USING btree (billing_period, billing_cycle_start_day);
         CREATE INDEX lease_billing_type_policy_item_lease_billing_policy_idx ON lease_billing_type_policy_item USING btree (lease_billing_policy) ;
+        
+        UPDATE  _admin_.admin_pmc 
+        SET     schema_version = '1.0.8'
+        WHERE   namespace = v_schema_name;
                       
         
 END;
