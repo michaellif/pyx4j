@@ -34,7 +34,6 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -111,16 +110,7 @@ public abstract class ARAbstractTransactionManager {
         for (PADPolicyItem item : policy.debitBalanceTypes()) {
             debitBalanceType.put(item.debitType().getValue(), item.owingBalanceType().getValue());
         }
-        // get bill
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), cycle));
-        Bill bill = Persistence.service().retrieve(criteria);
-        if (bill == null) {
-            return BigDecimal.ZERO;
-        }
         BigDecimal balance = BigDecimal.ZERO;
-        Persistence.ensureRetrieve(bill.lineItems(), AttachLevel.Attached);
         switch (policy.chargeType().getValue()) {
         case FixedAmount:
             throw new Error("Not Implemented");
@@ -130,7 +120,7 @@ public abstract class ARAbstractTransactionManager {
                 if (balanceType == null) {
                     continue;
                 }
-                if (balanceType.equals(OwingBalanceType.ToDateTotal) || bill.lineItems().contains(charge)) {
+                if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.billingCycle().equals(cycle)) {
                     balance = balance.add(charge.outstandingDebit().getValue());
                 }
             }
