@@ -55,9 +55,35 @@ public class CaledonPadUtils {
         return new SimpleDateFormat("yyyyMMdd").format(value);
     }
 
+    private static Date parseAndValidate(String value, String pattern) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        format.setLenient(false);
+        Date dateObj = format.parse(value);
+        if (!value.equals(format.format(dateObj))) {
+            throw new ParseException("Date value [" + value + "] does not match pattern [" + pattern + "]", 0);
+        }
+        return dateObj;
+    }
+
     public static LogicalDate parsDate(String value) {
         try {
-            return new LogicalDate(new SimpleDateFormat("yyyyMMdd").parse(value));
+            return new LogicalDate(parseAndValidate(value, "yyyyMMdd"));
+        } catch (ParseException e) {
+            throw new Error("Invalid date format '" + value + "'");
+        }
+    }
+
+    /**
+     * Temporary parser for Caledon Reconciliations.
+     */
+    public static LogicalDate parsDateReconciliation(String value) {
+        try {
+            return new LogicalDate(parseAndValidate(value, "yyyy-MM-dd"));
+        } catch (ParseException ignore) {
+        }
+        // Fallback to generic Caledon spec
+        try {
+            return new LogicalDate(parseAndValidate(value, "yyyyMMdd"));
         } catch (ParseException e) {
             throw new Error("Invalid date format '" + value + "'");
         }
