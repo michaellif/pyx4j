@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -78,6 +79,8 @@ public class LeaseGenerator extends DataGenerator {
         lease.currentTerm().termFrom().setValue(leaseFrom);
         lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(expectedMoveIn);
+
+        lease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
 
         ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
 
