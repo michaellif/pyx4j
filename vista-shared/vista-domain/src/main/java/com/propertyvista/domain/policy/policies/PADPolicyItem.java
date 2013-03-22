@@ -28,6 +28,14 @@ import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 
 public interface PADPolicyItem extends IEntity {
 
+    @NotNull
+    IPrimitive<DebitType> debitType();
+
+    @NotNull
+    IPrimitive<OwingBalanceType> owingBalanceType();
+
+    // internals: 
+
     @Owner
     @NotNull
     @MemberColumn(notNull = true)
@@ -38,11 +46,4 @@ public interface PADPolicyItem extends IEntity {
 
     @OrderColumn
     IPrimitive<Integer> orderInParent();
-
-    @NotNull
-    IPrimitive<DebitType> debitType();
-
-    @NotNull
-    IPrimitive<OwingBalanceType> owingBalanceType();
-
 }
