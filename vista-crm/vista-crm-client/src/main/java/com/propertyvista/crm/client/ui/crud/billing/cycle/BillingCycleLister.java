@@ -45,6 +45,6 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().targetBillExecutionDate().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().targetBillExecutionDate(), true));
     }
 }
