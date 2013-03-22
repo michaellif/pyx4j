@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.policies.pad;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -102,8 +103,10 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
                     alreadySelectedTypes.add(di.debitType().getValue());
                 }
             }
+            Collection<DebitType> selection = new ArrayList<DebitType>(EnumSet.allOf(DebitType.class));
+            selection.removeAll(alreadySelectedTypes);
 
-            new SelectEnumDialog<DebitType>(i18n.tr("Select Debit Type"), EnumSet.complementOf(EnumSet.copyOf(alreadySelectedTypes))) {
+            new SelectEnumDialog<DebitType>(i18n.tr("Select Debit Type"), selection) {
                 @Override
                 public boolean onClickOk() {
                     PADPolicyItem newItem = EntityFactory.create(PADPolicyItem.class);
