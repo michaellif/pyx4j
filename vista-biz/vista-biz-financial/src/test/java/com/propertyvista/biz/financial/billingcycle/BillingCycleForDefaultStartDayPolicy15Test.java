@@ -74,10 +74,35 @@ public class BillingCycleForDefaultStartDayPolicy15Test extends FinancialTestBas
         createLease("23-Mar-2013", "03-Aug-2013");
 
         // @formatter:off
-        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "27-May-2013")).
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "14-May-2013")).
+        billingCycleStartDate("15-Apr-2013").
+        billingCycleEndDate("14-May-2013");
+        // @formatter:on
+
+        // @formatter:off
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "15-May-2013")).
         billingCycleStartDate("15-May-2013").
         billingCycleEndDate("14-Jun-2013");
         // @formatter:on
+
+        // @formatter:off
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "30-May-2013")).
+        billingCycleStartDate("15-May-2013").
+        billingCycleEndDate("14-Jun-2013");
+        // @formatter:on
+
+        // @formatter:off
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "14-Jun-2013")).
+        billingCycleStartDate("15-May-2013").
+        billingCycleEndDate("14-Jun-2013");
+        // @formatter:on
+
+        // @formatter:off
+        new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "15-Jun-2013")).
+        billingCycleStartDate("15-Jun-2013").
+        billingCycleEndDate("14-Jul-2013");
+        // @formatter:on
+
     }
 
 }
