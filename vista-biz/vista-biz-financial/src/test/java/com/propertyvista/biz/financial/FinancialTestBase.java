@@ -656,11 +656,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected DebitCreditLink createHardDebitCreditLink(PaymentRecord paymentRecord, InvoiceDebit debit, String targetAmount) {
-        return ServerSideFactory.create(ARFacade.class).createHardLink(paymentRecord, debit, new BigDecimal(targetAmount));
+        DebitCreditLink link = ServerSideFactory.create(ARFacade.class).createHardLink(paymentRecord, debit, new BigDecimal(targetAmount));
+        Persistence.service().commit();
+        return link;
+
     }
 
     protected void removeHardLink(DebitCreditLink link) {
         ServerSideFactory.create(ARFacade.class).removeHardLink(link);
+        Persistence.service().commit();
     }
 
     protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
