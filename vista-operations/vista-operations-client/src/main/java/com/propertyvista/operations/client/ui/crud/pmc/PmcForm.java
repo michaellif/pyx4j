@@ -212,21 +212,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private FormFlexPanel createYardiTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Yardi"));
-
         int row = -1;
-
-        content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().residentTransactionsServiceURL()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().sysBatchServiceURL()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().propertyCode()), 30).build());
-
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().username()), 30).build());
-
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().credential()), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().serverName()), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().database()), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yardiCredential().platform()), 15).build());
-
+        content.setWidget(++row, 0, inject(proto().yardiCredential(), new YardiCredentialEditor()));
         return content;
     }
 }
