@@ -39,12 +39,13 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().total()).build(),
             new MemberColumnDescriptor.Builder(proto().targetPadGenerationDate()).build(),
             new MemberColumnDescriptor.Builder(proto().actualPadGenerationDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().padExecutionDate()).build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().targetBillExecutionDate(), true));
+        return Arrays.asList(new Sort(proto().billingCycleStartDate(), true));
     }
 }

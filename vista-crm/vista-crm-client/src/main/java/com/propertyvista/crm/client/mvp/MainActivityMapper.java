@@ -37,6 +37,7 @@ import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBill
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferViewerActivity;
@@ -641,6 +642,8 @@ public class MainActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new PaymentViewerActivity(crudPlace);
                             break;
+                        case lister:
+                            activity = new PaymentListerActivity(crudPlace);
                         default:
                             break;
                         }

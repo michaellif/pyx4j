@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -65,7 +66,7 @@ class BillingCycleManager {
         Persistence.service().retrieve(lease.unit().building());
 
         BillingPeriod billingPeriod = lease.billingAccount().billingPeriod().getValue();
-        return getBillingType(lease.unit().building(), billingPeriod, lease.leaseFrom().getValue());
+        return ensureBillingType(lease.unit().building(), billingPeriod, lease.leaseFrom().getValue());
 
     }
 
@@ -92,22 +93,23 @@ class BillingCycleManager {
     }
 
     protected BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         LogicalDate startDate = calculateBillingCycleStartDate(lease.billingAccount().billingType(), date);
         return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingPeriod().getValue(), startDate);
     }
 
-    BillingType getBillingType(Building building, BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
+    BillingType ensureBillingType(Building building, BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
         LeaseBillingTypePolicyItem policy = retreiveLeaseBillingTypePolicyItem(building, billingPeriod);
 
         if (policy.billingCycleStartDay().isNull()) { // According to Lease start day
-            return getBillingType(billingPeriod, getBillingCycleStartDay(billingPeriod, leaseStartDate));
+            return ensureBillingType(billingPeriod, getBillingCycleStartDay(billingPeriod, leaseStartDate));
         } else { // According to policy default start day
-            return getBillingType(billingPeriod, policy.billingCycleStartDay().getValue());
+            return ensureBillingType(billingPeriod, policy.billingCycleStartDay().getValue());
         }
 
     }
 
-    BillingType getBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
+    BillingType ensureBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
 
         // Try to find existing billing type
         EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
@@ -178,7 +180,7 @@ class BillingCycleManager {
 
     BillingCycle ensureBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
 
-        BillingType billingType = getBillingType(building, billingPeriod, billingPeriodStartDate);
+        BillingType billingType = ensureBillingType(building, billingPeriod, billingPeriodStartDate);
 
         // Try to find existing billing cycle
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
@@ -256,7 +258,7 @@ class BillingCycleManager {
      */
     BillingCycle createBillingCycle(final Building building, final BillingPeriod billingPeriod, LogicalDate leaseStartDate) throws BillingException {
 
-        BillingType billingType = getBillingType(building, billingPeriod, leaseStartDate);
+        BillingType billingType = ensureBillingType(building, billingPeriod, leaseStartDate);
 
         BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
         billingCycle.billingType().set(billingType);

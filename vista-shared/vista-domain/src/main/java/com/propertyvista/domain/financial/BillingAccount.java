@@ -144,7 +144,6 @@ public interface BillingAccount extends IEntity {
     @NotNull
     IPrimitive<BillingPeriod> billingPeriod();
 
-    // TODO move to InternalBillingAccount when $asInstanceOf  implemented
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
 

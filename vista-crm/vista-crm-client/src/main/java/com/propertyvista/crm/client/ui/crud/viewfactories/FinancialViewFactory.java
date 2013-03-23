@@ -32,6 +32,8 @@ import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferL
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerView;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerViewImpl;
 
 public class FinancialViewFactory extends ViewFactoryBase {
 
@@ -59,6 +61,11 @@ public class FinancialViewFactory extends ViewFactoryBase {
             } else if (AggregatedTransferViewerView.class.equals(type)) {
                 map.put(type, new AggregatedTransferViewerViewImpl());
             }
+
+            else if (PaymentRecordListerView.class.equals(type)) {
+                map.put(type, new PaymentRecordListerViewImpl());
+            }
+
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

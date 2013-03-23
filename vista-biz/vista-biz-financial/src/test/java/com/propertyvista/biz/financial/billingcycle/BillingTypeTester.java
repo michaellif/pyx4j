@@ -27,7 +27,7 @@ public class BillingTypeTester extends Tester {
     }
 
     public BillingTypeTester(Building building, BillingPeriod billingPeriod, String leaseStartDate) {
-        this(BillingCycleManager.instance().getBillingType(building, billingPeriod, getDate(leaseStartDate)));
+        this(BillingCycleManager.instance().ensureBillingType(building, billingPeriod, getDate(leaseStartDate)));
     }
 
     public BillingTypeTester billingCycleStartDate(Integer day) {

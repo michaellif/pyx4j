@@ -31,4 +31,7 @@ public interface BillingCycleDTO extends BillingCycle {
 
     @Caption(name = "Leases With Non Run Bills")
     IPrimitive<Long> notRun();
+
+    @Caption(name = "PADs")
+    IPrimitive<Long> pads();
 }

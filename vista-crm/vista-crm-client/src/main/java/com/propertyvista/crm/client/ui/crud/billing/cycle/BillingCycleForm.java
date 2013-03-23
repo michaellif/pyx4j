@@ -64,6 +64,13 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRun())).build());
         content.setWidget(row, 1, new ViewLeasesLink(true));
 
+        content.setH2(++row, 0, 2, i18n.tr("PAD"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetPadGenerationDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualPadGenerationDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padExecutionDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pads())).build());
+        content.setWidget(row, 1, new ViewPadLink());
+
         content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
@@ -108,6 +115,21 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
                         place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
                     }
                     place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BT_ID, getValue().billingType().getPrimaryKey().toString());
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+        }
+    }
+
+    private class ViewPadLink extends Anchor {
+        public ViewPadLink() {
+            super(i18n.tr("View"));
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppPlace place = new CrmSiteMap.Finance.Payment();
+                    place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
                     AppSite.getPlaceController().goTo(place);
                 }
             });
