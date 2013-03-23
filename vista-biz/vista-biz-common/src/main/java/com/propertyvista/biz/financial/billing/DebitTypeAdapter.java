@@ -24,7 +24,7 @@ public class DebitTypeAdapter {
         DebitType debitType = null;
 
         if (productItemType == null) {
-            debitType = DebitType.unknown;
+            debitType = DebitType.other;
         } else if (productItemType.isInstanceOf(ServiceItemType.class)) {
             debitType = DebitType.lease;
         } else if (productItemType.isInstanceOf(FeatureItemType.class)) {
