@@ -139,7 +139,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 //        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
         panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 25).build());
         panel.setWidget(
                 ++row,
                 0,
