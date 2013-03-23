@@ -10,6 +10,8 @@
 
 CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_108(v_schema_name TEXT) RETURNS VOID AS
 $$
+DECLARE 
+        v_billing_type_id               BIGINT := NULL;
 BEGIN
         EXECUTE 'SET search_path = '||v_schema_name;
         
@@ -167,22 +169,6 @@ BEGIN
         ALTER TABLE preauthorized_payment OWNER TO vista;
         
         
-        /*
-        -- product_item_type$yardi_charge_codes
-        
-        CREATE TABLE product_item_type$yardi_charge_codes
-        (
-                id                                      BIGINT                          NOT NULL,
-                owner                                   BIGINT,
-                value                                   BIGINT,
-                seq                                     INT,
-                        CONSTRAINT      product_item_type$yardi_charge_codes_pk PRIMARY KEY(id)
-        );
-        
-        ALTER TABLE product_item_type$yardi_charge_codes OWNER TO vista;
-        
-       */
-        
         -- yardi_charge_code
         
         CREATE TABLE yardi_charge_code
@@ -286,7 +272,35 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.billing_billing_cycle '
                 ||'SET  pad_execution_date = billing_cycle_start_date ';
                 
-        -- 
+        -- billing_billing_type
+        
+        EXECUTE 'SELECT id FROM '||v_schema_name||'.billing_billing_type '
+                
+                ||'WHERE        billing_period = ''Monthly'' '
+                ||'AND          billing_cycle_start_day = 1 '
+                INTO v_billing_type_id ;
+        
+        IF (v_billing_type_id IS NULL)
+        THEN
+                SELECT nextval('public.billing_billing_type_seq') INTO v_billing_type_id;
+                EXECUTE 'INSERT INTO '||v_schema_name||'.billing_billing_type '
+                        ||'(id,billing_period,billing_cycle_start_day) VALUES ('
+                        ||v_billing_type_id||',''Monthly'',1)';
+        END IF;
+        
+        -- billing_account
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_account '
+                ||'SET  billing_type = '||v_billing_type_id||' '
+                ||'WHERE billing_type IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_account '
+                ||'SET  final_due_day_offset = 15 '
+                ||'WHERE        final_due_day_offset IS NULL';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_account '
+                ||'SET  payment_due_day_offset = 0 '
+                ||'WHERE        payment_due_day_offset IS NULL ';
         
         
         /**
