@@ -39,6 +39,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -57,7 +58,7 @@ public class TenantPadParser {
         pads = parsePads(data, format);
         counters.add(savePads(pads));
 
-        String message = SimpleMessageFormat.format("{0} payment methods created, {1} skipped, {2} amounts updated", counters.imported, counters.skipped,
+        String message = SimpleMessageFormat.format("{0} payment methods created, {1} unchanged, {2} amounts updated", counters.imported, counters.unchanged,
                 counters.updated);
         log.info(message);
         return message;
@@ -97,8 +98,8 @@ public class TenantPadParser {
 
     private TenantPadCounter savePads(List<PadFileModel> entities) {
         TenantPadCounter counters = new TenantPadCounter();
-        padFileModel: for (PadFileModel entity : entities) {
-            String tenantId = entity.tenantId().getValue().trim();
+        padFileModel: for (PadFileModel padFileModel : entities) {
+            String tenantId = padFileModel.tenantId().getValue().trim();
             LeaseTermTenant leaseTermTenant = EntityFactory.create(LeaseTermTenant.class);
             {
                 EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
@@ -111,72 +112,113 @@ public class TenantPadParser {
                     }
                 }
                 if (!isFound) {
-                    throw new UserRuntimeException(i18n.tr("Tenant Id ''{0}'' not found in database, row {1}", tenantId, entity._import().row().getValue()));
+                    throw new UserRuntimeException(i18n.tr("Tenant Id ''{0}'' not found in database, row {1}", tenantId, padFileModel._import().row()
+                            .getValue()));
                 }
             }
 
             EcheckInfo details = EntityFactory.create(EcheckInfo.class);
-            details.accountNo().newNumber().setValue(entity.accountNumber().getValue().trim());
-            details.bankId().setValue(entity.bankId().getValue().trim());
-            details.branchTransitNumber().setValue(entity.transitNumber().getValue().trim());
-            details.nameOn().setValue(entity.name().getValue().trim());
+            details.accountNo().newNumber().setValue(padFileModel.accountNumber().getValue().trim());
+            details.bankId().setValue(padFileModel.bankId().getValue().trim());
+            details.branchTransitNumber().setValue(padFileModel.transitNumber().getValue().trim());
+            details.nameOn().setValue(padFileModel.name().getValue().trim());
 
             Persistence.service().retrieve(leaseTermTenant.leaseParticipant().customer());
             Persistence.service().retrieveMember(leaseTermTenant.leaseParticipant().customer().paymentMethods());
             LeasePaymentMethod existingPaymentMethod = retrievePaymentMethod(leaseTermTenant.leaseParticipant().customer(), details);
             if (existingPaymentMethod != null) {
-                List<PreauthorizedPayment> payments = new ArrayList<PreauthorizedPayment>();
-                {
-                    EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-                    criteria.eq(criteria.proto().paymentMethod(), existingPaymentMethod);
-                    criteria.eq(criteria.proto().tenant(), leaseTermTenant.leaseParticipant());
-                    payments = Persistence.service().query(criteria);
-                }
-                for (PreauthorizedPayment payment : payments) {
-                    if (!payment.isDeleted().getValue()) {
-                        if (payment.amount().getValue().equals(new BigDecimal(entity.charge().getValue()))) {
-                            counters.skipped++;
-                            continue padFileModel;
-                        }
-                        payment.isDeleted().setValue(Boolean.TRUE);
-                        Persistence.service().persist(payment);
+                // Update PAP if one exists for existing PaymentMethod
+                if (!padFileModel.charge().isNull() || !padFileModel.percent().isNull()) {
+                    List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
+                    {
+                        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                        criteria.eq(criteria.proto().paymentMethod(), existingPaymentMethod);
+                        criteria.eq(criteria.proto().tenant(), leaseTermTenant.leaseParticipant());
+                        paps = Persistence.service().query(criteria);
                     }
+                    //We do not support import of more then one PAP per PaymentMethod
+                    boolean sameAmountPapFound = false;
+                    for (PreauthorizedPayment pap : paps) {
+                        if (!pap.isDeleted().getValue()) {
+                            if (!isSameAmount(pap, padFileModel)) {
+                                pap.isDeleted().setValue(Boolean.TRUE);
+                                Persistence.service().persist(pap);
+                            } else {
+                                sameAmountPapFound = true;
+                            }
+                        }
+                    }
+                    if (!sameAmountPapFound) {
+                        Persistence.service().persist(createPAP(existingPaymentMethod, padFileModel, leaseTermTenant));
+                        Persistence.service().commit();
+                        counters.updated++;
+                    } else {
+                        counters.unchanged++;
+                    }
+                } else {
+                    counters.unchanged++;
                 }
-                Persistence.service().persist(createPayment(existingPaymentMethod, entity, leaseTermTenant));
+            } else {
+
+                LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
+                method.isProfiledMethod().setValue(Boolean.TRUE);
+                method.sameAsCurrent().setValue(Boolean.TRUE);
+                method.type().setValue(PaymentType.Echeck);
+                method.details().set(details);
+                method.customer().set(leaseTermTenant.leaseParticipant().customer());
+                method.billingAddress().set(getAddress(leaseTermTenant));
+
+                Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease());
+                Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease().unit());
+                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method,
+                        leaseTermTenant.leaseParticipant().lease().unit().building());
+
+                if (!padFileModel.charge().isNull() || !padFileModel.percent().isNull()) {
+                    Persistence.service().persist(createPAP(method, padFileModel, leaseTermTenant));
+                }
                 Persistence.service().commit();
-                counters.updated++;
-                continue;
+                counters.imported++;
             }
-
-            LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
-            method.isProfiledMethod().setValue(Boolean.TRUE);
-            method.sameAsCurrent().setValue(Boolean.TRUE);
-            method.type().setValue(PaymentType.Echeck);
-            method.details().set(details);
-            method.customer().set(leaseTermTenant.leaseParticipant().customer());
-            method.billingAddress().set(getAddress(leaseTermTenant));
-
-            Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease());
-            Persistence.service().retrieve(leaseTermTenant.leaseParticipant().lease().unit());
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, leaseTermTenant.leaseParticipant().lease().unit().building());
-
-            if (!entity.charge().getValue().isEmpty()) {
-                Persistence.service().persist(createPayment(method, entity, leaseTermTenant));
-            }
-            Persistence.service().commit();
-            counters.imported++;
         }
 
         return counters;
     }
 
-    private PreauthorizedPayment createPayment(LeasePaymentMethod method, PadFileModel entity, LeaseTermTenant leaseTermTenant) {
-        PreauthorizedPayment payment = EntityFactory.create(PreauthorizedPayment.class);
-        payment.paymentMethod().set(method);
-        BigDecimal amount = new BigDecimal(entity.charge().getValue());
-        payment.amount().setValue(amount);
-        payment.tenant().set(leaseTermTenant.leaseParticipant());
-        return payment;
+    private boolean isSameAmount(PreauthorizedPayment pap, PadFileModel padFileModel) {
+        if (!padFileModel.charge().isNull()) {
+            if (pap.amountType().getValue() != AmountType.Value) {
+                return false;
+            }
+            BigDecimal amount = new BigDecimal(padFileModel.charge().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
+            return pap.amount().getValue().compareTo(amount) == 0;
+        } else if (!padFileModel.percent().isNull()) {
+            if (pap.amountType().getValue() != AmountType.Percent) {
+                return false;
+            }
+            BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+            return pap.amount().getValue().compareTo(percent) == 0;
+        } else {
+            return false;
+        }
+    }
+
+    private PreauthorizedPayment createPAP(LeasePaymentMethod method, PadFileModel padFileModel, LeaseTermTenant leaseTermTenant) {
+        PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+        pap.paymentMethod().set(method);
+
+        if (!padFileModel.charge().isNull()) {
+            pap.amountType().setValue(AmountType.Value);
+            BigDecimal amount = new BigDecimal(padFileModel.charge().getValue());
+            pap.amount().setValue(amount);
+        } else if (!padFileModel.percent().isNull()) {
+            pap.amountType().setValue(AmountType.Percent);
+            BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
+            pap.amount().setValue(percent);
+        } else {
+            throw new IllegalArgumentException();
+        }
+        pap.tenant().set(leaseTermTenant.leaseParticipant());
+        return pap;
     }
 
     private static class PadFileCSVReciver extends EntityCSVReciver<PadFileModel> {
@@ -233,19 +275,19 @@ public class TenantPadParser {
 
         public int imported;
 
-        public int skipped;
+        public int unchanged;
 
         public int updated;
 
         public TenantPadCounter() {
             this.imported = 0;
-            this.skipped = 0;
+            this.unchanged = 0;
             this.updated = 0;
         }
 
         public void add(TenantPadCounter counters) {
             this.imported += counters.imported;
-            this.skipped += counters.skipped;
+            this.unchanged += counters.unchanged;
             this.updated += counters.updated;
         }
     }

@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
 
-
 @Transient
 public interface PadFileModel extends IEntity {
 
@@ -48,6 +47,9 @@ public interface PadFileModel extends IEntity {
     @NotNull
     IPrimitive<String> accountNumber();
 
+    @ImportColumn(names = { "Charge", "Amount" })
     IPrimitive<String> charge();
+
+    IPrimitive<String> percent();
 
 }
