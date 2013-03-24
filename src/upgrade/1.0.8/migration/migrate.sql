@@ -36,6 +36,7 @@ BEGIN TRANSACTION;
         AND     LOWER(substring(namespace,1,1)) = 'a';
 COMMIT;
 
+
 BEGIN TRANSACTION;
         SELECT  namespace,_dba_.migrate_pmc_108(namespace)
         FROM    _admin_.admin_pmc
