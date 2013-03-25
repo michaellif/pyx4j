@@ -18,6 +18,8 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -27,12 +29,24 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface PADPolicy extends Policy {
 
+    @I18n
     public enum PADChargeType {
-        FixedAmount, OwingBalance
+        FixedAmount, OwingBalance;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
+    @I18n
     public enum OwingBalanceType {
-        LastBill, ToDateTotal
+        LastBill, ToDateTotal;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @NotNull

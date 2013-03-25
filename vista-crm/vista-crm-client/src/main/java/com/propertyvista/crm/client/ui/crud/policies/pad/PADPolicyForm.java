@@ -53,7 +53,7 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeType()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
         panel.setWidget(++row, 0, inject(proto().debitBalanceTypes(), new PADPolicyItemEditorFolder()));
 
         return panel;
