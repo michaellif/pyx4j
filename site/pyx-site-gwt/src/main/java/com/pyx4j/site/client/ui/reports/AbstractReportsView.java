@@ -30,6 +30,11 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.css.ClassBasedThemeId;
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,6 +51,42 @@ public abstract class AbstractReportsView extends AbstractView implements IRepor
     public enum Styles {
 
         SettingsFormPanel, ReportPanel;
+    }
+
+    private static class ReportPrintPalette extends Palette {
+
+    }
+
+    private static class ReportPrintTheme extends Theme {
+
+        public ReportPrintTheme() {
+            Style style = new Style("*");
+            style.addProperty("color", "black");
+            style.addProperty("font-size", "12px");
+            addStyle(style);
+
+            style = new Style("a, a:link, a:visited, a:hover, a:active");
+            style.addProperty("color", "black");
+            style.addProperty("text-decoration", "none");
+            addStyle(style);
+        }
+
+        @Override
+        public final ThemeId getId() {
+            return new ClassBasedThemeId(getClass());
+        }
+    }
+
+    private static String PRINT_THEME;
+
+    static {
+        StringBuilder stylesString = new StringBuilder();
+        ReportPrintTheme theme = new ReportPrintTheme();
+        Palette palette = new ReportPrintPalette();
+        for (Style style : theme.getAllStyles()) {
+            stylesString.append(style.toString(theme, palette));
+        }
+        PRINT_THEME = stylesString.toString();
     }
 
     private static final I18n i18n = I18n.get(AbstractReportsView.class);
@@ -208,11 +249,19 @@ public abstract class AbstractReportsView extends AbstractView implements IRepor
     }
 
     public void print() {
-        print(DOM.clone(reportPanel.getElement(), true).getInnerHTML());
-    }
+        StringBuilder printableHtml = new StringBuilder();
+        printableHtml.append("<html>");
+        printableHtml.append("<head>");
+        printableHtml.append("<style type=\"text/css\">");
+        printableHtml.append(PRINT_THEME);
+        printableHtml.append("</style>");
+        printableHtml.append("</head>");
+        printableHtml.append("<body>");
+        printableHtml.append(DOM.clone(reportPanel.getElement(), true).getInnerHTML());
+        printableHtml.append("</body>");
+        printableHtml.append("</html>");
 
-    protected void print(String html) {
-        Print.preview(html);
+        Print.preview(printableHtml.toString());
     }
 
     private void setSettingsMode(boolean isAdvanced) {
@@ -284,4 +333,5 @@ public abstract class AbstractReportsView extends AbstractView implements IRepor
                     : settingsId));
         }
     }
+
 }
