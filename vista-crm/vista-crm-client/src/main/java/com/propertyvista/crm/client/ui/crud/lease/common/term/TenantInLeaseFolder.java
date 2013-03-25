@@ -381,6 +381,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 content.setWidget(0, 0, amountPlaceholder);
                 content.setWidget(0, 1, new DecoratorBuilder(inject(proto().paymentMethod()), 30, 10).build());
 
+                // tweaks:
+                content.getColumnFormatter().setWidth(0, "15em");
+
                 return content;
             }
 
