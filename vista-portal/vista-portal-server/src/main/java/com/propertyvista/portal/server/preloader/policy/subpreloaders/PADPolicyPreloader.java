@@ -15,11 +15,8 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.policies.PADPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class PADPolicyPreloader extends AbstractPolicyPreloader<PADPolicy> {
@@ -32,25 +29,6 @@ public class PADPolicyPreloader extends AbstractPolicyPreloader<PADPolicy> {
     protected PADPolicy createPolicy(StringBuilder log) {
         PADPolicy policy = EntityFactory.create(PADPolicy.class);
         policy.chargeType().setValue(PADChargeType.OwingBalance);
-        {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.lease);
-            item.owingBalanceType().setValue(OwingBalanceType.LastBill);
-            policy.debitBalanceTypes().add(item);
-        }
-        {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.parking);
-            item.owingBalanceType().setValue(OwingBalanceType.LastBill);
-            policy.debitBalanceTypes().add(item);
-        }
-        {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.locker);
-            item.owingBalanceType().setValue(OwingBalanceType.LastBill);
-            policy.debitBalanceTypes().add(item);
-        }
-
         log.append(policy.getStringView());
         return policy;
     }

@@ -28,6 +28,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeas
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupPADPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.PADPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
@@ -57,6 +58,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new DepositPolicyPreloader());
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
+            add(new PADPolicyPreloader());
         } else {
             add(new LegalDocumentationPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());
