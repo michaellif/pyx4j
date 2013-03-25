@@ -16,7 +16,10 @@ package com.propertyvista.domain.payment;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -26,15 +29,19 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
 
+@ToStringFormat("{0}, {1,choice,null#|!null#{1}}{2,choice,null#|!null#{2}} - {3}")
 public interface PreauthorizedPayment extends IEntity {
 
+    @I18n
     public enum AmountType {
 
         Percent, Value;
@@ -46,28 +53,39 @@ public interface PreauthorizedPayment extends IEntity {
     }
 
     @NotNull
-    @ToString(index = 0)
     @ReadOnly
+    @ToString(index = 0)
+    @Caption(name = "Type")
     IPrimitive<AmountType> amountType();
 
     @NotNull
+    @ReadOnly
     @ToString(index = 1)
     @Format("#,##0.00")
+    @Caption(name = "Amount")
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> percent();
+
+    @NotNull
     @ReadOnly
-    IPrimitive<BigDecimal> amount();
+    @ToString(index = 2)
+    @Format("#,##0.00")
+    @Caption(name = "Amount")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> value();
 
     @NotNull
     IPrimitive<Boolean> isDeleted();
 
     @NotNull
-    @ToString(index = 2)
     @ReadOnly
+    @ToString(index = 3)
     LeasePaymentMethod paymentMethod();
 
     @Length(40)
     IPrimitive<String> comments();
 
-    // internals:
+    // internals: -------------------------------------------------------------
 
     @Owner
     @ReadOnly

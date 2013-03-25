@@ -272,7 +272,7 @@ public class LeaseLifecycleSimulator {
 
                 pap.paymentMethod().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
                 pap.amountType().setValue(AmountType.Percent);
-                pap.amount().setValue(BigDecimal.ONE);
+                pap.percent().setValue(BigDecimal.ONE);
                 pap.comments().setValue("Default preauthorization...");
 
                 pap.tenant().set(mainTenant.leaseParticipant());

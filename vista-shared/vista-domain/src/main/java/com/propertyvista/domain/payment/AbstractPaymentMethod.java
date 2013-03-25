@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.contact.AddressStructured;
 
 @AbstractEntity
+@ToStringFormat("{0} - {1}")
 public interface AbstractPaymentMethod extends IEntity {
 
     @NotNull

@@ -152,10 +152,11 @@ public class LeaseDataModel extends MockDataModel<Lease> {
                     PADPolicy policy = getDataModel(PADPolicyDataModel.class).getCurrentItem();
                     if (policy.chargeType().getValue() == PADPolicy.PADChargeType.OwingBalance) {
                         pap.amountType().setValue(AmountType.Percent);
+                        pap.percent().setValue(value);
                     } else {
                         pap.amountType().setValue(AmountType.Value);
+                        pap.value().setValue(value);
                     }
-                    pap.amount().setValue(value);
                     pap.comments().setValue("Preauthorized Payment");
 
                     ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);

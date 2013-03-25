@@ -14,13 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -32,15 +33,8 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -55,12 +49,10 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -353,19 +345,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
     }
 
-    private class PreauthorizedPayments extends VistaTableFolder<PreauthorizedPayment> {
+    private class PreauthorizedPayments extends VistaBoxFolder<PreauthorizedPayment> {
 
         public PreauthorizedPayments() {
             super(PreauthorizedPayment.class);
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().amountType(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"));
-              //@formatter:on
         }
 
         @Override
@@ -376,50 +359,45 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             return super.create(member);
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityFolderRowEditor<PreauthorizedPayment> {
+        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
+
+            private final SimplePanel amountPlaceholder = new SimplePanel();
+
+            private final Widget percent;
+
+            private final Widget value;
 
             public PreauthorizedPaymentEditor() {
-                super(PreauthorizedPayment.class, columns());
+                super(PreauthorizedPayment.class);
+
+                percent = new DecoratorBuilder(inject(proto().percent()), 10, 5).build();
+                value = new DecoratorBuilder(inject(proto().value()), 10, 5).build();
             }
 
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                if (proto().paymentMethod() == column.getObject()) {
-                    return inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>());
-                } else if (proto().amount() == column.getObject()) {
-                    return inject(proto().amount(), new CLabel<BigDecimal>());
-                }
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
 
-                return super.createCell(column);
+                content.setWidget(0, 0, amountPlaceholder);
+                content.setWidget(0, 1, new DecoratorBuilder(inject(proto().paymentMethod()), 30, 10).build());
+
+                return content;
             }
 
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-                bindAmountEditor(getValue().amountType().getValue());
-            }
 
-            private void bindAmountEditor(AmountType valueType) {
-                CComponent<?, ?> comp = null;
-                if (valueType != null) {
-                    switch (valueType) {
-                    case Value:
-                        comp = new CMoneyField();
-                        break;
-                    case Percent:
-                        comp = new CPercentageField();
-                        break;
-                    }
-                }
-
-                if (comp != null) {
-                    @SuppressWarnings("unchecked")
-                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().amount())).getDecorator();
-                    unbind(proto().amount());
-                    inject(proto().amount(), comp);
-                    comp.setDecorator(decor);
-
-                    get(proto().amount()).populate(getValue().amount().getValue(BigDecimal.ZERO));
+                amountPlaceholder.clear();
+                switch (getValue().amountType().getValue()) {
+                case Percent:
+                    amountPlaceholder.setWidget(percent);
+                    break;
+                case Value:
+                    amountPlaceholder.setWidget(value);
+                    break;
+                default:
+                    break;
                 }
             }
         }

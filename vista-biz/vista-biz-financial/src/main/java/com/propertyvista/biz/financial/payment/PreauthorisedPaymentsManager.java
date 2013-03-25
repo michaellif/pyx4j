@@ -186,8 +186,8 @@ class PreauthorisedPaymentsManager {
                         // Lazy currentBalance initialization
                         currentBalance = ServerSideFactory.create(ARFacade.class).getPADBalance(billingAccount, billingCycle);
                     }
-                    percentTotal = percentTotal.add(pap.amount().getValue());
-                    record.amount = DomainUtil.roundMoney(currentBalance.multiply(pap.amount().getValue()));
+                    percentTotal = percentTotal.add(pap.percent().getValue());
+                    record.amount = DomainUtil.roundMoney(currentBalance.multiply(pap.percent().getValue()));
                     percentAmountTotal = percentAmountTotal.add(record.amount);
 
                     if ((recordLargest == null) || (record.amount.compareTo(recordLargest.amount) > 0)) {
@@ -195,7 +195,7 @@ class PreauthorisedPaymentsManager {
                     }
                     break;
                 case Value:
-                    record.amount = pap.amount().getValue();
+                    record.amount = pap.value().getValue();
                     break;
                 default:
                     throw new IllegalArgumentException();

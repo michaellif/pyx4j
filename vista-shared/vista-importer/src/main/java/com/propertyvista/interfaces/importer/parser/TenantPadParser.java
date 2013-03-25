@@ -190,13 +190,13 @@ public class TenantPadParser {
                 return false;
             }
             BigDecimal amount = new BigDecimal(padFileModel.charge().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
-            return pap.amount().getValue().compareTo(amount) == 0;
+            return pap.value().getValue().compareTo(amount) == 0;
         } else if (!padFileModel.percent().isNull()) {
             if (pap.amountType().getValue() != AmountType.Percent) {
                 return false;
             }
             BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
-            return pap.amount().getValue().compareTo(percent) == 0;
+            return pap.percent().getValue().compareTo(percent) == 0;
         } else {
             return false;
         }
@@ -209,11 +209,11 @@ public class TenantPadParser {
         if (!padFileModel.charge().isNull()) {
             pap.amountType().setValue(AmountType.Value);
             BigDecimal amount = new BigDecimal(padFileModel.charge().getValue());
-            pap.amount().setValue(amount);
+            pap.value().setValue(amount);
         } else if (!padFileModel.percent().isNull()) {
             pap.amountType().setValue(AmountType.Percent);
             BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100)).setScale(4, BigDecimal.ROUND_HALF_UP);
-            pap.amount().setValue(percent);
+            pap.percent().setValue(percent);
         } else {
             throw new IllegalArgumentException();
         }
