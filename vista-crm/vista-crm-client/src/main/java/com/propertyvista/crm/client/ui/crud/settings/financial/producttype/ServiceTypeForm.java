@@ -70,5 +70,6 @@ public class ServiceTypeForm extends CrmEntityForm<ServiceItemType> implements H
     @Override
     public void setYardiIntegrationModeEnabled(boolean enabled) {
         yardiIntegrationMixin.setYardiIntegrationModeEnabled(enabled);
+        get(proto().glCode()).setVisible(!enabled);
     }
 }

@@ -69,5 +69,6 @@ public class FeatureTypeForm extends CrmEntityForm<FeatureItemType> implements H
     @Override
     public void setYardiIntegrationModeEnabled(boolean enabled) {
         yardiIntegrationMixin.setYardiIntegrationModeEnabled(enabled);
+        get(proto().glCode()).setVisible(!enabled);
     }
 }
