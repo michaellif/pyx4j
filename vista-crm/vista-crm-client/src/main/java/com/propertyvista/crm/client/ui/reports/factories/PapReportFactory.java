@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,8 +27,11 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
+import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.factories.pad.PadReportForm;
@@ -97,7 +101,7 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
                 for (PaymentRecord paymentRecord : reportData) {
                     bb.appendHtmlConstant("<tr>");
                     for (ColumnDescriptor desc : COLUMN_DESCRIPTORS) {
-                        cell(bb, desc.convert(paymentRecord));
+                        cell(desc, bb, paymentRecord);
                     }
                     bb.appendHtmlConstant("</tr>");
                 }
@@ -106,12 +110,14 @@ public class PapReportFactory implements ReportFactory<PapReportMetadata> {
                 reportHtml.setHTML(bb.toSafeHtml());
             }
 
-            private void cell(SafeHtmlBuilder bb, String data) {
+            private void cell(ColumnDescriptor desc, SafeHtmlBuilder bb, PaymentRecord paymentRecord) {
                 bb.appendHtmlConstant("<td>");
-                bb.appendEscaped(data);
+                CrudAppPlace paymentPlace = AppPlaceEntityMapper.resolvePlace(paymentRecord.getInstanceValueClass(), paymentRecord.getPrimaryKey());
+                bb.appendHtmlConstant("<a href=\"" + AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, paymentPlace) + "\">");
+                bb.appendEscaped(desc.convert(paymentRecord));
+                bb.appendHtmlConstant("</a>");
                 bb.appendHtmlConstant("</td>");
             }
         };
     }
-
 }
