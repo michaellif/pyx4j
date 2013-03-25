@@ -383,7 +383,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         } else if (VistaTODO.VISTA_2242_Simple_Lease_Renewal) {
 
             renewButton.setCommand(new Command() {
-
                 @Override
                 public void execute() {
                     // TODO Auto-generated method stub

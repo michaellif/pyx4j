@@ -44,6 +44,7 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
 
     public PreauthorizedPaymentsFolder() {
         super(PreauthorizedPayment.class);
+        setOrderable(false);
     }
 
     @Override
