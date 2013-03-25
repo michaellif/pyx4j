@@ -83,7 +83,7 @@ public class ARDateUtils {
         LogicalDate startDate;
         int dueDateOffset;
         Lease lease = Persistence.service().retrieve(Lease.class, account.lease().getPrimaryKey());
-        if (cycle.billingCycleEndDate().getValue().before(lease.leaseTo().getValue())) {
+        if (lease.leaseTo().isNull() || cycle.billingCycleEndDate().getValue().before(lease.leaseTo().getValue())) {
             // normal cycle
             startDate = cycle.billingCycleStartDate().getValue();
             dueDateOffset = account.paymentDueDayOffset().getValue();
