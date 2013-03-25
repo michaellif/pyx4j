@@ -1134,7 +1134,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     private void updateUnitRentPrice(Lease lease) {
-        Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
+        Persistence.service().retrieve(lease.unit());
 
         BigDecimal origPrice = lease.unit().financial()._unitRent().getValue();
         BigDecimal currentPrice = null;
