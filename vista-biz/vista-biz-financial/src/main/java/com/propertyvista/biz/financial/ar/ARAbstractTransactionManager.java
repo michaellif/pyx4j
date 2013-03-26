@@ -111,20 +111,14 @@ public abstract class ARAbstractTransactionManager {
             debitBalanceType.put(item.debitType().getValue(), item.owingBalanceType().getValue());
         }
         BigDecimal balance = BigDecimal.ZERO;
-        switch (policy.chargeType().getValue()) {
-        case FixedAmount:
-            throw new Error("Not Implemented");
-        case OwingBalance:
-            for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
-                OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
-                if (balanceType == null) {
-                    continue;
-                }
-                if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.billingCycle().equals(cycle)) {
-                    balance = balance.add(charge.outstandingDebit().getValue());
-                }
+        for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
+            OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
+            if (balanceType == null) {
+                continue;
             }
-            break;
+            if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.billingCycle().equals(cycle)) {
+                balance = balance.add(charge.outstandingDebit().getValue());
+            }
         }
         return balance;
     }

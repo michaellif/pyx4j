@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -34,6 +36,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.dto.PADPolicyDTO;
+import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
 
 public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
@@ -55,8 +58,20 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
         panel.setWidget(++row, 0, inject(proto().debitBalanceTypes(), new PADPolicyItemEditorFolder()));
+        get(proto().chargeType()).addValueChangeHandler(new ValueChangeHandler<PADChargeType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PADChargeType> event) {
+                get(proto().debitBalanceTypes()).setVisible(!PADChargeType.FixedAmount.equals(event.getValue()));
+            }
+        });
 
         return panel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        get(proto().debitBalanceTypes()).setVisible(getValue().isNull() || !PADChargeType.FixedAmount.equals(getValue().chargeType().getValue()));
     }
 
     private static class PADPolicyItemEditorFolder extends VistaBoxFolder<PADPolicyItem> {
