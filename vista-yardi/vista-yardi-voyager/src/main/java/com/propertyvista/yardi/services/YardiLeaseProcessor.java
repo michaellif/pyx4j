@@ -81,14 +81,15 @@ public class YardiLeaseProcessor {
     }
 
     public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
-
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
             if (!Persistence.service().query(criteria).isEmpty()) {
                 Lease existingLease = Persistence.service().query(criteria).get(0);
                 Persistence.service().retrieve(existingLease.currentTerm().version().tenants());
-                return updateLease(rtCustomer, existingLease);
+                updateLease(rtCustomer, existingLease);
+                new TenantMerger().updateTenantNames(rtCustomer, existingLease);
+                return null;
             }
         }
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -100,27 +101,26 @@ public class YardiLeaseProcessor {
 
     }
 
-    Lease updateLease(RTCustomer rtCustomer, Lease lease) {
+    private void updateLease(RTCustomer rtCustomer, Lease lease) {
+        TenantMerger tenantMerger = new TenantMerger();
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
-        if (new LeaseMerger().validateTermChanges(yardiLease, lease.currentTerm()) || new TenantMerger().validateChanges(yardiCustomers, tenants)
+        if (new LeaseMerger().checkTermChanges(yardiLease, lease.currentTerm()) || tenantMerger.checkChanges(yardiCustomers, tenants)
                 || new LeaseMerger().validatePaymentTypeChanger(rtCustomer.getPaymentAccepted(), lease)) {
-            LeaseTerm newTerm = Persistence.secureRetrieveDraft(LeaseTerm.class, lease.currentTerm().getPrimaryKey());
+            LeaseTerm newTerm = lease.currentTerm();
             newTerm = new LeaseMerger().updateTerm(yardiLease, newTerm);
             Persistence.service().retrieve(newTerm.version().tenants());
-            newTerm = new TenantMerger().updateTenants(yardiCustomers, newTerm);
+            newTerm = tenantMerger.updateTenants(yardiCustomers, newTerm);
             lease.currentTerm().set(newTerm);
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
             lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-        } else if (new LeaseMerger().validateLeaseChanges(yardiLease, lease)) {
+        } else if (new LeaseMerger().checkLeaseChanges(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
             ServerSideFactory.create(LeaseFacade.class).updateLeaseDates(lease);
-        } else {
-            return null;
         }
-        return lease;
+        Persistence.service().persist(lease);
     }
 
     private Lease createLease(RTCustomer rtCustomer, AptUnit unit, String propertyCode) {

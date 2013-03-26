@@ -30,7 +30,6 @@ public class TenantMapper {
 
         customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
         customer.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
-        customer.person().name().middleName().setValue(yardiCustomer.getName().getMiddleName());
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
         tenantInLease.leaseParticipant().customer().set(customer);

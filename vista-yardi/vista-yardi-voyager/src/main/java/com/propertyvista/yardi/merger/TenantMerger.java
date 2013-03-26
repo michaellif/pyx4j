@@ -17,20 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.resident.RTCustomer;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.mapper.TenantMapper;
 
 public class TenantMerger {
 
-    public boolean validateChanges(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
+    public boolean checkChanges(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
         for (YardiCustomer customer : yardiCustomers) {
             boolean isNew = true;
             for (LeaseTermTenant tenant : tenants) {
-                if (compare(customer, tenant)) {
+                if (customer.getCustomerID().equals(tenant.leaseParticipant().participantId().getValue())) {
                     isNew = false;
                 }
             }
@@ -43,47 +47,25 @@ public class TenantMerger {
 
     public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
         IList<LeaseTermTenant> tenants = term.version().tenants();
-        List<String> existing = getNfromT(tenants);
-        List<String> imported = getNfromC(yardiCustomers);
+        List<String> existing = fromT(tenants);
+        List<String> imported = fromC(yardiCustomers);
         List<String> removed = new ArrayList<String>(existing);
         removed.removeAll(imported);
         List<String> added = new ArrayList<String>(imported);
         added.removeAll(existing);
-
-        for (String name : removed) {
-            LeaseTermTenant tenant = getT(tenants, name);
+        for (String id : removed) {
+            LeaseTermTenant tenant = toT(tenants, id);
             term.version().tenants().remove(tenant);
         }
-        for (String name : added) {
-            YardiCustomer customer = getC(yardiCustomers, name);
+        for (String id : added) {
+            YardiCustomer customer = toC(yardiCustomers, id);
             LeaseTermTenant tenant = new TenantMapper().map(customer, term.version().tenants());
             term.version().tenants().add(tenant);
         }
         return term;
     }
 
-    private List<String> getNfromT(List<LeaseTermTenant> tenants) {
-        List<String> names = new ArrayList<String>();
-        for (LeaseTermTenant tenant : tenants) {
-            String name = new String();
-            name = tenant.leaseParticipant().customer().person().name().firstName().getValue() + "!"
-                    + tenant.leaseParticipant().customer().person().name().lastName().getValue();
-            names.add(name);
-        }
-        return names;
-    }
-
-    private List<String> getNfromC(List<YardiCustomer> customers) {
-        List<String> names = new ArrayList<String>();
-        for (YardiCustomer customer : customers) {
-            String name = new String();
-            name = customer.getName().getFirstName() + "!" + customer.getName().getLastName();
-            names.add(name);
-        }
-        return names;
-    }
-
-    private boolean compare(YardiCustomer customer, LeaseTermTenant tenant) {
+    public boolean sameName(YardiCustomer customer, LeaseTermTenant tenant) {
         if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
                 && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
             return true;
@@ -91,22 +73,73 @@ public class TenantMerger {
         return false;
     }
 
-    private YardiCustomer getC(List<YardiCustomer> customers, String name) {
+    private List<String> fromT(List<LeaseTermTenant> tenants) {
+        List<String> ids = new ArrayList<String>();
+        for (LeaseTermTenant tenant : tenants) {
+            String id = tenant.leaseParticipant().participantId().getValue();
+            ids.add(id);
+        }
+        return ids;
+    }
+
+    private List<String> fromC(List<YardiCustomer> customers) {
+        List<String> ids = new ArrayList<String>();
         for (YardiCustomer customer : customers) {
-            if (customer.getName().getFirstName().equals(name.split("!")[0]) && customer.getName().getLastName().equals(name.split("!")[1])) {
+            String id = customer.getCustomerID();
+            ids.add(id);
+        }
+        return ids;
+    }
+
+    private YardiCustomer toC(List<YardiCustomer> customers, String id) {
+        for (YardiCustomer customer : customers) {
+            if (customer.getCustomerID().equals(id)) {
                 return customer;
             }
         }
         return null;
     }
 
-    private LeaseTermTenant getT(List<LeaseTermTenant> tenants, String name) {
+    private LeaseTermTenant toT(List<LeaseTermTenant> tenants, String id) {
         for (LeaseTermTenant tenant : tenants) {
-            if (tenant.leaseParticipant().customer().person().name().firstName().getValue().equals(name.split("!")[0])
-                    && tenant.leaseParticipant().customer().person().name().lastName().getValue().equals(name.split("!")[1])) {
+            if (tenant.leaseParticipant().participantId().getValue().equals(id)) {
                 return tenant;
             }
         }
         return null;
     }
+
+    public boolean changedNames(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
+        for (YardiCustomer customer : yardiCustomers) {
+            boolean isChanged = true;
+            for (LeaseTermTenant tenant : tenants) {
+                if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
+                        && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
+                    isChanged = false;
+                }
+            }
+            if (isChanged) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateTenantNames(RTCustomer rtCustomer, Lease lease) {
+        List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
+        if (new TenantMerger().changedNames(rtCustomer.getCustomers().getCustomer(), tenants)) {
+            for (YardiCustomer yardiCustomer : rtCustomer.getCustomers().getCustomer()) {
+                for (LeaseTermTenant tenant : tenants) {
+                    if (tenant.leaseParticipant().participantId().getValue().equals(yardiCustomer.getCustomerID())
+                            && !new TenantMerger().sameName(yardiCustomer, tenant)) {
+                        Customer cust = tenant.leaseParticipant().customer();
+                        cust.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
+                        cust.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
+                        Persistence.service().persist(cust);
+                    }
+                }
+            }
+        }
+    }
+
 }

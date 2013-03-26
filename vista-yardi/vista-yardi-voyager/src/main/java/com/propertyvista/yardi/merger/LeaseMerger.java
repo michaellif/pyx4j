@@ -43,13 +43,13 @@ public class LeaseMerger {
         return existing;
     }
 
-    public boolean validateTermChanges(YardiLease imported, LeaseTerm existing) {
+    public boolean checkTermChanges(YardiLease imported, LeaseTerm existing) {
         compare(existing.termFrom(), imported.getLeaseFromDate());
         compare(existing.termTo(), imported.getLeaseToDate());
         return isNew;
     }
 
-    public boolean validateLeaseChanges(YardiLease imported, Lease existing) {
+    public boolean checkLeaseChanges(YardiLease imported, Lease existing) {
         compare(existing.actualMoveIn(), imported.getActualMoveIn());
         compare(existing.actualMoveOut(), imported.getActualMoveOut());
         compare(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
