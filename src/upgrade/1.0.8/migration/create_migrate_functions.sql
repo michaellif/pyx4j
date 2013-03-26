@@ -155,7 +155,7 @@ BEGIN
         (
                 id                                      BIGINT                          NOT NULL,
                 amount_type                             VARCHAR(50),
-                percent                                 NUMERIC(18,2),
+                percent                                 NUMERIC(5,4),
                 value                                   NUMERIC(18,2),
                 is_deleted                              BOOLEAN,
                 payment_method_discriminator            VARCHAR(50),
@@ -310,6 +310,14 @@ BEGIN
                 
         END IF;
         
+        -- Delete from aging_buckets debit_type 'target'
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.billing_arrears_snapshot$aging_buckets '
+                ||'WHERE value IN       (SELECT id FROM '||v_schema_name||'.aging_buckets '
+                ||'                     WHERE debit_type = ''target'' )';
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.aging_buckets '
+                ||'WHERE debit_type = ''target'' ';
         
         /**
         ***     ==========================================================================================================
@@ -372,7 +380,7 @@ BEGIN
                 
         -- Check constraints
         ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_debit_type_e_ck 
-                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'target' ,'total', 'utility'));
+                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'total', 'utility'));
         ALTER TABLE billing_account ADD CONSTRAINT billing_account_billing_period_e_ck 
                 CHECK ((billing_period) IN ('Annually', 'BiWeekly', 'Monthly', 'SemiAnnyally', 'SemiMonthly', 'Weekly'));
         ALTER TABLE billing_billing_type ADD CONSTRAINT billing_billing_type_billing_period_e_ck 
