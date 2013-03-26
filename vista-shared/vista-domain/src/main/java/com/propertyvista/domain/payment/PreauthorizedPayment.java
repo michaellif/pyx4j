@@ -64,6 +64,7 @@ public interface PreauthorizedPayment extends IEntity {
     @Format("#,##0.00")
     @Caption(name = "Amount")
     @Editor(type = EditorType.percentage)
+    @MemberColumn(precision = 5, scale = 4)
     IPrimitive<BigDecimal> percent();
 
     @NotNull
