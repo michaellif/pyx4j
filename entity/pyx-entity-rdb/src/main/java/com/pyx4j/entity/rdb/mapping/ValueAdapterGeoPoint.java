@@ -49,12 +49,12 @@ class ValueAdapterGeoPoint implements ValueAdapter {
     }
 
     @Override
-    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName) {
         return dialect.isCompatibleType(Double.class, 0, typeName);
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
         sql.append(dialect.getSqlType(Double.class));
     }
 

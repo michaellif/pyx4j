@@ -29,9 +29,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 interface ValueAdapter extends ValueBindAdapter {
 
-    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName);
+    void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName);
 
-    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName);
+    boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName);
 
     Serializable retrieveValue(ResultSet rs, String memberSqlName) throws SQLException;
 

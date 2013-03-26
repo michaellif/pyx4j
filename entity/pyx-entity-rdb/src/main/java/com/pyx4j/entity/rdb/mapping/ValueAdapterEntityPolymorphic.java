@@ -110,8 +110,8 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
-    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(discriminatorColumnNameSufix)) {
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName) {
+        if (columnName.endsWith(discriminatorColumnNameSufix)) {
             return dialect.isCompatibleType(String.class, TableModel.ENUM_STRING_LENGHT_MAX, typeName);
         } else {
             return dialect.isCompatibleType(Long.class, 0, typeName);
@@ -119,8 +119,8 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(discriminatorColumnNameSufix)) {
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
+        if (columnName.endsWith(discriminatorColumnNameSufix)) {
             sql.append(dialect.getSqlType(String.class));
             sql.append('(').append(TableModel.ENUM_STRING_LENGHT_MAX).append(')');
         } else {

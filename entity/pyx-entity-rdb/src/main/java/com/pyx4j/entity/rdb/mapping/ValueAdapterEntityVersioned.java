@@ -62,8 +62,8 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
     }
 
     @Override
-    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
+    public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName) {
+        if (columnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
             return dialect.isCompatibleType(java.util.Date.class, 0, typeName);
         } else {
             return dialect.isCompatibleType(Long.class, 0, typeName);
@@ -71,8 +71,8 @@ class ValueAdapterEntityVersioned implements ValueAdapter {
     }
 
     @Override
-    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String coumnName) {
-        if (coumnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
+        if (columnName.endsWith(FOR_DATE_COLUNM_NAME_SUFIX)) {
             sql.append(dialect.getSqlType(java.util.Date.class));
         } else {
             sql.append(dialect.getSqlType(Long.class));

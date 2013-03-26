@@ -139,6 +139,14 @@ public abstract class Dialect {
         return typeMeta.getSqlType(length);
     }
 
+    public String getSqlType(Class<?> klass, TypeMetaConfiguration tmc) {
+        TypeMeta typeMeta = typeNames.get(getType(klass));
+        if (typeMeta == null) {
+            throw new RuntimeException("Undefined SQL type for class " + getType(klass).getName());
+        }
+        return typeMeta.getSqlType(tmc);
+    }
+
     public boolean isCompatibleType(Class<?> klass, int length, String typeName) {
         TypeMeta typeMeta = typeNames.get(getType(klass));
         if (typeMeta == null) {

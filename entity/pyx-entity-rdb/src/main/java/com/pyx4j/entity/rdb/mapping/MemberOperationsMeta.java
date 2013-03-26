@@ -29,6 +29,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.rdb.dialect.TypeMetaConfiguration;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -140,6 +141,17 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         } else {
             return memberColumn.notNull();
         }
+    }
+
+    public TypeMetaConfiguration getTypeConfiguration() {
+        TypeMetaConfiguration tmc = new TypeMetaConfiguration();
+        tmc.setLength(memberMeta.getLength());
+        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+        if (memberColumn != null) {
+            tmc.setPrecision(memberColumn.precision());
+            tmc.setScale(memberColumn.scale());
+        }
+        return tmc;
     }
 
     public Serializable getPersistMemberValue(IEntity entity) {

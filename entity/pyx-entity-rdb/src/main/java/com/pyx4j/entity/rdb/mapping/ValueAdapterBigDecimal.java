@@ -36,6 +36,11 @@ class ValueAdapterBigDecimal extends ValueAdapterPrimitive {
     }
 
     @Override
+    public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
+        sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getTypeConfiguration()));
+    }
+
+    @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
             stmt.setNull(parameterIndex, sqlType);

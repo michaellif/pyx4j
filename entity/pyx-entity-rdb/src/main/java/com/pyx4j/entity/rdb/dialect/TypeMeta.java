@@ -96,6 +96,43 @@ public class TypeMeta {
         throw new RuntimeException("Undefined SQL type for length " + length + " for class " + javaClass.getName());
     }
 
+    public String getSqlType(TypeMetaConfiguration tmc) {
+        String matchingSqlType = null;
+        if ((tmc.length < maxLength) || (maxLength == 0)) {
+            matchingSqlType = this.sqlType;
+        } else if (extendedTypes != null) {
+            for (Map.Entry<Integer, String> me : extendedTypes.entrySet()) {
+                if (me.getKey() > tmc.length) {
+                    matchingSqlType = me.getValue();
+                }
+            }
+        }
+
+        if (matchingSqlType == null) {
+            throw new RuntimeException("Undefined SQL type for length " + tmc.length + " for class " + javaClass.getName());
+        }
+
+        int typePrecision = this.precision;
+        if (tmc.precision >= 0) {
+            typePrecision = tmc.precision;
+        }
+        int typeScale = this.scale;
+        if (tmc.scale >= 0) {
+            typeScale = tmc.scale;
+        }
+
+        if (typePrecision >= 0) {
+            if (typeScale >= 0) {
+                return matchingSqlType + "(" + typePrecision + ", " + typeScale + ")";
+            } else {
+                return matchingSqlType + "(" + typePrecision + ")";
+            }
+        } else {
+            return this.sqlType;
+        }
+
+    }
+
     public void setCompatibleTypeNames(String... compatibleTypeNames) {
         this.compatibleTypeNames = compatibleTypeNames;
     }

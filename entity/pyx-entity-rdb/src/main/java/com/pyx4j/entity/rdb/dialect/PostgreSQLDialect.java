@@ -39,7 +39,7 @@ public class PostgreSQLDialect extends Dialect {
         addTypeMeta(Double.class, "double precision", "float8");
         addTypeMeta(Boolean.class, "bool");
 
-        // TODO use annotation for scale
+        // We use annotation @MemberColumn to override scale
         addTypeMeta(BigDecimal.class, "numeric", 18, 2);
 
         addTypeMeta(byte[].class, "bytea");

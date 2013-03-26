@@ -46,4 +46,17 @@ public @interface MemberColumn {
 
     Class<? extends ColumnId> value() default ColumnId.class;
 
+    /**
+     * The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+     * 
+     * For example, precision = 7 and scale 2 is a number that has 5 digits before the decimal and 2 digits after the decimal
+     */
+    public int precision() default -1;
+
+    /**
+     * The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+     * Number of digits after the decimal.
+     */
+    public int scale() default -1;
+
 }
