@@ -57,7 +57,7 @@
     </repositories>
 
     <properties>
-        <pyxVersion>2.1.8-SNAPSHOT</pyxVersion><!--pyx-version-->
+        <pyxVersion>2.1.9-SNAPSHOT</pyxVersion><!--pyx-version-->
     </properties>
 
     <dependencyManagement>
