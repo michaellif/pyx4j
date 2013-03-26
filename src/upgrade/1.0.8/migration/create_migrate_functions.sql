@@ -155,7 +155,8 @@ BEGIN
         (
                 id                                      BIGINT                          NOT NULL,
                 amount_type                             VARCHAR(50),
-                amount                                  NUMERIC(18,2),
+                percent                                 NUMERIC(18,2),
+                value                                   NUMERIC(18,2),
                 is_deleted                              BOOLEAN,
                 payment_method_discriminator            VARCHAR(50),
                 payment_method                          BIGINT,
@@ -371,13 +372,13 @@ BEGIN
                 
         -- Check constraints
         ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_debit_type_e_ck 
-                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'target', 'total', 'unknown', 'utility'));
+                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'target' ,'total', 'utility'));
         ALTER TABLE billing_account ADD CONSTRAINT billing_account_billing_period_e_ck 
                 CHECK ((billing_period) IN ('Annually', 'BiWeekly', 'Monthly', 'SemiAnnyally', 'SemiMonthly', 'Weekly'));
         ALTER TABLE billing_billing_type ADD CONSTRAINT billing_billing_type_billing_period_e_ck 
                 CHECK ((billing_period) IN ('Annually', 'BiWeekly', 'Monthly', 'SemiAnnyally', 'SemiMonthly', 'Weekly'));
         ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_debit_type_e_ck 
-                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'target', 'total', 'unknown', 'utility'));
+                CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 'pet', 'total', 'utility'));
         ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_credit_item_discriminator_d_ck 
                 CHECK ((credit_item_discriminator) IN ('AccountCredit', 'CarryforwardCredit', 'DepositRefund', 'Payment', 'ProductCredit', 'YardiCredit', 
                 'YardiPayment', 'YardiReceipt'));
@@ -390,7 +391,7 @@ BEGIN
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
         ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_debit_type_e_ck 
                 CHECK ((debit_type) IN ('accountCharge', 'addOn', 'booking', 'deposit', 'latePayment', 'lease', 'locker', 'nsf', 'other', 'parking', 
-                'pet', 'target', 'total', 'unknown', 'utility'));
+                'pet', 'total', 'utility'));
         ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_owing_balance_type_e_ck CHECK ((owing_balance_type) IN ('LastBill', 'ToDateTotal'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
