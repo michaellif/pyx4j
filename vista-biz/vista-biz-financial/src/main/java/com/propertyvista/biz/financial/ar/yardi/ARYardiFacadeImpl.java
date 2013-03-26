@@ -65,7 +65,12 @@ public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
     public boolean validatePayment(PaymentRecord paymentRecord) throws ARException {
-        return ARYardiPaymentManager.instance().validatePayment(paymentRecord);
+        // Avoid creation of two payments in Yadi
+        if (false) {
+            return ARYardiPaymentManager.instance().validatePayment(paymentRecord);
+        } else {
+            return true;
+        }
     }
 
     @Override
