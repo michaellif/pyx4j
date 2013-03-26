@@ -268,16 +268,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         return state;
     }
 
-    private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes) {
+    private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes)
+            throws YardiServiceException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
-            try {
-                ResidentTransactions residentTransactions = getResidentTransactions(client, yc, propertyCode);
-                if (residentTransactions != null) {
-                    transactions.add(residentTransactions);
-                }
-            } catch (YardiServiceException e) {
-                log.error("Errors during call getResidentTransactions operation for building {}", propertyCode, e);
+            ResidentTransactions residentTransactions = getResidentTransactions(client, yc, propertyCode);
+            if (residentTransactions != null) {
+                transactions.add(residentTransactions);
             }
         }
 

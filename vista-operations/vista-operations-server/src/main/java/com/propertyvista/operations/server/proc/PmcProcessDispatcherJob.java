@@ -153,7 +153,7 @@ public class PmcProcessDispatcherJob implements Job {
             }
         } catch (Throwable e) {
             log.error("pmcProcess execution error", e);
-            run.errorMessage().setValue(e.getMessage());
+            run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(e.getMessage()));
             run.status().setValue(RunStatus.Failed);
             return null;
         } finally {
@@ -251,7 +251,7 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(run.executionReport());
             } catch (Throwable e) {
                 log.error("pmcProcess execution error", e);
-                run.errorMessage().setValue(e.getMessage());
+                run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(e.getMessage()));
                 run.status().setValue(RunStatus.Failed);
                 return;
             }
@@ -354,7 +354,7 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(runData.executionReport());
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
-            runData.errorMessage().setValue(executionException.getMessage());
+            runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(executionException.getMessage()));
         } else {
             runData.status().setValue(RunDataStatus.Processed);
         }

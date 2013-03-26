@@ -280,11 +280,20 @@ public class ExecutionMonitor {
 
             for (ReportMessage message : section.getValue().messages) {
                 ExecutionReportMessage executionReportMessage = EntityFactory.create(ExecutionReportMessage.class);
-                executionReportMessage.message().setValue(message.message);
+                executionReportMessage.message().setValue(truncErrorMessage(message.message));
                 executionReportMessage.eventTime().setValue(message.eventTime);
                 executionReportSection.messages().add(executionReportMessage);
             }
             executionReport.details().add(executionReportSection);
+        }
+    }
+
+    //TODO use @Length annotation adapter
+    public static String truncErrorMessage(String errorMessage) {
+        if ((errorMessage != null) && (errorMessage.length() > 4000)) {
+            return errorMessage.substring(0, 4000);
+        } else {
+            return errorMessage;
         }
     }
 

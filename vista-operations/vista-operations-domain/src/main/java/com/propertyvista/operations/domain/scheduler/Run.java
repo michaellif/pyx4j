@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -72,6 +73,7 @@ public interface Run extends IEntity {
     @Owned(forceCreation = true, cascade = {})
     ExecutionReport executionReport();
 
+    @Length(4000)
     IPrimitive<String> errorMessage();
 
     @Owned
