@@ -76,6 +76,14 @@ SET search_path = '_admin_';
                                                 DROP COLUMN amount_processed;
         */
        
+        -- scheduler_run
+        
+        ALTER TABLE scheduler_run ALTER COLUMN error_message  TYPE VARCHAR(4000);
+        
+        --  scheduler_run_data
+        
+        ALTER TABLE scheduler_run_data ALTER COLUMN error_message TYPE VARCHAR(4000);
+        
        
         /**
         ***     ============================================================================================================
