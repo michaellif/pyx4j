@@ -253,7 +253,7 @@ public class PadSim {
         Persistence.service().retrieveMember(padFile.batches());
 
         PadSimFile padFileNew = EntityGraph.businessDuplicate(padFile);
-
+        padFileNew.originalFile().set(padStub);
         String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         padFileNew.fileName().setValue(filename + "." + FilenameUtils.getExtension(padFile.fileName().getValue()));
 

@@ -17,7 +17,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
@@ -49,6 +51,11 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 25).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
 
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().originalFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))),
+                        35).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().returnSent()), 10).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().state()), 25).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
 
@@ -64,5 +71,15 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
 
         return main;
+    }
+
+    @Override
+    protected void onValuePropagation(PadSimFile value, boolean fireEvent, boolean populate) {
+        super.onValuePropagation(value, fireEvent, populate);
+
+        boolean returns = ((value != null) && (value.returns().getValue(Boolean.FALSE)));
+
+        get(proto().originalFile()).setVisible(returns);
+        get(proto().returnSent()).setVisible(returns);
     }
 }

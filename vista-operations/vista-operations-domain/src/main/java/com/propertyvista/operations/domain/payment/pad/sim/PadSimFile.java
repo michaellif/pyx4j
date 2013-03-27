@@ -62,6 +62,8 @@ public interface PadSimFile extends IEntity {
 
     IPrimitive<Boolean> returns();
 
+    PadSimFile originalFile();
+
     IPrimitive<String> companyId();
 
     IPrimitive<String> fileCreationNumber();
@@ -93,10 +95,13 @@ public interface PadSimFile extends IEntity {
     @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> updated();
 
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> acknowledged();
 
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> reconciliationSent();
 
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Date> returnSent();
 
     @Owned(cascade = {})
