@@ -127,8 +127,8 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARYardiTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount);
+    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
+        return ARYardiTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount, padItemsOnly);
     }
 
     @Override

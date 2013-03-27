@@ -54,7 +54,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
         List<InvoiceDebit> debits = new ArrayList<InvoiceDebit>();
 
         EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);

@@ -96,7 +96,7 @@ public abstract class ARAbstractTransactionManager {
         return th;
     }
 
-    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
+    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly);
 
     abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 
@@ -111,7 +111,7 @@ public abstract class ARAbstractTransactionManager {
             debitBalanceType.put(item.debitType().getValue(), item.owingBalanceType().getValue());
         }
         BigDecimal balance = BigDecimal.ZERO;
-        for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
+        for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount, true)) {
             OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
             if (balanceType == null) {
                 continue;

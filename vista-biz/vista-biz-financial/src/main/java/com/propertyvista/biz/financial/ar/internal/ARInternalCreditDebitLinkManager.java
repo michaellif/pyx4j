@@ -88,8 +88,13 @@ class ARInternalCreditDebitLinkManager {
     }
 
     InvoiceCredit consumeCredit(InvoiceCredit credit) {
+        boolean isPadPayment = false;
+        // see if this is a pad payment
+        if (credit instanceof InvoicePayment) {
+            isPadPayment = !credit.<InvoicePayment> cast().paymentRecord().padBillingCycle().isNull();
+        }
         List<InvoiceDebit> debits = ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(
-                credit.billingAccount().<InternalBillingAccount> cast());
+                credit.billingAccount().<InternalBillingAccount> cast(), isPadPayment);
         for (InvoiceDebit debit : debits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);

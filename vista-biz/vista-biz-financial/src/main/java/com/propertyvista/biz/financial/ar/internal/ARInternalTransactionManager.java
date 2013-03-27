@@ -15,7 +15,11 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -37,10 +41,13 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -94,7 +101,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
         List<InvoiceDebit> lineItems;
         {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
@@ -112,9 +119,31 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
             building = Persistence.service().retrieve(criteria);
         }
 
-        // make a sorting in required mode. ConsumeCreditPolicy should be set on Application level.
-        ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
-        Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy));
+        PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
+        if (padItemsOnly) {
+            Set<DebitType> debitTypes = new HashSet<DebitType>();
+            for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
+                debitTypes.add(item.debitType().getValue());
+            }
+            Iterator<InvoiceDebit> it = lineItems.iterator();
+            while (it.hasNext()) {
+                InvoiceDebit debit = it.next();
+                if (!debitTypes.contains(debit.debitType().getValue())) {
+                    it.remove();
+                }
+            }
+            Collections.sort(lineItems, new Comparator<InvoiceDebit>() {
+                @Override
+                public int compare(InvoiceDebit d1, InvoiceDebit d2) {
+                    // return newest charge first
+                    return -d1.dueDate().getValue().compareTo(d2.dueDate().getValue());
+                }
+            });
+        } else {
+            // make a sorting in required mode. ConsumeCreditPolicy should be set on Application level.
+            ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
+            Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy, padPolicy));
+        }
 
         return lineItems;
     }

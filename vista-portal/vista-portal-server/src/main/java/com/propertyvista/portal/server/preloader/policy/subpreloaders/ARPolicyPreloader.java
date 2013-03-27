@@ -31,7 +31,7 @@ public class ARPolicyPreloader extends AbstractPolicyPreloader<ARPolicy> {
     protected ARPolicy createPolicy(StringBuilder log) {
         ARPolicy policy = EntityFactory.create(ARPolicy.class);
 
-        policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
+        policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.oldestDebtFirst);
 
         return policy;
     }

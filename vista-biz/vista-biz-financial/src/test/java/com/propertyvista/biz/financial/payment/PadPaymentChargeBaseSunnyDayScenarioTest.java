@@ -70,7 +70,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         advanceSysDate("20-Mar-2011");
 
-        receiveAndPostPayment("20-Mar-2011", "2269.04"); //2269.04 - 1198.74
+        receiveAndPostPayment("20-Mar-2011", "1070.30"); //2269.04 - 1198.74(pad) = 1070.30
 
         setPreauthorizedPayment(new BigDecimal("1"));
 

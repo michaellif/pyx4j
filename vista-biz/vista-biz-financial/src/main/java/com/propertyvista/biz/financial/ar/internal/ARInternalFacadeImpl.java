@@ -113,8 +113,8 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+    public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
+        return ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast(), padItemsOnly);
     }
 
     @Override

@@ -16,28 +16,62 @@ package com.propertyvista.biz.financial.ar;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicy;
+import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
+import com.propertyvista.domain.policy.policies.PADPolicyItem;
 
 public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private final ARPolicy arPolicy;
 
-    public InvoiceDebitComparator(ARPolicy arPolicy) {
+    private final Map<DebitType, OwingBalanceType> padDebitTypes = new HashMap<DebitType, OwingBalanceType>();
+
+    public InvoiceDebitComparator(ARPolicy arPolicy, PADPolicy padPolicy) {
         this.arPolicy = arPolicy;
+        // create product map
+        for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
+            padDebitTypes.put(item.debitType().getValue(), item.owingBalanceType().getValue());
+        }
     }
 
     @Override
     public int compare(InvoiceDebit debit1, InvoiceDebit debit2) {
-        if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.byDueDate) {
+        int padComp = padCompare(debit1, debit2);
+        return padComp == 0 ? amtCompare(debit1, debit2) : padComp;
+    }
+
+    private int amtCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
+        // smaller amount first
+        return debit1.amount().getValue().compareTo(debit2.amount().getValue());
+    }
+
+    private int padCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
+        Boolean isPad1 = isPadDebit(debit1), isPad2 = isPadDebit(debit2);
+        if (isPad1 && isPad2) {
+            // oldest first
             return debit1.dueDate().getValue().compareTo(debit2.dueDate().getValue());
-        } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.byDebitType) {
+        } else if (!isPad1 && !isPad2) {
+            // per ar policy
+            return arCompare(debit1, debit2);
+        } else {
+            // non-pad first
+            return isPad1.compareTo(isPad2);
+        }
+    }
+
+    private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
+        if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.rentDebtLast) {
             return -debit1.debitType().getValue().compareTo(debit2.debitType().getValue());
-        } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.byAgingBucketAndDebitType) {
+        } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.oldestDebtFirst) {
             int ageComparison = compareBucketAge(debit1, debit2);
             if (ageComparison == 0) {
                 return -debit1.debitType().getValue().compareTo(debit2.debitType().getValue());
@@ -46,6 +80,10 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
             }
         }
         return 0;
+    }
+
+    private Boolean isPadDebit(InvoiceDebit debit) {
+        return padDebitTypes.containsKey(debit.debitType().getValue());
     }
 
     public static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {

@@ -59,7 +59,7 @@ public interface ARFacade {
 
     void removeHardLink(DebitCreditLink link);
 
-    List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
+    List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly);
 
     List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 

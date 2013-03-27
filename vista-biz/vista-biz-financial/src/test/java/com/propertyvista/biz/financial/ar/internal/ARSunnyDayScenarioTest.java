@@ -67,15 +67,15 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         agingBucketsCurrent(new BigDecimal("1010.30"), DebitType.deposit);
         // @formatter:on
 
-        receiveAndPostPayment("22-Mar-2011", "1000.00");
+        receiveAndPostPayment("22-Mar-2011", "1040.00");
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
         lineItemSize(5).
-        notCoveredDebitLineItemSize(2).
+        notCoveredDebitLineItemSize(1).
         notConsumedCreditInvoiceItemSize(0).
-        agingBucketsCurrent(new BigDecimal("338.82"), DebitType.total).
-        agingBucketsCurrent(new BigDecimal("338.82"), DebitType.deposit);
+        agingBucketsCurrent(new BigDecimal("298.82"), DebitType.total).
+        agingBucketsCurrent(new BigDecimal("298.82"), DebitType.lease);
         // @formatter:on
 
         //==================== RUN 2 ======================//

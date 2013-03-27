@@ -32,14 +32,11 @@ public interface ARPolicy extends Policy {
 
     @I18n
     enum CreditDebitRule {
-        @Translate("Oldest Debt First")
-        byDueDate,
-
         @Translate("Rent Debt Last")
-        byDebitType,
+        rentDebtLast,
 
-        @Translate("Oldest Debt First With Non Rent Priority")
-        byAgingBucketAndDebitType;
+        @Translate("Oldest Debt First")
+        oldestDebtFirst;
 
         @Override
         public String toString() {

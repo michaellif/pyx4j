@@ -76,9 +76,10 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         lineItemSize(4).
         notCoveredDebitLineItemSize(4).
         notConsumedCreditInvoiceItemSize(0).
-        outstandingDebit(new BigDecimal("1041.94"), 0).
-        outstandingDebit(new BigDecimal("89.60"), 1).
-        outstandingDebit(new BigDecimal("930.30"), 2);
+        outstandingDebit(new BigDecimal("1041.94"), 0). // lease
+        outstandingDebit(new BigDecimal("89.60"), 1). // parking
+        outstandingDebit(new BigDecimal("930.30"), 2). // deposit
+        outstandingDebit(new BigDecimal("80.00"), 3); // deposit
         // @formatter:on
 
         setSysDate("25-Feb-2011");
@@ -87,11 +88,12 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
         lineItemSize(5).
-        notCoveredDebitLineItemSize(4).
+        notCoveredDebitLineItemSize(3).
         notConsumedCreditInvoiceItemSize(0).
-        outstandingDebit(new BigDecimal("741.94"), 0).
+        outstandingDebit(new BigDecimal("1041.94"), 0).
         outstandingDebit(new BigDecimal("89.60"), 1).
-        outstandingDebit(new BigDecimal("930.30"), 2);
+        outstandingDebit(new BigDecimal("710.30"), 2).
+        outstandingDebit(new BigDecimal("0.00"), 3);
         // @formatter:on
 
         //==================== RUN 2 ======================//
