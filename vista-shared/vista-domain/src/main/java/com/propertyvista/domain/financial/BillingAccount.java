@@ -132,7 +132,6 @@ public interface BillingAccount extends IEntity {
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
 
-    //TODO @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();
 
     //TODO @Comment(name = "Payment Due Day",description = "Number of days between Billing Period Start Date and Payment Due Date: Start Day + Payment Due Day = Bill Payment Due Date") 
