@@ -14,9 +14,23 @@
 
 package com.propertyvista.domain.financial.billing;
 
-//TODO - see @Comments for new labels as per VISTA-2605 - alexs
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
+
+//TODO - see @Comments for new labels as per VISTA-2605 - alexs
 
 @ToStringFormat("{0}, {1}")
 @Table(prefix = "billing")

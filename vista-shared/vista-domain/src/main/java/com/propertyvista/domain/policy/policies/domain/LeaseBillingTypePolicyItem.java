@@ -13,6 +13,18 @@
  */
 package com.propertyvista.domain.policy.policies.domain;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
