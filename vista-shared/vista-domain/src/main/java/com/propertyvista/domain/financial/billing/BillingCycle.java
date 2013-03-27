@@ -11,21 +11,10 @@
  * @author vladlouk
  * @version $Id$
  */
+
 package com.propertyvista.domain.financial.billing;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+//TODO - see @Comments for new labels as per VISTA-2605 - alexs
 
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -49,15 +38,19 @@ public interface BillingCycle extends IEntity {
 
     @ReadOnly
     @Indexed(group = "DBT,1")
+    //TODO @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     IPrimitive<LogicalDate> billingCycleStartDate();
 
     @ReadOnly
     IPrimitive<LogicalDate> billingCycleEndDate();
 
+    //TODO @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date: Start Day – Bill Processing Day = Bill Processing Date") 
     IPrimitive<LogicalDate> targetBillExecutionDate();
 
+    //TODO @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date: Start Day – PAD Validation Day  = PAD Validation") 
     IPrimitive<LogicalDate> targetPadGenerationDate();
 
+    //TODO @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date: Start Day + PAD Processing Day = PAD Processing Date") 
     IPrimitive<LogicalDate> padExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)

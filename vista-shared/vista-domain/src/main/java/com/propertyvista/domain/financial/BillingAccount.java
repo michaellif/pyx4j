@@ -13,27 +13,9 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.util.logging.Logger;
+
 import javax.xml.bind.annotation.XmlType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Inheritance;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -137,6 +119,9 @@ public interface BillingAccount extends IEntity {
     /**
      * Immediate InvoiceLineItems are kept here between billing runs. Approved billing cleans this set.
      */
+
+    //TODO - see @Comments for new labels as per VISTA-2605 - alexs
+
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<InvoiceLineItem> invoiceLineItems();
@@ -147,10 +132,13 @@ public interface BillingAccount extends IEntity {
     @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
 
+    //TODO @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     IPrimitive<Integer> billingCycleStartDay();
 
+    //TODO @Comment(name = "Payment Due Day",description = "Number of days between Billing Period Start Date and Payment Due Date: Start Day + Payment Due Day = Bill Payment Due Date") 
     IPrimitive<Integer> paymentDueDayOffset();
 
+    //TODO @Comment(name = "Final Bill Due Day",description = "Final Bill payment Due day, relative to Lease End Day") 
     IPrimitive<Integer> finalDueDayOffset();
 
     IPrimitive<ProrationMethod> prorationMethod();
