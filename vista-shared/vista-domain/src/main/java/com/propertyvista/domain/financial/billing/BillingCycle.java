@@ -44,13 +44,13 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     IPrimitive<LogicalDate> billingCycleEndDate();
 
-    //TODO @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date: Start Day – Bill Processing Day = Bill Processing Date") 
+    //TODO @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> targetBillExecutionDate();
 
-    //TODO @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date: Start Day – PAD Validation Day  = PAD Validation") 
+    //TODO @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> targetPadGenerationDate();
 
-    //TODO @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date: Start Day + PAD Processing Day = PAD Processing Date") 
+    //TODO @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> padExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
