@@ -121,11 +121,23 @@ public class DevDumpProxyServlet extends HttpServlet {
 
     protected String getServiceURL(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {
         String path = request.getPathInfo();
+        String protocol = "http";
+        int port = 80;
+
         int hostEnd = path.indexOf('/', 1);
         String host = path.substring(1, hostEnd);
+        if (host.equals("http") || host.equals("https")) {
+            protocol = host;
+            path = path.substring(hostEnd);
+            hostEnd = path.indexOf('/', 1);
+            host = path.substring(1, hostEnd);
+        }
+        if (protocol.equals("https")) {
+            port = 80;
+        }
         ensureWhitelisted(host);
         String servicePath = path.substring(hostEnd);
-        String url = new URL("https", host, 443, servicePath).toExternalForm();
+        String url = new URL(protocol, host, port, servicePath).toExternalForm();
         if (request.getQueryString() != null) {
             url += "?" + request.getQueryString();
         }
@@ -163,7 +175,7 @@ public class DevDumpProxyServlet extends HttpServlet {
     }
 
     private void execute(HttpMethodBase method, HttpServletRequest request, HttpServletResponse response, int id) throws IOException {
-        log.debug("proxy request", request.getRequestURI(), method.getURI().toString());
+        log.debug("proxy request {} {}", request.getRequestURI(), method.getURI().toString());
         method.setFollowRedirects(false);
         DeferredExecuteHttpMethod deferredExecute = null;
         boolean sucsess = false;
@@ -186,7 +198,7 @@ public class DevDumpProxyServlet extends HttpServlet {
             sucsess = true;
         } finally {
             if (!sucsess) {
-                log.warn("Exception in proxy " + method.getName() + " " + method.getURI().toString());
+                log.warn("Exception in proxy {} {}", method.getName(), method.getURI().toString());
             }
             if ((!sucsess) && (deferredExecute != null)) {
                 deferredExecute.clenup();
