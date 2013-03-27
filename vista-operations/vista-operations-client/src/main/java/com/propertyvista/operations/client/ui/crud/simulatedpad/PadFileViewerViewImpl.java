@@ -60,7 +60,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         });
         addHeaderToolbarItem(replyReconciliation.asWidget());
 
-        createReturnReconciliation = new Button(i18n.tr("Create Retun File"), new Command() {
+        createReturnReconciliation = new Button(i18n.tr("Create Return File"), new Command() {
             @Override
             public void execute() {
                 ((PadFileViewerView.Presenter) getPresenter()).createReturnReconciliation();
