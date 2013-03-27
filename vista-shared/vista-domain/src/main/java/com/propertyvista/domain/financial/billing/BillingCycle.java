@@ -36,21 +36,21 @@ public interface BillingCycle extends IEntity {
     @Indexed(group = "DBT,3")
     BillingType billingType();
 
+    // @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     @ReadOnly
     @Indexed(group = "DBT,1")
-    //TODO @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     IPrimitive<LogicalDate> billingCycleStartDate();
 
     @ReadOnly
     IPrimitive<LogicalDate> billingCycleEndDate();
 
-    //TODO @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date") 
+    // @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> targetBillExecutionDate();
 
-    //TODO @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date") 
+    // @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> targetPadGenerationDate();
 
-    //TODO @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date") 
+    // @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> padExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)

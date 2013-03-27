@@ -18,7 +18,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 //TODO Find a better name
 
-//TODO See VISTA-2605 for comments - caption descriptions need to be changed
+//See VISTA-2605 for comments - caption descriptions need to be changed
 
 public interface LeaseBillingTypePolicyItem extends IEntity {
 

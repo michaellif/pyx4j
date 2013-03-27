@@ -134,15 +134,15 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Integer> billingCycleStartDay();
 
-    //TODO @Comment(name = "Payment Due Day",description = "Number of days between Billing Period Start Date and Payment Due Date") 
+    // @Comment(name = "Payment Due Day",description = "Number of days between Billing Period Start Date and Payment Due Date") 
     IPrimitive<Integer> paymentDueDayOffset();
 
-    //TODO @Comment(name = "Final Bill Due Day",description = "Final Bill payment Due day, relative to Lease End Day") 
+    // @Comment(name = "Final Bill Due Day",description = "Final Bill payment Due day, relative to Lease End Day") 
     IPrimitive<Integer> finalDueDayOffset();
 
     IPrimitive<ProrationMethod> prorationMethod();
 
-    // TODO move to InternalBillingAccount when $asInstanceOf  implemented
+    // move to InternalBillingAccount when $asInstanceOf  implemented
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     ISet<LeaseArrearsSnapshot> arrearsSnapshots();
