@@ -38,14 +38,25 @@ public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFil
     }
 
     @Override
-    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
-        new PadSim().replyAcknowledgment(triggerStub);
+    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
+        new PadSim().replyAcknowledgment(padStub);
         callback.onSuccess(null);
     }
 
     @Override
-    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
-        new PadSim().replyReconciliation(triggerStub);
+    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
+        new PadSim().replyReconciliation(padStub);
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void createReturnReconciliation(AsyncCallback<PadSimFile> callback, PadSimFile padStub) {
+        callback.onSuccess(new PadSim().createReturnReconciliation(padStub));
+    }
+
+    @Override
+    public void replyReturns(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
+        new PadSim().replyReturns(padStub);
         callback.onSuccess(null);
     }
 

@@ -31,12 +31,20 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
 
     private final ILister<PadSimBatch> batchLister;
 
+    Button replyAcknowledgment;
+
+    Button replyReconciliation;
+
+    Button createReturnReconciliation;
+
+    Button replyReturns;
+
     public PadFileViewerViewImpl() {
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 
         setForm(new PadFileForm(this));
 
-        Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new Command() {
+        replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new Command() {
             @Override
             public void execute() {
                 ((PadFileViewerView.Presenter) getPresenter()).replyAcknowledgment();
@@ -44,7 +52,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         });
         addHeaderToolbarItem(replyAcknowledgment.asWidget());
 
-        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
+        replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
             @Override
             public void execute() {
                 ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
@@ -52,10 +60,39 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         });
         addHeaderToolbarItem(replyReconciliation.asWidget());
 
+        createReturnReconciliation = new Button(i18n.tr("Create Retun File"), new Command() {
+            @Override
+            public void execute() {
+                ((PadFileViewerView.Presenter) getPresenter()).createReturnReconciliation();
+            }
+        });
+        addHeaderToolbarItem(createReturnReconciliation.asWidget());
+
+        replyReturns = new Button(i18n.tr("Reply Returns"), new Command() {
+            @Override
+            public void execute() {
+                ((PadFileViewerView.Presenter) getPresenter()).replyReturns();
+            }
+        });
+        addHeaderToolbarItem(replyReturns.asWidget());
+
     }
 
     @Override
     public ILister<PadSimBatch> getBatchListerView() {
         return batchLister;
+    }
+
+    @Override
+    public void populate(PadSimFile value) {
+        super.populate(value);
+
+        boolean returns = ((value != null) && (value.returns().getValue(Boolean.FALSE)));
+
+        replyAcknowledgment.setVisible(!returns);
+        replyReconciliation.setVisible(!returns);
+        createReturnReconciliation.setVisible(!returns);
+        replyReturns.setVisible(returns);
+
     }
 }

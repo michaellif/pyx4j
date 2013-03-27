@@ -24,8 +24,12 @@ public interface PadSimFileCrudService extends AbstractCrudService<PadSimFile> {
 
     public void loadPadFile(AsyncCallback<PadSimFile> callback);
 
-    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub);
+    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile padStub);
 
-    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub);
+    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile padStub);
+
+    public void createReturnReconciliation(AsyncCallback<PadSimFile> callback, PadSimFile padStub);
+
+    public void replyReturns(AsyncCallback<VoidSerializable> callback, PadSimFile padStub);
 
 }

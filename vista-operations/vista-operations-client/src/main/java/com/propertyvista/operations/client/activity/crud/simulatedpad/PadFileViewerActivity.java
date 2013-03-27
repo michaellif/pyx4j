@@ -19,6 +19,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -28,6 +29,7 @@ import com.propertyvista.operations.client.ui.crud.simulatedpad.PadFileViewerVie
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.operations.rpc.services.sim.PadSimFileCrudService;
 
@@ -69,5 +71,28 @@ public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> imple
                 populate();
             }
         }, EntityFactory.createIdentityStub(PadSimFile.class, getEntityId()));
+    }
+
+    @Override
+    public void replyReturns() {
+        ((PadSimFileCrudService) getService()).replyReturns(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(PadSimFile.class, getEntityId()));
+    }
+
+    @Override
+    public void createReturnReconciliation() {
+        ((PadSimFileCrudService) getService()).createReturnReconciliation(new DefaultAsyncCallback<PadSimFile>() {
+            @Override
+            public void onSuccess(PadSimFile result) {
+                CrudAppPlace place = new OperationsSiteMap.Simulation.PadSimulation.PadSimFile();
+                place.formViewerPlace(result.getPrimaryKey());
+                AppSite.getPlaceController().goTo(place);
+            }
+        }, EntityFactory.createIdentityStub(PadSimFile.class, getEntityId()));
+
     }
 }

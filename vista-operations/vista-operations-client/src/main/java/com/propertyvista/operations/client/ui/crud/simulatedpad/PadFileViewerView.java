@@ -26,6 +26,10 @@ public interface PadFileViewerView extends IViewer<PadSimFile> {
         public void replyAcknowledgment();
 
         public void replyReconciliation();
+
+        public void replyReturns();
+
+        public void createReturnReconciliation();
     }
 
     ILister<PadSimBatch> getBatchListerView();

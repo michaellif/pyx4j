@@ -16,14 +16,19 @@ package com.propertyvista.operations.server.services.sim;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
@@ -213,13 +218,121 @@ public class PadSim {
         }
     }
 
-    public void replyReconciliation(PadSimFile triggerStub) {
-        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
+    public void replyReconciliation(PadSimFile padStub) {
+        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, padStub.getPrimaryKey());
         Persistence.service().retrieveMember(padFile.batches());
 
         padFile.state().add(PadSimFile.PadSimFileStatus.ReconciliationSent);
         padFile.reconciliationSent().setValue(SystemDateManager.getDate());
         updateReconciliation(padFile);
+
+        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));
+        try {
+            PadSimReconciliationFileWriter writer = new PadSimReconciliationFileWriter(padFile, file);
+            try {
+                writer.write();
+            } finally {
+                writer.close();
+            }
+        } catch (Throwable e) {
+            log.error("pad write error", e);
+            throw new Error(e.getMessage());
+        }
+        String errorMessage = new CaledonPadSftpClient().sftpPutSim(file);
+        if (errorMessage != null) {
+            throw new Error(errorMessage);
+        }
+        log.info("pad file sent {}", file.getAbsolutePath());
+
+        Persistence.service().persist(padFile);
+        Persistence.service().commit();
+    }
+
+    public PadSimFile createReturnReconciliation(PadSimFile padStub) {
+        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, padStub.getPrimaryKey());
+        Persistence.service().retrieveMember(padFile.batches());
+
+        PadSimFile padFileNew = EntityGraph.businessDuplicate(padFile);
+
+        String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        padFileNew.fileName().setValue(filename + "." + FilenameUtils.getExtension(padFile.fileName().getValue()));
+
+        padFileNew.state().clear();
+        padFileNew.returns().setValue(Boolean.TRUE);
+
+        Persistence.service().persist(padFileNew);
+
+        for (PadSimBatch padBatch : padFileNew.batches()) {
+            Persistence.service().persist(padBatch);
+        }
+
+        Persistence.service().commit();
+
+        return padFileNew;
+
+    }
+
+    private void updateReturns(PadSimFile padFile) {
+        for (PadSimBatch padBatch : padFile.batches()) {
+            if (padBatch.reconciliationStatus().isNull()) {
+                padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+            }
+            SummaryTotal gross = new SummaryTotal();
+            SummaryTotal rejects = new SummaryTotal();
+            SummaryTotal returns = new SummaryTotal();
+
+            Iterator<PadSimDebitRecord> it = padBatch.records().iterator();
+            while (it.hasNext()) {
+                PadSimDebitRecord record = it.next();
+                if (record.acknowledgmentStatusCode().isNull()) {
+                    if (record.paymentDate().isNull()) {
+                        record.paymentDate().setValue(CaledonPadUtils.formatDate(SystemDateManager.getDate()));
+                    }
+                    if (record.reconciliationStatus().isNull()) {
+                        it.remove();
+                        continue;
+                    }
+                    switch (record.reconciliationStatus().getValue()) {
+                    case RETURNED:
+                        returns.add(record.amount().getValue());
+                        break;
+                    default:
+                        it.remove();
+                        continue;
+                    }
+                }
+            }
+
+            if (padBatch.grossPaymentCount().isNull()) {
+                padBatch.grossPaymentCount().setValue(String.valueOf(gross.recordsCount));
+            }
+            if (padBatch.grossPaymentAmount().isNull()) {
+                padBatch.grossPaymentAmount().setValue(CaledonPadUtils.formatAmount(gross.totalAmount));
+            }
+
+            if (padBatch.rejectItemsCount().isNull()) {
+                padBatch.rejectItemsCount().setValue(String.valueOf(rejects.recordsCount));
+            }
+            if (padBatch.rejectItemsAmount().isNull()) {
+                padBatch.rejectItemsAmount().setValue(CaledonPadUtils.formatAmount(rejects.totalAmount));
+            }
+
+            if (padBatch.returnItemsCount().isNull()) {
+                padBatch.returnItemsCount().setValue(String.valueOf(returns.recordsCount));
+            }
+            if (padBatch.returnItemsAmount().isNull()) {
+                padBatch.returnItemsAmount().setValue(CaledonPadUtils.formatAmount(returns.totalAmount));
+            }
+        }
+    }
+
+    public void replyReturns(PadSimFile padStub) {
+        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, padStub.getPrimaryKey());
+        Persistence.service().retrieveMember(padFile.batches());
+
+        padFile.state().add(PadSimFile.PadSimFileStatus.ReturnSent);
+        padFile.returnSent().setValue(SystemDateManager.getDate());
+        updateReturns(padFile);
 
         File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));
         try {

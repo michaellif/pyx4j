@@ -47,7 +47,9 @@ public interface PadSimFile extends IEntity {
 
         Acknowledged,
 
-        ReconciliationSent;
+        ReconciliationSent,
+
+        ReturnSent;
 
     };
 
@@ -57,6 +59,8 @@ public interface PadSimFile extends IEntity {
     @ToString
     @Editor(type = Editor.EditorType.label)
     IPrimitiveSet<PadSimFileStatus> state();
+
+    IPrimitive<Boolean> returns();
 
     IPrimitive<String> companyId();
 
@@ -92,6 +96,8 @@ public interface PadSimFile extends IEntity {
     IPrimitive<Date> acknowledged();
 
     IPrimitive<Date> reconciliationSent();
+
+    IPrimitive<Date> returnSent();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
