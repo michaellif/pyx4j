@@ -52,6 +52,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.services.ProductItemTypeAdapter;
 
 public class YardiIntegrationAgent {
+
     private final static Logger log = LoggerFactory.getLogger(YardiIntegrationAgent.class);
 
     public enum YardiReversalType {
@@ -224,8 +225,8 @@ public class YardiIntegrationAgent {
         // info below is used to uniquely identify transaction in yardi
         detail.setCustomerID(lease.leaseId().getValue());
         detail.setPropertyPrimaryID(lease.unit().building().propertyCode().getValue());
-        detail.setDocumentNumber(pr.paymentMethod().type().getValue().toString() + ":" + pr.getPrimaryKey().toString());
-        detail.setTransactionDate(pr.receivedDate().isNull() ? pr.createdDate().getValue() : pr.receivedDate().getValue());
+        detail.setDocumentNumber(pr.yardiDocumentNumber().getValue());
+        detail.setTransactionDate(pr.receivedDate().getValue());
         detail.setAmount(pr.amount().getValue().toString());
     }
 }

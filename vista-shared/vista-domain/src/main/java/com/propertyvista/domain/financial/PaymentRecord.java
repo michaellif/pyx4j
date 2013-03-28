@@ -123,6 +123,9 @@ public interface PaymentRecord extends IEntity {
     @ToString
     IPrimitive<Key> id();
 
+    @ReadOnly
+    IPrimitive<String> yardiDocumentNumber();
+
     IPrimitive<LogicalDate> createdDate();
 
     IPrimitive<LogicalDate> receivedDate();

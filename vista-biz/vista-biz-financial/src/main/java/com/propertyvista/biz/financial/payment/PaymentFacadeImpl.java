@@ -34,6 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -95,6 +96,27 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         }
 
+        if (paymentRecord.yardiDocumentNumber().isNull()) {
+            StringBuilder b = new StringBuilder();
+            if (paymentRecord.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                switch (VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue()) {
+                case Canada:
+                    b.append("eCheck (EFT)");
+                    break;
+                case US:
+                    b.append("eCheck (ACH)");
+                    break;
+                default:
+                    b.append("eCheck");
+                    break;
+                }
+            } else {
+                b.append(paymentRecord.paymentMethod().type().getValue().name());
+            }
+            b.append(":").append(paymentRecord.getPrimaryKey().toString());
+            paymentRecord.yardiDocumentNumber().setValue(b.toString());
+        }
+
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
@@ -122,6 +144,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
+        paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
         if (paymentRecord.merchantAccount().isNull()
@@ -166,7 +189,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Persistence.service().merge(paymentRecord);
 
         if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
-            paymentRecord.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             try {
                 ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
                 UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
@@ -185,8 +207,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
             } catch (ARException e) {
                 throw new PaymentException("Failed to post payment to AR while processing payment", e);
             }
-            Persistence.service().merge(paymentRecord);
+        } else {
+            paymentRecord.receivedDate().setValue(null);
         }
+
+        Persistence.service().merge(paymentRecord);
 
         return paymentRecord;
     }
