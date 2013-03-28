@@ -61,21 +61,23 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         Persistence.service().persist(receipt);
 
         Persistence.ensureRetrieve(paymentRecord.billingAccount(), AttachLevel.Attached);
-        Persistence.service().retrieve(paymentRecord.billingAccount().lease());
+        Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
 
         try {
             ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
             ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
         } catch (RemoteException e) {
-            throw new ARException("Posting receipt to Yardi is failed due to communication failure", e);
+            throw new ARException("Posting receipt to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {
-            throw new ARException("Posting receipt to Yardi is failed", e);
+            throw new ARException("Posting receipt to Yardi failed", e);
         }
 
     }
 
     @Override
     protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
+        Persistence.ensureRetrieve(paymentRecord.billingAccount(), AttachLevel.Attached);
+
         YardiReceiptReversal reversal = EntityFactory.create(YardiReceiptReversal.class);
         reversal.paymentRecord().set(paymentRecord);
         reversal.amount().setValue(paymentRecord.amount().getValue());
@@ -85,6 +87,8 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         reversal.applyNSF().setValue(applyNSF);
 
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
+
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(paymentRecord.billingAccount().lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
@@ -96,9 +100,9 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         try {
             ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
         } catch (RemoteException e) {
-            throw new ARException("Posting receipt reversal to Yardi is failed due to communication failure", e);
+            throw new ARException("Posting receipt reversal to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {
-            throw new ARException("Posting receipt reversal to Yardi is failed", e);
+            throw new ARException("Posting receipt reversal to Yardi failed", e);
         }
 
         try {
@@ -134,9 +138,9 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         try {
             ServerSideFactory.create(YardiProcessFacade.class).validateReceipt(receipt);
         } catch (RemoteException e) {
-            throw new ARException("Receipt validation is failed due to communication failure with Yardi", e);
+            throw new ARException("Receipt validation failed due to communication failure with Yardi", e);
         } catch (YardiServiceException e) {
-            throw new ARException("Receipt validation is failed", e);
+            throw new ARException("Receipt validation failed", e);
         }
 
         return true;
