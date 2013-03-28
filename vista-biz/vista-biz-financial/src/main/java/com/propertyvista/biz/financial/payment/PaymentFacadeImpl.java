@@ -116,7 +116,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             }
             b.append(":").append(paymentRecord.getPrimaryKey().toString());
             paymentRecord.yardiDocumentNumber().setValue(b.toString());
-            Persistence.service().merge(paymentRecord);
+            Persistence.service().persist(paymentRecord);
         }
 
         return paymentRecord;
