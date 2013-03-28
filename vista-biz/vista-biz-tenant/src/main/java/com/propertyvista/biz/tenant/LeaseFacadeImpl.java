@@ -146,6 +146,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 lease.billingAccount().set(billingAccount);
             } else {
                 InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+                billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
                 billingAccount.billCounter().setValue(0);
                 lease.billingAccount().set(billingAccount);
             }
