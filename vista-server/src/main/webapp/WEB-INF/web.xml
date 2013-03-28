@@ -40,6 +40,12 @@
     <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
+        <!--
+        <init-param>
+            <param-name>developmentDebugResponse</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        -->
     </filter>
 
     <filter-mapping>
@@ -340,7 +346,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
         <url-pattern>/field/srv/*</url-pattern>
