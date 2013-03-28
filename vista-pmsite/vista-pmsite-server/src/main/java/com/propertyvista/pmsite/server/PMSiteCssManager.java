@@ -71,6 +71,8 @@ public class PMSiteCssManager {
         case skin6:
             theme = new PMSiteBlackNightTheme(style);
             break;
+        default:
+            break;
         }
         // generate resource registry key
         final String css = theme.getCssString(getCssPalette());
