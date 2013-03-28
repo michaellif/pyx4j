@@ -278,7 +278,10 @@ public class BillingManager {
             }
         }
 
-        Persistence.service().persist(bill.billingCycle().stats());
+        // persist stats for non-preview bills
+        if (bill.billSequenceNumber().getValue() > 0) {
+            Persistence.service().persist(bill.billingCycle().stats());
+        }
 
     }
 
