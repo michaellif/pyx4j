@@ -200,11 +200,12 @@
 .listingCtlButton {
 	background-image: url("images/aptListIcons_gold.png");
 	background-repeat: no-repeat;
+	background-position: left bottom;
 	display: inline-block;
 	zoom: 1;
 	*display: inline;
 	width:70px;
-	height:25px;
+	height:auto;
 	padding-top:5px;
 	padding-left:30px;
 	font-weight:normal;

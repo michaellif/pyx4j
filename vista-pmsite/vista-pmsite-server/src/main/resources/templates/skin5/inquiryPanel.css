@@ -4,7 +4,6 @@
 	margin:0;
 	margin-top:10px;
 	color:red;
-	background:white;
 	display:inline-block;
 /* if EI7 */	
 	*display: inline;
@@ -31,7 +30,6 @@ select {
 
 .inquiryPanel .inputEntry input {
 	border: 1px solid #EC8E21;
-	box-shadow: inset 5px 5px 5px #7f7f7f;
 }
 
 .inquiryPanel .inputEntry input[type="radio"]  {
@@ -71,21 +69,13 @@ select {
     zoom: 1;	
 }
 .inquiryPanel input[type=submit] {
-	background: -moz-linear-gradient(top, #b55508, #FA8D0C);
-    background: -webkit-gradient(linear, left top, left bottom, 
-                color-stop(100%,#b55508), color-stop(100%,#FA8D0C));
-    background: -webkit-linear-gradient(top, #b55508, #FA8D0C);
-    filter:	progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#b55508', endColorstr='#FA8D0C');
-    zoom: 1;
-    background: -o-linear-gradient(top, #b55508, #FA8D0C);
-    background: -ms-linear-gradient(top, #b55508, #FA8D0C);
-    background: linear-gradient(top, #b55508, #FA8D0C);
-    box-shadow: 5px 5px 5px #fff inset;
+	background-color: #302a2c; 
 	/*background: ${object1_100};
 	border: 2px solid ${object1_100};*/
-	color: ${object1_10};
+	color: #d7ac3f;
     height: 36px;
     min-width:128px;
+    width: auto;
     padding:0 8px;
     font-size: 14pt;
     font-weight: bold;
@@ -95,8 +85,7 @@ select {
     border: none;
 }
 .inquiryPanel input[type=submit]:hover {
-	box-shadow: 5px 5px 5px #fff;
-	color: #1F1B1C;
+	color: #FA8D0C;
 }
 
 /*

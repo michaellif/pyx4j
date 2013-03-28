@@ -436,7 +436,7 @@ a.listingCtlButton {
 }
 .btnViewDetails {
 	background-image: url("images/aptListIcons_gold.png");
-	/*background-position:0px -30px;*/
+	background-position:left center;
 }
 /*
  * Map style

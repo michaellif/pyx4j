@@ -170,7 +170,7 @@
 
 .vista-pmsite-staticPage .testimItem {
     margin-bottom: 20px;
-    padding: 20px 0 20px 20px;
+    padding: 20px 0;
 }
 
 
@@ -190,13 +190,14 @@
 }
 
 .vista-pmsite-staticPage .newsItem .date {
-    color: #999999;
+    color: #b4afb0;
 }
 
 .vista-pmsite-staticPage .newsItem .headline {
     font-family: monospace;
     font-size: 14pt;
     font-weight: bold;
+    color: #D7AC3F;
 }
 
 .vista-pmsite-staticPage .newsItem .text {

@@ -3,7 +3,7 @@
 }
 
 .vista-pmsite-content {
-    margin: 0 auto;
+    margin: 0 15%;
     padding: 0 19px;
     width: 960px;
 }
@@ -16,6 +16,7 @@
 .infobox_body {
 	overflow:hidden;
 	border-top: 1px solid #484243;
+	padding-top: 20px;
 }
 
 .infobox_body .selectField{
@@ -37,6 +38,7 @@
 .banner_img {
     height: 375px;
 	padding: 10px 0;
+	background-repeat: no-repeat;
 }
 
 .banner .infobox_header {
@@ -90,6 +92,11 @@
 	margin: 0 0 6px 0;
 }
 
+select {
+	outline: 1px solid #ED8F21;
+    width: 151px;
+}
+
 .quickSearch input[type=submit] {
 	background: none repeat scroll 0 0 transparent;
 	border: medium none;
@@ -105,6 +112,13 @@
 	overflow: hidden;
 }
 
+.quickSearch .submit:after {
+    content: ">>";
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: -8px;
+}
+
 .wideGadgetBox.quickSearch .selectField {
 	display:inline-block;
 }
@@ -113,6 +127,11 @@
 	display:inline-block;
 	font-size:13px;
 	width: 100%;
+}
+
+.newsBox {
+    position: relative;
+    top: -10px;
 }
 
 .vista-pmsite-sidebarWrap {
@@ -129,9 +148,10 @@
 }
 
 .vista-pmsite-main {
-	width: 660px;
+	width: 620px;
 	float: right;
 	position: relative;
+	left: -40px;
 	display:inline-block;
 }
 
@@ -140,10 +160,11 @@
 	overflow:hidden;
 	width: 100%;
 	margin-bottom: 20px;
+	padding-top: 2px;
 }
 
 .testimBox .infobox_body {
-	padding-top: 15px;
+	padding-top: 35px;
 }
 
 .testimBox .callout {
@@ -165,13 +186,14 @@
 .newsBox .date {
 	color: #fff;
 	font-size: 12px;
-	margin: 12px 0 4px 0;
+	margin: 0 0 4px 0;
+	border-top: 1px solid #484243;
+	padding-top: 12px;
 }
 
 .newsBox .headline {
 	color: #D7AC3F;
-	font-family: monospace;
-	font-weight: bold;
+	font-weight: normal;
 	text-transform: uppercase;
     font-size: 12pt;
     margin-bottom: 5px;
@@ -183,11 +205,14 @@
 	color: #E8E8E8;
 	line-height: 11pt;
  	text-align: justify;
+ 	border-bottom: 1px solid #484243;
+    padding-bottom: 20px;
+    position: relative;
+    top: 4px;
 }
 
 .newsBox .infobox_content {
-	margin-bottom: 20px;
-	border-top: 1px solid #484243;
+	border-bottom: 3px solid #1F1B1C;
 }
 
 .infobox_content .read_more {
@@ -200,6 +225,10 @@
 .infobox_header .read_more {
 	color: #fff;
 	padding: 7px;
+	position: relative;
+    top: 48px;
+    left: -136px;
+    z-index: 1;
 }
 
 .narrowGadgetBox.quickSearch .infobox_header {
@@ -212,16 +241,22 @@
 }
 
 .narrowGadgetBox.quickSearch .infobox_header .infobox_header_title {
+	background-color: inherit;
+	*background-color:#fa8d0c;
     color: #000000;
     font-weight: bold;
 }
 
 .infobox_header_title {
+	background-color: #30292B;
 	color: #fff;
 	font-size:16px;
 	text-transform: uppercase;
     display: inline-block;
 	margin: 0 20px 0 0;
+	position: relative;
+	top: 13px;
+	padding-right: 10px;
 
 }
 .infobox_header_title:lang(fr) {
@@ -236,6 +271,8 @@
 }
 
 .promoBox .infobox_content {
+	width: 154px;
+	margin: 27px 5px 0 0;
 	width: 154px;
 	float:left;
 	margin-right: 5px;
@@ -271,6 +308,6 @@
 	border-bottom: 3px solid #E8E8E8;;
 }
 .promoBox .citySelectionForm {
-	margin: 15px 0 10px 0;
+	margin: 6px 0 10px 0;
 }
 

@@ -18,7 +18,7 @@
 	position: relative;
 	top: 16px;
 	background: #302A2C;
-	width: 160px;
+	width: 200px;
 	z-index: 1;
 }
 
@@ -28,7 +28,7 @@
 	width: 211px;
 	float: left;
 	min-height: 400px;
-	margin: 40px 20px 0 0;
+	margin: 40px 0 0 0;
 	line-height: 1.67;
 }
 
@@ -45,7 +45,7 @@
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li {
-	width: 200px;
+	width: 180px;
 	font-size: 16px;
 	font-weight: normal;
 	height: 28px;
@@ -78,10 +78,14 @@
 .vista-pmsite-residentPage .vista-pmsite-main .content {
 	min-height: 200px;
 	line-height: 20px;
-	padding-top: 30px;
+	padding: 30px 0;
     overflow: hidden;
     color: #B4AFB0;
     border-top: 3px solid #1F1B1C;
+    font-size: 13.5px;
+}
+h2 {
+    color: #D7AC3F;
 }
 .vista-pmsite-residentPage .vista-pmsite-main .content > div {
     border-top-color: #484243;
@@ -89,6 +93,18 @@
     border-top-width: 1px;
     margin-top: -30px;
     padding-top: 10px;
+}
+.BillingDetailItemAmount {
+	color: #B4AFB0 !important;
+}
+
+.BillingDetailItemAmount.TSPaymentAmount {
+    color: #B4AFB0;
+}
+
+.BillingDetailTotalAmount {
+	border-top: 2px solid #FFFFFF !important;
+    color: #FFFFFF !important;
 }
 
 .LandingViewPanel {
@@ -104,14 +120,16 @@
     text-shadow: none;
     text-align: left;
     background: #302A2C;
-    color: #B4AFB0;
+    color: #D7AC3F;
+    padding: 20px 8px;
 }
 .vista-pmsite-residentPage .TenantDashboard .FormFlexPanel .FormFlexPanelH1 {
 	color: #B4AFB0;
 	background: #302A2C;
 }
-.FormFlexPanel td {
-	text-align: center;
+
+.FormFlexPanelH1 {
+	background-color: inherit !important;
 }
 
 .vista-pmsite-residentPage .LandingViewSectionHeader {
@@ -126,10 +144,8 @@
 
 .vista-pmsite-residentPage a {
 	color: #D7AC3F !important;
-	/*white-space: nowrap;*/
-	padding: 10px 0;
-	/*margin-right: 20px;*/
-	font-size: 14px;
+	white-space: nowrap;
+	font-size: 16px;
 }
 
 .vista-pmsite-residentPage .TenantDashboardSection {
@@ -145,11 +161,12 @@
 }
 
 .vista-pmsite-residentPage .FormFlexPanelH3Label {
-    color: black;
+    color: #D7AC3F;
+    font-size: 14pt;
     font-family: monospace;
-    font-size: 13pt;
-    font-weight: normal;
+    font-weight: bold;
     font-style: normal;
+    border-bottom: 3px solid #1F1B1C;
 }
 
 .vista-pmsite-residentPage .Button, .gwt-Button {
@@ -186,9 +203,13 @@
 }
 
 .vista-pmsite-residentPage .EntityFolderAddButton, .vista-pmsite-residentPage .EntityFolderTableHeaderLabel  {
-	color: #000000;
+	color: #B4AFB0;
 	font-weight: bold;
 }
+.EntityFolderTableHeader {
+	background-color: inherit !important;
+}
+
 .LandingViewSectionContent table {
 	border-collapse: separate;
 }
@@ -208,11 +229,16 @@
 
 .vista-pmsite-residentPage .WidgetDecorator-readOnly .WidgetDecoratorLabel, .vista-pmsite-residentPage .BillingLineItem, .vista-pmsite-residentPage  .WidgetDecoratorLabel {
     color: #B4AFB0;
+    font-size: 16px;
 }
 
 .vista-pmsite-residentPage .WidgetDecorator-readOnly, .vista-pmsite-residentPage  .BillingBillTotal .WidgetDecoratorComponent {
-	color: #000000;
+	color: #B4AFB0;
 	font-weight: normal;
+}
+
+.BillingLineItemAmount {
+	color: #ffffff !important;
 }
 
 .vista-pmsite-residentPage .ValidationLabel ul {
@@ -229,8 +255,22 @@
 }
 
 .FormFlexPanel {
+	min-width: 487px;
 	max-width: 685px;
 	overflow: hidden;
+}
+
+.FormFlexPanelHR {
+	width: 739px;
+    background-color: #1F1B1C !important;
+    border-bottom: 1px solid #484243;
+    height: 3px !important;
+    margin: 6px 0 6px 10px !important;
+}
+
+.FormFlexPanelH3 {
+	line-height: 2;
+	border-bottom: 1px solid #484243 !important;
 }
 
 .TriggerPannel .TextBox	{
@@ -243,12 +283,15 @@
 }
 
 .Dialog {
-    background-color: #999999 !important;
+    background-color: #FA8D0C !important;
 }
 
 .DialogCaption {
-    background: none repeat scroll 0 0 #CCCCCC !important;
-    color: #fff!important;
+    background: none repeat scroll 0 0 #302A2C !important;
+    color: #fa8d0c!important;
+}
+.DialogContent {
+	background-color: #B4AFB0 !important;
 }
 
 .TenantSureManagementStatusDetailsPanel {
@@ -259,9 +302,15 @@
 .TenantSureManagementActionsPanel {
     width: 35% !important;
 }
+.FormFlexPanelH2 {
+	border-bottom: 2px solid #b4afb0 !important;
+}
+.FormFlexPanelH2Label {
+	color: #b4afb0 !important;
+}
 
 .TenantSureManagementActionsPanel .Anchor-disabled {
-	color: #666666 !important;
+	color: #b4afb0 !important;
     text-decoration: none;
     cursor: default;
 }
