@@ -160,7 +160,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             tenant.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
         }
 
-        assert (!tenant.leaseTermV().isNull());
+//        assert (!tenant.leaseTermV().isNull());
         return tenant;
     }
 
