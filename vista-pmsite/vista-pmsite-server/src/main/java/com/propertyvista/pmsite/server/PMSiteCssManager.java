@@ -36,7 +36,9 @@ import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 import com.propertyvista.pmsite.server.skins.blacknight.PMSiteBlackNightTheme;
 import com.propertyvista.pmsite.server.skins.future.PMSiteFutureTheme;
 import com.propertyvista.pmsite.server.skins.power.PMSitePowerTheme;
+import com.propertyvista.pmsite.server.skins.simple.PMSiteSimpleTheme;
 import com.propertyvista.pmsite.server.skins.starlight.PMSiteStarlightTheme;
+import com.propertyvista.pmsite.server.skins.strict.PMSiteStrictTheme;
 
 public class PMSiteCssManager {
     // TODO - to be removed when a better way to handle old resource removal is found
@@ -56,6 +58,12 @@ public class PMSiteCssManager {
             break;
         case skin2:
             theme = new PMSitePowerTheme(style);
+            break;
+        case skin3:
+            theme = new PMSiteStrictTheme(style);
+            break;
+        case skin4:
+            theme = new PMSiteSimpleTheme(style);
             break;
         case skin5:
             theme = new PMSiteFutureTheme(style);
