@@ -56,9 +56,12 @@ public class LifecycleFilter implements Filter {
 
     private AntiDoS antiDoS;
 
+    private boolean developmentDebugResponse = false;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         antiDoS = new AntiDoS();
+        developmentDebugResponse = "true".equals(filterConfig.getInitParameter("developmentDebugResponse"));
     }
 
     @Override
@@ -86,6 +89,9 @@ public class LifecycleFilter implements Filter {
             } else {
                 HttpServletRequest httprequest = new DeploymentContextHttpServletRequestWrapper((HttpServletRequest) request);
                 HttpServletResponse httpresponse = (HttpServletResponse) response;
+                if (developmentDebugResponse) {
+                    httpresponse = new DevDebugHttpServletResponseWrapper(httpresponse);
+                }
                 if (!allowRequest(httprequest, httpresponse)) {
                     return;
                 }
