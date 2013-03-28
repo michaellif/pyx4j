@@ -101,7 +101,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (paymentRecord.paymentMethod().type().getValue() == PaymentType.Echeck) {
                 switch (VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue()) {
                 case Canada:
-                    b.append("eCheck (EFT)");
+                    b.append("eCheque (EFT)");
                     break;
                 case US:
                     b.append("eCheck (ACH)");
