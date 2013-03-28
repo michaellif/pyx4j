@@ -96,6 +96,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         }
 
+        Persistence.service().merge(paymentRecord);
         if (paymentRecord.yardiDocumentNumber().isNull()) {
             StringBuilder b = new StringBuilder();
             if (paymentRecord.paymentMethod().type().getValue() == PaymentType.Echeck) {
@@ -115,9 +116,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
             }
             b.append(":").append(paymentRecord.getPrimaryKey().toString());
             paymentRecord.yardiDocumentNumber().setValue(b.toString());
+            Persistence.service().merge(paymentRecord);
         }
 
-        Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
 
