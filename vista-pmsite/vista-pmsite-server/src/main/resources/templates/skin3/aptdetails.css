@@ -1,10 +1,7 @@
 .vista-pmsite-aptDetailsPage {
 	font-size:14px;
 }
-.vista-pmsite-aptDetailsPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
+.vista-pmsite-aptDetailsPage .vista-pmsite-content {
     background: ${object2_10};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {

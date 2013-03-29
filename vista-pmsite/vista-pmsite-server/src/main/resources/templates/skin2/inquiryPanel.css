@@ -38,20 +38,7 @@
 	display:inline-block;
 	width:360px;
 }
-.inquiryPanel input[type=submit] {
-	background: ${object1_100};
-	border: 2px solid ${object1_100};
-	color: ${object1_10};
-    height: 32px;
-    min-width:128px;
-    padding:0 8px;
-    font-size: 16px;
-    text-transform: uppercase;
-    cursor: pointer;
-}
-.inquiryPanel input[type=submit]:hover {
-	background-position: 0 -32px;
-}
+
 /*
  * Datepicker style
  */

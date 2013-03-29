@@ -2,18 +2,6 @@
 	min-height: 400px;
 }
 
-.vista-pmsite-residentPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-	background: #fff;
-}
-
-.vista-pmsite-residentPage .PortalView .vista-pmsite-mainWrap {
-	width: 920px;
-	padding: 0 20px 20px 20px;
-}
-
 .vista-pmsite-residentPage .caption {
 	border-top: 1px solid #000000;
 	border-bottom: 5px solid #000000;
@@ -206,4 +194,9 @@
 	color: #666666 !important;
     text-decoration: none;
     cursor: default;
+}
+
+.PortalView {
+	min-width: 920px !important;
+    width: 100% !important;
 }

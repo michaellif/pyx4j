@@ -1,27 +1,25 @@
-.vista-pmsite-aptListPage {
-}
-.vista-pmsite-aptListPage .vista-pmsite-mainWrap {
+.vista-pmsite-aptListPage .vista-pmsite-content  {
+	margin: 0 auto;
 	width: 960px;
-	margin: 20px auto 0 auto;
 	overflow: hidden;
-    background: #2F292A;
-    padding: 0 50px 0 0;
+	color: #fff;
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
+	width: 280px;
+	float: left;
 	position: relative;
 	top: 20px;
-	display: inline-block;
-	width: 280px;
-	color: #fff;
-	vertical-align: top;
-	margin-right: 20px;
 	background: #2F292A;
-	border-top: 4px solid #1F1B1C;
-	float: left;
+	border-top: 3px solid #1F1B1C;
+}
+
+.vista-pmsite-aptListPage .vista-pmsite-main {
+	margin-left: 300px;
+	position: relative;
+	top: -22px;
 }
 
 .vista-pmsite-aptListPage .advancedSearchCriteria {
-	height: 460px;
     padding: 20px 0;
 }
 
@@ -38,18 +36,13 @@
 	font-size:15pt;
 	padding: 0 5px 5px 0;
 	height:30px;
-	/*font-family: monospace;*/
 	font-weight: normal;
 	text-transform: uppercase;
 	background: #2F292A;
 }
 
 .advancedSearchNarrowWrap {
-	width: 280px;
-	height: 575px;
 	background: #FA8D0C;
-	position: relative;
-	top: -15px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
 	color: #D7AC3F;
@@ -66,14 +59,13 @@
     font-weight: bold;
     margin: 20px 0;
     width: auto;
-    padding: 10px 0 10px 10px;
+    padding: 10px;
 }
 
 .advancedSearchNarrowWrap label {
 	display: block;
 	padding: 4px 0;
 	white-space: nowrap;
-	color: #fff;
 }
 
 .advancedSearchNarrowWrap .inputBlockFrame {
@@ -183,7 +175,6 @@
 	display:inline-block;
 	width:26px;
 	text-align:center;
-	color: #fff;
 }
 .advancedSearchNarrowWrap .searchAmenityBox {
 	border-top: 3px solid #1F1B1C;
@@ -223,26 +214,13 @@
 	white-space: nowrap;
 }
 
-.vista-pmsite-aptListPage .vista-pmsite-main {
-	position: relative;
-	top: -22px;
-	display: inline-block;
-	zoom: 1;
-	*display: inline;
-	width: 660px;
-	vertical-align: top;
-	float: right;
-}
 .vista-pmsite-aptListPage .apartmentListingWrap {
 	width:100%;
 	overflow: hidden;
-	border-top: 4px solid #1F1B1C;
-	position: relative;
-	top: 3px;
+	border-top: 3px solid #1F1B1C;
 }
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	min-height:600px;
-	border-bottom: 1px solid #484243;
 }
 
 #aptListModeSwitch {
@@ -319,8 +297,6 @@
 	zoom: 1;
 	*display: inline;
 	*float:left;
-	color: #FFFFFF;
-	font-size: 11pt;
 } 
 .apartmentListingWrap .listingEntry .infoBoxEntry {
 	padding:4px 0;

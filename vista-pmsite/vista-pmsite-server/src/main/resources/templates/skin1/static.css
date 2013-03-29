@@ -1,16 +1,3 @@
-.vista-pmsite-staticPage {
-}
-
-.vista-pmsite-staticPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
-
-.vista-pmsite-staticPage .caption {
-	
-}
-
 .vista-pmsite-staticPage .secondaryNavig {
 	padding: 35px 0;
 	width: 211px;
@@ -20,7 +7,6 @@
 }
 
 .vista-pmsite-staticPage .secondaryNavig ul {
-	list-style: none outside none;
 	margin: 0;
 	padding: 0;
 }
@@ -29,7 +15,6 @@
 	color: ${foreground_100};
 	font-size: 17px;
 	font-weight:bold;
-	height: 38px;
 	line-height: 38px;
 	overflow: hidden;
 	padding: 0 10px 0 35px;
@@ -50,6 +35,7 @@
 
 .vista-pmsite-staticPage .content {
 	min-height: 396px;
+	text-align: justify;
 	color: ${foreground_100};
 	border-top:1px solid ${foreground_20};
 	background-color: ${background_10};
@@ -65,10 +51,6 @@
 	padding: 0 0 25px;
 }
 
-.vista-pmsite-staticPage .content h1 {
-	
-}
-
 .vista-pmsite-staticPage .content  h2 {
 	font-size: 18px;
 	line-height: 20px;
@@ -81,12 +63,6 @@
 	padding: 0 0 25px;
 }
 
-.vista-pmsite-staticPage .content  h4 {
-	font-size: 14px;
-	line-height: 20px;
-	padding: 0 0 25px;
-}
-
 .vista-pmsite-staticPage .content  address {
 	padding: 0 0 25px;
 }
@@ -94,4 +70,33 @@
 .vista-pmsite-staticPage .content ul,.staticMain .content ol {
 	margin: 0;
 	padding: 0 0 25px 25px;
+}
+
+.vista-pmsite-staticPage .testimItem {
+    background-color: #A4C5E8;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+
+.vista-pmsite-staticPage .testimItem .name {
+    font-size: 14px;
+    text-align: right;
+}
+
+.vista-pmsite-staticPage .newsItem {
+    padding-bottom: 20px;
+}
+
+.vista-pmsite-staticPage .newsItem .date {
+    color: #A3A3A3;
+}
+
+.vista-pmsite-staticPage .newsItem .headline {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.vista-pmsite-staticPage .newsItem .text {
+    padding: 10px 0;
 }

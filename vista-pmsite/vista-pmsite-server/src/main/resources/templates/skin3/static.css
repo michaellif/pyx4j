@@ -1,10 +1,7 @@
 .vista-pmsite-staticPage {
 }
 
-.vista-pmsite-staticPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
+.vista-pmsite-staticPage .vista-pmsite-content  {
 	background: ${object2_10};
 }
 

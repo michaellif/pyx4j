@@ -1,6 +1,3 @@
-.buildingInfoPanel .pictureBox {
-	text-align:center;
-} 
 .buildingInfoPanel .pictureBox .picture {
 	width:100%;
 }
@@ -19,18 +16,12 @@
 	margin-left:0;
 }
 .buildingInfoPanel .infoBox {
-	width:100%;
 	font-weight:bold;
-	color: ${object2_100};
 } 
 .buildingInfoPanel .infoBoxEntry {
 	padding-top:15px;
 } 
-.buildingInfoPanel .infoBoxEntry .infoBoxCaption {
-	display:block;
-	padding-top:4px;
-}
-.buildingInfoPanel .infoBoxEntry .infoBoxText {
+.buildingInfoPanel .infoBoxEntry .infoBoxCaption, .buildingInfoPanel .infoBoxEntry .infoBoxText {
 	display:block;
 	padding-top:4px;
 }

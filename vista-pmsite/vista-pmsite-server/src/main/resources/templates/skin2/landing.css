@@ -1,26 +1,6 @@
-.vista-pmsite-contentWrap {
-}
-
-.vista-pmsite-content {
-    margin: 0 auto;
-	width: 960px;
-	/* anti-space trick */
-	font-size:0;
-}
-
 .infobox_body {
 	padding: 20px 20px;
 	border-left: solid 1px ${object2_20};
-}
-
-.banner {
-	position: absolute;
-	vertical-align:top;
-	z-index: 100;
-	font-size:13px;
-}
-
-.banner_img {
 }
 
 .banner .infobox_header {
@@ -42,7 +22,6 @@
 .quickSearch label {
 	color: #555555;
 	display: block;
-	font-size: 13px;
 	padding: 0 0 3px;
 }
 
@@ -51,24 +30,8 @@
 	margin-bottom: 15px;
 }
 
-.quickSearch input[type=submit] {
-	background: none repeat scroll 0 0 transparent;
-	border: medium none;
-	color: ${object1_10};
-	cursor: pointer;
-	font-size: 16px;
-	padding: 5px 0;
-	text-transform: uppercase;
-	width: 128px;
-}
-
 .quickSearch .submit {
-	background: ${object1_100};
-	height: 32px;
-	margin: 15px auto 0;
-	overflow: hidden;
-	width: 128px;
-	border: 2px splid ${object1_100};
+	text-align: center;
 }
 
 .wideGadgetBox.quickSearch .selectField {
@@ -77,8 +40,7 @@
 }
 
 .vista-pmsite-mainWrap {
-	display:inline-block;
-	font-size:13px;
+	overflow: hidden;
 	background: ${object2_10};
 }
 
@@ -91,29 +53,18 @@
 }
 
 .vista-pmsite-sidebar {
-	position: relative;
 	float: left;
-	display:inline-block;
-	min-width:300px;
-	min-height:380px;
+	width:300px;
 }
 
 .vista-pmsite-main {
-	width: 660px;
-	position: relative;
-	float: left;
+	margin-left: 300px;
 	background: ${bgC0lor_100};
-	display:inline-block;
 }
 
 .testimBox {
 	float: left;
-	overflow:hidden;
-	width: 100%;
-}
-
-.testimBox .infobox_header {
-	padding: 0 0 0 20px;
+	margin-top: 20px;
 }
 
 .testimBox .infobox_decor {
@@ -155,11 +106,7 @@
 }
 
 .newsBox {
-	width: 300px;
-	display: inline-block;
-	min-height: 520px;
-	float: left;
-	clear:left;
+	min-height: 450px;
 }
 
 .newsBox .infobox_header {
@@ -196,7 +143,6 @@
 	color: ${object2_10};
 	font-size: 16px;
 	line-height: 14px;
-	vertical-align: text-top;
 	padding-left: 10px;
 }
 
@@ -214,30 +160,14 @@
 	font-size: 18px;
 }
 
-.promoBox {
-	height:280px;
-	float:left;
-	overflow:hidden;
-	width: 100%;
-}
-
 .promoBox .infobox_content {
 	width:139px;
-	height:300px;
 	float:left;
 	margin-left:20px;
 }
 
-.promoBox .infobox_header {
-}
-
 .promoBox .infobox_content:first-child {
 	margin-left:0px;
-}
-
-.promoBox .picture {
-	width:137px;
-	background:grey;
 }
 
 .promoBox a .picture {
@@ -248,8 +178,7 @@
 	border:1px solid ${object2_100};
 }
 .promoBox .citySelectionForm {
-	margin-bottom: 20px;
-	margin-left: 20px;
+	margin: 0 0 20px 20px;
 }
 
 .wideGadgetBox {
@@ -257,15 +186,10 @@
 	overflow:hidden;
 	width: 100%;
 }
-.narrowGadgetBox {
-    float:left;
-	display:inline-block;
-	width:300px;
-}
+
 .narrowGadgetBox .infobox_header {
 	background: ${object2_90};
 }
 .narrowGadgetBox .infobox_body {
 	border:0;
 }
-

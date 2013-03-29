@@ -1,9 +1,4 @@
-.vista-pmsite-aptListPage {
-}
-.vista-pmsite-aptListPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
+.vista-pmsite-aptListPage .vista-pmsite-content {
     background: ${background_10};
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {

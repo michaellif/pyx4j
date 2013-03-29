@@ -1,27 +1,17 @@
 .vista-pmsite-inquiryFormPage {
 	font-size:14px;
-}
-.vista-pmsite-inquiryFormPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
 	overflow: hidden;
-    background: ${background_10};
 }
+
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 318px;
-	vertical-align: top;
+	float:left;
 	padding:20px 16px;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-main {
-	display: inline-block;
-	width: 606px;
-	vertical-align: top;
-	min-height:600px;
+	margin-left: 350px;
 }
-.vista-pmsite-inquiryFormPage .vista-pmsite-main .caption2 {
-	border-bottom:1px solid ${foreground_20};
-}
+
 .vista-pmsite-inquiryFormPage .inquiryFormWrap {
 	border-left:1px solid ${foreground_20};
 	min-height: 550px;

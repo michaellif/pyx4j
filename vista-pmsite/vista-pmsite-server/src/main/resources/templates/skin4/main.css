@@ -91,8 +91,6 @@ select {
 }
 
 .main {
-	margin: 0px auto 0px;
-	width: 960px;
 	background: #fff;
 	position:relative;
 	border-top: 6px solid #000000;
@@ -217,10 +215,6 @@ select {
 #footer .main {
 	height:100%;
 	border-top: 1px solid #000000;
-}
-.footer_wrap {
-	padding: 0px 20px;
-	*padding-top: 10px;
 }
 
 ul.footer_locations {
@@ -364,12 +358,10 @@ ul.footer_locations li {
  * Content
  */
 .vista-pmsite-main .caption {
-//	background-size: 100% 100%;
-	background: white;
 	height: 30px;
 	overflow: hidden;
 	padding: 5px 0 5px 0;
-	display: block;
+	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-main .caption h1 {
@@ -402,6 +394,9 @@ ul.footer_locations li {
 	color:${object2_10};
 }
 
-.vista-pmsite-sidebarWrap {
-	background-color: #fff;
+.container {
+	margin: 0px auto 0px;
+	width: 920px;
+	background: #fff;
+	padding: 0 20px;
 }

@@ -1,10 +1,7 @@
 .vista-pmsite-unitDetailsPage {
 	font-size:14px;
 }
-.vista-pmsite-unitDetailsPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
+.vista-pmsite-unitDetailsPage .vista-pmsite-content  {
     background: ${background_10};
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {

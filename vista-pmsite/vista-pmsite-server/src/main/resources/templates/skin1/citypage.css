@@ -1,16 +1,16 @@
-.vista-pmsite-cityPage {
-}
-.vista-pmsite-cityPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
+.vista-pmsite-cityPage{
 	overflow: hidden;
 }
+
 .vista-pmsite-cityPage .vista-pmsite-sidebar {
-	display: inline-block;
+	float:left;
 	width: 211px;
-	vertical-align: top;
 	border-right:1px solid ${foreground_20};
 }
+.vista-pmsite-cityPage .vista-pmsite-main {
+	margin-left:211px;
+}
+
 .vista-pmsite-cityPage .secondaryNavig {
 	color: ${foreground_60};
 }
@@ -158,11 +158,7 @@
 	color:${foreground_10} !important;
 	background-color:${foreground_60} !important;
 }
-.vista-pmsite-cityPage .vista-pmsite-main {
-	display: inline-block;
-	width: 744px;
-	vertical-align: top;
-}
+
 .vista-pmsite-cityPage .cityPageWrap {
 	line-height:1.6em;
 	min-height: 396px;

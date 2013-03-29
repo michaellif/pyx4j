@@ -1,6 +1,7 @@
 .vista-pmsite-findAptPage .vista-pmsite-content {
 	color: #FFFFFF;
     font-size: 16px;
+    overflow: hidden;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
@@ -14,16 +15,7 @@
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-mainWrap {
-	margin: 0 auto;
 	overflow: hidden;
-    background: #fff;
-    padding: 0 20px 20px;
-    *padding-bottom: 90px;
-    width: 920px;
-}
-
-.vista-pmsite-findAptPage .vista-pmsite-main .caption {
-	border-top: 1px solid #000000;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-main .caption h1 {

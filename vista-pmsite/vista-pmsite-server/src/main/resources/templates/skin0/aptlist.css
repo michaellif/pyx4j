@@ -1,21 +1,17 @@
-.vista-pmsite-aptListPage {
-}
 .vista-pmsite-aptListPage .vista-pmsite-content {
 	background: url("images/inner_bg.png") no-repeat;
 }
-.vista-pmsite-aptListPage .vista-pmsite-contentWrap {
+.vista-pmsite-aptListPage {
 	background: url("images/inner_content_bg.png") repeat-x #37393F;
 }
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 211px;
-	vertical-align: top;
 	float: left;
 }
 .vista-pmsite-aptListPage .secondaryNavig {
 	color:#aaa;
 }
-.vista-pmsite-aptListPage .secondaryNavig h3 {
+.vista-pmsite-aptListPage h3 {
 	width:100%;
 	text-align:center;
 	text-transform:uppercase;
@@ -25,7 +21,6 @@
 	margin-top:5px;
 }
 .advancedSearchNarrowWrap {
-	width: 190px;
 	margin: 10px;
 }
 .advancedSearchNarrowWrap input[type=submit] {
@@ -171,12 +166,10 @@
 	padding-bottom: 4px !important;
 }
 .vista-pmsite-aptListPage .vista-pmsite-main {
-	display: inline-block;
-	vertical-align: top;
+	margin-left: 211px;
+	min-height: 574px;
 }
-.vista-pmsite-aptListPage .apartmentListingWrap {
-	width:100%;
-}
+
 .vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background:white;
 	padding-bottom:40px;

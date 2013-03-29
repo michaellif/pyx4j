@@ -1,42 +1,25 @@
-.vista-pmsite-aptListPage {
-}
-.vista-pmsite-aptListPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-    background: ${background_10};
-}
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 211px;
-	vertical-align: top;
+	float: left;
 }
+
+.vista-pmsite-aptListPage .vista-pmsite-main {
+	margin-left: 211px;
+}
+
 .vista-pmsite-aptListPage .secondaryNavig {
 	color: ${foreground_60};
 }
-.vista-pmsite-aptListPage .secondaryNavig h3 {
-	width:100%;
+.vista-pmsite-aptListPage h3 {
 	text-align:center;
 	text-transform:uppercase;
 	font-size:14px;
-	font-weight:bold;
 	padding: 10px 0;
 	margin-top:5px;
 }
 .advancedSearchNarrowWrap {
 	width: 190px;
 	margin: 10px;
-}
-.advancedSearchNarrowWrap input[type=submit] {
-	background: ${object1_100};
-	border: 2px solid ${object1_100};
-	color: ${object1_10};
-	cursor: pointer;
-	font-size: 16px;
-	margin: 15px auto 0;
-	text-transform: uppercase;
-	width: 128px;
-	height: 32px;
 }
 
 .advancedSearchNarrowWrap label {
@@ -118,9 +101,6 @@
 	display:inline-block;
 }
 
-.advancedSearchNarrowWrap .searchCommonBox {
-}
-
 .advancedSearchNarrowWrap .searchCommonBox select {
 	width: 82px;
 	margin: 1px;
@@ -141,18 +121,13 @@
 	margin-bottom: 30px;
 }
 
-.advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
+.advancedSearchNarrowWrap .searchAmenityBox .searchField>label, .advancedSearchNarrowWrap .searchAmenityBox .amenityList {
 	display: block;
 	width: 100%;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox br {
 	display: none;
-}
-
-.advancedSearchNarrowWrap .searchAmenityBox .amenityList {
-	display: block;
-	width: 100%;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .amenityList label {
@@ -164,19 +139,9 @@
 	width: 165px;
 }
 
-.vista-pmsite-aptListPage .vista-pmsite-main {
-	display: inline-block;
-	width: 745px;
-	vertical-align: top;
-}
 .vista-pmsite-aptListPage .apartmentListingWrap {
-	width:100%;
 	border-left:1px solid ${foreground_20};
-}
-.vista-pmsite-aptListPage .apartmentListingWrap .listing_listview {
 	background: ${background_10};
-	padding-bottom:40px;
-	min-height:600px;
 }
 
 #aptListModeSwitch {
@@ -210,20 +175,14 @@
 .apartmentListingWrap .listingEntry {
 	padding:20px;
 	border-bottom: 1px solid ${foreground_20};
-	color: ${foreground_100};
 }
 .apartmentListingWrap .listingEntry:hover {
 	background-color:${object1_10};
 }
-.apartmentListingWrap .listingEntry:first-child {
-	border-top: 1px solid ${foreground_20};
-}
+
 .apartmentListingWrap .listingEntry .pictureBox {
-	display: inline-block;
-	vertical-align: top;
+	float: left;
 	width:80px;
-	min-height:75px;
-	text-align:center;
 } 
 .apartmentListingWrap .listingEntry .pictureBox .picture {
 	width:100%;

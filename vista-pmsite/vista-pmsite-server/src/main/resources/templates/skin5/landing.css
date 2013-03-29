@@ -1,10 +1,9 @@
-.vista-pmsite-contentWrap {
+.vista-pmsite-landingPage {
 	background: url("images/content_bg.png") repeat-x scroll 0 0 #2F292A;
 }
 
 .vista-pmsite-content {
-    margin: 0 15%;
-    padding: 0 19px;
+    margin: 0 auto;
     width: 960px;
 }
 
@@ -28,11 +27,6 @@
 .wideGadgetBox {
 	overflow:hidden;
 	width: 100%;
-}
-
-.banner {
-	vertical-align:top;
-	font-size:13px;
 }
 
 .banner_img {
@@ -66,8 +60,8 @@
 }
 
 .quickSearch .infobox_body {
-    margin-bottom: 20px;
     padding: 10px 40px;
+    border-top: none;
 }
 
 .quickSearch h3 {
@@ -124,22 +118,11 @@ select {
 }
 
 .vista-pmsite-mainWrap {
-	display:inline-block;
-	font-size:13px;
-	width: 100%;
+	overflow: hidden;
 }
 
 .newsBox {
-    position: relative;
-    top: -10px;
-}
-
-.vista-pmsite-sidebarWrap {
-	position: relative;
-	width: 100%;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;
+   	padding: 20px 0;
 }
 
 .vista-pmsite-sidebar {
@@ -148,19 +131,13 @@ select {
 }
 
 .vista-pmsite-main {
-	width: 620px;
-	float: right;
-	position: relative;
-	left: -40px;
-	display:inline-block;
+	margin-left: 300px;
 }
 
 .testimBox {
 	float: left;
 	overflow:hidden;
 	width: 100%;
-	margin-bottom: 20px;
-	padding-top: 2px;
 }
 
 .testimBox .infobox_body {
@@ -236,15 +213,12 @@ select {
     border-bottom: none;
 }
 
-.narrowGadgetBox.quickSearch .infobox_body {
-    border-top: none;
-}
-
 .narrowGadgetBox.quickSearch .infobox_header .infobox_header_title {
 	background-color: inherit;
 	*background-color:#fa8d0c;
     color: #000000;
     font-weight: bold;
+    margin-right: 0;
 }
 
 .infobox_header_title {
@@ -271,8 +245,7 @@ select {
 }
 
 .promoBox .infobox_content {
-	width: 154px;
-	margin: 27px 5px 0 0;
+	margin: 20px 5px 0 0;
 	width: 154px;
 	float:left;
 	margin-right: 5px;
@@ -307,7 +280,3 @@ select {
 .promoBox a:hover + .address {
 	border-bottom: 3px solid #E8E8E8;;
 }
-.promoBox .citySelectionForm {
-	margin: 6px 0 10px 0;
-}
-

@@ -372,10 +372,14 @@ ul.footer_locations li {
 	color:${object2_10};
 }
 
-.vista-pmsite-sidebarWrap {
+.vista-pmsite-content {
 		background-color:${object2_10};
 }
 
 .vista-pmsite-main .content{
 		background-color:${object2_100};
+}
+.container {
+	width: 960px;
+	margin: 0 auto;
 }

@@ -1,20 +1,11 @@
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 500px;
-}
-
-.vista-pmsite-residentPage .vista-pmsite-mainWrap {
 	width: 960px;
-	margin: 0 auto;
 	overflow: hidden;
-}
-
-.vista-pmsite-residentPage .PortalView .vista-pmsite-mainWrap {
-	width: 960px;
-	padding: 0;
+	margin: 0 auto 20px;
 }
 
 .vista-pmsite-residentPage .caption {
-	overflow: hidden;
 	position: relative;
 	top: 16px;
 	background: #302A2C;
@@ -28,7 +19,7 @@
 	width: 211px;
 	float: left;
 	min-height: 400px;
-	margin: 40px 0 0 0;
+	margin: 40px 20px 0 0;
 	line-height: 1.67;
 }
 
@@ -114,7 +105,6 @@ h2 {
 }
 
 .vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaptionTextEmph  {
-	font-family: monospace;
     font-size: 14pt;
     font-weight: bold;
     text-shadow: none;
@@ -134,7 +124,6 @@ h2 {
 
 .vista-pmsite-residentPage .LandingViewSectionHeader {
 	text-align: center;
-	font-family: monospace;
     font-size: 14pt;
     color: #D7AC3F;
 }
@@ -153,17 +142,13 @@ h2 {
 }
 
 .LandingButtonHolder {
-    margin-left: auto;
-    margin-right: auto;
     margin-top: 10px !important;
-    text-align: center;
-    width: 20em;
+    text-align: center !important;
 }
 
 .vista-pmsite-residentPage .FormFlexPanelH3Label {
     color: #D7AC3F;
     font-size: 14pt;
-    font-family: monospace;
     font-weight: bold;
     font-style: normal;
     border-bottom: 3px solid #1F1B1C;
@@ -183,16 +168,12 @@ h2 {
     filter: false; /*for IE9*/
    	font-weight: bold;
 }
-.vista-pmsite-residentPage .Button .ButtonText {
-	/*position: relative;
-	top: -30px;
-	right: 20px;*/
-}
 
 .vista-pmsite-residentPage .LandingButtonHolder .Button{
 	float: none;
     height: 1.5em;
     width: 7em;
+    text-transform: uppercase;
 }
 .vista-pmsite-residentPage .LandingButtonHolder .Button:hover {
 	color: #FA8D0C;

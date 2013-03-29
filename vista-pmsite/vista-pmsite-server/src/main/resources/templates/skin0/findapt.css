@@ -3,7 +3,7 @@
     font-size: 16px;
 }
 
-.vista-pmsite-findAptPage .vista-pmsite-contentWrap {
+.vista-pmsite-findAptPage {
 	background: url("images/inner_content_bg.png") repeat-x scroll
 		0 0 #37393F;
 }
@@ -14,14 +14,6 @@
 }
 .vista-pmsite-findAptPage .content {
 	background: url("images/FreeCableTV.png") no-repeat right 40px;
-}
-
-.vista-pmsite-findAptPage .caption h1 {
-	font-size: 36px;
-	font-weight: normal;
-	line-height: 38px;
-	padding: 0 0 20px;
-	color:#ccc;
 }
 
 .advancedSearchWideWrap {

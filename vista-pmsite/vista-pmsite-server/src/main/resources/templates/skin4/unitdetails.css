@@ -1,28 +1,15 @@
-.vista-pmsite-unitDetailsPage {
-}
 .vista-pmsite-unitDetailsPage .vista-pmsite-mainWrap {
-	width: 920px;
-	margin: 0 auto;
-	padding: 0 20px 20px 20px;
-	*padding-bottom: 20px;
 	overflow: hidden;
-    background: #fff;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 260px;
-	min-height: 600px;
 	background-color: #E8E8E8;
-	vertical-align: top;
 	float: left;
 	padding: 0 20px 20px 20px;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
-	display: inline-block;
-	width: 600px;
-	vertical-align: top;
 	min-height:600px;
-	float: right;
+	margin-left: 320px;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main .caption2 {
 }
@@ -30,7 +17,6 @@
 .vista-pmsite-unitDetailsPage .apartmentDetailsWrap {
 	min-height: 550px;
 	border-top: 5px solid #000000;
-	background-color: #fff;
 }
 
 .apartmentDetailsWrap .detailBox {
@@ -46,8 +32,7 @@
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	padding: 10px 0;
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
-}
+
 .apartmentDetailsWrap .detailBox .detailBoxEntry .detailBoxCaption {
 	display:inline-block;
 	vertical-align:top;
@@ -87,11 +72,9 @@
 } 
 .apartmentDetailsWrap .requestBtn {
 	background: ${object1_100};
-	border: 2px solid ${object1_100};
 	color: ${object1_10};
-    display:inline-block;
     line-height: 32px;
-    padding:0 8px;
+    padding:8px;
     margin-left:40px;
     font-size: 16px;
     text-transform: uppercase;

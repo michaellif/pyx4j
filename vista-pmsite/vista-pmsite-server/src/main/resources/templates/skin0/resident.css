@@ -56,7 +56,7 @@
 }
 
 .vista-pmsite-residentPage .content {
-	min-height: 500px;
+	min-height: 400px;
 	color: #333333;
 	background-color: white;
 	line-height: 20px;
@@ -147,4 +147,8 @@
 	color: #666666 !important;
     text-decoration: none;
     cursor: default;
+}
+
+.LandingButtonHolder {
+    text-align: center !important;
 }

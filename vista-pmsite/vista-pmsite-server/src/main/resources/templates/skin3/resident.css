@@ -4,14 +4,9 @@
 
 .vista-pmsite-residentPage .vista-pmsite-content {
 		min-height: 500px;
+		background: ${object2_10};
 }
 
-.vista-pmsite-residentPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-	background: ${object2_10};
-}
 .vista-pmsite-residentPage .caption {
 	height: 80px;
 	overflow: hidden;

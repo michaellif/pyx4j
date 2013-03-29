@@ -325,12 +325,7 @@ ul.footer_locations li {
 	text-align: center;
 	line-height: 20px;
 }
-.powered_product {
 
-}
-.powered_by {
-
-}
 .powered_logo {
 	background: url("images/vista.png") no-repeat;
 	display:inline-block;
@@ -351,12 +346,6 @@ ul.footer_locations li {
 	font-style: italic;
 }
 
-.vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-}
-.vista-pmsite-main {
-}
 .vista-pmsite-main .caption {
 	background: url("images/title_bg.gif") repeat-y scroll 0 -40px
 		transparent;
@@ -369,7 +358,7 @@ ul.footer_locations li {
 	font-size: 36px;
 	font-weight: normal;
 	line-height: 38px;
-	padding: 0 0 20px;
+	color:#ccc;
 }
 .caption2 {
 	background:

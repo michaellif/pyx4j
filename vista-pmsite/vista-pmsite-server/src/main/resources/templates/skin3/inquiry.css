@@ -1,10 +1,7 @@
 .vista-pmsite-inquiryFormPage {
 	font-size:14px;
 }
-.vista-pmsite-inquiryFormPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
+.vista-pmsite-inquiryFormPage .vista-pmsite-content  {
     background: ${background_10};
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {

@@ -1,52 +1,29 @@
-.vista-pmsite-contentWrap {
+.vista-pmsite-findAptPage {
 	background-image: url("images/content_bg.png");
-	background-repeat: repeat-x;
-	background-size: 100% 131%;
 }
 
-.vista-pmsite-findAptPage .vista-pmsite-content {
-	color: #FFFFFF;
+.vista-pmsite-content {
+    margin: 0 auto;
+    padding: 10px 0 100px 0;
+    width: 960px;
+    color: #FFFFFF;
     font-size: 16px;
-    height: 476px;
 }
 
 .vista-pmsite-findAptPage .vista-pmsite-content .content {
-    border-top: 5px solid #000000;
     background: url("images/resident.jpg") no-repeat right top;
     zoom: 1;
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/resident.jpg', sizingMethod='scale');
     -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/resident.jpg', sizingMethod='scale')";
 }
 
-.vista-pmsite-findAptPage #advancedSearchCriteriaForm1 {
-	top: 0;
-	height: 403px;
-	*height: 366px;
-}
-
-.vista-pmsite-findAptPage .vista-pmsite-mainWrap {
-	margin: 0 auto;
-	overflow: hidden;
-    /*background: #302A2C;*/
-    padding: 10px 20px;
-    padding-bottom: 100px;
-    width: 920px;
-}
-
 .vista-pmsite-findAptPage .vista-pmsite-main .caption {
-	border-top: 1px solid #000000;
 	display: none;
 }
 
-.vista-pmsite-findAptPage .vista-pmsite-main .caption h1 {
-    font-family: monospace;
-    font-size: 14pt;
-    color: #000000;
-  }
-
 .advancedSearchWideWrap {
 	_padding: 0 80px;
-	width:620px;
+	width:660px;
 	background-color: #FA8D0C;
 	background: -moz-linear-gradient(left top, #b55508, #FA8D0C);
     background: -webkit-gradient(linear, left top, left bottom, 
@@ -93,10 +70,10 @@
 	display:block;
 	white-space:nowrap;
 }
-.advancedSearchWideWrap .searchTypeSelBox {
+.advancedSearchWideWrap .searchTypeSelBox, .advancedSearchWideWrap .searchTypeBox {
 	float:left;
 	margin-top:30px;
-	padding: 0 80px;
+	padding: 0 100px;
 }
 .advancedSearchWideWrap .searchTypeSelButton {
 	width:214px;
@@ -128,12 +105,6 @@
 	border-left-style:none;
 }
 
-.advancedSearchWideWrap .searchTypeBox {
-	float:left;
-	_clear:both;
-	margin-top:30px;
-	padding: 0 80px;
-}
 .advancedSearchWideWrap .searchTypeBox .searchField {
 	float:left;
 	margin-left:30px;
@@ -160,10 +131,10 @@
 	outline: 1px solid #EC8E21;
 }
 .advancedSearchWideWrap .searchCommonBox {
-	width: 540px;
+	width: 560px;
 	_clear:both;
 	float:left;
-	padding: 0 0 30px 80px;
+	padding: 0 0 30px 100px;
 	*padding-bottom: 20px;
 	margin-top:30px;
 	border-bottom: 3px solid #1f1b1c;
@@ -210,7 +181,7 @@
 	float:left;
 	_clear:both;
 	border-top: 1px solid #ffd467;
-	padding: 20px 80px 0 80px;
+	padding: 20px 100px 0 100px;
 	margin-bottom:40px;
 }
 .advancedSearchWideWrap .searchAmenityBox br {
@@ -243,9 +214,4 @@
 	color:${object1_20} !important;
 	background-color:${object1_100} !important;
 	width:214px;
-}
-
-.vista-pmsite-findAptPage .advancedSearchCriteria {
-	top: 0;
-	height: 383px;
 }

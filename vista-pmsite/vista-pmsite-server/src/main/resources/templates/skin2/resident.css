@@ -1,19 +1,9 @@
-.vista-pmsite-residentPage {
-    color: ${foreground_100};
-}
-
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 400px;
 	padding-bottom: 20px;
 	background-color: #fff;
 }
 
-.vista-pmsite-residentPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-	background: ${object2_10};
-}
 .vista-pmsite-residentPage .caption {
 	height: 80px;
 	overflow: hidden;

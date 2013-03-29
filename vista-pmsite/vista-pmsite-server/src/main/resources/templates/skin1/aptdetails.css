@@ -1,27 +1,14 @@
-.vista-pmsite-aptDetailsPage {
-	font-size:14px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 318px;
-	vertical-align: top;
+	float:left;
 	padding:20px 16px;
 	border-right:1px solid ${foreground_20};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
-	display: inline-block;
-	width: 605px;
-	vertical-align: top;
-	min-height:400px;
+	margin-left: 350px;
+	padding-bottom: 20px;
 }
-.vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-	border-bottom:1px solid ${foreground_20};
-}
+
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_60};
 	padding-bottom:20px;
@@ -31,10 +18,9 @@
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
-	color:${foreground_60};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
-	padding: 10px 0;
+	padding: 10px 0 10px 10px;
 	border-bottom: 1px solid ${foreground_20};
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry:first-child {
@@ -67,14 +53,7 @@
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover {
 	background-color:${object1_10};
 }
-.apartmentDetailsWrap .detailBox .detailBoxEntry .picture {
-	display: inline-block;
-	vertical-align: top;
-	width:80px;
-	min-height:75px;
-	text-align:center;
-	padding-left:10px;
-} 
+
 .apartmentDetailsWrap .unitDetails {
 	display: inline-block;
 	vertical-align: top;
@@ -117,13 +96,8 @@
 .apartmentDetailsWrap .detailBox .detailBoxEntry .controlBox {
 	display: inline-block;
 	vertical-align: top;
-	width:100px;
-	padding:0;
 } 
-.apartmentDetailsWrap .controlBox .controlButton {
-	float:right;
-	padding:6px 0;
-}
+
 .listingCtlButton {
 	background-image: url("images/aptListIcons.png");
 	background-repeat: no-repeat;
@@ -151,11 +125,9 @@ a.listingCtlButton {
 	background: ${contrast1_100};
 	border: 2px solid ${contrast1_120};
 	color: ${contrast1_10};
-    display:inline-block;
     line-height: 32px;
-    padding:0 8px;
+    padding:8px;
     margin-left:40px;
-    margin-bottom:20px;
     font-size: 16px;
     text-transform: uppercase;
     text-decoration:none;

@@ -43,7 +43,7 @@ html,body {
 }
 
 body {
-	font: 16px Calibri;
+	font: 14px Calibri;
 	line-height: 1.4;
 	zoom: 1;
 	background: #2f292a;
@@ -101,7 +101,6 @@ select {
 
 .header {
 	width: 100%;
-	background: #2f292a;
 }
 
 .main {
@@ -379,11 +378,9 @@ ul.footer_locations li {
  */
 .vista-pmsite-main .caption {
 //	background-size: 100% 100%;
-	/*background: white;*/
 	height: 30px;
 	overflow: hidden;
 	padding: 5px 0 5px 0;
-	display: block;
 }
 
 .vista-pmsite-main .caption h1 {
@@ -410,7 +407,6 @@ ul.footer_locations li {
     z-index: 1;
 }
 .vista-pmsite-main .caption2 .rightControl {
-	height:25px;
 	margin:3px 0;
 	float:right;
 	color: #d7ac3f;
@@ -426,7 +422,4 @@ ul.footer_locations li {
 .vista-pmsite-main .caption2 .rightControl:hover {
 	color: #fa8d0c;
 	/*color:${object2_10};*/
-}
-
-.vista-pmsite-sidebarWrap {
 }

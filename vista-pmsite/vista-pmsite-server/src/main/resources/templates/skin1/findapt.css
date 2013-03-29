@@ -9,13 +9,6 @@
 	overflow: hidden;
 }
 
-.vista-pmsite-findAptPage .caption {
-	background-size: 100% 100%;
-	height: 80px;
-	overflow: hidden;
-	padding: 0 0 0 30px;
-}
-
 .vista-pmsite-findAptPage .caption h1 {
 	font-size: 36px;
 	font-weight: normal;

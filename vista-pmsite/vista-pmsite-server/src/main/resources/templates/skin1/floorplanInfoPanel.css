@@ -1,7 +1,3 @@
-.floorplanInfoPanel .pictureBox {
-	width:100%;
-	text-align:center;
-} 
 .floorplanInfoPanel .pictureBox .picture {
 	width:100%;
 }
@@ -21,18 +17,13 @@
 	margin-left:0;
 }
 .floorplanInfoPanel .infoBox {
-	width:100%;
 	font-weight:bold;
 	color:${foreground_60};
 } 
 .floorplanInfoPanel .infoBoxEntry {
 	padding-top:15px;
 } 
-.floorplanInfoPanel .infoBoxEntry .infoBoxCaption {
-	display:block;
-	padding-top:4px;
-}
-.floorplanInfoPanel .infoBoxEntry .infoBoxText {
+.floorplanInfoPanel .infoBoxEntry .infoBoxCaption, .floorplanInfoPanel .infoBoxEntry .infoBoxText {
 	display:block;
 	padding-top:4px;
 }

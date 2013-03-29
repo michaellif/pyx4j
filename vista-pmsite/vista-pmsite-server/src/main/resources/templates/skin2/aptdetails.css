@@ -1,28 +1,19 @@
 .vista-pmsite-aptDetailsPage {
 	font-size:14px;
-}
-.vista-pmsite-aptDetailsPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
 	overflow: hidden;
-    background: ${object2_10};
 }
+
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
-	display: inline-block;
 	width: 318px;
-	vertical-align: top;
 	padding:20px 16px;
+	float: left;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
-	display: inline-block;
-	width: 606px;
-	vertical-align: top;
-	min-height:400px;
+	margin-left: 350px;
 }
-.vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-	border-bottom:1px solid ${object2_20};
-}
+
 .vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
+	padding-bottom: 20px;
 	border-left:1px solid ${object2_20};
 	min-height: 550px;
 }
@@ -153,14 +144,10 @@ a.listingCtlButton {
 }
 .apartmentDetailsWrap .requestBtn {
 	background: ${object1_100};
-	border: 2px solid ${object1_100};
 	color: ${object1_10};
-    display:inline-block;
     line-height: 32px;
-    padding:0 8px;
+    padding:8px;
     margin-left:40px;
-    margin-bottom:20px;
     font-size: 16px;
     text-transform: uppercase;
-    text-decoration:none;
 }

@@ -1,4 +1,4 @@
-.vista-pmsite-contentWrap {
+.vista-pmsite-landingPage {
 	background: url("images/content_bg.png") repeat-x scroll 0 0
 		#37393F;
 }
@@ -7,17 +7,17 @@
 }
 .banner {
 	height: 375px;
-	width: 960px;
 	position: relative;
 }
 .banner_img {
 	height: 430px;
 	width: 960px;
-	float: left;
-	position: absolute; bottom:0;
+	position: absolute; 
+	bottom:0;
 }
 
 .vista-pmsite-mainWrap {
+    overflow: hidden;
 }
 
 .vista-pmsite-sidebarWrap {
@@ -27,10 +27,13 @@
 
 .vista-pmsite-sidebar {
 	width: 280px;
-	display:inline-block;
-	vertical-align:top;
+	float:left;
 	background: url("images/bg_sidebar.gif") repeat-x #34363C;
 	background-size:100% 100%;
+}
+
+.vista-pmsite-main {
+	margin-left: 280px;
 }
 
 .quickSearch h3 {
@@ -211,11 +214,6 @@
 	padding: 20px 30px;
 }
 
-.vista-pmsite-main {
-	width: 675px;
-	display:inline-block;
-	vertical-align:top;
-}
 .infobox_header_title {
 	font-size: 22px;
 	line-height: 60px;

@@ -7,18 +7,6 @@
 	padding-bottom: 20px;
 }
 
-.vista-pmsite-residentPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
-	overflow: hidden;
-}
-
-.vista-pmsite-residentPage .caption {
-	height: 80px;
-	overflow: hidden;
-	padding: 40px 0 0 30px;
-}
-
 .vista-pmsite-residentPage .secondaryNavig {
 	padding: 35px 0;
 	width: 211px;
@@ -163,4 +151,8 @@
 
 .LandingButtonHolder {
     text-align: center !important;
+}
+
+.LandingViewPanel {
+    position: relative;
 }
