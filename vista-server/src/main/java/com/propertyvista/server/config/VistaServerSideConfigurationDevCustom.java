@@ -33,7 +33,7 @@ public class VistaServerSideConfigurationDevCustom extends VistaServerSideConfig
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return getConfigProperties().getValue("ApplicationURLNamespace");
     }
 

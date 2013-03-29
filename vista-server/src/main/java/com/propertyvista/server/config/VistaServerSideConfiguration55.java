@@ -36,7 +36,7 @@ public class VistaServerSideConfiguration55 extends VistaServerSideConfiguration
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return "-55.birchwoodsoftwaregroup.com/";
     }
 

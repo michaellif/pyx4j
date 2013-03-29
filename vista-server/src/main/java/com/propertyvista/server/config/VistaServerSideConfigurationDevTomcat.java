@@ -21,7 +21,7 @@ public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfig
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return ".dev.birchwoodsoftwaregroup.com:9000/vista/";
     }
 }

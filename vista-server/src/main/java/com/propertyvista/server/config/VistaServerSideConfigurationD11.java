@@ -38,7 +38,7 @@ public class VistaServerSideConfigurationD11 extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return ".11.propertyvista.com/";
     }
 

@@ -69,7 +69,7 @@ class EnvLinksBuilder extends XMLStringWriter {
             td("DB Reset");
 
             startIdented("td");
-            a("http://static" + ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLNamespace() + "o/db-reset");
+            a("http://static" + ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getApplicationURLNamespace(true) + "o/db-reset");
             endIdented();
             endIdented();
         }

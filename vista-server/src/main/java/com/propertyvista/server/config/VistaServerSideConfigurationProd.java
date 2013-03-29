@@ -117,7 +117,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
             return "-prod03.propertyvista.com/";

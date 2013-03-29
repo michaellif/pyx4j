@@ -41,6 +41,19 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         return this;
     }
 
+    private boolean enableHttps() {
+        return false;
+    }
+
+    @Override
+    protected String getApplicationDeploymentProtocol() {
+        if (enableHttps()) {
+            return "https";
+        } else {
+            return "http";
+        }
+    }
+
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
         return new VistaConfigurationMySQL() {
@@ -113,7 +126,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         String hostPrefix = ".dev";
         if (Context.getRequest() != null) {
             // 192.168.179.1  -> .h.birchwoodsoftwaregroup.com
@@ -125,7 +138,16 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
                 hostPrefix = ".h";
             }
         }
-        return hostPrefix + ".birchwoodsoftwaregroup.com:" + devServerPort + devContextPath + "/";
+        StringBuilder b = new StringBuilder();
+        b.append(hostPrefix);
+        b.append(".birchwoodsoftwaregroup.com");
+
+        if (!enableHttps() || !secure) {
+            b.append(":").append(devServerPort);
+        }
+
+        b.append(devContextPath).append("/");
+        return b.toString();
     }
 
     @Override

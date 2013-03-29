@@ -38,7 +38,7 @@ public class VistaServerSideConfigurationD33 extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return ".33.propertyvista.com/";
     }
 

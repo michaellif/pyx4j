@@ -109,7 +109,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getMainApplicationURL() {
-        return getApplicationDeploymentProtocol() + "://" + NamespaceManager.getNamespace() + getApplicationURLNamespace();
+        return getApplicationDeploymentProtocol() + "://" + NamespaceManager.getNamespace() + getApplicationURLNamespace(true);
     }
 
     protected String getApplicationDeploymentProtocol() {
@@ -118,14 +118,14 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDevelopmentSessionCookieName() {
-        if (getApplicationURLNamespace() == null) {
+        if (getApplicationURLNamespace(true) == null) {
             return "dev_access";
         } else {
-            return "dev_access" + getApplicationURLNamespace().replaceAll("[\\-\\./:]", "_");
+            return "dev_access" + getApplicationURLNamespace(true).replaceAll("[\\-\\./:]", "_");
         }
     }
 
-    public String getApplicationURLNamespace() {
+    public String getApplicationURLNamespace(boolean secure) {
         return ".birchwoodsoftwaregroup.com/";
     }
 
@@ -141,7 +141,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         String base = secure ? getApplicationDeploymentProtocol() : "http";
-        base += "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace();
+        base += "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace(secure);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -151,7 +151,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -161,7 +161,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "ptapp" + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "ptapp" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -171,12 +171,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLvistaOperations() {
-        return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace() + DeploymentConsts.OPERATIONS_URL;
+        return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace(true) + DeploymentConsts.OPERATIONS_URL;
     }
 
     @Override
     public String getDefaultBaseURLvistaField(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
@@ -186,12 +186,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getCardServiceSimulatorUrl() {
-        return "http://" + "operations" + getApplicationURLNamespace() + "o/" + "CardServiceSimulation";
+        return "http://" + "operations" + getApplicationURLNamespace(true) + "o/" + "CardServiceSimulation";
     }
 
     @Override
     public String getDefaultBaseURLvistaOnboarding() {
-        String base = getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace();
+        String base = getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
