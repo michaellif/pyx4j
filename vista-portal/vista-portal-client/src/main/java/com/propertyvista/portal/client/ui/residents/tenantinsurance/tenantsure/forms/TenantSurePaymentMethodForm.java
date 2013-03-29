@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -43,7 +43,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     private final CCheckBox iAgreeBox = new CCheckBox();
 
-    protected final CLabel<String> legalTerms = new CLabel<String>();
+    protected final CRichTextArea legalTerms = new CRichTextArea();
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -55,6 +55,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         super(InsurancePaymentMethod.class);
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
         this.isAgreedToPreauthorizedPayments = false;
+        legalTerms.setViewable(true);
     }
 
     @Override

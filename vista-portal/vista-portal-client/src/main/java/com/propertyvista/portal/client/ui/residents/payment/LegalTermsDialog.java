@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.payment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -45,7 +45,8 @@ public class LegalTermsDialog extends OkDialog {
     }
 
     private IsWidget createBody(TermsType type) {
-        CLabel<String> legalTerms = new CLabel<String>();
+        CRichTextArea legalTerms = new CRichTextArea();
+        legalTerms.setViewable(true);
         switch (type) {
         case TermsOfUse:
             legalTerms.setValue(VistaResources.INSTANCE.termsAndConditions().getText());

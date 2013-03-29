@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.ui.residents.paymentmethod;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -36,7 +36,8 @@ public abstract class PaymentMethodPreauthorizationAgreementDialog extends OkCan
     }
 
     private IsWidget createBody(PaymentType type) {
-        CLabel<String> legalTerms = new CLabel<String>();
+        CRichTextArea legalTerms = new CRichTextArea();
+        legalTerms.setViewable(true);
         switch (type) {
         case Echeck:
             legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());
