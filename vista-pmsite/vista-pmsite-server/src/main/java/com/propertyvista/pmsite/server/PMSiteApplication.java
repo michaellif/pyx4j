@@ -139,8 +139,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                         newParams.set(pName, pValue);
                     }
                 }
-                info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
             }
+            info = new UrlInfo(info.getPageComponentInfo(), info.getPageClass(), newParams);
             return super.buildUrl(info);
         }
 
