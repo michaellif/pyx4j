@@ -629,10 +629,6 @@ td.DatePickerMonth {
 	border-right-color: #c2c2c2;
 }
 
-.DataTable {
-	
-}
-
 .DataTableHeader {
 	background-color: #c2c2c2;
 	color: #ffffff;
@@ -646,8 +642,7 @@ td.DatePickerMonth {
 	font-weight: bold;
 }
 
-.DataTableColumnSelector a:link,.DataTableColumnSelector a:visited,.DataTableColumnSelector a:active
-	{
+.DataTableColumnSelector a:link,.DataTableColumnSelector a:visited,.DataTableColumnSelector a:active {
 	color: #f0f0f0;
 }
 
@@ -853,10 +848,6 @@ td.DatePickerMonth {
 	height: 30px;
 }
 
-.PaymentEditorImages div.selected {
-	
-}
-
 .PaymentEditorImages div img {
 	padding-left: 10px;
 	height: 30px;
@@ -921,28 +912,12 @@ td.DatePickerMonth {
     text-transform: none;
 }
 
-.EntityFolderUpButton {
+.EntityFolderUpButton, .EntityFolderRowItemDecorator .EntityFolderRemoveButton, .EntityFolderCustomButton, .EntityFolderRowItemDecorator .EntityFolderCustomButton {
 	float: left;
 }
 
-.EntityFolderDownButton {
+.EntityFolderDownButton, .EntityFolderRemoveButton {
 	float: right;
-}
-
-.EntityFolderRemoveButton {
-	float: right;
-}
-
-.EntityFolderRowItemDecorator .EntityFolderRemoveButton {
-	float: left;
-}
-
-.EntityFolderCustomButton {
-	float: left;
-}
-
-.EntityFolderRowItemDecorator .EntityFolderCustomButton {
-	float: left;
 }
 
 .EntityFolderTableHeader {
@@ -1024,7 +999,7 @@ td.DatePickerMonth {
 
 .DialogCaption {
 	background: #e2e0e0;
-	filter: alpha(opacity =     95);
+	filter: alpha(opacity = 95);
 	opacity: 0.95;
 	color: #626057;
 	font-weight: bold;
@@ -1032,7 +1007,7 @@ td.DatePickerMonth {
 
 .DialogResizer {
 	background: #AAAAAA;
-	filter: alpha(opacity =     95);
+	filter: alpha(opacity = 95);
 	opacity: 0.95;
 }
 
@@ -1138,14 +1113,9 @@ td.DatePickerMonth {
 	cursor: hand;
 }
 
-.gwt-SuggestBoxPopup .item {
-	
-}
-
 .gwt-SuggestBoxPopup .item-selected {
 	background-color: #d1d1d1;
 }
-
 
 .BillingLineItemAmount {
 	color: #666666;
@@ -1164,10 +1134,6 @@ td.DatePickerMonth {
 	text-align: center;
 }
 
-.BillingDetailItemTitle {
-	
-}
-
 .BillingDetailItemAmount {
 	color: #666666;
 	text-align: right;
@@ -1178,10 +1144,6 @@ td.DatePickerMonth {
 	font-size: 12px;
 	font-weight: bold;
 	text-align: left;
-}
-
-.BillingDetailTotalTitle {
-	
 }
 
 .BillingDetailTotalAmount {
@@ -1455,55 +1417,14 @@ padding-right:10px;
 	padding-top: 7px;
 }
 
-.navigation span:lang(fr) {
-	
-}
-
 .navigation a {
-	color: ${object1_10
+	color: ${object1_10};
+	text-decoration:none;
+	float:left;
 }
 
-;
-text-decoration
-
-
-
-
-:
-
-
- 
-
-
-none
-
-
-
-
-;
-float
-
-
-
-
-:
-
-
- 
-
-
-left
-
-
-
-
-;
-}
 .navigation a:hover {
-	color: ${contrast1_100
-}
-
-;
+	color: ${contrast1_100};
 }
 
 /*
@@ -1558,11 +1479,9 @@ ul.footer_locations li {
 }
 
 .footer_locations a:hover {
-	color: ${object1_20
+	color: ${object1_20};
 }
 
-;
-}
 .footer_links {
 	text-align: center;
 	padding-top: 20px;
@@ -1585,11 +1504,9 @@ ul.footer_locations li {
 }
 
 .footer_link a:hover {
-	color: ${object1_20
+	color: ${object1_20};
 }
 
-;
-}
 .locale {
 	margin-top: 40px;
 	text-align: center;
@@ -1662,14 +1579,6 @@ ul.footer_locations li {
 	text-align: center;
 	line-height: 20px;
 	color: #000000;
-}
-
-.powered_product {
-	
-}
-
-.powered_by {
-	
 }
 
 .powered_logo {
