@@ -72,7 +72,7 @@ public class PMSiteCssManager {
             theme = new PMSiteBlackNightTheme(style);
             break;
         default:
-            break;
+            throw new IllegalArgumentException(cm.getSiteDescriptor().skin().getValue().name());
         }
         // generate resource registry key
         final String css = theme.getCssString(getCssPalette());
