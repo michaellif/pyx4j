@@ -186,7 +186,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getCardServiceSimulatorUrl() {
-        return "http://" + "operations" + getApplicationURLNamespace(true) + "o/" + "CardServiceSimulation";
+        return getConfigProperties().getValue("simulator.cardServiceSimulatorUrl",
+                "http://" + "operations" + getApplicationURLNamespace(false) + "o/" + "CardServiceSimulation");
     }
 
     @Override
