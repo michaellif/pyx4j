@@ -79,7 +79,7 @@ public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>, HTML
     public void setNativeValue(E newValue) {
         this.value = newValue;
         if (isViewable()) {
-            getViewer().setHTML(getCComponent().getItemName(newValue));
+            getViewer().setText(getCComponent().getItemName(newValue));
         } else {
             if ((this.value != null) && ((getCComponent().getOptions() == null) || !getCComponent().getOptions().contains(this.value))) {
                 refreshOptions();

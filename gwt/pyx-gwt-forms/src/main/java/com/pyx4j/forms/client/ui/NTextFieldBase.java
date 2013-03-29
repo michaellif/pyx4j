@@ -62,7 +62,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
     public void setNativeValue(DATA value) {
         String newValue = getCComponent().format(value);
         if (isViewable()) {
-            getViewer().setHTML(newValue);
+            getViewer().setText(newValue);
         } else {
             if (!newValue.equals(getEditor().getText())) {
                 getEditor().setText(newValue);

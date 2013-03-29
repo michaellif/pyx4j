@@ -51,7 +51,7 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
     public void setNativeValue(String value) {
         String newValue = value == null ? "" : value;
         if (isViewable()) {
-            getViewer().setHTML(newValue);
+            getViewer().setText(newValue);
         } else {
             if (!newValue.equals(getEditor().getText())) {
                 getEditor().setText(newValue);

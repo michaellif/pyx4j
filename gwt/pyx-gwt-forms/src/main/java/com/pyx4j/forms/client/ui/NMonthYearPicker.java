@@ -69,7 +69,7 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
     @Override
     public void setNativeValue(Date value) {
         if (isViewable()) {
-            getViewer().setHTML(value == null ? "" : getCComponent().isYearOnly() ? yearOnlyDateFormat.format(value) : defaultDateFormat.format(value));
+            getViewer().setText(value == null ? "" : getCComponent().isYearOnly() ? yearOnlyDateFormat.format(value) : defaultDateFormat.format(value));
         } else {
             getEditor().setDate(value);
         }
