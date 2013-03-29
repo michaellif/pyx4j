@@ -55,7 +55,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         super(InsurancePaymentMethod.class);
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
         this.isAgreedToPreauthorizedPayments = false;
-        this.legalTerms.setEscapeHTML(false);
     }
 
     @Override

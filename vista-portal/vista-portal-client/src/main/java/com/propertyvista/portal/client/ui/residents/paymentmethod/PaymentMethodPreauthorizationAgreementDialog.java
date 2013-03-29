@@ -37,7 +37,6 @@ public abstract class PaymentMethodPreauthorizationAgreementDialog extends OkCan
 
     private IsWidget createBody(PaymentType type) {
         CLabel<String> legalTerms = new CLabel<String>();
-        legalTerms.setEscapeHTML(false);
         switch (type) {
         case Echeck:
             legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());

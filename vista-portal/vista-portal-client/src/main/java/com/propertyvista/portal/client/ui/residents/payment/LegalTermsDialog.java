@@ -46,7 +46,6 @@ public class LegalTermsDialog extends OkDialog {
 
     private IsWidget createBody(TermsType type) {
         CLabel<String> legalTerms = new CLabel<String>();
-        legalTerms.setEscapeHTML(false);
         switch (type) {
         case TermsOfUse:
             legalTerms.setValue(VistaResources.INSTANCE.termsAndConditions().getText());
