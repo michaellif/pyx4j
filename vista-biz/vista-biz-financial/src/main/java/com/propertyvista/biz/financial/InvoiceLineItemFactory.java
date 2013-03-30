@@ -29,7 +29,6 @@ public class InvoiceLineItemFactory {
         charge.billingAccount().set(adjustment.billingAccount());
         charge.amount().setValue(adjustment.amount().getValue());
         charge.adjustment().set(adjustment);
-        charge.targetDate().setValue(adjustment.targetDate().getValue());
         charge.description().setValue(adjustment.reason().name().getValue());
         charge.debitType().setValue(DebitType.accountCharge);
 
@@ -49,7 +48,6 @@ public class InvoiceLineItemFactory {
         credit.billingAccount().set(adjustment.billingAccount());
         credit.amount().setValue(adjustment.amount().getValue().negate());
         credit.adjustment().set(adjustment);
-        credit.targetDate().setValue(adjustment.targetDate().getValue());
         credit.description().setValue(adjustment.reason().name().getValue());
 
         return credit;

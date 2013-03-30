@@ -44,6 +44,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 
+//TODO pending adjustment  should post by batch
 @ToStringFormat("{0}, ${1}")
 public interface LeaseAdjustment extends IEntity {
 

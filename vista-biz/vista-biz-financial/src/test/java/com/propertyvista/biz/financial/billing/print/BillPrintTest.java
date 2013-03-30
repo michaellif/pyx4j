@@ -78,14 +78,12 @@ public class BillPrintTest extends FinancialTestBase {
             accountCharge.amount().setValue(new BigDecimal("250.00"));
             accountCharge.taxTotal().setValue(new BigDecimal("25.00"));
             accountCharge.description().setValue("Account Charge");
-            accountCharge.targetDate().setValue(getDate("01-Mar-2011"));
             bill.lineItems().add(accountCharge);
 
             InvoiceAccountCredit accountCredit = EntityFactory.create(InvoiceAccountCredit.class);
             accountCredit.adjustment().executionType().setValue(ExecutionType.immediate);
             accountCredit.amount().setValue(new BigDecimal("-50.00"));
             accountCredit.description().setValue("Account Credit");
-            accountCredit.targetDate().setValue(getDate("02-Mar-2011"));
             bill.lineItems().add(accountCredit);
 
             bill.immediateAccountAdjustments().setValue(new BigDecimal("200.00"));
@@ -249,14 +247,12 @@ public class BillPrintTest extends FinancialTestBase {
             accountCharge.adjustment().executionType().setValue(ExecutionType.pending);
             accountCharge.amount().setValue(new BigDecimal("150.00"));
             accountCharge.description().setValue("Account Charge");
-            accountCharge.targetDate().setValue(getDate("08-Mar-2011"));
             bill.lineItems().add(accountCharge);
 
             InvoiceAccountCredit accountCredit = EntityFactory.create(InvoiceAccountCredit.class);
             accountCredit.adjustment().executionType().setValue(ExecutionType.pending);
             accountCredit.amount().setValue(new BigDecimal("-100.00"));
             accountCredit.description().setValue("Account Credit");
-            accountCredit.targetDate().setValue(getDate("09-Mar-2011"));
             bill.lineItems().add(accountCredit);
 
             bill.pendingAccountAdjustments().setValue(new BigDecimal("50.00"));

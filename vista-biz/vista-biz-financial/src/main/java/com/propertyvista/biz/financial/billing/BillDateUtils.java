@@ -161,9 +161,9 @@ public class BillDateUtils {
         if (lineItem instanceof InvoiceProductCharge) {
             return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
         } else if (lineItem instanceof InvoiceAccountCredit) {
-            return formatDays(((InvoiceAccountCredit) lineItem).targetDate().getValue(), null);
+            return formatDays(((InvoiceAccountCredit) lineItem).postDate().getValue(), null);
         } else if (lineItem instanceof InvoiceAccountCharge) {
-            return formatDays(((InvoiceAccountCharge) lineItem).targetDate().getValue(), null);
+            return formatDays(((InvoiceAccountCharge) lineItem).postDate().getValue(), null);
         } else {
             return formatDays(lineItem.postDate().getValue(), null);
         }
