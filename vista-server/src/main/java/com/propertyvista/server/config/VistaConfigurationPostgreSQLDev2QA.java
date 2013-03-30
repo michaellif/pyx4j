@@ -24,4 +24,10 @@ public class VistaConfigurationPostgreSQLDev2QA extends VistaConfigurationPostgr
     public String dbName() {
         return "vista";
     }
+
+    @Override
+    public Ddl ddl() {
+        return Ddl.disabled;
+    }
+
 }
