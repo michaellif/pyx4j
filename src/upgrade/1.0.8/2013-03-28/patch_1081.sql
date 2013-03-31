@@ -30,7 +30,17 @@ BEGIN
         THEN
                 EXECUTE 'INSERT INTO '||v_schema_name||'.resident_portal_settings (id,enabled,use_custom_html) '
                         ||' VALUES (nextval(''public.resident_portal_settings_seq''),TRUE,FALSE)';
+                        
+                EXECUTE 'UPDATE '||v_schema_name||'.site_descriptor AS a '
+                        ||'SET  resident_portal_settings = b.id '
+                        ||'FROM '||v_schema_name||'.resident_portal_settings AS b ';
         END IF;
+        
+        -- Update schema version
+        
+        UPDATE  _admin_.admin_pmc 
+        SET     schema_version = '1.0.8.1'
+        WHERE   namespace = v_schema_name;
                       
 END;
 $$
@@ -48,4 +58,15 @@ BEGIN TRANSACTION;
 COMMIT;
 
 DROP FUNCTION _dba_.patch_1081(text);
+
+-- Update for sterling payment_records
+
+BEGIN TRANSACTION;
+        
+        UPDATE  sterling.payment_record 
+        SET     target_date = '2013-04-03'
+        WHERE   target_date = '2013-04-01'
+        AND     payment_status = 'Scheduled';
+
+COMMIT;
 
