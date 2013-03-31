@@ -61,6 +61,7 @@ DROP FUNCTION _dba_.patch_1081(text);
 
 -- Update for sterling payment_records
 
+/*
 BEGIN TRANSACTION;
         
         UPDATE  sterling.payment_record 
@@ -69,4 +70,5 @@ BEGIN TRANSACTION;
         AND     payment_status = 'Scheduled';
 
 COMMIT;
+*/
 
