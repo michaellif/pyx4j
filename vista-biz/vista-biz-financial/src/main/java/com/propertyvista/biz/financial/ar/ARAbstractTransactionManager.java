@@ -14,7 +14,9 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class ARAbstractTransactionManager {
@@ -121,5 +124,29 @@ public abstract class ARAbstractTransactionManager {
             }
         }
         return balance;
+    }
+
+    public LogicalDate getTransactionDueDate(BillingAccount billingAccount, LogicalDate postDate) {
+        Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
+        BillingCycle currentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), postDate);
+        BillingCycle targetCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currentCycle);
+
+        LogicalDate startDate;
+        int dueDateOffset;
+        Lease lease = Persistence.service().retrieve(Lease.class, billingAccount.lease().getPrimaryKey());
+        if (lease.leaseTo().isNull() || targetCycle.billingCycleEndDate().getValue().before(lease.leaseTo().getValue())) {
+            // normal cycle
+            startDate = targetCycle.billingCycleStartDate().getValue();
+            dueDateOffset = billingAccount.paymentDueDayOffset().getValue();
+        } else {
+            // final cycle
+            startDate = lease.leaseTo().getValue();
+            dueDateOffset = billingAccount.finalDueDayOffset().getValue();
+        }
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DATE, dueDateOffset);
+        return new LogicalDate(calendar.getTime());
     }
 }

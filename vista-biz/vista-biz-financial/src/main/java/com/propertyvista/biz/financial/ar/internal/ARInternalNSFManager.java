@@ -15,14 +15,14 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
@@ -66,7 +66,9 @@ class ARInternalNSFManager {
         charge.billingAccount().set(paymentRecord.billingAccount());
         charge.debitType().setValue(DebitType.nsf);
         charge.amount().setValue(nsfItem.fee().getValue());
-        charge.dueDate().setValue(ARDateUtils.calculateDueDate(paymentRecord.billingAccount().<InternalBillingAccount> cast()));
+        charge.dueDate().setValue(
+                ARInternalTransactionManager.instance().getTransactionDueDate(paymentRecord.billingAccount(), new LogicalDate(SystemDateManager.getDate())));
+
         charge.description().setValue(i18n.tr("NSF fee"));
         charge.taxTotal().setValue(BigDecimal.ZERO);
         charge.paymentRecord().set(paymentRecord);

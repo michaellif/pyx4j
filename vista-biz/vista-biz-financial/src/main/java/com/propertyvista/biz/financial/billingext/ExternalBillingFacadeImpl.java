@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -64,7 +63,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
 
         charge.billingCycle().set(nextCycle);
-        charge.dueDate().setValue(ARDateUtils.getBillingCycleDueDate(billingAccount, nextCycle));
+//        charge.dueDate().setValue(ARDateUtils.getBillingCycleDueDate(billingAccount, nextCycle));
         charge.postDate().setValue(now);
 
         Persistence.service().persist(charge);

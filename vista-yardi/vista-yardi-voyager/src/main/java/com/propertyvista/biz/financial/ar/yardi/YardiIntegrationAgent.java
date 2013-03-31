@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.ar.ARDateUtils;
 import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -106,8 +105,8 @@ public class YardiIntegrationAgent {
     public static InvoiceLineItem createCharge(YardiBillingAccount account, ChargeDetail detail) {
         BigDecimal amount = new BigDecimal(detail.getAmount());
         // TODO - This calculation assumes that TransactionDate is set to or shortly after start date of cycle
-        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(account.lease(),
-                new LogicalDate(detail.getTransactionDate().getTime()));
+        LogicalDate transactionDate = new LogicalDate(detail.getTransactionDate().getTime());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(account.lease(), transactionDate);
         if (billingCycle == null) {
             throw new IllegalStateException("failed to create charge for yurid account = " + account.getPrimaryKey() + ": billing cycle was not found");
         }
@@ -122,7 +121,7 @@ public class YardiIntegrationAgent {
             charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
             charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
-            charge.dueDate().setValue(ARDateUtils.getBillingCycleDueDate(account, billingCycle));
+            charge.dueDate().setValue(ARYardiTransactionManager.instance().getTransactionDueDate(account, transactionDate));
             if (detail.getService() != null) {
                 try {
                     charge.service().type().setValue(YardiService.Type.valueOf(detail.getService().getType()));
@@ -133,7 +132,7 @@ public class YardiIntegrationAgent {
             item = charge;
         } else {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
-            credit.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
+            credit.postDate().setValue(transactionDate);
             item = credit;
         }
         // we don't have postDate

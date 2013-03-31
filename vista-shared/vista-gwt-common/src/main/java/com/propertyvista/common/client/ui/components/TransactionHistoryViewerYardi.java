@@ -81,22 +81,22 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
 
             int[] row = { -1 };
             contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
-            renderLineItems(row, contentPanel, outstangingCharges, chargeFormat);
+            renderLineItems(row, contentPanel, outstangingCharges, chargeFormat, i18n.tr("Due Date"));
 
             if (!accountCredits.isEmpty()) {
                 contentPanel.setH1(++row[0], 0, 3, i18n.tr("Account Credits"));
-                renderLineItems(row, contentPanel, accountCredits, paymentFormat);
+                renderLineItems(row, contentPanel, accountCredits, paymentFormat, null);
             }
 
             if (!unappliedPayments.isEmpty()) {
                 contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
-                renderLineItems(row, contentPanel, unappliedPayments, paymentFormat);
+                renderLineItems(row, contentPanel, unappliedPayments, paymentFormat, null);
             }
         }
         return contentPanel;
     }
 
-    private <E extends InvoiceLineItem> void renderLineItems(int[] row, FormFlexPanel panel, List<E> items, NumberFormat format) {
+    private <E extends InvoiceLineItem> void renderLineItems(int[] row, FormFlexPanel panel, List<E> items, NumberFormat format, String dateHdr) {
         // this code should be very defensive because you never know the quality of information that is coming from Yardi
         if (!items.isEmpty()) {
             int COL_DATE = 0;
@@ -104,7 +104,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             int COL_AMOUNT = 2;
 
             ++row[0];
-            panel.setWidget(row[0], COL_DATE, new HTML(i18n.tr("Date")));
+            panel.setWidget(row[0], COL_DATE, new HTML(dateHdr == null ? i18n.tr("Post Date") : dateHdr));
             panel.setWidget(row[0], COL_DESCRIPTION, new HTML(i18n.tr("Description")));
             panel.setWidget(row[0], COL_AMOUNT, new HTML(i18n.tr("Amount")));
 
