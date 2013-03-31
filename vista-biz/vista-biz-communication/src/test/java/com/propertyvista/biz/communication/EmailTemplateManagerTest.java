@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
 
@@ -44,14 +45,23 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
+import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
+import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
+import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -139,8 +149,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
 
-        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
-                PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true, PtSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     @Override
@@ -556,6 +566,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // emailTemplatesPolicy
 
         generateIdAssignmentPolicy();
+        generateLeaseBillingPolicy();
+        generateARPolicy();
 
         // site descriptor
         siteDescriptor = EntityFactory.create(SiteDescriptor.class);
@@ -723,6 +735,96 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         }
         policy.header().setValue(getHeader(false));
         policy.footer().setValue(getFooter(false));
+
+        Persistence.service().persist(policy);
+    }
+
+    protected void generateARPolicy() {
+        ARPolicy policy = EntityFactory.create(ARPolicy.class);
+        policy.node().set(getOrganizationPoliciesNode());
+
+        policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
+
+        Persistence.service().persist(policy);
+    }
+
+    protected void generateLeaseBillingPolicy() {
+        LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
+        policy.node().set(getOrganizationPoliciesNode());
+
+        policy.prorationMethod().setValue(BillingAccount.ProrationMethod.Actual);
+
+        LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
+        lateFee.baseFee().setValue(new BigDecimal(50.00));
+        lateFee.baseFeeType().setValue(BaseFeeType.FlatAmount);
+        lateFee.maxTotalFee().setValue(new BigDecimal(1000.00));
+        lateFee.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
+        policy.lateFee().set(lateFee);
+
+        NsfFeeItem nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentType.Check);
+        nsfItem.fee().setValue(new BigDecimal(30.00));
+        policy.nsfFees().add(nsfItem);
+
+        nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentType.Echeck);
+        nsfItem.fee().setValue(new BigDecimal(100.00));
+        policy.nsfFees().add(nsfItem);
+
+        nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentType.CreditCard);
+        nsfItem.fee().setValue(new BigDecimal(30.00));
+        policy.nsfFees().add(nsfItem);
+
+        policy.confirmationMethod().setValue(LeaseBillingPolicy.BillConfirmationMethod.manual);
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.Monthly);
+            billingType.billingCycleStartDay().setValue(1);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-15);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.SemiMonthly);
+            billingType.billingCycleStartDay().setValue(1);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-7);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.BiWeekly);
+            billingType.billingCycleStartDay().setValue(1);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-7);
+            billingType.padCalculationDayOffset().setValue(-3);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
+
+        {
+            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
+            billingType.billingPeriod().setValue(BillingPeriod.Weekly);
+            billingType.billingCycleStartDay().setValue(1);
+            billingType.paymentDueDayOffset().setValue(0);
+            billingType.finalDueDayOffset().setValue(15);
+            billingType.billExecutionDayOffset().setValue(-3);
+            billingType.padCalculationDayOffset().setValue(-1);
+            billingType.padExecutionDayOffset().setValue(0);
+            policy.availableBillingTypes().add(billingType);
+        }
 
         Persistence.service().persist(policy);
     }

@@ -858,7 +858,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (!policyFound) {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
-            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
 
             updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
         } else {
@@ -969,6 +968,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         updateLeaseDates(lease);
+        updateBillingType(lease);
 
         // ensure non-null member(s):
         if (lease.billingAccount().paymentAccepted().isNull()) {
@@ -976,11 +976,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         Persistence.secureSave(lease);
-
-        // update possible changes of initial balance (carryforwardBalance() field of billing account):
-        if (lease.status().getValue() == Status.ExistingLease && lease.billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
-            Persistence.service().merge(lease.billingAccount());
-        }
+        Persistence.service().merge(lease.billingAccount());
 
         // update reservation if necessary:
         if (doUnreserve) {
@@ -1190,6 +1186,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
             updateLeaseDates(concurrent);
             Persistence.secureSave(concurrent);
             complete(concurrent);
+        }
+    }
+
+    private void updateBillingType(Lease lease) {
+        if (!lease.leaseFrom().isNull() && !lease.unit().isNull()) {
+            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
+        } else {
+            log.debug("Can't retrieve Billing Type!..");
         }
     }
 }
