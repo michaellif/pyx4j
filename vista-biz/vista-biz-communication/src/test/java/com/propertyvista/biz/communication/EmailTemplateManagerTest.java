@@ -743,7 +743,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         ARPolicy policy = EntityFactory.create(ARPolicy.class);
         policy.node().set(getOrganizationPoliciesNode());
 
-        policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
+        policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.oldestDebtFirst);
 
         Persistence.service().persist(policy);
     }
