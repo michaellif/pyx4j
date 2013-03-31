@@ -92,56 +92,64 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
         log.info("processing TenantSure cancellations requested by tenant");
 
-        EntityQueryCriteria<InsuranceTenantSure> byTenantCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        byTenantCancellationsCriteria.le(byTenantCancellationsCriteria.proto().expiryDate(), dueDate);
-        byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().status(), InsuranceTenantSure.TenantSureStatus.PendingCancellation);
-        byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().cancellation(), InsuranceTenantSure.CancellationType.CancelledByTenant);
-        ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
-        try {
-            while (iterator.hasNext()) {
-                InsuranceTenantSure ts = iterator.next();
-                String certificateNumber = ts.insuranceCertificateNumber().getValue();
-                try {
-                    new UnitOfWork().execute(new TenantSureCancellator(ts));
-                    executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
-                } catch (Throwable cancellationError) {
-                    executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME, cancellationError);
-                    log.error("failed to cancel TenatSure insurance certificate: (#{})", certificateNumber);
-                    log.error("failure: ", cancellationError);
-                }
-            }
-        } catch (Throwable error) {
-            log.error("failed to process cancellations due to: ", error);
-        } finally {
-            iterator.close();
-        }
-
-        log.info("processing TenantSure cancellation due to skipped payment");
-        EntityQueryCriteria<InsuranceTenantSure> skippedPaymentCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-        skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().status(), InsuranceTenantSure.TenantSureStatus.PendingCancellation);
-        skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().cancellation(), InsuranceTenantSure.CancellationType.SkipPayment);
-        ICursorIterator<InsuranceTenantSure> skippedIterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
-        try {
-            LogicalDate today = new LogicalDate(SystemDateManager.getDate());
-            while (iterator.hasNext()) {
-                InsuranceTenantSure ts = iterator.next();
-                if (gracePeriodEnd(ts).compareTo(today) < 0) {
+        {
+            EntityQueryCriteria<InsuranceTenantSure> byTenantCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+            byTenantCancellationsCriteria.le(byTenantCancellationsCriteria.proto().expiryDate(), dueDate);
+            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().status(), InsuranceTenantSure.TenantSureStatus.PendingCancellation);
+            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().cancellation(), InsuranceTenantSure.CancellationType.CancelledByTenant);
+            ICursorIterator<InsuranceTenantSure> iterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
+            try {
+                while (iterator.hasNext()) {
+                    InsuranceTenantSure ts = iterator.next();
                     String certificateNumber = ts.insuranceCertificateNumber().getValue();
                     try {
-                        new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
+                        new UnitOfWork().execute(new TenantSureCancellator(ts));
                         executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
                     } catch (Throwable cancellationError) {
-                        executionMonitor.addProcessedEvent(//@formatter:off
+                        executionMonitor.addErredEvent(EXECUTION_MONITOR_SECTION_NAME, cancellationError);
+                        log.error("failed to cancel TenatSure insurance certificate: (#{})", certificateNumber);
+                        log.error("failure: ", cancellationError);
+                    }
+                }
+            } catch (Throwable error) {
+                log.error("failed to process cancellations due to: ", error);
+            } finally {
+                iterator.close();
+            }
+        }
+
+        {
+            log.info("processing TenantSure cancellation due to skipped payment");
+            EntityQueryCriteria<InsuranceTenantSure> skippedPaymentCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+            skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().status(),
+                    InsuranceTenantSure.TenantSureStatus.PendingCancellation);
+            skippedPaymentCancellationsCriteria
+                    .eq(skippedPaymentCancellationsCriteria.proto().cancellation(), InsuranceTenantSure.CancellationType.SkipPayment);
+            ICursorIterator<InsuranceTenantSure> skippedIterator = Persistence.service().query(null, skippedPaymentCancellationsCriteria, AttachLevel.Attached);
+            try {
+                LogicalDate today = new LogicalDate(SystemDateManager.getDate());
+                while (skippedIterator.hasNext()) {
+                    InsuranceTenantSure ts = skippedIterator.next();
+                    if (gracePeriodEnd(ts).compareTo(today) < 0) {
+                        String certificateNumber = ts.insuranceCertificateNumber().getValue();
+                        try {
+                            new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
+                            executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                        } catch (Throwable cancellationError) {
+                            executionMonitor.addProcessedEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
                                 SimpleMessageFormat.format("Failed to cancel (due to skipped payment) TenatSure insurance certificate: #{0}", certificateNumber)
                         );//@formatter:on
-                        log.error("failed to cancel (due to skipped payment) TenatSure insurance certificate: (#{})", certificateNumber);
-                        log.error("failure", cancellationError);
+                            log.error("failed to cancel (due to skipped payment) TenatSure insurance certificate: (#{})", certificateNumber);
+                            log.error("failure", cancellationError);
+                        }
                     }
                 }
+            } catch (Throwable error) {
+                log.error("failed to processs skipped payment cancellations due to: ", error);
+            } finally {
+                skippedIterator.close();
             }
-        } finally {
-            skippedIterator.close();
         }
     }
 

@@ -374,8 +374,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     @Override
     public void cancelDueToSkippedPayment(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-        validateIsCancellable(insuranceTenantSure);
-
+        if (insuranceTenantSure.status().getValue() != TenantSureStatus.PendingCancellation
+                & insuranceTenantSure.cancellation().getValue() != CancellationType.SkipPayment) {
+            throw new IllegalStateException("insurance should ped pending cancellationd due to skipped payment to proceed (insurance pk = "
+                    + insuranceTenantSure.getPrimaryKey());
+        }
         LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
                 CfcApiAdapterFacade.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
