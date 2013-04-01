@@ -171,8 +171,14 @@ class PreauthorisedPaymentsManager {
         PreauthorizedAmount recordLargest = null;
 
         for (LeaseTermTenant leaseParticipant : lease.currentTerm().version().tenants()) {
-            Persistence.service().retrieveMember(leaseParticipant.leaseParticipant().preauthorizedPayments());
-            for (PreauthorizedPayment pap : leaseParticipant.leaseParticipant().preauthorizedPayments()) {
+            List<PreauthorizedPayment> preauthorizedPayments;
+            {
+                EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
+                criteria.eq(criteria.proto().isDeleted(), false);
+                preauthorizedPayments = Persistence.service().query(criteria);
+            }
+            for (PreauthorizedPayment pap : preauthorizedPayments) {
 
                 Validate.isTrue(PaymentType.schedulable().contains(pap.paymentMethod().type().getValue()));
 

@@ -132,6 +132,7 @@ public interface BillingAccount extends IEntity {
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
+    @Indexed(uniqueConstraint = true)
     Lease lease();
 
     /**
