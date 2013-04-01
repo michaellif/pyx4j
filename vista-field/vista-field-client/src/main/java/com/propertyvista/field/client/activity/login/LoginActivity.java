@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView;
@@ -30,4 +31,10 @@ public class LoginActivity extends AbstractLoginActivty implements LoginView.Pre
         super(place, LoginViewFactory.instance(LoginView.class), GWT.<AuthenticationService> create(FieldAuthenticationService.class),
                 new FieldSiteMap.PasswordResetRequest());
     }
+
+    @Override
+    protected void onSuccessLogin() {
+        AppSite.getPlaceController().goTo(new FieldSiteMap.ApplicationSelection());
+    }
+
 }

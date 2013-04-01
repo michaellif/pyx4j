@@ -13,8 +13,12 @@
  */
 package com.propertyvista.field.server.services;
 
+import java.util.Set;
+
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -52,6 +56,15 @@ public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesI
     protected void sendPasswordRetrievalToken(CrmUser user) {
 //        ServerSideFactory.create(CommunicationFacade.class).sendAdminPasswordRetrievalToken(user);
 //        Persistence.service().commit();
+    }
+
+    @Override
+    protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
+        Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
+//        if (!userCredential.accessAllBuildings().isBooleanTrue()) {
+//            BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
+//        }
+        return behaviors;
     }
 
 }

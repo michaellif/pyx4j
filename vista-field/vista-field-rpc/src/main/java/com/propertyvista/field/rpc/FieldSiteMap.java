@@ -107,4 +107,7 @@ public class FieldSiteMap implements SiteMap {
     @PlaceProperties(navigLabel = "Runtime Errors")
     public static class RuntimeError extends AppPlace {
     }
+
+    public static class ApplicationSelection extends AppPlace {
+    }
 }

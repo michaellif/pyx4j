@@ -22,7 +22,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteViewFooter, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder;
+        SiteView, SiteViewContent, SiteViewHeader, SiteViewFooter, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton;
     }
 
     public FieldTheme() {
@@ -107,6 +107,15 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
         style.addProperty("margin-top", "20px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AppSelectionButton);
+        style.addProperty("border", "1px solid");
+        style.addProperty("height", "30px");
+        style.addProperty("width", "20em");
+        style.addProperty("text-align", "center");
+        style.addProperty("margin", "10px");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
     }
 

@@ -22,14 +22,14 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.field.client.FieldSite;
 import com.propertyvista.field.client.ui.RuntimeErrorView;
-import com.propertyvista.field.client.ui.viewfactories.FieldVeiwFactory;
+import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
 public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErrorView.Presenter {
 
     private final RuntimeErrorView view;
 
     public RuntimeErrorActivity(Place place) {
-        view = FieldVeiwFactory.instance(RuntimeErrorView.class);
+        view = FieldViewFactory.instance(RuntimeErrorView.class);
         assert (view != null);
         view.setPresenter(this);
     }

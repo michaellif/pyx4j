@@ -18,15 +18,16 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.field.client.activity.RuntimeErrorActivity;
+import com.propertyvista.field.client.activity.appselection.ApplicationSelectionActivity;
 import com.propertyvista.field.client.activity.login.LoginActivity;
 import com.propertyvista.field.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.field.client.activity.security.PasswordResetActivity;
 import com.propertyvista.field.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
-public class UtilityActivityMapper implements ActivityMapper {
+public class ScreenActivityMapper implements ActivityMapper {
 
-    public UtilityActivityMapper() {
+    public ScreenActivityMapper() {
     }
 
     @Override
@@ -42,6 +43,8 @@ public class UtilityActivityMapper implements ActivityMapper {
             return new LoginWithTokenActivity(place);
         } else if (place instanceof FieldSiteMap.RuntimeError) {
             return new RuntimeErrorActivity(place);
+        } else if (place instanceof FieldSiteMap.ApplicationSelection) {
+            return new ApplicationSelectionActivity();
         }
 
         return null;

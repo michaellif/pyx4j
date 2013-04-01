@@ -123,6 +123,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
                         HTML5Storage.getLocalStorage().removeItem(AbstractLoginActivty.HTML5_KEY);
                     }
                 }
+                onSuccessLogin();
             }
 
             @Override
@@ -139,6 +140,9 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
         };
         ClientContext.authenticate(authService, request, callback);
     }
+
+    protected void onSuccessLogin() {
+    };
 
     protected boolean isDevLoginRequired() {
         return ApplicationMode.isDevelopment() || VistaDemo.isDemo();

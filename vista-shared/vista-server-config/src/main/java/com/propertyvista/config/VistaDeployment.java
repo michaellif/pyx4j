@@ -150,6 +150,11 @@ public class VistaDeployment {
         case resident:
             target = DnsNameTarget.residentPortal;
             break;
+        case field:
+            target = DnsNameTarget.field;
+            //TODO fix that after dns will be added to database
+            return "http://vista.field.dev.birchwoodsoftwaregroup.com:8888/vista/field/";
+            //break;   
         default:
             throw new IllegalArgumentException();
         }

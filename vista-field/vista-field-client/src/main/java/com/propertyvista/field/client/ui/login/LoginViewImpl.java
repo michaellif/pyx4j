@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -50,13 +51,15 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.field.client.IsFullScreenWidget;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.components.LoginViewLayoutPanel;
 import com.propertyvista.field.client.ui.decorators.WatermarkDecoratorBuilder;
 
-public class LoginViewImpl extends Composite implements LoginView {
+public class LoginViewImpl extends Composite implements LoginView, IsFullScreenWidget {
 
     private static final I18n i18n = I18n.get(LoginViewImpl.class);
 
@@ -85,8 +88,8 @@ public class LoginViewImpl extends Composite implements LoginView {
             FlowPanel contentPanel = new FlowPanel();
 
             CTextField emailField = (CTextField) inject(proto().email(), new CTextField());
-            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextField>(emailField).watermark(i18n.tr("Email")).build()));
-            setMandatoryValidationMessage(emailField, i18n.tr("Enter your email address"));
+            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextField>(emailField).watermark(i18n.tr("Username")).build()));
+            setMandatoryValidationMessage(emailField, i18n.tr("Enter your username"));
 
             CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField());
             contentPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>(passwordField).watermark(i18n.tr("Password")).build()));
@@ -166,13 +169,19 @@ public class LoginViewImpl extends Composite implements LoginView {
     }
 
     private void bindLoginWidgets(LoginViewLayoutPanel panel) {
-        panel.getHeader().add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
+        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+        logoImage.getElement().getStyle().setProperty("maxHeight", "70px");
+
+        panel.getHeader().add(logoImage);
+
+        //panel.getContent().add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
+        //panel.getContent().add(new HTML(i18n.tr("Welcome. Please Login")));
 
         loginForm = new LoginForm();
         loginForm.initContent();
         panel.getContent().add(loginForm);
 
-        loginButton = new Button(i18n.tr("LOGIN"), new Command() {
+        loginButton = new Button(i18n.tr("Sign In"), new Command() {
             @Override
             public void execute() {
                 onLogin();

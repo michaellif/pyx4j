@@ -16,15 +16,23 @@ package com.propertyvista.field.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.field.client.ui.FieldScreenView;
+import com.propertyvista.field.client.ui.FieldScreenViewImpl;
 import com.propertyvista.field.client.ui.RuntimeErrorView;
 import com.propertyvista.field.client.ui.RuntimeErrorViewImpl;
+import com.propertyvista.field.client.ui.appselection.ApplicationSelectionView;
+import com.propertyvista.field.client.ui.appselection.ApplicationSelectionViewImpl;
 
-public class FieldVeiwFactory extends ViewFactoryBase {
+public class FieldViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (RuntimeErrorView.class.equals(type)) {
+            if (FieldScreenView.class.equals(type)) {
+                map.put(type, new FieldScreenViewImpl());
+            } else if (RuntimeErrorView.class.equals(type)) {
                 map.put(type, new RuntimeErrorViewImpl());
+            } else if (ApplicationSelectionView.class.equals(type)) {
+                map.put(type, new ApplicationSelectionViewImpl());
             }
         }
 
