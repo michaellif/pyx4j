@@ -77,6 +77,10 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.Tenant
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantViewImpl;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageView;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageViewImpl;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestViewImpl;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceView;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
@@ -110,8 +114,12 @@ public class PortalViewFactory extends ViewFactoryBase {
 
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
+            } else if (YardiMaintenanceView.class.equals(type)) {
+                map.put(type, new YardiMaintenanceViewImpl());
             } else if (EditMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditMaintenanceRequestViewImpl());
+            } else if (EditYardiMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new EditYardiMaintenanceRequestViewImpl());
 
             } else if (CommunicationCenterView.class.equals(type)) {
                 map.put(type, new CommunicationCenterViewImpl());

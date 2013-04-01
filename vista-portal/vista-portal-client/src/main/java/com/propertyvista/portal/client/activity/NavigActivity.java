@@ -77,7 +77,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
             items.add(new Residents.Financial.FinancialSummary());
         }
 
-        items.add(new Residents.Maintenance());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            items.add(new Residents.YardiMaintenance());
+        } else {
+            items.add(new Residents.Maintenance());
+        }
 
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
             items.add(new Residents.CommunicationCenter());

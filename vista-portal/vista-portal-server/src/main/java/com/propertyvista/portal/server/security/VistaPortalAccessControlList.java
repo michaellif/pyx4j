@@ -28,6 +28,7 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -67,6 +68,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceServ
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
+import com.propertyvista.portal.rpc.portal.services.resident.YardiMaintenanceService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -181,13 +183,14 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillSummaryService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DashboardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(YardiMaintenanceService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PersonalInfoCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ViewBillService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CommunicationCenterService.class));
 
-        // Tenant Insurance and TenantSure       
+        // Tenant Insurance and TenantSure
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceGeneric.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceTenantSure.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceService.class));
@@ -197,13 +200,14 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSurePurchaseService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureManagementService.class));
 
-        // Billing and Payments        
+        // Billing and Payments
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(Bill.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(LeasePaymentMethod.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(PaymentRecord.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(MaintenanceRequest.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(YardiServiceRequest.class, CRUD));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueElement.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));

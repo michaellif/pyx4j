@@ -36,6 +36,9 @@ import com.propertyvista.portal.client.activity.residents.maintenance.NewMainten
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
+import com.propertyvista.portal.client.activity.residents.yardimaintenance.EditYardiMaintenanceRequestActivity;
+import com.propertyvista.portal.client.activity.residents.yardimaintenance.NewYardiMaintenanceRequestActivity;
+import com.propertyvista.portal.client.activity.residents.yardimaintenance.YardiMaintenanceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
@@ -79,6 +82,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new NewMaintenanceRequestActivity(place);
                 } else if (place instanceof Residents.Maintenance.EditMaintenanceRequest) {
                     activity = new EditMaintenanceRequestActivity(place);
+
+                } else if (place instanceof Residents.YardiMaintenance) {
+                    activity = new YardiMaintenanceActivity(place);
+                } else if (place instanceof Residents.YardiMaintenance.NewYardiMaintenanceRequest) {
+                    activity = new NewYardiMaintenanceRequestActivity(place);
+                } else if (place instanceof Residents.YardiMaintenance.EditYardiMaintenanceRequest) {
+                    activity = new EditYardiMaintenanceRequestActivity(place);
 
                 } else if (place instanceof Residents.Financial.BillSummary) {
                     activity = new BillSummaryActivity(place);

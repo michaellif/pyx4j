@@ -27,6 +27,7 @@ import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.YardiServiceRequestDTO;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
@@ -182,6 +184,21 @@ public class Converter {
         to.issueClassification().set(from.issueClassification());
         to.permissionToEnter().set(from.permissionToEnter());
         to.petInstructions().set(from.petInstructions());
+        return to;
+    }
+
+    public static YardiServiceRequestDTO convert(YardiServiceRequest from) {
+        YardiServiceRequestDTO to = EntityFactory.create(YardiServiceRequestDTO.class);
+        to.id().set(from.id());
+        to.requestId().set(from.requestId());
+        to.propertyCode().set(from.propertyCode());
+        to.unitCode().set(from.unitCode());
+        to.tenantCode().set(from.tenantCode());
+        to.currentStatus().set(from.currentStatus());
+        to.accessNotes().set(from.accessNotes());
+        to.permissionToEnter().set(from.permissionToEnter());
+        to.requestDescriptionBrief().set(from.requestDescriptionBrief());
+        to.requestDescriptionFull().set(from.requestDescriptionFull());
         return to;
     }
 

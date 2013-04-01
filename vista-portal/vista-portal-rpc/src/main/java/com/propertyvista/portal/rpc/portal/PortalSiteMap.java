@@ -112,6 +112,15 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
+        public static class YardiMaintenance extends AppPlace {
+
+            public static class NewYardiMaintenanceRequest extends AppPlace {
+            }
+
+            public static class EditYardiMaintenanceRequest extends AppPlace {
+            }
+        }
+
         @PlaceProperties(navigLabel = "Comm Center", caption = "Communication Center")
         public static class CommunicationCenter extends AppPlace {
         }
