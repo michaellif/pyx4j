@@ -1,5 +1,5 @@
 .vista-pmsite-residentPage .vista-pmsite-content {
-	min-height: 500px;
+	min-height: 360px;
 	width: 960px;
 	overflow: hidden;
 	margin: 0 auto 20px;
@@ -66,10 +66,21 @@
 	padding-top: 30px;
 }
 
+.LandingOrLineSeparator div {
+	border-left: 3px solid #1F1B1C !important;
+    border-right: 1px solid #484243 !important;
+    border-bottom: none !important;
+    border-top: none !important;
+}
+
+.TenantDashboardLeft > div {
+	border-right: 1px solid #949494 !important;
+}
+
 .vista-pmsite-residentPage .vista-pmsite-main .content {
 	min-height: 200px;
 	line-height: 20px;
-	padding: 30px 0;
+	padding-top: 30px;
     overflow: hidden;
     color: #B4AFB0;
     border-top: 3px solid #1F1B1C;
