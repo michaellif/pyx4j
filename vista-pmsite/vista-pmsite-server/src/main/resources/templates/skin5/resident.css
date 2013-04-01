@@ -86,6 +86,16 @@
     border-top: 3px solid #1F1B1C;
     font-size: 13.5px;
 }
+.TenantDashboardRight {
+	margin-left: 20px;
+}
+.TenantDashboardLeft > div {
+	padding-right: 20px;
+	border-right: 1px solid #D7AC3F !important;
+}
+.TenantDashboardTableRow {
+    border-bottom: 1px dotted #D7AC3F;
+}
 h2 {
     color: #D7AC3F;
 }
@@ -140,12 +150,17 @@ h2 {
 }
 .TenantDashboardTableHeader {
 	background: #302A2C !important;
+	color: #B4AFB0 !important;
 }
 
 .vista-pmsite-residentPage a {
 	color: #D7AC3F !important;
 	white-space: nowrap;
 	font-size: 16px;
+}
+
+.-vista-NoTenantInsurancePanel > div {
+	margin-bottom: 15px;
 }
 
 .vista-pmsite-residentPage .TenantDashboardSection {
@@ -229,10 +244,20 @@ h2 {
 	font-weight: normal;
 }
 
+#gwt-debug-BillDTO-totalDueAmount {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 .BillingLineItemAmount {
 	color: #ffffff !important;
 }
 
+.PaymentEditorImages div img {
+    height: 30px;
+    width: 46px;
+}
 .vista-pmsite-residentPage .ValidationLabel ul {
 	padding-left: 6px;
 }
@@ -247,7 +272,6 @@ h2 {
 }
 
 .FormFlexPanel {
-	min-width: 487px;
 	max-width: 685px;
 	overflow: hidden;
 }
