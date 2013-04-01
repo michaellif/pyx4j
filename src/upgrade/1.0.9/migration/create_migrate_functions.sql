@@ -1,0 +1,291 @@
+/**
+***     ======================================================================================================================
+***
+***             @version $Revision$ ($Author$) $Date$
+***
+***             VISTA-2778 (future version 1.0.9) PMC migration function
+***
+***     ======================================================================================================================
+**/
+
+CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_109(v_schema_name TEXT) RETURNS VOID AS
+$$
+BEGIN
+        EXECUTE 'SET search_path = '||v_schema_name;
+        
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             DROP CONSTRAINTS SECTION
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        -- Foreign Keys
+        
+        ALTER TABLE concession_v DROP CONSTRAINT concession_v_product_item_type_fk;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_product_type_fk;
+        ALTER TABLE lease_adjustment DROP CONSTRAINT lease_adjustment_item_type_fk;
+        ALTER TABLE lease_adjustment_policy_item DROP CONSTRAINT lease_adjustment_policy_item_lease_adjustment_reason_fk;
+        ALTER TABLE lease_adjustment_reason DROP CONSTRAINT lease_adjustment_reason_gl_code_fk;
+        ALTER TABLE pet_constraints DROP CONSTRAINT pet_constraints_pet_fk;
+        ALTER TABLE product_item DROP CONSTRAINT product_item_item_type_fk;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_gl_code_fk;
+        ALTER TABLE product_tax_policy_item DROP CONSTRAINT product_tax_policy_item_product_item_type_fk;
+        ALTER TABLE yardi_charge_code DROP CONSTRAINT yardi_charge_code_product_item_type_fk;
+
+
+        -- Check Constraints
+        
+        ALTER TABLE aging_buckets DROP CONSTRAINT aging_buckets_debit_type_e_ck;
+        ALTER TABLE arpolicy DROP CONSTRAINT arpolicy_credit_debit_rule_e_ck;
+        ALTER TABLE concession_v DROP CONSTRAINT concession_v_product_item_type_discriminator_d_ck;
+        ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_product_type_discriminator_d_ck;
+        ALTER TABLE lead DROP CONSTRAINT lead_lease_type_e_ck;
+        ALTER TABLE lease_adjustment_reason DROP CONSTRAINT lease_adjustment_reason_action_type_e_ck;
+        ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
+        ALTER TABLE padpolicy DROP CONSTRAINT padpolicy_charge_type_e_ck;
+        ALTER TABLE pet_constraints DROP CONSTRAINT pet_constraints_pet_discriminator_d_ck;
+        ALTER TABLE product DROP CONSTRAINT product_feature_type_ck;
+        ALTER TABLE product DROP CONSTRAINT product_feature_type_e_ck;
+        ALTER TABLE product_item DROP CONSTRAINT product_item_item_type_discriminator_d_ck;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_feature_type_e_ck;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_id_discriminator_ck;
+        ALTER TABLE product_item_type DROP CONSTRAINT product_item_type_service_type_e_ck;
+        ALTER TABLE product DROP CONSTRAINT product_service_type_ck;
+        ALTER TABLE product DROP CONSTRAINT product_service_type_e_ck;
+        ALTER TABLE product_tax_policy_item DROP CONSTRAINT product_tax_policy_item_product_item_type_discriminator_d_ck;
+        ALTER TABLE yardi_charge_code DROP CONSTRAINT yardi_charge_code_product_item_type_discriminator_d_ck;
+
+        
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             DROP TABLES 
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        
+        
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             NEW AND ALTERED TABLES 
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        -- aging_buckets
+        
+        ALTER TABLE aging_buckets ADD COLUMN ar_code VARCHAR(50);
+        
+        -- arcode
+        
+        CREATE TABLE arcode
+        (
+                id                              BIGINT                          NOT NULL,
+                code_type                       VARCHAR(50),
+                name                            VARCHAR(50),
+                gl_code                         BIGINT,
+                updated                         TIMESTAMP,
+                default_code                    BOOLEAN,
+                        CONSTRAINT      arcode_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE arcode OWNER TO vista;
+        
+        
+        -- billing_invoice_line_item
+        
+        ALTER TABLE billing_invoice_line_item ADD COLUMN ar_code BIGINT;
+        
+        
+        -- concession_v
+        
+        ALTER TABLE concession_v ADD COLUMN product_code BIGINT;
+        
+        -- deposit_policy_item
+        
+        ALTER TABLE deposit_policy_item ADD COLUMN product_code BIGINT;
+        
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment ADD COLUMN code BIGINT;
+        
+        -- lease_adjustment_policy_item
+        
+        ALTER TABLE lease_adjustment_policy_item ADD COLUMN code BIGINT;
+        
+        
+        -- product
+        
+        ALTER TABLE product ADD COLUMN code_type VARCHAR(50);
+        
+        -- product_item
+        
+        ALTER TABLE product_item ADD COLUMN code BIGINT;
+        
+        -- product_tax_policy_item
+        
+        ALTER TABLE product_tax_policy_item ADD COLUMN product_code BIGINT;
+        
+        -- yardi_charge_code
+        
+        ALTER TABLE yardi_charge_code ADD COLUMN ar_code BIGINT;
+        
+        
+        /**
+        ***     =====================================================================================================
+        ***
+        ***             DATA MIGRATION
+        ***
+        ***     =====================================================================================================
+        **/
+        
+        
+        -- arpolicy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.arpolicy '
+                ||'SET credit_debit_rule = '
+                ||'CASE WHEN credit_debit_rule IN (''byDueDate'',''byAgingBucketAndDebitType'') THEN ''oldestDebtFirst'' '
+                ||'WHEN credit_debit_rule = ''byDebitType'' THEN ''rentDebtLast'' END ';
+                
+                
+        -- lease
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease '
+                ||'SET lease_type = ''Residential'' '
+                ||'WHERE lease_type = ''residentialUnit'' ';
+        
+        
+        /**
+        ***     ==========================================================================================================
+        ***
+        ***             DROP TABLES AND COLUMNS
+        ***
+        ***     ==========================================================================================================
+        **/
+        
+        -- aging_buckets
+        
+        ALTER TABLE aging_buckets DROP COLUMN debit_type;
+        
+        -- concession_v
+        
+        ALTER TABLE concession_v        DROP COLUMN product_item_type,
+                                        DROP COLUMN product_item_type_discriminator;
+                                        
+        -- deposit_policy_item
+        
+        ALTER TABLE deposit_policy_item DROP COLUMN product_type,
+                                        DROP COLUMN product_type_discriminator;
+                                        
+        -- lease_adjustment
+        
+        ALTER TABLE lease_adjustment    DROP COLUMN item_type;
+        
+        -- lease_adjustment_policy_item
+        
+        ALTER TABLE lease_adjustment_policy_item        DROP COLUMN lease_adjustment_reason;
+        
+        
+        -- lease_adjustment_reason
+        
+        DROP TABLE lease_adjustment_reason;
+        
+        
+        -- pet_constraints
+        
+        ALTER TABLE pet_constraints     DROP COLUMN pet_discriminator;
+        
+        
+        -- product
+        
+        ALTER TABLE product     DROP COLUMN feature_type,
+                                DROP COLUMN service_type;
+                                
+                                
+        -- product_item
+        
+        ALTER TABLE product_item        DROP COLUMN item_type,
+                                        DROP COLUMN item_type_discriminator;
+                                        
+                                        
+        -- product_item_type
+        
+        DROP TABLE product_item_type;
+        
+        
+        -- product_tax_policy_item
+        
+        ALTER TABLE product_tax_policy_item     DROP COLUMN product_item_type,
+                                                DROP COLUMN product_item_type_discriminator;
+                                                
+        -- yardi_charge_code
+        
+        ALTER TABLE yardi_charge_code   DROP COLUMN product_item_type,
+                                        DROP COLUMN product_item_type_discriminator;
+         
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             CREATE CONSTRAINTS 
+        ***     
+        ***     =======================================================================================================
+        **/
+        
+        -- Foreign Keys
+        
+        ALTER TABLE arcode ADD CONSTRAINT arcode_gl_code_fk FOREIGN KEY(gl_code) REFERENCES gl_code(id);
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_ar_code_fk FOREIGN KEY(ar_code) REFERENCES arcode(id);
+        ALTER TABLE concession_v ADD CONSTRAINT concession_v_product_code_fk FOREIGN KEY(product_code) REFERENCES arcode(id);
+        ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_product_code_fk FOREIGN KEY(product_code) REFERENCES arcode(id);
+        ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
+        ALTER TABLE lease_adjustment_policy_item ADD CONSTRAINT lease_adjustment_policy_item_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
+        ALTER TABLE pet_constraints ADD CONSTRAINT pet_constraints_pet_fk FOREIGN KEY(pet) REFERENCES arcode(id);
+        ALTER TABLE product_item ADD CONSTRAINT product_item_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
+        ALTER TABLE product_tax_policy_item ADD CONSTRAINT product_tax_policy_item_product_code_fk FOREIGN KEY(product_code) REFERENCES arcode(id);
+        ALTER TABLE yardi_charge_code ADD CONSTRAINT yardi_charge_code_ar_code_fk FOREIGN KEY(ar_code) REFERENCES arcode(id);
+
+        -- Check Constraints
+        
+        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
+                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE arcode ADD CONSTRAINT arcode_code_type_e_ck 
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_credit_debit_rule_e_ck CHECK ((credit_debit_rule) IN ('oldestDebtFirst', 'rentDebtLast'));
+        ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck 
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('Any', 'FixedAmount', 'OwingBalance'));
+        ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
+                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+
+        
+        /**
+        ***     ====================================================================================================
+        ***     
+        ***             INDEXES 
+        ***
+        ***     ====================================================================================================
+        **/
+        
+        
+        -- Finishing touch
+        
+        UPDATE  _admin_.admin_pmc
+        SET     schema_version = '1.0.9'
+        WHERE   namespace = v_schema_name;          
+        
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+        
