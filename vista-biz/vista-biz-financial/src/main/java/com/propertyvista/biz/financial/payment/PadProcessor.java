@@ -396,7 +396,7 @@ public class PadProcessor {
         try {
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
         } catch (ARException e) {
-            throw new Error("Processed payment can't be rejected", e);
+            throw new Error("Payment can't be rejected", e);
         }
 
     }
@@ -428,9 +428,9 @@ public class PadProcessor {
         Persistence.service().merge(paymentRecord);
 
         try {
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
         } catch (ARException e) {
-            throw new Error("Processed payment can't be returned", e);
+            throw new Error("Payment can't be returned", e);
         }
 
         log.info("Payment {} {} Returned", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
