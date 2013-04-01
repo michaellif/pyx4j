@@ -1,3 +1,8 @@
+.vista-pmsite-inquiryFormPage {
+	overflow: hidden;
+	padding-bottom: 20px;
+}
+
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
 	width: 260px;
 	padding: 0 20px 20px 20px;

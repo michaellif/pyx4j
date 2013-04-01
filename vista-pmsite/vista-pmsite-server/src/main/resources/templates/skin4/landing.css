@@ -59,15 +59,6 @@
 	margin: 0 0 6px 0;
 }
 
-.quickSearch input[type=submit] {
-	background: ${object1_100};
-	border: medium none;
-	color:#fff;
-	cursor: pointer;
-	padding: 10px;
-	font-size: 13px;
-}
-
 .quickSearch .submit {
 	float: right;
 }

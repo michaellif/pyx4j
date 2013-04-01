@@ -1,24 +1,20 @@
 .vista-pmsite-aptDetailsPage {
 	font-size:14px;
+	overflow:hidden;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-content {
     background: ${object2_10};
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
-	display: inline-block;
+	float:left;
 	width: 318px;
-	vertical-align: top;
 	padding:20px 16px;
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
-	display: inline-block;
-	width: 606px;
-	vertical-align: top;
-	min-height:400px;
+	margin-left:350px;
     background: ${object2_100};
 }
-.vista-pmsite-aptDetailsPage .vista-pmsite-main .caption2 {
-}
+
 .vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
 	border-left:1px solid ${object2_20};
 	min-height: 550px;

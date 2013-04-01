@@ -73,6 +73,18 @@ input,select,textarea {
 	*border:none !important;
 }
 
+input[type=submit] {
+	background-color: #302A2C;
+	border: medium none;
+    color: #D7AC3F;
+	cursor: pointer;
+	float: right;
+    font-size: 14pt;
+    font-weight: bold;
+    padding: 0;
+    text-transform: uppercase;
+}
+
 table {
 	border-collapse: collapse;
 }

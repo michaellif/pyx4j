@@ -1,16 +1,15 @@
 .vista-pmsite-cityPage {
-}
-.vista-pmsite-cityPage .vista-pmsite-mainWrap {
-	width: 960px;
-	margin: 0 auto;
 	overflow: hidden;
-    background: ${background_10};
 }
+
 .vista-pmsite-cityPage .vista-pmsite-sidebar {
-	display: inline-block;
+	float:left;
 	width: 211px;
-	vertical-align: top;
 }
+.vista-pmsite-cityPage .vista-pmsite-main {
+	margin-left:211px;
+}
+
 .vista-pmsite-cityPage .secondaryNavig {
 	color: ${foreground_60};
 }
@@ -26,17 +25,6 @@
 .advancedSearchNarrowWrap {
 	width: 190px;
 	margin: 10px;
-}
-.advancedSearchNarrowWrap input[type=submit] {
-	background: ${object1_100};
-	border: 2px solid ${object1_100};
-	color: ${object1_10};
-	cursor: pointer;
-	font-size: 16px;
-	margin: 15px auto 0;
-	text-transform: uppercase;
-	width: 128px;
-	height: 32px;
 }
 
 .advancedSearchNarrowWrap label {
@@ -118,9 +106,6 @@
 	display:inline-block;
 }
 
-.advancedSearchNarrowWrap .searchCommonBox {
-}
-
 .advancedSearchNarrowWrap .searchCommonBox select {
 	width: 82px;
 	margin: 1px;
@@ -138,7 +123,6 @@
 .advancedSearchNarrowWrap .searchAmenityBox {
 	border-top: 1px dotted ${foreground_60};
 	padding-top: 10px;
-	margin-bottom: 30px;
 }
 
 .advancedSearchNarrowWrap .searchAmenityBox .searchField>label {
@@ -164,16 +148,10 @@
 	width: 165px;
 }
 
-.vista-pmsite-cityPage .vista-pmsite-main {
-	display: inline-block;
-	width: 745px;
-	vertical-align: top;
-}
 .vista-pmsite-cityPage .cityPageWrap {
 	line-height:1.6em;
 	min-height: 396px;
 	color: ${foreground_100};
-	border-top:1px solid ${foreground_20};
 	overflow: hidden;
 	padding: 30px 30px 0;
 }

@@ -5,19 +5,14 @@
     background: ${background_10};
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
-	display: inline-block;
+	float:left;
 	width: 318px;
-	vertical-align: top;
 	padding:20px 16px;
 }
 .vista-pmsite-inquiryFormPage .vista-pmsite-main {
-	display: inline-block;
-	width: 606px;
-	vertical-align: top;
-	min-height:600px;
+	margin-left: 350px;
 }
-.vista-pmsite-inquiryFormPage .vista-pmsite-main .caption2 {
-}
+
 .vista-pmsite-inquiryFormPage .inquiryFormWrap {
 	background: ${object2_100};
 	min-height: 550px;

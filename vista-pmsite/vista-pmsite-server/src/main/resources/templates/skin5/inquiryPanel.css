@@ -69,19 +69,6 @@ select {
     zoom: 1;	
 }
 .inquiryPanel input[type=submit] {
-	background-color: #302a2c; 
-	/*background: ${object1_100};
-	border: 2px solid ${object1_100};*/
-	color: #d7ac3f;
-    height: 36px;
-    min-width:128px;
-    width: auto;
-    padding:0 8px;
-    font-size: 14pt;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    margin-left: 40px;
     border: none;
 }
 .inquiryPanel input[type=submit]:hover {

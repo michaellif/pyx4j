@@ -68,9 +68,8 @@
 }
 
 .vista-pmsite-mainWrap {
-	display:inline-block;
 	background: ${object2_80};
-	font-size:13px;
+	overflow: hidden;
 }
 
 .vista-pmsite-sidebarWrap {
@@ -82,20 +81,14 @@
 }
 
 .vista-pmsite-sidebar {
-	position: relative;
+	width:300px;
 	float: left;
-	display:inline-block;
-	min-width:300px;
-	min-height:960px;
 	background: ${object2_10};
 }
 
 .vista-pmsite-main {
-	width: 660px;
-	position: relative;
-	float: left;
+	margin-left: 300px;
 	background: ${bgC0lor_100};
-	display:inline-block;
 }
 
 .testimBox {
@@ -106,9 +99,6 @@
 
 .testimBox .infobox_header {
 	padding: 0 0 0 20px;
-}
-
-.testimBox .infobox_body {
 }
 
 .testimBox .infobox_decor {

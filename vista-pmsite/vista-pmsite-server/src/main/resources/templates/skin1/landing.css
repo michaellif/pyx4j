@@ -23,25 +23,8 @@
 	margin-bottom: 15px;
 }
 
-.quickSearch input[type=submit] {
-	background: none repeat scroll 0 0 transparent;
-	border: medium none;
-	color: ${background_100};
-	cursor: pointer;
-	font-size: 16px;
-	padding: 5px 0;
-	text-transform: uppercase;
-	width: 128px;
-}
-
 .quickSearch .submit {
-	background: ${contrast1_100};
-	color: ${contrast1_10}
-	height: 32px;
-	margin: 15px auto 0;
-	overflow: hidden;
-	width: 128px;
-	border: 2px solid ${contrast1_120};
+	text-align: center;
 }
 
 .vista-pmsite-mainWrap {

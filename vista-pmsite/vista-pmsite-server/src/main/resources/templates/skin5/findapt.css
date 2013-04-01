@@ -48,22 +48,7 @@
 }
 
 .advancedSearchWideWrap input[type=submit] {
-	/*background: ${object1_100};
-	color: ${object1_10};*/
-	position: relative;
-	top: 20px;
-	right: -10px;
-	background: #302A2C;
-	color: #D7AC3F;
-	cursor: pointer;
-	display:block;
-	float: right;
-	border: medium none;
-	font-size: 14pt;
-	font-weight: bold;
-	text-transform: uppercase;
-	/*margin: 20px 0;
-	padding: 10px;*/
+	margin-top: 15px;
 }
 
 .advancedSearchWideWrap label {

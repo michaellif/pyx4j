@@ -31,18 +31,6 @@
 	display:inline-block;
 }
 
-.advancedSearchWideWrap input[type=submit] {
-	background: ${contrast1_100};
-	border: 2px solid ${contrast1_120};
-	color: ${contrast1_10};
-	cursor: pointer;
-	font-size: 16px;
-	margin: 15px auto 0;
-	text-transform: uppercase;
-	width: 128px;
-	height: 32px;
-}
-
 .advancedSearchWideWrap label {
 	display:block;
 	padding:6px 0;
