@@ -39,7 +39,7 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
     public SafeHtml formatContent(IEntity entity) {//@formatter:off
         String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
         return new SafeHtmlBuilder()
-                .appendHtmlConstant("<a href=\"").appendHtmlConstant(url).appendHtmlConstant("\">")
+                .appendHtmlConstant("<a href=\"" + url + "\">")
                 .appendEscaped(columnDescriptor.convert(entity))
                 .appendHtmlConstant("</a>")
                 .toSafeHtml();
