@@ -97,6 +97,10 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         return step;
     }
 
+    public IWizard<? extends IEntity> getView() {
+        return view;
+    }
+
     @Override
     public void onReset() {
         if (wizardPanel.getTabs().size() > 0) {
