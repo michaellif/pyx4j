@@ -186,6 +186,5 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         }
 
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
-
     }
 }
