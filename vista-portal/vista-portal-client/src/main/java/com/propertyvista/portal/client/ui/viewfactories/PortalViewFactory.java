@@ -51,6 +51,8 @@ import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentView;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
+import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
@@ -111,6 +113,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new EditPaymentMethodViewImpl());
             } else if (PaymentView.class.equals(type)) {
                 map.put(type, new PaymentViewImpl());
+            } else if (PaymentWizardView.class.equals(type)) {
+                map.put(type, new PaymentWizardViewImpl());
 
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());

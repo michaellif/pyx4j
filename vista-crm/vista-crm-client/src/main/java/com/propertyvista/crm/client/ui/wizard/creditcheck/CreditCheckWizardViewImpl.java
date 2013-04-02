@@ -20,7 +20,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.AbstractWizard;
 
 import com.propertyvista.crm.client.ui.components.LegalTermsDialog;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
@@ -30,11 +29,12 @@ public class CreditCheckWizardViewImpl extends AbstractWizard<CreditCheckSetupDT
     private static final I18n i18n = I18n.get(CreditCheckWizardViewImpl.class);
 
     public CreditCheckWizardViewImpl() {
-        super(CrmSiteMap.Administration.Settings.CreditCheck.Setup.class);
+        super(i18n.tr("Credit Check Setup"));
         setForm(new CreditCheckWizardForm(this, new Command() {
             @Override
             public void execute() {
-                new LegalTermsDialog(GWT.<PmcTermsOfServiceService> create(PmcTermsOfServiceService.class), "500px", "400px", i18n.tr("Terms of Service")).show();
+                new LegalTermsDialog(GWT.<PmcTermsOfServiceService> create(PmcTermsOfServiceService.class), "500px", "400px", i18n.tr("Terms of Service"))
+                        .show();
             }
         }));
     }

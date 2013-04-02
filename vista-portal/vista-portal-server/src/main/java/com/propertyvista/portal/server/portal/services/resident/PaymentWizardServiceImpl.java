@@ -1,0 +1,81 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-04-02
+ * @author VladL
+ * @version $Id$
+ */
+package com.propertyvista.portal.server.portal.services.resident;
+
+import java.math.BigDecimal;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
+import com.propertyvista.portal.server.portal.TenantAppContext;
+
+public class PaymentWizardServiceImpl implements PaymentWizardService {
+
+    @Override
+    public void create(AsyncCallback<PaymentRecordDTO> callback) {
+        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
+        Persistence.service().retrieve(tenant.leaseTermV());
+        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
+
+        Lease lease = tenant.leaseTermV().holder().lease();
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().building());
+
+        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
+
+        dto.billingAccount().set(lease.billingAccount());
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
+
+        dto.leaseId().set(lease.leaseId());
+        dto.leaseStatus().set(lease.status());
+        dto.propertyCode().set(lease.unit().building().propertyCode());
+        dto.unitNumber().set(lease.unit().info().number());
+        dto.leaseTermParticipant().set(tenant);
+
+        // some default values:
+        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        // calculate current balance:
+        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
+
+        callback.onSuccess(dto);
+    }
+
+    @Override
+    @ServiceExecution(waitCaption = "Submitting...")
+    public void finish(AsyncCallback<VoidSerializable> callback, PaymentRecordDTO editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+}
