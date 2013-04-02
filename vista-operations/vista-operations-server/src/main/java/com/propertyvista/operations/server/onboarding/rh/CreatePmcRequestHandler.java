@@ -25,8 +25,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.PmcNameValidator;
@@ -38,6 +36,8 @@ import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.common.security.UserAccessUtils;
 
 public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCRequestIO> {
@@ -65,7 +65,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
             return response;
         }
 
-        final String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
+        String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         if (!PmcNameValidator.canCreatePmcName(dnsName, request.onboardingAccountId().getValue())) {
             response.success().setValue(Boolean.FALSE);
             log.info("Error occurred.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
@@ -74,6 +74,9 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.dnsName().setValue(dnsName);
+        if (dnsName.matches("[0-9][a-zA-Z0-9-]*")) {
+            dnsName = "d" + dnsName;
+        }
         pmc.namespace().setValue(dnsName.replace('-', '_'));
         pmc.name().setValue(request.name().getValue());
         pmc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
