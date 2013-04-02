@@ -32,7 +32,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 class ScheduledPaymentsManager {
 
@@ -79,6 +81,26 @@ class ScheduledPaymentsManager {
         } catch (PaymentException e) {
             log.error("Preauthorised payment creation failed", e);
             executionMonitor.addErredEvent("Erred", paymentRecord.amount().getValue(), e);
+        }
+    }
+
+    void cancelScheduledPayments(LeasePaymentMethod paymentMethod) {
+        EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+        criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
+        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled);
+
+        for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+            ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+        }
+    }
+
+    void cancelScheduledPayments(PreauthorizedPayment preauthorizedPayment) {
+        EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+        criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
+        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled);
+
+        for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+            ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
         }
     }
 }

@@ -135,9 +135,9 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
     /**
      * 
-     * Set Preauthorized Payment to first found tenant with Echeck payment method, otherwise returns false
+     * Set Preauthorized Payment to first found tenant with eCheck payment method, otherwise returns false
      */
-    public boolean setPreauthorizedPayment(BigDecimal value) {
+    public PreauthorizedPayment createPreauthorizedPayment(BigDecimal value) {
         Persistence.service().retrieveMember(getCurrentItem().leaseParticipants());
         while (getCurrentItem().leaseParticipants().iterator().hasNext()) {
             Tenant tenant = getCurrentItem().leaseParticipants().iterator().next().cast();
@@ -160,11 +160,11 @@ public class LeaseDataModel extends MockDataModel<Lease> {
                     pap.comments().setValue("Preauthorized Payment");
 
                     ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
-                    return true;
+                    return pap;
                 }
             }
         }
-        return false;
+        return null;
     }
 
 }

@@ -37,67 +37,71 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
     protected void generate() {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        for (FeatureItemType type : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
-            DepositPolicyItem item = null;
-            String product = null;
+        if (getConfig().depositsEnabled) {
 
-            FeatureItemType featureItemType = type;
-            product = featureItemType.featureType().getStringView();
+            for (FeatureItemType type : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
+                DepositPolicyItem item = null;
+                String product = null;
 
-            switch (featureItemType.featureType().getValue()) {
-            case parking:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            case locker:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            case pet:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.SecurityDeposit);
-                item.valueType().setValue(ValueType.Monetary);
-                item.value().setValue(new BigDecimal("200.00"));
-                break;
-            default:
-                break;
+                FeatureItemType featureItemType = type;
+                product = featureItemType.featureType().getStringView();
+
+                switch (featureItemType.featureType().getValue()) {
+                case parking:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.Percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    break;
+                case locker:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.Percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    break;
+                case pet:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.Monetary);
+                    item.value().setValue(new BigDecimal("200.00"));
+                    break;
+                default:
+                    break;
+                }
+
+                if (item != null) {
+                    item.productType().set(type);
+                    item.annualInterestRate().setValue(new BigDecimal("0.12"));
+                    item.description().setValue(item.depositType().getStringView() + ", " + product);
+                    policy.policyItems().add(item);
+                }
             }
 
-            if (item != null) {
-                item.productType().set(type);
-                item.annualInterestRate().setValue(new BigDecimal("0.12"));
-                item.description().setValue(item.depositType().getStringView() + ", " + product);
-                policy.policyItems().add(item);
-            }
-        }
+            for (ServiceItemType type : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
+                DepositPolicyItem item = null;
+                String product = null;
+                ServiceItemType serviceItemType = type;
+                product = serviceItemType.serviceType().getStringView();
 
-        for (ServiceItemType type : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
-            DepositPolicyItem item = null;
-            String product = null;
-            ServiceItemType serviceItemType = type;
-            product = serviceItemType.serviceType().getStringView();
+                switch (serviceItemType.serviceType().getValue()) {
+                case residentialUnit:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.LastMonthDeposit);
+                    item.valueType().setValue(ValueType.Percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    break;
+                default:
+                    break;
+                }
 
-            switch (serviceItemType.serviceType().getValue()) {
-            case residentialUnit:
-                item = EntityFactory.create(DepositPolicyItem.class);
-                item.depositType().setValue(DepositType.LastMonthDeposit);
-                item.valueType().setValue(ValueType.Percentage);
-                item.value().setValue(new BigDecimal("1.0"));
-                break;
-            default:
-                break;
+                if (item != null) {
+                    item.productType().set(type);
+                    item.annualInterestRate().setValue(new BigDecimal("0.12"));
+                    item.description().setValue(item.depositType().getStringView() + ", " + product);
+                    policy.policyItems().add(item);
+                }
             }
 
-            if (item != null) {
-                item.productType().set(type);
-                item.annualInterestRate().setValue(new BigDecimal("0.12"));
-                item.description().setValue(item.depositType().getStringView() + ", " + product);
-                policy.policyItems().add(item);
-            }
         }
 
         policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());

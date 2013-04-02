@@ -42,11 +42,14 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethod) {
-        Persistence.service().retrieve(paymentMethod);
+    public void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId) {
+        LeasePaymentMethod paymentMethod = Persistence.service().retrieve(LeasePaymentMethod.class, paymentMethodId.getPrimaryKey());
         paymentMethod.isDeleted().setValue(Boolean.TRUE);
         paymentMethod.isProfiledMethod().setValue(Boolean.FALSE);
         Persistence.service().merge(paymentMethod);
+        new ScheduledPaymentsManager().cancelScheduledPayments(paymentMethod);
+        // delete associated PreauthorizedPayments
+        new PreauthorizedPaymentAgreementMananger().deletePreauthorizedPayments(paymentMethod);
     }
 
     @Override
@@ -97,23 +100,16 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
-        preauthorizedPayment.tenant().set(tenantId);
-        Persistence.service().merge(preauthorizedPayment);
-        return null;
+        return new PreauthorizedPaymentAgreementMananger().persistPreauthorizedPayment(preauthorizedPayment, tenantId);
     }
 
     @Override
     public void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment) {
-        Persistence.service().retrieve(preauthorizedPayment);
-        preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
-        Persistence.service().merge(preauthorizedPayment);
+        new PreauthorizedPaymentAgreementMananger().deletePreauthorizedPayment(preauthorizedPayment);
     }
 
     @Override
     public List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-        criteria.eq(criteria.proto().tenant(), tenantId);
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        return Persistence.service().query(criteria);
+        return new PreauthorizedPaymentAgreementMananger().retrievePreauthorizedPayments(tenantId);
     }
 }

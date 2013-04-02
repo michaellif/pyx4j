@@ -31,6 +31,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +70,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -608,7 +611,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setPreauthorizedPayment(BigDecimal value) {
-        getDataModel(LeaseDataModel.class).setPreauthorizedPayment(value);
+        PreauthorizedPayment preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(value);
+        Assert.assertNotNull("CreatePreauthorizedPayment failed to create PAP", preauthorizedPayment);
         Persistence.service().commit();
     }
 

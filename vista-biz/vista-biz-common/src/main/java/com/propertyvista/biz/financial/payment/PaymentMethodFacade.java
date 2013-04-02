@@ -32,7 +32,7 @@ public interface PaymentMethodFacade {
 
     LeasePaymentMethod persistLeasePaymentMethod(LeasePaymentMethod paymentMethod, Building building);
 
-    void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethod);
+    void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId);
 
     List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<?> participant);
 
@@ -54,7 +54,7 @@ public interface PaymentMethodFacade {
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId);
 
-    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment);
+    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 }

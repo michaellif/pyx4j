@@ -16,12 +16,14 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.propertyvista.biz.financial.payment.PadPaymentMethodCancellationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class })
+@Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class,
+        PadPaymentMethodCancellationTest.class })
 public class PaymentSuite {
 
 }
