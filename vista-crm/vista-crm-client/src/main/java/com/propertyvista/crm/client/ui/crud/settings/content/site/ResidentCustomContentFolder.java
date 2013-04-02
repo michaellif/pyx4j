@@ -99,7 +99,7 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
             } else {
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
             }
-
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated()), 10).build());
             return main;
         }
 

@@ -13,8 +13,12 @@
  */
 package com.propertyvista.domain.site;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,4 +31,9 @@ public interface HtmlContent extends IEntity {
     @Editor(type = Editor.EditorType.richtextarea)
     @Length(48000)
     IPrimitive<String> html();
+
+    @Timestamp
+    @Editor(type = Editor.EditorType.label)
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> updated();
 }
