@@ -26,9 +26,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -45,9 +43,9 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
 
     private final Button btnNext;
 
-    public AbstractWizard(Class<? extends AppPlace> placeClass) {
+    public AbstractWizard(String caption) {
         super();
-        setCaption(placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+        setCaption(caption);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
