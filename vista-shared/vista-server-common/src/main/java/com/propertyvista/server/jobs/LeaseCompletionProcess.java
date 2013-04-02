@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseCompletionProcess implements PmcProcess {
 
@@ -43,29 +44,31 @@ public class LeaseCompletionProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-        criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), context.getForDate()));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
+            criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), context.getForDate()));
 
-        Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-        final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        while (i.hasNext()) {
+            Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+            final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+            while (i.hasNext()) {
 
-            final Lease lease = i.next();
-            try {
-                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() {
-                        leaseFacade.complete(lease);
-                        return null;
-                    }
-                });
-                context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
-            } catch (Throwable t) {
-                context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
+                final Lease lease = i.next();
+                try {
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() {
+                            leaseFacade.complete(lease);
+                            return null;
+                        }
+                    });
+                    context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
+                } catch (Throwable t) {
+                    context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
+                }
             }
+            log.info(context.getExecutionMonitor().toString());
         }
-        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override
