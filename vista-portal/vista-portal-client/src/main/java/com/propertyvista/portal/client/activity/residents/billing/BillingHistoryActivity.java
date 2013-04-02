@@ -13,14 +13,11 @@
  */
 package com.propertyvista.portal.client.activity.residents.billing;
 
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -29,7 +26,7 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
-import com.propertyvista.portal.domain.dto.BillListDTO;
+import com.propertyvista.portal.domain.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 
@@ -50,12 +47,10 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.listBills(new DefaultAsyncCallback<Vector<BillDataDTO>>() {
+        srv.getBillingHistory(new DefaultAsyncCallback<BillingHistoryDTO>() {
             @Override
-            public void onSuccess(Vector<BillDataDTO> result) {
-                BillListDTO billHistory = EntityFactory.create(BillListDTO.class);
-                billHistory.bills().addAll(result);
-                view.populate(billHistory);
+            public void onSuccess(BillingHistoryDTO result) {
+                view.populate(result);
             }
         });
     }

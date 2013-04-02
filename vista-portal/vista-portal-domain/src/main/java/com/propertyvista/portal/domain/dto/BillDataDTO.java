@@ -24,6 +24,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.payment.PaymentMethod;
+
 @Transient
 public interface BillDataDTO extends IEntity {
 
@@ -39,4 +41,10 @@ public interface BillDataDTO extends IEntity {
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    IPrimitive<String> transactionId();
+
+    IPrimitive<String> transactionStatus();
+
+    PaymentMethod paymentMethod();
 }

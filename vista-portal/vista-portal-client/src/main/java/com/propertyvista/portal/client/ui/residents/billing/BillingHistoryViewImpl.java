@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.domain.dto.BillListDTO;
+import com.propertyvista.portal.domain.dto.BillingHistoryDTO;
 
 public class BillingHistoryViewImpl extends SimplePanel implements BillingHistoryView {
 
@@ -33,7 +33,7 @@ public class BillingHistoryViewImpl extends SimplePanel implements BillingHistor
     }
 
     @Override
-    public void populate(BillListDTO bills) {
+    public void populate(BillingHistoryDTO bills) {
         form.reset();
         form.populate(bills);
     }

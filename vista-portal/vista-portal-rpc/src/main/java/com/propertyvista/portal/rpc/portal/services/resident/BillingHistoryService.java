@@ -13,16 +13,14 @@
  */
 package com.propertyvista.portal.rpc.portal.services.resident;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.portal.domain.dto.BillingHistoryDTO;
 
 public interface BillingHistoryService extends IService {
 
-    void listBills(AsyncCallback<Vector<BillDataDTO>> callback);
+    void getBillingHistory(AsyncCallback<BillingHistoryDTO> callback);
 
 }
