@@ -18,8 +18,6 @@ import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.propertyvista.biz.system.PmcNameValidator;
-
 public class PmcNameValidatorTest {
 
     @Test
@@ -51,8 +49,8 @@ public class PmcNameValidatorTest {
 
         assertTrue(PmcNameValidator.isDnsNameValid("abcd"));
         assertTrue(PmcNameValidator.isDnsNameValid("abc123"));
-        assertFalse(PmcNameValidator.isDnsNameValid("123abc"));
-        assertFalse(PmcNameValidator.isDnsNameValid("1abc"));
+        assertTrue(PmcNameValidator.isDnsNameValid("123abc"));
+        assertTrue(PmcNameValidator.isDnsNameValid("1abc"));
         assertTrue(PmcNameValidator.isDnsNameValid("Abcd"));
         assertTrue(PmcNameValidator.isDnsNameValid("AbCdE"));
         assertTrue(PmcNameValidator.isDnsNameValid("ABCDE"));
