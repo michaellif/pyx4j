@@ -220,8 +220,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord cancel(PaymentRecord paymentId) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.Queued).contains(
-                paymentRecord.paymentStatus().getValue())) {
+        if (!PaymentRecord.PaymentStatus.cancelable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"));
         }
 
@@ -246,7 +245,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord clear(PaymentRecord paymentId) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!PaymentRecord.PaymentStatus.checkClearable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be cleared"));
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {
@@ -271,7 +270,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord reject(PaymentRecord paymentId, boolean applyNSF) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!PaymentRecord.PaymentStatus.checkRejectable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {

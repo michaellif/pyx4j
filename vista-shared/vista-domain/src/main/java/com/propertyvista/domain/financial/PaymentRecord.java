@@ -93,6 +93,21 @@ public interface PaymentRecord extends IEntity {
             return EnumSet.of(Rejected, Cleared, Returned);
         }
 
+        public static Collection<PaymentStatus> cancelable() {
+            return EnumSet.of(Submitted, Scheduled, Queued);
+        }
+
+        /**
+         * Applicable only for Check
+         */
+        public static Collection<PaymentStatus> checkClearable() {
+            return EnumSet.of(Processing, Received);
+        }
+
+        public static Collection<PaymentStatus> checkRejectable() {
+            return checkClearable();
+        }
+
         // states:
 
         public boolean isProcessed() {
