@@ -45,6 +45,7 @@ BEGIN
         ALTER TABLE lease_adjustment_reason DROP CONSTRAINT lease_adjustment_reason_action_type_e_ck;
         ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
         ALTER TABLE padpolicy DROP CONSTRAINT padpolicy_charge_type_e_ck;
+        ALTER TABLE padpolicy_item DROP CONSTRAINT padpolicy_item_debit_type_e_ck;
         ALTER TABLE pet_constraints DROP CONSTRAINT pet_constraints_pet_discriminator_d_ck;
         ALTER TABLE product DROP CONSTRAINT product_feature_type_ck;
         ALTER TABLE product DROP CONSTRAINT product_feature_type_e_ck;
@@ -90,8 +91,8 @@ BEGIN
                 gl_code                         BIGINT,
                 updated                         TIMESTAMP,
                 default_code                    BOOLEAN,
-                lad_id                          BIGINT,                         # lease_adjustment_reason.id - to be dropped at the end
-                pit_id                          BIGINT,                         # product_item_type.id - also not gonna last
+                lad_id                          BIGINT,                        -- lease_adjustment_reason.id - to be dropped at the end
+                pit_id                          BIGINT,                        -- product_item_type.id - also not gonna last
                         CONSTRAINT      arcode_pk PRIMARY KEY(id)
         );
         
@@ -119,6 +120,11 @@ BEGIN
         
         ALTER TABLE lease_adjustment_policy_item ADD COLUMN code BIGINT;
         
+        -- padpolicy_item
+        
+        ALTER TABLE padpolicy_item RENAME COLUMN debit_type TO debit_type_old;
+        
+        ALTER TABLE padpolicy_item ADD COLUMN debit_type BIGINT;
         
         -- product
         
@@ -150,18 +156,18 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets '
                 ||'SET  ar_code = '
                 ||'     CASE WHEN debit_type = ''accountCharge'' THEN ''AccountCharge'' '
-                ||'     CASE WHEN debit_type = ''addOn'' THEN ''AddOn'' '
-                ||'     CASE WHEN debit_type = ''booking'' THEN ''X3'' '
-                ||'     CASE WHEN debit_type = ''deposit'' THEN ''Deposit'' '
-                ||'     CASE WHEN debit_type = ''latePayment'' THEN ''LatePayment'' '
-                ||'     CASE WHEN debit_type = ''lease'' THEN ''X3'' '
-                ||'     CASE WHEN debit_type = ''locker'' THEN ''Locker'' '
-                ||'     CASE WHEN debit_type = ''nsf'' THEN ''NSF'' '
-                ||'     CASE WHEN debit_type = ''other'' THEN ''X3'' '
-                ||'     CASE WHEN debit_type = ''parking'' THEN ''Parking'' '
-                ||'     CASE WHEN debit_type = ''pet'' THEN ''Pet'' '
-                ||'     CASE WHEN debit_type = ''total'' THEN ''X3'' '
-                ||'     CASE WHEN debit_type = ''utility'' THEN ''Utility'' END ';
+                ||'     WHEN debit_type = ''addOn'' THEN ''AddOn'' '
+                ||'     WHEN debit_type = ''booking'' THEN ''OneTime'' '
+                ||'     WHEN debit_type = ''deposit'' THEN ''Deposit'' '
+                ||'     WHEN debit_type = ''latePayment'' THEN ''LatePayment'' '
+                ||'     WHEN debit_type = ''lease'' THEN ''Residential'' '
+                ||'     WHEN debit_type = ''locker'' THEN ''Locker'' '
+                ||'     WHEN debit_type = ''nsf'' THEN ''NSF'' '
+                ||'     WHEN debit_type = ''other'' THEN ''ExternalCharge'' '
+                ||'     WHEN debit_type = ''parking'' THEN ''Parking'' '
+                ||'     WHEN debit_type = ''pet'' THEN ''Pet'' '
+                ||'     WHEN debit_type = ''total'' THEN NULL '
+                ||'     WHEN debit_type = ''utility'' THEN ''Utility'' END ';
         
         
         -- arcode data import from lease_adjustment_type
@@ -175,20 +181,20 @@ BEGIN
                 ||' ORDER BY    id )';
                 
         
-        -- arcode data import from lease_adjustment_type
+        -- arcode data import from product_item_type
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,gl_code,updated,pit_id) '
                 ||'(SELECT      nextval(''public.arcode_seq'') AS id, '
                 ||'             CASE WHEN service_type = ''commercialUnit'' THEN ''Commercial'' '
-                ||'             CASE WHEN service_type = ''residentialShortTermUnit'' THEN ''ResidentialShortTerm'' '
-                ||'             CASE WHEN service_type = ''residentialUnit'' THEN ''Residential'' '
-                ||'             CASE WHEN feature_type = ''addOn'' THEN ''AddOn'' '
-                ||'             CASE WHEN feature_type = ''booking'' THEN ''X3'' '
-                ||'             CASE WHEN feature_type = ''locker'' THEN ''Locker'' '
-                ||'             CASE WHEN feature_type = ''oneTimeCharge'' THEN ''OneTime'' '
-                ||'             CASE WHEN feature_type = ''parking'' THEN ''Parking'' '
-                ||'             CASE WHEN feature_type = ''pet'' THEN ''Pet'' '
-                ||'             CASE WHEN feature_type = ''utility'' THEN ''Utility'' END AS code_type,'
+                ||'             WHEN service_type = ''residentialShortTermUnit'' THEN ''ResidentialShortTerm'' '
+                ||'             WHEN service_type = ''residentialUnit'' THEN ''Residential'' '
+                ||'             WHEN feature_type = ''addOn'' THEN ''AddOn'' '
+                ||'             WHEN feature_type = ''booking'' THEN ''Residential'' '
+                ||'             WHEN feature_type = ''locker'' THEN ''Locker'' '
+                ||'             WHEN feature_type = ''oneTimeCharge'' THEN ''OneTime'' '
+                ||'             WHEN feature_type = ''parking'' THEN ''Parking'' '
+                ||'             WHEN feature_type = ''pet'' THEN ''Pet'' '
+                ||'             WHEN feature_type = ''utility'' THEN ''Utility'' END AS code_type,'
                 ||'             name,gl_code,updated,id AS pit_id '
                 ||' FROM        '||v_schema_name||'.product_item_type '
                 ||' ORDER BY    id ) ';
@@ -202,6 +208,13 @@ BEGIN
                 ||'SET credit_debit_rule = '
                 ||'CASE WHEN credit_debit_rule IN (''byDueDate'',''byAgingBucketAndDebitType'') THEN ''oldestDebtFirst'' '
                 ||'WHEN credit_debit_rule = ''byDebitType'' THEN ''rentDebtLast'' END ';
+        
+        
+         -- lead
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lead '
+                ||'SET lease_type = ''Residential'' '
+                ||'WHERE lease_type = ''residentialUnit'' ';
                 
                 
         -- lease
@@ -209,6 +222,14 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.lease '
                 ||'SET lease_type = ''Residential'' '
                 ||'WHERE lease_type = ''residentialUnit'' ';
+                
+                
+        -- lease_adjustment
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment  AS l '
+                ||'SET  code = a.id '
+                ||'FROM '||v_schema_name||'.arcode AS a '
+                ||'WHERE l.item_type = a.lad_id ';
         
         
         /**
@@ -222,6 +243,10 @@ BEGIN
         -- aging_buckets
         
         ALTER TABLE aging_buckets DROP COLUMN debit_type;
+        
+        -- billing_invoice_line_item
+        
+        ALTER TABLE billing_invoice_line_item DROP COLUMN target_date;
         
         -- concession_v
         
@@ -287,6 +312,11 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- Not Null
+        
+        --ALTER TABLE product ALTER COLUMN code_type SET NOT NULL;
+        --ALTER TABLE yardi_charge_code ALTER COLUMN ar_code SET NOT NULL;
+        
         -- Foreign Keys
         
         ALTER TABLE arcode ADD CONSTRAINT arcode_gl_code_fk FOREIGN KEY(gl_code) REFERENCES gl_code(id);
@@ -295,6 +325,7 @@ BEGIN
         ALTER TABLE deposit_policy_item ADD CONSTRAINT deposit_policy_item_product_code_fk FOREIGN KEY(product_code) REFERENCES arcode(id);
         ALTER TABLE lease_adjustment ADD CONSTRAINT lease_adjustment_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
         ALTER TABLE lease_adjustment_policy_item ADD CONSTRAINT lease_adjustment_policy_item_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
+        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_debit_type_fk FOREIGN KEY(debit_type) REFERENCES arcode(id);
         ALTER TABLE pet_constraints ADD CONSTRAINT pet_constraints_pet_fk FOREIGN KEY(pet) REFERENCES arcode(id);
         ALTER TABLE product_item ADD CONSTRAINT product_item_code_fk FOREIGN KEY(code) REFERENCES arcode(id);
         ALTER TABLE product_tax_policy_item ADD CONSTRAINT product_tax_policy_item_product_code_fk FOREIGN KEY(product_code) REFERENCES arcode(id);
