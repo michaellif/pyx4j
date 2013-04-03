@@ -40,23 +40,31 @@ import com.yardi.ws.operations.ImportResidentTransactions_Login;
 import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -75,6 +83,8 @@ import com.propertyvista.yardi.bean.Messages;
 public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
+
+    private final I18n i18n = I18n.get(YardiResidentTransactionsService.class);
 
     private static class SingletonHolder {
         public static final YardiResidentTransactionsService INSTANCE = new YardiResidentTransactionsService();
@@ -131,6 +141,16 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
+        if (reversal.applyNSF().isBooleanTrue()) {
+
+            try {
+                String targetEmail = getEmailForNsfNotification(reversal);
+                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmail, reversal);
+            } catch (Throwable e) {
+                log.error("failed to send email", e);
+            }
+        }
+
         YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
@@ -436,4 +456,30 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         }
     }
 
+    private String getEmailForNsfNotification(YardiReceiptReversal receiptReversal) throws Exception {
+        String email = null;
+
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, receiptReversal.billingAccount().getPrimaryKey());
+        Persistence.service().retrieve(billingAccount.lease());
+        Persistence.service().retrieve(billingAccount.lease().unit().building());
+        Persistence.service().retrieve(billingAccount.lease().unit().building().contacts().propertyContacts());
+
+        for (PropertyContact contact : billingAccount.lease().unit().building().contacts().propertyContacts()) {
+            if (contact.type().getValue() == PropertyContactType.superintendent) {
+                email = contact.email().getValue();
+                break;
+            }
+        }
+
+        if (email != null) {
+            SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
+            if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
+                email = mailConfig.getForwardAllTo();
+            }
+            return email;
+        } else {
+            throw new Exception(i18n.tr("Email address for NSF notification for payment record '" + receiptReversal.paymentRecord().getPrimaryKey()
+                    + "' was not defined (superintendant's email at building/marketing/propertyContacts)"));
+        }
+    }
 }

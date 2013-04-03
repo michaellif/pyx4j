@@ -15,6 +15,7 @@ package com.propertyvista.biz.communication;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -64,6 +65,8 @@ public interface CommunicationFacade {
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
+
+    void sendPaymentReversalWithNsfNotification(String targetEmail, YardiReceiptReversal paymentReversal);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

@@ -308,6 +308,14 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createNsfNotificationEmail() {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        email.setSubject("Nsf notification");
+        email.setTextBody("TODO: nsf notification body");
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {

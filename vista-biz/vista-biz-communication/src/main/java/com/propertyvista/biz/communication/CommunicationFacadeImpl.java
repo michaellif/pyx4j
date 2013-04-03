@@ -27,6 +27,7 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmUser;
@@ -298,6 +299,20 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         final MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
 
         m.setTo(userEmail);
+
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
+    }
+
+    @Override
+    public void sendPaymentReversalWithNsfNotification(String targetEmail, YardiReceiptReversal paymentReversal) {
+        if (disabled) {
+            return;
+        }
+        final MailMessage m = MessageTemplates.createNsfNotificationEmail();
+
+        m.setTo(targetEmail);
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
