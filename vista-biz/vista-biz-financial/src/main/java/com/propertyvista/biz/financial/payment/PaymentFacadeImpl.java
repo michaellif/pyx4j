@@ -131,7 +131,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (paymentRecord.targetDate().isNull()) {
             throw new UserRuntimeException(i18n.tr("Payment target date should be present"));
         }
-        Validate.isTrue(PaymentType.schedulable().contains(paymentRecord.paymentMethod().type().getValue()));
+        Validate.isTrue(paymentRecord.paymentMethod().type().getValue().isSchedulable());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
         Persistence.service().merge(paymentRecord);

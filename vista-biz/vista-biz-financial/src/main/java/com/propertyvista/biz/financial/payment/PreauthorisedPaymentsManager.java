@@ -38,7 +38,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -180,7 +179,7 @@ class PreauthorisedPaymentsManager {
             }
             for (PreauthorizedPayment pap : preauthorizedPayments) {
 
-                Validate.isTrue(PaymentType.schedulable().contains(pap.paymentMethod().type().getValue()));
+                Validate.isTrue(pap.paymentMethod().type().getValue().isSchedulable());
 
                 PreauthorizedAmount record = new PreauthorizedAmount();
                 record.leaseTermTenant = leaseParticipant;

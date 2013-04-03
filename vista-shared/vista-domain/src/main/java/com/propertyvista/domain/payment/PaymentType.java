@@ -78,6 +78,10 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> transactable() {
+        return EnumSet.of(Echeck, EFT, CreditCard);
+    }
+
     public static EnumSet<PaymentType> schedulable() {
         return EnumSet.of(Echeck, CreditCard);
     }
@@ -85,6 +89,10 @@ public enum PaymentType {
     // grouping:
 
     public boolean isTransactable() {
-        return EnumSet.of(Echeck, EFT, CreditCard).contains(this);
+        return transactable().contains(this);
+    }
+
+    public boolean isSchedulable() {
+        return schedulable().contains(this);
     }
 }

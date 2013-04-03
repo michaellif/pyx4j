@@ -74,13 +74,13 @@ public interface PaymentRecord extends IEntity {
 
         Received,
 
-        Rejected,
-
-        Canceled,
-
         Cleared,
 
-        Returned;
+        Rejected,
+
+        Returned,
+
+        Canceled;
 
         @Override
         public String toString() {
@@ -109,9 +109,20 @@ public interface PaymentRecord extends IEntity {
         }
 
         // states:
-
         public boolean isProcessed() {
             return processed().contains(this);
+        }
+
+        public boolean isCancelable() {
+            return cancelable().contains(this);
+        }
+
+        public boolean isCheckClearable() {
+            return checkClearable().contains(this);
+        }
+
+        public boolean isCheckRejectable() {
+            return checkRejectable().contains(this);
         }
     };
 

@@ -20,7 +20,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentViewerView {
@@ -96,8 +95,8 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         setActionVisible(scheduleAction, false);
         setActionVisible(processAction, false);
         setActionVisible(clearAction, false);
-        setActionVisible(rejectNSFAction, false);
         setActionVisible(rejectAction, false);
+        setActionVisible(rejectNSFAction, false);
         setActionVisible(cancelAction, false);
         super.reset();
     }
@@ -108,10 +107,10 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
         // enable editing for submitted payments only:
         setEditingVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-        setActionVisible(cancelAction, !value.paymentStatus().getValue().isProcessed());
+        setActionVisible(cancelAction, value.paymentStatus().getValue().isCancelable());
 
         if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {
-            if (!value.targetDate().isNull() && PaymentType.schedulable().contains(value.paymentMethod().type().getValue())) {
+            if (!value.targetDate().isNull() && value.paymentMethod().type().getValue().isSchedulable()) {
                 setActionVisible(scheduleAction, true);
             } else {
                 setActionVisible(processAction, true);
@@ -121,9 +120,9 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
         switch (value.paymentMethod().type().getValue()) {
         case Check:
-            setActionVisible(clearAction, value.paymentStatus().getValue() == PaymentStatus.Received);
-            setActionVisible(rejectAction, value.paymentStatus().getValue() == PaymentStatus.Received);
-            setActionVisible(rejectNSFAction, value.paymentStatus().getValue() == PaymentStatus.Received);
+            setActionVisible(clearAction, value.paymentStatus().getValue().isCheckClearable());
+            setActionVisible(rejectAction, value.paymentStatus().getValue().isCheckRejectable());
+            setActionVisible(rejectNSFAction, value.paymentStatus().getValue().isCheckRejectable());
             break;
         default:
             // No other special handling for payment types
