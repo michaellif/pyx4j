@@ -126,14 +126,11 @@ class PolicyManager {
             }
             if (Complex.class.equals(nodeClass)) {
                 EntityQueryCriteria<Building> criteria = new EntityQueryCriteria<Building>(Building.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().complex(), node.getPrimaryKey()));
-
-                List<Building> buildings = Persistence.service().query(criteria);
-                for (Building building : buildings) {
-                    if (building.complexPrimary().isBooleanTrue()) {
-                        policyNode = building.info().address().province();
-                        break;
-                    }
+                criteria.eq(criteria.proto().complex(), node.getPrimaryKey());
+                criteria.eq(criteria.proto().complexPrimary(), true);
+                Building primaryBuilding = Persistence.service().retrieve(criteria);
+                if (primaryBuilding != null) {
+                    policyNode = primaryBuilding.info().address().province();
                 }
                 break;
             }
