@@ -90,6 +90,8 @@ BEGIN
                 gl_code                         BIGINT,
                 updated                         TIMESTAMP,
                 default_code                    BOOLEAN,
+                lad_id                          BIGINT,                         # lease_adjustment_reason.id - to be dropped at the end
+                pit_id                          BIGINT,                         # product_item_type.id - also not gonna last
                         CONSTRAINT      arcode_pk PRIMARY KEY(id)
         );
         
@@ -142,6 +144,56 @@ BEGIN
         ***
         ***     =====================================================================================================
         **/
+        
+        -- aging_buckets
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets '
+                ||'SET  ar_code = '
+                ||'     CASE WHEN debit_type = ''accountCharge'' THEN ''AccountCharge'' '
+                ||'     CASE WHEN debit_type = ''addOn'' THEN ''AddOn'' '
+                ||'     CASE WHEN debit_type = ''booking'' THEN ''X3'' '
+                ||'     CASE WHEN debit_type = ''deposit'' THEN ''Deposit'' '
+                ||'     CASE WHEN debit_type = ''latePayment'' THEN ''LatePayment'' '
+                ||'     CASE WHEN debit_type = ''lease'' THEN ''X3'' '
+                ||'     CASE WHEN debit_type = ''locker'' THEN ''Locker'' '
+                ||'     CASE WHEN debit_type = ''nsf'' THEN ''NSF'' '
+                ||'     CASE WHEN debit_type = ''other'' THEN ''X3'' '
+                ||'     CASE WHEN debit_type = ''parking'' THEN ''Parking'' '
+                ||'     CASE WHEN debit_type = ''pet'' THEN ''Pet'' '
+                ||'     CASE WHEN debit_type = ''total'' THEN ''X3'' '
+                ||'     CASE WHEN debit_type = ''utility'' THEN ''Utility'' END ';
+        
+        
+        -- arcode data import from lease_adjustment_type
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,gl_code,updated,lad_id) '
+                ||'(SELECT      nextval(''public.arcode_seq'') AS id, '
+                ||'             CASE WHEN action_type = ''charge'' THEN ''AccountCharge'' '
+                ||'             WHEN action_type = ''credit'' THEN ''AccountCredit'' END AS code_type, '
+                ||'             name,gl_code,updated,id AS lad_id '
+                ||' FROM        '||v_schema_name||'.lease_adjustment_reason '
+                ||' ORDER BY    id )';
+                
+        
+        -- arcode data import from lease_adjustment_type
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,gl_code,updated,pit_id) '
+                ||'(SELECT      nextval(''public.arcode_seq'') AS id, '
+                ||'             CASE WHEN service_type = ''commercialUnit'' THEN ''Commercial'' '
+                ||'             CASE WHEN service_type = ''residentialShortTermUnit'' THEN ''ResidentialShortTerm'' '
+                ||'             CASE WHEN service_type = ''residentialUnit'' THEN ''Residential'' '
+                ||'             CASE WHEN feature_type = ''addOn'' THEN ''AddOn'' '
+                ||'             CASE WHEN feature_type = ''booking'' THEN ''X3'' '
+                ||'             CASE WHEN feature_type = ''locker'' THEN ''Locker'' '
+                ||'             CASE WHEN feature_type = ''oneTimeCharge'' THEN ''OneTime'' '
+                ||'             CASE WHEN feature_type = ''parking'' THEN ''Parking'' '
+                ||'             CASE WHEN feature_type = ''pet'' THEN ''Pet'' '
+                ||'             CASE WHEN feature_type = ''utility'' THEN ''Utility'' END AS code_type,'
+                ||'             name,gl_code,updated,id AS pit_id '
+                ||' FROM        '||v_schema_name||'.product_item_type '
+                ||' ORDER BY    id ) ';
+                
+              
         
         
         -- arpolicy
