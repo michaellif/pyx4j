@@ -45,7 +45,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 
         EntityQueryCriteria<CrmUser> criteriaCrmUser = EntityQueryCriteria.create(CrmUser.class);
         List<CrmUser> listCrmUsers = Persistence.service().query(criteriaCrmUser);
-        log.info("There are {} crm usres " + listCrmUsers.size());
+        log.info("There are {} crm usres ", listCrmUsers.size());
 
         // get a few existing CrmUsers:
         CrmUser m001 = null;
