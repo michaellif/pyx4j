@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -75,6 +76,7 @@ public interface BillingCycle extends IEntity {
 
     // Used as different entity to avoid transaction isolation problems in HDQLDB
     @Owned
+    @Detached(level = AttachLevel.Detached)
     BillingCycleStats stats();
 
 }

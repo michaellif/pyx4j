@@ -41,4 +41,8 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
         return BillingCycleManager.instance().getSubsiquentBillingCycle(billingCycle);
     }
 
+    @Override
+    public BillingCycle getPriorBillingCycle(BillingCycle billingCycle) {
+        return BillingCycleManager.instance().getPriorBillingCycle(billingCycle);
+    }
 }

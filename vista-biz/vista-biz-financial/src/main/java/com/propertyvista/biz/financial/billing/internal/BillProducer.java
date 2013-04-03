@@ -32,10 +32,12 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -94,13 +96,19 @@ class BillProducer {
 
             currentPeriodBill = BillingManager.instance().getLatestConfirmedBill(lease);
 
-            bill.previousCycleBill().set(currentPeriodBill);
             if (currentPeriodBill != null) {
                 Persistence.service().retrieve(currentPeriodBill.lineItems());
-                if (!currentPeriodBill.previousCycleBill().isNull()) {
-                    previousPeriodBill = currentPeriodBill.previousCycleBill();
+
+                BillingCycle priorBillingCycle = ServerSideFactory.create(BillingCycleFacade.class).getPriorBillingCycle(currentPeriodBill.billingCycle());
+
+                EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+                criteria.eq(criteria.proto().billingAccount(), lease.billingAccount());
+                criteria.eq(criteria.proto().billingCycle(), priorBillingCycle);
+                previousPeriodBill = Persistence.service().retrieve(criteria);
+                if (previousPeriodBill != null) {
                     Persistence.service().retrieve(previousPeriodBill.lineItems());
                 }
+
             }
 
             bill.executionDate().setValue(new LogicalDate(SystemDateManager.getDate()));

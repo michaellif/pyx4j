@@ -107,8 +107,6 @@ public interface Bill extends IEntity {
 
     IPrimitiveSet<String> warnings();
 
-    Bill previousCycleBill();
-
     @ToString(index = 0)
     IPrimitive<LogicalDate> dueDate();
 

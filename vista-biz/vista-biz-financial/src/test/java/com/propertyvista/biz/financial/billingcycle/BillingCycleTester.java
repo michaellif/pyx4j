@@ -14,6 +14,8 @@
 package com.propertyvista.biz.financial.billingcycle;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -28,6 +30,9 @@ public class BillingCycleTester extends Tester {
     public BillingCycleTester(BillingCycle billingCycle) {
         super();
         this.billingCycle = billingCycle;
+        if (billingCycle.stats().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(billingCycle.stats());
+        }
     }
 
     public static BillingCycle ensureBillingCycle(Building building, BillingPeriod billingPeriod, String leaseStartDate) {

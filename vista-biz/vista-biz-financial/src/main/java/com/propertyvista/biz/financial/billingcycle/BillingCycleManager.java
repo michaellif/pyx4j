@@ -77,6 +77,13 @@ class BillingCycleManager {
         return ensureBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
     }
 
+    protected BillingCycle getPriorBillingCycle(BillingCycle billingCycle) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(billingCycle.billingCycleStartDate().getValue());
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
+    }
+
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         BillingAccount billingAccount = lease.billingAccount();
         LogicalDate firstCycleStartDate = null;

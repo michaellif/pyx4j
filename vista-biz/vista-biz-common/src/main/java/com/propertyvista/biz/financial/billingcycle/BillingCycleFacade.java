@@ -29,4 +29,5 @@ public interface BillingCycleFacade {
 
     BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 
+    BillingCycle getPriorBillingCycle(BillingCycle billingCycle);
 }

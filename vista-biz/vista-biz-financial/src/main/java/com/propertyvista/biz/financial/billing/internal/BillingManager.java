@@ -233,6 +233,10 @@ public class BillingManager {
 
     void updateBillingCycleStats(Bill bill, boolean newlyCreated) {
 
+        if (bill.billingCycle().stats().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(bill.billingCycle().stats());
+        }
+
         switch (bill.billStatus().getValue()) {
         case Failed:
             BillingUtils.increment(bill.billingCycle().stats().failed());
