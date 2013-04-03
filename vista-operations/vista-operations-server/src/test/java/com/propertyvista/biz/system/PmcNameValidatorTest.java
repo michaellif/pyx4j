@@ -20,6 +20,9 @@ import org.junit.Test;
 
 public class PmcNameValidatorTest {
 
+    /**
+     *
+     */
     @Test
     public void testWildcardReservedNamesMatching() {
         PmcNameValidator.setReservedWords(new String[] { "x*", "a*c", "b??c", "?*a" });
@@ -50,6 +53,8 @@ public class PmcNameValidatorTest {
         assertTrue(PmcNameValidator.isDnsNameValid("abcd"));
         assertTrue(PmcNameValidator.isDnsNameValid("abc123"));
         assertTrue(PmcNameValidator.isDnsNameValid("123abc"));
+        assertFalse(PmcNameValidator.isDnsNameValid("-123abc"));
+        assertFalse(PmcNameValidator.isDnsNameValid("_123abc"));
         assertTrue(PmcNameValidator.isDnsNameValid("1abc"));
         assertTrue(PmcNameValidator.isDnsNameValid("Abcd"));
         assertTrue(PmcNameValidator.isDnsNameValid("AbCdE"));
