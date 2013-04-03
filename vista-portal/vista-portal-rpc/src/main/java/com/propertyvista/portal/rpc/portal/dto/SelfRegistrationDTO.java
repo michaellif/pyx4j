@@ -32,6 +32,8 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
     @NotNull
     IPrimitive<String> firstName();
 
+    IPrimitive<String> middleName();
+
     @NotNull
     IPrimitive<String> lastName();
 

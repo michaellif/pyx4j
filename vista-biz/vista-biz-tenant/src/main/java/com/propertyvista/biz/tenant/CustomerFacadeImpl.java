@@ -22,14 +22,12 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -201,20 +199,20 @@ public class CustomerFacadeImpl implements CustomerFacade {
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
 
-        Tenant tenant = null;
         List<Tenant> tenants = Persistence.service().query(criteria);
+        if (tenants.size() == 0) {
+            throw new UserRuntimeException(i18n.tr("The Secuirty Code was incorrect"));
+        }
+
+        Tenant tenant = null;
         for (Tenant t : tenants) {
-            if (!equalsIgnoreCase(t.customer().person().name().lastName(), selfRegistration.lastName())) {
-                continue;
+            if (CustomerRegistrationNameMatching.nameMatch(t.customer().person().name(), selfRegistration)) {
+                tenant = t;
+                break;
             }
-            if (!equalsIgnoreCase(t.customer().person().name().firstName(), selfRegistration.firstName())) {
-                continue;
-            }
-            tenant = t;
-            break;
         }
         if (tenant == null) {
-            throw new UserRuntimeException(i18n.tr("One of the fields you entered was incorrect"));
+            throw new UserRuntimeException(i18n.tr("The name provided does not match our records"));
         }
 
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
@@ -240,13 +238,4 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     }
 
-    private boolean equalsIgnoreCase(IPrimitive<String> name, IPrimitive<String> nameRegistration) {
-        if (CommonsStringUtils.equals(name.getValue(), nameRegistration.getValue())) {
-            return true;
-        }
-        if (name.isNull() || nameRegistration.isNull()) {
-            return false;
-        }
-        return name.getValue().trim().compareToIgnoreCase(nameRegistration.getValue().trim()) == 0;
-    }
 }
