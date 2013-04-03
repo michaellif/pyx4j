@@ -141,6 +141,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
+        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
+
+        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+        ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
+
+        importResidentTransactions(client, yc, reversalTransactions);
+
         if (reversal.applyNSF().isBooleanTrue()) {
 
             try {
@@ -150,13 +157,6 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                 log.error("failed to send email", e);
             }
         }
-
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
-
-        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
-
-        importResidentTransactions(client, yc, reversalTransactions);
     }
 
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
