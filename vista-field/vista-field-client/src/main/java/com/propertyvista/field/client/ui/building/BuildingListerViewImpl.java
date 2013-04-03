@@ -13,12 +13,20 @@
  */
 package com.propertyvista.field.client.ui.building;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface BuildingListerView extends IsWidget {
+import com.propertyvista.field.client.theme.FieldTheme;
 
-    interface Presenter {
+public class BuildingListerViewImpl extends SimplePanel implements BuildingListerView {
+
+    public BuildingListerViewImpl() {
+        setStyleName(FieldTheme.StyleName.BuildingLister.name());
+        setWidget(new Button("Hello"));
     }
 
-    void setPresenter(Presenter presenter);
+    @Override
+    public void setPresenter(Presenter presenter) {
+        // TODO Auto-generated method stub
+    }
 }

@@ -17,13 +17,27 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-public class ToolbarActivityMapper implements ActivityMapper {
+import com.propertyvista.field.client.activity.ScreenActivity;
+import com.propertyvista.field.rpc.ScreenMode.FullScreen;
+import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
+import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
 
-    public ToolbarActivityMapper() {
+public class ScreenViewerActivityMapper implements ActivityMapper {
+
+    public ScreenViewerActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
+
+        if (isScreenViewerPlace(place)) {
+            return new ScreenActivity(place);
+        }
+
         return null;
+    }
+
+    private boolean isScreenViewerPlace(Place place) {
+        return (place instanceof FullScreen) || (place instanceof HeaderLister) || (place instanceof HeaderListerDetails);
     }
 }

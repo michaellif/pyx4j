@@ -7,18 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 1, 2013
- * @author Mykola
+ * Created on Jul 13, 2012
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.building;
+package com.propertyvista.field.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface BuildingListerView extends IsWidget {
+import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
-    interface Presenter {
-    }
+public interface ScreenViewer extends IsWidget {
+
+    DisplayPanel getHeaderDisplay();
+
+    DisplayPanel getListerDisplay();
+
+    DisplayPanel getDetailsDisplay();
+
+    DisplayPanel getFullScreenDisplay();
 
     void setPresenter(Presenter presenter);
+
+    public interface Presenter {
+    }
+
+    void setWidget(IsWidget widget);
+
+    void setScreenLayout(ScreenLayout layout);
+
 }

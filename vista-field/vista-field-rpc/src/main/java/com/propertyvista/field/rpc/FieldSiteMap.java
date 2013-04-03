@@ -20,9 +20,12 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
+import com.propertyvista.field.rpc.ScreenMode.FullScreen;
+import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
+
 public class FieldSiteMap implements SiteMap {
 
-    public static class Login extends AppPlace implements PublicPlace {
+    public static class Login extends AppPlace implements PublicPlace, FullScreen {
     }
 
     public static class SigningOut extends AppPlace implements SigningOutPlace {
@@ -31,18 +34,17 @@ public class FieldSiteMap implements SiteMap {
     /**
      * A place where a unfortunate user can perform request to reset his password.
      */
-    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace, FullScreen {
     }
 
     /**
      * Used while user is waiting for authentication required for password reset.
      */
-    public static class LoginWithToken extends AppPlace implements PublicPlace {
-
+    public static class LoginWithToken extends AppPlace implements PublicPlace, FullScreen {
     }
 
     @PlaceProperties(caption = "Reset Password")
-    public static class PasswordReset extends AppPlace {
+    public static class PasswordReset extends AppPlace implements FullScreen {
     }
 
     @PlaceProperties(caption = "Change Password")
@@ -105,9 +107,12 @@ public class FieldSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "Runtime Errors")
-    public static class RuntimeError extends AppPlace {
+    public static class RuntimeError extends AppPlace implements FullScreen {
     }
 
-    public static class ApplicationSelection extends AppPlace {
+    public static class ApplicationSelection extends AppPlace implements FullScreen {
+    }
+
+    public static class BuildingDetails extends AppPlace implements HeaderListerDetails {
     }
 }

@@ -17,21 +17,26 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.field.client.activity.building.BuildingDetailsActivity;
-import com.propertyvista.field.rpc.FieldSiteMap;
+import com.propertyvista.field.client.activity.header.HeaderActivity;
+import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
+import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
 
-public class DetailsActivityMapper implements ActivityMapper {
+public class HeaderActivityMapper implements ActivityMapper {
 
-    public DetailsActivityMapper() {
+    public HeaderActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof FieldSiteMap.BuildingDetails) {
-            return new BuildingDetailsActivity();
+        if (isHeaderPlace(place)) {
+            return new HeaderActivity(place);
         }
 
         return null;
+    }
+
+    private boolean isHeaderPlace(Place place) {
+        return (place instanceof HeaderLister) || (place instanceof HeaderListerDetails);
     }
 }

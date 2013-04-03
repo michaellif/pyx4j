@@ -25,16 +25,16 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.field.client.mvp.DetailsActivityMapper;
+import com.propertyvista.field.client.mvp.FullScreenActivityMapper;
+import com.propertyvista.field.client.mvp.HeaderActivityMapper;
 import com.propertyvista.field.client.mvp.ListerActivityMapper;
-import com.propertyvista.field.client.mvp.ScreenActivityMapper;
-import com.propertyvista.field.client.mvp.ToolbarActivityMapper;
+import com.propertyvista.field.client.mvp.ScreenViewerActivityMapper;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
@@ -49,21 +49,22 @@ public class FieldPanel extends LayoutPanel {
         add(contentPanel);
 
         //============ Screen display ============
-        DisplayPanel screenDisplay = new ScreenDisplayPanel();
+        DisplayPanel screenDisplay = new DisplayPanel();
         screenDisplay.setSize("100%", "100%");
         contentPanel.add(screenDisplay);
 
         //============ Composite view with all displays 
-        FieldScreenView screen = FieldViewFactory.instance(FieldScreenView.class);
+        ScreenViewer screen = FieldViewFactory.instance(ScreenViewer.class);
         screenDisplay.add(screen);
 
         EventBus eventBus = AppSite.getEventBus();
 
         //Activity <-> Display bindings:
-        bind(new ScreenActivityMapper(), screenDisplay, eventBus);
-        bind(new ToolbarActivityMapper(), screen.getToolbarDisplay(), eventBus);
+        bind(new ScreenViewerActivityMapper(), screenDisplay, eventBus);
+        bind(new HeaderActivityMapper(), screen.getHeaderDisplay(), eventBus);
         bind(new ListerActivityMapper(), screen.getListerDisplay(), eventBus);
         bind(new DetailsActivityMapper(), screen.getDetailsDisplay(), eventBus);
+        bind(new FullScreenActivityMapper(), screen.getFullScreenDisplay(), eventBus);
     }
 
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
@@ -71,14 +72,14 @@ public class FieldPanel extends LayoutPanel {
         activityManager.setDisplay(widget);
     }
 
-    class ScreenDisplayPanel extends DisplayPanel {
-
-        @Override
-        public void setWidget(IsWidget w) {
-            if (getWidget() != null && getWidget() instanceof FieldScreenView) {
-                ((FieldScreenView) getWidget()).setWidget(w);
-            }
-        }
-    }
+//    class ScreenDisplayPanel extends DisplayPanel {
+//
+//        @Override
+//        public void setWidget(IsWidget w) {
+//            if (getWidget() != null && getWidget() instanceof ScreenViewer) {
+//                ((ScreenViewer) getWidget()).setWidget(w);
+//            }
+//        }
+//    }
 
 }

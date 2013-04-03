@@ -17,6 +17,9 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.propertyvista.field.client.activity.building.BuildingListerActivity;
+import com.propertyvista.field.rpc.FieldSiteMap;
+
 public class ListerActivityMapper implements ActivityMapper {
 
     public ListerActivityMapper() {
@@ -24,6 +27,11 @@ public class ListerActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
+
+        if (place instanceof FieldSiteMap.BuildingDetails) {
+            return new BuildingListerActivity();
+        }
+
         return null;
     }
 }

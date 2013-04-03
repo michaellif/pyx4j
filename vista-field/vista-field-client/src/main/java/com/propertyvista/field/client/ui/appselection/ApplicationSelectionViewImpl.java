@@ -18,10 +18,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.field.client.IsFullScreenWidget;
 import com.propertyvista.field.client.theme.FieldTheme;
+import com.propertyvista.field.rpc.FieldSiteMap;
 
 public class ApplicationSelectionViewImpl extends VerticalPanel implements ApplicationSelectionView, IsFullScreenWidget {
 
@@ -37,7 +39,7 @@ public class ApplicationSelectionViewImpl extends VerticalPanel implements Appli
         final Button propertyManagerButton = createButton(i18n.tr("Property Manager"), new Command() {
             @Override
             public void execute() {
-                Window.alert("Property Manager goes next..");
+                AppSite.getPlaceController().goTo(new FieldSiteMap.BuildingDetails());
             }
         });
 

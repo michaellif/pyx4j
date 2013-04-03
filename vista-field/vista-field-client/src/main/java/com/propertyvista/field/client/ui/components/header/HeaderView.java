@@ -11,14 +11,10 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.building;
+package com.propertyvista.field.client.ui.components.header;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface BuildingListerView extends IsWidget {
+public interface HeaderView extends IsWidget {
 
-    interface Presenter {
-    }
-
-    void setPresenter(Presenter presenter);
 }

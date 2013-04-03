@@ -25,9 +25,9 @@ import com.propertyvista.field.client.activity.security.PasswordResetActivity;
 import com.propertyvista.field.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
-public class ScreenActivityMapper implements ActivityMapper {
+public class FullScreenActivityMapper implements ActivityMapper {
 
-    public ScreenActivityMapper() {
+    public FullScreenActivityMapper() {
     }
 
     @Override

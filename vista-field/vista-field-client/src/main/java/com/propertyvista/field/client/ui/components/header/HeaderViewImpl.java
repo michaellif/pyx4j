@@ -11,14 +11,15 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.building;
+package com.propertyvista.field.client.ui.components.header;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface BuildingListerView extends IsWidget {
+import com.propertyvista.field.client.theme.FieldTheme;
 
-    interface Presenter {
+public class HeaderViewImpl extends SimplePanel implements HeaderView {
+
+    public HeaderViewImpl() {
+        setStyleName(FieldTheme.StyleName.Toolbar.name());
     }
-
-    void setPresenter(Presenter presenter);
 }

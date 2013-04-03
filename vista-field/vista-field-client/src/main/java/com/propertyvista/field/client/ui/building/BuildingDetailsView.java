@@ -7,27 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 13, 2012
- * @author stanp
+ * Created on Apr 1, 2013
+ * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui;
+package com.propertyvista.field.client.ui.building;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface FieldScreenView extends IsWidget {
+public interface BuildingDetailsView extends IsWidget {
 
-    DisplayPanel getToolbarDisplay();
-
-    DisplayPanel getListerDisplay();
-
-    DisplayPanel getDetailsDisplay();
-
-    void setPresenter(Presenter presenter);
-
-    public interface Presenter {
+    interface Presenter {
     }
 
-    void setWidget(IsWidget widget);
+    void setPresenter(Presenter presenter);
 
 }

@@ -11,14 +11,21 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.building;
+package com.propertyvista.field.rpc;
 
-import com.google.gwt.user.client.ui.IsWidget;
+public interface ScreenMode {
 
-public interface BuildingListerView extends IsWidget {
-
-    interface Presenter {
+    public enum ScreenLayout {
+        FullScreen, HeaderLister, HeaderListerDetails
     }
 
-    void setPresenter(Presenter presenter);
+    public interface FullScreen {
+    }
+
+    public interface HeaderLister {
+    }
+
+    public interface HeaderListerDetails {
+    }
+
 }

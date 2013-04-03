@@ -22,7 +22,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteViewFooter, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton;
+        SiteView, SiteViewContent, SiteViewHeader, SiteViewFooter, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, BuildingLister, BuildingDetails;
     }
 
     public FieldTheme() {
@@ -111,11 +111,29 @@ public class FieldTheme extends VistaTheme {
 
         style = new Style(".", StyleName.AppSelectionButton);
         style.addProperty("border", "1px solid");
-        style.addProperty("height", "30px");
+        style.addProperty("height", "20px");
         style.addProperty("width", "20em");
         style.addProperty("text-align", "center");
         style.addProperty("margin", "10px");
         style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BuildingLister);
+        style.addProperty("width", "50%");
+        style.addProperty("height", "10%");
+        style.addProperty("background-color", "blue");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BuildingDetails);
+        style.addProperty("width", "100%");
+        style.addProperty("height", "90%");
+        style.addProperty("background-color", "black");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Toolbar);
+        style.addProperty("width", "50%");
+        style.addProperty("height", "10%");
+        style.addProperty("background-color", "red");
         addStyle(style);
     }
 
