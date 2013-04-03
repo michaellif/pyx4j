@@ -16,24 +16,14 @@ package com.propertyvista.server.jobs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.biz.tenant.LeaseProcessFacade;
 
 public class LeaseActivationProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseActivationProcess.class);
-
-    private static final String EXECUTION_MONITOR_SECTION_NAME = "LeaseActivated";
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -43,41 +33,12 @@ public class LeaseActivationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Approved));
-            criteria.add(PropertyCriterion.le(criteria.proto().currentTerm().termFrom(), context.getForDate()));
-
-            ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-            final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-            try {
-                while (i.hasNext()) {
-                    final Lease lease = i.next();
-                    try {
-                        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                            @Override
-                            public Void execute() {
-                                leaseFacade.activate(lease);
-                                return null;
-                            }
-                        });
-
-                        context.getExecutionMonitor().addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
-                    } catch (Throwable t) {
-                        context.getExecutionMonitor().addFailedEvent(EXECUTION_MONITOR_SECTION_NAME, t);
-                    }
-                }
-                log.info(context.getExecutionMonitor().toString());
-            } finally {
-                i.close();
-            }
-            log.info(context.getExecutionMonitor().toString());
-        }
+        ServerSideFactory.create(LeaseProcessFacade.class).leaseActivation(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
+        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override
     public void complete(PmcProcessContext context) {
         log.info("Activate Lease batch job finished");
     }
-
 }

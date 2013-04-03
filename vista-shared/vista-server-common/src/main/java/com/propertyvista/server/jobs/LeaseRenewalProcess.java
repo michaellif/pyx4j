@@ -13,22 +13,13 @@
  */
 package com.propertyvista.server.jobs;
 
-import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.shared.config.VistaFeatures;
+import com.propertyvista.biz.tenant.LeaseProcessFacade;
 
 public class LeaseRenewalProcess implements PmcProcess {
 
@@ -42,39 +33,12 @@ public class LeaseRenewalProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().nextTerm()));
-            criteria.add(PropertyCriterion.le(criteria.proto().nextTerm().termFrom(), context.getForDate()));
-
-            long total = 0;
-            long failed = 0;
-
-            Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-            final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-            while (i.hasNext()) {
-                final Lease lease = i.next();
-                try {
-                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                        @Override
-                        public Void execute() {
-                            leaseFacade.renew(lease);
-                            return null;
-                        }
-                    });
-                    context.getExecutionMonitor().addProcessedEvent("Lease");
-                } catch (Throwable error) {
-                    context.getExecutionMonitor().addFailedEvent("Lease", error);
-                }
-            }
-            log.info(context.getExecutionMonitor().toString());
-        }
+        ServerSideFactory.create(LeaseProcessFacade.class).leaseRenewal(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
+        log.info(context.getExecutionMonitor().toString());
     }
 
     @Override
     public void complete(PmcProcessContext context) {
         log.info("Renew Lease batch job finished");
     }
-
 }

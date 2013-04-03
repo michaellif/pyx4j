@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-import java.util.Iterator;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
@@ -65,22 +63,27 @@ public class LeaseProcessManagerInternal {
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().nextTerm()));
         criteria.add(PropertyCriterion.le(criteria.proto().nextTerm().termFrom(), date));
 
-        Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        while (i.hasNext()) {
-            final Lease lease = i.next();
-            try {
-                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() {
-                        leaseFacade.renew(lease);
-                        return null;
-                    }
-                });
-                executionMonitor.addProcessedEvent("Lease Renewal");
-            } catch (Throwable error) {
-                executionMonitor.addFailedEvent("Lease Renewal", error);
+        try {
+            while (i.hasNext()) {
+                final Lease lease = i.next();
+                try {
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() {
+                            leaseFacade.renew(lease);
+                            return null;
+                        }
+                    });
+
+                    executionMonitor.addProcessedEvent("Lease Renewal");
+                } catch (Throwable error) {
+                    executionMonitor.addFailedEvent("Lease Renewal", error);
+                }
             }
+        } finally {
+            i.close();
         }
     }
 
@@ -89,22 +92,27 @@ public class LeaseProcessManagerInternal {
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
         criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), date));
 
-        Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-        while (i.hasNext()) {
-            final Lease lease = i.next();
-            try {
-                new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() {
-                        leaseFacade.complete(lease);
-                        return null;
-                    }
-                });
-                executionMonitor.addProcessedEvent("Lease Completion");
-            } catch (Throwable error) {
-                executionMonitor.addFailedEvent("Lease Completion", error);
+        try {
+            while (i.hasNext()) {
+                final Lease lease = i.next();
+                try {
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() {
+                            leaseFacade.complete(lease);
+                            return null;
+                        }
+                    });
+
+                    executionMonitor.addProcessedEvent("Lease Completion");
+                } catch (Throwable error) {
+                    executionMonitor.addFailedEvent("Lease Completion", error);
+                }
             }
+        } finally {
+            i.close();
         }
     }
 }
