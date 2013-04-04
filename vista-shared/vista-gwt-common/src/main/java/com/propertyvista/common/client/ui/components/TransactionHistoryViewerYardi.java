@@ -107,6 +107,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
 
             ++row[0];
             panel.setWidget(row[0], COL_DATE, new HTML(dateHdr == null ? i18n.tr("Post Date") : dateHdr));
+            panel.setWidget(row[0], COL_TYPE, new HTML(i18n.tr("AR Code Type")));
             panel.setWidget(row[0], COL_DESCRIPTION, new HTML(i18n.tr("Description")));
             panel.setWidget(row[0], COL_AMOUNT, new HTML(i18n.tr("Amount")));
 
