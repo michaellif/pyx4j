@@ -235,7 +235,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             try {
                 ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
             } catch (ARException e) {
-                throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"), e);
+                throw new UserRuntimeException(i18n.tr("Payment can't be canceled"), e);
             }
         }
 
@@ -303,7 +303,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 throw new IllegalArgumentException("PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
             }
         } catch (ARException e) {
-            throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"), e);
+            throw new UserRuntimeException(i18n.tr("Payment can't be rejected"), e);
         }
 
         return paymentRecord;
