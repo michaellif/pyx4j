@@ -310,7 +310,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (disabled) {
             return;
         }
-        final MailMessage m = MessageTemplates.createNsfNotificationEmail();
+        final MailMessage m = MessageTemplates.createNsfNotificationEmail(paymentReversal);
 
         m.setTo(targetEmail);
 

@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -45,7 +46,10 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestAd
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -54,9 +58,12 @@ import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -308,11 +315,46 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createNsfNotificationEmail() {
+    public static MailMessage createNsfNotificationEmail(YardiReceiptReversal paymentReversal) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
-        email.setSubject("Nsf notification");
-        email.setTextBody("TODO: nsf notification body");
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, paymentReversal.billingAccount().getPrimaryKey());
+
+        Persistence.service().retrieve(billingAccount.lease());
+        String leaseId = billingAccount.lease().leaseId().getValue();
+        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formPlace(billingAccount.lease().getPrimaryKey()));
+
+        String tenantName = paymentReversal.paymentRecord().paymentMethod().customer().person().name().getStringView();
+        String tenantId = "TENANT-ID-NOT-FOUND";
+        String tenantUrl = "javascript:void(0);";
+
+        Persistence.service().retrieveMember(billingAccount.lease().leaseParticipants());
+        for (LeaseParticipant<?> t : billingAccount.lease().leaseParticipants()) {
+            if (EntityGraph.fullyEqual(t.customer(), paymentReversal.paymentRecord().paymentMethod().customer())) {
+                Tenant tenant = t.cast();
+                tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Tenant().formViewerPlace(tenant.getPrimaryKey()));
+                tenantId = tenant.getPrimaryKey().toString();
+                break;
+            }
+        }
+
+        String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
+                new CrmSiteMap.Finance.Payment().formViewerPlace(paymentReversal.paymentRecord().getPrimaryKey()));
+        String paymentId = paymentReversal.paymentRecord().getPrimaryKey().toString();
+
+        email.setSubject(i18n.tr("NSF Alert for {0}, id {1}, lease: {2}", tenantName, tenantId, leaseId));
+
+        email.setHtmlBody(i18n.tr(//@formatter:off
+                "NSF alert for <a href=\"{0}\">{1}, id: {2}</a>, lease: <a href=\"{3}\">{4}</a>: <br/>" +
+                "The <a href=\"{5}\">payment #{6}</a> was returned/rejected. The associated acccount had Non Sufficient Funds to process the payment. <br/>" +
+                "NSF fee will be applied.",
+                tenantUrl, tenantName, tenantId,
+                leaseUrl, leaseId,
+                paymentRecordUrl, paymentId 
+        ));//@formatter:on
+
         return email;
     }
 
