@@ -138,6 +138,10 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         }
     }
 
+    protected EntitySearchResult<E> query(EntityListCriteria<E> criteria) {
+        return Persistence.secureQuery(criteria);
+    }
+
     @Override
     public void list(AsyncCallback<EntitySearchResult<DTO>> callback, EntityListCriteria<DTO> dtoCriteria) {
         if (!dtoCriteria.getEntityClass().equals(dtoClass)) {
@@ -148,7 +152,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         criteria.setPageSize(dtoCriteria.getPageSize());
         criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
         enhanceListCriteria(criteria, dtoCriteria);
-        EntitySearchResult<E> dbResults = Persistence.secureQuery(criteria);
+        EntitySearchResult<E> dbResults = query(criteria);
 
         EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
         result.setEncodedCursorReference(dbResults.getEncodedCursorReference());
