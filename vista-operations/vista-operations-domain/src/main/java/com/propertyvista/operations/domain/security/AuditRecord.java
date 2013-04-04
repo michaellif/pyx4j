@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -47,6 +48,7 @@ public interface AuditRecord extends IEntity {
     IPrimitive<String> remoteAddr();
 
     @Caption(name = "When")
+    @Format("MM/dd/yyyy HH:mm")
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 

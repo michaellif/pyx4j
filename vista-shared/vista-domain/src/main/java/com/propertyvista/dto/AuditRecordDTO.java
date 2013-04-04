@@ -15,6 +15,7 @@ package com.propertyvista.dto;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,6 +30,7 @@ public interface AuditRecordDTO extends IEntity {
 
     IPrimitive<String> remoteAddr();
 
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> when();
 
     IPrimitive<AuditRecordEventType> event();

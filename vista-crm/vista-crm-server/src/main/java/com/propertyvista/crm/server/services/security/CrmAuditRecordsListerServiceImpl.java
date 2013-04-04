@@ -13,18 +13,22 @@
  */
 package com.propertyvista.crm.server.services.security;
 
+import java.util.concurrent.Callable;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
-import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.dto.AuditRecordDTO;
+import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
 
@@ -34,22 +38,36 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
 
     @Override
     protected void bind() {
-
         bind(dtoProto.remoteAddr(), dboProto.remoteAddr());
         bind(dtoProto.when(), dboProto.created());
         bind(dtoProto.event(), dboProto.event());
         bind(dtoProto.app(), dboProto.app());
         bind(dtoProto.details(), dboProto.details());
-
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<AuditRecordDTO>> callback, EntityListCriteria<AuditRecordDTO> dtoCriteria) {
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            super.list(callback, dtoCriteria);
-        } finally {
-            NamespaceManager.remove();
+    protected void enhanceListCriteria(EntityListCriteria<AuditRecord> dbCriteria, EntityListCriteria<AuditRecordDTO> dtoCriteria) {
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+        dbCriteria.eq(dbCriteria.proto().namespace(), NamespaceManager.getNamespace());
+    }
+
+    @Override
+    protected EntitySearchResult<AuditRecord> query(final EntityListCriteria<AuditRecord> criteria) {
+        return TaskRunner.runInOperationsNamespace(new Callable<EntitySearchResult<AuditRecord>>() {
+            @Override
+            public EntitySearchResult<AuditRecord> call() {
+                return Persistence.secureQuery(criteria);
+            }
+        });
+    }
+
+    @Override
+    protected void enhanceListRetrieved(AuditRecord entity, AuditRecordDTO dto) {
+        if (!entity.user().isNull()) {
+            CrmUser user = Persistence.service().retrieve(CrmUser.class, entity.user().getValue());
+            if (user != null) {
+                dto.userName().setValue(user.getStringView());
+            }
         }
     }
 
