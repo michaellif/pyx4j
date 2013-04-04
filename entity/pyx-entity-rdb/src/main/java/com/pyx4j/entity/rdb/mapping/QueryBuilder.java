@@ -395,6 +395,7 @@ public class QueryBuilder<T extends IEntity> {
         subQuerySql.append(" \n NOT EXISTS ( SELECT 1 FROM ");
 
         if (dialect.isMultitenantSeparateSchemas()) {
+            assert NamespaceManager.getNamespace() != null : "Namespace is required";
             subQuerySql.append(NamespaceManager.getNamespace()).append('.');
         }
         subQuerySql.append(memberJoin.sqlTableName);

@@ -95,6 +95,7 @@ public class TableModelCollections {
             int numberOfParams = 0;
             sql.append("INSERT INTO ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" ( ");
@@ -243,6 +244,7 @@ public class TableModelCollections {
             }
             sql.append(" FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ");
@@ -352,6 +354,7 @@ public class TableModelCollections {
             }
             sql.append(" FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ");
@@ -430,6 +433,7 @@ public class TableModelCollections {
             }
             sql.append(" FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ");
@@ -492,6 +496,7 @@ public class TableModelCollections {
         try {
             sql.append("DELETE FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
@@ -526,6 +531,7 @@ public class TableModelCollections {
             //TODO delete by Polymorphic Owner
             sql.append("DELETE FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");

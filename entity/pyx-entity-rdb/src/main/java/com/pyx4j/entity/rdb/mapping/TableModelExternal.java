@@ -58,6 +58,7 @@ public class TableModelExternal {
             }
             sql.append(" FROM ");
             if (dialect.isMultitenantSeparateSchemas()) {
+                assert NamespaceManager.getNamespace() != null : "Namespace is required";
                 sql.append(NamespaceManager.getNamespace()).append('.');
             }
             sql.append(member.sqlName()).append(" WHERE ");

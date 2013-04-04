@@ -164,6 +164,7 @@ public class TableModel {
 
     public String getFullTableName(String tableName) {
         if (dialect.isMultitenantSeparateSchemas()) {
+            assert NamespaceManager.getNamespace() != null : "Namespace is required";
             return NamespaceManager.getNamespace() + "." + tableName;
         } else if (mappings.getConfiguration().forceQualifiedNames()) {
             return mappings.getConfiguration().tablesSchema() + "." + tableName;

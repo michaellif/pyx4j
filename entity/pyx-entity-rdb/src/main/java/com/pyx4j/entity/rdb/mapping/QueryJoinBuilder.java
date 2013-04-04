@@ -343,6 +343,7 @@ class QueryJoinBuilder {
                     sql.append(" INNER JOIN ");
                 }
                 if (dialect.isMultitenantSeparateSchemas()) {
+                    assert NamespaceManager.getNamespace() != null : "Namespace is required";
                     sql.append(NamespaceManager.getNamespace()).append('.');
                 }
                 sql.append(memberJoin.sqlTableName);
