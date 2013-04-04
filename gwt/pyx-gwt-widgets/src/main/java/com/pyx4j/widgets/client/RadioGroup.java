@@ -35,6 +35,8 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -56,7 +58,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         boolean optionEnabled;
 
-        public OptionRadioButton(String name, String label) {
+        public OptionRadioButton(String name, SafeHtml label) {
             super(name, label);
             optionEnabled = true;
         }
@@ -256,8 +258,8 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
     }
 
-    protected String format(E value) {
-        return value.toString();
+    protected SafeHtml format(E value) {
+        return SafeHtmlUtils.fromString(value.toString());
     }
 
     @Override

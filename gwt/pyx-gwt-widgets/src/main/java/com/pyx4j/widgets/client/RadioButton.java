@@ -22,10 +22,15 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.LabelElement;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 public class RadioButton extends com.google.gwt.user.client.ui.RadioButton {
 
     public RadioButton(String name, String label) {
+        super(name, label);
+    }
+
+    public RadioButton(String name, SafeHtml label) {
         super(name, label);
     }
 

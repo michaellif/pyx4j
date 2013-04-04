@@ -25,6 +25,8 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.RadioGroup;
@@ -39,8 +41,8 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     protected RadioGroup<E> createEditor() {
         return new RadioGroup<E>(getCComponent().getLayout()) {
             @Override
-            protected String format(E value) {
-                return getCComponent().getFormat().format(value);
+            protected SafeHtml format(E value) {
+                return SafeHtmlUtils.fromTrustedString(getCComponent().getFormat().format(value));
             };
         };
     }

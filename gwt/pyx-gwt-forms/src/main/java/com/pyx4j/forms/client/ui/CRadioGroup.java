@@ -127,7 +127,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
         return addHandler(handler, OptionsChangeEvent.getType());
     }
 
-    public IFormat<E> getFormat() {
+    public final IFormat<E> getFormat() {
         return format;
     }
 
