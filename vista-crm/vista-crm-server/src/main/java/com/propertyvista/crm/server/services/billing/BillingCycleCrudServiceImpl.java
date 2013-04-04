@@ -37,6 +37,19 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
     }
 
     @Override
+    protected void enhanceListRetrieved(BillingCycle entity, BillingCycleDTO dto) {
+        if (entity.stats().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(entity.stats());
+            dto.stats().set(entity.stats());
+        }
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().padBillingCycle(), entity);
+            dto.pads().setValue((long) Persistence.service().count(criteria));
+        }
+    }
+
+    @Override
     protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto, RetrieveTraget retrieveTraget) {
         enhanceListRetrieved(entity, dto);
         Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
@@ -54,18 +67,6 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
         criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
 
         dto.notRun().setValue((long) Persistence.service().count(criteriaNotRun));
-
-        {
-
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), entity);
-            dto.pads().setValue((long) Persistence.service().count(criteria));
-        }
-    }
-
-    @Override
-    protected void enhanceListRetrieved(BillingCycle entity, BillingCycleDTO dto) {
-
     }
 
     @Override

@@ -26,7 +26,7 @@ public interface BillingCycleDTO extends BillingCycle {
 
     // Statistics:
 
-    @Caption(name = "Total Leases Number")
+    @Caption(name = "Total Leases")
     IPrimitive<Long> total();
 
     @Caption(name = "Leases With Non Run Bills")
