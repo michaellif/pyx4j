@@ -29,7 +29,7 @@ public interface MaintenanceService extends AbstractCrudService<MaintenanceReque
 
     void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
-    void cancelTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
+    void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
 
-    void rateTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request, Integer rate);
+    void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request, Integer rate);
 }

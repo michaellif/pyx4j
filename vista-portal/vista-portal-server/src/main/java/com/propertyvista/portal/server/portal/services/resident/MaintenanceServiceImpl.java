@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -18,16 +18,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -51,10 +48,9 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     static Vector<MaintenanceRequestDTO> listOpenIssues() {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant()));
-        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
+        List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getOpenMaintenanceRequests(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
+        for (MaintenanceRequest mr : requests) {
             Persistence.service().retrieve(mr.issueClassification());
             dto.add(Converter.convert(mr));
         }
@@ -64,10 +60,9 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     @Override
     public void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved, MaintenanceRequestStatus.Cancelled));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant()));
-        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
+        List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getClosedMaintenanceRequests(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
+        for (MaintenanceRequest mr : requests) {
             Persistence.service().retrieve(mr.issueClassification());
             dto.add(Converter.convert(mr));
         }
@@ -91,40 +86,16 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        entity.leaseParticipant().set(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
-        super.persist(entity, dto);
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity, TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
     }
 
     @Override
-    public void cancelTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
-        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
-        if (rs.size() > 0) {
-            MaintenanceRequest req = rs.get(0);
-            req.status().setValue(MaintenanceRequestStatus.Cancelled);
-            req.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
-            Persistence.service().merge(req);
-            Persistence.service().commit();
-            callback.onSuccess(null);
-        } else {
-            callback.onFailure(new Throwable("Ticket not found."));
-        }
+    public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
+        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(callback, dto);
     }
 
     @Override
-    public void rateTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
-        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
-        if (rs.size() > 0) {
-            MaintenanceRequest req = rs.get(0);
-            req.surveyResponse().rating().setValue(rate);
-            Persistence.service().merge(req);
-            Persistence.service().commit();
-            callback.onSuccess(null);
-        } else {
-            callback.onFailure(new Throwable("Ticket not found."));
-        }
+    public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
+        ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(callback, dto, rate);
     }
 }

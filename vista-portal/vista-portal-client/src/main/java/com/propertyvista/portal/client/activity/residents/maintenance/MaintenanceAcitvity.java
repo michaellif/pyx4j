@@ -79,7 +79,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void cancelRequest(MaintenanceRequestDTO request) {
-        srv.cancelTicket(new DefaultAsyncCallback<VoidSerializable>() {
+        srv.cancelMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 srv.listOpenIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
@@ -100,7 +100,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void rateRequest(MaintenanceRequestDTO request, Integer rate) {
-        srv.rateTicket(new DefaultAsyncCallback<VoidSerializable>() {
+        srv.rateMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
             }
