@@ -13,21 +13,20 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import java.text.ParseException;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -43,8 +42,6 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
-    private final FlowPanel paymentTypeImages = new FlowPanel();
-
     private final boolean twoColumns;
 
     public PaymentMethodForm(Class<E> clazz) {
@@ -58,42 +55,55 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
     @Override
     public IsWidget createContent() {
-        paymentTypeImages.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
-        Image paymentTypeImage;
-        FlowPanel holder;
-
-        for (PaymentType type : defaultPaymentTypes()) {
-            switch (type) {
-            case Echeck:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
-                break;
-            case CreditCard:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
-                break;
-            case Interac:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
-                break;
-            default:
-                paymentTypeImage = null;
-                break;
-            }
-            if (paymentTypeImage != null) {
-                holder = new FlowPanel();
-                holder.add(paymentTypeImage);
-                paymentTypeImages.add(holder);
-            }
-        }
-
-        HorizontalPanel paymentMethods = new HorizontalPanel();
+        VerticalPanel paymentMethods = new VerticalPanel();
         paymentMethods.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
-        paymentMethods.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         paymentMethods.setWidth("100%");
 
-        paymentMethods.add(paymentTypeImages);
-        paymentMethods.add(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(), RadioGroup.Layout.VERTICAL)));
+        CRadioGroupEnum<PaymentType> pmsrg;
+        paymentMethods.add(inject(proto().type(), pmsrg = new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
+                RadioGroup.Layout.HORISONTAL)));
         paymentMethods.add(paymentDetailsHolder);
-        DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_RIGHT.getTextAlignString());
+        DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
         paymentDetailsHolder.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
+
+        pmsrg.setFormat(new IFormat<PaymentType>() {
+            @Override
+            public PaymentType parse(String string) throws ParseException {
+                return null;
+            }
+
+            @Override
+            public String format(PaymentType value) {
+                Image paymentTypeImage;
+                FlowPanel holder = null;
+
+                if (value != null) {
+                    switch (value) {
+                    case Echeck:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
+                        break;
+                    case CreditCard:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
+                        break;
+                    case Interac:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
+                        break;
+                    default:
+                        paymentTypeImage = null;
+                        break;
+                    }
+
+                    if (paymentTypeImage != null) {
+                        holder = new FlowPanel();
+                        holder.add(paymentTypeImage);
+                    }
+
+                    return (paymentTypeImage != null ? holder.getElement().getInnerHTML() : value.toString());
+                }
+
+                return null;
+            }
+        });
 
         // Form content pane:
         FormFlexPanel content = new FormFlexPanel();
@@ -118,16 +128,6 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
                 get(proto().billingAddress()).setEditable(!event.getValue());
-            }
-        });
-
-        // hide pictures for view only state:
-        addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.viewable) {
-                    paymentTypeImages.setVisible(!isViewable());
-                }
             }
         });
 

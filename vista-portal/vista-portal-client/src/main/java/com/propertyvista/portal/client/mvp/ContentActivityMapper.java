@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
-import com.propertyvista.portal.client.activity.residents.PaymentWizardActivity;
+import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
@@ -97,7 +97,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Residents.Financial.BillSummary) {
                         activity = new BillSummaryActivity(appPlace);
                     } else if (appPlace instanceof Residents.Financial.BillSummary.PayNow) {
-                        activity = new PaymentWizardActivity(appPlace);
+//                        activity = new PaymentWizardActivity(appPlace);
+                        activity = new PaymentActivity(appPlace);
 
                     } else if (appPlace instanceof Residents.Financial.BillingHistory) {
                         activity = new BillingHistoryActivity(appPlace);
