@@ -13,13 +13,12 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
@@ -38,11 +37,11 @@ public class MockupProductTaxPolicyPreloader extends AbstractPolicyPreloader<Pro
     protected ProductTaxPolicy createPolicy(StringBuilder log) {
         ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
 
-        EntityQueryCriteria<FeatureItemType> pitc = EntityQueryCriteria.create(FeatureItemType.class);
-        for (FeatureItemType pit : Persistence.service().query(pitc)) {
+        EntityQueryCriteria<ARCode> pitc = EntityQueryCriteria.create(ARCode.class);
+        for (ARCode pit : Persistence.service().query(pitc)) {
             if (RandomUtil.randomBoolean()) { // do not process all items...
                 ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
-                item.productItemType().set(pit);
+                item.productCode().set(pit);
 
                 EntityQueryCriteria<Tax> criteria = EntityQueryCriteria.create(Tax.class);
                 item.taxes().add(RandomUtil.random(Persistence.service().query(criteria)));

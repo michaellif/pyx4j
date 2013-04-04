@@ -27,39 +27,39 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.financial.ARCode;
 
-public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelectorTableDialog<LeaseAdjustmentReason> {
+public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelectorTableDialog<ARCode> {
 
     private final static I18n i18n = I18n.get(LeaseAdjustmentReasonSelectorDialog.class);
 
     public LeaseAdjustmentReasonSelectorDialog() {
-        this(Collections.<LeaseAdjustmentReason> emptyList());
+        this(Collections.<ARCode> emptyList());
     }
 
     public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect) {
-        this(isMultiselect, Collections.<LeaseAdjustmentReason> emptyList());
+        this(isMultiselect, Collections.<ARCode> emptyList());
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(List<LeaseAdjustmentReason> alreadySelected) {
+    public LeaseAdjustmentReasonSelectorDialog(List<ARCode> alreadySelected) {
         this(false, alreadySelected);
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<LeaseAdjustmentReason> alreadySelected) {
-        this(isMultiselect, alreadySelected, i18n.tr("Select Reason"));
+    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<ARCode> alreadySelected) {
+        this(isMultiselect, alreadySelected, i18n.tr("Select Adjustment Code"));
     }
 
-    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<LeaseAdjustmentReason> alreadySelected, String caption) {
-        super(LeaseAdjustmentReason.class, isMultiselect, alreadySelected, caption);
+    public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<ARCode> alreadySelected, String caption) {
+        super(ARCode.class, isMultiselect, alreadySelected, caption);
         setWidth("700px");
     }
 
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().type(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().name(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().glCode(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().actionType(), true).build()
+                new MemberColumnDescriptor.Builder(proto().glCode(), true).build()
         ); //@formatter:on
     }
 
@@ -69,7 +69,7 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
     }
 
     @Override
-    protected AbstractListService<LeaseAdjustmentReason> getSelectService() {
-        return GWT.<AbstractListService<LeaseAdjustmentReason>> create(SelectLeaseAdjustmentReasonListService.class);
+    protected AbstractListService<ARCode> getSelectService() {
+        return GWT.<AbstractListService<ARCode>> create(SelectLeaseAdjustmentReasonListService.class);
     }
 }

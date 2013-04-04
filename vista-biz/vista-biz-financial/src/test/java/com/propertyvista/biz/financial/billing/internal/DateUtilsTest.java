@@ -18,6 +18,7 @@ import org.junit.experimental.categories.Category;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
+import com.propertyvista.biz.financial.billing.DateRange;
 
 @Category(FunctionalTests.class)
 public class DateUtilsTest extends FinancialTestBase {

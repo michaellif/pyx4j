@@ -15,12 +15,12 @@ package com.propertyvista.biz.financial.productcatalog;
 
 import java.util.List;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -53,7 +53,7 @@ public interface ProductCatalogFacade {
 
     // access:
 
-    List<Service> getServicesFor(ProductCatalog catalog, AptUnit unit, ServiceType type);
+    List<Service> getServicesFor(ProductCatalog catalog, AptUnit unit, ARCode.Type type);
 
     // eligibility:
     List<Feature> getFeaturesFor(ProductCatalog catalog, Service service);

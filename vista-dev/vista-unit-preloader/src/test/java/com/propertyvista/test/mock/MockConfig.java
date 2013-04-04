@@ -16,7 +16,7 @@ package com.propertyvista.test.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
@@ -31,7 +31,7 @@ public class MockConfig {
 
     public boolean yardiIntegration = false;
 
-    public Map<DebitType, OwingBalanceType> padBalanceTypeMap;
+    public Map<ARCode.Type, OwingBalanceType> padBalanceTypeMap;
 
     public PADChargeType padChargeType;
 
@@ -41,10 +41,10 @@ public class MockConfig {
         padChargeType = type;
     }
 
-    public void setPadBalanceType(DebitType charge, OwingBalanceType type) {
+    public void setPadBalanceType(ARCode.Type chargeType, OwingBalanceType type) {
         if (padBalanceTypeMap == null) {
-            padBalanceTypeMap = new HashMap<DebitType, OwingBalanceType>();
+            padBalanceTypeMap = new HashMap<ARCode.Type, OwingBalanceType>();
         }
-        padBalanceTypeMap.put(charge, type);
+        padBalanceTypeMap.put(chargeType, type);
     }
 }

@@ -29,7 +29,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
@@ -127,25 +127,25 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         main.setWidget(++row, 0, consessionPanel);
 
         chargedPanel.setH1(0, 0, 1, i18n.tr("Utilities"));
-        chargedPanel.setWidget(1, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
+        chargedPanel.setWidget(1, 0, inject(proto().agreedUtilities(), new FeatureFolder(ARCode.Type.Utility, this, false)));
         main.setWidget(++row, 0, chargedPanel);
 
         main.setH1(++row, 0, 1, i18n.tr("Add-Ons"));
 
         petsPanel.setH2(0, 0, 1, i18n.tr("Pets"));
-        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), petFolder = new FeatureExFolder(Feature.Type.pet, this, modifiable)));
+        petsPanel.setWidget(1, 0, inject(proto().agreedPets(), petFolder = new FeatureExFolder(ARCode.Type.Pet, this, modifiable)));
         main.setWidget(++row, 0, petsPanel);
 
         parkingPanel.setH2(0, 0, 1, i18n.tr("Parking"));
-        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), parkingFolder = new FeatureExFolder(Feature.Type.parking, this, modifiable)));
+        parkingPanel.setWidget(1, 0, inject(proto().agreedParking(), parkingFolder = new FeatureExFolder(ARCode.Type.Parking, this, modifiable)));
         main.setWidget(++row, 0, parkingPanel);
 
         storagePanel.setH2(0, 0, 1, i18n.tr("Storage"));
-        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), lockerFolder = new FeatureFolder(Feature.Type.locker, this, modifiable)));
+        storagePanel.setWidget(1, 0, inject(proto().agreedStorage(), lockerFolder = new FeatureFolder(ARCode.Type.Locker, this, modifiable)));
         main.setWidget(++row, 0, storagePanel);
 
         otherPanel.setH2(0, 0, 1, i18n.tr("Other"));
-        otherPanel.setWidget(1, 0, inject(proto().agreedOther(), new FeatureFolder(Feature.Type.addOn, this, modifiable)));
+        otherPanel.setWidget(1, 0, inject(proto().agreedOther(), new FeatureFolder(ARCode.Type.AddOn, this, modifiable)));
         main.setWidget(++row, 0, otherPanel);
 
         return main;

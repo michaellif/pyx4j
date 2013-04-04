@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.entity.shared.AttachLevel;
@@ -26,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.misc.VistaTODO;
 
@@ -38,7 +38,7 @@ public class FeatureLister extends AbstractLister<Feature> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().featureType(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().type(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
@@ -48,7 +48,7 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().type().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
     }
 
     @Override
@@ -61,11 +61,11 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     protected void onItemNew() {
-        new SelectEnumDialog<Feature.Type>(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class)) {
+        new SelectEnumDialog<ARCode.Type>(i18n.tr("Select Feature Type"), ARCode.Type.features()) {
             @Override
             public boolean onClickOk() {
                 Feature feature = EntityFactory.create(Feature.class);
-                feature.featureType().setValue(getSelectedType());
+                feature.type().setValue(getSelectedType());
                 feature.catalog().setPrimaryKey(getPresenter().getParent());
                 feature.catalog().setAttachLevel(AttachLevel.IdOnly);
                 getPresenter().editNew(getItemOpenPlaceClass(), feature);

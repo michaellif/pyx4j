@@ -20,7 +20,6 @@ import java.util.GregorianCalendar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.billing.internal.DateRange;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;

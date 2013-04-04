@@ -92,7 +92,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         setSysDate("30-Apr-2011");
         receiveAndPostPayment("30-Apr-2011", "1041.94");
         // add some immediate charges (taxable) - should see late payment fee
-        addBooking("28-Apr-2011");
+        addBooking("28-Apr-2011"); // $30.00
         finalizeLeaseAdendum();
 
         addAccountCharge("100.00");
@@ -112,21 +112,22 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
         serviceCharge("930.30").
-        oneTimeFeatureCharges("100.00").
+        oneTimeFeatureCharges("30.00").
+        immediateAccountAdjustments("-188.00"). // -300 +112
         latePaymentFees("50.00").
-        taxes("123.64"). // 12% (930.30 + 100) = 135.64
-        totalDueAmount("1015.94"); // 930.30 +100 +100 +135.64 -300 +50
+        taxes("115.24"). // 12% (930.30 + 30) = 115.24
+        totalDueAmount("937.54"); // 930.30 +30 +112 +115.24 -300 +50
         // @formatter:on
 
         //==================== Bill 4 (partial late payment scenario) ======================//
 
         // Add Payment for May (partial)
         setSysDate("30-May-2011");
-        receiveAndPostPayment("30-May-2011", "1000.00");
+        receiveAndPostPayment("30-May-2011", "900.00");
 
         // Add Payment for May (final) after due date - should see late fee
         setSysDate("02-Jun-2011");
-        receiveAndPostPayment("30-May-2011", "15.94");
+        receiveAndPostPayment("30-May-2011", "37.54");
 
         setSysDate("17-Jun-2011");
 
@@ -136,7 +137,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        paymentReceivedAmount("-1015.94").
+        paymentReceivedAmount("-937.54").
         serviceCharge("930.30").
         latePaymentFees("50.00").
         taxes("111.64").

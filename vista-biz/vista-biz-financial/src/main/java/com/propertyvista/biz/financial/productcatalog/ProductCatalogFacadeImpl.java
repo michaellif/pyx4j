@@ -20,12 +20,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -115,7 +115,7 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
     }
 
     @Override
-    public List<Service> getServicesFor(ProductCatalog catalog, AptUnit unit, ServiceType type) {
+    public List<Service> getServicesFor(ProductCatalog catalog, AptUnit unit, ARCode.Type type) {
         // TODO Auto-generated method stub
         return null;
     }

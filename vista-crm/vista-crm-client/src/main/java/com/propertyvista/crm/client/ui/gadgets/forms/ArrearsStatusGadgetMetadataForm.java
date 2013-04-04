@@ -34,17 +34,29 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<Arre
         int row = -1;
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().arrearsStatusListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByCategory())).build());
+        get(proto().filterByCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().category()).setVisible(event.getValue() == true); // value can be null
+                if (event.getValue() == false) {
+                    get(proto().category()).setValue(null);
+                }
+            }
+        });
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                if (event.getValue() != null) {
-                    get(proto().asOf()).setVisible(event.getValue());
+                get(proto().asOf()).setVisible(event.getValue() == true); // value can be null
+                if (event.getValue() == false) {
+                    get(proto().asOf()).setValue(null);
                 }
             }
         });
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+        get(proto().category()).setVisible(false);
         get(proto().asOf()).setVisible(false);
         return p;
     }

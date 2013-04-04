@@ -25,7 +25,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 /**
@@ -61,9 +61,11 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 )//@formatter:on
 public interface ArrearsStatusGadgetMetadata extends GadgetMetadata, BuildingGadget {
 
+    IPrimitive<Boolean> filterByCategory();
+
     @Caption(description = "Choose which category of arrears to display")
     @NotNull
-    IPrimitive<DebitType> category();
+    IPrimitive<ARCode.Type> category();
 
     IPrimitive<Boolean> customizeDate();
 

@@ -23,9 +23,9 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
+public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements OkCancelOption {
 
     private final static I18n i18n = I18n.get(LeaseDataDialog.class);
 
@@ -50,7 +50,7 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
     }
 
     public LeaseDataDialog(Type type, AptUnit selectedUnitId) {
-        super(i18n.tr("Select Lease Type"), Service.ServiceType.unitRelated());
+        super(i18n.tr("Select Lease Type"), ARCode.Type.unitRelatedServices());
         this.type = type;
         this.selectedUnitId = selectedUnitId;
     }
@@ -86,7 +86,7 @@ public class LeaseDataDialog extends SelectEnumDialog<Service.ServiceType> imple
         return true;
     }
 
-    private Lease createNewLease(Service.ServiceType leaseType) {
+    private Lease createNewLease(ARCode.Type leaseType) {
         Lease newLease = EntityFactory.create(Lease.class);
 
         newLease.type().setValue(leaseType);

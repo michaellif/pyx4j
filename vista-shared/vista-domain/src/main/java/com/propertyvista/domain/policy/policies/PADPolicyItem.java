@@ -23,13 +23,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 
 public interface PADPolicyItem extends IEntity {
 
     @NotNull
-    IPrimitive<DebitType> debitType();
+    ARCode debitType();
 
     @NotNull
     IPrimitive<OwingBalanceType> owingBalanceType();

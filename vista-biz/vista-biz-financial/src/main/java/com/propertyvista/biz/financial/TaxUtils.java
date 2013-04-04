@@ -26,12 +26,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
@@ -39,7 +39,6 @@ import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class TaxUtils {
 
@@ -106,7 +105,8 @@ public class TaxUtils {
 
     public static void calculateProductChargeTaxes(InvoiceProductCharge charge, Building building) {
         if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), building));
+            charge.taxes()
+                    .addAll(TaxUtils.calculateProductTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().code(), building));
         }
         charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
@@ -116,7 +116,7 @@ public class TaxUtils {
 
     public static void calculateAccountChargeTax(InvoiceAccountCharge charge, Building building) {
         if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), building));
+            charge.taxes().addAll(TaxUtils.calculateProductTaxes(charge.amount().getValue(), charge.adjustment().code(), building));
         }
         charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
@@ -125,13 +125,13 @@ public class TaxUtils {
     }
 
     //TODO Calculate taxes for specific day
-    public static List<InvoiceChargeTax> calculateTaxes(final BigDecimal baseAmount, ProductItemType productItemType, Building building) {
-        List<Tax> taxes = retrieveTaxesForProductItemType(productItemType, building);
+    public static List<InvoiceChargeTax> calculateProductTaxes(BigDecimal baseAmount, ARCode productCode, Building building) {
+        List<Tax> taxes = retrieveTaxesForProductItemType(productCode, building);
         return calculateTaxes(baseAmount, taxes);
     }
 
-    public static List<InvoiceChargeTax> calculateTaxes(BigDecimal baseAmount, LeaseAdjustmentReason reason, Building building) {
-        List<Tax> taxes = retrieveTaxesForAdjustmentReason(reason, building);
+    public static List<InvoiceChargeTax> calculateLeaseAdjustmentTaxes(BigDecimal baseAmount, ARCode adjustmentCode, Building building) {
+        List<Tax> taxes = retrieveTaxesForAdjustmentReason(adjustmentCode, building);
         return calculateTaxes(baseAmount, taxes);
     }
 
@@ -162,7 +162,7 @@ public class TaxUtils {
         return chargeTaxes;
     }
 
-    private static List<Tax> retrieveTaxesForProductItemType(ProductItemType productItemType, Building building) {
+    private static List<Tax> retrieveTaxesForProductItemType(ARCode productCode, Building building) {
 
         ProductTaxPolicy productTaxPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ProductTaxPolicy.class);
 
@@ -170,20 +170,20 @@ public class TaxUtils {
         {
             EntityQueryCriteria<ProductTaxPolicyItem> criteria = new EntityQueryCriteria<ProductTaxPolicyItem>(ProductTaxPolicyItem.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().policy(), productTaxPolicy));
-            criteria.add(PropertyCriterion.eq(criteria.proto().productItemType(), productItemType));
+            criteria.add(PropertyCriterion.eq(criteria.proto().productCode(), productCode));
             productTaxPolicyItem = Persistence.service().retrieve(criteria);
         }
 
         return productTaxPolicyItem == null ? new ArrayList<Tax>() : productTaxPolicyItem.taxes();
     }
 
-    private static List<Tax> retrieveTaxesForAdjustmentReason(LeaseAdjustmentReason reason, Building building) {
+    private static List<Tax> retrieveTaxesForAdjustmentReason(ARCode adjustmentCode, Building building) {
         LeaseAdjustmentPolicy leaseAdjustmentPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseAdjustmentPolicy.class);
         LeaseAdjustmentPolicyItem leaseAdjustmentPolicyItem = null;
         {
             EntityQueryCriteria<LeaseAdjustmentPolicyItem> criteria = new EntityQueryCriteria<LeaseAdjustmentPolicyItem>(LeaseAdjustmentPolicyItem.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().policy(), leaseAdjustmentPolicy));
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseAdjustmentReason(), reason));
+            criteria.add(PropertyCriterion.eq(criteria.proto().code(), adjustmentCode));
             leaseAdjustmentPolicyItem = Persistence.service().retrieve(criteria);
         }
 

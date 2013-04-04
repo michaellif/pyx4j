@@ -1,4 +1,17 @@
-/*
+/*    public ARCode getDefaultARCode(Type type) throws ARException {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), type));
+        criteria.add(PropertyCriterion.eq(criteria.proto().defaultCode(), Boolean.TRUE));
+        List<ARCode> codes = Persistence.service().query(criteria);
+        if (codes.size() == 0) {
+            throw new ARException("Default ARCode for " + type + " is not found");
+        } else if (codes.size() > 1) {
+            throw new ARException("More than one default ARCode for " + type + " is found");
+        }
+        return codes.get(0);
+    }
+
+
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
@@ -34,12 +47,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
@@ -94,7 +108,7 @@ public abstract class ARAbstractTransactionManager {
         Collection<AgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
 
         th.agingBuckets().addAll(agingBucketsCollection);
-        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(DebitType.total), agingBucketsCollection));
+        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(null), agingBucketsCollection));
 
         return th;
     }
@@ -109,13 +123,13 @@ public abstract class ARAbstractTransactionManager {
         // get PAD policy
         PADPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
         // create product map
-        Map<DebitType, OwingBalanceType> debitBalanceType = new HashMap<DebitType, OwingBalanceType>();
+        Map<ARCode, OwingBalanceType> debitBalanceType = new HashMap<ARCode, OwingBalanceType>();
         for (PADPolicyItem item : policy.debitBalanceTypes()) {
-            debitBalanceType.put(item.debitType().getValue(), item.owingBalanceType().getValue());
+            debitBalanceType.put(item.debitType(), item.owingBalanceType().getValue());
         }
         BigDecimal balance = BigDecimal.ZERO;
         for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount, true)) {
-            OwingBalanceType balanceType = debitBalanceType.get(charge.debitType().getValue());
+            OwingBalanceType balanceType = debitBalanceType.get(charge.arCode());
             if (balanceType == null) {
                 continue;
             }
@@ -149,4 +163,18 @@ public abstract class ARAbstractTransactionManager {
         calendar.add(Calendar.DATE, dueDateOffset);
         return new LogicalDate(calendar.getTime());
     }
+
+    public ARCode getDefaultARCode(Type type) {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), type));
+        criteria.add(PropertyCriterion.eq(criteria.proto().defaultCode(), Boolean.TRUE));
+        List<ARCode> codes = Persistence.service().query(criteria);
+        if (codes.size() == 0) {
+            throw new Error("Default ARCode for " + type + " is not found");
+        } else if (codes.size() > 1) {
+            throw new Error("More than one default ARCode for " + type + " is found");
+        }
+        return codes.get(0);
+    }
+
 }

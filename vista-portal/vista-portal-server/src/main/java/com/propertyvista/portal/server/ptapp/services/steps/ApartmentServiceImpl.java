@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.PublicVisibilityType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -61,13 +61,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         Lease lease = PtAppContext.retrieveCurrentUserLease();
         for (Iterator<BillableItem> iter = lease.currentTerm().version().leaseProducts().featureItems().iterator(); iter.hasNext();) {
             BillableItem item = iter.next();
-            if (item.item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
-                case utility:
+            if (ARCode.Type.features().contains(item.item().code().type().getValue())) {
+                switch (item.item().code().type().getValue()) {
+                case Utility:
                     break;
-                case pet:
-                case parking:
-                case locker:
+                case Pet:
+                case Parking:
+                case Locker:
                 default:
                     iter.remove(); // remove all non-utility items
                 }
@@ -226,43 +226,41 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         // fill agreed items:
         for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-            if (item.item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
-                case utility:
-                    entity.agreedUtilities().add(item);
-                    break;
-                case pet:
-                    entity.agreedPets().add(item);
-                    break;
-                case parking:
-                    entity.agreedParking().add(item);
-                    break;
-                case locker:
-                    entity.agreedStorage().add(item);
-                    break;
-                default:
-                    entity.agreedOther().add(item);
-                }
+            switch (item.item().code().type().getValue()) {
+            case Utility:
+                entity.agreedUtilities().add(item);
+                break;
+            case Pet:
+                entity.agreedPets().add(item);
+                break;
+            case Parking:
+                entity.agreedParking().add(item);
+                break;
+            case Locker:
+                entity.agreedStorage().add(item);
+                break;
+            default:
+                entity.agreedOther().add(item);
             }
         }
 
         // fill available items:
         for (Service service : building.productCatalog().services()) {
-            if (service.serviceType().equals(lease.type())) {
+            if (service.type().equals(lease.type())) {
                 for (Feature feature : service.version().features()) {
                     for (ProductItem item : feature.version().items()) {
-                        switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
-                        case addOn:
-                        case utility:
+                        switch (item.code().type().getValue()) {
+                        case AddOn:
+                        case Utility:
                             entity.availableUtilities().add(item);
                             break;
-                        case pet:
+                        case Pet:
                             entity.availablePets().add(item);
                             break;
-                        case parking:
+                        case Parking:
                             entity.availableParking().add(item);
                             break;
-                        case locker:
+                        case Locker:
                             entity.availableStorage().add(item);
                             break;
                         default:

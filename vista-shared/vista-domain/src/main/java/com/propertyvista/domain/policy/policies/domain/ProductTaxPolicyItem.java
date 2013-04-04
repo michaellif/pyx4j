@@ -25,14 +25,14 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 
 public interface ProductTaxPolicyItem extends IEntity {
 
     @ToString
-    ProductItemType productItemType();
+    ARCode productCode();
 
     IList<Tax> taxes();
 

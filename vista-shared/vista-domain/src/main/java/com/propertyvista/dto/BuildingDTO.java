@@ -20,15 +20,15 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @ExtendsDBO
 public interface BuildingDTO extends Building {
 
-    IList<FeatureItemType> availableUtilities();
+    IList<ARCode> availableUtilities();
 
     @EmbeddedEntity
     GeoLocation geoLocation();

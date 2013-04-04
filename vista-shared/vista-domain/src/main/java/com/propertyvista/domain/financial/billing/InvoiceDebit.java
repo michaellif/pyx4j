@@ -24,24 +24,9 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 @AbstractEntity
 public interface InvoiceDebit extends InvoiceLineItem {
-
-    @I18n
-    public enum DebitType {
-
-        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, other, total;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-    }
-
-    IPrimitive<DebitType> debitType();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

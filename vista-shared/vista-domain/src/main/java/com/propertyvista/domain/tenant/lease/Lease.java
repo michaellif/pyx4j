@@ -41,8 +41,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
@@ -171,7 +171,7 @@ public interface Lease extends IEntity {
     @ReadOnly
     @ToString(index = 1)
     @MemberColumn(name = "leaseType")
-    IPrimitive<Service.ServiceType> type();
+    IPrimitive<ARCode.Type> type();
 
     @NotNull
     @ToString(index = 2)

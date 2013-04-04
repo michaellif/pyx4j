@@ -24,8 +24,8 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface ArrearsReportService extends IService {
@@ -33,7 +33,7 @@ public interface ArrearsReportService extends IService {
     static int YOY_ANALYSIS_CHART_MAX_YEARS_AGO = 10;
 
     void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
-            DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
+            ARCode.Type arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf);
 

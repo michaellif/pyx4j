@@ -17,29 +17,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
-import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseAdjustmentPolicyDTO> {
 
@@ -80,7 +74,26 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
 
         @Override
         protected void addItem() {
-            new ProductSelectorDialog().show();
+            List<ARCode> selected = new Vector<ARCode>();
+            for (LeaseAdjustmentPolicyItem item : getValue()) {
+                if (!item.code().isNull()) {
+                    selected.add(item.code());
+                }
+            }
+
+            new LeaseAdjustmentReasonSelectorDialog(selected) {
+                @Override
+                public boolean onClickOk() {
+                    if (!getSelectedItems().isEmpty()) {
+                        for (ARCode selected : getSelectedItems()) {
+                            LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
+                            item.code().set(selected);
+                            addItem(item);
+                        }
+                    }
+                    return !getSelectedItems().isEmpty();
+                }
+            }.show();
         }
 
         // internals:
@@ -96,65 +109,13 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 FormFlexPanel content = new FormFlexPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseAdjustmentReason())).build());
-                get(proto().leaseAdjustmentReason()).setViewable(true);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().code())).build());
+                get(proto().code()).setViewable(true);
 
                 content.setH3(++row, 0, 1, proto().taxes().getMeta().getCaption());
                 content.setWidget(++row, 0, inject(proto().taxes(), new TaxFolder(isEditable())));
 
                 return content;
-            }
-        }
-
-        List<LeaseAdjustmentReason> getAlreadySelected() {
-            List<LeaseAdjustmentReason> selected = new Vector<LeaseAdjustmentReason>();
-            for (LeaseAdjustmentPolicyItem item : getValue()) {
-                if (!item.leaseAdjustmentReason().isNull()) {
-                    selected.add(item.leaseAdjustmentReason());
-                }
-            }
-            return selected;
-        }
-
-        private class ProductSelectorDialog extends EntitySelectorTableDialog<LeaseAdjustmentReason> {
-
-            public ProductSelectorDialog() {
-                super(LeaseAdjustmentReason.class, true, getAlreadySelected(), i18n.tr("Select Product"));
-                setWidth("700px");
-            }
-
-            @Override
-            public boolean onClickOk() {
-                if (getSelectedItems().isEmpty()) {
-                    return false;
-                } else {
-                    for (LeaseAdjustmentReason selected : getSelectedItems()) {
-                        LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
-                        item.leaseAdjustmentReason().set(selected);
-                        addItem(item);
-                    }
-
-                    return true;
-                }
-            }
-
-            @Override
-            protected List<ColumnDescriptor> defineColumnDescriptors() {
-                return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().actionType()).build(),
-                    new MemberColumnDescriptor.Builder(proto().glCode()).build()
-                );//@formatter:on
-            }
-
-            @Override
-            public List<Sort> getDefaultSorting() {
-                return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
-            }
-
-            @Override
-            protected AbstractListService<LeaseAdjustmentReason> getSelectService() {
-                return GWT.<AbstractListService<LeaseAdjustmentReason>> create(SelectLeaseAdjustmentReasonListService.class);
             }
         }
     }

@@ -32,6 +32,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -329,13 +330,13 @@ public class AvailabilityReportManager {
 
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated()));
+        criteria.add(PropertyCriterion.in(criteria.proto().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
-                    if (service.serviceType().getValue() == Service.ServiceType.residentialUnit) {
+                    if (service.type().getValue() == ARCode.Type.Residential) {
                         residentialUnitMarketRent = item.price().getValue();
                         break;
                     }

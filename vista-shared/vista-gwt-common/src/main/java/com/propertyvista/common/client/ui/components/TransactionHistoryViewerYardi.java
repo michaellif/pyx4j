@@ -80,6 +80,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             }
 
             int[] row = { -1 };
+
             contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
             renderLineItems(row, contentPanel, outstangingCharges, chargeFormat, i18n.tr("Due Date"));
 
@@ -100,8 +101,9 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
         // this code should be very defensive because you never know the quality of information that is coming from Yardi
         if (!items.isEmpty()) {
             int COL_DATE = 0;
-            int COL_DESCRIPTION = 1;
-            int COL_AMOUNT = 2;
+            int COL_TYPE = 1;
+            int COL_DESCRIPTION = 2;
+            int COL_AMOUNT = 3;
 
             ++row[0];
             panel.setWidget(row[0], COL_DATE, new HTML(dateHdr == null ? i18n.tr("Post Date") : dateHdr));
@@ -125,8 +127,11 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
                 BigDecimal amount = item.amount().getValue();
                 HTML amountHtml = amount != null ? new HTML(htmlEscape(format.format(amount))) : new HTML("&nbsp;");
 
+                HTML typeHtml = new HTML(htmlEscape(item.arCode().type().getValue().toString()));
+
                 ++row[0];
                 panel.setWidget(row[0], COL_DATE, dateHtml);
+                panel.setWidget(row[0], COL_TYPE, typeHtml);
                 panel.setWidget(row[0], COL_DESCRIPTION, descriptionHtml);
                 panel.setWidget(row[0], COL_AMOUNT, amountHtml);
 

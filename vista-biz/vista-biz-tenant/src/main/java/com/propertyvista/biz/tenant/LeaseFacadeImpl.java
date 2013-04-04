@@ -57,6 +57,7 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -66,8 +67,6 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -127,8 +126,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
 
         if (lease.type().isNull()) {
-            lease.type().setValue(Service.ServiceType.residentialUnit);
-        } else if (!Service.ServiceType.unitRelated().contains(lease.type().getValue())) {
+            lease.type().setValue(ARCode.Type.Residential);
+        } else if (!ARCode.Type.unitRelatedServices().contains(lease.type().getValue())) {
             throw new IllegalStateException(SimpleMessageFormat.format("Unsupported Lease Type (\"{0}\")", lease.type().getValue()));
         }
 
@@ -1092,7 +1091,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ServiceType leaseType) {
+    private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ARCode.Type leaseType) {
         Persistence.ensureRetrieve(unit, AttachLevel.Attached);
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
@@ -1104,13 +1103,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), leaseType));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), leaseType));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
-            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
 

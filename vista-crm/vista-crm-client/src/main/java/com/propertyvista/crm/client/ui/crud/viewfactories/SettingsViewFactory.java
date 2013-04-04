@@ -40,28 +40,18 @@ import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCredit
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonListerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.FeatureTypeViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxListerView;
@@ -110,15 +100,10 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (ProductDictionaryView.class.equals(type)) {
                 map.put(type, new ProductDictionaryViewImpl());
 
-            } else if (ServiceTypeViewerView.class.equals(type)) {
-                map.put(type, new ServiceTypeViewerViewImpl());
-            } else if (ServiceTypeEditorView.class.equals(type)) {
-                map.put(type, new ServiceTypeEditorViewImpl());
-
-            } else if (FeatureTypeViewerView.class.equals(type)) {
-                map.put(type, new FeatureTypeViewerViewImpl());
-            } else if (FeatureTypeEditorView.class.equals(type)) {
-                map.put(type, new FeatureTypeEditorViewImpl());
+            } else if (ProductCodeViewerView.class.equals(type)) {
+                map.put(type, new ProductCodeViewerViewImpl());
+            } else if (ProductCodeEditorView.class.equals(type)) {
+                map.put(type, new ProductCodeEditorViewImpl());
 
             } else if (CrmRoleListerView.class.equals(type)) {
                 map.put(type, new CrmRoleListerViewImpl());
@@ -147,13 +132,6 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new GlCodeCategoryEditorViewImpl());
             } else if (GlCodeCategoryViewerView.class.equals(type)) {
                 map.put(type, new GlCodeCategoryViewerViewImpl());
-
-            } else if (LeaseAdjustmentReasonListerView.class.equals(type)) {
-                map.put(type, new LeaseAdjustmentReasonListerViewImpl());
-            } else if (LeaseAdjustmentReasonEditorView.class.equals(type)) {
-                map.put(type, new LeaseAdjustmentReasonEditorViewImpl());
-            } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
-                map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
 
             } else if (CustomerCreditCheckListerView.class.equals(type)) {
                 map.put(type, new CustomerCreditCheckListerViewImpl());

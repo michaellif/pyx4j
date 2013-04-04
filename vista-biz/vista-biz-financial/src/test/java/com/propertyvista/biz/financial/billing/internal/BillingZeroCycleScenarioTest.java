@@ -136,7 +136,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         // try existing lease from just earlier this month
         createLease("03-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
-        addBooking("03-Mar-2011");
+        addBooking("03-Mar-2011"); // 50.00 for existing lease
 
         //==================== CYCLE 1 ======================//
 
@@ -154,9 +154,10 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("0.00").
         serviceCharge("812.90"). // service prorated
         recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("100.00").
+        oneTimeFeatureCharges("50.00").
         depositAmount("0.00").
-        taxes("109.55").
+        taxes("103.55").
+        carryForwardCredit("-1066.45"). // 812.90 +50 +103.55 +100
         totalDueAmount("-100.00");
         // @formatter:on
 

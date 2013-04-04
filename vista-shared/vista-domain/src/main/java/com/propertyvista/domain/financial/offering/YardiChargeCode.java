@@ -22,6 +22,9 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
+
+//TODO move to com.propertyvista.domain.financial
 public interface YardiChargeCode extends IEntity {
 
     @Owner
@@ -30,7 +33,7 @@ public interface YardiChargeCode extends IEntity {
     @NotNull
     @JoinColumn
     @MemberColumn(notNull = true)
-    ProductItemType productItemType();
+    ARCode arCode();
 
     // TODO maybe a link to yardi account
 

@@ -35,9 +35,9 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -53,7 +53,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().code(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
@@ -71,10 +71,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     protected void addItem() {
         EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
-        switch (parent.getValue().serviceType().getValue()) {
-        case residentialUnit:
-        case residentialShortTermUnit:
-        case commercialUnit:
+        if (ARCode.Type.unitRelatedServices().contains(parent.getValue().type().getValue())) {
             List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
                 alreadySelected.add((AptUnit) item.element().cast());
@@ -91,15 +88,6 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                     return processSelectedItems(getSelectedItems());
                 }
             };
-            break;
-
-// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//        case garage:
-//            break;
-//        case storage:
-//            break;
-//        case roof:
-//            break;
         }
 
         if (buildingElementSelectionBox != null) {
@@ -133,23 +121,10 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().serviceType().getValue()) {
-            case residentialUnit:
-            case residentialShortTermUnit:
-            case commercialUnit:
+
+            if (ARCode.Type.unitRelatedServices().contains(parent.getValue().type().getValue())) {
                 buildingElementClass = AptUnit.class;
                 isViewable = true;
-                break;
-// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
-//            case garage:
-//                buildingElementClass = Parking.class;
-//                break;
-//            case storage:
-//                buildingElementClass = LockerArea.class;
-//                break;
-//            case roof:
-//                buildingElementClass = Roof.class;
-//                break;
             }
 
             CComponent<?, ?> comp;
@@ -166,20 +141,20 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
-            } else if (column.getObject() == proto().type()) {
-                comp = inject(column.getObject(), new CEntityComboBox<ServiceItemType>(ServiceItemType.class));
+            } else if (column.getObject() == proto().code()) {
+                comp = inject(column.getObject(), new CEntityComboBox<ARCode>(ARCode.class));
             } else {
                 comp = super.createCell(column);
             }
 
-            if (column.getObject() == proto().type()) {
+            if (column.getObject() == proto().code()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<ServiceItemType> combo = (CEntityComboBox<ServiceItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().serviceType(), parent.getValue().serviceType()));
+                    final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
                     // preselect if single option:                    
-                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ServiceItemType>>() {
+                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
                         @Override
-                        public void onOptionsChange(OptionsChangeEvent<List<ServiceItemType>> event) {
+                        public void onOptionsChange(OptionsChangeEvent<List<ARCode>> event) {
                             if (event.getOptions().size() == 1) {
                                 if (combo.getValue() == null) {
                                     combo.setValue(event.getOptions().get(0), false);

@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +38,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -152,7 +151,7 @@ public class ARArrearsManager {
     }
 
     protected Collection<AgingBuckets> calculateAgingBuckets(List<InvoiceDebit> debits) {
-        Map<DebitType, AgingBuckets> agingBucketsMap = new HashMap<DebitType, AgingBuckets>();
+        Map<ARCode.Type, AgingBuckets> agingBucketsMap = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
 
         LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
 
@@ -169,10 +168,12 @@ public class ARArrearsManager {
         LogicalDate date90 = new LogicalDate(calendar.getTime());
 
         for (InvoiceDebit debit : debits) {
-            if (!agingBucketsMap.containsKey(debit.debitType().getValue())) {
-                agingBucketsMap.put(debit.debitType().getValue(), ARArreasManagerUtils.createAgingBuckets(debit.debitType().getValue()));
+            ARCode.Type arrearsCategory = debit.arCode().type().getValue();
+
+            if (!agingBucketsMap.containsKey(arrearsCategory)) {
+                agingBucketsMap.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(arrearsCategory));
             }
-            AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
+            AgingBuckets agingBuckets = agingBucketsMap.get(arrearsCategory);
 
             if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(currentDate) < 0) {
                 agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
@@ -213,7 +214,7 @@ public class ARArrearsManager {
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
         arrearsSnapshot.totalAgingBuckets().set(//@formatter:off
                 ARArreasManagerUtils.addInPlace(
-                        ARArreasManagerUtils.createAgingBuckets(DebitType.total),
+                        ARArreasManagerUtils.createAgingBuckets(null),
                         arrearsSnapshot.agingBuckets())
         );//@formatter:on                                                                                                                                           // FIXME what the hell is going on with the following two lines???
         arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -231,16 +232,16 @@ public class ARArrearsManager {
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance
 
         BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
-        EnumMap<DebitType, AgingBuckets> agingBucketsAcc = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
-        for (DebitType debitType : DebitType.values()) {
-            agingBucketsAcc.put(debitType, ARArreasManagerUtils.createAgingBuckets(debitType));
+        EnumMap<ARCode.Type, AgingBuckets> agingBucketsAcc = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
+        for (ARCode.Type arrearsCategory : ARCode.Type.values()) {
+            agingBucketsAcc.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(arrearsCategory));
         }
 
         // accumulate
         while (billingAccountsIter.hasNext()) {
             ArrearsSnapshot arrearsSnapshot = takeArrearsSnapshot(billingAccountsIter.next());
             for (AgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
-                ARArreasManagerUtils.addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
+                ARArreasManagerUtils.addInPlace(agingBucketsAcc.get(agingBuckets.arCode().getValue()), agingBuckets);
             }
             ARArreasManagerUtils.addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
         }
@@ -261,7 +262,7 @@ public class ARArrearsManager {
 
     private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
         ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
-        snapshot.totalAgingBuckets().set(ARArreasManagerUtils.createAgingBuckets(DebitType.total));
+        snapshot.totalAgingBuckets().set(ARArreasManagerUtils.createAgingBuckets(null));
         return snapshot;
     }
 
@@ -273,12 +274,12 @@ public class ARArrearsManager {
             return true;
         }
 
-        EnumMap<DebitType, AgingBuckets> currentBuckets = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
+        Map<ARCode.Type, AgingBuckets> currentBuckets = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
         for (AgingBuckets buckets : currentSnapshot.agingBuckets()) {
-            currentBuckets.put(buckets.debitType().getValue(), buckets);
+            currentBuckets.put(buckets.arCode().getValue(), buckets);
         }
         for (AgingBuckets previous : previousSnapshot.agingBuckets()) {
-            AgingBuckets current = currentBuckets.get(previous.debitType().getValue());
+            AgingBuckets current = currentBuckets.get(previous.arCode().getValue());
             if (current == null || !EntityGraph.fullyEqualValues(current, previous)) {
                 return true;
             }

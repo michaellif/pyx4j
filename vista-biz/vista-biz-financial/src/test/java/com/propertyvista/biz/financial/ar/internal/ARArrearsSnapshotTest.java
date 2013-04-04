@@ -16,8 +16,8 @@ package com.propertyvista.biz.financial.ar.internal;
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 @Category(FunctionalTests.class)
 public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
@@ -36,9 +36,9 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         updateArrearsHistory();
         assertArrearsSnapshotStart("18-Mar-2011");
         // TODO these values were copied from ARSunnyDayScenarioTest: I have no idea how they were calculated (part the lease month?), need to ask Michael  
-        assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "1010.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+        assertArrearsCategory(ARCode.Type.Residential, "302.50", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Parking, "26.02", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Deposit, "1010.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
         assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // arrears are not supposed to change until the due date
@@ -61,9 +61,9 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsSnapshotIsSameAsBefore("18-Mar-2011", "22-Mar-2011");
 
         assertArrearsSnapshotStart("23-Mar-2011");
-        assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "1010.30", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Residential, "302.50", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Parking, "26.02", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Deposit, "1010.30", "0.00", "0.00", "0.00", "0.00");
         assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // here also nothing is supposed to change
@@ -79,10 +79,10 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
 
         // after this billing run we expect "the current" bucket to be filled with values different from 0.00
         assertArrearsSnapshotStart("28-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "1041.94", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "89.60", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "0.00", "1010.30", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.latePayment, "50.00", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Residential, "1041.94", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Parking, "89.60", "26.02", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.Deposit, "0.00", "1010.30", "0.00", "0.00", "0.00");
+        assertArrearsCategory(ARCode.Type.LatePayment, "50.00", "0.00", "0.00", "0.00", "0.00");
         assertArrearsTotal("1181.54", "1338.82", "0.00", "0.00", "0.00");
 
         setSysDate("01-Apr-2011");

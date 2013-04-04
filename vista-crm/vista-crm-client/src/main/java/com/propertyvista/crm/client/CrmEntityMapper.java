@@ -28,6 +28,7 @@ import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
@@ -37,10 +38,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.policy.policies.ARPolicy;
@@ -84,7 +83,6 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseApplicationDTO;
@@ -114,9 +112,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
         AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
 
+        AppPlaceEntityMapper.register(ARCode.class, Financial.ProductDictionary.ProductCode.class, defaultImage);
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
-        AppPlaceEntityMapper.register(ServiceItemType.class, Financial.ProductDictionary.ServiceItemType.class, defaultImage);
-        AppPlaceEntityMapper.register(FeatureItemType.class, Financial.ProductDictionary.FeatureItemType.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
 
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
@@ -141,7 +138,6 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MerchantAccount.class, Financial.MerchantAccount.class, defaultImage);
         AppPlaceEntityMapper.register(GlCode.class, Financial.GlCodeCategory.class, defaultImage);
         AppPlaceEntityMapper.register(GlCodeCategory.class, Financial.GlCodeCategory.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, Financial.LeaseAdjustmentReason.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, Financial.Tax.class, defaultImage);
 
         AppPlaceEntityMapper.register(CrmRole.class, Security.UserRole.class, defaultImage);

@@ -30,12 +30,11 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
@@ -117,15 +116,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
-                switch (service.serviceType().getValue()) {
-                case commercialUnit:
-                case residentialUnit:
-                case residentialShortTermUnit:
+                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
                     ProductItem item = createUnitItem(unit, service);
                     Persistence.service().persist(item);
-                    break;
-                default:
-                    break;
                 }
             }
         }
@@ -143,14 +136,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
-                switch (service.serviceType().getValue()) {
-                case commercialUnit:
-                case residentialUnit:
-                case residentialShortTermUnit:
+                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
                     updateUnitItem(unit, service);
-                    break;
-                default:
-                    break;
                 }
             }
         }
@@ -159,25 +146,25 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     // internals:
 
     private List<Service> createDefaultServices(ProductCatalog catalog) {
-        EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-        criteria.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated());
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.in(criteria.proto().type(), ARCode.Type.services());
 
-        // create services of unique types:
+        // create services:
         List<Service> items = new ArrayList<Service>();
-        for (ServiceItemType itemType : Persistence.service().query(criteria)) {
-            items.add(createService(catalog, itemType));
+        for (ARCode code : Persistence.service().query(criteria)) {
+            items.add(createService(catalog, code));
         }
 
         return items;
     }
 
-    private Service createService(ProductCatalog catalog, ServiceItemType type) {
+    private Service createService(ProductCatalog catalog, ARCode code) {
         Service item = EntityFactory.create(Service.class);
         item.isDefaultCatalogItem().setValue(true);
 
         item.catalog().set(catalog);
-        item.serviceType().setValue(type.serviceType().getValue());
-        item.version().name().setValue(type.name().getValue());
+        item.type().setValue(code.type().getValue());
+        item.version().name().setValue(code.name().getValue());
 
         return item;
     }
@@ -185,49 +172,50 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     // ----------------------------------------------------------------------------------
 
     private List<Feature> createDefaultFeatures(ProductCatalog catalog) {
-        EntityQueryCriteria<FeatureItemType> criteria = EntityQueryCriteria.create(FeatureItemType.class);
-        List<FeatureItemType> itemTypes = Persistence.service().query(criteria);
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.in(criteria.proto().type(), ARCode.Type.features());
+        List<ARCode> codes = Persistence.service().query(criteria);
 
         // accumulate unique type:
-        List<Feature.Type> types = new ArrayList<Feature.Type>();
-        for (FeatureItemType itemType : itemTypes) {
-            if (!types.contains(itemType.featureType().getValue())) {
-                types.add(itemType.featureType().getValue());
+        List<ARCode.Type> types = new ArrayList<ARCode.Type>();
+        for (ARCode code : codes) {
+            if (!types.contains(code.type().getValue())) {
+                types.add(code.type().getValue());
             }
         }
 
         // create corresponding features:
         List<Feature> items = new ArrayList<Feature>(types.size());
-        for (Feature.Type type : types) {
-            items.add(createFeature(catalog, type, itemTypes));
+        for (ARCode.Type type : types) {
+            items.add(createFeature(catalog, type, codes));
         }
 
         return items;
     }
 
-    private Feature createFeature(ProductCatalog catalog, Feature.Type type, List<FeatureItemType> itemTypes) {
+    private Feature createFeature(ProductCatalog catalog, ARCode.Type type, List<ARCode> codes) {
         Feature item = EntityFactory.create(Feature.class);
         item.isDefaultCatalogItem().setValue(true);
 
         item.catalog().set(catalog);
-        item.featureType().setValue(type);
+        item.type().setValue(type);
         item.version().name().setValue(type.toString());
-        item.version().recurring().setValue(type.isRecurrent());
+        item.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(type));
         item.version().mandatory().setValue(false);
 
-        for (FeatureItemType itemType : itemTypes) {
-            if (type.equals(itemType.featureType().getValue())) {
-                item.version().items().add(createFeatureItem(itemType));
+        for (ARCode code : codes) {
+            if (type.equals(code.type().getValue())) {
+                item.version().items().add(createFeatureItem(code));
             }
         }
 
         return item;
     }
 
-    private ProductItem createFeatureItem(FeatureItemType itemType) {
+    private ProductItem createFeatureItem(ARCode code) {
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.type().set(itemType);
+        item.code().set(code);
         item.price().setValue(BigDecimal.ZERO);
 
         return item;
@@ -254,10 +242,12 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         ProductItem item = EntityFactory.create(ProductItem.class);
         item.product().set(service.version());
 
-        EntityQueryCriteria<ServiceItemType> criteria = EntityQueryCriteria.create(ServiceItemType.class);
-        criteria.eq(criteria.proto().serviceType(), service.serviceType());
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), service.type());
 
-        item.type().set(Persistence.service().retrieve(criteria));
+        assert (ARCode.Type.unitRelatedServices().contains(service.type().getValue()));
+
+        item.code().set(Persistence.service().retrieve(criteria));
         item.price().setValue(unit.financial()._marketRent().isNull() ? BigDecimal.ZERO : unit.financial()._marketRent().getValue());
         item.element().set(unit);
 

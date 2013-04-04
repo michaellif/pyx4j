@@ -34,6 +34,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -41,7 +42,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
@@ -121,14 +121,14 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
 
         PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
         if (padItemsOnly) {
-            Set<DebitType> debitTypes = new HashSet<DebitType>();
+            Set<ARCode> debitTypes = new HashSet<ARCode>();
             for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
-                debitTypes.add(item.debitType().getValue());
+                debitTypes.add(item.debitType());
             }
             Iterator<InvoiceDebit> it = lineItems.iterator();
             while (it.hasNext()) {
                 InvoiceDebit debit = it.next();
-                if (!debitTypes.contains(debit.debitType().getValue())) {
+                if (!debitTypes.contains(debit.arCode())) {
                     it.remove();
                 }
             }

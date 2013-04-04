@@ -39,10 +39,10 @@ import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
@@ -63,7 +63,7 @@ public class DepositFacadeImpl implements DepositFacade {
 
         private final String productType;
 
-        public DepositPolicyKey(DepositType depositType, ProductItemType productType) {
+        public DepositPolicyKey(DepositType depositType, ARCode productType) {
             this.depositType = depositType;
             this.productType = productType.name().getValue();
         }
@@ -94,7 +94,7 @@ public class DepositFacadeImpl implements DepositFacade {
         DepositPolicyItem policyItem = null;
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         for (DepositPolicyItem pi : depositPolicy.policyItems()) {
-            if (pi.depositType().getValue().equals(depositType) && pi.productType().equals(billableItem.item().type())) {
+            if (pi.depositType().getValue().equals(depositType) && pi.productCode().equals(billableItem.item().code())) {
                 policyItem = pi;
                 break;
             }
@@ -107,7 +107,7 @@ public class DepositFacadeImpl implements DepositFacade {
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
-            if (!policyItem.productType().equals(billableItem.item().type())) {
+            if (!policyItem.productCode().equals(billableItem.item().code())) {
                 continue;
             }
             deposits.add(makeDeposit(policyItem, billableItem));
@@ -195,7 +195,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 continue;
             }
             ProductTerm term = deposits.get(deposit);
-            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.type));
+            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.productType));
             if (policyItem == null) {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
@@ -264,7 +264,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 if (term.to == null) {
                     break;
                 }
-                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.type));
+                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.productType));
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
@@ -305,7 +305,7 @@ public class DepositFacadeImpl implements DepositFacade {
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = new HashMap<DepositPolicyKey, DepositPolicyItem>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
-            policyMatrix.put(new DepositPolicyKey(policyItem.depositType().getValue(), policyItem.productType()), policyItem);
+            policyMatrix.put(new DepositPolicyKey(policyItem.depositType().getValue(), policyItem.productCode()), policyItem);
         }
         return policyMatrix;
     }

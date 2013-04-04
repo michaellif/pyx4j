@@ -21,10 +21,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
@@ -95,11 +96,9 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         charge.amount().setValue(latePaymentFee);
         charge.taxTotal().setValue(BigDecimal.ZERO);
         charge.description().setValue(i18n.tr("Late payment fee"));
-        charge.debitType().setValue(DebitType.latePayment);
-
+        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.LatePayment));
         nextBill.lineItems().add(charge);
 
         nextBill.latePaymentFees().setValue(nextBill.latePaymentFees().getValue().add(charge.amount().getValue()));
-
     }
 }

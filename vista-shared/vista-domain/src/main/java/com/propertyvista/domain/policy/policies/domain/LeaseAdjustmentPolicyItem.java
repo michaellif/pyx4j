@@ -25,9 +25,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public interface LeaseAdjustmentPolicyItem extends IEntity {
 
@@ -43,7 +43,7 @@ public interface LeaseAdjustmentPolicyItem extends IEntity {
     IPrimitive<Integer> orderInPolicy();
 
     @ToString
-    LeaseAdjustmentReason leaseAdjustmentReason();
+    ARCode code();
 
     IList<Tax> taxes();
 }

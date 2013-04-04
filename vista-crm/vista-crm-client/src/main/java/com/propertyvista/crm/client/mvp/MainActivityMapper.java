@@ -122,11 +122,9 @@ import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorAct
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductCodeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountViewerActivity;
@@ -136,9 +134,6 @@ import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerAct
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonListerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tax.LeaseAdjustmentReasonViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
@@ -773,9 +768,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Financial.ProductDictionary) {
-                        activity = new ProductDictionaryViewActivity(crudPlace);
-
                     } else if (crudPlace instanceof Administration.Content) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -825,24 +817,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Financial.ProductDictionary.ServiceItemType) {
+                    } else if (crudPlace instanceof Financial.ProductDictionary) {
+                        activity = new ProductDictionaryViewActivity(crudPlace);
+
+                    } else if (crudPlace instanceof Financial.ProductDictionary.ProductCode) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new ServiceItemTypeEditorActivity(crudPlace);
+                            activity = new ProductCodeEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new ServiceItemTypeViewerActivity(crudPlace);
-                            break;
-                        default:
-                            break;
-                        }
-                    } else if (crudPlace instanceof Financial.ProductDictionary.FeatureItemType) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new FeatureItemTypeEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new FeatureItemTypeViewerActivity(crudPlace);
+                            activity = new ProductCodeViewerActivity(crudPlace);
                             break;
                         default:
                             break;
@@ -899,20 +883,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new GlCodeCategoryListerActivity(crudPlace);
                             break;
                         }
-
-                    } else if (crudPlace instanceof Financial.LeaseAdjustmentReason) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new LeaseAdjustmentReasonEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new LeaseAdjustmentReasonViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new LeaseAdjustmentReasonListerActivity(crudPlace);
-                            break;
-                        }
-
 // - Policies:
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {

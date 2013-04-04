@@ -14,20 +14,28 @@
 package com.propertyvista.crm.server.services.selections;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReasonListService;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.financial.ARCode;
 
-public class SelectLeaseAdjustmentReasonListServiceImpl extends AbstractListServiceImpl<LeaseAdjustmentReason> implements
-        SelectLeaseAdjustmentReasonListService {
+public class SelectLeaseAdjustmentReasonListServiceImpl extends AbstractListServiceImpl<ARCode> implements SelectLeaseAdjustmentReasonListService {
 
     public SelectLeaseAdjustmentReasonListServiceImpl() {
-        super(LeaseAdjustmentReason.class);
+        super(ARCode.class);
     }
 
     @Override
     protected void bind() {
         bind(dtoProto.id(), dboProto.id());
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<ARCode> dbCriteria, EntityListCriteria<ARCode> dtoCriteria) {
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+
+        // filter out just lease adjustment related codes:
+        dbCriteria.in(dbCriteria.proto().type(), ARCode.Type.leaseAjustments());
     }
 }

@@ -116,7 +116,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         totalDueAmount("1198.74");
         // @formatter:on
 
-        addBooking("25-May-2011");
+        addBooking("25-May-2011"); // 30.00
         finalizeLeaseAdendum();
 
         advanceSysDate("18-Jun-2011");
@@ -135,9 +135,9 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         paymentReceivedAmount("-1198.74").
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
-        oneTimeFeatureCharges("100.00").
-        taxes("140.44").
-        totalDueAmount("1310.74");
+        oneTimeFeatureCharges("30.00").
+        taxes("132.04").
+        totalDueAmount("1232.34");
         // @formatter:on
 
         advanceSysDate("18-Jul-2011");
@@ -157,8 +157,9 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
+        latePaymentFees("50.00"). // late fee for booking charge overdue
         taxes("128.44").
-        totalDueAmount("1360.74");
+        totalDueAmount("1282.34");
         // @formatter:on
 
         receiveAndPostPayment("18-Jul-2011", "162.00");

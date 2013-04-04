@@ -37,8 +37,8 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.LockerArea;
@@ -58,7 +58,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().code(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
@@ -84,11 +84,11 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().featureType().getValue()) {
-            case parking:
+            switch (parent.getValue().type().getValue()) {
+            case Parking:
                 buildingElementClass = Parking.class;
                 break;
-            case locker:
+            case Locker:
                 buildingElementClass = LockerArea.class;
                 break;
             }
@@ -106,20 +106,20 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
-            } else if (column.getObject() == proto().type()) {
-                comp = inject(column.getObject(), new CEntityComboBox<FeatureItemType>(FeatureItemType.class));
+            } else if (column.getObject() == proto().code()) {
+                comp = inject(column.getObject(), new CEntityComboBox<ARCode>(ARCode.class));
             } else {
                 comp = super.createCell(column);
             }
 
-            if (column.getObject() == proto().type()) {
+            if (column.getObject() == proto().code()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().featureType()));
+                    final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
                     // preselect if single option:                    
-                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<FeatureItemType>>() {
+                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
                         @Override
-                        public void onOptionsChange(OptionsChangeEvent<List<FeatureItemType>> event) {
+                        public void onOptionsChange(OptionsChangeEvent<List<ARCode>> event) {
                             if (event.getOptions().size() == 1) {
                                 if (combo.getValue() == null) {
                                     combo.setValue(event.getOptions().get(0), false);

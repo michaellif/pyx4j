@@ -18,7 +18,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class InvoiceLineItemFactory {
@@ -29,8 +28,8 @@ public class InvoiceLineItemFactory {
         charge.billingAccount().set(adjustment.billingAccount());
         charge.amount().setValue(adjustment.amount().getValue());
         charge.adjustment().set(adjustment);
-        charge.description().setValue(adjustment.reason().name().getValue());
-        charge.debitType().setValue(DebitType.accountCharge);
+        charge.description().setValue(adjustment.code().name().getValue());
+        charge.arCode().set(adjustment.code());
 
         Persistence.service().retrieve(adjustment.billingAccount());
         Persistence.service().retrieve(adjustment.billingAccount().lease());
@@ -48,7 +47,7 @@ public class InvoiceLineItemFactory {
         credit.billingAccount().set(adjustment.billingAccount());
         credit.amount().setValue(adjustment.amount().getValue().negate());
         credit.adjustment().set(adjustment);
-        credit.description().setValue(adjustment.reason().name().getValue());
+        credit.description().setValue(adjustment.code().name().getValue());
 
         return credit;
     }

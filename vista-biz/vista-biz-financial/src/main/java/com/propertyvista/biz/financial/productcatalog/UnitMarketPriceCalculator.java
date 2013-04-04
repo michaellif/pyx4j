@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -43,7 +44,7 @@ public class UnitMarketPriceCalculator {
             productCatalog = Persistence.service().retrieve(criteria);
             Persistence.service().retrieveMember(productCatalog.services());
             for (Service service : productCatalog.services()) {
-                if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue())) {
+                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
                     Persistence.service().retrieve(service.version().items());
                 }
             }
@@ -74,7 +75,7 @@ public class UnitMarketPriceCalculator {
 
         //Find only first Service/ ProductItem that apply to units
         for (Service service : productCatalog.services()) {
-            if (Service.ServiceType.unitRelated().contains(service.serviceType().getValue())) {
+            if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
                 for (ProductItem item : service.version().items()) {
                     if (item.element().isInstanceOf(AptUnit.class)) {
                         if (!firstItemsInCatalog.containsKey(item.element())) {

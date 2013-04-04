@@ -20,7 +20,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class Tester {
 
-    public static boolean continueOnError = false;
+    public static boolean continueOnError = true;//false;
 
     public Tester() {
     }

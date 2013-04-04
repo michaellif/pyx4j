@@ -15,6 +15,8 @@ package com.propertyvista.portal.rpc.shared;
 
 import com.pyx4j.commons.UserRuntimeException;
 
+@Deprecated
+//TODO BillingException should be checked exception of Billing module
 public class BillingException extends UserRuntimeException {
 
     private static final long serialVersionUID = 1L;

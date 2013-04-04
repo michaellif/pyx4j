@@ -25,7 +25,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.util.DomainUtil;
@@ -85,7 +85,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.monthlyCharges().charges().clear();
 
             charges.monthlyCharges().charges()
-                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.agreedPrice().getValue()));
+                    .add(DomainUtil.createChargeLine(serviceItem.item().code().getStringView(), serviceItem.agreedPrice().getValue()));
 
             // create/update deposits:
             charges.applicationCharges().charges().clear();
@@ -96,18 +96,17 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
             // fill agreed items:
             for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                if (item.item().type().isInstanceOf(FeatureItemType.class)) {
-
-                    switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
-                    case utility:
-                    case pet:
-                    case parking:
-                    case locker:
-                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                if (ARCode.Type.features().contains(item.item().code().type().getValue())) {
+                    switch (item.item().code().type().getValue()) {
+                    case Utility:
+                    case Pet:
+                    case Parking:
+                    case Locker:
+                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().code().getStringView(), item.agreedPrice().getValue()));
                         break;
 
                     default:
-                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
+                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().code().getStringView(), item.agreedPrice().getValue()));
                     }
                 }
             }

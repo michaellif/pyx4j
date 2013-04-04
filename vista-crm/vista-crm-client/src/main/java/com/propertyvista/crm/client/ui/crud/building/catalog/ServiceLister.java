@@ -24,6 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
 
@@ -36,7 +37,7 @@ public class ServiceLister extends AbstractLister<Service> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().serviceType()).build(),
+            new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
         );//@formatter:on
@@ -44,7 +45,7 @@ public class ServiceLister extends AbstractLister<Service> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().serviceType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().type().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
     }
 
     @Override
@@ -57,11 +58,11 @@ public class ServiceLister extends AbstractLister<Service> {
 
     @Override
     protected void onItemNew() {
-        new SelectEnumDialog<Service.ServiceType>(i18n.tr("Select Service Type"), Service.ServiceType.unitRelated()) {
+        new SelectEnumDialog<ARCode.Type>(i18n.tr("Select Service Type"), ARCode.Type.services()) {
             @Override
             public boolean onClickOk() {
                 Service newService = EntityFactory.create(Service.class);
-                newService.serviceType().setValue(getSelectedType());
+                newService.type().setValue(getSelectedType());
                 newService.catalog().setPrimaryKey(getPresenter().getParent());
                 newService.catalog().setValueDetached();
                 getPresenter().editNew(getItemOpenPlaceClass(), newService);

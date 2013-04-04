@@ -46,12 +46,11 @@ import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
@@ -168,13 +167,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         // tweak UI for ProductItem:
         if (!getValue().item().isEmpty()) {
-            if (getValue().item().type().isInstanceOf(ServiceItemType.class)) {
+            if (ARCode.Type.services().contains(getValue().item().code().type().getValue())) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
 
                 updateServiceItemEditability();
-            } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+            } else if (ARCode.Type.features().contains(getValue().item().code().type().getValue())) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
                 get(proto().effectiveDate()).setVisible((isEditable() || !getValue().effectiveDate().isNull()));
@@ -241,19 +240,19 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             extraDataPanel.setWidget(null);
         }
 
-        if (getValue() != null && getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+        if (getValue() != null && ARCode.Type.features().contains(getValue().item().code().type())) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
             BillableItemExtraData extraData = value.extraData();
 
-            switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
-            case parking:
+            switch (getValue().item().code().type().getValue()) {
+            case Parking:
                 editor = new VehicleDataEditor();
                 if (extraData.getInstanceValueClass() != Vehicle.class) {
                     extraData.set(EntityFactory.create(Vehicle.class));
                 }
                 break;
-            case pet:
+            case Pet:
                 editor = new PetDataEditor();
                 if (extraData.getInstanceValueClass() != Pet.class) {
                     extraData.set(EntityFactory.create(Pet.class));

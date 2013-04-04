@@ -26,23 +26,23 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.ARCode;
 
-public class UtilityFolder extends VistaTableFolder<ProductItemType> {
+public class UtilityFolder extends VistaTableFolder<ARCode> {
 
     public static final ArrayList<EntityFolderColumnDescriptor> COLUMNS = new ArrayList<EntityFolderColumnDescriptor>();
     static {
-        ProductItemType proto = EntityFactory.getEntityPrototype(ProductItemType.class);
+        ARCode proto = EntityFactory.getEntityPrototype(ARCode.class);
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "30em"));
     }
 
     public UtilityFolder() {
-        super(ProductItemType.class, false);
+        super(ARCode.class, false);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof ProductItemType) {
+        if (member instanceof ARCode) {
             return new UtilityEditor();
         } else {
             return super.create(member);
@@ -56,9 +56,9 @@ public class UtilityFolder extends VistaTableFolder<ProductItemType> {
         return columns;
     }
 
-    private class UtilityEditor extends CEntityFolderRowEditor<ProductItemType> {
+    private class UtilityEditor extends CEntityFolderRowEditor<ARCode> {
         public UtilityEditor() {
-            super(ProductItemType.class, UtilityFolder.COLUMNS);
+            super(ARCode.class, UtilityFolder.COLUMNS);
         }
 
         @Override
@@ -71,8 +71,8 @@ public class UtilityFolder extends VistaTableFolder<ProductItemType> {
     }
 
     @Override
-    protected IFolderDecorator<ProductItemType> createFolderDecorator() {
-        TableFolderDecorator<ProductItemType> decotator = (TableFolderDecorator<ProductItemType>) super.createFolderDecorator();
+    protected IFolderDecorator<ARCode> createFolderDecorator() {
+        TableFolderDecorator<ARCode> decotator = (TableFolderDecorator<ARCode>) super.createFolderDecorator();
         decotator.setShowHeader(false);
         return decotator;
     }

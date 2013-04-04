@@ -24,7 +24,7 @@ public class LeaseAdjustmentLister extends AbstractLister<LeaseAdjustment> {
         super(LeaseAdjustment.class, true);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().reason().actionType()).build(),
+            new MemberColumnDescriptor.Builder(proto().code()).build(),
             new MemberColumnDescriptor.Builder(proto().executionType()).build(),
             new MemberColumnDescriptor.Builder(proto().receivedDate(), false).build(),
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),

@@ -22,9 +22,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
@@ -64,7 +65,7 @@ class ARInternalNSFManager {
 
         InvoiceNSF charge = EntityFactory.create(InvoiceNSF.class);
         charge.billingAccount().set(paymentRecord.billingAccount());
-        charge.debitType().setValue(DebitType.nsf);
+        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.NSF));
         charge.amount().setValue(nsfItem.fee().getValue());
         charge.dueDate().setValue(
                 ARInternalTransactionManager.instance().getTransactionDueDate(paymentRecord.billingAccount(), new LogicalDate(SystemDateManager.getDate())));

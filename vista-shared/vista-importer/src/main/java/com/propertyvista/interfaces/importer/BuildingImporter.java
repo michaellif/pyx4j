@@ -32,9 +32,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -250,16 +250,16 @@ public class BuildingImporter extends ImportPersister {
                     counters.units += items.size();
 
                     if (VistaFeatures.instance().productCatalog()) {
-                        EntityQueryCriteria<ServiceItemType> serviceCriteria = EntityQueryCriteria.create(ServiceItemType.class);
-                        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.ServiceType.residentialUnit));
-                        ServiceItemType productType = Persistence.service().retrieve(serviceCriteria);
+                        EntityQueryCriteria<ARCode> serviceCriteria = EntityQueryCriteria.create(ARCode.class);
+                        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ARCode.Type.Residential));
+                        ARCode productType = Persistence.service().retrieve(serviceCriteria);
 
                         for (AptUnit unit : items) {
                             ProductItem product = EntityFactory.create(ProductItem.class);
                             BigDecimal price = unit.financial()._marketRent().getValue();
-                            product.type().set(productType);
+                            product.code().set(productType);
                             product.price().setValue(price);
-                            product.description().setValue(Service.ServiceType.residentialUnit.toString() + " description");
+                            product.description().setValue(ARCode.Type.Residential.toString() + " description");
                             product.element().set(unit);
 
                             products.add(product);
@@ -272,7 +272,7 @@ public class BuildingImporter extends ImportPersister {
         if (VistaFeatures.instance().productCatalog()) {
             List<Service> services = new ArrayList<Service>();
             Service service = EntityFactory.create(Service.class);
-            service.serviceType().setValue(Service.ServiceType.residentialUnit);
+            service.type().setValue(ARCode.Type.Residential);
             service.version().items().addAll(products);
             service.catalog().set(building.productCatalog());
             services.add(service);

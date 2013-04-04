@@ -122,8 +122,8 @@ public class TransactionHistoryPrinter {
     }
 
     private static String createAgingBucketsLine(AgingBuckets agingBuckets) {
-        return convertToCell(agingBuckets.debitType().getValue().toString(), 14, true)
-                + convertToCell(agingBuckets.bucketCurrent().getValue().toString(), 14, true)
+        String bucketName = agingBuckets.arCode().isNull() ? "Total" : agingBuckets.arCode().getValue().toString();
+        return convertToCell(bucketName, 14, true) + convertToCell(agingBuckets.bucketCurrent().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket30().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket60().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket90().getValue().toString(), 14, true)

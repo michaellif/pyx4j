@@ -15,8 +15,9 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.EnumMap;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -28,10 +29,10 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -39,7 +40,7 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     private ArrearsSnapshot actualArrearsSnapshot;
 
-    private EnumMap<DebitType, AgingBuckets> prevExpectedAgingBuckets;
+    private Map<String, AgingBuckets> prevExpectedAgingBuckets;
 
     private LogicalDate prevFromDate;
 
@@ -66,8 +67,7 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
     protected void assertArrearsSnapshotStart(String asOf) {
         actualArrearsSnapshot = ServerSideFactory.create(ARFacade.class).getArrearsSnapshot(billingAccount(), asDate(asOf));
         prevFromDate = actualArrearsSnapshot.fromDate().getValue();
-        prevExpectedAgingBuckets = new EnumMap<DebitType, AgingBuckets>(DebitType.class);
-
+        prevExpectedAgingBuckets = new HashMap<String, AgingBuckets>();
     }
 
     protected void assertArrearsSnapshotIsSameAsBefore(String from, String to) {
@@ -93,22 +93,23 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
         assertEquals("got unexpected snapshot from other date", prevFromDate, actualArrearsSnapshot.fromDate().getValue());
 
         for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {
-            if (expected.debitType().getValue() != DebitType.total) {
-                assertArrearsDebitType(expected.debitType().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue()
+            if (expected.arCode().getValue() != null) {
+                assertArrearsCategory(expected.arCode().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue()
                         .toString(), expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue()
                         .toString());
             }
         }
-        AgingBuckets expectedTotal = prevExpectedAgingBuckets.get(DebitType.total);
+
+        AgingBuckets expectedTotal = prevExpectedAgingBuckets.get("TOTAL");
         assertArrearsTotal(expectedTotal.bucketCurrent().getValue().toString(), expectedTotal.bucket30().getValue().toString(), expectedTotal.bucket60()
                 .getValue().toString(), expectedTotal.bucket90().getValue().toString(), expectedTotal.bucketOver90().getValue().toString());
     }
 
-    protected void assertArrearsDebitType(DebitType debitType, String expectedCurrent, String expected30, String expected60, String expected90,
+    protected void assertArrearsCategory(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,
             String expectedOver90) {
 
         for (AgingBuckets actualBuckets : actualArrearsSnapshot.agingBuckets()) {
-            if (actualBuckets.debitType().getValue() == debitType) {
+            if (actualBuckets.arCode().getValue() == debitType) {
                 assertAgingBuckets(expectedAgingBuckets(debitType, expectedCurrent, expected30, expected60, expected90, expectedOver90), actualBuckets);
                 return;
             }
@@ -117,14 +118,14 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
     }
 
     protected void assertArrearsTotal(String expectedCurrent, String expected30, String expected60, String expected90, String expectedOver90) {
-        assertAgingBuckets(expectedAgingBuckets(DebitType.total, expectedCurrent, expected30, expected60, expected90, expectedOver90),
+        assertAgingBuckets(expectedAgingBuckets(null, expectedCurrent, expected30, expected60, expected90, expectedOver90),
                 actualArrearsSnapshot.totalAgingBuckets());
     }
 
-    private AgingBuckets expectedAgingBuckets(DebitType debitType, String expectedCurrent, String expected30, String expected60, String expected90,
+    private AgingBuckets expectedAgingBuckets(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,
             String expectedOver90) {
         AgingBuckets expected = EntityFactory.create(AgingBuckets.class);
-        expected.debitType().setValue(debitType);
+        expected.arCode().setValue(debitType);
         expected.bucketCurrent().setValue(new BigDecimal(expectedCurrent));
         expected.bucket30().setValue(new BigDecimal(expected30));
         expected.bucket60().setValue(new BigDecimal(expected60));
@@ -133,7 +134,8 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
 
         AgingBuckets cachedExpected = prevExpectedAgingBuckets.get(debitType);
         if (cachedExpected == null) {
-            prevExpectedAgingBuckets.put(debitType, expected);
+            String bucketsKey = debitType == null ? "TOTAL" : debitType.name();
+            prevExpectedAgingBuckets.put(bucketsKey, expected);
             cachedExpected = expected;
         } else {
             if (!EntityGraph.fullyEqualValues(cachedExpected, expected)) {

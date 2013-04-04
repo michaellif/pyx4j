@@ -389,10 +389,7 @@ public class CrmSiteMap implements SiteMap {
                     super(Type.viewer);
                 }
 
-                public static class ServiceItemType extends CrmCrudAppPlace {
-                }
-
-                public static class FeatureItemType extends CrmCrudAppPlace {
+                public static class ProductCode extends CrmCrudAppPlace {
                 }
             }
 
@@ -403,11 +400,6 @@ public class CrmSiteMap implements SiteMap {
             @PlaceProperties(navigLabel = "Taxes")
             public static class Tax extends CrmCrudAppPlace {
             }
-
-            @PlaceProperties(navigLabel = "Lease Adjustments")
-            public static class LeaseAdjustmentReason extends CrmCrudAppPlace {
-            }
-
         }
 
         public static class Content extends CrmCrudAppPlace {

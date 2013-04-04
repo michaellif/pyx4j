@@ -54,7 +54,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().featureType(), "15em"),
+                new EntityFolderColumnDescriptor(proto().type(), "15em"),
                 new EntityFolderColumnDescriptor(proto().version().name(), "20em"),
                 new EntityFolderColumnDescriptor(proto().version().recurring(), "5em"),
                 new EntityFolderColumnDescriptor(proto().version().mandatory(), "5em")
@@ -80,7 +80,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             CComponent<?, ?> comp = null;
-            if (member.equals(proto().featureType())) {
+            if (member.equals(proto().type())) {
                 if (ServiceFeatureFolder.this.isEditable()) {
                     comp = new CEnumLabel();
                 } else {
@@ -126,7 +126,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().featureType(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().type(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
@@ -136,7 +136,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().featureType().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().type().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
         }
 
         @Override

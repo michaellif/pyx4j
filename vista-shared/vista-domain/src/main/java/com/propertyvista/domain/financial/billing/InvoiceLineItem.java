@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 
 @AbstractEntity
@@ -60,6 +61,9 @@ public interface InvoiceLineItem extends IEntity {
     IPrimitive<BigDecimal> amount();
 
     IPrimitive<LogicalDate> postDate();
+
+    @NotNull
+    ARCode arCode();
 
     interface OrderId extends ColumnId {
 

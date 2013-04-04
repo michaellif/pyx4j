@@ -39,6 +39,7 @@ import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandle
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO.ConstraintsReason;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -888,7 +889,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().serviceType(), Service.ServiceType.unitRelated()));
+        criteria.add(PropertyCriterion.in(criteria.proto().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());

@@ -19,12 +19,13 @@ import java.util.List;
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.DateRange;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
 
@@ -49,7 +50,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
                 if (overlap != null) {
                     //Check if that adjustment is already presented in previous bills
                     boolean attachedToPreviousBill = false;
-                    if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
+                    if (ARCode.Type.AccountCharge.equals(adjustment.code().type().getValue())) {
                         List<InvoiceAccountCharge> charges = new ArrayList<InvoiceAccountCharge>();
                         charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCharge.class));
                         charges.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCharge.class));
@@ -61,7 +62,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
                         if (!attachedToPreviousBill) {
                             createPendingCharge(adjustment);
                         }
-                    } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
+                    } else if (ARCode.Type.AccountCredit.equals(adjustment.code().type().getValue())) {
                         List<InvoiceAccountCredit> credits = new ArrayList<InvoiceAccountCredit>();
                         credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getPreviousPeriodBill(), InvoiceAccountCredit.class));
                         credits.addAll(BillingUtils.getLineItemsForType(getBillProducer().getCurrentPeriodBill(), InvoiceAccountCredit.class));

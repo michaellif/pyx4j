@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -42,6 +41,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 
 //TODO pending adjustment  should post by batch
@@ -98,8 +98,7 @@ public interface LeaseAdjustment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    @MemberColumn(name = "itemType")
-    LeaseAdjustmentReason reason();
+    ARCode code();
 
     @NotNull
     @ToString(index = 1)

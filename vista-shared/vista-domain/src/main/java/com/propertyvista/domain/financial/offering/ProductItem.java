@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 
 @ToStringFormat("{0}, {1}, ${2}")
@@ -53,8 +54,7 @@ public interface ProductItem extends IEntity {
 
     @NotNull
     @ToString(index = 1)
-    @MemberColumn(name = "itemType")
-    ProductItemType type();
+    ARCode code();
 
     @NotNull
     @ToString(index = 2)

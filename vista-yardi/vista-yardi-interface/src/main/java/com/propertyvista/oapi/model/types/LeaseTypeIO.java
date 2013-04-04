@@ -15,31 +15,31 @@ package com.propertyvista.oapi.model.types;
 
 import javax.xml.bind.annotation.XmlValue;
 
-import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.oapi.xml.Action;
 import com.propertyvista.oapi.xml.PrimitiveIO;
 
-public class LeaseTypeIO implements PrimitiveIO<Service.ServiceType> {
+public class LeaseTypeIO implements PrimitiveIO<ARCode.Type> {
 
-    private Service.ServiceType value;
+    private ARCode.Type value;
 
     private Action action;
 
     public LeaseTypeIO() {
     }
 
-    public LeaseTypeIO(Service.ServiceType value) {
+    public LeaseTypeIO(ARCode.Type value) {
         this.value = value;
     }
 
     @Override
     @XmlValue
-    public Service.ServiceType getValue() {
+    public ARCode.Type getValue() {
         return value;
     }
 
     @Override
-    public void setValue(Service.ServiceType value) {
+    public void setValue(ARCode.Type value) {
         this.value = value;
     }
 

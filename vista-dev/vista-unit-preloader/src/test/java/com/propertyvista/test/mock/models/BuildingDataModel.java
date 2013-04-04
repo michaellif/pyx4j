@@ -28,12 +28,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -46,9 +44,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         available, used
     }
 
-    private static Map<Service.ServiceType, List<ServiceItemType>> serviceMeta;
-
-    private Map<Feature.Type, List<FeatureItemType>> featureMeta;
+    private static Map<ARCode.Type, List<ARCode>> arCodes;
 
     private final Map<Building, Service> standardResidentialServices;
 
@@ -90,10 +86,10 @@ public class BuildingDataModel extends MockDataModel<Building> {
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(serviceMeta.get(Service.ServiceType.residentialUnit).get(0));
+        productItem.code().set(arCodes.get(ARCode.Type.Residential).get(0));
         productItem.element().set(generateResidentialUnit(getCurrentItem()));
         productItem.price().setValue(price);
-        productItem.description().setValue(productItem.type().name().getValue());
+        productItem.description().setValue(productItem.code().name().getValue());
 
         standardResidentialService.version().items().add(productItem);
         Persistence.service().persist(standardResidentialService);
@@ -122,22 +118,15 @@ public class BuildingDataModel extends MockDataModel<Building> {
     }
 
     private void createServiceMeta() {
-        serviceMeta = new HashMap<Service.ServiceType, List<ServiceItemType>>();
-        featureMeta = new HashMap<Feature.Type, List<FeatureItemType>>();
+        arCodes = new HashMap<ARCode.Type, List<ARCode>>();
 
-        for (ServiceItemType serviceItemType : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
-            if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
-                serviceMeta.put(serviceItemType.serviceType().getValue(), new ArrayList<ServiceItemType>());
+        for (ARCode arCode : getDataModel(ARCodeDataModel.class).getAllItems()) {
+            if (!arCodes.containsKey(arCode.type().getValue())) {
+                arCodes.put(arCode.type().getValue(), new ArrayList<ARCode>());
             }
-            serviceMeta.get(serviceItemType.serviceType().getValue()).add(serviceItemType);
+            arCodes.get(arCode.type().getValue()).add(arCode);
         }
 
-        for (FeatureItemType featureItemType : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
-            if (!featureMeta.containsKey(featureItemType.featureType().getValue())) {
-                featureMeta.put(featureItemType.featureType().getValue(), new ArrayList<FeatureItemType>());
-            }
-            featureMeta.get(featureItemType.featureType().getValue()).add(featureItemType);
-        }
     }
 
     private Service generateCatalog(Building building) {
@@ -157,7 +146,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
     private Service generateResidentialUnitService(Building building) {
         Service standardResidentialService = EntityFactory.create(Service.class);
         standardResidentialService.catalog().set(building.productCatalog());
-        standardResidentialService.serviceType().setValue(Service.ServiceType.residentialUnit);
+        standardResidentialService.type().setValue(ARCode.Type.Residential);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
@@ -166,59 +155,53 @@ public class BuildingDataModel extends MockDataModel<Building> {
     }
 
     private void generateFeatures(Building building, Service standardResidentialService) {
-        for (Feature.Type serviceType : featureMeta.keySet()) {
-            generateFeature(building, standardResidentialService, serviceType);
+        for (ARCode.Type type : ARCode.Type.features()) {
+            generateFeature(building, standardResidentialService, type);
         }
     }
 
-    private void generateFeature(Building building, Service standardResidentialService, Feature.Type type) {
+    private void generateFeature(Building building, Service standardResidentialService, ARCode.Type type) {
         Feature feature = EntityFactory.create(Feature.class);
 
         feature.catalog().set(building.productCatalog());
 
-        feature.featureType().setValue(type);
+        feature.type().setValue(type);
         feature.version().name().setValue("Regular " + type.name());
         feature.version().description().setValue("Feature - " + type.name());
 
-        switch (feature.featureType().getValue()) {
-        case parking:
+        switch (type) {
+        case Parking:
             feature.version().recurring().setValue(true);
             for (Parking parking : building.parkings()) {
-                for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
+                for (ARCode productItemType : arCodes.get(type)) {
                     generateParkingFeatureItem(feature, parking, productItemType);
                 }
             }
             break;
-        case locker:
+        case Locker:
             feature.version().recurring().setValue(true);
             for (LockerArea lockerArea : building.lockerAreas()) {
-                for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
+                for (ARCode productItemType : arCodes.get(type)) {
                     generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
                 }
             }
             break;
-        case pet:
+        case Pet:
             feature.version().recurring().setValue(true);
-            for (ProductItemType productItemType : featureMeta.get(Feature.Type.pet)) {
+            for (ARCode productItemType : arCodes.get(type)) {
                 generatePetFeatureItem(feature, productItemType);
             }
             break;
-        case addOn:
+        case AddOn:
             feature.version().recurring().setValue(true);
-            for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
+            for (ARCode productItemType : arCodes.get(type)) {
                 generateAddOnFeatureItem(feature, productItemType);
             }
             break;
-        case oneTimeCharge:
-            feature.version().recurring().setValue(true);
-            for (ProductItemType productItemType : featureMeta.get(Feature.Type.oneTimeCharge)) {
-                generateOneTimeChargeFeatureItem(feature, productItemType);
-            }
-            break;
-        case booking:
+        case OneTime:
             feature.version().recurring().setValue(false);
-            for (ProductItemType productItemType : featureMeta.get(Feature.Type.booking)) {
-                generateBookingFeatureItem(feature, productItemType);
+            for (ARCode productItemType : arCodes.get(type)) {
+                generateOneTimeChargeFeatureItem(feature, productItemType);
             }
             break;
 
@@ -235,51 +218,51 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     }
 
-    private void generateParkingFeatureItem(Feature feature, Parking parking, ProductItemType type) {
+    private void generateParkingFeatureItem(Feature feature, Parking parking, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.element().set(parking);
         productItem.price().setValue(new BigDecimal("80.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
-    private void generateLockerAreaFeatureItem(Feature feature, LockerArea lockerArea, ProductItemType type) {
+    private void generateLockerAreaFeatureItem(Feature feature, LockerArea lockerArea, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.element().set(lockerArea);
         productItem.price().setValue(new BigDecimal("60.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
-    private void generateAddOnFeatureItem(Feature feature, ProductItemType type) {
+    private void generateAddOnFeatureItem(Feature feature, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.price().setValue(new BigDecimal("40.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
-    private void generateOneTimeChargeFeatureItem(Feature feature, ProductItemType type) {
+    private void generateOneTimeChargeFeatureItem(Feature feature, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.price().setValue(new BigDecimal("30.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
-    private void generatePetFeatureItem(Feature feature, ProductItemType type) {
+    private void generatePetFeatureItem(Feature feature, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.price().setValue(new BigDecimal("20.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);
     }
 
-    private void generateBookingFeatureItem(Feature feature, ProductItemType type) {
+    private void generateBookingFeatureItem(Feature feature, ARCode type) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.type().set(type);
+        productItem.code().set(type);
         productItem.price().setValue(new BigDecimal("100.00"));
         productItem.description().setValue(type.name().getValue());
         feature.version().items().add(productItem);

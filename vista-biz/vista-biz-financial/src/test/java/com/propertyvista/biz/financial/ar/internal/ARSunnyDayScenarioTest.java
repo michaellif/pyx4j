@@ -30,8 +30,8 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 @Category(RegressionTests.class)
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
@@ -61,10 +61,10 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         lineItemSize(4).
         notCoveredDebitLineItemSize(4).
         notConsumedCreditInvoiceItemSize(0).
-        agingBucketsCurrent(new BigDecimal("1338.82"), DebitType.total).
-        agingBucketsCurrent(new BigDecimal("302.50"), DebitType.lease).
-        agingBucketsCurrent(new BigDecimal("26.02"), DebitType.parking).
-        agingBucketsCurrent(new BigDecimal("1010.30"), DebitType.deposit);
+        agingBucketsCurrent(new BigDecimal("1338.82"), null).
+        agingBucketsCurrent(new BigDecimal("302.50"), ARCode.Type.Residential).
+        agingBucketsCurrent(new BigDecimal("26.02"), ARCode.Type.Parking).
+        agingBucketsCurrent(new BigDecimal("1010.30"), ARCode.Type.Deposit);
         // @formatter:on
 
         receiveAndPostPayment("22-Mar-2011", "1040.00");
@@ -74,8 +74,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         lineItemSize(5).
         notCoveredDebitLineItemSize(1).
         notConsumedCreditInvoiceItemSize(0).
-        agingBucketsCurrent(new BigDecimal("298.82"), DebitType.total).
-        agingBucketsCurrent(new BigDecimal("298.82"), DebitType.lease);
+        agingBucketsCurrent(new BigDecimal("298.82"), null).
+        agingBucketsCurrent(new BigDecimal("298.82"), ARCode.Type.Residential);
         // @formatter:on
 
         //==================== RUN 2 ======================//

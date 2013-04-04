@@ -13,9 +13,14 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import java.util.List;
 
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
@@ -32,27 +37,33 @@ public class MockupPADPolicyPreloader extends AbstractPolicyPreloader<PADPolicy>
     protected PADPolicy createPolicy(StringBuilder log) {
         PADPolicy policy = EntityFactory.create(PADPolicy.class);
         policy.chargeType().setValue(PADChargeType.OwingBalance);
-        {
+        for (ARCode code : getARCodes(ARCode.Type.Residential)) {
             PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.lease);
+            item.debitType().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }
-        {
+        for (ARCode code : getARCodes(ARCode.Type.Parking)) {
             PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.parking);
+            item.debitType().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }
-        {
+        for (ARCode code : getARCodes(ARCode.Type.Locker)) {
             PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().setValue(DebitType.locker);
+            item.debitType().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }
 
         log.append(policy.getStringView());
         return policy;
+    }
+
+    private List<ARCode> getARCodes(ARCode.Type type) {
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().type(), type));
+        return Persistence.service().query(criteria);
     }
 
 }

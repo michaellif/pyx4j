@@ -22,12 +22,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.ARCode;
 
 @Transient
 public interface AptUnitServicePriceDTO extends IEntity {
 
-    IPrimitive<Service.ServiceType> type();
+    IPrimitive<ARCode.Type> type();
 
     IPrimitive<String> name();
 

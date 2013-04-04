@@ -22,9 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
@@ -44,45 +42,45 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
     protected DepositPolicy createPolicy(StringBuilder log) {
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
-        EntityQueryCriteria<ServiceItemType> srvType = EntityQueryCriteria.create(ServiceItemType.class);
-        srvType.add(PropertyCriterion.in(srvType.proto().serviceType(), Service.ServiceType.unitRelated()));
-        List<ServiceItemType> services = Persistence.service().query(srvType);
-        for (ServiceItemType pit : services) {
+        EntityQueryCriteria<ARCode> srvType = EntityQueryCriteria.create(ARCode.class);
+        srvType.add(PropertyCriterion.in(srvType.proto().type(), ARCode.Type.unitRelatedServices()));
+        List<ARCode> services = Persistence.service().query(srvType);
+        for (ARCode pit : services) {
 
             DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
             item.depositType().setValue(DepositType.SecurityDeposit);
             item.description().setValue(i18n.tr("Security Deposit"));
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
             item.valueType().setValue(ValueType.Monetary);
-            item.productType().set(pit);
+            item.productCode().set(pit);
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
             policy.policyItems().add(item);
         }
 
-        EntityQueryCriteria<FeatureItemType> pitc = EntityQueryCriteria.create(FeatureItemType.class);
-        List<FeatureItemType> features = Persistence.service().query(pitc);
-        for (FeatureItemType pit : features) {
+        EntityQueryCriteria<ARCode> pitc = EntityQueryCriteria.create(ARCode.class);
+        List<ARCode> features = Persistence.service().query(pitc);
+        for (ARCode pit : features) {
             if (RandomUtil.randomBoolean()) {
-                switch (pit.featureType().getValue()) {
-                case parking:
+                switch (pit.type().getValue()) {
+                case Parking:
                     DepositPolicyItem item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("First Month Parking"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
-                    item.productType().set(pit);
+                    item.productCode().set(pit);
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);
                     break;
-                case locker:
+                case Locker:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("Last Month Locker"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.valueType().setValue(ValueType.Percentage);
-                    item.productType().set(pit);
+                    item.productCode().set(pit);
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
                     policy.policyItems().add(item);

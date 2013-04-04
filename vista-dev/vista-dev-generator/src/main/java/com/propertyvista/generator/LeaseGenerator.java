@@ -23,9 +23,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -172,29 +171,26 @@ public class LeaseGenerator extends DataGenerator {
 
     private static void ensureAgreedPrice(BillableItem billableItem) {
         if (billableItem.item().price().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (billableItem.item().type().isInstanceOf(ServiceItemType.class)) {
+            if (ARCode.Type.services().contains(billableItem.item().code().type())) {
                 billableItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-            } else if (billableItem.item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (((FeatureItemType) billableItem.item().type()).featureType().getValue()) {
-                case parking:
+            } else if (ARCode.Type.features().contains(billableItem.item().code().type())) {
+                switch (billableItem.item().code().type().getValue()) {
+                case Parking:
                     billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
                     break;
-                case locker:
+                case Locker:
                     billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
                     break;
-                case pet:
+                case Pet:
                     billableItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
                     break;
-                case booking:
-                    billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(5)));
-                    break;
-                case addOn:
+                case AddOn:
                     billableItem.agreedPrice().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
                     break;
-                case oneTimeCharge:
+                case OneTime:
                     billableItem.agreedPrice().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
                     break;
-                case utility:
+                case Utility:
                     billableItem.agreedPrice().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
                     break;
                 }

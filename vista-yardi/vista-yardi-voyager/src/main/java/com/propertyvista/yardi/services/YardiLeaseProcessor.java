@@ -32,8 +32,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -131,7 +131,7 @@ public class YardiLeaseProcessor {
 
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
         lease.leaseId().setValue(rtCustomer.getCustomerID());
-        lease.type().setValue(ServiceType.residentialUnit);
+        lease.type().setValue(ARCode.Type.Residential);
 
         // set unit:
         if (unit.getPrimaryKey() != null) {

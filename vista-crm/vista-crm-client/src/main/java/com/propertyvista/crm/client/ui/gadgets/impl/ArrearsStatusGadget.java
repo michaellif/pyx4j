@@ -235,7 +235,8 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
     }
 
     private void redrawTitleBanner() {
-        String unescaptedBanner = i18n.tr("{0} arrears as of {1,date,short}", getMetadata().category().getValue(), getStatusDate());
+        String arrearsCategory = getMetadata().filterByCategory().isBooleanTrue() ? getMetadata().category().getValue().toString() : i18n.tr("Total");
+        String unescaptedBanner = i18n.tr("{0} arrears as of {1,date,short}", arrearsCategory, getStatusDate());
         titleBannerLabel.setHTML(new SafeHtmlBuilder().appendEscaped(unescaptedBanner).toSafeHtml());
     }
 }

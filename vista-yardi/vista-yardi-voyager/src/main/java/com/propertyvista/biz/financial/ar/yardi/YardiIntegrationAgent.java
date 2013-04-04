@@ -34,8 +34,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -48,7 +48,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.yardi.services.ProductItemTypeAdapter;
+import com.propertyvista.yardi.services.ARCodeAdapter;
 
 public class YardiIntegrationAgent {
 
@@ -114,7 +114,7 @@ public class YardiIntegrationAgent {
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiCharge charge = EntityFactory.create(YardiCharge.class);
             charge.chargeCode().setValue(detail.getChargeCode());
-            charge.debitType().setValue(new DebitTypeAdapter().getDebitType(new ProductItemTypeAdapter().findProductItemType(detail.getChargeCode())));
+            charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode()));
             charge.transactionId().setValue(detail.getTransactionID());
             charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
             charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
@@ -132,6 +132,7 @@ public class YardiIntegrationAgent {
             item = charge;
         } else {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
+            credit.arCode().set(new ARCodeAdapter().findARCode(ActionType.Credit, detail.getChargeCode()));
             credit.postDate().setValue(transactionDate);
             item = credit;
         }

@@ -58,6 +58,8 @@ import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -65,7 +67,6 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -82,7 +83,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -101,14 +101,13 @@ import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
-import com.propertyvista.test.mock.models.FeatureItemTypeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
-import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
@@ -116,7 +115,6 @@ import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
-import com.propertyvista.test.mock.models.ServiceItemTypeDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
@@ -158,7 +156,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             SystemDateManager.resetDate();
             super.tearDown();
         }
-        assertTrue("Running with Tester.continueOnError = true", !Tester.continueOnError);
+//        assertTrue("Running with Tester.continueOnError = true", !Tester.continueOnError);
     }
 
     public <E extends MockDataModel<?>> E getDataModel(Class<E> modelClass) {
@@ -198,9 +196,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
-        models.add(ServiceItemTypeDataModel.class);
-        models.add(FeatureItemTypeDataModel.class);
-        models.add(LeaseAdjustmentReasonDataModel.class);
+        models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(MerchantAccountDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);
@@ -371,32 +367,32 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
-        return addBillableItem(Type.parking, effectiveDate, expirationDate);
+        return addBillableItem(ARCode.Type.Parking, effectiveDate, expirationDate);
     }
 
     protected BillableItem addParking() {
-        return addBillableItem(Type.parking);
+        return addBillableItem(ARCode.Type.Parking);
     }
 
     protected BillableItem addLocker(String effectiveDate, String expirationDate) {
-        return addBillableItem(Type.locker, effectiveDate, expirationDate);
+        return addBillableItem(ARCode.Type.Locker, effectiveDate, expirationDate);
     }
 
     protected BillableItem addLocker() {
-        return addBillableItem(Type.locker);
+        return addBillableItem(ARCode.Type.Locker);
     }
 
     protected BillableItem addPet(String effectiveDate, String expirationDate) {
-        return addBillableItem(Type.pet, effectiveDate, expirationDate);
+        return addBillableItem(ARCode.Type.Pet, effectiveDate, expirationDate);
     }
 
     protected BillableItem addPet() {
-        BillableItem billableItem = addBillableItem(Type.pet);
+        BillableItem billableItem = addBillableItem(ARCode.Type.Pet);
         return billableItem;
     }
 
     protected BillableItem addBooking(String date) {
-        return addBillableItem(Type.booking, date, date);
+        return addBillableItem(ARCode.Type.OneTime, date, date);
     }
 
     protected void cancelBillableItem(String billableItemId, String expirationDate) {
@@ -424,36 +420,36 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType) {
+    private BillableItem addBillableItem(ARCode.Type featureType) {
         Lease lease = retrieveLease();
         return addBillableItem(featureType, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate) {
+    private BillableItem addBillableItem(ARCode.Type featureType, String effectiveDate, String expirationDate) {
         return addBillableItem(featureType, getDate(effectiveDate), getDate(expirationDate));
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
+    private BillableItem addBillableItem(ARCode.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = retrieveLeaseDraft();
 
         // correct agreed price for existing leases:
         BigDecimal agreedPrice = null;
         if (lease.status().getValue() == Lease.Status.ExistingLease) {
             switch (featureType) {
-            case parking:
+            case Parking:
                 agreedPrice = new BigDecimal("80.00");
                 break;
-            case locker:
+            case Locker:
                 agreedPrice = new BigDecimal("60.00");
                 break;
-            case addOn:
+            case AddOn:
                 agreedPrice = new BigDecimal("40.00");
                 break;
-            case pet:
+            case Pet:
                 agreedPrice = new BigDecimal("20.00");
                 break;
-            case booking:
-                agreedPrice = new BigDecimal("100.00");
+            case OneTime:
+                agreedPrice = new BigDecimal("50.00");
                 break;
             default:
                 break;
@@ -465,7 +461,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Service.ServiceV service = serviceItem.product().cast();
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
-            if (featureType.equals(feature.featureType().getValue()) && feature.version().items().size() != 0) {
+            if (featureType.equals(feature.type().getValue()) && feature.version().items().size() != 0) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 BillableItem billableItem = leaseFacade.createBillableItem(lease, feature.version().items().get(0), lease.unit().building());
 
@@ -575,8 +571,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount, mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class)
-                .getItem(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
+        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCredit), immediate);
     }
 
     protected LeaseAdjustment addAccountCharge(String amount) {
@@ -584,11 +579,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addAccountCharge(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount,
-                mockManager.getDataModel(LeaseAdjustmentReasonDataModel.class).getItem(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
+        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCharge), immediate);
     }
 
-    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, boolean immediate) {
+    private LeaseAdjustment addLeaseAdjustment(String amount, ARCode reason, boolean immediate) {
         Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
@@ -597,7 +591,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
         adjustment.targetDate().setValue(new LogicalDate(getSysDate()));
         adjustment.description().setValue(reason.name().getValue());
-        adjustment.reason().setValue(reason.getValue());
+        adjustment.code().setValue(reason.getValue());
         adjustment.billingAccount().set(lease.billingAccount());
 
         Persistence.service().persist(adjustment);

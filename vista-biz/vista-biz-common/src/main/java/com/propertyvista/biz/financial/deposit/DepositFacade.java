@@ -18,9 +18,9 @@ import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -36,12 +36,12 @@ public interface DepositFacade {
 
         public final LogicalDate to;
 
-        public final ProductItemType type;
+        public final ARCode productType;
 
         public ProductTerm(BillableItem product, Lease lease) {
             from = product.effectiveDate().isNull() ? lease.currentTerm().termFrom().getValue() : product.effectiveDate().getValue();
             to = product.expirationDate().isNull() ? lease.currentTerm().termTo().getValue() : product.expirationDate().getValue();
-            type = product.item().type();
+            productType = product.item().code();
         }
     }
 

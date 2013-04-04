@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -49,7 +49,7 @@ class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
         int row = -1;
 
         CLabel lb;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().type().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().code().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
                 .build());
         lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
@@ -77,15 +77,15 @@ class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
-            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
-                case parking:
+            if (ARCode.Type.features().contains(getValue().item().code().type())) {
+                switch (getValue().item().code().type().getValue()) {
+                case Parking:
                     editor = new VehicleDataEditor();
                     if (extraData.isNull()) {
                         extraData.set(EntityFactory.create(Vehicle.class));
                     }
                     break;
-                case pet:
+                case Pet:
                     editor = new PetDataEditor();
                     if (extraData.isNull()) {
                         extraData.set(EntityFactory.create(Pet.class));

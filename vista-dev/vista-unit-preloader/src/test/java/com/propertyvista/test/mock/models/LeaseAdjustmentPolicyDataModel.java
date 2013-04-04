@@ -15,12 +15,15 @@ package com.propertyvista.test.mock.models;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmentPolicy> {
@@ -33,10 +36,19 @@ public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmen
 
         LeaseAdjustmentPolicy policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
-        for (LeaseAdjustmentReasonDataModel.Reason reason : LeaseAdjustmentReasonDataModel.Reason.values()) {
-            LeaseAdjustmentReason lar = getDataModel(LeaseAdjustmentReasonDataModel.class).getItem(reason);
+        {
+            ARCode creditCode;
+            creditCode = ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCredit);
             LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
-            item.leaseAdjustmentReason().set(lar);
+            item.code().set(creditCode);
+            policy.policyItems().add(item);
+        }
+
+        {
+            ARCode chargeCode;
+            chargeCode = ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCharge);
+            LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
+            item.code().set(chargeCode);
             item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
             policy.policyItems().add(item);
         }

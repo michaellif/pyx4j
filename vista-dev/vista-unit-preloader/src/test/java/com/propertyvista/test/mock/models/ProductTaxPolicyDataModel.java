@@ -18,8 +18,7 @@ import org.apache.commons.lang.NotImplementedException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.test.mock.MockDataModel;
@@ -33,16 +32,9 @@ public class ProductTaxPolicyDataModel extends MockDataModel<ProductTaxPolicy> {
     protected void generate() {
         ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
 
-        for (ServiceItemType type : getDataModel(ServiceItemTypeDataModel.class).getAllItems()) {
+        for (ARCode code : getDataModel(ARCodeDataModel.class).getAllItems()) {
             ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
-            item.productItemType().set(type);
-            item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
-            policy.policyItems().add(item);
-        }
-
-        for (FeatureItemType type : getDataModel(FeatureItemTypeDataModel.class).getAllItems()) {
-            ProductTaxPolicyItem item = EntityFactory.create(ProductTaxPolicyItem.class);
-            item.productItemType().set(type);
+            item.productCode().set(code);
             item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));
             policy.policyItems().add(item);
         }

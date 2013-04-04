@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -160,7 +159,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         Collections.sort(arrearsByCategory, new Comparator<AgingBuckets>() {
             @Override
             public int compare(AgingBuckets arg0, AgingBuckets arg1) {
-                return arg0.debitType().getValue().toString().compareTo(arg1.debitType().getValue().toString());
+                return arg0.arCode().getValue().toString().compareTo(arg1.arCode().getValue().toString());
             }
         });
         FormFlexPanel arrearsView = new FormFlexPanel();
@@ -179,7 +178,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
     private void drawArrearsTableHeader(FormFlexPanel arrearsView, int row) {
         AgingBuckets proto = EntityFactory.getEntityPrototype(AgingBuckets.class);
-        arrearsView.setHTML(row, 0, toSafeHtml(proto.debitType().getMeta().getCaption()));
+        arrearsView.setHTML(row, 0, toSafeHtml(proto.arCode().getMeta().getCaption()));
         arrearsView.setHTML(row, 1, toSafeHtml(proto.bucketCurrent().getMeta().getCaption()));
         arrearsView.setHTML(row, 2, toSafeHtml(proto.bucket30().getMeta().getCaption()));
         arrearsView.setHTML(row, 3, toSafeHtml(proto.bucket60().getMeta().getCaption()));
@@ -202,7 +201,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             return;
         }
 
-        panel.setHTML(row, 0, toSafeHtml(bucket.debitType().getStringView()));
+        panel.setHTML(row, 0, toSafeHtml(bucket.arCode().getStringView()));
         panel.setHTML(row, 1, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketCurrent().getValue())));
         panel.setHTML(row, 2, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket30().getValue())));
         panel.setHTML(row, 3, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket60().getValue())));
@@ -210,7 +209,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         panel.setHTML(row, 5, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketOver90().getValue())));
         panel.setHTML(row, 6, toSafeHtml(NUMBER_FORMAT.format(bucket.arrearsAmount().getValue())));
 
-        if (bucket.debitType().getValue() != DebitType.total) {
+        if (bucket.arCode().getValue() != null) {
             panel.getRowFormatter().setStyleName(row,
                     row % 2 == 0 ? CrmTheme.ArrearsStyleName.ArrearsCategoryEven.name() : CrmTheme.ArrearsStyleName.ArrearsCategoryOdd.name());
         } else {

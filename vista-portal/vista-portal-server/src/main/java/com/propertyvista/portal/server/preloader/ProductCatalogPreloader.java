@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
@@ -26,14 +25,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.generator.ProductItemTypesGenerator;
+import com.propertyvista.generator.ARCodesGenerator;
 
 public class ProductCatalogPreloader extends AbstractDataPreloader {
 
@@ -73,30 +70,24 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     }
 
     private void createProductItemTypes() {
-        ProductItemTypesGenerator generator = new ProductItemTypesGenerator();
+        ARCodesGenerator generator = new ARCodesGenerator();
 
         // Assignee GL references
-        for (ServiceItemType i : generator.getServiceItemTypes()) {
-            EntityQueryCriteria<GlCode> criteria = EntityQueryCriteria.create(GlCode.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().codeId(), i.glCode().codeId()));
-            i.glCode().set(Persistence.service().retrieve(criteria));
-        }
-        for (FeatureItemType i : generator.getFeatureItemTypes()) {
+        for (ARCode i : generator.getARCodes()) {
             EntityQueryCriteria<GlCode> criteria = EntityQueryCriteria.create(GlCode.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().codeId(), i.glCode().codeId()));
             i.glCode().set(Persistence.service().retrieve(criteria));
         }
 
-        Persistence.service().persist(generator.getServiceItemTypes());
-        Persistence.service().persist(generator.getFeatureItemTypes());
+        Persistence.service().persist(generator.getARCodes());
     }
 
     private void createLeaseAdjustmentReasons() {
-        List<LeaseAdjustmentReason> reasons = EntityCSVReciver.create(LeaseAdjustmentReason.class).loadResourceFile(
+        List<ARCode> reasons = EntityCSVReciver.create(ARCode.class).loadResourceFile(
                 IOUtils.resourceFileName("leaseAdjustmentReason.csv", ProductCatalogPreloader.class));
 
         // Assignee GL references
-        for (LeaseAdjustmentReason i : reasons) {
+        for (ARCode i : reasons) {
             EntityQueryCriteria<GlCode> criteria = EntityQueryCriteria.create(GlCode.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().codeId(), i.glCode().codeId()));
             i.glCode().set(Persistence.service().retrieve(criteria));
@@ -119,10 +110,9 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
     @Override
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
-            return deleteAll(GlCodeCategory.class, GlCode.class, Tax.class, LeaseAdjustmentReason.class, ServiceItemType.class, FeatureItemType.class);
+            return deleteAll(GlCodeCategory.class, GlCode.class, Tax.class, ARCode.class, ARCode.class);
         } else {
             return "This is production";
         }
     }
-
 }

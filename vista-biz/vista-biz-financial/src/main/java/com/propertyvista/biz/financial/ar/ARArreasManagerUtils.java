@@ -18,8 +18,8 @@ import java.util.Collection;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class ARArreasManagerUtils {
 
@@ -45,10 +45,10 @@ public class ARArreasManagerUtils {
         return accumulator;
     }
 
-    public static AgingBuckets createAgingBuckets(DebitType debitType) {
+    public static AgingBuckets createAgingBuckets(ARCode.Type debitType) {
         AgingBuckets agingBuckets = EntityFactory.create(AgingBuckets.class);
 
-        agingBuckets.debitType().setValue(debitType);
+        agingBuckets.arCode().setValue(debitType);
 
         BigDecimal zero = new BigDecimal("0.00");
         agingBuckets.bucketThisMonth().setValue(zero);

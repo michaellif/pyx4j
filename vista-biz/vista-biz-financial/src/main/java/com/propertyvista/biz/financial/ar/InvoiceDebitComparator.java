@@ -22,8 +22,8 @@ import java.util.Map;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
@@ -33,13 +33,13 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private final ARPolicy arPolicy;
 
-    private final Map<DebitType, OwingBalanceType> padDebitTypes = new HashMap<DebitType, OwingBalanceType>();
+    private final Map<ARCode, OwingBalanceType> padDebitTypes = new HashMap<ARCode, OwingBalanceType>();
 
     public InvoiceDebitComparator(ARPolicy arPolicy, PADPolicy padPolicy) {
         this.arPolicy = arPolicy;
         // create product map
         for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
-            padDebitTypes.put(item.debitType().getValue(), item.owingBalanceType().getValue());
+            padDebitTypes.put(item.debitType(), item.owingBalanceType().getValue());
         }
     }
 
@@ -70,11 +70,11 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
         if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.rentDebtLast) {
-            return -debit1.debitType().getValue().compareTo(debit2.debitType().getValue());
+            return -debit1.arCode().type().getValue().compareTo(debit2.arCode().type().getValue());
         } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.oldestDebtFirst) {
             int ageComparison = compareBucketAge(debit1, debit2);
             if (ageComparison == 0) {
-                return -debit1.debitType().getValue().compareTo(debit2.debitType().getValue());
+                return -debit1.arCode().type().compareTo(debit2.arCode().type());
             } else {
                 return ageComparison;
             }
@@ -83,7 +83,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
     }
 
     private Boolean isPadDebit(InvoiceDebit debit) {
-        return padDebitTypes.containsKey(debit.debitType().getValue());
+        return padDebitTypes.containsKey(debit.arCode());
     }
 
     public static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {

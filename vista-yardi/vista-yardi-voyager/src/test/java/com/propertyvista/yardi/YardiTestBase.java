@@ -32,20 +32,18 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
-import com.propertyvista.test.mock.models.FeatureItemTypeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
-import com.propertyvista.test.mock.models.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
-import com.propertyvista.test.mock.models.ServiceItemTypeDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
 
 public class YardiTestBase {
@@ -100,9 +98,7 @@ public class YardiTestBase {
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
-        models.add(ServiceItemTypeDataModel.class);
-        models.add(FeatureItemTypeDataModel.class);
-        models.add(LeaseAdjustmentReasonDataModel.class);
+        models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);
         models.add(ProductTaxPolicyDataModel.class);

@@ -148,4 +148,8 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester carryForwardCredit(String value) {
+        assertEquals("Carry-forward Credit", new BigDecimal(value), bill.carryForwardCredit().getValue());
+        return this;
+    }
 }

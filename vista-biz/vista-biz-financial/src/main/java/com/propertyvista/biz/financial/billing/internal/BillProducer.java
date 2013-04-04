@@ -37,6 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
+import com.propertyvista.biz.financial.billing.DateRange;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.InternalBillingAccount;

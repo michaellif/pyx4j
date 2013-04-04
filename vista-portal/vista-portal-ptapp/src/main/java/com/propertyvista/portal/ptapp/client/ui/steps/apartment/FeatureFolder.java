@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
@@ -33,13 +33,13 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(FeatureFolder.class);
 
-    private final Feature.Type type;
+    private final ARCode.Type type;
 
     private final ApartmentViewForm apartmentViewForm;
 
     private int maxCount = -1;
 
-    public FeatureFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
+    public FeatureFolder(ARCode.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(BillableItem.class, modifiable);
 
         this.type = type;
@@ -57,7 +57,7 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "13em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().item().code(), "13em"));
         columns.add(new EntityFolderColumnDescriptor(proto().agreedPrice(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "50em"));
         return columns;

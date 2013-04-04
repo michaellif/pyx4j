@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
@@ -67,7 +67,7 @@ public interface DepositPolicyItem extends IEntity {
     /**
      * Could be null for security deposits
      */
-    ProductItemType productType();
+    ARCode productCode();
 
     @NotNull
     @ToString(index = 0)

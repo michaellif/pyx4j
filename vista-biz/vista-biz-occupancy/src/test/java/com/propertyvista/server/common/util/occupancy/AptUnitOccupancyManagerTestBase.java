@@ -43,10 +43,9 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.ServiceType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -90,8 +89,8 @@ public class AptUnitOccupancyManagerTestBase {
 
         generateIdAssignmentPolicy();
 
-        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
-        type.serviceType().setValue(ServiceType.residentialUnit);
+        ARCode type = EntityFactory.create(ARCode.class);
+        type.type().setValue(ARCode.Type.Residential);
         type.name().setValue("residential unit for every child");
         Persistence.service().merge(type);
 
@@ -102,14 +101,14 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().merge(unit);
 
         Service service = EntityFactory.create(Service.class);
-        service.serviceType().setValue(ServiceType.residentialUnit);
+        service.type().setValue(ARCode.Type.Residential);
         service.version().name().setValue("Residential Unit Service");
         service.version().description().setValue("Residential Unit Descriptio");
 
         ProductItem serviceItem = EntityFactory.create(ProductItem.class);
         serviceItem.element().set(unit);
         serviceItem.price().setValue(new BigDecimal("1000.00"));
-        serviceItem.type().set(type);
+        serviceItem.code().set(type);
         serviceItem.description().setValue("a mockup unit");
 
         service.version().items().add(serviceItem);

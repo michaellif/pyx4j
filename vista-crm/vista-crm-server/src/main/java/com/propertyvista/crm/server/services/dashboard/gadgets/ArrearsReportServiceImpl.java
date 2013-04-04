@@ -48,10 +48,10 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsValueDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -91,7 +91,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
     @Override
     public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf,
-            DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+            ARCode.Type arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
         buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> criteriaConverter = createCriteriaConverter(arrearsCategory);
@@ -255,7 +255,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return totalArrears;
     }
 
-    private LeaseArrearsSnapshotDTO toSnapshotDTO(DebitType arrearsCategory, LeaseArrearsSnapshot snapshot) {
+    private LeaseArrearsSnapshotDTO toSnapshotDTO(ARCode.Type arrearsCategory, LeaseArrearsSnapshot snapshot) {
         Persistence.service().retrieve(snapshot.billingAccount());
         Persistence.service().retrieve(snapshot.billingAccount().lease());
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
@@ -264,11 +264,11 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createDTO(snapshot);
 
         AgingBuckets selectedBuckets = null;
-        if (arrearsCategory == DebitType.total) {
+        if (arrearsCategory == null) {
             selectedBuckets = snapshot.totalAgingBuckets().duplicate();
         } else {
             for (AgingBuckets buckets : snapshot.agingBuckets()) {
-                if (buckets.debitType().getValue() == arrearsCategory) {
+                if (buckets.arCode().getValue() == arrearsCategory) {
                     selectedBuckets = buckets.duplicate();
                 }
             }
@@ -281,12 +281,12 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return snapshotDTO;
     }
 
-    private EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createCriteriaConverter(final DebitType arrearsCategory) {
+    private EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createCriteriaConverter(final ARCode.Type arrearsCategory) {
         final LeaseArrearsSnapshotDTO dtoProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
         final LeaseArrearsSnapshot dboProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshot.class);
 
         PropertyMapper bucketMapper = null;
-        if (arrearsCategory == DebitType.total) {
+        if (arrearsCategory == null) {
             bucketMapper = new PropertyMapper() {
                 @Override
                 public Path getDboMemberPath(Path dtoMemberPath) {

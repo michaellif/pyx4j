@@ -13,16 +13,15 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
@@ -38,11 +37,11 @@ public class MockupLeaseAdjustmentPolicyPreloader extends AbstractPolicyPreloade
     protected LeaseAdjustmentPolicy createPolicy(StringBuilder log) {
         LeaseAdjustmentPolicy policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
-        EntityQueryCriteria<LeaseAdjustmentReason> larc = EntityQueryCriteria.create(LeaseAdjustmentReason.class);
-        for (LeaseAdjustmentReason lar : Persistence.service().query(larc)) {
+        EntityQueryCriteria<ARCode> larc = EntityQueryCriteria.create(ARCode.class);
+        for (ARCode lar : Persistence.service().query(larc)) {
             if (RandomUtil.randomBoolean()) { // do not process all items...
                 LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
-                item.leaseAdjustmentReason().set(lar);
+                item.code().set(lar);
 
                 EntityQueryCriteria<Tax> criteria = EntityQueryCriteria.create(Tax.class);
                 item.taxes().add(RandomUtil.random(Persistence.service().query(criteria)));

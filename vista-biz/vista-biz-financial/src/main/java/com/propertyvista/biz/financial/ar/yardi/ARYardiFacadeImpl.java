@@ -33,6 +33,8 @@ import com.propertyvista.biz.financial.ar.ARArrearsManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -188,6 +190,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     @Override
     public BillingFacade getBillingFacade() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ARCode getDefaultARCode(Type type) {
+        return ARYardiTransactionManager.instance().getDefaultARCode(type);
     }
 
 }

@@ -24,7 +24,7 @@ import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
-import com.propertyvista.biz.financial.billing.DebitTypeAdapter;
+import com.propertyvista.biz.financial.billing.DateRange;
 import com.propertyvista.biz.financial.billing.ProrationUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -32,8 +32,6 @@ import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.portal.rpc.shared.BillingException;
@@ -192,7 +190,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
         charge.dueDate().setValue(bill.dueDate().getValue());
-        charge.debitType().setValue(new DebitTypeAdapter().getDebitType(billableItem.item().type()));
+        charge.arCode().set(billableItem.item().code());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.productType().setValue(InvoiceProductCharge.ProductType.service);
@@ -275,15 +273,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
         BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
         adjustment.amount().setValue(MoneyUtils.round(amount.multiply(proration)));
-
-        if (billableItemAdjustment.billableItem().item().type().isInstanceOf(FeatureItemType.class)) {
-            adjustment.description().setValue(
-                    billableItemAdjustment.billableItem().item().type().<FeatureItemType> cast().featureType().getStringView() + " " + i18n.tr("Adjustment"));
-        } else if (billableItemAdjustment.billableItem().item().type().isInstanceOf(ServiceItemType.class)) {
-            adjustment.description().setValue(
-                    billableItemAdjustment.billableItem().item().type().<ServiceItemType> cast().serviceType().getStringView() + " " + i18n.tr("Adjustment"));
-        }
-
+        adjustment.description().setValue(billableItemAdjustment.billableItem().item().code().getStringView() + " " + i18n.tr("Adjustment"));
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
         charge.adjustmentSubLineItems().add(adjustment);

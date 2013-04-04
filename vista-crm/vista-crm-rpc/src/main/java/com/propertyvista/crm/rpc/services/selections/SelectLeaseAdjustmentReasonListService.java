@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services.selections;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.financial.ARCode;
 
-public interface SelectLeaseAdjustmentReasonListService extends AbstractListService<LeaseAdjustmentReason> {
+public interface SelectLeaseAdjustmentReasonListService extends AbstractListService<ARCode> {
 }

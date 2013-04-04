@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Concession.ConcessionV;
 
 /**
@@ -143,7 +144,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         IPrimitive<Condition> condition();
 
         @NotNull
-        ProductItemType productItemType();
+        ARCode productCode();
 
         @NotNull
         IPrimitive<Integer> productItemQuantity();

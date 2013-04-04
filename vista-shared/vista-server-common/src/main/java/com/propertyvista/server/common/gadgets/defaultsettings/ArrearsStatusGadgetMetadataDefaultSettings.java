@@ -14,7 +14,6 @@
 package com.propertyvista.server.common.gadgets.defaultsettings;
 
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class ArrearsStatusGadgetMetadataDefaultSettings extends AbstractGadgetMetadataCommonDefaultSettings<ArrearsStatusGadgetMetadata> {
 
@@ -22,8 +21,7 @@ public class ArrearsStatusGadgetMetadataDefaultSettings extends AbstractGadgetMe
     public void init(ArrearsStatusGadgetMetadata gadgetMetadata) {
         super.init(gadgetMetadata);
         gadgetMetadata.arrearsStatusListerSettings().pageSize().setValue(10);
-        gadgetMetadata.category().setValue(DebitType.total);
-
+        gadgetMetadata.category().setValue(null);
     }
 
 }

@@ -15,13 +15,15 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCharge;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCredit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
@@ -41,11 +43,12 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         // calculate product charge total
         Bill nextPeriodBill = getBillProducer().getNextPeriodBill();
         BigDecimal total = nextPeriodBill.serviceCharge().getValue()
-// @formatter:off
+        // @formatter:off
             .add(nextPeriodBill.recurringFeatureCharges().getValue())
             .add(nextPeriodBill.oneTimeFeatureCharges().getValue())
             .add(nextPeriodBill.depositAmount().getValue())
             .add(nextPeriodBill.taxes().getValue());
+        // @formatter:on
         BigDecimal initialBalance = nextPeriodBill.billingAccount().carryforwardBalance().getValue().subtract(total);
         InvoiceLineItem zeroCycleBalance = null;
         if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
@@ -55,7 +58,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
             InvoiceCarryforwardCharge charge = EntityFactory.create(InvoiceCarryforwardCharge.class);
             charge.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
             charge.taxTotal().setValue(BigDecimal.ZERO);
-            charge.debitType().setValue(DebitType.other);
+            charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.CarryForwardCharge));
             zeroCycleBalance = charge;
         }
         zeroCycleBalance.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
@@ -63,7 +66,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         zeroCycleBalance.description().setValue(i18n.tr("Carryforward Balance"));
         getBillProducer().getNextPeriodBill().lineItems().add(zeroCycleBalance);
         getBillProducer().getNextPeriodBill().carryForwardCredit()
-        .setValue(getBillProducer().getNextPeriodBill().carryForwardCredit().getValue().add(zeroCycleBalance.amount().getValue()));
+                .setValue(getBillProducer().getNextPeriodBill().carryForwardCredit().getValue().add(zeroCycleBalance.amount().getValue()));
 
     }
 

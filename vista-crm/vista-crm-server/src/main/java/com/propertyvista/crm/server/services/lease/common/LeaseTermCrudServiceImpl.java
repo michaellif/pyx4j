@@ -35,7 +35,6 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -268,13 +267,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), currentValue.lease().type()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), currentValue.lease().type()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
-            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().type(), ServiceItemType.class));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.lease().unit()));
 

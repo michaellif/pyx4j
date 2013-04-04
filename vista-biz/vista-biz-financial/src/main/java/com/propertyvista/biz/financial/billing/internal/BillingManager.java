@@ -305,7 +305,7 @@ public class BillingManager {
 
         BigDecimal taxRate = BigDecimal.ZERO;
         for (LeaseAdjustmentPolicyItem item : result.policyItems()) {
-            if (item.leaseAdjustmentReason().equals(adjustment.reason())) {
+            if (item.code().equals(adjustment.code())) {
                 for (Tax tax : item.taxes()) {
                     taxRate = taxRate.add(tax.rate().getValue());
                 }

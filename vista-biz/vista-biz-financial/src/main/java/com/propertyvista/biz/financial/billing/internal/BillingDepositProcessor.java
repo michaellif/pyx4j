@@ -27,9 +27,9 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade.ProductTerm;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -73,7 +73,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
                 invoiceDeposit.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
                 invoiceDeposit.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
-                invoiceDeposit.debitType().setValue(DebitType.deposit);
+                invoiceDeposit.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.Deposit));
                 invoiceDeposit.description().setValue(deposit.description().getStringView());
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
                 invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
@@ -81,7 +81,6 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                 addInvoiceDeposit(invoiceDeposit);
             }
         }
-
     }
 
     private void addInvoiceDeposit(InvoiceDeposit invoiceDeposit) {

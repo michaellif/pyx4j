@@ -45,7 +45,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceType(), new CEnumLabel()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 55).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);

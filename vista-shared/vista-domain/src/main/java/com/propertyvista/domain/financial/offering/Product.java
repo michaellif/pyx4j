@@ -33,10 +33,11 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Product.ProductV;
 
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILooseVersioning {
 
@@ -54,8 +55,13 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     @NotNull
     IPrimitive<Boolean> isDefaultCatalogItem();
 
-    @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+    @NotNull
+    @ToString(index = 0)
+    @MemberColumn(name = "codeType", notNull = true)
+    IPrimitive<ARCode.Type> type();
+
     @AbstractEntity
+    @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     public interface ProductV<P extends Product<?>> extends IVersionData<P> {
 

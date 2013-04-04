@@ -23,13 +23,11 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
-import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.admin.ProductCodeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Utility;
 
 public class ProductDictionaryViewActivity extends AbstractActivity implements ProductDictionaryView.Presenter {
@@ -38,9 +36,7 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
 
     protected final ProductDictionaryView view;
 
-    ILister.Presenter<ServiceItemType> serviceLister;
-
-    ILister.Presenter<FeatureItemType> featureLister;
+    ILister.Presenter<ARCode> productCodeLister;
 
     ILister.Presenter<Utility> utilityLister;
 
@@ -48,10 +44,8 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
         this.place = place;
         this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
 
-        serviceLister = new ListerController<ServiceItemType>(view.getServiceListerView(),
-                GWT.<ServiceItemTypeCrudService> create(ServiceItemTypeCrudService.class), ServiceItemType.class);
-        featureLister = new ListerController<FeatureItemType>(view.getFeatureListerView(),
-                GWT.<FeatureItemTypeCrudService> create(FeatureItemTypeCrudService.class), FeatureItemType.class);
+        productCodeLister = new ListerController<ARCode>(view.getProductCodeListerView(), GWT.<ProductCodeCrudService> create(ProductCodeCrudService.class),
+                ARCode.class);
         utilityLister = new ListerController<Utility>(view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class), Utility.class);
     }
 
@@ -68,8 +62,7 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
 
     @Override
     public void populate() {
-        serviceLister.populate();
-        featureLister.populate();
+        productCodeLister.populate();
         utilityLister.populate();
     }
 

@@ -38,10 +38,10 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.TaxType;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
@@ -55,19 +55,19 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reason(), new CEntitySelectorHyperlink<LeaseAdjustmentReason>() {
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
             @Override
             protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(LeaseAdjustmentReason.class, getValue().getPrimaryKey());
+                return AppPlaceEntityMapper.resolvePlace(ARCode.class, getValue().getPrimaryKey());
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<LeaseAdjustmentReason> getSelectorDialog() {
+            protected AbstractEntitySelectorDialog<ARCode> getSelectorDialog() {
                 return new LeaseAdjustmentReasonSelectorDialog() {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            get(LeaseAdjustmentForm.this.proto().reason()).setValue(getSelectedItems().get(0));
+                            get(LeaseAdjustmentForm.this.proto().code()).setValue(getSelectedItems().get(0));
                             recalculateTaxesAndTotal();
                         }
                         return !getSelectedItems().isEmpty();

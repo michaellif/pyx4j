@@ -31,6 +31,7 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -63,9 +64,9 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         for (InvoiceLineItem item : bill.lineItems()) {
             if (item.isInstanceOf(InvoiceDebit.class)) {
                 invoiceDebit = item.cast();
-                if (invoiceDebit.debitType().getValue().compareTo(InvoiceDebit.DebitType.parking) == 0) {
+                if (invoiceDebit.arCode().type().getValue().compareTo(ARCode.Type.Parking) == 0) {
                     invoiceDebitParking = invoiceDebit;
-                } else if (invoiceDebit.debitType().getValue().compareTo(InvoiceDebit.DebitType.lease) == 0) {
+                } else if (invoiceDebit.arCode().type().getValue().compareTo(ARCode.Type.Residential) == 0) {
                     invoiceDebitLease = invoiceDebit;
                 }
             }

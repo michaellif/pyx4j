@@ -153,8 +153,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        addBooking("25-Apr-2011");
-        addBooking("5-May-2011");
+        addBooking("25-Apr-2011"); // 30.00
+        addBooking("5-May-2011"); // 30.00
         finalizeLeaseAdendum();
 
         advanceSysDate("18-Apr-2011");
@@ -173,16 +173,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("-1247.00").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
-        oneTimeFeatureCharges("200.00").
-        taxes("155.20").
-        totalDueAmount("1448.50");
+        oneTimeFeatureCharges("60.00").
+        taxes("138.40").
+        totalDueAmount("1291.70");
         // @formatter:on
 
-        receiveAndPostPayment("19-Apr-2011", "1448.50");
+        receiveAndPostPayment("19-Apr-2011", "1291.70");
 
         //==================== RUN 4 ======================//
 
-        addBooking("28-Apr-2011");
+        addBooking("28-Apr-2011"); // 30.00
         finalizeLeaseAdendum();
 
         addGoodWillCredit("20.00", false);
@@ -206,15 +206,15 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         numOfProductCharges(6).
-        paymentReceivedAmount("-1448.50").
+        paymentReceivedAmount("-1291.70").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
-        oneTimeFeatureCharges("100.00").
-        taxes("143.20").
-        totalDueAmount("1036.50");
+        oneTimeFeatureCharges("30.00").
+        taxes("134.80").
+        totalDueAmount("958.10");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1036.50");
+        receiveAndPostPayment("19-May-2011", "958.10");
 
         //==================== RUN 5 ======================//
 
@@ -233,7 +233,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1036.50").
+        paymentReceivedAmount("-958.10").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").

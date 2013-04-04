@@ -20,8 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -29,7 +28,7 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
 
     private static final I18n i18n = I18n.get(OkCancelDialog.class);
 
-    public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+    public SelectFeatureBox(ARCode.Type type, ApartmentInfoDTO apartmentInfo) {
         super(i18n.tr("Select {0}(s)", type), true, getAvailableList(type, apartmentInfo));
     }
 
@@ -43,20 +42,20 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
         return "100px";
     }
 
-    private static List<ProductItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+    private static List<ProductItem> getAvailableList(ARCode.Type type, ApartmentInfoDTO apartmentInfo) {
         // TODO in the previous version there was a commented out part of code that restricted addition of already selected items (from apartmentInfo.agreed*())
         List<ProductItem> available = null;
         switch (type) {
-        case utility:
+        case Utility:
             available = apartmentInfo.availableUtilities();
             break;
-        case pet:
+        case Pet:
             available = apartmentInfo.availablePets();
             break;
-        case parking:
+        case Parking:
             available = apartmentInfo.availableParking();
             break;
-        case locker:
+        case Locker:
             available = apartmentInfo.availableStorage();
             break;
         default:
@@ -72,20 +71,19 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
         return result;
     }
 
-    private static boolean isCompatible(ProductItem item, Feature.Type type) {
-
-        if (type.equals(Feature.Type.addOn)) {
-            switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
-            case utility:
-            case pet:
-            case parking:
-            case locker:
+    private static boolean isCompatible(ProductItem item, ARCode.Type type) {
+        if (type.equals(ARCode.Type.AddOn)) {
+            switch (item.code().type().getValue()) {
+            case Utility:
+            case Pet:
+            case Parking:
+            case Locker:
                 return false;
 
             default:
                 return true;
             }
         }
-        return (item.type().<FeatureItemType> cast().featureType().getValue().equals(type));
+        return (item.code().type().getValue().equals(type));
     }
 }

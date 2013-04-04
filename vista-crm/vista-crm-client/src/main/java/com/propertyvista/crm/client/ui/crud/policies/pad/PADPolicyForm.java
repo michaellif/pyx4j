@@ -15,26 +15,30 @@ package com.propertyvista.crm.client.ui.crud.policies.pad;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.PADPolicyDTO;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
@@ -112,27 +116,38 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
 
         @Override
         protected void addItem() {
-            final List<DebitType> alreadySelectedTypes = new ArrayList<DebitType>();
+            final List<ARCode> alreadySelectedTypes = new ArrayList<ARCode>();
             for (PADPolicyItem di : getValue()) {
                 if (!di.debitType().isNull()) {
-                    alreadySelectedTypes.add(di.debitType().getValue());
+                    alreadySelectedTypes.add(di.debitType());
                 }
             }
-            Collection<DebitType> selection = new ArrayList<DebitType>(EnumSet.allOf(DebitType.class));
-            selection.removeAll(alreadySelectedTypes);
 
-            new SelectEnumDialog<DebitType>(i18n.tr("Select Debit Type"), selection) {
+            new EntitySelectorTableDialog<ARCode>(ARCode.class, false, alreadySelectedTypes, i18n.tr("Select Debit Type")) {
                 @Override
                 public boolean onClickOk() {
                     PADPolicyItem newItem = EntityFactory.create(PADPolicyItem.class);
-                    newItem.debitType().setValue(getSelectedType());
+                    newItem.debitType().set(getSelectedItems().get(0));
                     PADPolicyItemEditorFolder.this.addItem(newItem);
                     return true;
                 }
 
                 @Override
-                public String defineWidth() {
-                    return "20em";
+                protected List<ColumnDescriptor> defineColumnDescriptors() {
+                    return Arrays.asList(//@formatter:off
+                            new MemberColumnDescriptor.Builder(proto().name(), true).build(),
+                            new MemberColumnDescriptor.Builder(proto().type(), true).build()
+                    ); //@formatter:on
+                }
+
+                @Override
+                public List<Sort> getDefaultSorting() {
+                    return Arrays.asList(new Sort(proto().type().getPath().toString(), false), new Sort(proto().name().getPath().toString(), false));
+                }
+
+                @Override
+                protected AbstractListService<ARCode> getSelectService() {
+                    return GWT.<AbstractListService<ARCode>> create(SelectProductCodeListService.class);
                 }
             }.show();
         }

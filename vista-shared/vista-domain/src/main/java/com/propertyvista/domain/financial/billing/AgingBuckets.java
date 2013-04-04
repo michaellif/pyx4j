@@ -22,11 +22,11 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.ARCode;
 
 public interface AgingBuckets extends IEntity {
 
-    IPrimitive<DebitType> debitType();
+    IPrimitive<ARCode.Type> arCode();
 
     /** sum of money that is owed but which time is not yet overdue */
     @Caption(name = "Current")

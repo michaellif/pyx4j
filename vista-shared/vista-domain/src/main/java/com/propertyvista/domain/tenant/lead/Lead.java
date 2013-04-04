@@ -37,7 +37,7 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -139,7 +139,7 @@ public interface Lead extends IEntity {
     IPrimitive<LeaseTerm> leaseTerm();
 
     @ToString(index = 3)
-    IPrimitive<Service.ServiceType> leaseType();
+    IPrimitive<ARCode.Type> leaseType();
 
     Floorplan floorplan();
 

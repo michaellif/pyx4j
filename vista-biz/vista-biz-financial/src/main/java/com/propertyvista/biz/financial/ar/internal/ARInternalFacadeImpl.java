@@ -32,6 +32,8 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -170,6 +172,11 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
         return ARInternalTransactionManager.instance().getPADBalance(billingAccount, cycle);
+    }
+
+    @Override
+    public ARCode getDefaultARCode(Type type) {
+        return ARInternalTransactionManager.instance().getDefaultARCode(type);
     }
 
     @Override

@@ -38,7 +38,6 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
@@ -94,7 +93,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
 
         Collection<AgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
         th.agingBuckets().addAll(agingBucketsCollection);
-        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(DebitType.total), agingBucketsCollection));
+        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(null), agingBucketsCollection));
         return th;
     }
 
@@ -148,4 +147,5 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         }
         return total;
     }
+
 }

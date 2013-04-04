@@ -29,10 +29,9 @@ import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -73,8 +72,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         if (retrieveTraget == RetrieveTraget.Edit) {
-            EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
-            featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
+            EntityQueryCriteria<ARCode> featureItemCriteria = EntityQueryCriteria.create(ARCode.class);
+            featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().type(), ARCode.Type.AddOn, ARCode.Type.Utility));
             dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
         }
 
