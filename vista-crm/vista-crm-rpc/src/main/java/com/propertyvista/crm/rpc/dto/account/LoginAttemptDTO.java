@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.security.AuditRecordEventType;
 public interface LoginAttemptDTO extends IEntity {
 
     @Caption(name = "When")
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> time();
 
     @Length(16)
