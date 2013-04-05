@@ -75,7 +75,7 @@ public enum PmcProcessType implements Serializable {
 
     tenantSureReports,
 
-    tenantSureTransactionReports,
+    tenantSureTransactionReports(true),
 
     // Used for scheduler testing
     test;
