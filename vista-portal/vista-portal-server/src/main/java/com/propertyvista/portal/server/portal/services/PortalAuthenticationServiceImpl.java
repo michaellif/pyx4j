@@ -122,7 +122,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
         Customer customer = Persistence.service().retrieve(criteria);
-        if (customer.registeredInPortal() == null || customer.registeredInPortal().getValue() == Boolean.FALSE) {
+        if (!customer.registeredInPortal().getValue(Boolean.FALSE)) {
             customer.registeredInPortal().setValue(Boolean.TRUE);
             Persistence.service().persist(customer);
             Persistence.service().commit();
