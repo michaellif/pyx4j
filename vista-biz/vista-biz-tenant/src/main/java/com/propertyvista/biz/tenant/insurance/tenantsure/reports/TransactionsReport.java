@@ -35,7 +35,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
-import com.propertyvista.biz.tenant.insurance.TenantSureReportStatusData;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.operations.rpc.TenantSureCcTaransactionsReportLineDTO;
@@ -48,7 +47,8 @@ public class TransactionsReport implements Report {
 
     @Override
     public void start(ReportTableFormatter formatter) {
-        EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
+        EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO> er = new EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO>(
+                TenantSureCcTaransactionsReportLineDTO.class);
         er.createHeader(formatter);
     }
 
