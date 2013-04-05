@@ -26,5 +26,4 @@ public class PaymentWizardViewImpl extends VistaAbstractWizard<PaymentRecordDTO>
         super(i18n.tr("Payment Setup"));
         setForm(new PaymentWizardForm(this));
     }
-
 }

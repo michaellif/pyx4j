@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ui.residents.payment;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -21,6 +22,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -156,20 +158,26 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                             }
                         }
 
-                        paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
-
                         paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
-                        paymentMethodEditor.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
                         break;
                     }
+                }
+            }
+        });
+
+        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
+                if (event.getValue() != null) {
+                    paymentMethodEditor.populate(event.getValue());
                 }
             }
         });
@@ -202,8 +210,55 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().getStepTitle().equals(PAYMENTMETHOD_STEP_TITLE)) {
-            paymentMethodEditor.setEditable(getValue().selectPaymentMethod().getValue() == PaymentSelect.New);
+//            paymentMethodEditor.setEditable(getValue().selectPaymentMethod().getValue() == PaymentSelect.New);
         }
+    }
+
+    @Override
+    protected void onValueSet(final boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().id()).setVisible(!getValue().id().isNull());
+
+        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
+        paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+
+        loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+                boolean isProfiledMethod = profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod());
+
+                get(proto().selectPaymentMethod()).reset();
+                get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
+                get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
+                get(proto().selectPaymentMethod()).setValue((isProfiledMethod ? PaymentSelect.Profiled : PaymentSelect.New), !isProfiledMethod, populate);
+
+                profiledPaymentMethodsCombo.setVisible(isProfiledMethod);
+            }
+        });
+
+        if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
+            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
+        } else {
+            paymentMethodEditor.setViewable(false);
+        }
+
+        // TODO : this is the HACK - check CComponent.setVisible implementation!!!
+        paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
+    }
+
+    private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
+        profiledPaymentMethodsCombo.setOptions(null);
+        ((PaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
+            @Override
+            public void onSuccess(List<LeasePaymentMethod> result) {
+                profiledPaymentMethodsCombo.setOptions(result);
+                if (callback != null) {
+                    callback.onSuccess(null);
+                }
+            }
+        });
     }
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
