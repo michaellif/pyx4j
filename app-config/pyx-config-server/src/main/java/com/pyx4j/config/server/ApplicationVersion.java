@@ -104,7 +104,7 @@ public class ApplicationVersion {
         }
 
         buildLabel = properties.getProperty(BUILD_NUMBER, "n/a");
-        if (buildLabel.startsWith("${") || buildLabel.endsWith("-SNAPSHOT")) {
+        if (buildLabel.startsWith("${")) {
             buildLabel = "n/a";
         }
         productVersion = properties.getProperty(POM_VERSION, buildLabel);
