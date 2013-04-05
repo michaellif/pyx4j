@@ -13,7 +13,7 @@
  */
 package com.propertyvista.biz.financial.maintenance.yardi;
 
-import com.propertyvista.domain.maintenance.IssueElement;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 
 public class MaintenanceYardiCategoryManager {
 
@@ -25,9 +25,9 @@ public class MaintenanceYardiCategoryManager {
         return SingletonHolder.INSTANCE;
     }
 
-    protected IssueElement getMaintenanceRequestCategoryMeta() {
+    protected MaintenanceRequestCategory getMaintenanceRequestCategories() {
 
-        // TODO map categories we get from Yardi into this? Still work in progress, either returns IssueElement or something else
+        // TODO map categories we get from Yardi into MaintenanceRequestCategoryMeta and then into MaintenanceRequestCategory tree. Use one as a top category (no parent), each of which could have a list of subcategories.
 
         return null;
     }

@@ -20,8 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
-import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -36,8 +36,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public IssueElement getMaintenanceRequestCategoryMeta() {
-        return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategoryMeta();
+    public MaintenanceRequestCategory getMaintenanceRequestCategory() {
+        return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategories();
     }
 
     @Override

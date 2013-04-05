@@ -21,12 +21,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceFacade {
 
-    IssueElement getMaintenanceRequestCategoryMeta();
+    MaintenanceRequestCategory getMaintenanceRequestCategory();
 
     List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant);
 

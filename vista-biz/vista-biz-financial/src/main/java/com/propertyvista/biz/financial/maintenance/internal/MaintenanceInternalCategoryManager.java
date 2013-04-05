@@ -13,7 +13,12 @@
  */
 package com.propertyvista.biz.financial.maintenance.internal;
 
-import com.propertyvista.domain.maintenance.IssueElement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 
 public class MaintenanceInternalCategoryManager {
 
@@ -25,9 +30,18 @@ public class MaintenanceInternalCategoryManager {
         return SingletonHolder.INSTANCE;
     }
 
-    protected IssueElement getMaintenanceRequestCategoryMeta() {
-        // TODO Auto-generated method stub
-        return null;
+    protected MaintenanceRequestCategory getMaintenanceRequestCategories() {
+        // TODO replace with real preload data
+		MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
+        List<MaintenanceRequestCategory> subCategories = new ArrayList<MaintenanceRequestCategory>();
+        for (int i = 0; i < 5; i++) {
+            category.name().setValue("subCategory" + i);
+            subCategories.add(category);
+        }
+        category.name().setValue("topCategory");
+        category.subCategories().addAll(subCategories);
+
+        return category;
     }
 
 }

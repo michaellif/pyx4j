@@ -14,7 +14,14 @@
 package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface MaintenanceRequestCategoryMeta extends IEntity {
+public interface MaintenanceRequestCategory extends IEntity {
 
+    MaintenanceRequestCategory parent();
+
+    IPrimitive<String> name();
+
+    IList<MaintenanceRequestCategory> subCategories();
 }

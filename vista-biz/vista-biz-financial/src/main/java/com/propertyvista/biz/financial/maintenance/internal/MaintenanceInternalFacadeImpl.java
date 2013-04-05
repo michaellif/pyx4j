@@ -25,8 +25,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
-import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -42,8 +42,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public IssueElement getMaintenanceRequestCategoryMeta() {
-        return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategoryMeta();
+    public MaintenanceRequestCategory getMaintenanceRequestCategory() {
+        return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategories();
     }
 
     @Override
