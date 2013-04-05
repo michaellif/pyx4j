@@ -14,11 +14,11 @@
 package com.propertyvista.portal.client.ui.residents.payment;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.wizard.AbstractWizard;
 
+import com.propertyvista.common.client.ui.wizard.VistaAbstractWizard;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentWizardViewImpl extends AbstractWizard<PaymentRecordDTO> implements PaymentWizardView {
+public class PaymentWizardViewImpl extends VistaAbstractWizard<PaymentRecordDTO> implements PaymentWizardView {
 
     private static final I18n i18n = I18n.get(PaymentWizardViewImpl.class);
 

@@ -1,0 +1,173 @@
+/*
+ * Pyx4j framework
+ * Copyright (C) 2008-2011 pyx4j.com.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ *
+ * Created on Apr 6, 2012
+ * @author michaellif
+ * @version $Id$
+ */
+package com.propertyvista.common.client.ui.wizard;
+
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.site.client.ui.BreadcrumbsBar;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
+import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.VisorEditorHolder;
+import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
+import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
+
+public abstract class VistaAbstractView extends VerticalPanel implements IPane {
+
+    private static final String TOOLBAR_DEFAULT_HEIGHT = "35px";
+
+    private final DeckLayoutPanel contentPanel = new DeckLayoutPanel();
+
+    private final VisorLayoutPanel visorPane;
+
+    private final Label captionLabel;
+
+    private final Toolbar headerToolbar;
+
+    private final Toolbar footerToolbar;
+
+    private final FlowPanel headerContainer;
+
+    private final SimplePanel headerBreadcrumbHolder;
+
+    private final SimplePanel headerToolbarHolder;
+
+    private final SimplePanel footerToolbarHolder;
+
+    private final FlowPanel headerCaption;
+
+    private final String headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+
+    private String footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+
+    public VistaAbstractView() {
+        super();
+
+        headerCaption = new FlowPanel();
+        captionLabel = new Label();
+        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+        headerCaption.add(captionLabel);
+        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
+        headerCaption.setHeight(TOOLBAR_DEFAULT_HEIGHT);
+        add(headerCaption);
+
+        headerContainer = new FlowPanel();
+        headerContainer.setStyleName(DefaultPaneTheme.StyleName.HeaderContainer.name());
+        headerContainer.setHeight("0");
+        add(headerContainer);
+
+        headerToolbarHolder = new SimplePanel();
+        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        headerToolbar = new Toolbar();
+        headerToolbarHolder.setWidget(headerToolbar);
+
+        headerContainer.add(headerToolbarHolder);
+
+        headerBreadcrumbHolder = new SimplePanel();
+        headerBreadcrumbHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderBreadcrumbs.name());
+        headerContainer.add(headerBreadcrumbHolder);
+
+        add(contentPanel);
+
+        footerToolbarHolder = new SimplePanel();
+        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        footerToolbar = new Toolbar();
+        footerToolbarHolder.setWidget(footerToolbar);
+        footerToolbarHolder.setHeight("0");
+        add(footerToolbarHolder);
+
+        visorPane = new VisorLayoutPanel();
+        visorPane.setAnimationDuration(500);
+    }
+
+    protected FlowPanel getHeaderCaption() {
+        return headerCaption;
+    }
+
+    protected IsWidget getContentPane() {
+        return contentPanel;
+    }
+
+    protected void setContentPane(IsWidget widget) {
+        assert visorPane.getWidgetCount() == 0 : "Content Pane is already set";
+        visorPane.setContentPane(widget);
+        add(visorPane);
+    }
+
+    @Override
+    public void showVisor(IVisor visor, String caption) {
+        if (visor instanceof IVisorViewer) {
+            visorPane.showVisorPane(new VisorViewerHolder((IVisorViewer) visor, caption, this));
+        } else if (visor instanceof IVisorEditor) {
+            visorPane.showVisorPane(new VisorEditorHolder((IVisorEditor) visor, caption, this));
+        }
+    }
+
+    @Override
+    public void hideVisor() {
+        visorPane.hideVisorPane();
+    }
+
+    @Override
+    public boolean isVisorShown() {
+        return visorPane.isVisorShown();
+    }
+
+    public void setCaption(String caption) {
+        captionLabel.setText(caption);
+    }
+
+    public String getCaption() {
+        return captionLabel.getText();
+    }
+
+    public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
+        headerContainer.setHeight(headerToolbarHeight);
+        headerBreadcrumbHolder.setWidget(breadcrumbsBar);
+    }
+
+    public void addHeaderToolbarItem(Widget widget) {
+        headerContainer.setHeight(headerToolbarHeight);
+        headerToolbar.addItem(widget);
+    }
+
+    public void addFooterToolbarItem(Widget widget) {
+        footerToolbarHolder.setHeight(footerToolbarHeight);
+        footerToolbar.addItem(widget);
+    }
+
+    public void setFooterToolbarHeight(String footerToolbarHeight) {
+        this.footerToolbarHeight = footerToolbarHeight;
+        if (footerToolbar.getWidgetCount() == 0) {
+            footerToolbarHolder.setHeight(footerToolbarHeight);
+        }
+    }
+
+}
