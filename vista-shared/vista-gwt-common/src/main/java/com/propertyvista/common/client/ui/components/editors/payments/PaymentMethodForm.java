@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.text.ParseException;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -59,14 +60,16 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         paymentMethods.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
         paymentMethods.setWidth("100%");
 
-        CRadioGroupEnum<PaymentType> pmsrg;
-        paymentMethods.add(inject(proto().type(), pmsrg = new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
+        CRadioGroupEnum<PaymentType> pmRadioGroup;
+        paymentMethods.add(inject(proto().type(), pmRadioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
                 RadioGroup.Layout.HORISONTAL)));
+        pmRadioGroup.asWidget().getElement().getStyle().setMarginLeft(10, Unit.EM);
+
         paymentMethods.add(paymentDetailsHolder);
         DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
         paymentDetailsHolder.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
 
-        pmsrg.setFormat(new IFormat<PaymentType>() {
+        pmRadioGroup.setFormat(new IFormat<PaymentType>() {
             @Override
             public PaymentType parse(String string) throws ParseException {
                 return null;
