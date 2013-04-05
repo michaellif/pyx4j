@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.wizard;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -58,11 +60,17 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
         setWidth("100%");
 
-        headerCaption = new FlowPanel();
+// TODO: style right (generic) way!!!
+
         captionLabel = new Label();
-//        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+//      captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+
+        headerCaption = new FlowPanel();
         headerCaption.add(captionLabel);
 //        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
+        headerCaption.getElement().getStyle().setFontSize(1.2, Unit.EM);
+        headerCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
         headerCaption.setHeight(TOOLBAR_DEFAULT_HEIGHT);
         add(headerCaption);
 
@@ -76,7 +84,6 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         add(contentHolder);
 
         footerToolbarHolder = new SimplePanel();
-        // TODO: style generic way
         footerToolbarHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 //        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
 

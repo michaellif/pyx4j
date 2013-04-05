@@ -89,6 +89,10 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
         return view;
     }
 
+    public VistaWizardStep getSelectedStep() {
+        return wizardPanel.getSelectedStep();
+    }
+
     @Override
     public void onReset() {
         if (wizardPanel.size() > 0) {

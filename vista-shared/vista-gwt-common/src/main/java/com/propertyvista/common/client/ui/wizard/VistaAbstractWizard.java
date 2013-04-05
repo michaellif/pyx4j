@@ -145,6 +145,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
 
     @Override
     public void onStepChange() {
+        setCaption(form.getSelectedStep().getStepTitle());
         calculateButtonsState();
     }
 }

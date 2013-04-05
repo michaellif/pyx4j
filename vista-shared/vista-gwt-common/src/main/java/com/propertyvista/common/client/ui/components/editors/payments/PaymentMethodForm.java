@@ -96,9 +96,10 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
                     if (paymentTypeImage != null) {
                         holder = new FlowPanel();
                         holder.add(paymentTypeImage);
+                        return holder.getElement().getInnerHTML();
                     }
 
-                    return (paymentTypeImage != null ? holder.getElement().getInnerHTML() : value.toString());
+                    return value.toString();
                 }
 
                 return null;
