@@ -1,33 +1,78 @@
 /*
- * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- * Created on Dec 26, 2012
- * @author michaellif
+ * Created on 2013-04-05
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.common.client.ui.wizard;
 
-import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IndexedPanel;
 
-public class VistaWizardPanel extends TabPanel {
+public class VistaWizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<VistaWizardStep>,
+        HasSelectionHandlers<VistaWizardStep> {
 
     public VistaWizardPanel() {
         super();
-        addStyleName(DefaultTabTheme.StyleName.WizardPanel.name());
+//        addStyleName(DefaultTabTheme.StyleName.WizardPanel.name());
     }
 
+    public void addStep(VistaWizardStep step) {
+        add(step);
+    }
+
+    public void insertStep(VistaWizardStep step, int beforeIndex) {
+        insert(step, beforeIndex);
+    }
+
+    public void selectStep(VistaWizardStep step) {
+        selectStep(getWidgetIndex(step));
+    }
+
+    public void selectStep(int i) {
+        BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, (VistaWizardStep) getWidget(i));
+        if (event != null && event.isCanceled()) {
+            return;
+        }
+
+        showWidget(i);
+        SelectionEvent.fire(this, getSelectedStep());
+    }
+
+    public int getSelectedIndex() {
+        return getVisibleWidget();
+    }
+
+    public VistaWizardStep getSelectedStep() {
+        return (VistaWizardStep) getWidget(getVisibleWidget());
+    }
+
+    public int size() {
+        return getWidgetCount();
+    }
+
+    @Override
+    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<VistaWizardStep> handler) {
+        return addHandler(handler, BeforeSelectionEvent.getType());
+    }
+
+    @Override
+    public HandlerRegistration addSelectionHandler(SelectionHandler<VistaWizardStep> handler) {
+        return addHandler(handler, SelectionEvent.getType());
+    }
 }

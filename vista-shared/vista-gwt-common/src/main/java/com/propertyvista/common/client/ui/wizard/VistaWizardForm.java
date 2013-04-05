@@ -1,26 +1,17 @@
 /*
- * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- * Created on 2011-07-29
- * @author Vlad
+ * Created on 2013-04-05
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.common.client.ui.wizard;
-
-import java.util.List;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -31,18 +22,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-import com.pyx4j.site.client.ui.prime.wizard.WizardStep;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
-public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> {
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+
+public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecoratableForm<E> {
 
     private static final I18n i18n = I18n.get(VistaWizardForm.class);
 
@@ -54,35 +42,35 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> 
         super(rootClass);
         this.view = view;
         wizardPanel = new VistaWizardPanel();
-        wizardPanel.addSelectionHandler(new SelectionHandler<Tab>() {
+        wizardPanel.addSelectionHandler(new SelectionHandler<VistaWizardStep>() {
             @Override
-            public void onSelection(SelectionEvent<Tab> event) {
+            public void onSelection(SelectionEvent<VistaWizardStep> event) {
                 onStepChange(event);
             }
         });
     }
 
-    protected void onStepChange(SelectionEvent<Tab> event) {
+    protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         view.onStepChange();
     }
 
     @Override
     public IsWidget createContent() {
-        wizardPanel.setSize("100%", "100%");
+//        wizardPanel.setSize("100%", "30em");
         return wizardPanel;
     }
 
-    public WizardStep addStep(final FormFlexPanel panel) {
-        final WizardStep step = addStep(panel, panel.getTitle());
+    public VistaWizardStep addStep(final FormFlexPanel panel) {
+        final VistaWizardStep step = addStep(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     ValidationResults validationResults = panel.getValidationResults();
                     if (validationResults.isValid()) {
-                        step.setTabWarning(null);
+                        step.setStepWarning(null);
                     } else {
-                        step.setTabWarning(validationResults.getValidationShortMessage());
+                        step.setStepWarning(validationResults.getValidationShortMessage());
                     }
                 }
             }
@@ -90,10 +78,10 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> 
         return step;
     }
 
-    public WizardStep addStep(Widget content, String tabTitle) {
-        WizardStep step = null;
-        step = new WizardStep(content, tabTitle);
-        wizardPanel.addTab(step);
+    public VistaWizardStep addStep(Widget content, String tabTitle) {
+        VistaWizardStep step = null;
+        step = new VistaWizardStep(content, tabTitle);
+        wizardPanel.addStep(step);
         return step;
     }
 
@@ -103,13 +91,8 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> 
 
     @Override
     public void onReset() {
-        if (wizardPanel.getTabs().size() > 0) {
-            wizardPanel.selectTab(0);
-        }
-
-        List<Tab> tabs = wizardPanel.getTabs();
-        for (int i = 1; i < tabs.size(); i++) {
-            tabs.get(i).setTabEnabled(false);
+        if (wizardPanel.size() > 0) {
+            wizardPanel.selectStep(0);
         }
 
         super.onReset();
@@ -118,19 +101,18 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> 
     public void previous() {
         int index = wizardPanel.getSelectedIndex();
         if (index > 0) {
-            wizardPanel.selectTab(index - 1);
+            wizardPanel.selectStep(index - 1);
         }
     }
 
     public void next() {
-        WizardStep step = (WizardStep) wizardPanel.getSelectedTab();
+        VistaWizardStep step = wizardPanel.getSelectedStep();
         step.showErrors();
         ValidationResults validationResults = step.getValidationResults();
         if (validationResults.isValid()) {
             int index = wizardPanel.getSelectedIndex();
             if (index < wizardPanel.size() - 1) {
-                wizardPanel.setTabEnabled(index + 1, true);
-                wizardPanel.selectTab(index + 1);
+                wizardPanel.selectStep(index + 1);
             }
         } else {
             MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true));
@@ -154,25 +136,5 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityForm<E> 
 
     public boolean isLast() {
         return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
-    }
-
-    // decoration stuff:
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?, ?> component) {
-            super(component);
-        }
-
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
-            super(component);
-            componentWidth(componentWidth);
-        }
-
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
-            super(component);
-            componentWidth(componentWidth);
-            labelWidth(labelWidth);
-        }
-
     }
 }

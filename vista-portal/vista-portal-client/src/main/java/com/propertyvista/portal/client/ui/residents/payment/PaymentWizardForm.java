@@ -38,12 +38,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
+import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -52,7 +53,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
 
-public class PaymentWizardForm extends WizardForm<PaymentRecordDTO> {
+public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
@@ -132,6 +133,47 @@ public class PaymentWizardForm extends WizardForm<PaymentRecordDTO> {
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
 
+        get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
+                paymentMethodEditor.reset();
+                paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
+
+                if (event.getValue() != null) {
+                    switch (event.getValue()) {
+                    case New:
+                        paymentMethodEditor.setViewable(false);
+
+                        if (getValue().allowedPaymentTypes().isEmpty()) {
+                            paymentMethodEditor.initNew(null);
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
+                        } else {
+                            // set preferred value:
+                            if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {
+                                paymentMethodEditor.initNew(PaymentType.Echeck);
+                            } else {
+                                paymentMethodEditor.initNew(null);
+                            }
+                        }
+
+                        paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
+
+                        paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
+
+                        setProfiledPaymentMethodsVisible(false);
+                        break;
+                    case Profiled:
+                        paymentMethodEditor.setViewable(true);
+                        paymentMethodEditor.setVisible(false);
+
+                        profiledPaymentMethodsCombo.reset();
+                        setProfiledPaymentMethodsVisible(true);
+                        break;
+                    }
+                }
+            }
+        });
+
         return panel;
     }
 
@@ -139,13 +181,6 @@ public class PaymentWizardForm extends WizardForm<PaymentRecordDTO> {
         FormFlexPanel panel = new FormFlexPanel(PAYMENTMETHOD_STEP_TITLE);
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
-
-        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                setupAddThisPaymentMethodToProfile(event.getValue());
-            }
-        });
 
         return panel;
     }
@@ -164,11 +199,15 @@ public class PaymentWizardForm extends WizardForm<PaymentRecordDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<Tab> event) {
+    protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
-        if (event.getSelectedItem().getTabTitle().equals(PAYMENTMETHOD_STEP_TITLE)) {
+        if (event.getSelectedItem().getStepTitle().equals(PAYMENTMETHOD_STEP_TITLE)) {
             paymentMethodEditor.setEditable(getValue().selectPaymentMethod().getValue() == PaymentSelect.New);
         }
+    }
+
+    private void setProfiledPaymentMethodsVisible(boolean visible) {
+        profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
     }
 
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {

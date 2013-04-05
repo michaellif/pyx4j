@@ -1,33 +1,24 @@
 /*
- * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- * 
- * Created on 2011-05-04
- * @author Vlad
+ * Created on 2013-04-05
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.common.client.ui.wizard;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -36,7 +27,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
 
     private static final I18n i18n = I18n.get(VistaAbstractWizard.class);
 
-    private WizardForm<E> form;
+    private VistaWizardForm<E> form;
 
     private IWizard.Presenter presenter;
 
@@ -47,6 +38,14 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
     public VistaAbstractWizard(String caption) {
         super();
         setCaption(caption);
+
+        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
+            @Override
+            public void execute() {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -69,23 +68,9 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
             }
         });
         addFooterToolbarItem(btnNext);
-
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
-            @Override
-            public void execute() {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
-
     }
 
-    protected void setForm(WizardForm<E> form) {
-        if (getContentPane() == null) { // finalise UI here:
-            setContentPane(new LayoutPanel());
-            setSize("100%", "100%");
-        }
-
+    protected void setForm(VistaWizardForm<E> form) {
         if (getForm() == form) {
             return; // already!?.
         }
@@ -93,14 +78,10 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
         this.form = form;
         this.form.initContent();
 
-        LayoutPanel content = (LayoutPanel) getContentPane();
-        content.clear(); // remove current form...
-
-        content.add(this.form);
-
+        setContent(this.form.asWidget());
     }
 
-    protected WizardForm<E> getForm() {
+    protected VistaWizardForm<E> getForm() {
         return form;
     }
 

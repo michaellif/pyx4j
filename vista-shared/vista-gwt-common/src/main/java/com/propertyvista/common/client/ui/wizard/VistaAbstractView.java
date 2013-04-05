@@ -1,26 +1,18 @@
 /*
- * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- *
- * Created on Apr 6, 2012
- * @author michaellif
+ * Created on 2013-04-05
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.common.client.ui.wizard;
 
-import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -28,8 +20,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.site.client.ui.BreadcrumbsBar;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
@@ -41,11 +31,13 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
-    private static final String TOOLBAR_DEFAULT_HEIGHT = "35px";
+    private static final String TOOLBAR_DEFAULT_HEIGHT = "50px";
 
-    private final DeckLayoutPanel contentPanel = new DeckLayoutPanel();
+    private final SimplePanel contentHolder = new SimplePanel();
 
     private final VisorLayoutPanel visorPane;
+
+    private final FlowPanel headerCaption;
 
     private final Label captionLabel;
 
@@ -53,54 +45,43 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
     private final Toolbar footerToolbar;
 
-    private final FlowPanel headerContainer;
-
-    private final SimplePanel headerBreadcrumbHolder;
-
     private final SimplePanel headerToolbarHolder;
 
     private final SimplePanel footerToolbarHolder;
 
-    private final FlowPanel headerCaption;
-
-    private final String headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private String headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     private String footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     public VistaAbstractView() {
         super();
 
+        setWidth("100%");
+
         headerCaption = new FlowPanel();
         captionLabel = new Label();
-        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+//        captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
         headerCaption.add(captionLabel);
-        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
+//        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
         headerCaption.setHeight(TOOLBAR_DEFAULT_HEIGHT);
         add(headerCaption);
 
-        headerContainer = new FlowPanel();
-        headerContainer.setStyleName(DefaultPaneTheme.StyleName.HeaderContainer.name());
-        headerContainer.setHeight("0");
-        add(headerContainer);
-
         headerToolbarHolder = new SimplePanel();
-        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+//        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
+        add(headerToolbarHolder);
 
-        headerContainer.add(headerToolbarHolder);
-
-        headerBreadcrumbHolder = new SimplePanel();
-        headerBreadcrumbHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderBreadcrumbs.name());
-        headerContainer.add(headerBreadcrumbHolder);
-
-        add(contentPanel);
+        add(contentHolder);
 
         footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        // TODO: style generic way
+        footerToolbarHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+//        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
-        footerToolbarHolder.setHeight("0");
         add(footerToolbarHolder);
 
         visorPane = new VisorLayoutPanel();
@@ -111,14 +92,13 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         return headerCaption;
     }
 
-    protected IsWidget getContentPane() {
-        return contentPanel;
+    protected IsWidget getContent() {
+        return contentHolder.getWidget();
     }
 
-    protected void setContentPane(IsWidget widget) {
-        assert visorPane.getWidgetCount() == 0 : "Content Pane is already set";
-        visorPane.setContentPane(widget);
-        add(visorPane);
+    protected void setContent(IsWidget widget) {
+        contentHolder.clear();
+        contentHolder.setWidget(widget);
     }
 
     @Override
@@ -148,14 +128,16 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         return captionLabel.getText();
     }
 
-    public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
-        headerContainer.setHeight(headerToolbarHeight);
-        headerBreadcrumbHolder.setWidget(breadcrumbsBar);
+    public void addHeaderToolbarItem(Widget widget) {
+        headerToolbarHolder.setHeight(headerToolbarHeight);
+        headerToolbar.addItem(widget);
     }
 
-    public void addHeaderToolbarItem(Widget widget) {
-        headerContainer.setHeight(headerToolbarHeight);
-        headerToolbar.addItem(widget);
+    public void setHeaderToolbarHeight(String headerToolbarHeight) {
+        this.headerToolbarHeight = headerToolbarHeight;
+        if (headerToolbar.getWidgetCount() == 0) {
+            headerToolbarHolder.setHeight(headerToolbarHeight);
+        }
     }
 
     public void addFooterToolbarItem(Widget widget) {
@@ -169,5 +151,4 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
             footerToolbarHolder.setHeight(footerToolbarHeight);
         }
     }
-
 }
