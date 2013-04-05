@@ -93,7 +93,7 @@ public class AppPlaceInfo {
         } else {
             b.append("#");
         }
-        b.append(place.getToken());
+        b.append(place.getToken(redirectable));
         return b.toString();
     }
 

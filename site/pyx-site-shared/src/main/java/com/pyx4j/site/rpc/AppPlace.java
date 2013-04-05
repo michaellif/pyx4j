@@ -132,7 +132,11 @@ public class AppPlace extends Place {
     }
 
     public String getToken() {
-        return getPlaceId() + createQueryString();
+        return getToken(false);
+    }
+
+    String getToken(boolean asUrlQuery) {
+        return getPlaceId() + createQueryString(asUrlQuery);
     }
 
     public String getPlaceId() {
@@ -160,12 +164,15 @@ public class AppPlace extends Place {
         return hash;
     }
 
-    protected String createQueryString() {
+    protected final String createQueryString(boolean asUrlQuery) {
         if (queryArgs == null) {
             return "";
         }
         StringBuilder queryString = new StringBuilder();
         boolean first = true;
+        if (asUrlQuery) {
+            first = false;
+        }
         for (Map.Entry<String, List<String>> me : queryArgs.entrySet()) {
             if (first) {
                 queryString.append(ARGS_GROUP_SEPARATOR);
@@ -214,7 +221,7 @@ public class AppPlace extends Place {
 
     @Override
     public String toString() {
-        return this.getClass().getName() + createQueryString();
+        return this.getClass().getName() + createQueryString(false);
     }
 
     public String getName() {
