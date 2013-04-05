@@ -15,8 +15,6 @@ package com.propertyvista.common.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ImageResource.ImageOptions;
-import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.forms.client.ImageFactory.FormsImageBundle;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -47,35 +45,36 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("logo.png")
     ImageResource logo();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-master.gif")
+    @Source("PaymentOptionIcons/Small/Mastercard.png")
     ImageResource paymentMC();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-visa.gif")
+    @Source("PaymentOptionIcons/Small/Visa.png")
     ImageResource paymentVISA();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("payment-discover.gif")
+    @Source("PaymentOptionIcons/Small/Discover.png")
     ImageResource paymentDiscover();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("PaymentOptionIcons/Small/eCheck.png")
+    ImageResource paymentECheque();
+
+    @Source("PaymentOptionIcons/Small/Cash.png")
+    ImageResource paymentCash();
+
+    @Source("PaymentOptionIcons/Small/CC.png")
+    ImageResource paymentCredit();
+
     @Source("payment-interact.gif")
     ImageResource paymentInterac();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("payment-ach.gif")
     ImageResource paymentACH();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("cheque-guide.jpg")
     ImageResource chequeGuide();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("canadian-cheque-guide.jpg")
     ImageResource canadianChequeGuide();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("e_cheque-guide.png")
     ImageResource eChequeGuide();
 
@@ -90,10 +89,4 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("logo_td.jpg")
     ImageResource logoTD();
-
-    @Source("payment_credit.jpg")
-    ImageResource paymentCredit();
-
-    @Source("e_cheque.jpg")
-    ImageResource paymentECheque();
 }
