@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.config;
 
+import com.pyx4j.config.server.IPersistenceConfiguration;
+
 public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfigurationDev {
 
     @Override
@@ -23,5 +25,16 @@ public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfig
     @Override
     public String getApplicationURLNamespace(boolean secure) {
         return ".dev.birchwoodsoftwaregroup.com:9000/vista/";
+    }
+
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        return new VistaConfigurationPostgreSQL();
+    }
+
+    @Override
+    public int interfaceSSHDPort() {
+        return super.interfaceSSHDPort();
+        //return 0;
     }
 }
