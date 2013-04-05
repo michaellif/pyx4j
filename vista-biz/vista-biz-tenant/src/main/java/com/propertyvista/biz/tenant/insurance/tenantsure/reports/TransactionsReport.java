@@ -60,7 +60,7 @@ public class TransactionsReport implements Report {
                 EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
                 criteria.ge(criteria.proto().transactionDate(), DateUtils.dayStart(date));
                 criteria.le(criteria.proto().transactionDate(), DateUtils.dayEnd(date));
-                criteria.le(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Cleared);
+                criteria.eq(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Cleared);
 
                 ICursorIterator<InsuranceTenantSureTransaction> transactions = Persistence.service().query(null, criteria, AttachLevel.Attached);
 

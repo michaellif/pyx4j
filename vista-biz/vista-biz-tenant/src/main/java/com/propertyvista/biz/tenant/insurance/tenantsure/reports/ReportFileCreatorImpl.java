@@ -39,6 +39,7 @@ public class ReportFileCreatorImpl implements ReportFileCreator {
         }
 
         file = createFile(dirReports, reportFileNameBase);
+        log.debug("creating report file {}", file);
     }
 
     @Override
