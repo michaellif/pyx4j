@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -39,12 +40,16 @@ import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.shared.EntityValidationException;
+import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 
 public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrationDTO> {
 
     private static final I18n i18n = I18n.get(TenantRegistrationForm.class);
 
     private CSimpleEntityComboBox<SelfRegistrationBuildingDTO> buildingComboBox;
+
+    private EntityValidationException entityValidationError;
 
     public TenantRegistrationForm() {
         super(SelfRegistrationDTO.class);
@@ -134,11 +139,42 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         });
         get(proto().password()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().passwordConfirm())));
 
+        for (String memberName : proto().getEntityMeta().getMemberNames()) {
+            final IObject<?> member = proto().getMember(memberName);
+            CComponent<?, ?> boundMember = null;
+            try {
+                boundMember = get(member);
+            } catch (Throwable e) {
+                // just skip the unbound member
+            }
+            if (boundMember != null) {
+                boundMember.addValueValidator(new EditableValueValidator() {
+                    @Override
+                    public ValidationError isValid(CComponent component, Object value) {
+                        if (TenantRegistrationForm.this.entityValidationError != null) {
+                            for (MemberValidationError memberValidationError : TenantRegistrationForm.this.entityValidationError.getErrors()) {
+                                if (memberValidationError.getMember().getPath().equals(member.getPath())) {
+                                    return new ValidationError(component, memberValidationError.getMessage());
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                });
+            }
+        }
+
         return contentPanel;
     }
 
     public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
         buildingComboBox.setOptions(buildings);
+    }
+
+    public void setEntityValidationError(EntityValidationException caught) {
+        this.entityValidationError = caught;
+        setUnconditionalValidationErrorRendering(true);
+        revalidate();
     }
 
     private Widget center(IsWidget w) {

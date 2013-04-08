@@ -43,6 +43,7 @@ import com.propertyvista.portal.client.ui.residents.login.LandingViewImpl.Landin
 import com.propertyvista.portal.client.ui.residents.login.LoginAndSignUpResources;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
 
@@ -64,6 +65,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     @Override
     public void populate(List<SelfRegistrationBuildingDTO> buildings) {
         signupform.setBuildingOptions(buildings);
+        signupform.setUnconditionalValidationErrorRendering(false);
         signupform.setVisited(false);
         signupform.populateNew();
     }
@@ -117,7 +119,11 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         registerButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         buttonHolder.setWidget(registerButton);
         layout.getFooter().add(buttonHolder);
+    }
 
+    @Override
+    public void showValidationError(EntityValidationException caught) {
+        signupform.setEntityValidationError(caught);
     }
 
     private void bindGreetingPanel(Side layout) {
@@ -157,6 +163,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     }
 
     private void onRegister() {
+        signupform.setEntityValidationError(null);
         signupform.revalidate();
         signupform.setUnconditionalValidationErrorRendering(true);
         if (signupform.isValid()) {

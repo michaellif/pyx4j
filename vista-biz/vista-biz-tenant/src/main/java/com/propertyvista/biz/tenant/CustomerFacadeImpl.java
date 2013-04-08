@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -44,6 +43,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -200,8 +200,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
 
         List<Tenant> tenants = Persistence.service().query(criteria);
+
         if (tenants.size() == 0) {
-            throw new UserRuntimeException(i18n.tr("The Secuirty Code was incorrect"));
+            throw EntityValidationException.make(SelfRegistrationDTO.class)
+                    .addError(selfRegistration.secuirtyCode(), i18n.tr("The Secuirty Code was incorrect")).build();
         }
 
         Tenant tenant = null;
@@ -212,7 +214,11 @@ public class CustomerFacadeImpl implements CustomerFacade {
             }
         }
         if (tenant == null) {
-            throw new UserRuntimeException(i18n.tr("The name provided does not match our records"));
+            throw EntityValidationException.make(SelfRegistrationDTO.class)//@formatter:off
+                    .addError(selfRegistration.firstName(), i18n.tr("The name provided does not match our records"))
+                    .addError(selfRegistration.middleName(), i18n.tr("The name provided does not match our records"))
+                    .addError(selfRegistration.lastName(), i18n.tr("The name provided does not match our records"))
+                    .build();//@formatter:on
         }
 
         tenant.customer().person().email().setValue(selfRegistration.email().getValue());
@@ -220,7 +226,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
         try {
             persistCustomer(tenant.customer());
         } catch (UniqueConstraintUserRuntimeException e) {
-            throw new UserRuntimeException(i18n.tr("Your Email already registered, Contact Property Owner"), e);
+            throw EntityValidationException.make(SelfRegistrationDTO.class)//@formatter:off
+                    .addError(selfRegistration.email(), i18n.tr("Your Email already registered, Contact Property Owner"))
+                    .build();//@formatter:on            
         }
 
         CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());

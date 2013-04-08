@@ -35,6 +35,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
+import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
 
@@ -78,7 +79,9 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
 
             @Override
             public void onFailure(Throwable caught) {
-                if (caught instanceof UserRuntimeException) {
+                if (caught instanceof EntityValidationException) {
+                    view.showValidationError((EntityValidationException) caught);
+                } else if (caught instanceof UserRuntimeException) {
                     view.showError(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);

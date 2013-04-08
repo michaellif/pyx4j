@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public interface TenantRegistrationView extends IsWidget {
 
@@ -40,5 +41,7 @@ public interface TenantRegistrationView extends IsWidget {
     SelfRegistrationDTO getValue();
 
     void showError(String message);
+
+    void showValidationError(EntityValidationException caught);
 
 }
