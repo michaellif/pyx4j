@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -27,13 +28,15 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -44,6 +47,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
@@ -61,13 +65,15 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final String PRICING_STEP_TITLE = i18n.tr("Pricing");
 
-    private static final String SELECTPAYMENTMETHOD_STEP_TITLE = i18n.tr("Select Payment Method");
+    private static final String SELECTPAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method Selection");
 
     private static final String PAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method");
 
     private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
+
+    private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
@@ -104,21 +110,28 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         FormFlexPanel panel = new FormFlexPanel(PRICING_STEP_TITLE);
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 10).build());
+
+        panel.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).customLabel(i18n.tr("Tenant"))
+                        .build());
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
+
         panel.setHR(++row, 0, 1);
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
 
         // tweak UI:
-        get(proto().id()).setViewable(true);
+        get(proto().propertyAddress()).setViewable(true);
+        get(proto().propertyCode()).setViewable(true);
         get(proto().unitNumber()).setViewable(true);
+
         get(proto().leaseId()).setViewable(true);
         get(proto().leaseStatus()).setViewable(true);
-        get(proto().createdDate()).setViewable(true);
 
         return panel;
     }
@@ -198,7 +211,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
         int row = -1;
 
-        panel.setBR(++row, 0, 1);
+        panel.setWidget(++row, 0, confirmationDetailsHolder);
         panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, createLegalTermsPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -209,16 +222,15 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     @Override
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
-        if (event.getSelectedItem().getStepTitle().equals(PAYMENTMETHOD_STEP_TITLE)) {
-//            paymentMethodEditor.setEditable(getValue().selectPaymentMethod().getValue() == PaymentSelect.New);
+        if (event.getSelectedItem().getStepTitle().equals(CONFIRMATION_STEP_TITLE)) {
+            confirmationDetailsHolder.clear();
+            confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }
     }
 
     @Override
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
-
-        get(proto().id()).setVisible(!getValue().id().isNull());
 
         paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
@@ -284,6 +296,30 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                 break;
             }
         }
+    }
+
+    private Widget createConfirmationDetailsPanel() {
+        VerticalPanel panel = new VerticalPanel();
+        Widget w;
+
+        panel.add(new HTML(get(proto().leaseTermParticipant()).getValue().getStringView()));
+        panel.add(new HTML(get(proto().propertyAddress()).getValue().getStringView()));
+
+        HorizontalPanel pm = new HorizontalPanel();
+        pm.add(new HTML(i18n.tr("Payment Method:") + "&nbsp"));
+        pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
+        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        panel.add(pm);
+
+        HorizontalPanel amount = new HorizontalPanel();
+        amount.add(new HTML(i18n.tr("Amount to pay:") + "&nbsp$"));
+        amount.add(w = new HTML(get(proto().amount()).getValue().toString()));
+        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        panel.add(amount);
+
+        return panel;
     }
 
     private Widget createLegalTermsPanel() {

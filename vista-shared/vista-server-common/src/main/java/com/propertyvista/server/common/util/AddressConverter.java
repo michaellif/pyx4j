@@ -59,12 +59,6 @@ public class AddressConverter {
             
             address.append(", ").append(i18n.tr("Suite")).append(' ').append(val(dbo.suiteNumber()));
             dto.street1().setValue(address.toString());
-            
-            address.append(", ").append(val(dbo.city()))
-                .append(", ").append(val(dbo.province().code()))
-                .append(' ').append(val(dbo.postalCode()))
-                .append(", ").append(val(dbo.country().name()));
-            dto.street2().setValue(address.toString());
             //@formatter:on
         }
 

@@ -33,8 +33,6 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
-    private static final String TOOLBAR_DEFAULT_HEIGHT = "50px";
-
     private final SimplePanel contentHolder = new SimplePanel();
 
     private final VisorLayoutPanel visorPane;
@@ -51,9 +49,9 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
     private final SimplePanel footerToolbarHolder;
 
-    private String headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private String headerToolbarHeight = "50px";
 
-    private String footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private String footerToolbarHeight = "50px";
 
     public VistaAbstractView() {
         super();
@@ -71,7 +69,7 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         headerCaption.getElement().getStyle().setFontSize(1.2, Unit.EM);
         headerCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-        headerCaption.setHeight(TOOLBAR_DEFAULT_HEIGHT);
+        headerCaption.setHeight("30px");
         add(headerCaption);
 
         headerToolbarHolder = new SimplePanel();

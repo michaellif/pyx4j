@@ -42,6 +42,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentWizardServiceImpl implements PaymentWizardService {
@@ -63,11 +64,17 @@ public class PaymentWizardServiceImpl implements PaymentWizardService {
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
 
-        dto.leaseId().set(lease.leaseId());
-        dto.leaseStatus().set(lease.status());
+        AddressStructured fullAddress = lease.unit().building().info().address().duplicate();
+        fullAddress.suiteNumber().setValue(lease.unit().info().number().getValue());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(fullAddress, dto.propertyAddress());
+
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
+
         dto.leaseTermParticipant().set(tenant);
+
+        dto.leaseId().set(lease.leaseId());
+        dto.leaseStatus().set(lease.status());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));

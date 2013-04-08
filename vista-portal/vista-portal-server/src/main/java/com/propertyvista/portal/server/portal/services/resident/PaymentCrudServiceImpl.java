@@ -47,6 +47,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
@@ -81,10 +82,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
 
-        dto.leaseId().set(dto.billingAccount().lease().leaseId());
-        dto.leaseStatus().set(dto.billingAccount().lease().status());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(dto.billingAccount().lease().unit().building().info().address(),
+                dto.propertyAddress());
+
         dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
+
+        dto.leaseId().set(dto.billingAccount().lease().leaseId());
+        dto.leaseStatus().set(dto.billingAccount().lease().status());
+
         dto.addThisPaymentMethodToProfile().setValue(entity.paymentMethod().isProfiledMethod().getValue());
 
         Persistence.service().retrieve(dto.paymentMethod());
@@ -147,11 +153,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
 
-        dto.leaseId().set(lease.leaseId());
-        dto.leaseStatus().set(lease.status());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(lease.unit().building().info().address(), dto.propertyAddress());
+
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
+
         dto.leaseTermParticipant().set(tenant);
+
+        dto.leaseId().set(lease.leaseId());
+        dto.leaseStatus().set(lease.status());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));

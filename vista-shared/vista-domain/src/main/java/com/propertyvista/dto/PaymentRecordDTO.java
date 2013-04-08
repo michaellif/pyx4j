@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -45,6 +46,8 @@ public interface PaymentRecordDTO extends PaymentRecord {
             return I18nEnum.toString(this);
         }
     };
+
+    AddressSimple propertyAddress();
 
     IPrimitive<String> propertyCode();
 

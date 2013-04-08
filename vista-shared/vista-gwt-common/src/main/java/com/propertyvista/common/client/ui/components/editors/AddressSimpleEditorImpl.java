@@ -59,6 +59,15 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         return main;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (isViewable()) {
+            get(proto().street2()).setVisible(!getValue().street2().isNull());
+        }
+    }
+
     private void attachFilters(final AddressSimple proto, CComponent<Province, ?> province, CComponent<Country, ?> country, CComponent<String, ?> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));

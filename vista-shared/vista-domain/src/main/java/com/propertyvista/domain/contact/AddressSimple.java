@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Reference;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -32,27 +33,33 @@ import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AddressSimple extends IEntity {
 
-    @Caption(name = "Address 1")
     @NotNull
+    @ToString(index = 0)
+    @Caption(name = "Address 1")
     IPrimitive<String> street1();
 
+    @ToString(index = 1)
     @Caption(name = "Address 2")
     IPrimitive<String> street2();
 
     @NotNull
+    @ToString(index = 2)
     IPrimitive<String> city();
 
-    @Caption(name = "Province/State")
     @NotNull
+    @ToString(index = 3)
+    @Caption(name = "Province/State")
     @Editor(type = EditorType.combo)
     @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
-    @Editor(type = EditorType.suggest)
     @NotNull
+    @ToString(index = 4)
+    @Editor(type = EditorType.suggest)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
+    @ToString(index = 5)
     IPrimitive<String> postalCode();
 }

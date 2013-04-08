@@ -35,6 +35,8 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
 
     private final Button btnNext;
 
+    private String endButtonCaption = i18n.tr("Finish");
+
     public VistaAbstractWizard(String caption) {
         super();
         setCaption(caption);
@@ -104,6 +106,10 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
         this.presenter = presenter;
     }
 
+    public void setEndButtonCaption(String endButtonCaption) {
+        this.endButtonCaption = endButtonCaption;
+    }
+
     @Override
     public IWizard.Presenter getPresenter() {
         return presenter;
@@ -135,7 +141,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
 
     protected void calculateButtonsState() {
         if (form.isLast()) {
-            btnNext.setCaption(i18n.tr("Finish"));
+            btnNext.setCaption(endButtonCaption);
         } else {
             btnNext.setCaption(i18n.tr("Next"));
         }
