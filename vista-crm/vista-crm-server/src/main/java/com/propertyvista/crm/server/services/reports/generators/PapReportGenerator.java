@@ -34,6 +34,7 @@ public class PapReportGenerator implements ReportGenerator {
         for (PaymentRecord paymentRecord : paymentRecords) {
             Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
             Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease()); // this is for lease id
+            Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease().unit().building()); // this is for lease id
         }
         return paymentRecords;
     }

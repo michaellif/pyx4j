@@ -48,6 +48,9 @@ public class PapReport extends Composite implements Report {
                 new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Lease().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().getPath())).getPrimaryKey()); }
                 },
+                new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().building().propertyCode()).columnTitle("Building").build()) {
+                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Building().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().building().getPath())).getPrimaryKey()); }                    
+                },
                 new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().info().number()).columnTitle("Unit").build()) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Unit().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().getPath())).getPrimaryKey()); }                    
                 },
