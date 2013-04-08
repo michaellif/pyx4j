@@ -33,6 +33,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
@@ -49,6 +51,8 @@ import com.propertyvista.pmsite.server.panels.HeaderPanel;
 public abstract class BasePage extends WebPage {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(BasePage.class);
 
     public static final String META_TITLE = "pageTitle";
 
@@ -205,6 +209,7 @@ public abstract class BasePage extends WebPage {
         if (ApplicationMode.isDevelopment()) {
             throw new RuntimeException(msg);
         } else {
+            log.debug("redirect to page: {} - {}", pageClass, msg);
             throw new RestartResponseException(pageClass);
         }
     }

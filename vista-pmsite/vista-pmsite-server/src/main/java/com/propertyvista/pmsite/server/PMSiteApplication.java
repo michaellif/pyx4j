@@ -375,6 +375,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     public void redirectToTarget() {
         String targetUrl = RequestCycle.get().getRequest().getRequestParameters().getParameterValue(PMSiteApplication.ParamNameTarget).toString();
         if (targetUrl == null || targetUrl.length() == 0) {
+            log.debug("redirect to page: {}", getHomePage());
             throw new RestartResponseException(getHomePage());
         } else {
             // get path relative to context root
@@ -384,6 +385,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                 servletPath = servletPath.substring(1);
             }
             toRoot += servletPath + "/" + targetUrl;
+            log.debug("redirect to url: {}", toRoot);
             throw new RedirectToUrlException(toRoot + "");
         }
 
@@ -394,6 +396,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     public void restartResponseAtSignInPage() {
         PageParameters pp = new PageParameters();
         pp.add(ParamNameTarget, getReturnToTargetUrl());
+        log.debug("redirect to page: {}", getSignInPageClass());
         throw new RestartResponseException(getSignInPageClass(), pp);
     }
 
@@ -405,9 +408,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {
             String secureUrl = secureBaseUrl + request.getUrl().toString();
-            log.info("secure redirect {}", secureUrl);
+            log.debug("secure redirect {}", secureUrl);
             throw new RedirectToUrlException(secureUrl);
         }
     }
-
 }

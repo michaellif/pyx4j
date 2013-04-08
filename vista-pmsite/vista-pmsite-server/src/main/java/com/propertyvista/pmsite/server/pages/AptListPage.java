@@ -28,6 +28,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
@@ -58,6 +60,8 @@ import com.propertyvista.portal.server.portal.PropertyFinder;
 public class AptListPage extends BasePage {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(AptListPage.class);
 
     private static final I18n i18n = I18n.get(AptListPage.class);
 
@@ -116,6 +120,7 @@ public class AptListPage extends BasePage {
             if (searchResult != null && searchResult.size() > 0) {
                 propCode = searchResult.get(0).propertyCode().getValue();
             }
+            log.debug("redirect to page: {}", AptDetailsPage.class);
             throw new RestartResponseException(AptDetailsPage.class, new PageParameters().set(PMSiteApplication.ParamNameBuilding, propCode));
         }
 

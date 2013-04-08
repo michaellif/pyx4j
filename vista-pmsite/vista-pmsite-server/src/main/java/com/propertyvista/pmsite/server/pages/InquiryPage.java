@@ -14,10 +14,11 @@
 package com.propertyvista.pmsite.server.pages;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
@@ -36,6 +37,8 @@ import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class InquiryPage extends BasePage {
     private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(InquiryPage.class);
 
     private static final I18n i18n = I18n.get(InquiryPage.class);
 
@@ -59,14 +62,21 @@ public class InquiryPage extends BasePage {
         Building bld = null;
         if (planId != null) {
             fp = PropertyFinder.getFloorplanDetails(planId);
-            Persistence.service().retrieve(fp.building());
-            add(new FloorplanInfoPanel("infoPanel", fp));
+            if (fp != null) {
+                Persistence.service().retrieve(fp.building());
+                add(new FloorplanInfoPanel("infoPanel", fp));
+            } else {
+                redirectOrFail(FindAptPage.class, "Invalid floorplan id: " + planId);
+            }
         } else if (propCode != null) {
             bld = PropertyFinder.getBuildingDetails(propCode);
-            add(new BuildingInfoPanel("infoPanel", bld));
+            if (bld != null) {
+                add(new BuildingInfoPanel("infoPanel", bld));
+            } else {
+                redirectOrFail(FindAptPage.class, "Invalid property code: " + propCode);
+            }
         } else {
-//          throw new RuntimeException();
-            throw new RestartResponseException(FindAptPage.class);
+            redirectOrFail(FindAptPage.class, "No floorplan or property code provided");
         }
 
         // right side - inquiry form

@@ -18,6 +18,8 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
@@ -32,6 +34,8 @@ public class ResidentsPage extends CustomizablePage {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Logger log = LoggerFactory.getLogger(ResidentsPage.class);
+
     private static final I18n i18n = I18n.get(ResidentsPage.class);
 
     private boolean residentPortalEnabled;
@@ -45,6 +49,7 @@ public class ResidentsPage extends CustomizablePage {
         } catch (Exception ignore) {
         }
         if (!residentPortalEnabled) {
+            log.debug("redirect to page: {}", LandingPage.class);
             throw new RestartResponseException(LandingPage.class);
         }
 
