@@ -19,21 +19,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.Validate;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -45,7 +53,18 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PaymentWizardServiceImpl implements PaymentWizardService {
+public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentWizardService {
+
+    private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
+
+    public PaymentWizardServiceImpl() {
+        super(PaymentRecord.class, PaymentRecordDTO.class);
+    }
+
+    @Override
+    protected void bind() {
+        bindCompleteDBO();
+    }
 
     @Override
     public void create(AsyncCallback<PaymentRecordDTO> callback) {
@@ -90,9 +109,44 @@ public class PaymentWizardServiceImpl implements PaymentWizardService {
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<VoidSerializable> callback, PaymentRecordDTO editableEntity) {
-        // TODO Auto-generated method stub
+    public void finish(AsyncCallback<VoidSerializable> callback, PaymentRecordDTO dto) {
+        PaymentRecord entity = createDBO(dto);
 
+        entity.paymentMethod().customer().set(dto.leaseTermParticipant().leaseParticipant().customer());
+
+        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer()));
+        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
+
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
+                VistaApplication.resident);
+        Validate.isTrue(allowedPaymentTypes.contains(dto.paymentMethod().type().getValue()));
+
+        // Do not change profile methods
+        if (entity.paymentMethod().id().isNull()) {
+            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            } else {
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+            }
+
+            // some corrections for particular method types:
+            if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            }
+        }
+
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        Persistence.service().commit();
+
+        try {
+            ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
+        } catch (PaymentException e) {
+            throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
+        }
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
