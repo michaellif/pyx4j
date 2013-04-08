@@ -20,16 +20,25 @@ CREATE OR REPLACE VIEW _dba_.dba_proc AS
 );
 
 -- pmc_stats - basic per-pmc statistics
+
 CREATE OR REPLACE VIEW _dba_.pmc_stats AS
-(       SELECT  a.pmc AS pmc_name,a.row_count AS buildings,
+(       SELECT  ap.name,a.pmc AS namespace,
+                TO_CHAR(ap.created,'DD-MON-YYYY') AS created,
+                a.row_count AS buildings,
                 b.row_count AS units,
                 c.row_count AS leases,
                 d.row_count AS payment_records,
-                e.row_count AS customers_accepted_terms
-        FROM    (SELECT * FROM _dba_.count_rows_all_pmc('building')) a
+                e.row_count AS customers_accepted_terms,
+                f.row_count AS customer_users,
+                g.row_count AS insurance_certificates
+        FROM    _admin_.admin_pmc ap
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('building')) a ON (ap.namespace = a.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('apt_unit')) b ON (a.pmc = b.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('lease')) c ON (a.pmc = c.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('payment_record')) d ON (a.pmc = d.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer_accepted_terms')) e ON (a.pmc = e.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer_user')) f ON (a.pmc = f.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('insurance_certificate')) g ON (a.pmc = g.pmc)
+        ORDER BY ap.id
 );
         
