@@ -105,7 +105,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
                     return value.toString();
                 }
 
-                return null;
+                return "";
             }
         });
 
