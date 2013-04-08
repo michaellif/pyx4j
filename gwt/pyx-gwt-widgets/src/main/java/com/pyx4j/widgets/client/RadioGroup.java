@@ -259,7 +259,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     }
 
     protected SafeHtml format(E value) {
-        return SafeHtmlUtils.fromString(value.toString());
+        return SafeHtmlUtils.fromTrustedString(value.toString());
     }
 
     @Override

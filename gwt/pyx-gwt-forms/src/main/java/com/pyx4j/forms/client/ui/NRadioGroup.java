@@ -74,7 +74,7 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
     @Override
     public void setNativeValue(E value) {
         if (isViewable()) {
-            getViewer().setText(getCComponent().getFormat().format(value));
+            getViewer().setHTML(SafeHtmlUtils.fromTrustedString(getCComponent().getFormat().format(value)));
         } else {
             getEditor().setValue(value);
         }

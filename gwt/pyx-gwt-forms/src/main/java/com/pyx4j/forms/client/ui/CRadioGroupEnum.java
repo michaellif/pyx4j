@@ -37,13 +37,12 @@ public class CRadioGroupEnum<E extends Enum<E>> extends CRadioGroup<E> {
         super(layout);
         this.optionsClass = optionsClass;
         setFormat(new IFormat<E>() {
-
             @Override
             public String format(E value) {
-                if (value == null) {
-                    return null;
-                } else {
+                if (value != null) {
                     return value.toString();
+                } else {
+                    return "";
                 }
             }
 
