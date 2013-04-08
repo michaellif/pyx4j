@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +30,24 @@ import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
 
+/*
+ * The debit comparator is used to prioritize debit items for credit coverage according to to following rules:
+ * 1. non-PAD debits have priority over PAD-debits
+ * 2. for two non-PAD debits use ARPolicy rules (rentDebtLast or oldestDebtFirst)
+ * 3. for two PAD-debits use PADPolicy rules (LastBill or ToDateTotal)
+ * 4. for two debits of the same priority, the smallest amount wins
+ */
 public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private final ARPolicy arPolicy;
 
+    private final boolean padOnly;
+
     private final Map<ARCode, OwingBalanceType> padDebitTypes = new HashMap<ARCode, OwingBalanceType>();
 
-    public InvoiceDebitComparator(ARPolicy arPolicy, PADPolicy padPolicy) {
+    public InvoiceDebitComparator(ARPolicy arPolicy, PADPolicy padPolicy, boolean padOnly) {
         this.arPolicy = arPolicy;
+        this.padOnly = padOnly;
         // create product map
         for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
             padDebitTypes.put(item.debitType(), item.owingBalanceType().getValue());
@@ -55,35 +66,38 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
     }
 
     private int padCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
-        Boolean isPad1 = isPadDebit(debit1), isPad2 = isPadDebit(debit2);
-        if (isPad1 && isPad2) {
-            // oldest first
-            return debit1.dueDate().getValue().compareTo(debit2.dueDate().getValue());
-        } else if (!isPad1 && !isPad2) {
+        OwingBalanceType padType1 = padDebitType(debit1), padType2 = padDebitType(debit2);
+        if (padType1 != null && padType2 != null) {
+            if (padType1 == OwingBalanceType.ToDateTotal && padType2 == OwingBalanceType.ToDateTotal) {
+                return arCompare(debit1, debit2);
+            } else if (padOnly) {
+                // LastBill goes first
+                return new Boolean(padType2 == OwingBalanceType.LastBill).compareTo(padType1 == OwingBalanceType.LastBill);
+            } else {
+                // LastBill goes last
+                return new Boolean(padType1 == OwingBalanceType.LastBill).compareTo(padType2 == OwingBalanceType.LastBill);
+            }
+        } else if (padType1 == null && padType2 == null) {
             // per ar policy
             return arCompare(debit1, debit2);
         } else {
             // non-pad first
-            return isPad1.compareTo(isPad2);
+            return new Boolean(padType1 != null).compareTo(padType2 != null);
         }
     }
 
     private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
         if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.rentDebtLast) {
-            return -debit1.arCode().type().getValue().compareTo(debit2.arCode().type().getValue());
+            EnumSet<ARCode.Type> service = ARCode.Type.services();
+            return new Boolean(service.contains(debit1.arCode().type())).compareTo(service.contains(debit2.arCode().type()));
         } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.oldestDebtFirst) {
-            int ageComparison = compareBucketAge(debit1, debit2);
-            if (ageComparison == 0) {
-                return -debit1.arCode().type().compareTo(debit2.arCode().type());
-            } else {
-                return ageComparison;
-            }
+            return compareBucketAge(debit1, debit2);
         }
         return 0;
     }
 
-    private Boolean isPadDebit(InvoiceDebit debit) {
-        return padDebitTypes.containsKey(debit.arCode());
+    private OwingBalanceType padDebitType(InvoiceDebit debit) {
+        return padDebitTypes.get(debit.arCode());
     }
 
     public static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {

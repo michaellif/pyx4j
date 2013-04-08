@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -132,18 +131,10 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
                     it.remove();
                 }
             }
-            Collections.sort(lineItems, new Comparator<InvoiceDebit>() {
-                @Override
-                public int compare(InvoiceDebit d1, InvoiceDebit d2) {
-                    // return newest charge first
-                    return -d1.dueDate().getValue().compareTo(d2.dueDate().getValue());
-                }
-            });
-        } else {
-            // make a sorting in required mode. ConsumeCreditPolicy should be set on Application level.
-            ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
-            Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy, padPolicy));
         }
+        // Sort items according to AR and PAD policies
+        ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
+        Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy, padPolicy, padItemsOnly));
 
         return lineItems;
     }
