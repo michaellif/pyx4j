@@ -52,8 +52,13 @@ public class HeaderPanel extends Panel {
         add(logoLink);
         // slogan
         add(new Label("slogan", cm.getSiteSlogan(locale)).setEscapeModelStrings(false));
-        // login
-        add(new AuthenticationPanel("auth"));
+        // show login if Residents page is enabled
+        boolean residentsEnabled = false;
+        try {
+            residentsEnabled = cm.getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue();
+        } catch (Exception ignore) {
+        }
+        add(residentsEnabled ? new AuthenticationPanel("auth") : new Label("auth"));
         // main menu
         if (!residentsOnly) {
             add(new MainNavigationPanel("mainNavig"));
