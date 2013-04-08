@@ -370,7 +370,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             } else if (userDomain.equals("static.propertyvista.com")) {
                 return "https://static.propertyvista.com/accounts/idp";
             } else if (userDomain.equals("11.birchwoodsoftwaregroup.com")) {
-                return "http://static.11.birchwoodsoftwaregroup.com/static/accounts/idp";
+                return "https://static-11.birchwoodsoftwaregroup.com/static/accounts/idp";
             } else {
                 return "https://www.google.com/accounts/o8/site-xrds?hd=" + userDomain;
             }
