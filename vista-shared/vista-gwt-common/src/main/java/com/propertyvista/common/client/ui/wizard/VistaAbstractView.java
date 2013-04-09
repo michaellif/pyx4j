@@ -42,9 +42,9 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
     private final SimplePanel footerToolbarHolder;
 
-    private String headerToolbarHeight = "50px";
+    private String headerToolbarHeight = "auto";
 
-    private String footerToolbarHeight = "50px";
+    private String footerToolbarHeight = "auto";
 
     public VistaAbstractView() {
         captionLabel = new Label();
@@ -53,7 +53,6 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         headerCaption = new FlowPanel();
         headerCaption.add(captionLabel);
         headerCaption.setStyleName(VistaWizardPaneTheme.StyleName.Header.name());
-        headerCaption.setHeight("30px");
         add(headerCaption);
 
         headerToolbarHolder = new SimplePanel();

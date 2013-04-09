@@ -32,6 +32,7 @@ public class VistaWizardPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         //@formatter:off
+        
         Header, 
         HeaderCaption, 
         HeaderContainer, 
@@ -70,7 +71,6 @@ public class VistaWizardPaneTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         style.addProperty("font-size", "1.3em");
         style.addProperty("font-weight", "bold");
-        style.addProperty("line-height", "35px");
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderContainer);
@@ -97,7 +97,8 @@ public class VistaWizardPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar);
-        style.addProperty("padding", "2px 0px");
+        style.addProperty("margin", "8px 0");
+        style.addProperty("padding", "2px 0");
         style.addProperty("float", "right");
         style.addProperty("border-top", "4px solid");
 //        style.addProperty("border-top-color", ThemeColor.foreground, 0.3);

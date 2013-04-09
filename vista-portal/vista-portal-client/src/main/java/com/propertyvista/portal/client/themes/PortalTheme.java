@@ -50,11 +50,9 @@ public class PortalTheme extends VistaTheme {
     }
 
     protected void initStyles() {
-
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
-
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
             protected void initStyles() {
@@ -71,7 +69,6 @@ public class PortalTheme extends VistaTheme {
                 return ThemeColor.foreground;
             }
         });
-
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
@@ -154,21 +151,19 @@ public class PortalTheme extends VistaTheme {
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
         addTheme(new NewPaymentMethodEditorTheme());
+        addTheme(new BillingTheme());
+        addTheme(new TransactionHistoryViewerTheme());
+        addTheme(new LandingPagesTheme());
+        addTheme(new TenantInsuranceTheme());
+        addTheme(new TenantSureTheme());
 
         initCellListStyle();
-
         initCheckBoxStyle();
         initHyperlinkStyle();
         initGroupBoxStyle();
         initSiteViewStyles();
         initPropertyMarkerStyle();
         initSuggestBoxStyle();
-
-        addTheme(new BillingTheme());
-        addTheme(new TransactionHistoryViewerTheme());
-        addTheme(new LandingPagesTheme());
-        addTheme(new TenantInsuranceTheme());
-        addTheme(new TenantSureTheme());
 
         initTenantInsuranceStyles(); // TODO move this to a theme class
     }
