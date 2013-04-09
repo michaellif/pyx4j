@@ -126,7 +126,7 @@
             <artifactId>vista-field-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
 <!--
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -176,7 +176,7 @@
         </dependency>
 
         <dependency>
-            <groupId>postgresql</groupId>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
 
