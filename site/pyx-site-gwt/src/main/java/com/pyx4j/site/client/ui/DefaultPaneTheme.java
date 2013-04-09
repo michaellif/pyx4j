@@ -32,9 +32,28 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Header, HeaderCaption, HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, HighlightedAction,
+        //@formatter:off
+        Header, 
+        HeaderCaption, 
+        HeaderContainer, 
+        HeaderToolbar, 
+        HeaderBreadcrumbs, 
+        
+        FooterToolbar, 
+        
+        BreadcrumbsBar, 
+        BreadcrumbAnchor, 
+        
+        HighlightedButton, 
+        HighlightedAction,
+        
+        Lister, 
+        ListerFiltersPanel, 
+        ListerListPanel, 
 
-        Visor, VisorCloseButton
+        Visor, 
+        VisorCloseButton
+        //@formatter:on
     }
 
     public DefaultPaneTheme() {
