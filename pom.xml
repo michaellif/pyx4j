@@ -223,12 +223,6 @@
         <dependencies>
 
             <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>1.4</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.pyx4j</groupId>
                 <artifactId>pyx-essentials-server</artifactId>
                 <version>${pyxVersion}</version>
