@@ -41,6 +41,8 @@ public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
 
     protected String allowSendToEmailSufix;
 
+    protected String blockedMailForwardTo;
+
     protected String forwardAllTo;
 
     public SMTPMailServiceConfig() {
@@ -86,12 +88,21 @@ public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
         return forwardAllTo;
     }
 
+    public String getBlockedMailForwardTo() {
+        return blockedMailForwardTo;
+    }
+
+    public void setBlockedMailForwardTo(String blockedMailForwardTo) {
+        this.blockedMailForwardTo = blockedMailForwardTo;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
         this.port = c.getIntegerValue("port", this.port);
         this.starttls = c.getBooleanValue("starttls", this.starttls);
         this.allowSendToEmailSufix = c.getValue("allowSendToEmailSufix", this.allowSendToEmailSufix);
+        this.blockedMailForwardTo = c.getValue("blockedMailForwardTo", this.blockedMailForwardTo);
         this.forwardAllTo = c.getValue("forwardAllTo", this.forwardAllTo);
 
         this.user = c.getValue("user", this.user);

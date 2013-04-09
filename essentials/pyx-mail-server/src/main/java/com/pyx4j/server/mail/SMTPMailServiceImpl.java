@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -133,6 +134,10 @@ class SMTPMailServiceImpl implements IMailService {
                     recipientsBcc = emails(mailMessage.getBcc());
                 } else {
                     address = filterDestinations(emailFilter, emails(mailMessage.getTo()));
+                    if (isEmptyList(address) && (config.getBlockedMailForwardTo() != null)) {
+                        address = new Vector<InternetAddress>();
+                        address.add(new InternetAddress(config.getBlockedMailForwardTo()));
+                    }
                     recipientsCc = filterDestinations(emailFilter, emails(mailMessage.getCc()));
                     recipientsBcc = filterDestinations(emailFilter, emails(mailMessage.getBcc()));
                 }
