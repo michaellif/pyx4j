@@ -24,18 +24,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
-import com.pyx4j.site.client.ui.visor.IVisorViewer;
-import com.pyx4j.site.client.ui.visor.VisorEditorHolder;
-import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
-import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
-    private final SimplePanel contentHolder = new SimplePanel();
-
-    private final VisorLayoutPanel visorPane;
+    private final SimplePanel contentHolder;
 
     private final FlowPanel headerCaption;
 
@@ -79,7 +72,7 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         headerToolbarHolder.setWidget(headerToolbar);
         add(headerToolbarHolder);
 
-        add(contentHolder);
+        add(contentHolder = new SimplePanel());
 
         footerToolbarHolder = new SimplePanel();
         footerToolbarHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
@@ -88,9 +81,6 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         add(footerToolbarHolder);
-
-        visorPane = new VisorLayoutPanel();
-        visorPane.setAnimationDuration(500);
     }
 
     protected FlowPanel getHeaderCaption() {
@@ -104,25 +94,6 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
     protected void setContent(IsWidget widget) {
         contentHolder.clear();
         contentHolder.setWidget(widget);
-    }
-
-    @Override
-    public void showVisor(IVisor visor, String caption) {
-        if (visor instanceof IVisorViewer) {
-            visorPane.showVisorPane(new VisorViewerHolder((IVisorViewer) visor, caption, this));
-        } else if (visor instanceof IVisorEditor) {
-            visorPane.showVisorPane(new VisorEditorHolder((IVisorEditor) visor, caption, this));
-        }
-    }
-
-    @Override
-    public void hideVisor() {
-        visorPane.hideVisorPane();
-    }
-
-    @Override
-    public boolean isVisorShown() {
-        return visorPane.isVisorShown();
     }
 
     public void setCaption(String caption) {
@@ -155,5 +126,23 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         if (footerToolbar.getWidgetCount() == 0) {
             footerToolbarHolder.setHeight(footerToolbarHeight);
         }
+    }
+
+    // not supported functionality:
+
+    @Override
+    public void showVisor(IVisor visor, String caption) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void hideVisor() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean isVisorShown() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

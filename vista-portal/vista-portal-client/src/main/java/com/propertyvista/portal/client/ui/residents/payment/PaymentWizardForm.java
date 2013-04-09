@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -63,7 +62,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
-    private static final String PRICING_STEP_TITLE = i18n.tr("Pricing");
+    private static final String DETAILS_STEP_TITLE = i18n.tr("Details");
 
     private static final String SELECTPAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method Selection");
 
@@ -107,31 +106,21 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     private FormFlexPanel createPricingStep() {
-        FormFlexPanel panel = new FormFlexPanel(PRICING_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 10).build());
-
         panel.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).customLabel(i18n.tr("Tenant"))
                         .build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
+        panel.setBR(++row, 0, 1);
+        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
 
         panel.setHR(++row, 0, 1);
-
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
 
         // tweak UI:
         get(proto().propertyAddress()).setViewable(true);
-        get(proto().propertyCode()).setViewable(true);
-        get(proto().unitNumber()).setViewable(true);
-
-        get(proto().leaseId()).setViewable(true);
-        get(proto().leaseStatus()).setViewable(true);
 
         return panel;
     }
@@ -305,18 +294,20 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         panel.add(new HTML(get(proto().leaseTermParticipant()).getValue().getStringView()));
         panel.add(new HTML(get(proto().propertyAddress()).getValue().getStringView()));
 
+        panel.add(new HTML("<br/>"));
+
         HorizontalPanel pm = new HorizontalPanel();
-        pm.add(new HTML(i18n.tr("Payment Method:") + "&nbsp"));
+        pm.add(w = new HTML(i18n.tr("Payment Method:")));
+        w.setWidth("10em");
         pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
         panel.add(pm);
 
         HorizontalPanel amount = new HorizontalPanel();
-        amount.add(new HTML(i18n.tr("Amount to pay:") + "&nbsp$"));
-        amount.add(w = new HTML(get(proto().amount()).getValue().toString()));
+        amount.add(w = new HTML(i18n.tr("Amount to pay:")));
+        w.setWidth("10em");
+        amount.add(w = new HTML("$" + get(proto().amount()).getValue().toString()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
         panel.add(amount);
 
         return panel;
@@ -327,7 +318,6 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         Widget w;
 
         panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our")));
-
         panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {
@@ -337,7 +327,6 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
         panel.add(w = new HTML(",&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
         panel.add(w = new Anchor(i18n.tr("Privacy Policy"), new Command() {
             @Override
             public void execute() {
@@ -345,20 +334,14 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
             }
         }));
 
-        panel.add(w = new HTML("&nbsp"));
+        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new HTML(i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
         panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
             @Override
             public void execute() {
                 new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
             }
         }));
-
-        panel.setWidth("70%");
-        panel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         return panel;
     }
