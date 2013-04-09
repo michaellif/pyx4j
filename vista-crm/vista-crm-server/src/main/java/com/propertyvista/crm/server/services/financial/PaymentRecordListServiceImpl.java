@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.financial;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -27,5 +28,14 @@ public class PaymentRecordListServiceImpl extends AbstractListServiceImpl<Paymen
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PaymentRecord entity, PaymentRecord dto) {
+        super.enhanceListRetrieved(entity, dto);
+        Persistence.service().retrieve(dto.billingAccount());
+        Persistence.service().retrieve(dto.billingAccount().lease());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
+        Persistence.service().retrieve(dto.paymentMethod().customer());
     }
 }
