@@ -14,8 +14,7 @@
 package com.propertyvista.crm.server.services.reports;
 
 import java.util.Map;
-
-import net.sf.ehcache.store.chm.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.pyx4j.site.server.services.reports.AbstractReportsService;
 import com.pyx4j.site.server.services.reports.ReportGenerator;
