@@ -20,12 +20,12 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentE
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerView;
-import com.propertyvista.crm.client.ui.crud.lease.FormerLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
@@ -38,6 +38,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorVie
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceCreditViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceCreditViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -72,6 +74,9 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new DepositLifecycleViewerViewImpl());
             } else if (DepositLifecycleEditorView.class.equals(type)) {
                 map.put(type, new DepositLifecycleEditorViewImpl());
+
+            } else if (InvoiceCreditViewerView.class.equals(type)) {
+                map.put(type, new InvoiceCreditViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

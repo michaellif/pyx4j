@@ -158,6 +158,11 @@ public class CrmSiteMap implements SiteMap {
 
         @PlaceProperties(navigLabel = "Leases")
         public static class Lease extends CrmCrudAppPlace {
+
+            @PlaceProperties(navigLabel = "Credit Transaction")
+            public static class InvoiceCredit extends CrmCrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(navigLabel = "Lease Applications")

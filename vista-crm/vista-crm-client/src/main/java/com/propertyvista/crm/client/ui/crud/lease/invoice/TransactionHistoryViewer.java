@@ -23,6 +23,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,9 +35,12 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.crm.client.themes.CrmTheme;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -110,7 +114,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
         lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
 
-        for (InvoiceLineItem item : items) {
+        for (final InvoiceLineItem item : items) {
             ++row;
 
             int colAmount = -1;
@@ -132,7 +136,17 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
             // build row
             lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(item.postDate().getValue())));
-            lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(item.description().getValue()));
+            if (item instanceof InvoiceCredit) {
+                lineItemsView.setWidget(row, COL_ITEM, asAnchor(item.description().getValue(), new Command() {
+                    @Override
+                    public void execute() {
+                        // TODO reslove via AppPlaceEntityMapper when it doesn't lag
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease.InvoiceCredit().formViewerPlace(item.getPrimaryKey()));
+                    }
+                }));
+            } else {
+                lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(item.description().getValue()));
+            }
             lineItemsView.setHTML(row, colAmount, toSafeHtml(amountRepresentation));
             lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balanceRespresentation));
 
@@ -230,5 +244,10 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             b.appendEscaped(str);
         }
         return b.toSafeHtml();
+    }
+
+    private static Anchor asAnchor(String text, Command cmd) {
+        Anchor a = new Anchor(text, cmd);
+        return a;
     }
 }
