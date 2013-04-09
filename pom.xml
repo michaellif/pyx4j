@@ -756,7 +756,7 @@
                             <report>index</report>
                             <report>dependencies</report>
                             <report>dependency-convergence</report>
-                            <report>dependency-info</report>
+                            <!-- see property dependency.details.enabled above -->
                             <report>dependency-management</report>
                             <report>project-team</report>
                             <report>plugin-management</report>
