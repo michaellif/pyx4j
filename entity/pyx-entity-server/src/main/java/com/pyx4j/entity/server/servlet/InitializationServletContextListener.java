@@ -78,6 +78,7 @@ public class InitializationServletContextListener implements ServletContextListe
         } catch (Throwable e) {
             Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
             log.error("initialization error", e);
+            throw new Error("Application initialization error", e);
         }
     }
 
