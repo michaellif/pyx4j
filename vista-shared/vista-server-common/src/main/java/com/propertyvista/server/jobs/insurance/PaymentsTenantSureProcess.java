@@ -13,11 +13,9 @@
  */
 package com.propertyvista.server.jobs.insurance;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.server.jobs.PmcProcess;
@@ -35,11 +33,8 @@ public class PaymentsTenantSureProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        GregorianCalendar dueDateCal = new GregorianCalendar();
-        dueDateCal.setTime(context.getForDate());
-        dueDateCal.add(Calendar.DAY_OF_MONTH, -1);
-
-        ServerSideFactory.create(TenantSureProcessFacade.class).processPayments(context.getExecutionMonitor(), new LogicalDate(dueDateCal.getTime()));
+        ServerSideFactory.create(TenantSureProcessFacade.class).processPayments(context.getExecutionMonitor(),
+                DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1));
     }
 
     @Override

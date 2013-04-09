@@ -13,8 +13,10 @@
  */
 package com.propertyvista.server.jobs.insurance;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
 import com.propertyvista.server.jobs.PmcProcess;
@@ -32,12 +34,14 @@ public class TenantSureTransactionsReportProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).processTransactionsReport(context.getExecutionMonitor(), context.getForDate(), formatter);
+        ServerSideFactory.create(TenantSureProcessFacade.class).processTransactionsReport(context.getExecutionMonitor(),
+                DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1), formatter);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(TenantSureProcessFacade.class).completeTransactionsReport(formatter, context.getForDate());
+        ServerSideFactory.create(TenantSureProcessFacade.class).completeTransactionsReport(formatter,
+                DateUtils.daysAdd(new LogicalDate(context.getForDate()), -1));
     }
 
 }
