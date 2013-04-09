@@ -222,6 +222,11 @@ public class YardiIntegrationAgent {
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
         detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
+        // There is Max length in YArdi table trans.SUSERDEFINED2 nvarchar(42)
+        if (detail.getPaidBy().length() > 24) {
+            detail.setPaidBy(detail.getPaidBy().substring(0, 24));
+        }
+
         // info below is used to uniquely identify transaction in yardi
         detail.setCustomerID(lease.leaseId().getValue());
         detail.setPropertyPrimaryID(lease.unit().building().propertyCode().getValue());
