@@ -32,14 +32,13 @@ public class MaintenanceInternalCategoryManager {
 
     protected MaintenanceRequestCategory getMaintenanceRequestCategories() {
         // TODO replace with real preload data
-		MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
+        MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
         List<MaintenanceRequestCategory> subCategories = new ArrayList<MaintenanceRequestCategory>();
         for (int i = 0; i < 5; i++) {
             category.name().setValue("subCategory" + i);
             subCategories.add(category);
         }
         category.name().setValue("topCategory");
-        category.subCategories().addAll(subCategories);
 
         return category;
     }

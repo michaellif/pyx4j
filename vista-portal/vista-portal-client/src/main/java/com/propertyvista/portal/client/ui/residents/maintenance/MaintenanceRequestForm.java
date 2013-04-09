@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -19,12 +19,14 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.IssueClassificationChoice;
+import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
@@ -32,6 +34,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
     private IssueClassificationChoice<?> mainChoice;
+
+    private MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice;
 
     public MaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
@@ -71,6 +75,46 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
             }
         };
         mainChoice = choice1;
+
+        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice5 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
+                MaintenanceRequestCategory.class, 0) {
+            @Override
+            protected boolean isLeaf(MaintenanceRequestCategory opt) {
+                return !opt.isEmpty() && opt.name().isNull();
+            }
+        };
+
+        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice6 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
+                MaintenanceRequestCategory.class, 1) {
+            @Override
+            protected boolean isLeaf(MaintenanceRequestCategory opt) {
+                Boolean a = opt.parent().isNull();
+                return !opt.isEmpty() && opt.parent().isNull();
+            }
+        };
+
+        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice7 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
+                MaintenanceRequestCategory.class, 2) {
+            @Override
+            protected boolean isLeaf(MaintenanceRequestCategory opt) {
+                return !opt.isEmpty() && opt.parent().parent().isNull();
+            }
+        };
+
+        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice8 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
+                MaintenanceRequestCategory.class, 3) {
+            @Override
+            protected boolean isLeaf(MaintenanceRequestCategory opt) {
+                return !opt.isEmpty() && opt.parent().parent().parent().isNull();
+            }
+        };
+
+        choice = choice5;
+
+        choice6.assignParent(choice5, choice6.proto().parent());
+        choice7.assignParent(choice6, choice7.proto().parent());
+        choice8.assignParent(choice7, choice8.proto().parent());
+
         choice2.assignParent(choice1, choice2.proto().issueElement());
         choice3.assignParent(choice2, choice3.proto().subject());
         choice4.assignParent(choice3, choice4.proto().subjectDetails());
@@ -79,6 +123,11 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), choice2), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), choice3), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification(), choice4), 15).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent().parent().parent(), choice5), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent().parent(), choice6), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent(), choice7), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category(), choice8), 15).build());
 
         // Description
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
@@ -94,6 +143,13 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     @Override
     public void onReset() {
         mainChoice.init();
+        choice.init();
         super.onReset();
     }
+
+    @Override
+    public void onValueSet(boolean populate) {
+
+    }
+
 }

@@ -13,15 +13,26 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface MaintenanceRequestCategory extends IEntity {
 
+    @Owner
     MaintenanceRequestCategory parent();
 
+    @ToString(index = 0)
     IPrimitive<String> name();
 
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    @OrderBy(PrimaryKey.class)
     IList<MaintenanceRequestCategory> subCategories();
 }

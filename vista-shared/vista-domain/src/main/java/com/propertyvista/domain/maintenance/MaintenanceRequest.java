@@ -47,6 +47,8 @@ public interface MaintenanceRequest extends IEntity {
     @NotNull
     IssueClassification issueClassification();
 
+    MaintenanceRequestCategory category();
+
     @NotNull
     IPrimitive<MaintenanceRequestStatus> status();
 

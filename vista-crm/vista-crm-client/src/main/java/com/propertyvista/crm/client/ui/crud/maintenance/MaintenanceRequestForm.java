@@ -138,6 +138,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             comp4 = new CEntityLabel();
         }
         VerticalPanel subjPanel = new VerticalPanel();
+//        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category()), 25).build());
         subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
         subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
         subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());

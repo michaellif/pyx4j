@@ -38,8 +38,8 @@ public class YardiMaintenanceRequestForm extends CEntityDecoratableForm<YardiSer
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subCategory()), 25).build());
+//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category()), 25).build());
+//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subCategory()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestDescriptionBrief()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestDescriptionFull()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().priority()), 25).build());

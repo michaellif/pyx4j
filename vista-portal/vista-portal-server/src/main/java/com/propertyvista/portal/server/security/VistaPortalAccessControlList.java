@@ -28,6 +28,7 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -215,6 +216,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueSubjectDetails.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueClassification.class, EntityPermission.READ));
+
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(ApplicationDocumentFile.class, CRUD));

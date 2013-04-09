@@ -41,10 +41,6 @@ public interface YardiServiceRequest extends IEntity {
 
     IPrimitive<String> priority();
 
-    IPrimitive<String> category();
-
-    IPrimitive<String> subCategory();
-
     IPrimitive<Boolean> permissionToEnter();
 
     IPrimitive<String> accessNotes();
