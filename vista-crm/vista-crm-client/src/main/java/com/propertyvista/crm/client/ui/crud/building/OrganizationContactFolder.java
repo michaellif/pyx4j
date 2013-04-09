@@ -64,7 +64,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
                 public void onValueChange(ValueChangeEvent<Employee> event) {
                     OrganizationContact value = getValue();
                     value.person().set(event.getValue());
-                    setValue(value);
+                    OrganizationContactEditor.this.setValue(value, false);
                 }
             });
 
