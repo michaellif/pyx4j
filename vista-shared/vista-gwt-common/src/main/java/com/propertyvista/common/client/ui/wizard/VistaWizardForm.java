@@ -56,7 +56,6 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
 
     @Override
     public IsWidget createContent() {
-//        wizardPanel.setSize("100%", "30em");
         return wizardPanel;
     }
 

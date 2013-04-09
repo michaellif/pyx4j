@@ -24,12 +24,14 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IndexedPanel;
 
+import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
+
 public class VistaWizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<VistaWizardStep>,
         HasSelectionHandlers<VistaWizardStep> {
 
     public VistaWizardPanel() {
         super();
-//        addStyleName(DefaultTabTheme.StyleName.WizardPanel.name());
+        addStyleName(VistaWizardPaneTheme.StyleName.WizardPanel.name());
     }
 
     public void addStep(VistaWizardStep step) {

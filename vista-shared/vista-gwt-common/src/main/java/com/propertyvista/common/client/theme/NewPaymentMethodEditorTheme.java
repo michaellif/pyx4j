@@ -24,7 +24,13 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class NewPaymentMethodEditorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        PaymentEditor, PaymentEditorButtons, PaymentEditorImages, PaymentEditorLegalTerms, PaymentEditorForm
+        //@formatter:off
+        PaymentEditor, 
+        PaymentEditorButtons, 
+        PaymentEditorImages, 
+        PaymentEditorLegalTerms, 
+        PaymentEditorForm
+        //@formatter:on
     }
 
     public static enum StyleDependent implements IStyleDependent {

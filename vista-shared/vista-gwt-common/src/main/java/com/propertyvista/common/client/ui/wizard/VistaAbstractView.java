@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.wizard;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -25,6 +23,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+
+import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 
 public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
@@ -47,26 +47,17 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
     private String footerToolbarHeight = "50px";
 
     public VistaAbstractView() {
-        super();
-
-        setWidth("100%");
-
-// TODO: style right (generic) way!!!
-
         captionLabel = new Label();
-//      captionLabel.setStyleName(DefaultPaneTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(VistaWizardPaneTheme.StyleName.HeaderCaption.name());
 
         headerCaption = new FlowPanel();
         headerCaption.add(captionLabel);
-//        headerCaption.setStyleName(DefaultPaneTheme.StyleName.Header.name());
-        headerCaption.getElement().getStyle().setFontSize(1.2, Unit.EM);
-        headerCaption.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-
+        headerCaption.setStyleName(VistaWizardPaneTheme.StyleName.Header.name());
         headerCaption.setHeight("30px");
         add(headerCaption);
 
         headerToolbarHolder = new SimplePanel();
-//        headerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
+        headerToolbarHolder.setStyleName(VistaWizardPaneTheme.StyleName.HeaderToolbar.name());
 
         headerToolbar = new Toolbar();
         headerToolbarHolder.setWidget(headerToolbar);
@@ -75,12 +66,13 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         add(contentHolder = new SimplePanel());
 
         footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-//        footerToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        footerToolbarHolder.setStyleName(VistaWizardPaneTheme.StyleName.FooterToolbar.name());
 
         footerToolbar = new Toolbar();
         footerToolbarHolder.setWidget(footerToolbar);
         add(footerToolbarHolder);
+
+        setWidth("100%");
     }
 
     protected FlowPanel getHeaderCaption() {

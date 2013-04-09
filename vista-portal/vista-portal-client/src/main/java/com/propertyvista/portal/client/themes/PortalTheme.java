@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -33,6 +32,7 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
@@ -119,15 +119,10 @@ public class PortalTheme extends VistaTheme {
 
         //.vista-pmsite-residentPage .content
 
-        addTheme(new DefaultDatePickerTheme());
-
-        addTheme(new DefaultPaneTheme());
+//        addTheme(new DefaultPaneTheme());
         addTheme(new DefaultDataTableTheme());
-
         addTheme(new DefaultCComponentsTheme());
-
-        addTheme(new NewPaymentMethodEditorTheme());
-
+        addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultEntityFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
@@ -153,12 +148,12 @@ public class PortalTheme extends VistaTheme {
 
             }
         });
-
-        addTheme(new TenantDashboardTheme());
-
-        addTheme(new CommunicationCenterTheme());
-
         addTheme(new DefaultDialogTheme());
+
+        addTheme(new VistaWizardPaneTheme());
+        addTheme(new TenantDashboardTheme());
+        addTheme(new CommunicationCenterTheme());
+        addTheme(new NewPaymentMethodEditorTheme());
 
         initCellListStyle();
 

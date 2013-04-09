@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
+import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
+
 public class VistaWizardStep extends SimplePanel implements IValidatable {
 
     private final Widget content;
@@ -42,6 +44,7 @@ public class VistaWizardStep extends SimplePanel implements IValidatable {
         setStepTitle(title);
         assert (content != null);
         setWidget(new ScrollPanel(this.content = content));
+        addStyleName(VistaWizardPaneTheme.StyleName.WizardStep.name());
     }
 
     public String getStepTitle() {
