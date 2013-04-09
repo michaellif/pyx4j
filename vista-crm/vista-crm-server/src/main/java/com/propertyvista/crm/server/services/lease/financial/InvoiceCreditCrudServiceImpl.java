@@ -64,8 +64,9 @@ public class InvoiceCreditCrudServiceImpl implements InvoiceCreditCrudService {
             debitLinkDto.setPrimaryKey(debitCreditLink.getPrimaryKey());
             debitLinkDto.date().setValue(debitCreditLink.debitItem().postDate().getValue());
             debitLinkDto.arCodeType().setValue(debitCreditLink.debitItem().arCode().type().getValue());
+            debitLinkDto.arCode().setValue(debitCreditLink.debitItem().arCode().name().getValue());
             debitLinkDto.description().setValue(debitCreditLink.debitItem().description().getValue());
-            debitLinkDto.outstandingAmount().setValue(debitCreditLink.debitItem().amount().getValue());
+            debitLinkDto.debitAmount().setValue(debitCreditLink.debitItem().amount().getValue());
             debitLinkDto.outstandingAmount().setValue(debitCreditLink.debitItem().outstandingDebit().getValue());
             debitLinkDto.paidAmount().setValue(debitCreditLink.amount().getValue());
             creditDto.debitCreditLinks().add(debitLinkDto);

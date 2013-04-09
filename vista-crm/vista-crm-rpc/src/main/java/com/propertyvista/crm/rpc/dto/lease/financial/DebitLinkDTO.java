@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.dto.lease.financial;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -30,7 +31,11 @@ public interface DebitLinkDTO extends IEntity {
 
     IPrimitive<LogicalDate> date();
 
+    @Caption(name = "AR Code Type")
     IPrimitive<ARCode.Type> arCodeType();
+
+    @Caption(name = "AR Code Name")
+    IPrimitive<String> arCode();
 
     IPrimitive<String> description();
 

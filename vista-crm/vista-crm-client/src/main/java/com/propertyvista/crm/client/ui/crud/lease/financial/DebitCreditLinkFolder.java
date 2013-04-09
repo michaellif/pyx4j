@@ -30,9 +30,11 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
         COLUMNS = Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto.date(), "10em"),
                 new EntityFolderColumnDescriptor(proto.arCodeType(), "10em"),
+                new EntityFolderColumnDescriptor(proto.arCode(), "10em"),                
                 new EntityFolderColumnDescriptor(proto.description(), "20em"),
-                new EntityFolderColumnDescriptor(proto.outstandingAmount(), "10em"),
-                new EntityFolderColumnDescriptor(proto.paidAmount(), "10em") 
+                new EntityFolderColumnDescriptor(proto.debitAmount(), "10em"),
+                new EntityFolderColumnDescriptor(proto.paidAmount(), "10em"),
+                new EntityFolderColumnDescriptor(proto.outstandingAmount(), "10em")                
         );//@formatter:on
     }
 
