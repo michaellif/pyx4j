@@ -162,7 +162,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         totalDueAmount("1282.34");
         // @formatter:on
 
-        receiveAndPostPayment("18-Jul-2011", "162.00");
+        receiveAndPostPayment("18-Jul-2011", "83.60");
 
         advanceSysDate("18-Aug-2011");
 
@@ -177,14 +177,12 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         billingPeriodStartDate("1-Sep-2011").
         billingPeriodEndDate("30-Sep-2011").
         numOfProductCharges(3).
-        //TODO AR submitted part of one time payment for booking and late payment against lease (lease is oldest arrears)
-        //paymentReceivedAmount("-1360.74").
+        paymentReceivedAmount("-1282.34").
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
-        taxes("128.44");
-        //TODO see above 
-        //totalDueAmount("1198.74");
+        taxes("128.44").
+        totalDueAmount("1198.74");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
