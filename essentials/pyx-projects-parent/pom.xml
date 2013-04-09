@@ -41,21 +41,6 @@
         <developerConnection>scm:svn:https://svn.pyx4j.com/svn/trunk/essentials/pyx-projects-parent</developerConnection>
     </scm>
 
-    <repositories>
-
-        <repository>
-            <id>pyx4j-snapshot</id>
-            <url>http://repository.pyx4j.com/maven2-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-
-    </repositories>
-
     <properties>
         <pyxVersion>2.1.9-SNAPSHOT</pyxVersion><!--pyx-version-->
     </properties>
