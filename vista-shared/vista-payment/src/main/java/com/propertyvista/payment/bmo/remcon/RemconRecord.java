@@ -15,4 +15,5 @@ package com.propertyvista.payment.bmo.remcon;
 
 public interface RemconRecord {
 
+    String recordType();
 }

@@ -13,23 +13,27 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
+
 public class RemconRecordFileHeader implements RemconRecord {
 
-    @RemconRecordLenght(1)
-    public String recordType = "0";
+    @Override
+    public String recordType() {
+        return "0";
+    };
 
     //Numeric; File creation date (YYMMDD)
-    @RemconRecordLenght(6)
+    @RemconField(value = 6, type = RemconFieldType.DateYYMMDD)
     public String currentDate;
 
     //Numeric; System assigned file serial #
-    @RemconRecordLenght(6)
+    @RemconField(6)
     public String fileSerialNumber;
 
     //Numeric; Date of system assigned file serial #
-    @RemconRecordLenght(6)
+    @RemconField(value = 6, type = RemconFieldType.DateYYMMDD)
     public String fileSerialDate;
 
-    @RemconRecordLenght(131)
+    @RemconField(value = 131, type = RemconFieldType.Alphanumeric)
     public String filler;
 }

@@ -15,17 +15,25 @@ package com.propertyvista.payment.bmo.remcon;
 
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
-public class RemconRecordBoxHeader implements RemconRecord {
+public class RemconRecordFileTrailer implements RemconRecord {
 
     @Override
     public String recordType() {
-        return "1";
+        return "9";
     };
 
-    //Numeric; Static box number assigned to customer by the Bank
-    @RemconField(4)
-    public String boxNumber;
+    //Consists of File Serial date followed by File Serial number as defined under File Header
+    @RemconField(12)
+    public String fileSerial;
 
-    @RemconField(value = 145, type = RemconFieldType.Alphanumeric)
+    //Total number of transaction records for the file, including trailers, headers and details
+    @RemconField(10)
+    public String recordCount;
+
+    //Total dollar value of detail record transactions
+    @RemconField(14)
+    public String totalAmount;
+
+    @RemconField(value = 113, type = RemconFieldType.Alphanumeric)
     public String filler;
 }

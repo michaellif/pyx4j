@@ -13,7 +13,21 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
-public @interface RemconRecordLenght {
+public @interface RemconField {
 
+    public static enum RemconFieldType {
+
+        Numeric,
+
+        DateYYMMDD,
+
+        Alphanumeric
+    }
+
+    /**
+     * filed length
+     */
     int value();
+
+    RemconFieldType type() default RemconFieldType.Numeric;
 }

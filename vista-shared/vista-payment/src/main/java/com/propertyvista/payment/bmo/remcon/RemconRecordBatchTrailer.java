@@ -15,45 +15,39 @@ package com.propertyvista.payment.bmo.remcon;
 
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
-/**
- * A batch is created for each incoming source location code (e.g. Royal Bank) and for each unique file date
- * 
- */
-public class RemconRecordBatchHeader implements RemconRecord {
+public class RemconRecordBatchTrailer implements RemconRecord {
 
     @Override
     public String recordType() {
-        return "2";
+        return "8";
     };
 
-    //Numeric; Last two are cents
+    //Cumulative amount of total dollar value of remittances within the batch
     @RemconField(12)
     public String batchAmount;
 
-    //Numeric;
     @RemconField(5)
     public String sequenceNumberFirst;
 
-    //Numeric;
     @RemconField(5)
     public String sequenceNumberLast;
 
-    //Numeric;
+    //Initialized as zero, but represents total number of transaction records within the batch.
     @RemconField(5)
     public String numberOfItems;
 
-    //Numeric; Location code assigned to each source (e.g. BMO is 1001)
+    //Location code as defined under batch header
     @RemconField(4)
     public String locationCode;
 
     @RemconField(1)
     public String mode;
 
-    //Numeric; Box number assigned by Bank
+    //Box number as defined under batch header
     @RemconField(4)
     public String boxNumber;
 
-    //Unique sequential batch number. Each batch begins at 1 and incrementally increases by 1 for each additional batch until 999 is reached. Once 999 is reached, the batch number is reset to 1.
+    //Batch number as defined under batch header
     @RemconField(3)
     public String batchNumber;
 
@@ -81,7 +75,7 @@ public class RemconRecordBatchHeader implements RemconRecord {
     @RemconField(2)
     public String operatorNumber;
 
-    //Collection Date. Date of payment collection provided by the source location code telebanking operator (MMDDYY)
+    //Collection date as defined under batch header
     @RemconField(6)
     public String collectionDate;
 
@@ -94,11 +88,11 @@ public class RemconRecordBatchHeader implements RemconRecord {
     @RemconField(1)
     public String financialFlag;
 
-    //Identification of source of remittance information. Value of 14 represents telebanking/electronic bill payments.
+    //As defined in the batch header
     @RemconField(2)
     public String sourceCode;
 
-    //If the source location (e.g. TDBANK) sends a trace number for their incoming file, then that trace number is referenced here. Each source location can have a different trace number format.
+    //Trace number as defined in batch heade.
     @RemconField(value = 30, type = RemconFieldType.Alphanumeric)
     public String traceNumber;
 
