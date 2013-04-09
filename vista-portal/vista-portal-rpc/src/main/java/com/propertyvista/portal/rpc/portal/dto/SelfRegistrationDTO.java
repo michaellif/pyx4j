@@ -38,7 +38,7 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
     IPrimitive<String> lastName();
 
     @NotNull
-    IPrimitive<String> secuirtyCode();
+    IPrimitive<String> securityCode();
 
     // email and password inherited
 

@@ -197,13 +197,13 @@ public class CustomerFacadeImpl implements CustomerFacade {
         // We need protection from attacks that check names of the user?
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
-        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.secuirtyCode().getValue().toUpperCase(Locale.ENGLISH));
+        criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.securityCode().getValue().toUpperCase(Locale.ENGLISH));
 
         List<Tenant> tenants = Persistence.service().query(criteria);
 
         if (tenants.size() == 0) {
             throw EntityValidationException.make(SelfRegistrationDTO.class)
-                    .addError(selfRegistration.secuirtyCode(), i18n.tr("The Secuirty Code was incorrect")).build();
+                    .addError(selfRegistration.securityCode(), i18n.tr("The Secuirty Code was incorrect")).build();
         }
 
         Tenant tenant = null;
