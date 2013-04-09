@@ -488,7 +488,7 @@ public class PMSiteContentManager implements Serializable {
                 i18n.tr("{0} apartments for rent by {1}, find your next rental apartment in {0} fast and easy using our apartment search.", city.name()
                         .getValue(), getSiteTitles(curLocale).residentPortalTitle().getValue()));
         meta.keywords().setValue(
-                i18n.tr("rent {0} apartments, apartments {0}, apartments in {0}, {0} rental appartments, {0} apartments for rent", city.name().getValue()));
+                i18n.tr("rent {0} apartments, apartments {0}, apartments in {0}, {0} rental apartments, {0} apartments for rent", city.name().getValue()));
         return meta;
     }
 
