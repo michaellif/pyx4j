@@ -78,7 +78,7 @@ public class ImageHolder extends SimplePanel implements IWidget {
         getElement().getStyle().setProperty("padding", "5px");
         getElement().getStyle().setProperty("border", "1px solid #999");
 
-        slideshow = new Slideshow();
+        slideshow = new Slideshow(0, false);
         editControl = new EditorControlPanel();
         editControl.setVisible(false);
 
@@ -99,24 +99,19 @@ public class ImageHolder extends SimplePanel implements IWidget {
 
         contentPanel.add(slideshow);
         contentPanel.add(editControl);
-        contentPanel.setWidgetTopHeight(editControl, 10, Unit.PCT, 40, Unit.PX);
+        contentPanel.setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
 
         setWidget(contentPanel);
     }
 
     public void onModelChange() {
+        slideshow.removeAllItems();
         for (String url : imageList.getImageUrls()) {
-            final Image image = new Image(url);
-            final ImageViewport imageViewport = new ImageViewport();
-            image.addLoadHandler(new LoadHandler() {
-                @Override
-                public void onLoad(LoadEvent event) {
-                    imageViewport.scaleToFit();
-                }
-            });
-            imageViewport.setImage(image);
+            final ImageViewport imageViewport = new ImageViewport(dimension);
+            imageViewport.setUrl(url);
             slideshow.addItem(imageViewport);
         }
+        slideshow.show(slideshow.getWidgetCount() - 1);
     }
 
     public void reset() {
@@ -150,6 +145,9 @@ public class ImageHolder extends SimplePanel implements IWidget {
             getElement().getStyle().setProperty("lineHeight", "40px");
             getElement().getStyle().setProperty("textAlign", "center");
             getElement().getStyle().setProperty("background", "gray");
+            getElement().getStyle().setProperty("color", "white");
+            getElement().getStyle().setProperty("opacity", "0.8");
+            getElement().getStyle().setProperty("cursor", "pointer");
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -160,13 +158,26 @@ public class ImageHolder extends SimplePanel implements IWidget {
         }
     }
 
-    class ImageViewport extends LayoutPanel {
+    public static class ImageViewport extends LayoutPanel {
 
-        private Image image;
+        private final Image image = new Image();
 
-        void setImage(Image image) {
-            this.image = image;
+        private final Dimension dimension;
+
+        public ImageViewport(Dimension dimension) {
+            this.dimension = dimension;
+            setSize(dimension.width + "px", dimension.height + "px");
+            image.addLoadHandler(new LoadHandler() {
+                @Override
+                public void onLoad(LoadEvent event) {
+                    scaleToFit();
+                }
+            });
             add(image);
+        }
+
+        public void setUrl(String url) {
+            image.setUrl(url);
         }
 
         private void scaleToFit() {
