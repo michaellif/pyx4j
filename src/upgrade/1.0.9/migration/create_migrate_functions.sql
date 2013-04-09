@@ -210,7 +210,28 @@ BEGIN
                 ||'WHEN credit_debit_rule = ''byDebitType'' THEN ''rentDebtLast'' END ';
         
         
-         -- lead
+        -- billing_invoice_line_item
+        
+        -- ???????
+        
+        
+        -- concession_v
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.concession_v AS c '
+                ||'SET  product_code = a.id '
+                ||'FROM '||v_schema_name||'.arcode  AS a '
+                ||'WHERE c.product_item_type = a.pit_id ';
+                
+        
+        -- deposit_policy_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy_item AS d '
+                ||'SET  product_code = a.id '
+                ||'FROM '||v_schema_name||'.arcode  AS a '
+                ||'WHERE c.product_type = a.pit_id ';
+        
+        
+        -- lead
         
         EXECUTE 'UPDATE '||v_schema_name||'.lead '
                 ||'SET lease_type = ''Residential'' '
@@ -230,6 +251,13 @@ BEGIN
                 ||'SET  code = a.id '
                 ||'FROM '||v_schema_name||'.arcode AS a '
                 ||'WHERE l.item_type = a.lad_id ';
+                
+        -- lease_adjustment_policy_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_adjustment_policy_item AS l '
+                ||'SET  code = a.id '
+                ||'FROM '||v_schema_name||'.arcode AS a '
+                ||'WHERE        l.lease_adjustment_reason = a.lad_id ';
         
         
         /**
