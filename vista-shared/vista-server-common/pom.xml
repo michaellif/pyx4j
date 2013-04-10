@@ -71,6 +71,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>com.mortennobel</groupId>
             <artifactId>java-image-scaling</artifactId>
             <version>0.8.5</version>
