@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-09
+ * Created on 2013-04-10
  * @author ArtyomB
  * @version $Id$
  */
@@ -16,45 +16,45 @@ package com.propertyvista.crm.rpc.dto.lease.financial;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
 @Transient
-public interface DebitLinkDTO extends IEntity {
-
-    InvoiceDebit debitItemStub();
-
-    InvoiceCredit creditItemStub();
+@ExtendsDBO(InvoiceDebit.class)
+public interface InvoiceDebitDTO extends IEntity {
 
     IPrimitive<LogicalDate> date();
 
-    @Caption(name = "AR Code Type")
-    IPrimitive<ARCode.Type> arCodeType();
-
-    @Caption(name = "AR Code Name")
-    IPrimitive<String> arCode();
-
-    IPrimitive<String> description();
+    /** item description */
+    IPrimitive<String> item();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> debitAmount();
+    IPrimitive<BigDecimal> totalAmount();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> outstandingAmount();
+    IPrimitive<BigDecimal> outstandingDebit();
+
+    IPrimitive<LogicalDate> dueDate();
+
+    @Owned
+    IList<InvoiceChargeTax> taxes();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> paidAmount();
+    IPrimitive<BigDecimal> taxTotal();
+
+    IList<DebitLinkDTO> debitCreditLinks();
 
 }

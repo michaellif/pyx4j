@@ -104,6 +104,7 @@ import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
+import com.propertyvista.crm.rpc.services.lease.financial.InvoiceDebitCrudService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -156,6 +157,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -351,6 +353,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(InvoiceCredit.class, EntityPermission.READ));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InvoiceCreditCrudService.class));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(InvoiceDebit.class, EntityPermission.READ));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InvoiceDebitCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseTermListService.class));
 

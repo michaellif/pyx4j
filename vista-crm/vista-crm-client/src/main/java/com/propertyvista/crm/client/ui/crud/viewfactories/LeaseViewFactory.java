@@ -40,6 +40,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerVie
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceCreditViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceCreditViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceDebitViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceDebitViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -77,6 +79,8 @@ public class LeaseViewFactory extends ViewFactoryBase {
 
             } else if (InvoiceCreditViewerView.class.equals(type)) {
                 map.put(type, new InvoiceCreditViewerViewImpl());
+            } else if (InvoiceDebitViewerView.class.equals(type)) {
+                map.put(type, new InvoiceDebitViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

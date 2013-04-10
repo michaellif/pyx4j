@@ -100,6 +100,7 @@ import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerAc
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceCreditViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.financial.InvoiceDebitViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestEditorActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestListerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestViewerActivity;
@@ -565,6 +566,13 @@ public class MainActivityMapper implements AppActivityMapper {
                         switch (crudPlace.getType()) {
                         default:
                             activity = new InvoiceCreditViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof CrmSiteMap.Tenants.Lease.InvoiceDebit) {
+                        switch (crudPlace.getType()) {
+                        default:
+                            activity = new InvoiceDebitViewerActivity(crudPlace);
                             break;
                         }
 

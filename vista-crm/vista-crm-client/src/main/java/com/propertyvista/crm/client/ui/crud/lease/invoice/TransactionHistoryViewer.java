@@ -145,7 +145,13 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
                     }
                 }));
             } else {
-                lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(item.description().getValue()));
+                lineItemsView.setWidget(row, COL_ITEM, asAnchor(item.description().getValue(), new Command() {
+                    @Override
+                    public void execute() {
+                        // TODO reslove via AppPlaceEntityMapper when it doesn't lag
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease.InvoiceDebit().formViewerPlace(item.getPrimaryKey()));
+                    }
+                }));
             }
             lineItemsView.setHTML(row, colAmount, toSafeHtml(amountRepresentation));
             lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balanceRespresentation));

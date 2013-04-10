@@ -163,6 +163,11 @@ public class CrmSiteMap implements SiteMap {
             public static class InvoiceCredit extends CrmCrudAppPlace {
 
             }
+
+            @PlaceProperties(navigLabel = "Debit Transaction")
+            public static class InvoiceDebit extends CrmCrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(navigLabel = "Lease Applications")

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-09
+ * Created on 2013-04-10
  * @author ArtyomB
  * @version $Id$
  */
@@ -25,15 +25,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.billing.InvoiceCredit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
 @Transient
-public interface DebitLinkDTO extends IEntity {
-
-    InvoiceDebit debitItemStub();
-
-    InvoiceCredit creditItemStub();
+public interface CreditLinkDTO extends IEntity {
 
     IPrimitive<LogicalDate> date();
 

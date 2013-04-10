@@ -36,6 +36,8 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.InvoiceCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -168,6 +170,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Administration.Policies.AR.class, defaultImage);
         AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Administration.Policies.TenantInsurance.class, defaultImage);
         AppPlaceEntityMapper.register(PADPolicy.class, CrmSiteMap.Administration.Policies.PADs.class, defaultImage);
+        AppPlaceEntityMapper.register(InvoiceDebit.class, CrmSiteMap.Tenants.Lease.InvoiceDebit.class, defaultImage);
+        AppPlaceEntityMapper.register(InvoiceCredit.class, CrmSiteMap.Tenants.Lease.InvoiceCredit.class, defaultImage);
 
         // DTO mappings:
         AppPlaceEntityMapper.register(LeaseDTO.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
@@ -175,5 +179,6 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(CustomerCreditCheckDTO.class, CrmSiteMap.Report.CustomerCreditCheck.class, defaultImage);
         AppPlaceEntityMapper.register(CustomerCreditCheckLongReportDTO.class, CrmSiteMap.Tenants.CustomerCreditCheckLongReport.class, defaultImage);
+
     }
 }

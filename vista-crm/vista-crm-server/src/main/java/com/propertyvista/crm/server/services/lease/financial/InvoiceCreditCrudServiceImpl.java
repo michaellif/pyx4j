@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
-import com.propertyvista.crm.rpc.dto.lease.financial.DebitLinkDTO;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceCreditDTO;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -60,16 +59,7 @@ public class InvoiceCreditCrudServiceImpl implements InvoiceCreditCrudService {
         creditDto.totalAmount().setValue(creditDbo.amount().getValue().abs());
         creditDto.outstandingCredit().setValue(creditDbo.outstandingCredit().getValue().abs());
         for (DebitCreditLink debitCreditLink : debitCreditLinks) {
-            DebitLinkDTO debitLinkDto = EntityFactory.create(DebitLinkDTO.class);
-            debitLinkDto.setPrimaryKey(debitCreditLink.getPrimaryKey());
-            debitLinkDto.date().setValue(debitCreditLink.debitItem().postDate().getValue());
-            debitLinkDto.arCodeType().setValue(debitCreditLink.debitItem().arCode().type().getValue());
-            debitLinkDto.arCode().setValue(debitCreditLink.debitItem().arCode().name().getValue());
-            debitLinkDto.description().setValue(debitCreditLink.debitItem().description().getValue());
-            debitLinkDto.debitAmount().setValue(debitCreditLink.debitItem().amount().getValue());
-            debitLinkDto.outstandingAmount().setValue(debitCreditLink.debitItem().outstandingDebit().getValue());
-            debitLinkDto.paidAmount().setValue(debitCreditLink.amount().getValue());
-            creditDto.debitCreditLinks().add(debitLinkDto);
+            creditDto.debitCreditLinks().add(DebitCreditLinkDtoConverter.asDto(debitCreditLink));
         }
 
         callback.onSuccess(creditDto);
