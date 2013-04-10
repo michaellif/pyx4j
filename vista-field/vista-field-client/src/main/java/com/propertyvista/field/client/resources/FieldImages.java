@@ -34,4 +34,7 @@ public interface FieldImages extends VistaImages {
     @Source("sort.png")
     ImageResource sort();
 
+    @Source("back.png")
+    ImageResource back();
+
 }

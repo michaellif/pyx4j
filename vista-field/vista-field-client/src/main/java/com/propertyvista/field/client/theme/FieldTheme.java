@@ -22,7 +22,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImageHolder, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted;
+        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImage, ToolbarImageHolder, ToolbarLabel, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted, SortPanel, SearchPanel, SearchPanelToolbar, SearchResults;
     }
 
     public FieldTheme() {
@@ -129,13 +129,21 @@ public class FieldTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.Toolbar);
-        //style.addProperty("background-color", "red");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ToolbarImage);
+        style.addProperty("position", "relative");
+        style.addProperty("left", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarImageHolder);
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
-        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ToolbarLabel);
+        style.addProperty("position", "relative");
+        style.addProperty("width", "50px");
         addStyle(style);
 
         style = new Style(".", StyleName.MenuScreen);
@@ -152,6 +160,28 @@ public class FieldTheme extends VistaTheme {
         style = new Style(".", StyleName.OverlapScreenShifted);
         style.addProperty("margin-left", "80%");
         style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SortPanel);
+        style.addProperty("margin-top", "5%");
+        style.addProperty("width", "100%");
+        style.addProperty("height", "50%");
+        style.addProperty("background-color", "yellow");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SearchPanel);
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SearchPanelToolbar);
+        addStyle(style);
+
+        style = new Style(".", StyleName.SearchResults);
+        style.addProperty("margin-top", "auto");
+        style.addProperty("margin-bottom", "auto");
+        style.addProperty("background-color", "#C0C0C0");
         addStyle(style);
     }
 
