@@ -72,7 +72,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private DataTable.ItemSelectionHandler zoomInHandler;
 
-    public EntityDataTablePanel(Class<E> clazz) {
+    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
         setStyleName(DefaultPaneTheme.StyleName.Lister.name());
         dataTablePanel = new DataTablePanel<E>(clazz);
@@ -136,34 +136,19 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTablePanel.getDataTable().setAutoColumnsWidth(true);
 
         add(dataTablePanel);
+
+        setAllowZoomIn(allowZoomIn);
+        setAllowAddNew(allowAddNew);
+        setAllowDelete(allowDelete);
+
+    }
+
+    public EntityDataTablePanel(Class<E> clazz) {
+        this(clazz, false, false, false);
     }
 
     public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
-        this(clazz);
-        setAllowZoomIn(allowZoomIn);
-
-        // new item stuff:
-        if (allowAddNew) {
-            dataTablePanel.setAddActionCommand(new Command() {
-                @Override
-                public void execute() {
-                    onItemNew();
-                }
-            });
-        }
-    }
-
-    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
-        this(clazz, allowZoomIn, allowAddNew);
-        // delete items stuff:
-        if (allowDelete) {
-            dataTablePanel.setDelActionCommand(new Command() {
-                @Override
-                public void execute() {
-                    onItemsDelete(getDataTablePanel().getDataTable().getCheckedItems());
-                }
-            });
-        }
+        this(clazz, allowZoomIn, allowAddNew, false);
     }
 
     public boolean isAllowZoomIn() {
@@ -187,6 +172,31 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
             dataTablePanel.getDataTable().remItemSelectionHandler(zoomInHandler);
             zoomInHandler = null;
         }
+    }
+
+    protected void setAllowDelete(boolean allowDelete) {
+        // delete items stuff:
+        if (allowDelete) {
+            dataTablePanel.setDelActionCommand(new Command() {
+                @Override
+                public void execute() {
+                    onItemsDelete(getDataTablePanel().getDataTable().getCheckedItems());
+                }
+            });
+        }
+    }
+
+    protected void setAllowAddNew(boolean allowAddNew) {
+        // new item stuff:
+        if (allowAddNew) {
+            dataTablePanel.setAddActionCommand(new Command() {
+                @Override
+                public void execute() {
+                    onItemNew();
+                }
+            });
+        }
+
     }
 
     public void setDataSource(ListerDataSource<E> dataSource) {
