@@ -41,6 +41,7 @@ public class JobNotifications {
         case PartiallyCompleted:
         case Failed:
             events.add(TriggerNotificationEvent.Error);
+            events.add(TriggerNotificationEvent.NonEmpty);
             break;
         default:
             return;
@@ -73,6 +74,26 @@ public class JobNotifications {
         }
         message += "</body></html>";
         m.setHtmlBody(message);
+
+        boolean important = false;
+        switch (run.status().getValue()) {
+        case PartiallyCompleted:
+        case Failed:
+            important = true;
+            break;
+        default:
+            break;
+        }
+        if (run.executionReport().erred().getValue(0L) > 0) {
+            important = true;
+        }
+
+        if (important) {
+            m.setHeader("Priority", "Urgent");
+            m.setHeader("Importance", "high");
+            m.setHeader("X-Priority", "1");
+        }
+
         Mail.send(m);
     }
 }
