@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.domain;
 
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IImageFile;
 
-public interface TFile extends IFile {
+public interface TFile extends IImageFile {
 
 }

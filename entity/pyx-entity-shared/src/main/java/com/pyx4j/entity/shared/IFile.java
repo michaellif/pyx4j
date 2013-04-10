@@ -53,8 +53,4 @@ public interface IFile extends IEntity {
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
     IPrimitive<Key> blobKey();
-
-    IPrimitive<String> caption();
-
-    IPrimitive<String> description();
 }

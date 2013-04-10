@@ -71,6 +71,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
                 return Images.INSTANCE;
             }
         };
+
         cGallery.setImageFileUrlBuilder(new ImageFileURLBuilder(false));
         cGallery.setThumbnailFileUrlBuilder(new ImageFileURLBuilder(true));
         cGallery.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
