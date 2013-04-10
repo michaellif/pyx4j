@@ -22,14 +22,17 @@ package com.pyx4j.tester.client.view.form;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImageList;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.images.Images;
+import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
@@ -55,20 +58,20 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 //        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cGallery)));
 
-//        CImageGallery<TFile> cGallery = new CImageGallery<TFile>(TFile.class) {
-//            @Override
-//            public EntityFolderImages getFolderImages() {
-//                return Images.INSTANCE;
-//            }
-//        };
-//        cGallery.setImageFileUrlBuilder(new ImageFileURLBuilder(false));
-//        cGallery.setThumbnailFileUrlBuilder(new ImageFileURLBuilder(true));
-//        cGallery.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
-
         CImageList<TFile> cGallery = new CImageList<TFile>(TFile.class) {
             @Override
             public EntityFolderImages getFolderIcons() {
                 return Images.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
+                FormFlexPanel infoPanel = new FormFlexPanel();
+                int row = -1;
+                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())));
+                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().caption())));
+                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().description())));
+                return infoPanel;
             }
         };
 

@@ -29,7 +29,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IImageFile;
@@ -162,9 +161,7 @@ public class NImageList<T extends IImageFile> extends NComponent<IList<T>, Image
                         HorizontalPanel content = new HorizontalPanel();
                         content.add(thumb);
 
-                        VerticalPanel infoPanel = new VerticalPanel();
-                        infoPanel.add(inject(proto().fileName()));
-                        content.add(infoPanel);
+                        content.add(getCComponent().getImageEntryView(this));
 
                         return content;
                     }
@@ -242,7 +239,6 @@ public class NImageList<T extends IImageFile> extends NComponent<IList<T>, Image
             public boolean onClickCancel() {
                 getCComponent().getValue().clear();
                 getCComponent().getValue().addAll(imageFiles);
-                createViewer().reset();
                 return true;
             }
 

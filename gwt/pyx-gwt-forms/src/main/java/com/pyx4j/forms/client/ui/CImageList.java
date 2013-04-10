@@ -1,6 +1,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IImageFile;
 import com.pyx4j.entity.shared.IList;
@@ -61,4 +62,6 @@ public abstract class CImageList<E extends IImageFile> extends CComponent<IList<
     public UploadService<E, E> getUploadService() {
         return service;
     }
+
+    public abstract Widget getImageEntryView(CEntityForm<E> entryForm);
 }

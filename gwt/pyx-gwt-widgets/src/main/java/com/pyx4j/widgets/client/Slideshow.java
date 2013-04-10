@@ -88,14 +88,19 @@ public class Slideshow extends LayoutPanel {
 
     public void addItem(Widget widget) {
         widget.setPixelSize(getOffsetWidth(), getOffsetHeight());
-        slides.add(widget);
         widget.setVisible(false);
+        slides.add(widget);
         controlPanel.reset();
+
     }
 
     public void removeAllItems() {
         slides.clear();
         controlPanel.reset();
+    }
+
+    public int getItemCount() {
+        return slides.getWidgetCount();
     }
 
     public void setSlideChangeSpeed(int slideChangeSpeed) {
@@ -109,8 +114,8 @@ public class Slideshow extends LayoutPanel {
         slideChangeTimer = new Timer() {
             @Override
             public void run() {
-                if (slides.getWidgetCount() > 0) {
-                    show((currentIndex + 1) % slides.getWidgetCount());
+                if (getItemCount() > 0) {
+                    show((currentIndex + 1) % getItemCount());
                 }
             }
         };
@@ -148,17 +153,17 @@ public class Slideshow extends LayoutPanel {
     }
 
     public void show(final int index) {
-        if (slides.getWidgetCount() == 0) {
+        if (getItemCount() == 0) {
             return;
         }
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                if ((currentIndex == index) || animationIsRunning) {
+                if (animationIsRunning) {
                     return;
                 }
-                int idx = index % slides.getWidgetCount();
+                int idx = index % getItemCount();
                 final Widget fadeIn = slides.getWidget(idx);
                 setOpacity(fadeIn, 0);
                 fadeIn.setVisible(true);
@@ -238,10 +243,10 @@ public class Slideshow extends LayoutPanel {
                 public void onClick(ClickEvent event) {
                     stop();
                     if (currentIndex == 0) {
-                        show(slides.getWidgetCount() - 1);
+                        show(getItemCount() - 1);
                     } else {
-                        if (slides.getWidgetCount() > 0) {
-                            show((currentIndex - 1) % slides.getWidgetCount());
+                        if (getItemCount() > 0) {
+                            show((currentIndex - 1) % getItemCount());
                         }
                     }
                 }
@@ -271,8 +276,8 @@ public class Slideshow extends LayoutPanel {
                 @Override
                 public void onClick(ClickEvent event) {
                     stop();
-                    if (slides.getWidgetCount() > 0) {
-                        show((currentIndex + 1) % slides.getWidgetCount());
+                    if (getItemCount() > 0) {
+                        show((currentIndex + 1) % getItemCount());
                     }
                 }
             });
@@ -285,7 +290,7 @@ public class Slideshow extends LayoutPanel {
         void reset() {
             itemActionList.clear();
             itemActionsHolder.clear();
-            for (int i = 0; i < slides.getWidgetCount(); i++) {
+            for (int i = 0; i < getItemCount(); i++) {
                 Action itemAction = new Action();
                 itemActionList.add(itemAction);
                 itemActionsHolder.add(itemAction);

@@ -111,7 +111,7 @@ public class ImageHolder extends SimplePanel implements IWidget {
             imageViewport.setUrl(url);
             slideshow.addItem(imageViewport);
         }
-        slideshow.show(slideshow.getWidgetCount() - 1);
+        slideshow.show(slideshow.getItemCount() - 1);
     }
 
     public void reset() {
