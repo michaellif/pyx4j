@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -60,54 +61,13 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         paymentMethods.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
         paymentMethods.setWidth("100%");
 
-        CRadioGroupEnum<PaymentType> pmRadioGroup;
-        paymentMethods.add(inject(proto().type(), pmRadioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                RadioGroup.Layout.HORISONTAL)));
-        pmRadioGroup.asWidget().getElement().getStyle().setMarginLeft(10, Unit.EM);
+        Widget w;
+        paymentMethods.add(w = inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
+        w.getElement().getStyle().setMarginLeft(10, Unit.EM);
 
         paymentMethods.add(paymentDetailsHolder);
         DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
         paymentDetailsHolder.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
-
-        pmRadioGroup.setFormat(new IFormat<PaymentType>() {
-            @Override
-            public PaymentType parse(String string) throws ParseException {
-                return null;
-            }
-
-            @Override
-            public String format(PaymentType value) {
-                Image paymentTypeImage;
-                FlowPanel holder = null;
-
-                if (value != null) {
-                    switch (value) {
-                    case Echeck:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
-                        break;
-                    case CreditCard:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
-                        break;
-                    case Interac:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
-                        break;
-                    default:
-                        paymentTypeImage = null;
-                        break;
-                    }
-
-                    if (paymentTypeImage != null) {
-                        holder = new FlowPanel();
-                        holder.add(paymentTypeImage);
-                        return holder.getElement().getInnerHTML();
-                    }
-
-                    return value.toString();
-                }
-
-                return "";
-            }
-        });
 
         // Form content pane:
         FormFlexPanel content = new FormFlexPanel();
@@ -150,5 +110,52 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         }
 
         setPaymentTypeSelectionEditable(getValue().id().isNull());
+    }
+
+    private CRadioGroupEnum<PaymentType> createPaymentTypesRadioGroup() {
+        CRadioGroupEnum<PaymentType> pmRadioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL);
+        pmRadioGroup.setFormat(new IFormat<PaymentType>() {
+            @Override
+            public PaymentType parse(String string) throws ParseException {
+                return null;
+            }
+
+            @Override
+            public String format(PaymentType value) {
+                Image paymentTypeImage;
+                FlowPanel holder = null;
+
+                if (value != null) {
+                    switch (value) {
+                    case Echeck:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
+                        break;
+                    case CreditCard:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
+                        break;
+                    case Interac:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
+                        break;
+                    default:
+                        paymentTypeImage = null;
+                        break;
+                    }
+
+                    if (paymentTypeImage != null) {
+                        holder = new FlowPanel();
+                        holder.add(paymentTypeImage);
+                        return holder.getElement().getInnerHTML();
+                    }
+
+                    return value.toString();
+                }
+
+                return "";
+            }
+        });
+
+        pmRadioGroup.setOptions(defaultPaymentTypes());
+
+        return pmRadioGroup;
     }
 }

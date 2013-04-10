@@ -30,7 +30,6 @@ public class EditPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
 
     public EditPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
-
             @Override
             public Collection<PaymentType> defaultPaymentTypes() {
                 return PortalPaymentTypesUtil.getAllowedPaymentTypes();

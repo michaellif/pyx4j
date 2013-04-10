@@ -43,9 +43,8 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
     @Override
     public IsWidget createContent() {
-
-        Widget widget = null;
         FormFlexPanel container = new FormFlexPanel();
+        Widget widget = null;
 
         int row = -1;
 
