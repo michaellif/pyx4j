@@ -18,10 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 @Transient
-public interface BillingHistoryDTO extends IEntity {
+public interface BillListDTO extends IEntity {
 
     IList<BillDataDTO> bills();
-
-    IList<PaymentDataDTO> payments();
-
 }
