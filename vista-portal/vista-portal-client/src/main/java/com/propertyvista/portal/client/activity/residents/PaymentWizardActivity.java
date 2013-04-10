@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.WizardActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -28,6 +29,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 
 public class PaymentWizardActivity extends WizardActivityBase<PaymentRecordDTO> implements PaymentWizardView.Persenter {
@@ -56,4 +58,9 @@ public class PaymentWizardActivity extends WizardActivityBase<PaymentRecordDTO> 
         });
     }
 
+    @Override
+    protected void onSaved() {
+        getView().reset();
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.NewPreauthorizedPaymentMethod());
+    }
 }
