@@ -51,6 +51,7 @@ import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
+import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.operations.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
@@ -146,6 +147,8 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MerchantAccountFileUploadService.class));
 
         grant(VistaOperationsBehavior.SecurityAdmin, VistaOperationsBehavior.SystemAdmin);
         grant(VistaOperationsBehavior.SecurityAdmin, new IServiceExecutePermission(EncryptedStorageService.class));

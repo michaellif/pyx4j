@@ -16,13 +16,19 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.rpc.PmcDTO;
 
 public class PmcLister extends AbstractLister<PmcDTO> {
+
+    protected static final I18n i18n = I18n.get(PmcLister.class);
 
     public PmcLister() {
         super(PmcDTO.class, true);
@@ -38,6 +44,14 @@ public class PmcLister extends AbstractLister<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().features().tenantSureIntegration()).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().features().countryOfOperation()).visible(false).build()
         );//@formatter:on
+
+        addActionItem(new Button(i18n.tr("Upload Merchant Accounts"), new Command() {
+            @Override
+            public void execute() {
+                ((PmcListerView.Presenter) getPresenter()).uploadMerchantAccounts();
+            }
+        }));
+
     }
 
     @Override

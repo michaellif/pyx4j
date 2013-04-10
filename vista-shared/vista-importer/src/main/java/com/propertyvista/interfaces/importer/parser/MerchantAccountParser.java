@@ -1,0 +1,140 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Mar 7, 2013
+ * @author yuriyl
+ * @version $Id$
+ */
+package com.propertyvista.interfaces.importer.parser;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.essentials.server.csv.XLSLoad;
+import com.pyx4j.gwt.shared.DownloadFormat;
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;
+
+public class MerchantAccountParser {
+
+    private final static Logger log = LoggerFactory.getLogger(MerchantAccountParser.class);
+
+    private static final I18n i18n = I18n.get(MerchantAccountParser.class);
+
+    private List<MerchantAccountFileModel> pads = new ArrayList<MerchantAccountFileModel>();
+
+    public String persistMerchantAccounts(byte[] data, DownloadFormat format) {
+        MerchantAccountCounter counters = new MerchantAccountCounter();
+        pads = parseFile(data, format);
+        counters.add(saveMerchantAccounts(pads));
+
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} unchanged", counters.imported, counters.unchanged, counters.updated);
+        log.info(message);
+        return message;
+    }
+
+    private List<MerchantAccountFileModel> parseFile(byte[] data, DownloadFormat format) {
+        if ((format != DownloadFormat.XLS) && (format != DownloadFormat.XLSX)) {
+            throw new IllegalArgumentException();
+        }
+        XLSLoad loader;
+        try {
+            loader = new XLSLoad(new ByteArrayInputStream(data), format == DownloadFormat.XLSX);
+        } catch (IOException e) {
+            log.error("XLSLoad error", e);
+            throw new UserRuntimeException(i18n.tr("Unable to read Excel File, {0}", e.getMessage()));
+        }
+        int sheets = loader.getNumberOfSheets();
+
+        for (int sheetNumber = 0; sheetNumber < sheets; sheetNumber++) {
+            if (loader.isSheetHidden(sheetNumber)) {
+                continue;
+            }
+            EntityCSVReciver<MerchantAccountFileModel> receiver = new MerchantAccountFileCSVReciver(loader.getSheetName(sheetNumber));
+            try {
+                if (!loader.loadSheet(sheetNumber, receiver)) {
+                    new UserRuntimeException(i18n.tr("Column header declaration not found"));
+                }
+            } catch (UserRuntimeException e) {
+                log.error("XLSLoad error", e);
+                throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
+            }
+            pads.addAll(receiver.getEntities());
+        }
+        return pads;
+
+    }
+
+    private MerchantAccountCounter saveMerchantAccounts(List<MerchantAccountFileModel> entities) {
+        MerchantAccountCounter counters = new MerchantAccountCounter();
+
+        for (MerchantAccountFileModel model : entities) {
+            MerchantAccount account = EntityFactory.create(MerchantAccount.class);
+            // TODO create and save a merchant account
+        }
+
+        return counters;
+    }
+
+    private static class MerchantAccountFileCSVReciver extends EntityCSVReciver<MerchantAccountFileModel> {
+        String sheetNumber;
+
+        public MerchantAccountFileCSVReciver(String sheetName) {
+            super(MerchantAccountFileModel.class);
+            this.sheetNumber = sheetName;
+            this.setMemberNamesAsHeaders(false);
+            this.setHeaderLinesCount(1, 2);
+            this.setHeadersMatchMinimum(3);
+            this.setVerifyRequiredHeaders(true);
+            this.setVerifyRequiredValues(true);
+        }
+
+        @Override
+        public void onRow(MerchantAccountFileModel entity) {
+            if (!entity.isNull()) {
+                entity._import().row().setValue(getCurrentRow());
+                entity._import().sheet().setValue(sheetNumber);
+                super.onRow(entity);
+            }
+        }
+
+    }
+
+    public class MerchantAccountCounter {
+
+        public int imported;
+
+        public int unchanged;
+
+        public int updated;
+
+        public MerchantAccountCounter() {
+            this.imported = 0;
+            this.unchanged = 0;
+            this.updated = 0;
+        }
+
+        public void add(MerchantAccountCounter counters) {
+            this.imported += counters.imported;
+            this.unchanged += counters.unchanged;
+            this.updated += counters.updated;
+        }
+    }
+}
