@@ -481,7 +481,7 @@ public class ExtractMojo extends AbstractMojo {
                 throw new MojoExecutionException("Unable to create poDirectory " + poDirectory);
             }
         }
-        writePO(po, new File(poDirectory, keysFile), writeBomTokeysFile);
+        writePO(po, new File(poDirectory, keysFile), writeBomTokeysFile, false);
         getLog().info("Extracted " + po.entries.size() + " strings for i18n");
 
         //Create file for corrections
@@ -490,18 +490,22 @@ public class ExtractMojo extends AbstractMojo {
             for (POEntry entry : poc.entries) {
                 entry.translated = entry.untranslated;
             }
-            writePO(poc, new File(poDirectory, correctionKeysFile), writeBomTokeysFile);
+            writePO(poc, new File(poDirectory, correctionKeysFile), writeBomTokeysFile, true);
         }
 
         return po;
     }
 
-    private void writePO(POFile po, File file, boolean writeBom) throws MojoExecutionException {
+    private void writePO(POFile po, File file, boolean writeBom, boolean correctionsFile) throws MojoExecutionException {
         try {
             POFileWriter poWriter = new POFileWriter();
             poWriter.pageWidth = poPageWidth;
             poWriter.wrapLines = poWrapLines;
             poWriter.writeBom = writeBom;
+
+            if (correctionsFile) {
+                poWriter.duplicateReferencesAsComments = true;
+            }
 
             poWriter.write(file, po);
         } catch (IOException e) {
@@ -571,7 +575,7 @@ public class ExtractMojo extends AbstractMojo {
             if (apiCalls > 0) {
                 catalog.write();
             }
-            writePO(poTransl, new File(poDirectory, lang + ".po"), true);
+            writePO(poTransl, new File(poDirectory, lang + ".po"), true, false);
         }
     }
 
@@ -598,7 +602,7 @@ public class ExtractMojo extends AbstractMojo {
                 }
             }
             getLog().info("Translated:" + translated + "; Not Translated:" + notTranslated);
-            writePO(poTransl, new File(poDirectory, lang + ".po"), true);
+            writePO(poTransl, new File(poDirectory, lang + ".po"), true, false);
         }
     }
 }

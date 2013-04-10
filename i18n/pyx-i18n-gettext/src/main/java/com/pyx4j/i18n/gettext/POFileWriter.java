@@ -35,6 +35,11 @@ public class POFileWriter {
 
     public boolean wrapLines = true;
 
+    /**
+     * Bug in PO Edit that we can't see the source code in UI
+     */
+    public boolean duplicateReferencesAsComments = false;
+
     public void write(File file, POFile po) throws IOException {
         PrintWriter writer = null;
         FileOutputStream fos = null;
@@ -82,6 +87,9 @@ public class POFileWriter {
         if (entry.references != null) {
             for (final String str : entry.references) {
                 writer.println("#: " + str);
+                if (duplicateReferencesAsComments) {
+                    writer.println("#. " + str);
+                }
             }
         }
 
