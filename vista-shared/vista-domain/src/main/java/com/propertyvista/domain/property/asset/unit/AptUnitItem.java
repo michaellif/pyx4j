@@ -36,6 +36,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @ToStringFormat("{0}, {1}")
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AptUnitItem extends IEntity {
 
     @I18n

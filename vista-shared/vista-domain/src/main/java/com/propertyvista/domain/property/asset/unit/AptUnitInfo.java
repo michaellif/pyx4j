@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 
 @EmbeddedEntity
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AptUnitInfo extends IEntity {
 
     @I18n
