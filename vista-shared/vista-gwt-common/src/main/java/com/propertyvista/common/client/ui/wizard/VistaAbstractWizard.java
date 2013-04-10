@@ -47,7 +47,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
                 getPresenter().cancel();
             }
         });
-        addFooterToolbarItem(btnCancel);
+        addFooterItem(btnCancel);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -56,7 +56,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
                 calculateButtonsState();
             }
         });
-        addFooterToolbarItem(btnPrevious);
+        addFooterItem(btnPrevious);
 
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
@@ -69,7 +69,7 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
                 }
             }
         });
-        addFooterToolbarItem(btnNext);
+        addFooterItem(btnNext);
     }
 
     protected void setForm(VistaWizardForm<E> form) {

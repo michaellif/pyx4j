@@ -30,7 +30,6 @@ public class VistaWizardPanel extends DeckPanel implements HasWidgets, IndexedPa
         HasSelectionHandlers<VistaWizardStep> {
 
     public VistaWizardPanel() {
-        super();
         addStyleName(VistaWizardPaneTheme.StyleName.WizardPanel.name());
     }
 

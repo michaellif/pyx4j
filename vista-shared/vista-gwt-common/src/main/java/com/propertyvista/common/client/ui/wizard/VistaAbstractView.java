@@ -28,54 +28,36 @@ import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 
 public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
-    private final SimplePanel contentHolder;
-
-    private final FlowPanel headerCaption;
+    private final FlowPanel header;
 
     private final Label captionLabel;
 
-    private final Toolbar headerToolbar;
+    private final SimplePanel contentHolder;
 
     private final Toolbar footerToolbar;
 
-    private final SimplePanel headerToolbarHolder;
+    private final SimplePanel footer;
 
-    private final SimplePanel footerToolbarHolder;
-
-    private String headerToolbarHeight = "auto";
-
-    private String footerToolbarHeight = "auto";
+    private String footerHeight = "auto";
 
     public VistaAbstractView() {
         captionLabel = new Label();
         captionLabel.setStyleName(VistaWizardPaneTheme.StyleName.HeaderCaption.name());
 
-        headerCaption = new FlowPanel();
-        headerCaption.add(captionLabel);
-        headerCaption.setStyleName(VistaWizardPaneTheme.StyleName.Header.name());
-        add(headerCaption);
-
-        headerToolbarHolder = new SimplePanel();
-        headerToolbarHolder.setStyleName(VistaWizardPaneTheme.StyleName.HeaderToolbar.name());
-
-        headerToolbar = new Toolbar();
-        headerToolbarHolder.setWidget(headerToolbar);
-        add(headerToolbarHolder);
+        header = new FlowPanel();
+        header.add(captionLabel);
+        header.setStyleName(VistaWizardPaneTheme.StyleName.Header.name());
+        add(header);
 
         add(contentHolder = new SimplePanel());
 
-        footerToolbarHolder = new SimplePanel();
-        footerToolbarHolder.setStyleName(VistaWizardPaneTheme.StyleName.FooterToolbar.name());
-
         footerToolbar = new Toolbar();
-        footerToolbarHolder.setWidget(footerToolbar);
-        add(footerToolbarHolder);
+        footer = new SimplePanel();
+        footer.setStyleName(VistaWizardPaneTheme.StyleName.FooterToolbar.name());
+        footer.setWidget(footerToolbar);
+        add(footer);
 
         setWidth("100%");
-    }
-
-    protected FlowPanel getHeaderCaption() {
-        return headerCaption;
     }
 
     protected IsWidget getContent() {
@@ -95,27 +77,15 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
         return captionLabel.getText();
     }
 
-    public void addHeaderToolbarItem(Widget widget) {
-        headerToolbarHolder.setHeight(headerToolbarHeight);
-        headerToolbar.addItem(widget);
-    }
-
-    public void setHeaderToolbarHeight(String headerToolbarHeight) {
-        this.headerToolbarHeight = headerToolbarHeight;
-        if (headerToolbar.getWidgetCount() == 0) {
-            headerToolbarHolder.setHeight(headerToolbarHeight);
-        }
-    }
-
-    public void addFooterToolbarItem(Widget widget) {
-        footerToolbarHolder.setHeight(footerToolbarHeight);
+    public void addFooterItem(Widget widget) {
+        footer.setHeight(footerHeight);
         footerToolbar.addItem(widget);
     }
 
-    public void setFooterToolbarHeight(String footerToolbarHeight) {
-        this.footerToolbarHeight = footerToolbarHeight;
+    public void setFooterHeight(String footerToolbarHeight) {
+        this.footerHeight = footerToolbarHeight;
         if (footerToolbar.getWidgetCount() == 0) {
-            footerToolbarHolder.setHeight(footerToolbarHeight);
+            footer.setHeight(footerToolbarHeight);
         }
     }
 
