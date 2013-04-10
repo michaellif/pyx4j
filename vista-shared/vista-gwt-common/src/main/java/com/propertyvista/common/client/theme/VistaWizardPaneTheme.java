@@ -86,7 +86,11 @@ public class VistaWizardPaneTheme extends Theme {
     }
 
     protected void initWizardPanelStyles() {
-        Style style = new Style(".", StyleName.WizardPanel, " .", StyleName.WizardStep);
+        Style style = new Style(".", StyleName.WizardPanel);
+        style.addProperty("min-height", "25em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WizardPanel, " .", StyleName.WizardStep);
         style.addProperty("height", "auto");
 //        style.addProperty("border", "1px solid");
 //        style.addProperty("border-color", ThemeColor.foreground, 0.6);
@@ -94,6 +98,5 @@ public class VistaWizardPaneTheme extends Theme {
 //        style.addProperty("margin-left", "4px");
 //        style.addProperty("margin-right", "4px");
         addStyle(style);
-
     }
 }
