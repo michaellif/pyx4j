@@ -7,13 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 29, 2013
+ * Created on Apr 1, 2013
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client;
+package com.propertyvista.field.client.ui.components.header;
 
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IsFullScreenWidget {
+public interface ToolbarView extends IsWidget {
 
 }

@@ -22,7 +22,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteViewFooter, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, BuildingLister, BuildingDetails;
+        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImageHolder, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted;
     }
 
     public FieldTheme() {
@@ -41,12 +41,14 @@ public class FieldTheme extends VistaTheme {
 
         // Header:
         style = new Style(".", StyleName.SiteViewHeader.name());
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.7);
+        style.addProperty("width", "100%");
+        style.addProperty("height", "10%");
         addStyle(style);
 
-        // Footer:
-        style = new Style(".", StyleName.SiteViewFooter.name());
-        style.addProperty("background-color", "yellow");
+        // Main Area:
+        style = new Style(".", StyleName.SiteMainArea.name());
+        style.addProperty("width", "100%");
+        style.addProperty("height", "90%");
         addStyle(style);
 
         //Login fields:
@@ -119,21 +121,37 @@ public class FieldTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.BuildingLister);
-        style.addProperty("width", "50%");
-        style.addProperty("height", "10%");
         style.addProperty("background-color", "blue");
         addStyle(style);
 
         style = new Style(".", StyleName.BuildingDetails);
-        style.addProperty("width", "100%");
-        style.addProperty("height", "90%");
         style.addProperty("background-color", "black");
         addStyle(style);
 
         style = new Style(".", StyleName.Toolbar);
-        style.addProperty("width", "50%");
-        style.addProperty("height", "10%");
-        style.addProperty("background-color", "red");
+        //style.addProperty("background-color", "red");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ToolbarImageHolder);
+        style.addProperty("margin-left", "auto");
+        style.addProperty("margin-right", "auto");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MenuScreen);
+        style.addProperty("position", "fixed");
+        style.addProperty("z-index", "-1");
+        style.addProperty("background-color", "green");
+        addStyle(style);
+
+        style = new Style(".", StyleName.OverlapScreenNormal);
+        style.addProperty("margin-left", "auto");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(".", StyleName.OverlapScreenShifted);
+        style.addProperty("margin-left", "80%");
+        style.addProperty("background-color", "white");
         addStyle(style);
     }
 

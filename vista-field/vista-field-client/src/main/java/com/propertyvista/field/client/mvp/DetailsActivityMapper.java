@@ -28,7 +28,7 @@ public class DetailsActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof FieldSiteMap.BuildingDetails) {
+        if (place instanceof FieldSiteMap.BuildingListerDetails) {
             return new BuildingDetailsActivity();
         }
 

@@ -25,4 +25,13 @@ public interface FieldImages extends VistaImages {
     @Source("blank.gif")
     ImageResource blank();
 
+    @Source("menu.png")
+    ImageResource menu();
+
+    @Source("search.png")
+    ImageResource search();
+
+    @Source("sort.png")
+    ImageResource sort();
+
 }

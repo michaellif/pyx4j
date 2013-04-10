@@ -28,10 +28,14 @@ public class ListerActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof FieldSiteMap.BuildingDetails) {
+        if (isBuidingListerPlace(place)) {
             return new BuildingListerActivity();
         }
 
         return null;
+    }
+
+    private boolean isBuidingListerPlace(Place place) {
+        return (place instanceof FieldSiteMap.BuildingLister) || (place instanceof FieldSiteMap.BuildingListerDetails);
     }
 }

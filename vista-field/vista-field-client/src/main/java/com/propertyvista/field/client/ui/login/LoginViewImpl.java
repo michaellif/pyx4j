@@ -54,12 +54,11 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.login.LoginView;
-import com.propertyvista.field.client.IsFullScreenWidget;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.components.LoginViewLayoutPanel;
 import com.propertyvista.field.client.ui.decorators.WatermarkDecoratorBuilder;
 
-public class LoginViewImpl extends Composite implements LoginView, IsFullScreenWidget {
+public class LoginViewImpl extends Composite implements LoginView {
 
     private static final I18n i18n = I18n.get(LoginViewImpl.class);
 

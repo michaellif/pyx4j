@@ -7,34 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 13, 2012
- * @author stanp
+ * Created on Apr 1, 2013
+ * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui;
+package com.propertyvista.field.client.ui.components.menu;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
-
-public interface ScreenViewer extends IsWidget {
-
-    public enum ScreenPosition {
-        NORMAL, SHIFTED
-    }
-
-    DisplayPanel getHeaderDisplay();
-
-    DisplayPanel getListerDisplay();
-
-    DisplayPanel getDetailsDisplay();
-
-    DisplayPanel getFullScreenDisplay();
-
-    void setWidget(IsWidget widget);
-
-    void setScreenLayout(ScreenLayout layout);
-
-    void shiftScreen();
+public interface MenuScreenView extends IsWidget {
 
 }

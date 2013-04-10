@@ -16,14 +16,18 @@ package com.propertyvista.field.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.field.client.ui.ScreenViewer;
-import com.propertyvista.field.client.ui.ScreenViewerImpl;
 import com.propertyvista.field.client.ui.RuntimeErrorView;
 import com.propertyvista.field.client.ui.RuntimeErrorViewImpl;
+import com.propertyvista.field.client.ui.ScreenViewer;
+import com.propertyvista.field.client.ui.ScreenViewerImpl;
 import com.propertyvista.field.client.ui.appselection.ApplicationSelectionView;
 import com.propertyvista.field.client.ui.appselection.ApplicationSelectionViewImpl;
-import com.propertyvista.field.client.ui.components.header.HeaderView;
-import com.propertyvista.field.client.ui.components.header.HeaderViewImpl;
+import com.propertyvista.field.client.ui.components.header.NavigToolbarView;
+import com.propertyvista.field.client.ui.components.header.NavigToolbarViewImpl;
+import com.propertyvista.field.client.ui.components.header.ToolbarView;
+import com.propertyvista.field.client.ui.components.header.ToolbarViewImpl;
+import com.propertyvista.field.client.ui.components.menu.MenuScreenView;
+import com.propertyvista.field.client.ui.components.menu.MenuScreenViewImpl;
 
 public class FieldViewFactory extends ViewFactoryBase {
 
@@ -35,8 +39,12 @@ public class FieldViewFactory extends ViewFactoryBase {
                 map.put(type, new RuntimeErrorViewImpl());
             } else if (ApplicationSelectionView.class.equals(type)) {
                 map.put(type, new ApplicationSelectionViewImpl());
-            } else if (HeaderView.class.equals(type)) {
-                map.put(type, new HeaderViewImpl());
+            } else if (ToolbarView.class.equals(type)) {
+                map.put(type, new ToolbarViewImpl());
+            } else if (NavigToolbarView.class.equals(type)) {
+                map.put(type, new NavigToolbarViewImpl());
+            } else if (MenuScreenView.class.equals(type)) {
+                map.put(type, new MenuScreenViewImpl());
             }
         }
 

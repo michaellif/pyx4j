@@ -15,6 +15,6 @@ package com.propertyvista.field.client.ui.components.header;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface HeaderView extends IsWidget {
+public interface NavigToolbarView extends IsWidget {
 
 }

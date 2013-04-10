@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.field.client.ui.components.header.HeaderView;
+import com.propertyvista.field.client.ui.components.header.ToolbarView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class HeaderActivity extends AbstractActivity {
+public class ToolbarActivity extends AbstractActivity {
 
-    private final HeaderView view;
+    private final ToolbarView view;
 
-    public HeaderActivity(Place place) {
-        view = FieldViewFactory.instance(HeaderView.class);
+    public ToolbarActivity(Place place) {
+        view = FieldViewFactory.instance(ToolbarView.class);
     }
 
     @Override

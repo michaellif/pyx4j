@@ -21,11 +21,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.field.client.IsFullScreenWidget;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
-public class ApplicationSelectionViewImpl extends VerticalPanel implements ApplicationSelectionView, IsFullScreenWidget {
+public class ApplicationSelectionViewImpl extends VerticalPanel implements ApplicationSelectionView {
 
     private final static I18n i18n = I18n.get(ApplicationSelectionViewImpl.class);
 
@@ -39,7 +38,7 @@ public class ApplicationSelectionViewImpl extends VerticalPanel implements Appli
         final Button propertyManagerButton = createButton(i18n.tr("Property Manager"), new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new FieldSiteMap.BuildingDetails());
+                AppSite.getPlaceController().goTo(new FieldSiteMap.BuildingLister());
             }
         });
 

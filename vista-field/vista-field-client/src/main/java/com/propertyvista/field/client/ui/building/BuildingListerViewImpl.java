@@ -14,15 +14,16 @@
 package com.propertyvista.field.client.ui.building;
 
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.field.client.theme.FieldTheme;
 
-public class BuildingListerViewImpl extends SimplePanel implements BuildingListerView {
+public class BuildingListerViewImpl extends FlowPanel implements BuildingListerView {
 
     public BuildingListerViewImpl() {
+        setSize("100%", "100%");
         setStyleName(FieldTheme.StyleName.BuildingLister.name());
-        setWidget(new Button("Hello"));
+        add(new Button("Building Lister"));
     }
 
     @Override

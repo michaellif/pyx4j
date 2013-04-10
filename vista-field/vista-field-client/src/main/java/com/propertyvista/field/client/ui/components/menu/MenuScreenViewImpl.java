@@ -11,15 +11,13 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.components.header;
+package com.propertyvista.field.client.ui.components.menu;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.field.client.theme.FieldTheme;
+public class MenuScreenViewImpl extends SimplePanel implements MenuScreenView {
 
-public class HeaderViewImpl extends SimplePanel implements HeaderView {
-
-    public HeaderViewImpl() {
-        setStyleName(FieldTheme.StyleName.Toolbar.name());
+    public MenuScreenViewImpl() {
+        setSize("100%", "100%");
     }
 }

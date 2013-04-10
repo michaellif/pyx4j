@@ -18,17 +18,21 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.field.client.event.ScreenShiftEvent;
+import com.propertyvista.field.client.event.ScreenShiftHandler;
 import com.propertyvista.field.client.ui.ScreenViewer;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 import com.propertyvista.field.rpc.ScreenMode.FullScreen;
-import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
 import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
+import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
-public class ScreenActivity extends AbstractActivity {
+public class ScreenActivity extends AbstractActivity implements ScreenShiftHandler {
+
+    private final ScreenViewer view;
 
     public ScreenActivity(Place place) {
-        ScreenViewer view = FieldViewFactory.instance(ScreenViewer.class);
+        view = FieldViewFactory.instance(ScreenViewer.class);
         view.setScreenLayout(getScreenLayout(place));
     }
 
@@ -47,7 +51,12 @@ public class ScreenActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        // TODO Auto-generated method stub
+        eventBus.addHandler(ScreenShiftEvent.getType(), this);
+    }
+
+    @Override
+    public void onScreenShift(ScreenShiftEvent event) {
+        view.shiftScreen();
     }
 
 }

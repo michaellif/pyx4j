@@ -13,14 +13,17 @@
  */
 package com.propertyvista.field.client.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.field.client.theme.FieldTheme;
+import com.propertyvista.field.client.ui.components.menu.MenuScreenView;
+import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
 public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
-
-    private Presenter presenter;
 
     private final DisplayPanel header;
 
@@ -30,25 +33,34 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
 
     private final DisplayPanel fullScreen;
 
+    private final DisplayPanel background;
+
+    private final DockLayoutPanel overlap;
+
     private ScreenLayout layout;
 
+    private ScreenPosition overlapPosition;
+
     public ScreenViewerImpl() {
+        setSize("100%", "100%");
+
         header = initDisplay();
         lister = initDisplay();
         details = initDisplay();
         fullScreen = initDisplay();
 
-        setSize("100%", "100%");
+        background = initBackgroundDisplay();
 
-        add(header);
-        add(lister);
-        add(details);
-        add(fullScreen);
-    }
+        overlap = new DockLayoutPanel(Unit.PCT);
+        overlap.setSize("100%", "100%");
+        overlap.addNorth(header, 10);
+        overlap.addWest(lister, 100);
+        overlap.addEast(details, 0);
+        overlap.addSouth(fullScreen, 100);
+        setOverlapStyle(ScreenPosition.NORMAL);
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        add(background);
+        add(overlap);
     }
 
     @Override
@@ -77,6 +89,14 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
         return display;
     }
 
+    private DisplayPanel initBackgroundDisplay() {
+        DisplayPanel display = new DisplayPanel();
+        display.setSize("100%", "100%");
+        display.setStyleName(FieldTheme.StyleName.MenuScreen.name());
+        display.setWidget(FieldViewFactory.instance(MenuScreenView.class));
+        return display;
+    }
+
     @Override
     public void setWidget(IsWidget widget) {
         if (ScreenLayout.FullScreen == layout) {
@@ -85,11 +105,10 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
     }
 
     private void hideDisplays() {
-        header.setVisible(false);
-        lister.setVisible(false);
-        details.setVisible(false);
-        fullScreen.setVisible(false);
-
+        overlap.setWidgetHidden(header, true);
+        overlap.setWidgetHidden(lister, true);
+        overlap.setWidgetHidden(details, true);
+        overlap.setWidgetHidden(fullScreen, true);
     }
 
     @Override
@@ -114,20 +133,30 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
 
     private void initFullScreen() {
         hideDisplays();
-        fullScreen.setVisible(true);
+        overlap.setWidgetHidden(fullScreen, false);
     }
 
     private void initHeaderLister() {
         hideDisplays();
-        header.setVisible(true);
-        lister.setVisible(true);
+        overlap.setWidgetHidden(header, false);
+        overlap.setWidgetHidden(lister, false);
     }
 
     private void initHeaderListerDetails() {
         hideDisplays();
-        header.setVisible(true);
-        lister.setVisible(true);
-        details.setVisible(true);
+        overlap.setWidgetHidden(header, false);
+        overlap.setWidgetHidden(lister, false);
+        overlap.setWidgetHidden(details, false);
     }
 
+    @Override
+    public void shiftScreen() {
+        setOverlapStyle(overlapPosition == ScreenPosition.NORMAL ? ScreenPosition.SHIFTED : ScreenPosition.NORMAL);
+    }
+
+    private void setOverlapStyle(ScreenPosition position) {
+        this.overlapPosition = position;
+        overlap.setStyleName(position == ScreenPosition.NORMAL ? FieldTheme.StyleName.OverlapScreenNormal.name() : FieldTheme.StyleName.OverlapScreenShifted
+                .name());
+    }
 }
