@@ -72,6 +72,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
     private int q = 0;
 
     private void devGenerateTestCredencials() {
+        // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         switch (q) {
         case 0:
             get(proto().residentTransactionsServiceURL()).setValue(
@@ -80,7 +81,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
             get(proto().username()).setValue("sa");
             get(proto().credential()).setValue("akan1212");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
-            get(proto().database()).setValue("Starlight_1");
+            get(proto().database()).setValue("sl_0404");
             break;
         case 1:
             get(proto().residentTransactionsServiceURL()).setValue(

@@ -21,7 +21,16 @@ public class DevYardiCredentials {
 
     public static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
+        // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         if (true) {
+            cr.propertyCode().setValue(".pvberk");
+            cr.residentTransactionsServiceURL().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60/webservices/itfresidenttransactions20.asmx");
+            cr.sysBatchServiceURL().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60/webservices/itfresidenttransactions20_SysBatch.asmx");
+            cr.username().setValue("sa");
+            cr.credential().setValue("akan1212");
+            cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
+            cr.database().setValue("sl_0404");
+        } else if (false) {
             cr.propertyCode().setValue("prvista2");
             cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
             cr.sysBatchServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx");
@@ -49,17 +58,4 @@ public class DevYardiCredentials {
 
         return cr;
     }
-
-    // https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20_SysBatch.asmx
-
-    /**
-     * test system
-     * "http://yardi.birchwoodsoftwaregroup.com/voyager60/webservices/itfresidenttransactions20.asmx";
-     * public static final String USERNAME = "sa";
-     * public static final String PASSWORD = "akan1212";
-     * public static final String SERVER_NAME = "WIN-CO5DPAKNUA4\\YARDI";
-     * public static final String DATABASE = "demo1";
-     * public static final String PLATFORM = "SQL";
-     * public static final String INTERFACE_ENTITY = "RentPayment";
-     */
 }
