@@ -15,8 +15,10 @@ package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -70,13 +72,20 @@ public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements Ok
         switch (type) {
         case Current:
             termDto.carryforwardBalance().setValue(BigDecimal.ZERO);
+            AppSite.getPlaceController().goTo(
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
+                            LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
+            break;
+
         case New:
+            termDto.termFrom().setValue(new LogicalDate(ClientContext.getServerDate()));
             AppSite.getPlaceController().goTo(
                     new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
                             LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
             break;
 
         case Application:
+            termDto.termFrom().setValue(new LogicalDate(ClientContext.getServerDate()));
             AppSite.getPlaceController().goTo(
                     new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
                             LeaseTermEditorActivity.ReturnBehaviour.Application.name()));

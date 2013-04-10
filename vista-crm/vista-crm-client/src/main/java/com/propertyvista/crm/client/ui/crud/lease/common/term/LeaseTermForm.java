@@ -166,8 +166,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter())
-                                    .setSelectedBuilding(getSelectedItems().get(0));
+                            ((LeaseTermEditorView.Presenter) ((IEditor<LeaseTermDTO>) getParentView()).getPresenter()).setSelectedBuilding(getSelectedItems()
+                                    .get(0));
                         }
                         return !getSelectedItems().isEmpty();
                     }
@@ -442,6 +442,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     }
 
     void setUnitNote(String note) {
-        get(proto().lease().unit()).setNote(note);
+        String fullNote = note;
+        if (get(proto().lease().unit()).isEditable() && getValue().lease().status().getValue() != Lease.Status.ExistingLease) {
+            fullNote = i18n.tr("Note: Building/Unit availability depends on 'Term From' date selected!");
+            if (note != null) {
+                fullNote += note;
+            }
+        }
+        get(proto().lease().unit()).setNote(fullNote, NoteStyle.Warn);
     }
 }
