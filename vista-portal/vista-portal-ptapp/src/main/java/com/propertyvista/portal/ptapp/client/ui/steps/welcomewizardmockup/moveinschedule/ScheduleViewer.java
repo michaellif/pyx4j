@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -79,7 +79,8 @@ public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.add(new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Elevator Availability for")).toSafeHtml().asString()));
-        panel.add(new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr(dateFormat.format(value.scheduleDate().getValue()))).toSafeHtml().asString()));
+        // TODO i18n the string
+        panel.add(new HTML(new SafeHtmlBuilder().appendEscaped(dateFormat.format(value.scheduleDate().getValue())).toSafeHtml().asString()));
 
         scheduleScrollPanel = new ScrollPanel(redraw().asWidget());
         scheduleScrollPanel.setWidth("17em");
@@ -155,7 +156,7 @@ public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
         }
         // init redraw
         prevScrollPosition = scheduleScrollPanel.getVerticalScrollPosition(); // hack to put the scroll bar to the same position after redraw initiated by setValue
-        // this is workaround againts setting the same value in the setValue() (because we want to actually fire the event); 
+        // this is workaround againts setting the same value in the setValue() (because we want to actually fire the event);
         ScheduleDTO clone = EntityFactory.create(ScheduleDTO.class);
         clone.schedule().set(getValue().schedule());
         clone.scheduleDate().setValue(getValue().scheduleDate().getValue());

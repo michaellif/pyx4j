@@ -67,7 +67,8 @@ public class TenantListerActivity extends ListerActivityBase<TenantDTO> implemen
         ) {
             @Override
             protected void onUploadComplete(com.pyx4j.gwt.rpc.upload.UploadResponse<IEntity> serverUploadResponse) {
-                MessageDialog.info("", i18n.tr(serverUploadResponse.message));
+                // TODO i18n the string
+                MessageDialog.info("", serverUploadResponse.message);
             };
         }.show();//@formatter:on
     }

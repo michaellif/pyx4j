@@ -352,7 +352,7 @@ public class MessageTemplates {
                 "NSF fee will be applied.",
                 tenantUrl, tenantName, tenantId,
                 leaseUrl, leaseId,
-                paymentRecordUrl, paymentId 
+                paymentRecordUrl, paymentId
         ));//@formatter:on
 
         return email;
@@ -462,9 +462,8 @@ public class MessageTemplates {
             body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
             body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
 
-            template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
-                body
-        )));//@formatter:on
+            // TODO i18n body
+            template.content().setValue(wrapAdminHtml(body));
 
             return template;
 
@@ -497,9 +496,8 @@ public class MessageTemplates {
             body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
                     + DeploymentConsts.TENANT_URL_PATH, true, PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
-            template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
-                body
-            )));//@formatter:on
+            // TODO i18n body
+            template.content().setValue(wrapTenantSureHtml(body));
 
             return template;
 
@@ -513,9 +511,8 @@ public class MessageTemplates {
         template.subject().setValue(i18n.tr("Payment Processing Resumed"));
         try {
             String body = IOUtils.getTextResource("email/tenantsure-payments-resumed.html");
-            template.content().setValue(wrapTenantSureHtml(i18n.tr(//@formatter:off
-                body
-        )));//@formatter:on
+            // TODO i18n body
+            template.content().setValue(wrapTenantSureHtml(body));
 
             return template;
 
@@ -531,10 +528,8 @@ public class MessageTemplates {
             // TODO add email html
             String body = IOUtils.getTextResource("email/online-payment-setup-completed.html");
             body = body.replace("${userName}", userName);
-            template.content().setValue(i18n.tr(//@formatter:off
-                body
-        ));//@formatter:on
-
+            // TODO i18n body
+            template.content().setValue(body);
             return template;
 
         } catch (IOException e) {
