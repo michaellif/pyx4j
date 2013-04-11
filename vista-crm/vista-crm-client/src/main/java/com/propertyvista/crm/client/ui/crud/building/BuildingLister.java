@@ -22,13 +22,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingLister extends AbstractLister<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingLister.class);
 
     public BuildingLister() {
-        super(BuildingDTO.class, true);
+        super(BuildingDTO.class, !VistaFeatures.instance().yardiIntegration() ? true : false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),

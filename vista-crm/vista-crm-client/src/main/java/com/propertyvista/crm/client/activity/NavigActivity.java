@@ -97,7 +97,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //Properties
         NavigFolder folder = new NavigFolder(i18n.tr("Properties"), CrmImages.INSTANCE.propertiesNormal(), CrmImages.INSTANCE.propertiesHover(),
                 CrmImages.INSTANCE.propertiesActive());
-        folder.addNavigItem(new CrmSiteMap.Properties.Complex());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Properties.Complex());
+        }
         folder.addNavigItem(new CrmSiteMap.Properties.Building());
         folder.addNavigItem(new CrmSiteMap.Properties.Unit());
         list.add(folder);

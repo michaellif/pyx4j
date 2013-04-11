@@ -21,11 +21,12 @@ import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.FloorplanDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FloorplanLister extends AbstractLister<FloorplanDTO> {
 
     public FloorplanLister() {
-        super(FloorplanDTO.class, true);
+        super(FloorplanDTO.class, !VistaFeatures.instance().yardiIntegration() ? true : false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

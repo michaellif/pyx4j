@@ -32,6 +32,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseLister extends AbstractLister<LeaseDTO> {
 
@@ -73,19 +74,23 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 //            }
 //        }));
 
-        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New Lease"), new Command() {
-            @Override
-            public void execute() {
-                new LeaseDataDialog(LeaseDataDialog.Type.New).show();
-            }
-        }));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New Lease"), new Command() {
+                @Override
+                public void execute() {
+                    new LeaseDataDialog(LeaseDataDialog.Type.New).show();
+                }
+            }));
+        }
 
-        addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Current Lease"), new Command() {
-            @Override
-            public void execute() {
-                new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
-            }
-        }));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Current Lease"), new Command() {
+                @Override
+                public void execute() {
+                    new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
+                }
+            }));
+        }
     }
 
     @Override

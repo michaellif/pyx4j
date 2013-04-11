@@ -202,7 +202,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(noticeAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(noticeAction);
+        }
 
         cancelNoticeAction = new MenuItem(i18n.tr("Cancel Notice"), new Command() {
             @Override
@@ -210,7 +212,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 cancelCmpletion(CompletionType.Notice);
             }
         });
-        addAction(cancelNoticeAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(cancelNoticeAction);
+        }
 
         evictAction = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
@@ -228,7 +232,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(evictAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(evictAction);
+        }
 
         cancelEvictAction = new MenuItem(i18n.tr("Cancel Eviction"), new Command() {
             @Override
@@ -236,7 +242,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 cancelCmpletion(CompletionType.Eviction);
             }
         });
-        addAction(cancelEvictAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(cancelEvictAction);
+        }
 
         terminateAction = new MenuItem(i18n.tr("Terminate..."), new Command() {
             @Override
@@ -254,7 +262,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(terminateAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(terminateAction);
+        }
 
         cancelTerminateAction = new MenuItem(i18n.tr("Cancel Termination"), new Command() {
             @Override
@@ -262,7 +272,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 cancelCmpletion(CompletionType.Termination);
             }
         });
-        addAction(cancelTerminateAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(cancelTerminateAction);
+        }
 
         yardiImportAction = new MenuItem(i18n.tr("Update From Yardi"), new Command() {
             @Override
@@ -280,7 +292,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
-        addAction(activateAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(activateAction);
+        }
 
         moveOutAction = new MenuItem(i18n.tr("Move Out"), new ConfirmCommand(i18n.tr("Move Out"),
                 i18n.tr("This will make this unit available to other leases (Tenant has brought the key).") + "<br/><br/>"
@@ -290,8 +304,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                         ((LeaseViewerView.Presenter) getPresenter()).moveOut();
                     }
                 }));
-
-        addAction(moveOutAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(moveOutAction);
+        }
 
         closeAction = new MenuItem(i18n.tr("Close"), new Command() {
             @Override
@@ -309,7 +324,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(closeAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(closeAction);
+        }
 
         cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
@@ -327,7 +344,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addAction(cancelAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(cancelAction);
+        }
 
         maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
@@ -339,7 +358,9 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));
-        addHeaderToolbarItem(renewButton.asWidget());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addHeaderToolbarItem(renewButton.asWidget());
+        }
 
         if (VistaTODO.VISTA_1789_Renew_Lease) {
             Button.ButtonMenuBar renewMenu = renewButton.createMenu();

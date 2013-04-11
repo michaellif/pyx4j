@@ -34,6 +34,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implements UnitViewerView {
 
@@ -91,7 +92,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 }
             }
         });
-        addAction(existingLeaseAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(existingLeaseAction);
+        }
 
         scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
             @Override
@@ -111,7 +114,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             }
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
-        addAction(scopeAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(scopeAction);
+        }
 
         makePendingAction = new MenuItem(i18n.tr("Make Pending..."), new Command() {
             @Override
@@ -122,7 +127,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             }
         });
         makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
-        addAction(makePendingAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(makePendingAction);
+        }
     }
 
     @Override

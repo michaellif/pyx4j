@@ -32,6 +32,7 @@ import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitLister extends AbstractLister<AptUnitDTO> {
 
@@ -42,7 +43,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
     }
 
     public UnitLister(boolean allowAddNew) {
-        super(AptUnitDTO.class, allowAddNew);
+        super(AptUnitDTO.class, !VistaFeatures.instance().yardiIntegration() ? allowAddNew : false);
         setupColumns();
     }
 
