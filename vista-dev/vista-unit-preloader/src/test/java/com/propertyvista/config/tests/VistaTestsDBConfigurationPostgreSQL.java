@@ -84,6 +84,11 @@ public class VistaTestsDBConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cf
     }
 
     @Override
+    public boolean allowForeignKeyDeferrable() {
+        return true;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return "public";
     }

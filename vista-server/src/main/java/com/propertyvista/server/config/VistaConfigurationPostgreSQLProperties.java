@@ -27,11 +27,14 @@ import com.propertyvista.config.VistaDBNamingConvention;
 public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgreSQLProperties {
 
     public VistaConfigurationPostgreSQLProperties(File configDirectory, Map<String, String> properties) {
-        File dbCredentialsFile = new File(configDirectory, "db-credentials.properties");
 
         this.properties.unreturnedConnectionBackgroundProcessTimeout = 4 * Consts.HOURS2SEC;
+        this.properties.allowForeignKeyDeferrable = true;
 
         readProperties("db", properties);
+
+        File dbCredentialsFile = new File(configDirectory, "db-credentials.properties");
+
         if (dbCredentialsFile.canRead()) {
             Credentials credentials = CredentialsFileStorage.getCredentials(dbCredentialsFile);
             this.properties.user = credentials.userName;
