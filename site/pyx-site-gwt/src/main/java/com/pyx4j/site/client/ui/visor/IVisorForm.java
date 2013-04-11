@@ -20,16 +20,12 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
+public interface IVisorForm<E extends IEntity> extends IVisor {
 
-    void save(AsyncCallback<VoidSerializable> asyncCallback);
+    void populate(E value);
 
-    void apply();
+    void reset();
 
-    boolean onBeforeClose(boolean saved);
 }

@@ -109,7 +109,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     @Override
-    protected void setForm(CrudEntityForm<? extends E> form) {
+    protected void setForm(PrimeEntityForm<E> form) {
         super.setForm(form);
 
         this.getForm().addValueChangeHandler(new ValueChangeHandler<E>() {

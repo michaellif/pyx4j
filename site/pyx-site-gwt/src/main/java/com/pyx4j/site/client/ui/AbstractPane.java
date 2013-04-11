@@ -29,8 +29,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.visor.IVisor;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
-import com.pyx4j.site.client.ui.visor.IVisorViewer;
 import com.pyx4j.site.client.ui.visor.VisorHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
@@ -114,11 +112,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     @Override
     public void showVisor(IVisor visor) {
-        if (visor instanceof IVisorViewer) {
-            visorHolder.showVisorPane(visor);
-        } else if (visor instanceof IVisorEditor) {
-            visorHolder.showVisorPane(visor);
-        }
+        visorHolder.showVisorPane(visor);
     }
 
     @Override

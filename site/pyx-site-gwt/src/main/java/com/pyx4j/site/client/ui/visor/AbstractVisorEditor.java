@@ -23,12 +23,13 @@ package com.pyx4j.site.client.ui.visor;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class AbstractVisorEditor extends AbstractVisorPane implements IVisorEditor {
+public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVisorForm<E> implements IVisorEditor<E> {
 
     private static final I18n i18n = I18n.get(AbstractVisorEditor.class);
 

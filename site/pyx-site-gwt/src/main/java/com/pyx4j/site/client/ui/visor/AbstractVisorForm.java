@@ -14,23 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jun 13, 2011
+ * Created on Mar 14, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.prime.form;
+package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
-public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane implements IForm<E> {
+public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisorPane implements IVisorViewer<E> {
 
-    private PrimeEntityForm<E> form;
+    private CEntityForm<E> form;
 
-    public AbstractForm() {
+    public AbstractVisorForm() {
         super();
     }
 
@@ -39,32 +39,16 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         throw new Error("Call setForm instead of calling setContentPane");
     }
 
-    /*
-     * Should be called by descendant upon initialisation.
-     */
-    protected void setForm(PrimeEntityForm<E> form) {
-
-        if (getContentPane() == null) { // finalise UI here:
-            super.setContentPane(new LayoutPanel());
-            setSize("100%", "100%");
-        }
-
-        if (this.form == form) {
-            return; // already!?.
-        }
+    protected void setForm(CEntityForm<E> form) {
 
         this.form = form;
-
         this.form.initContent();
 
-        LayoutPanel center = (LayoutPanel) getContentPane();
-        center.clear(); // remove current form...
-
-        center.add(this.form);
+        super.setContentPane(new ScrollPanel(form.asWidget()));
 
     }
 
-    protected PrimeEntityForm<E> getForm() {
+    protected CEntityForm<E> getForm() {
         return form;
     }
 
@@ -79,20 +63,6 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         setCaption(null);
         assert (form != null);
         form.reset();
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        if (index >= 0) {
-            assert (form != null);
-            form.setActiveTab(index);
-        }
-    }
-
-    @Override
-    public int getActiveTab() {
-        assert (form != null);
-        return form.getActiveTab();
     }
 
 }

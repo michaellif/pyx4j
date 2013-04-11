@@ -20,49 +20,12 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.ui.Image;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.widgets.client.ImageFactory;
-
-public abstract class AbstractVisorViewer extends AbstractVisorPane implements IVisorViewer {
+public abstract class AbstractVisorViewer<E extends IEntity> extends AbstractVisorForm<E> implements IVisorViewer<E> {
 
     public AbstractVisorViewer() {
         super();
-
-        final Image closeImage = new Image(ImageFactory.getImages().closeTab());
-        closeImage.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
-
-        closeImage.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getParentPane().hideVisor();
-            }
-        });
-        closeImage.addMouseOverHandler(new MouseOverHandler() {
-
-            @Override
-            public void onMouseOver(MouseOverEvent event) {
-                closeImage.setResource(ImageFactory.getImages().closeTabFocused());
-            }
-        });
-        closeImage.addMouseOutHandler(new MouseOutHandler() {
-
-            @Override
-            public void onMouseOut(MouseOutEvent event) {
-                closeImage.setResource(ImageFactory.getImages().closeTab());
-            }
-        });
-
-        closeImage.setTitle("Close");
-
-        getHeaderCaption().add(closeImage);
     }
 
 }

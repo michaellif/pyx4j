@@ -30,10 +30,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class ReportSettingsManagementPanel extends AbstractVisorViewer {
+public abstract class ReportSettingsManagementPanel extends AbstractVisorPane {
 
     private static final I18n i18n = I18n.get(ReportSettingsManagementPanel.class);
 

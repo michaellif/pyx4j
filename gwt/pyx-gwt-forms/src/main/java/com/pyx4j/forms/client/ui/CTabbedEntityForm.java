@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-07-29
- * @author Vlad
+ * Created on Apr 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.prime.form;
+package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -31,32 +31,22 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
-public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
-
-    private IForm<? extends IEntity> view;
+public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     private final TabPanel tabPanel;
 
-    public CrudEntityForm(Class<E> rootClass, IForm<? extends IEntity> view) {
-        this(rootClass, null, view);
+    public CTabbedEntityForm(Class<E> clazz) {
+        this(clazz, null);
+
     }
 
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, IForm<? extends IEntity> view) {
+    public CTabbedEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
         super(rootClass, factory);
-        this.view = view;
-
-        if (view instanceof IViewer) {
-            setEditable(false);
-            setViewable(true);
-        }
-
         tabPanel = new TabPanel();
         tabPanel.setSize("100%", "100%");
 
@@ -107,11 +97,6 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public void setTabVisible(Tab tab, boolean show) {
         tabPanel.setTabVisible(tab, show);
-    }
-
-    public IForm<? extends IEntity> getParentView() {
-        assert (view != null);
-        return view;
     }
 
     public void setActiveTab(int index) {
