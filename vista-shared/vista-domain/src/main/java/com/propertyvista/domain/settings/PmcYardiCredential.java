@@ -50,6 +50,9 @@ public interface PmcYardiCredential extends IEntity {
     @Caption(name = "Sys Batch Service URL")
     IPrimitive<String> sysBatchServiceURL();
 
+    @Caption(name = "Maintenance Requests Service URL")
+    IPrimitive<String> maintenanceRequestsServiceURL();
+
     @Caption(name = "Web Service User")
     IPrimitive<String> username();
 

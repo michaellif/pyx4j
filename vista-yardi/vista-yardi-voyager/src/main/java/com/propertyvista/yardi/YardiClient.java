@@ -28,6 +28,8 @@ import com.yardi.ws.ItfResidentTransactions20_SysBatch;
 import com.yardi.ws.ItfResidentTransactions20_SysBatchStub;
 import com.yardi.ws.ItfResidentTransactions2_0;
 import com.yardi.ws.ItfResidentTransactions2_0Stub;
+import com.yardi.ws.ItfServiceRequests;
+import com.yardi.ws.ItfServiceRequestsStub;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
@@ -69,6 +71,13 @@ public class YardiClient {
     public ItfResidentTransactions20_SysBatch getResidentTransactionsSysBatchService() throws AxisFault {
         ItfResidentTransactions20_SysBatchStub serviceStub = new ItfResidentTransactions20_SysBatchStub(serviceURL);
         addMessageContextListener("ResidentTransactions", serviceStub, null);
+        setTransportOptions(serviceStub);
+        return serviceStub;
+    }
+
+    public ItfServiceRequests getMaintenanceRequestsService() throws AxisFault {
+        ItfServiceRequestsStub serviceStub = new ItfServiceRequestsStub(serviceURL);
+        addMessageContextListener("ServiceRequests", serviceStub, null);
         setTransportOptions(serviceStub);
         return serviceStub;
     }
