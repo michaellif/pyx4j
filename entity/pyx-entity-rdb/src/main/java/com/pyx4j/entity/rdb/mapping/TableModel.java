@@ -272,8 +272,8 @@ public class TableModel {
 
             String constraintName = dialect.getNamingConvention().sqlForeignKeyName(this.tableName, member.sqlName(), refSqlTableName);
             if (!tableMetadata.hasForeignKey(constraintName)) {
-                SQLUtils.execute(persistenceContext.getConnection(),
-                        TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(), refSqlTableName));
+                SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreateForeignKey(dialect, this, this.getTableName(), member.sqlName(),
+                        refSqlTableName, mappings.getConfiguration().allowForeignKeyDeferrable()));
             }
 
         }
@@ -284,8 +284,8 @@ public class TableModel {
             {
                 String constraintName = dialect.getNamingConvention().sqlForeignKeyName(member.sqlName(), member.sqlOwnerName(), tableName);
                 if (!memberTableMetadata.hasForeignKey(constraintName)) {
-                    SQLUtils.execute(persistenceContext.getConnection(),
-                            TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlOwnerName(), tableName));
+                    SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlOwnerName(),
+                            tableName, mappings.getConfiguration().allowForeignKeyDeferrable()));
                 }
             }
 
@@ -296,8 +296,8 @@ public class TableModel {
                     String refSqlTableName = TableModel.getTableName(dialect, EntityFactory.getEntityMeta(entityClass));
                     String constraintName = dialect.getNamingConvention().sqlForeignKeyName(member.sqlName(), member.sqlValueName(), refSqlTableName);
                     if (!memberTableMetadata.hasForeignKey(constraintName)) {
-                        SQLUtils.execute(persistenceContext.getConnection(),
-                                TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(), member.sqlValueName(), refSqlTableName));
+                        SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreateForeignKey(dialect, this, member.sqlName(),
+                                member.sqlValueName(), refSqlTableName, mappings.getConfiguration().allowForeignKeyDeferrable()));
                     }
                 }
             }

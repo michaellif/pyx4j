@@ -111,6 +111,11 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public boolean isForeignKeyDeferrableSupported() {
+        return true;
+    }
+
+    @Override
     public String applyLimitCriteria(String sql) {
         return sql + " LIMIT ? OFFSET ?";
     }

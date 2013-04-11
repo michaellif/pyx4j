@@ -288,7 +288,8 @@ class TableDDL {
         return sql.toString();
     }
 
-    static String sqlCreateForeignKey(Dialect dialect, TableModel tableModel, String tableFrom, String indexColName, String tableTo) {
+    static String sqlCreateForeignKey(Dialect dialect, TableModel tableModel, String tableFrom, String indexColName, String tableTo,
+            boolean foreignKeyDeferrable) {
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableModel.getFullTableName(tableFrom));
         sql.append(" ADD CONSTRAINT ");
@@ -308,6 +309,11 @@ class TableDDL {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
         sql.append(")");
+
+        if (foreignKeyDeferrable && dialect.isForeignKeyDeferrableSupported()) {
+            sql.append(" INITIALLY DEFERRED");
+        }
+
         return sql.toString();
     }
 

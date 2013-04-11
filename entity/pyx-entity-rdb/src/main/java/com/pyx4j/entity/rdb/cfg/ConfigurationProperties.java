@@ -63,6 +63,8 @@ public class ConfigurationProperties {
 
     public boolean createForeignKeys = true;
 
+    public boolean allowForeignKeyDeferrable = false;
+
     public MultitenancyType multitenant = MultitenancyType.SingleTenant;
 
     public String sharedSequencesSchema = null;
@@ -90,6 +92,7 @@ public class ConfigurationProperties {
         this.sharedSequencesSchema = c.getValue("sharedSequencesSchema", this.sharedSequencesSchema);
 
         this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
+        this.allowForeignKeyDeferrable = c.getBooleanValue("allowForeignKeyDeferrable", this.allowForeignKeyDeferrable);
         this.forceQualifiedNames = c.getBooleanValue("forceQualifiedNames", this.forceQualifiedNames);
         this.tablesSchema = c.getValue("tablesSchema", this.tablesSchema);
 

@@ -251,6 +251,10 @@ public abstract class Dialect {
 
     public abstract String sqlDropForeignKey(String tableName, String constraintName);
 
+    public boolean isForeignKeyDeferrableSupported() {
+        return false;
+    }
+
     public String applyLimitCriteria(String sql) {
         throw new Error("Dialect does not support limit");
     }

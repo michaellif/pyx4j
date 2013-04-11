@@ -107,6 +107,11 @@ public abstract class ConfigurationMySQL implements Configuration {
         return true;
     }
 
+    @Override
+    public boolean allowForeignKeyDeferrable() {
+        return false;
+    }
+
     public boolean isAutoReconnect() {
         return false;
     }

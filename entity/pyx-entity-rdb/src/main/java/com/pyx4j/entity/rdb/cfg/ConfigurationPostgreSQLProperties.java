@@ -165,6 +165,11 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
         return properties.createForeignKeys;
     }
 
+    @Override
+    public boolean allowForeignKeyDeferrable() {
+        return properties.allowForeignKeyDeferrable;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
 

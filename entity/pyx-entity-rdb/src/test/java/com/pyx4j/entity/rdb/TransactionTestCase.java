@@ -33,6 +33,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedParent;
 
 public abstract class TransactionTestCase extends DatastoreTestBase {
 
@@ -384,5 +386,48 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertNotExists(setId, "1.0");
         assertExists(setId, "1.0CH");
 
+    }
+
+    public void testForeignKeysLock() {
+
+        final String setId = uniqueString();
+
+        final BidirectionalOneToOneInversedParent p1 = EntityFactory.create(BidirectionalOneToOneInversedParent.class);
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                p1.testId().setValue(setId);
+                srv.persist(p1);
+                return null;
+            }
+
+        });
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                BidirectionalOneToOneInversedChild c1 = EntityFactory.create(BidirectionalOneToOneInversedChild.class);
+                c1.testId().setValue(setId);
+                c1.parent().set(p1);
+                srv.persist(c1);
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        p1.name().setValue("u1");
+                        srv.persist(p1);
+                        return null;
+                    }
+
+                });
+
+                return null;
+            }
+
+        });
     }
 }

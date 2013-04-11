@@ -123,6 +123,11 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
+    public boolean isForeignKeyDeferrableSupported() {
+        return true;
+    }
+
+    @Override
     public String applyLimitCriteria(String sql) {
         StringBuffer msql = new StringBuffer(sql.length() + 128);
         msql.append("SELECT * FROM ( SELECT p_row_.*, rownum p_rownum_ FROM ( ");

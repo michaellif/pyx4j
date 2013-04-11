@@ -102,6 +102,11 @@ public abstract class ConfigurationHSQL implements Configuration {
     }
 
     @Override
+    public boolean allowForeignKeyDeferrable() {
+        return false;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return null;
     }

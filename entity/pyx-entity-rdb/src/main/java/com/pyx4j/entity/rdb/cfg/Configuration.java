@@ -82,6 +82,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public boolean createForeignKeys();
 
+    public boolean allowForeignKeyDeferrable();
+
     /**
      * Used in development to create sparse identity values for every table, to ensure pseudo-unique value of every key.
      * 

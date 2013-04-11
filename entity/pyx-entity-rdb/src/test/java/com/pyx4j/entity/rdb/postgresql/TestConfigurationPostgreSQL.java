@@ -64,6 +64,11 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
     }
 
     @Override
+    public boolean allowForeignKeyDeferrable() {
+        return true;
+    }
+
+    @Override
     public int tablesIdentityOffset() {
         return 937;
     }

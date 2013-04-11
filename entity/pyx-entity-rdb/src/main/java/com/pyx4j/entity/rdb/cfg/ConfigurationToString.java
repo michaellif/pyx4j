@@ -25,6 +25,7 @@ public class ConfigurationToString {
     public static String toString(Configuration conf) {
         StringBuilder b = new StringBuilder();
         b.append("configurationClass                           : ").append(conf.getClass().getName()).append("\n");
+        b.append("driverClass                                  : ").append(conf.driverClass()).append("\n");
         b.append("connectionUrl                                : ").append(conf.connectionUrl()).append("\n");
         b.append("dbHost                                       : ").append(conf.dbHost()).append("\n");
         b.append("dbName                                       : ").append(conf.dbName()).append("\n");
@@ -41,6 +42,9 @@ public class ConfigurationToString {
         b.append("unreturnedConnectionTimeout                  : ").append(conf.unreturnedConnectionTimeout()).append("\n");
         b.append("unreturnedConnectionBackgroundProcessTimeout : ").append(conf.unreturnedConnectionBackgroundProcessTimeout()).append("\n");
         b.append("tablesIdentityOffset                         : ").append(conf.tablesIdentityOffset()).append("\n");
+        b.append("createForeignKeys                            : ").append(conf.createForeignKeys()).append("\n");
+        b.append("allowForeignKeyDeferrable                    : ").append(conf.allowForeignKeyDeferrable()).append("\n");
+
         return b.toString();
     }
 }

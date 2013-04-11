@@ -118,6 +118,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public boolean allowForeignKeyDeferrable() {
+        return false;
+    }
+
+    @Override
     public String connectionValidationQuery() {
         return "SELECT 1 FROM DUAL";
     }
