@@ -42,8 +42,24 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("qv_hover.png")
     ImageResource formTooltipHoverInfo();
 
+    // -----------------------------------------------
+
     @Source("logo.png")
     ImageResource logo();
+
+    @Source("logo_bmo.gif")
+    ImageResource logoBMO();
+
+    @Source("logo_rbc.gif")
+    ImageResource logoRBC();
+
+    @Source("logo_scotia.jpg")
+    ImageResource logoScotia();
+
+    @Source("logo_td.jpg")
+    ImageResource logoTD();
+
+    // -----------------------------------------------
 
     @Source("PaymentOptionIcons/Small/Mastercard.png")
     ImageResource paymentMC();
@@ -60,7 +76,7 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("PaymentOptionIcons/Small/Cash.png")
     ImageResource paymentCash();
 
-    @Source("PaymentOptionIcons/Small/CC.png")
+    @Source("PaymentOptionIcons/Small/Credit-Card.png")
     ImageResource paymentCredit();
 
     @Source("payment-interact.gif")
@@ -68,6 +84,9 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("payment-ach.gif")
     ImageResource paymentACH();
+
+    @Source("PaymentOptionIcons/Small/RecurringCredit.png")
+    ImageResource recurringCredit();
 
     @Source("cheque-guide.jpg")
     ImageResource chequeGuide();
@@ -77,16 +96,4 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("e_cheque-guide.png")
     ImageResource eChequeGuide();
-
-    @Source("logo_bmo.gif")
-    ImageResource logoBMO();
-
-    @Source("logo_rbc.gif")
-    ImageResource logoRBC();
-
-    @Source("logo_scotia.jpg")
-    ImageResource logoScotia();
-
-    @Source("logo_td.jpg")
-    ImageResource logoTD();
 }
