@@ -76,6 +76,10 @@
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfApplicantScreening</uri>
                             <packageName>com.yardi.ws.operations</packageName>
                         </namespaceURI>
+						<namespaceURI>
+                            <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfServiceRequests</uri>
+                            <packageName>com.yardi.ws.operations</packageName>
+                        </namespaceURI>
                     </namespaceURIs>
                 </configuration>
                 <executions>
@@ -86,7 +90,7 @@
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
-                            <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20.wsdl</wsdlFile>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfResidentTransactions20.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
@@ -97,7 +101,7 @@
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
-                            <wsdlFile>${basedir}/src/main/resources/ItfResidentTransactions20_SysBatch.wsdl</wsdlFile>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfResidentTransactions20_SysBatch.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
@@ -108,7 +112,18 @@
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
-                            <wsdlFile>${basedir}/src/main/resources/ItfApplicantScreening20.wsdl</wsdlFile>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfApplicantScreening20.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+					<execution>
+                        <id>wsdl2code-client-yardi-sr</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/maintenance/ItfServiceRequests.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
@@ -120,14 +135,46 @@
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <executions>
                     <execution>
+						<id>common-schemas-gen</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
-                            <schemaDirectory>src/main/resources</schemaDirectory>
-                            <bindingDirectory>src/main/resources</bindingDirectory>
+                            <schemaDirectory>src/main/resources/common</schemaDirectory>
+                            <bindingDirectory>src/main/resources/common</bindingDirectory>
                             <clearOutputDir>false</clearOutputDir>
                             <arguments>-extension -Xnamespace-prefix</arguments>
+							<staleFile>${project.build.directory}/jaxb2/.schema1XjcStaleFlag</staleFile>
+                        </configuration>
+                    </execution>
+					<execution>
+						<id>maintenance-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+							<schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+                            <schemaFiles>Itf_ServiceRequest.xsd</schemaFiles>
+							<bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+                            <bindingFiles>bindings-maintenance.xjb</bindingFiles>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+							<staleFile>${project.build.directory}/jaxb2/.schema2XjcStaleFlag</staleFile>
+                        </configuration>
+                    </execution>
+					<execution>
+						<id>maintenance-meta-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+							<schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+                            <schemaFiles>Itf_CustomValues.xsd</schemaFiles>
+							<bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+                            <bindingFiles>bindings-maintenance-meta.xjb</bindingFiles>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+							<staleFile>${project.build.directory}/jaxb2/.schema3XjcStaleFlag</staleFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -153,7 +200,7 @@
                 <configuration>
                     <keep>true</keep>
                     <verbose>true</verbose>
-                    <wsdlDirectory>${basedir}/src/main/resources/</wsdlDirectory>
+                    <wsdlDirectory>${basedir}/src/main/resources/common</wsdlDirectory>
                     <wsdlFiles>
                         <wsdlFile>ScreeningService.wsdl</wsdlFile>
                     </wsdlFiles>
