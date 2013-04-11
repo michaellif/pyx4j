@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EmptyStackException;
 import java.util.HashSet;
 import java.util.ListIterator;
 import java.util.Set;
@@ -168,7 +169,11 @@ public class PersistenceContext {
     }
 
     public String txId() {
-        return "TX" + options().txId;
+        try {
+            return "TX" + options().txId;
+        } catch (EmptyStackException e) {
+            return "NoTx";
+        }
     }
 
     PersistenceContext getSuppressedPersistenceContext() {
