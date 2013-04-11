@@ -17,10 +17,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 
 public class PaymentSubmittedActivity extends SecurityAwareActivity implements PaymentSubmittedView.Presenter {
@@ -56,7 +59,6 @@ public class PaymentSubmittedActivity extends SecurityAwareActivity implements P
 
     @Override
     public void goToAutoPay() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.AutoPay());
     }
 }

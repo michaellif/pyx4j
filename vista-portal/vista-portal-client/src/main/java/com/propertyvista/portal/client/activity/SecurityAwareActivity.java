@@ -31,10 +31,7 @@ public abstract class SecurityAwareActivity extends AbstractActivity {
                 if (!ClientContext.isAuthenticated()) {
                     panel.setWidget(null);
                 }
-
             }
         });
-
     }
-
 }

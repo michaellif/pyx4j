@@ -7,20 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 27, 2011
- * @author Dad
+ * Created on Nov 27, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 
-@Transient
-public interface PaymentMethodListDTO extends IEntity {
+public interface PreauthorizedPaymentListService extends AbstractListService<PreauthorizedPayment> {
 
-    IList<LeasePaymentMethod> paymentMethods();
 }

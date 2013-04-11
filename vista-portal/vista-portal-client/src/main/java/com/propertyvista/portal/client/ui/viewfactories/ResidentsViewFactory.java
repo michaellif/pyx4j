@@ -53,6 +53,8 @@ import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
@@ -109,6 +111,8 @@ public class ResidentsViewFactory extends ViewFactoryBase {
                 map.put(type, new PaymentWizardViewImpl());
             } else if (PaymentSubmittedView.class.equals(type)) {
                 map.put(type, new PaymentSubmittedViewImpl());
+            } else if (PreauthorizedPaymentsView.class.equals(type)) {
+                map.put(type, new PreauthorizedPaymentsViewImpl());
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());

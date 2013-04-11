@@ -112,6 +112,12 @@ public class PortalSiteMap implements SiteMap {
                     return paymentRecord;
                 }
             }
+
+            public static class AutoPay extends AppPlace {
+
+                public static class NewPreauthorizedPayment extends AppPlace {
+                }
+            }
         }
 
         public static class PaymentMethods extends AppPlace {
@@ -120,12 +126,6 @@ public class PortalSiteMap implements SiteMap {
             }
 
             public static class EditPaymentMethod extends AppPlace {
-            }
-
-            public static class NewPreauthorizedPaymentMethod extends AppPlace {
-            }
-
-            public static class EditPreauthorizedPaymentMethod extends AppPlace {
             }
         }
 

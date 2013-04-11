@@ -62,7 +62,6 @@ public interface PreauthorizedPayment extends IEntity {
     @ReadOnly
     @ToString(index = 1)
     @Format("#,##0.00")
-    @Caption(name = "Amount")
     @Editor(type = EditorType.percentage)
     @MemberColumn(precision = 5, scale = 4)
     IPrimitive<BigDecimal> percent();
@@ -71,7 +70,6 @@ public interface PreauthorizedPayment extends IEntity {
     @ReadOnly
     @ToString(index = 2)
     @Format("#,##0.00")
-    @Caption(name = "Amount")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> value();
 

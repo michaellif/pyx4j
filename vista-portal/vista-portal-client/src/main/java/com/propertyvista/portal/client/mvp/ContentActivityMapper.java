@@ -35,6 +35,7 @@ import com.propertyvista.portal.client.activity.residents.maintenance.Maintenanc
 import com.propertyvista.portal.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PaymentSubmittedActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PaymentWizardActivity;
+import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentsActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
@@ -108,6 +109,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new PaymentWizardActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentSubmitted) {
                         activity = new PaymentSubmittedActivity(appPlace);
+                    } else if (appPlace instanceof Financial.AutoPay) {
+                        activity = new PreauthorizedPaymentsActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Residents.TenantInsurance) {
                         activity = new TenantInsuranceActivity();
