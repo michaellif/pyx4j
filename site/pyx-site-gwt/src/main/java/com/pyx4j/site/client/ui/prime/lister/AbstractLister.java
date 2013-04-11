@@ -138,7 +138,7 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     @Override
-    public void showVisor(IVisor visor, String caption) {
+    public void showVisor(IVisor visor) {
         // TODO Auto-generated method stub
 
     }

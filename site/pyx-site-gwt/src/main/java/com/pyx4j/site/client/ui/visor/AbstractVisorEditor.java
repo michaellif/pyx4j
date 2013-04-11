@@ -25,25 +25,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-public class VisorEditorHolder extends AbstractVisorHolder {
+public abstract class AbstractVisorEditor extends AbstractVisorPane implements IVisorEditor {
 
-    private static final I18n i18n = I18n.get(VisorEditorHolder.class);
+    private static final I18n i18n = I18n.get(AbstractVisorEditor.class);
 
     protected final Button btnApply;
 
     protected final Button btnSave;
 
-    public VisorEditorHolder(final IVisorEditor visor, String caption, final IPane parent) {
-        super(visor, caption, parent);
+    public AbstractVisorEditor() {
+        super();
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
             public void execute() {
-                visor.save(new AsyncCallback<VoidSerializable>() {
+                save(new AsyncCallback<VoidSerializable>() {
 
                     @Override
                     public void onFailure(Throwable caught) {
@@ -52,8 +51,8 @@ public class VisorEditorHolder extends AbstractVisorHolder {
 
                     @Override
                     public void onSuccess(VoidSerializable result) {
-                        if (visor.onBeforeClose(true)) {
-                            parent.hideVisor();
+                        if (onBeforeClose(true)) {
+                            getParentPane().hideVisor();
                         }
                     }
                 });
@@ -65,7 +64,7 @@ public class VisorEditorHolder extends AbstractVisorHolder {
         btnApply = new Button(i18n.tr("Apply"), new Command() {
             @Override
             public void execute() {
-                visor.apply();
+                apply();
             }
         });
         addFooterToolbarItem(btnApply);
@@ -73,8 +72,8 @@ public class VisorEditorHolder extends AbstractVisorHolder {
         Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                if (visor.onBeforeClose(false)) {
-                    parent.hideVisor();
+                if (onBeforeClose(false)) {
+                    getParentPane().hideVisor();
                 }
             }
         });

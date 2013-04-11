@@ -32,7 +32,128 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
-public class VisorLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
+import com.pyx4j.site.client.ui.IPane;
+
+public class VisorHolder extends ComplexPanel implements RequiresResize, ProvidesResize {
+
+    private int animationDuration = 0;
+
+    private final Layout layout;
+
+    private final LayoutCommand vizorCmd;
+
+    private IsWidget visorPaneWidget;
+
+    private IsWidget previousVisorPaneWidget;
+
+    private final IPane parentPane;
+
+    public VisorHolder(IPane parentPane) {
+        this.parentPane = parentPane;
+        setElement(Document.get().createDivElement());
+        layout = new Layout(getElement());
+        vizorCmd = new VisorShowLayoutCommand();
+    }
+
+    public void setContentPane(IsWidget widget) {
+        assert widget != null : "Content Pane Widget should not be null";
+        assert getWidgetCount() == 0 : "Content Pane is already set";
+
+        widget.asWidget().removeFromParent();
+
+        getChildren().add(widget.asWidget());
+
+        // Physical attach.
+        Layer layer = layout.attachChild(widget.asWidget().getElement(), widget);
+        layer.setTopHeight(0.0, Unit.PCT, 100.0, Unit.PCT);
+        layer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
+        widget.asWidget().setLayoutData(layer);
+
+        adopt(widget.asWidget());
+
+        layout.layout();
+    }
+
+    public void showVisorPane(IVisor visor) {
+        assert visor != null : "Visor Pane Widget should not be null";
+        assert getWidgetCount() >= 1 : "Content Pane should be set first";
+
+        if (visorPaneWidget == visor) {
+            return;
+        }
+
+        previousVisorPaneWidget = visorPaneWidget;
+        visorPaneWidget = visor;
+
+        visor.asWidget().removeFromParent();
+
+        getChildren().insert(visor.asWidget(), 1);
+
+        // Physical attach.
+        Layer layer = layout.attachChild(visor.asWidget().getElement(), visor);
+        setWidgetVisible(visor.asWidget(), layer, false);
+        visor.asWidget().setLayoutData(layer);
+
+        adopt(visor.asWidget());
+        if (visor instanceof AbstractVisorPane) {
+            ((AbstractVisorPane) visor).setParentPane(parentPane);
+        }
+
+        vizorCmd.schedule(animationDuration, null);
+    }
+
+    public void hideVisor() {
+        previousVisorPaneWidget = visorPaneWidget;
+        visorPaneWidget = null;
+        if (previousVisorPaneWidget != null) {
+            vizorCmd.schedule(animationDuration, null);
+        }
+    }
+
+    public boolean isVisorShown() {
+        return (visorPaneWidget != null);
+    }
+
+    public int getAnimationDuration() {
+        return animationDuration;
+    }
+
+    public void setAnimationDuration(int duration) {
+        this.animationDuration = duration;
+    }
+
+    @Override
+    public void onResize() {
+        for (Widget child : getChildren()) {
+            if (child instanceof RequiresResize) {
+                ((RequiresResize) child).onResize();
+            }
+        }
+    }
+
+    @Override
+    public boolean remove(IsWidget w) {
+        boolean removed = super.remove(w);
+        if (removed) {
+            Layer layer = (Layer) w.asWidget().getLayoutData();
+            layout.removeChild(layer);
+            w.asWidget().setLayoutData(null);
+
+            if (visorPaneWidget == w) {
+                visorPaneWidget = null;
+            }
+
+            if (previousVisorPaneWidget == w) {
+                previousVisorPaneWidget = null;
+            }
+        }
+        return removed;
+    }
+
+    private void setWidgetVisible(IsWidget w, Layer layer, boolean visible) {
+        layer.setVisible(visible);
+        w.asWidget().setVisible(visible);
+    }
 
     private class VisorShowLayoutCommand extends LayoutCommand {
         public VisorShowLayoutCommand() {
@@ -100,118 +221,4 @@ public class VisorLayoutPanel extends ComplexPanel implements RequiresResize, Pr
             }
         }
     }
-
-    private int animationDuration = 0;
-
-    private final Layout layout;
-
-    private final LayoutCommand vizorCmd;
-
-    private IsWidget visorPaneWidget;
-
-    private IsWidget previousVisorPaneWidget;
-
-    public VisorLayoutPanel() {
-        setElement(Document.get().createDivElement());
-        layout = new Layout(getElement());
-        vizorCmd = new VisorShowLayoutCommand();
-    }
-
-    public void setContentPane(IsWidget widget) {
-        assert widget != null : "Content Pane Widget should not be null";
-        assert getWidgetCount() == 0 : "Content Pane is already set";
-
-        widget.asWidget().removeFromParent();
-
-        getChildren().add(widget.asWidget());
-
-        // Physical attach.
-        Layer layer = layout.attachChild(widget.asWidget().getElement(), widget);
-        layer.setTopHeight(0.0, Unit.PCT, 100.0, Unit.PCT);
-        layer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
-        widget.asWidget().setLayoutData(layer);
-
-        adopt(widget.asWidget());
-
-        layout.layout();
-    }
-
-    public void showVisorPane(IsWidget widget) {
-        assert widget != null : "Visor Pane Widget should not be null";
-        assert getWidgetCount() >= 1 : "Content Pane should be set first";
-
-        if (visorPaneWidget == widget) {
-            return;
-        }
-
-        previousVisorPaneWidget = visorPaneWidget;
-        visorPaneWidget = widget;
-
-        widget.asWidget().removeFromParent();
-
-        getChildren().insert(widget.asWidget(), 1);
-
-        // Physical attach.
-        Layer layer = layout.attachChild(widget.asWidget().getElement(), widget);
-        setWidgetVisible(widget.asWidget(), layer, false);
-        widget.asWidget().setLayoutData(layer);
-
-        adopt(widget.asWidget());
-
-        vizorCmd.schedule(animationDuration, null);
-    }
-
-    public void hideVisorPane() {
-        previousVisorPaneWidget = visorPaneWidget;
-        visorPaneWidget = null;
-        if (previousVisorPaneWidget != null) {
-            vizorCmd.schedule(animationDuration, null);
-        }
-    }
-
-    public boolean isVisorShown() {
-        return (visorPaneWidget != null);
-    }
-
-    public int getAnimationDuration() {
-        return animationDuration;
-    }
-
-    public void setAnimationDuration(int duration) {
-        this.animationDuration = duration;
-    }
-
-    @Override
-    public void onResize() {
-        for (Widget child : getChildren()) {
-            if (child instanceof RequiresResize) {
-                ((RequiresResize) child).onResize();
-            }
-        }
-    }
-
-    @Override
-    public boolean remove(IsWidget w) {
-        boolean removed = super.remove(w);
-        if (removed) {
-            Layer layer = (Layer) w.asWidget().getLayoutData();
-            layout.removeChild(layer);
-            w.asWidget().setLayoutData(null);
-
-            if (visorPaneWidget == w) {
-                visorPaneWidget = null;
-            }
-
-            if (previousVisorPaneWidget == w) {
-                previousVisorPaneWidget = null;
-            }
-        }
-        return removed;
-    }
-
-    private void setWidgetVisible(IsWidget w, Layer layer, boolean visible) {
-        layer.setVisible(visible);
-        w.asWidget().setVisible(visible);
-    }
-
 }

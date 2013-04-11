@@ -29,13 +29,12 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.widgets.client.ImageFactory;
 
-public class VisorViewerHolder extends AbstractVisorHolder {
+public abstract class AbstractVisorViewer extends AbstractVisorPane implements IVisorViewer {
 
-    public VisorViewerHolder(IVisorViewer visor, String caption, final IPane parent) {
-        super(visor, caption, parent);
+    public AbstractVisorViewer() {
+        super();
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());
         closeImage.addStyleName(DefaultPaneTheme.StyleName.VisorCloseButton.name());
@@ -43,7 +42,7 @@ public class VisorViewerHolder extends AbstractVisorHolder {
         closeImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                parent.hideVisor();
+                getParentPane().hideVisor();
             }
         });
         closeImage.addMouseOverHandler(new MouseOverHandler() {

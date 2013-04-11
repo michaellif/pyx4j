@@ -128,7 +128,7 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     }
 
     @Override
-    public void showVisor(IVisor visor, String caption) {
+    public void showVisor(IVisor visor) {
         // TODO Auto-generated method stub
 
     }

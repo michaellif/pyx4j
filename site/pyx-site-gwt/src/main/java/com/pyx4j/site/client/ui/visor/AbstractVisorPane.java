@@ -24,13 +24,20 @@ import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.IPane;
 
-public abstract class AbstractVisorHolder extends AbstractPane {
+public abstract class AbstractVisorPane extends AbstractPane {
 
-    public AbstractVisorHolder(IVisor visor, String caption, final IPane parent) {
+    private IPane parentPane;
+
+    public AbstractVisorPane() {
         super();
         setStyleName(DefaultPaneTheme.StyleName.Visor.name());
-        setContentPane(visor);
-        setCaption(caption);
     }
 
+    protected void setParentPane(IPane parentPane) {
+        this.parentPane = parentPane;
+    }
+
+    protected IPane getParentPane() {
+        return parentPane;
+    }
 }

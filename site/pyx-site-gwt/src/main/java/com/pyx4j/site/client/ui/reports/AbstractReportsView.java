@@ -290,7 +290,7 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
     private void onLoadSettingsClicked() {
         reportSettingsManagementPanel.setAvailableReportSettingsIds(null);
 
-        showVisor(reportSettingsManagementPanel, i18n.tr("Load report configuration preset"));
+        showVisor(reportSettingsManagementPanel);
 
         presenter.populateAvailableReportSettings();
 

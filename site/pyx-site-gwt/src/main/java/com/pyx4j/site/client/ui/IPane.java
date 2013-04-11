@@ -33,7 +33,7 @@ public interface IPane extends IsWidget {
         void refresh();
     }
 
-    void showVisor(IVisor visor, String caption);
+    void showVisor(IVisor visor);
 
     void hideVisor();
 

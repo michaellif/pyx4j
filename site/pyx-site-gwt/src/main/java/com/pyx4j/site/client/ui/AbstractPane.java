@@ -31,16 +31,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 import com.pyx4j.site.client.ui.visor.IVisorViewer;
-import com.pyx4j.site.client.ui.visor.VisorEditorHolder;
-import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
-import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
+import com.pyx4j.site.client.ui.visor.VisorHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
 
-    private final VisorLayoutPanel visorPane;
+    private final VisorHolder visorHolder;
 
     private final Label captionLabel;
 
@@ -93,8 +91,8 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
 
-        visorPane = new VisorLayoutPanel();
-        visorPane.setAnimationDuration(500);
+        visorHolder = new VisorHolder(this);
+        visorHolder.setAnimationDuration(500);
     }
 
     protected FlowPanel getHeaderCaption() {
@@ -102,35 +100,35 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
     }
 
     protected IsWidget getContentPane() {
-        if (visorPane.getWidgetCount() == 0) {
+        if (visorHolder.getWidgetCount() == 0) {
             return null;
         }
-        return visorPane.getWidget(0);
+        return visorHolder.getWidget(0);
     }
 
     protected void setContentPane(IsWidget widget) {
-        assert visorPane.getWidgetCount() == 0 : "Content Pane is already set";
-        visorPane.setContentPane(widget);
-        add(visorPane);
+        assert visorHolder.getWidgetCount() == 0 : "Content Pane is already set";
+        visorHolder.setContentPane(widget);
+        add(visorHolder);
     }
 
     @Override
-    public void showVisor(IVisor visor, String caption) {
+    public void showVisor(IVisor visor) {
         if (visor instanceof IVisorViewer) {
-            visorPane.showVisorPane(new VisorViewerHolder((IVisorViewer) visor, caption, this));
+            visorHolder.showVisorPane(visor);
         } else if (visor instanceof IVisorEditor) {
-            visorPane.showVisorPane(new VisorEditorHolder((IVisorEditor) visor, caption, this));
+            visorHolder.showVisorPane(visor);
         }
     }
 
     @Override
     public void hideVisor() {
-        visorPane.hideVisorPane();
+        visorHolder.hideVisor();
     }
 
     @Override
     public boolean isVisorShown() {
-        return visorPane.isVisorShown();
+        return visorHolder.isVisorShown();
     }
 
     public void setCaption(String caption) {

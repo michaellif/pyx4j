@@ -24,17 +24,16 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class ReportSettingsManagementPanel extends Composite implements IVisorViewer {
+public abstract class ReportSettingsManagementPanel extends AbstractVisorViewer {
 
     private static final I18n i18n = I18n.get(ReportSettingsManagementPanel.class);
 
@@ -47,7 +46,10 @@ public abstract class ReportSettingsManagementPanel extends Composite implements
     private final Button deleteButton;
 
     public ReportSettingsManagementPanel() {
+        super();
         panel = new DockLayoutPanel(Unit.EM);
+
+        setCaption(i18n.tr("Load report configuration preset"));
 
         HorizontalPanel buttonsPanel = new HorizontalPanel();
         buttonsPanel.setHeight("100%");
@@ -82,7 +84,7 @@ public abstract class ReportSettingsManagementPanel extends Composite implements
 
         panel.add(settingsIdsList);
 
-        initWidget(panel);
+        setContentPane(panel);
     }
 
     /**
