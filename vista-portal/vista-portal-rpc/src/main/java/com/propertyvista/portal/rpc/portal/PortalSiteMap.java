@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.rpc.portal;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
+
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PortalSiteMap implements SiteMap {
 
@@ -77,9 +80,6 @@ public class PortalSiteMap implements SiteMap {
 
             // Billing* are relevant for users who's financials managed by PV */
             public static class BillSummary extends AppPlace {
-
-                public static class PayNow extends AppPlace {
-                }
             }
 
             public static class BillingHistory extends AppPlace {
@@ -91,6 +91,26 @@ public class PortalSiteMap implements SiteMap {
             // this one is for tenants from Yardi integrated accounts
             public static class FinancialSummary extends AppPlace {
 
+            }
+
+            public static class PayNow extends AppPlace {
+            }
+
+            public static class PaymentSubmitted extends AppPlace {
+
+                private final PaymentRecordDTO paymentRecord;
+
+                public PaymentSubmitted() {
+                    paymentRecord = EntityFactory.create(PaymentRecordDTO.class);
+                }
+
+                public PaymentSubmitted(PaymentRecordDTO paymentRecord) {
+                    this.paymentRecord = paymentRecord;
+                }
+
+                public PaymentRecordDTO getPaymentRecord() {
+                    return paymentRecord;
+                }
             }
         }
 

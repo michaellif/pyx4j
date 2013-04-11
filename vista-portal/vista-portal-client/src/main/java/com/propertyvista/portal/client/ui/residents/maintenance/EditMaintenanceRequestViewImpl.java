@@ -29,8 +29,8 @@ public class EditMaintenanceRequestViewImpl extends BasicViewImpl<MaintenanceReq
 
         getForm().setViewable(!editable);
 
-        getSubmitButton().setVisible(editable);
-        getCancelAnchor().setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
+        getSubmit().setVisible(editable);
+        getCancel().setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
 
         super.populate(value);
     }

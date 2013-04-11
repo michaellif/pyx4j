@@ -19,13 +19,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.portal.client.ui.PotentialTenantView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class PotentialTenantActivity extends AbstractActivity {
     private final PotentialTenantView view;
 
     public PotentialTenantActivity(Place place) {
-        this.view = PortalViewFactory.instance(PotentialTenantView.class);
+        this.view = ResidentsViewFactory.instance(PotentialTenantView.class);
         withPlace(place);
 
     }

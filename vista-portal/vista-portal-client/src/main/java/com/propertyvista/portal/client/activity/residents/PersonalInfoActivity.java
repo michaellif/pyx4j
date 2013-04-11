@@ -26,7 +26,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
@@ -38,7 +38,7 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
     PersonalInfoCrudService srv;
 
     public PersonalInfoActivity(Place place) {
-        this.view = PortalViewFactory.instance(PersonalInfoView.class);
+        this.view = ResidentsViewFactory.instance(PersonalInfoView.class);
         this.view.setPresenter(this);
         withPlace(place);
         srv = GWT.create(PersonalInfoCrudService.class);

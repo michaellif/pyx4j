@@ -22,14 +22,14 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class UserMessageActivity extends AbstractActivity implements UserMessageView.Presenter {
 
     private final UserMessageView view;
 
     public UserMessageActivity(Place place) {
-        view = PortalViewFactory.instance(UserMessageView.class);
+        view = ResidentsViewFactory.instance(UserMessageView.class);
     }
 
     @Override

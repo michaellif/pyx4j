@@ -27,7 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -40,7 +40,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
     private final BillingHistoryService srv;
 
     public BillingHistoryActivity(Place place) {
-        this.view = PortalViewFactory.instance(BillingHistoryView.class);
+        this.view = ResidentsViewFactory.instance(BillingHistoryView.class);
         this.view.setPresenter(this);
         srv = GWT.create(BillingHistoryService.class);
     }

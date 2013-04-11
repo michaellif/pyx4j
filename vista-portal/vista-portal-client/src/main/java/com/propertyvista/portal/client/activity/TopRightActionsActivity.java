@@ -26,7 +26,7 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.TopRightActionsView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
@@ -34,7 +34,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        this.view = PortalViewFactory.instance(TopRightActionsView.class);
+        this.view = ResidentsViewFactory.instance(TopRightActionsView.class);
         assert (view != null);
         view.setPresenter(this);
     }

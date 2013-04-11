@@ -29,7 +29,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 
@@ -42,7 +42,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     private Key entityId;
 
     public EditPaymentMethodActivity(Place place) {
-        this.view = PortalViewFactory.instance(EditPaymentMethodView.class);
+        this.view = ResidentsViewFactory.instance(EditPaymentMethodView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
 

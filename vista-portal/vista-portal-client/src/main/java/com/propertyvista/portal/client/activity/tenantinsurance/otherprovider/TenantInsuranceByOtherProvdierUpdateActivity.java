@@ -25,7 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
@@ -39,7 +39,7 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     private final TenantInsuranceByOtherProviderManagementService insuranceByOtherProviderService;
 
     public TenantInsuranceByOtherProvdierUpdateActivity(Place place) {
-        view = PortalViewFactory.instance(TenantInsuranceByOtherProviderUpdateView.class);
+        view = ResidentsViewFactory.instance(TenantInsuranceByOtherProviderUpdateView.class);
         insuranceByOtherProviderService = GWT.<TenantInsuranceByOtherProviderManagementService> create(TenantInsuranceByOtherProviderManagementService.class);
         insuranceService = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }

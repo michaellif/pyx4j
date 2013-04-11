@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.residents;
+package com.propertyvista.portal.client.activity.residents.payment;
 
 import java.util.List;
 import java.util.Vector;
@@ -28,14 +28,14 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 
 public class PaymentWizardActivity extends WizardActivityBase<PaymentRecordDTO> implements PaymentWizardView.Persenter {
 
     public PaymentWizardActivity(AppPlace place) {
-        super(place, PortalViewFactory.instance(PaymentWizardView.class), GWT.<PaymentWizardService> create(PaymentWizardService.class), PaymentRecordDTO.class);
+        super(place, ResidentsViewFactory.instance(PaymentWizardView.class), GWT.<PaymentWizardService> create(PaymentWizardService.class), PaymentRecordDTO.class);
     }
 
     @Override
@@ -60,7 +60,10 @@ public class PaymentWizardActivity extends WizardActivityBase<PaymentRecordDTO> 
 
     @Override
     protected void onSaved() {
+        PaymentRecordDTO paymentRecord = getView().getValue();
+
         getView().reset();
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.NewPreauthorizedPaymentMethod());
+
+        AppSite.getPlaceController().goTo(new Financial.PaymentSubmitted(paymentRecord));
     }
 }

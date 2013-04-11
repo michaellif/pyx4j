@@ -30,7 +30,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -40,7 +40,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        this.view = PortalViewFactory.instance(NavigView.class);
+        this.view = ResidentsViewFactory.instance(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

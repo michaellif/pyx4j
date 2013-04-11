@@ -28,7 +28,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
@@ -38,7 +38,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     private final PasswordChangeView view;
 
     public PasswordChangeActivity() {
-        view = PortalViewFactory.instance(PasswordChangeView.class);
+        view = ResidentsViewFactory.instance(PasswordChangeView.class);
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 
 public class VistaTermsActivity extends AbstractActivity {
@@ -32,7 +32,7 @@ public class VistaTermsActivity extends AbstractActivity {
 
     public VistaTermsActivity() {
         service = GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class);
-        view = PortalViewFactory.instance(TermsView.class);
+        view = ResidentsViewFactory.instance(TermsView.class);
     }
 
     @Override

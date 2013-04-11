@@ -22,7 +22,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
@@ -57,7 +57,7 @@ public class TenantInsuranceActivity extends AbstractActivity {
                             throw new Error("got unknown insurance status");
                         }
                     } else {
-                        TenantInsuranceCoveredByOtherTenantView view = PortalViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
+                        TenantInsuranceCoveredByOtherTenantView view = ResidentsViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
                         view.populate(status);
                         panel.setWidget(view);
                     }

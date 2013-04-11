@@ -26,7 +26,7 @@ public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements 
 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm());
-        getCancelAnchor().setVisible(false);
+        getCancel().setVisible(false);
 
         Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
             @Override

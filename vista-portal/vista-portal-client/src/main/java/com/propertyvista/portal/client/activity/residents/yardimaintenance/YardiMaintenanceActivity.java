@@ -28,7 +28,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.dto.YardiServiceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.YardiMaintenanceService;
 
@@ -39,7 +39,7 @@ public class YardiMaintenanceActivity extends SecurityAwareActivity implements Y
     private final YardiMaintenanceService srv;
 
     public YardiMaintenanceActivity(Place place) {
-        this.view = PortalViewFactory.instance(YardiMaintenanceView.class);
+        this.view = ResidentsViewFactory.instance(YardiMaintenanceView.class);
         this.view.setPresenter(this);
         srv = GWT.create(YardiMaintenanceService.class);
     }

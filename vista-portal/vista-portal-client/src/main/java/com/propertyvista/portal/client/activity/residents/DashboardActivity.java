@@ -25,8 +25,9 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 
@@ -37,7 +38,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     private final DashboardService srv;
 
     public DashboardActivity(Place place) {
-        this.view = PortalViewFactory.instance(DashboardView.class);
+        this.view = ResidentsViewFactory.instance(DashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }
@@ -63,7 +64,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillSummary.PayNow());
+            AppSite.getPlaceController().goTo(new Financial.PayNow());
         }
     }
 }

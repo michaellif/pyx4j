@@ -31,7 +31,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -48,7 +48,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     private final TenantSurePurchaseService service;
 
     public TenantSurePurchaseActivity() {
-        view = PortalViewFactory.instance(TenantSurePurchaseView.class);
+        view = ResidentsViewFactory.instance(TenantSurePurchaseView.class);
         service = GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class);
     }
 

@@ -49,6 +49,8 @@ import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceR
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
+import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
@@ -82,7 +84,7 @@ import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMa
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceView;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceViewImpl;
 
-public class PortalViewFactory extends ViewFactoryBase {
+public class ResidentsViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
@@ -101,16 +103,17 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new BillingHistoryViewImpl());
             } else if (ViewBillView.class.equals(type)) {
                 map.put(type, new ViewBillViewImpl());
-
             } else if (FinancialSummaryView.class.equals(type)) {
                 map.put(type, new FinancialSummaryViewImpl());
+            } else if (PaymentWizardView.class.equals(type)) {
+                map.put(type, new PaymentWizardViewImpl());
+            } else if (PaymentSubmittedView.class.equals(type)) {
+                map.put(type, new PaymentSubmittedViewImpl());
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
                 map.put(type, new EditPaymentMethodViewImpl());
-            } else if (PaymentWizardView.class.equals(type)) {
-                map.put(type, new PaymentWizardViewImpl());
 
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());

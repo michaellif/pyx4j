@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.ui.CaptionView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class CaptionActivity extends AbstractActivity {
 
@@ -31,7 +31,7 @@ public class CaptionActivity extends AbstractActivity {
     private final AppPlace place;
 
     public CaptionActivity(Place place) {
-        this.view = PortalViewFactory.instance(CaptionView.class);
+        this.view = ResidentsViewFactory.instance(CaptionView.class);
         this.place = (AppPlace) place;
     }
 

@@ -33,56 +33,51 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     protected static final I18n i18n = I18n.get(BasicViewImpl.class);
 
-    private Presenter<E> presenter;
-
     private final UserMessagePanel messagePanel;
 
     private final SimplePanel formHolder;
 
     private CEntityForm<E> form;
 
-    private final Button submitButton;
+    private final Button submit;
 
-    private final Anchor cancelAnchor;
+    private final Anchor cancel;
 
-    public BasicViewImpl(String submitButtonCaption, CEntityForm<E> viewForm) {
+    private Presenter<E> presenter;
+
+    public BasicViewImpl() {
+        this(null);
+    }
+
+    public BasicViewImpl(CEntityForm<E> viewForm) {
         add(messagePanel = new UserMessagePanel());
 
         add(formHolder = new SimplePanel());
 
-        submitButton = new Button(submitButtonCaption);
-        submitButton.getElement().getStyle().setMargin(10, Unit.PX);
-        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        submitButton.setCommand(new Command() {
+        submit = new Button(i18n.tr("Submit"));
+        submit.getElement().getStyle().setMargin(10, Unit.PX);
+        submit.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        submit.setCommand(new Command() {
             @Override
             public void execute() {
                 onSubmit();
             }
         });
-        add(DecorationUtils.inline(submitButton));
+        add(DecorationUtils.inline(submit));
 
-        cancelAnchor = new Anchor(i18n.tr("Cancel"), new Command() {
+        cancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 presenter.cancel();
             }
         });
-        cancelAnchor.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        cancelAnchor.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(cancelAnchor);
+        cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(cancel);
 
         if (viewForm != null) {
             setForm(viewForm);
         }
-    }
-
-    public BasicViewImpl() {
-        this(i18n.tr("Save"), null);
-    }
-
-    public BasicViewImpl(CEntityForm<E> viewForm) {
-        this(i18n.tr("Save"), viewForm);
-
     }
 
     protected void setForm(CEntityForm<E> viewForm) {
@@ -114,22 +109,6 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
         messagePanel.setMessage(msg, UserMessageType.INFO);
     }
 
-    public Presenter<E> getPresenter() {
-        return presenter;
-    }
-
-    public CEntityForm<E> getForm() {
-        return form;
-    }
-
-    protected Button getSubmitButton() {
-        return submitButton;
-    }
-
-    public Anchor getCancelAnchor() {
-        return cancelAnchor;
-    }
-
     protected void onSubmit() {
         if (!form.isValid()) {
             Window.scrollTo(0, 0);
@@ -138,4 +117,21 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
             presenter.save(form.getValue());
         }
     }
+
+    public Presenter<E> getPresenter() {
+        return presenter;
+    }
+
+    public CEntityForm<E> getForm() {
+        return form;
+    }
+
+    protected Button getSubmit() {
+        return submit;
+    }
+
+    protected Anchor getCancel() {
+        return cancel;
+    }
+
 }

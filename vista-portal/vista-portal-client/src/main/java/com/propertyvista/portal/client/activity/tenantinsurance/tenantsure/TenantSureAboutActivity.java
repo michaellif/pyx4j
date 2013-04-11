@@ -18,14 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class TenantSureAboutActivity extends AbstractActivity {
 
     private final TenantSureAboutView view;
 
     public TenantSureAboutActivity() {
-        view = PortalViewFactory.instance(TenantSureAboutView.class);
+        view = ResidentsViewFactory.instance(TenantSureAboutView.class);
     }
 
     @Override

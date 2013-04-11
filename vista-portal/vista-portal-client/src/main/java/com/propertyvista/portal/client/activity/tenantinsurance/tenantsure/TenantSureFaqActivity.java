@@ -22,7 +22,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 
 public class TenantSureFaqActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class TenantSureFaqActivity extends AbstractActivity {
 
     public TenantSureFaqActivity() {
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
-        view = PortalViewFactory.instance(TermsView.class);
+        view = ResidentsViewFactory.instance(TermsView.class);
     }
 
     @Override

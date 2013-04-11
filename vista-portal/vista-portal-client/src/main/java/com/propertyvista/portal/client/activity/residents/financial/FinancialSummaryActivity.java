@@ -25,10 +25,10 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSummaryView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 /**
@@ -41,7 +41,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
     private final BillSummaryService service;
 
     public FinancialSummaryActivity(Place place) {
-        view = PortalViewFactory.instance(FinancialSummaryView.class);
+        view = ResidentsViewFactory.instance(FinancialSummaryView.class);
         service = GWT.<BillSummaryService> create(BillSummaryService.class);
     }
 
@@ -63,7 +63,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillSummary.PayNow());
+            AppSite.getPlaceController().goTo(new Financial.PayNow());
         }
     }
 }

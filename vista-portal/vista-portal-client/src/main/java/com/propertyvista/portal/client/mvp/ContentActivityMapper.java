@@ -24,7 +24,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
-import com.propertyvista.portal.client.activity.residents.PaymentWizardActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
@@ -34,6 +33,8 @@ import com.propertyvista.portal.client.activity.residents.financial.FinancialSum
 import com.propertyvista.portal.client.activity.residents.maintenance.EditMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
+import com.propertyvista.portal.client.activity.residents.payment.PaymentSubmittedActivity;
+import com.propertyvista.portal.client.activity.residents.payment.PaymentWizardActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
@@ -50,6 +51,7 @@ import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.Tenan
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -96,16 +98,16 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (appPlace instanceof Residents.Financial.BillSummary) {
                         activity = new BillSummaryActivity(appPlace);
-                    } else if (appPlace instanceof Residents.Financial.BillSummary.PayNow) {
-                        activity = new PaymentWizardActivity(appPlace);
-
                     } else if (appPlace instanceof Residents.Financial.BillingHistory) {
                         activity = new BillingHistoryActivity(appPlace);
                     } else if (appPlace instanceof Residents.Financial.BillingHistory.ViewBill) {
                         activity = new ViewBillActivity(appPlace);
-
                     } else if (appPlace instanceof Residents.Financial.FinancialSummary) {
                         activity = new FinancialSummaryActivity(appPlace);
+                    } else if (appPlace instanceof Financial.PayNow) {
+                        activity = new PaymentWizardActivity(appPlace);
+                    } else if (appPlace instanceof Financial.PaymentSubmitted) {
+                        activity = new PaymentSubmittedActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Residents.TenantInsurance) {
                         activity = new TenantInsuranceActivity();
