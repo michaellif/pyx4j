@@ -10,7 +10,7 @@
       name="ScreeningService"
       interface="com.yardi.ws.WSScreeningService"
       implementation="com.propertyvista.yardi.ws.WSScreeningServiceImpl"
-      wsdl="WEB-INF/wsdl/ScreeningService.wsdl"
+      wsdl="WEB-INF/wsdl/common/ScreeningService.wsdl"
       service="{http://propertyvista.com/interfaces/ws/ApplicantScreening}ScreeningService"
       port="{http://propertyvista.com/interfaces/ws/ApplicantScreening}WSScreeningService"
       url-pattern="/interfaces/ws/ApplicantScreening"/>
