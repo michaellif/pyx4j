@@ -38,7 +38,7 @@ import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.widgets.client.Button;
@@ -46,7 +46,7 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReportsView extends AbstractView implements IReportsView {
+public abstract class AbstractReportsView extends AbstractPane implements IReportsView {
 
     public enum Styles {
 

@@ -36,7 +36,7 @@ import com.pyx4j.site.client.ui.visor.VisorLayoutPanel;
 import com.pyx4j.site.client.ui.visor.VisorViewerHolder;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public abstract class AbstractView extends DockLayoutPanel implements IPane {
+public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
 
@@ -62,7 +62,7 @@ public abstract class AbstractView extends DockLayoutPanel implements IPane {
 
     private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
-    public AbstractView() {
+    public AbstractPane() {
         super(Unit.PX);
 
         headerCaption = new FlowPanel();

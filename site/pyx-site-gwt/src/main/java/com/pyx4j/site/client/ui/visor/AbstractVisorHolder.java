@@ -20,11 +20,11 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.IPane;
 
-public abstract class AbstractVisorHolder extends AbstractView {
+public abstract class AbstractVisorHolder extends AbstractPane {
 
     public AbstractVisorHolder(IVisor visor, String caption, final IPane parent) {
         super();

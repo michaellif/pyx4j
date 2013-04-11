@@ -22,11 +22,11 @@ package com.pyx4j.site.client.ui.prime;
 
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
-public class AbstractPrimePane extends AbstractView implements IPrimePane {
+public class AbstractPrimePane extends AbstractPane implements IPrimePane {
 
     private final IMemento memento = new MementoImpl();
 

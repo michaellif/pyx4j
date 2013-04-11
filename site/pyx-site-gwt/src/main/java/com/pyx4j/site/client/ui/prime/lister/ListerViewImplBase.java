@@ -30,10 +30,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.AbstractView;
+import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 
-public class ListerViewImplBase<E extends IEntity> extends AbstractView implements ILister<E> {
+public class ListerViewImplBase<E extends IEntity> extends AbstractPane implements ILister<E> {
 
     protected AbstractLister<E> lister = null;
 
