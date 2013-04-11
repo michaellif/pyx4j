@@ -16,12 +16,12 @@ package com.propertyvista.operations.client.ui.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.site.client.ui.prime.form.CrudEntityForm;
+import com.pyx4j.site.client.ui.prime.form.PrimeEntityForm;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 
-public abstract class OperationsEntityForm<E extends IEntity> extends CrudEntityForm<E> {
+public abstract class OperationsEntityForm<E extends IEntity> extends PrimeEntityForm<E> {
 
     public OperationsEntityForm(Class<E> rootClass, IForm<E> view) {
         super(rootClass, new OperationsEditorsComponentFactory(), view);

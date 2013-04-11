@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.visor.paps;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -24,7 +23,7 @@ import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 
-public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor {
+public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<PreauthorizedPaymentsDTO> {
 
     private final CEntityForm<PreauthorizedPaymentsDTO> form = new PreauthorizedPaymentsForm();
 
@@ -33,9 +32,7 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor {
     public PreauthorizedPaymentsVisorView(PreauthorizedPaymentsVisorController controller) {
         this.controller = controller;
 
-        // UI:
-        form.initContent();
-        setContentPane(new ScrollPanel(form.asWidget()));
+        setForm(form);
         getElement().getStyle().setProperty("padding", "6px");
     }
 

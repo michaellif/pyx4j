@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.visor.charges;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -28,7 +27,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.dto.BillDTO;
 
-public class ChargesVisorView extends AbstractVisorViewer {
+public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
 
     private static final I18n i18n = I18n.get(ChargesVisorView.class);
 
@@ -43,9 +42,8 @@ public class ChargesVisorView extends AbstractVisorViewer {
 
         // UI:
         form = new ChargesForm();
-        form.initContent();
 
-        setContentPane(new ScrollPanel(asWidget()));
+        setForm(form);
         getElement().getStyle().setProperty("padding", "6px");
     }
 

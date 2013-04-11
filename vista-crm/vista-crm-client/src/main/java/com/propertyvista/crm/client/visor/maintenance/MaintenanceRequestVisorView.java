@@ -17,12 +17,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
-import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
+import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestVisorView extends AbstractVisorViewer {
+public class MaintenanceRequestVisorView extends AbstractVisorPane {
 
     private final ILister<MaintenanceRequestDTO> lister;
 

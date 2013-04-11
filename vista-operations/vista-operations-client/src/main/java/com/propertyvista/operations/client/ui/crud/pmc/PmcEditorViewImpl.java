@@ -13,16 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.site.client.ui.prime.form.CrudEntityForm;
+import com.pyx4j.site.client.ui.prime.form.PrimeEntityForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.rpc.PmcDTO;
 
 public class PmcEditorViewImpl extends OperationsEditorViewImplBase<PmcDTO> implements PmcEditorView {
 
-    private final CrudEntityForm<PmcDTO> existingItemForm = new PmcForm(this);
+    private final PrimeEntityForm<PmcDTO> existingItemForm = new PmcForm(this);
 
-    private final CrudEntityForm<PmcDTO> newItemForm = new PmcFormNewItem(this);
+    private final PrimeEntityForm<PmcDTO> newItemForm = new PmcFormNewItem(this);
 
     public PmcEditorViewImpl() {
     }
