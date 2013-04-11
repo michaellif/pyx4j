@@ -18,16 +18,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.ui.visor.IVisorEditor;
+import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 
-public class PreauthorizedPaymentsVisorView extends ScrollPanel implements IVisorEditor {
-
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorView.class);
+public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor {
 
     private final CEntityForm<PreauthorizedPaymentsDTO> form = new PreauthorizedPaymentsForm();
 
@@ -38,7 +35,7 @@ public class PreauthorizedPaymentsVisorView extends ScrollPanel implements IViso
 
         // UI:
         form.initContent();
-        setWidget(form.asWidget());
+        setContentPane(new ScrollPanel(form.asWidget()));
         getElement().getStyle().setProperty("padding", "6px");
     }
 

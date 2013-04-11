@@ -15,28 +15,22 @@ package com.propertyvista.crm.client.visor.maintenance;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
-import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestVisorView extends ScrollPanel implements IVisorViewer {
-
-    private static final I18n i18n = I18n.get(MaintenanceRequestVisorView.class);
-
-    private final MaintenanceRequestVisorController controller;
+public class MaintenanceRequestVisorView extends AbstractVisorViewer {
 
     private final ILister<MaintenanceRequestDTO> lister;
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
-        this.controller = controller;
         this.lister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
 
         // UI:
-        setWidget(lister.asWidget());
+        setContentPane(new ScrollPanel(lister.asWidget()));
         getElement().getStyle().setProperty("padding", "6px");
     }
 

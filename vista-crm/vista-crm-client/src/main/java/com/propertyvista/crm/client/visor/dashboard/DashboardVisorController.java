@@ -87,7 +87,8 @@ public class DashboardVisorController implements IDashboardVisorController {
                 boolean isReadOnly = !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(dashboardMetadata.ownerUser().getPrimaryKey());
                 visor.setReadOnly(isReadOnly);
                 String readOnlyWarning = isReadOnly ? " " + i18n.tr("(read only)") : "";
-                parentView.showVisor(visor, dashboardStub.name().getValue() + readOnlyWarning);
+                visor.setCaption(dashboardStub.name().getValue() + readOnlyWarning);
+                parentView.showVisor(visor);
             }
 
             @Override

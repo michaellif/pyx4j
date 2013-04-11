@@ -50,7 +50,8 @@ public abstract class PreauthorizedPaymentsVisorController implements IVisorCont
         visor.populate(new Command() {
             @Override
             public void execute() {
-                parentView.showVisor(visor, i18n.tr("Setup Preauthorized Payments"));
+                visor.setCaption(i18n.tr("Setup Preauthorized Payments"));
+                parentView.showVisor(visor);
             }
         });
     }

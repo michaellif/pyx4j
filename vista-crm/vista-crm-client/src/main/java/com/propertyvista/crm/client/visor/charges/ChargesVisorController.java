@@ -45,7 +45,7 @@ public class ChargesVisorController implements IVisorController {
         visor.populate(new Command() {
             @Override
             public void execute() {
-                parentView.showVisor(visor, i18n.tr("Charges"));
+                parentView.showVisor(visor);
             }
         });
     }

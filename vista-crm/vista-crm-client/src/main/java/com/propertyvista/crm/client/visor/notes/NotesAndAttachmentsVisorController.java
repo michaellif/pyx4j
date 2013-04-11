@@ -50,7 +50,8 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         visor.populate(new Command() {
             @Override
             public void execute() {
-                parentView.showVisor(visor, i18n.tr("Notes & Attachments"));
+                visor.setCaption(i18n.tr("Notes & Attachments"));
+                parentView.showVisor(visor);
             }
         });
     }

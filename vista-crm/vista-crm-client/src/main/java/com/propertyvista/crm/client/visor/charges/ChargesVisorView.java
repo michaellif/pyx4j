@@ -22,13 +22,13 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.visor.IVisorViewer;
+import com.pyx4j.site.client.ui.visor.AbstractVisorViewer;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.dto.BillDTO;
 
-public class ChargesVisorView extends ScrollPanel implements IVisorViewer {
+public class ChargesVisorView extends AbstractVisorViewer {
 
     private static final I18n i18n = I18n.get(ChargesVisorView.class);
 
@@ -39,11 +39,13 @@ public class ChargesVisorView extends ScrollPanel implements IVisorViewer {
     public ChargesVisorView(ChargesVisorController controller) {
         this.controller = controller;
 
+        setCaption(i18n.tr("Charges"));
+
         // UI:
         form = new ChargesForm();
         form.initContent();
 
-        setWidget(form.asWidget());
+        setContentPane(new ScrollPanel(asWidget()));
         getElement().getStyle().setProperty("padding", "6px");
     }
 

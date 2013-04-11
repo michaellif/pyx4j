@@ -44,7 +44,8 @@ public class MaintenanceRequestVisorController implements IVisorController {
     @Override
     public void show(final IPane parentView) {
         lister.populate();
-        parentView.showVisor(visor, i18n.tr("Maintenance Requests"));
+        visor.setCaption(i18n.tr("Maintenance Requests"));
+        parentView.showVisor(visor);
     }
 
 }

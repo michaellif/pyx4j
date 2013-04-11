@@ -132,7 +132,7 @@ public class PmcAccountCreationRequestViewImpl extends Composite implements PmcA
     }
 
     @Override
-    public void showVisor(IVisor visor, String caption) {
+    public void showVisor(IVisor visor) {
         // TODO Auto-generated method stub
 
     }

@@ -37,7 +37,7 @@ public class AdminUserViewerViewImpl extends OperationsViewerViewImplBase<Operat
                         .getStringView());
             }
         });
-        addHeaderToolbarItem(passwordAction.asWidget());
+        addHeaderToolbarItem(passwordAction);
     }
 
     @Override
