@@ -16,20 +16,43 @@ package com.propertyvista.field.client.theme;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.VistaTheme;
 
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImage, ToolbarImageHolder, ToolbarLabel, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted, SortPanel, SearchPanel, SearchPanelToolbar, SearchResults;
+        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImage, ToolbarImageHolder, ToolbarLabel, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted, SortPanel, SearchPanel, SearchPanelToolbar, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget;
     }
 
     public FieldTheme() {
         initStyles();
+        initDialogBoxStyles();
+
     }
 
     protected void initStyles() {
+
+        addTheme(new HorizontalAlignCenterMixin());
+
+        addTheme(new DefaultWidgetsTheme());
+        addTheme(new DefaultWidgetDecoratorTheme() {
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.background;
+            }
+        });
+        addTheme(new DefaultFormFlexPanelTheme() {
+            @Override
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
+            }
+        });
+
         // All viewable area:
         Style style = new Style(".", StyleName.SiteView.name());
         style.addProperty("color", ThemeColor.foreground);
@@ -53,7 +76,7 @@ public class FieldTheme extends VistaTheme {
 
         //Login fields:
         style = new Style(".", StyleName.LoginInputField.name());
-        style.addProperty("width", "20em");
+        style.addProperty("width", "6em");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
         addStyle(style);
@@ -89,7 +112,7 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("bottom", "0%");
         style.addProperty("left", "100%");
         style.addProperty("right", "100%");
-        style.addProperty("border-color", "gray");
+        style.addProperty("border-color", "green !important");
 
         style = new Style(".", StyleName.LoginCaption);
         style.addProperty("margin-top", "25px");
@@ -104,7 +127,7 @@ public class FieldTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.LoginButtonHolder.name());
-        style.addProperty("width", "20em");
+        style.addProperty("width", "10em");
         style.addProperty("text-align", "center");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
@@ -114,7 +137,7 @@ public class FieldTheme extends VistaTheme {
         style = new Style(".", StyleName.AppSelectionButton);
         style.addProperty("border", "1px solid");
         style.addProperty("height", "20px");
-        style.addProperty("width", "20em");
+        style.addProperty("width", "9em");
         style.addProperty("text-align", "center");
         style.addProperty("margin", "10px");
         style.addProperty("vertical-align", "middle");
@@ -183,6 +206,36 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("margin-bottom", "auto");
         style.addProperty("background-color", "#C0C0C0");
         addStyle(style);
+
+        style = new Style(".", StyleName.Dialog);
+        style.addProperty("background-color", ThemeColor.object1, 1);
+        style.addProperty("width", "390px");
+        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogCaption);
+        style.addProperty("background", ThemeColor.object1, 0.8);
+        style.addProperty("filter", "alpha(opacity=95)");
+        style.addProperty("opacity", "0.95");
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-left", "10px");
+        style.addProperty("width", "380px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogResizer);
+        style.addProperty("background", ThemeColor.object1, 0.8);
+        style.addProperty("filter", "alpha(opacity=95)");
+        style.addProperty("opacity", "0.95");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogContent);
+        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("width", "380px");
+        style.addProperty("height", "100%");
+        style.addProperty("padding", "10px");
+        addStyle(style);
+
     }
 
 }
