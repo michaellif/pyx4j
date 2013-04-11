@@ -925,6 +925,10 @@ td.DatePickerMonth {
 	border-bottom-color: #666666;
 }
 
+.EntityFolderTableHeader .gwt-HTML {
+	white-space: nowrap;
+}
+
 .EntityFolderTableHeaderLabel {
 	font-weight: bold;
 	margin-left: 3px;
@@ -1736,4 +1740,10 @@ ul.footer_locations li {
 
 .TenantDashboardSection td {
     vertical-align: middle !important;
+}
+
+.TSSendDocs {
+    padding-bottom: 1em;
+    padding-top: 1em;
+    text-align: center;
 }
