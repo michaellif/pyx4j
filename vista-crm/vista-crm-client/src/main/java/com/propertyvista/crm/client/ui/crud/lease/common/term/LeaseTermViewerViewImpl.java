@@ -44,7 +44,7 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
                 @Override
                 public void execute() {
                     if (!isVisorShown()) {
-                        ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show(LeaseTermViewerViewImpl.this);
+                        ((LeaseTermViewerView.Presenter) getPresenter()).getChargesVisorController().show();
                     }
                 }
             }));

@@ -40,7 +40,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             @Override
             public void execute() {
                 if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show(TenantViewerViewImpl.this);
+                    ((TenantViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
                 }
             }
         }));

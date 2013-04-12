@@ -196,7 +196,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
                     List<Building> buildingsFilter = new ArrayList<Building>();
                     buildingsFilter.add(getForm().getValue());
                     if (!isVisorShown()) {
-                        ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show(BuildingViewerViewImpl.this);
+                        ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(dashboard, buildingsFilter).show();
                     }
                 }
 

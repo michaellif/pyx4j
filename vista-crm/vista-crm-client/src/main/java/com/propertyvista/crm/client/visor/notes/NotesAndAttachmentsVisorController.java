@@ -22,14 +22,14 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
-import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.shared.NotesParentId;
 
-public class NotesAndAttachmentsVisorController implements IVisor.Controller {
+public class NotesAndAttachmentsVisorController extends AbstractVisorController {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorController.class);
 
@@ -39,19 +39,20 @@ public class NotesAndAttachmentsVisorController implements IVisor.Controller {
 
     private final NotesParentId notesParentId;
 
-    public NotesAndAttachmentsVisorController(NotesParentId notesParentId) {
+    public NotesAndAttachmentsVisorController(IPane parentView, NotesParentId notesParentId) {
+        super(parentView);
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         visor = new NotesAndAttachmentsVisorView(this);
         this.notesParentId = notesParentId;
     }
 
     @Override
-    public void show(final IPane parentView) {
+    public void show() {
         visor.populate(new Command() {
             @Override
             public void execute() {
                 visor.setCaption(i18n.tr("Notes & Attachments"));
-                parentView.showVisor(visor);
+                getParentView().showVisor(visor);
             }
         });
     }

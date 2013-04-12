@@ -108,7 +108,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
-                    new PreauthorizedPaymentsVisorController(item.getValue().leaseParticipant().getPrimaryKey()) {
+                    new PreauthorizedPaymentsVisorController(parentView, item.getValue().leaseParticipant().getPrimaryKey()) {
                         @Override
                         public boolean onClose(List<PreauthorizedPayment> pads) {
                             for (CComponent<?, ?> comp : item.getComponents()) {
@@ -120,7 +120,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                             return true;
                         }
 
-                    }.show(parentView);
+                    }.show();
                 }
             });
         }

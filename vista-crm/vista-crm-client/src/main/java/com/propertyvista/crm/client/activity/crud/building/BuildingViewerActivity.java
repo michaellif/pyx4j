@@ -169,6 +169,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings) {
-        return new DashboardVisorController(dashboardMetadata, buildings);
+        return new DashboardVisorController(getView(), dashboardMetadata, buildings);
     }
 }

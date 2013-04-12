@@ -14,11 +14,9 @@
 package com.propertyvista.crm.client.visor.paps;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.visor.AbstractVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
@@ -49,22 +47,4 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
         });
     }
 
-    @Override
-    public void save(AsyncCallback<VoidSerializable> callback) {
-        getController().save(callback, form.getValue());
-    }
-
-    @Override
-    public void apply() {
-        getController().save(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-            }
-        }, form.getValue());
-    }
-
-    @Override
-    public boolean onBeforeClose(boolean saved) {
-        return getController().onClose(form.getValue().preauthorizedPayments());
-    }
 }

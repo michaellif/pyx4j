@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
@@ -28,7 +29,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class DashboardVisorController implements IDashboardVisorController {
+public class DashboardVisorController extends AbstractVisorController implements IDashboardVisorController {
 
     private static final I18n i18n = I18n.get(DashboardVisorController.class);
 
@@ -40,7 +41,8 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     private final List<Building> buildings;
 
-    public DashboardVisorController(DashboardMetadata dashboardMetadataStringViewStub, List<Building> buildingStringViewStubs) {
+    public DashboardVisorController(IPane parentView, DashboardMetadata dashboardMetadataStringViewStub, List<Building> buildingStringViewStubs) {
+        super(parentView);
         service = GWT.create(DashboardMetadataService.class);
         dashboardStub = dashboardMetadataStringViewStub;
         buildings = buildingStringViewStubs;
@@ -48,8 +50,8 @@ public class DashboardVisorController implements IDashboardVisorController {
     }
 
     @Override
-    public void show(IPane parentView) {
-        populate(parentView);
+    public void show() {
+        populate(getParentView());
     }
 
     @Override

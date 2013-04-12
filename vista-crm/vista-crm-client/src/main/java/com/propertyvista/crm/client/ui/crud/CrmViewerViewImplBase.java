@@ -77,7 +77,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             @Override
             public void execute() {
                 if (!isVisorShown()) {
-                    ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show(CrmViewerViewImplBase.this);
+                    ((CrmViewerActivity<E>) getPresenter()).getNotesAndAttachmentsController().show();
                 }
             }
         })).asWidget());

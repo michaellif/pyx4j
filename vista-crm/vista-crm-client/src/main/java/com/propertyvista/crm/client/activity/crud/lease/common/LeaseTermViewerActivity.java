@@ -40,7 +40,7 @@ public class LeaseTermViewerActivity extends CrmViewerActivity<LeaseTermDTO> imp
     @Override
     public ChargesVisorController getChargesVisorController() {
         if (chargesController == null) {
-            chargesController = new ChargesVisorController(currentLeaseId);
+            chargesController = new ChargesVisorController(getView(), currentLeaseId);
         }
         return chargesController;
     }

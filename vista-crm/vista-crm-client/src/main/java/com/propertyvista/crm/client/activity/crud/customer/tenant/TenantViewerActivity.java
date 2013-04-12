@@ -52,7 +52,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
         if (maintenanceRequestVisorController == null) {
-            maintenanceRequestVisorController = new MaintenanceRequestVisorController(currentTenantId);
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentTenantId);
         }
         return maintenanceRequestVisorController;
     }

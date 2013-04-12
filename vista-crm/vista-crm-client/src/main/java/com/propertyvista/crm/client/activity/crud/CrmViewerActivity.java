@@ -51,7 +51,7 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
 
     public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
         if (notesAndAttachmentsController == null) {
-            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(createNotesParentId());
+            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(getView(), createNotesParentId());
         }
         return notesAndAttachmentsController;
     }

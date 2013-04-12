@@ -22,7 +22,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
@@ -31,27 +33,30 @@ import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorSer
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public abstract class PreauthorizedPaymentsVisorController implements IVisorEditor.Controller {
+public abstract class PreauthorizedPaymentsVisorController extends AbstractVisorController implements IVisorEditor.Controller {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
 
-    private final PreauthorizedPaymentsVisorView visor = new PreauthorizedPaymentsVisorView(this);
+    private final PreauthorizedPaymentsVisorView visor;
 
-    private final PreauthorizedPaymentsVisorService service = GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class);
+    private final PreauthorizedPaymentsVisorService service;
 
     private final Key tenantId;
 
-    public PreauthorizedPaymentsVisorController(Key tenantId) {
+    public PreauthorizedPaymentsVisorController(IPane parentView, Key tenantId) {
+        super(parentView);
         this.tenantId = tenantId;
+        visor = new PreauthorizedPaymentsVisorView(this);
+        service = GWT.<PreauthorizedPaymentsVisorService> create(PreauthorizedPaymentsVisorService.class);
     }
 
     @Override
-    public void show(final IPane parentView) {
+    public void show() {
         visor.populate(new Command() {
             @Override
             public void execute() {
                 visor.setCaption(i18n.tr("Setup Preauthorized Payments"));
-                parentView.showVisor(visor);
+                getParentView().showVisor(visor);
             }
         });
     }
@@ -75,19 +80,24 @@ public abstract class PreauthorizedPaymentsVisorController implements IVisorEdit
 
     @Override
     public void apply() {
-        // TODO Auto-generated method stub
+        save(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
 
+            }
+        }, visor.getValue());
     }
 
     @Override
     public void save() {
-        // TODO Auto-generated method stub
-
+        save(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                if (onClose(visor.getValue().preauthorizedPayments())) {
+                    getParentView().hideVisor();
+                }
+            }
+        }, visor.getValue());
     }
 
-    @Override
-    public void cancel() {
-        // TODO Auto-generated method stub
-
-    }
 }
