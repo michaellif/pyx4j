@@ -189,15 +189,27 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private FormFlexPanel createPaymentMethodStep() {
         FormFlexPanel panel = new FormFlexPanel(PAYMENTMETHOD_STEP_TITLE);
+        int row = -1;
 
-        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+
+        panel.setHR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).build());
+
+        // tweaks:
+        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                setupAddThisPaymentMethodToProfile(event.getValue());
+            }
+        });
 
         return panel;
     }
 
     private FormFlexPanel createConfirmationStep() {
         FormFlexPanel panel = new FormFlexPanel(CONFIRMATION_STEP_TITLE);
-
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
@@ -264,6 +276,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
+        setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
     }
 
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
