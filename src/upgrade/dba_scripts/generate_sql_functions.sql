@@ -88,7 +88,10 @@ $$
         (SELECT 'ALTER TABLE '||table_name||' ADD CONSTRAINT '||constraint_name||
                 CASE WHEN constraint_type = 'p' THEN ' PRIMARY KEY('||column_name||');'
                 WHEN constraint_type = 'f' THEN ' FOREIGN KEY('||column_name||') '||
-                'REFERENCES '||ref_table_name||'('||ref_column_name||');'
+                'REFERENCES '||ref_table_name||'('||ref_column_name||') '||
+                        CASE WHEN is_deferrable THEN ' DEFERRABLE' END ||
+                        CASE WHEN is_deferred THEN ' INITIALLY DEFERRED' END ||
+                ';'       
                 WHEN constraint_type = 'c' THEN ' CHECK '||constraint_text||';' END
         FROM    t1
         WHERE   schema_version = $2

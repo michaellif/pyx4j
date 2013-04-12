@@ -228,7 +228,7 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.deposit_policy_item AS d '
                 ||'SET  product_code = a.id '
                 ||'FROM '||v_schema_name||'.arcode  AS a '
-                ||'WHERE c.product_type = a.pit_id ';
+                ||'WHERE d.product_type = a.pit_id ';
         
         
         -- lead
@@ -258,6 +258,35 @@ BEGIN
                 ||'SET  code = a.id '
                 ||'FROM '||v_schema_name||'.arcode AS a '
                 ||'WHERE        l.lease_adjustment_reason = a.lad_id ';
+                
+        -- padpolicy_item
+       
+        EXECUTE 'WITH t AS (SELECT debit_type_old, '
+                ||'             CASE WHEN debit_type_old = ''accountCharge'' THEN ''AccountCharge'' '
+                ||'             WHEN debit_type_old = ''addOn'' THEN ''AddOn'' '
+                ||'             WHEN debit_type_old = ''booking'' THEN ''OneTime'' '
+                ||'             WHEN debit_type_old = ''deposit'' THEN ''Deposit'' '
+                ||'             WHEN debit_type_old = ''latePayment'' THEN ''LatePayment'' '
+                ||'             WHEN debit_type_old = ''lease'' THEN ''Residential'' '
+                ||'             WHEN debit_type_old = ''locker'' THEN ''Locker'' '
+                ||'             WHEN debit_type_old = ''nsf'' THEN ''NSF'' '
+                ||'             WHEN debit_type_old = ''other'' THEN ''ExternalCharge'' '
+                ||'             WHEN debit_type_old = ''parking'' THEN ''Parking'' '
+                ||'             WHEN debit_type_old = ''pet'' THEN ''Pet'' '
+                ||'             WHEN debit_type_old = ''total'' THEN NULL '
+                ||'             WHEN debit_type_old = ''utility'' THEN ''Utility'' END  AS debit_type '
+                ||'     FROM    '||v_schema_name||'.padpolicy_item ) '
+                ||'UPDATE '||v_schema_name||'.padpolicy_item AS a '
+                ||'SET  debit_type = b.id '
+                ||'FROM (SELECT t.debit_type_old,a.id '
+                ||'     FROM t '
+                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type = a.name)) AS b '
+                ||'WHERE a.debit_type_old = b.debit_type_old ';   
+        
+        
+        -- pet_constraints
+        
+        
         
         
         /**
@@ -392,7 +421,8 @@ BEGIN
         -- Finishing touch
         
         UPDATE  _admin_.admin_pmc
-        SET     schema_version = '1.0.9'
+        SET     schema_version = '1.0.9',
+                schema_data_upgrade_steps = NULL
         WHERE   namespace = v_schema_name;          
         
 END;

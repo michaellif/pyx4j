@@ -633,6 +633,8 @@ DROP FUNCTION _dba_.compare_schema_constraints(text,text);
 CREATE OR REPLACE FUNCTION _dba_.compare_schema_constraints(text,text)
 RETURNS TABLE (	constraint_name         pg_catalog.name,
                 constraint_type         CHAR(1),
+                is_deferrable           BOOLEAN,
+                is_deferred             BOOLEAN,
                 table_name              pg_catalog.name,
                 ref_table_name          pg_catalog.name,
                 column_name             TEXT,
@@ -642,6 +644,8 @@ RETURNS TABLE (	constraint_name         pg_catalog.name,
 $$
         WITH t AS (     SELECT 	a.conname AS constraint_name,
 	                        a.contype::char AS constraint_type,
+	                        a.condeferrable AS is_deferrable,
+	                        a.condeferred AS is_deferred,
 	                        b.relname AS table_name,
 		                c.relname AS ref_table_name,
 		                d.colname AS column_name,
@@ -664,14 +668,22 @@ $$
                                         GROUP BY a.oid) AS e ON (a.oid = e.oid)
                         JOIN 	pg_namespace f ON (a.connamespace = f.oid) )
         SELECT a.*,$1 AS schema_name FROM 
-        (SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE  schema_name = $1       
+        (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
+                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+        FROM t WHERE  schema_name = $1       
         EXCEPT 
-        SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE schema_name = $2) AS a
+        SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
+                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+        FROM t WHERE schema_name = $2) AS a
         UNION
         SELECT a.*,$2 AS schema_name FROM 
-        (SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE  schema_name = $2     
+        (SELECT constraint_name,constraint_type,is_deferrable,is_deferred,
+                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+        FROM t WHERE  schema_name = $2     
         EXCEPT 
-        SELECT constraint_name,constraint_type,table_name,ref_table_name,column_name,ref_column_name,constraint_text FROM t WHERE schema_name = $1) AS a;
+        SELECT  constraint_name,constraint_type,is_deferrable,is_deferred,
+                table_name,ref_table_name,column_name,ref_column_name,constraint_text 
+        FROM t WHERE schema_name = $1) AS a;
 $$
 LANGUAGE SQL VOLATILE;
 
