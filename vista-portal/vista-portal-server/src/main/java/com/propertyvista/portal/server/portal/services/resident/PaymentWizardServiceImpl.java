@@ -15,8 +15,6 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 import org.apache.commons.lang.Validate;
@@ -28,7 +26,6 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,19 +35,18 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentWizardService {
 
@@ -146,24 +142,11 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenantInLease()));
     }
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        LeaseTermTenant payer = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.ensureRetrieve(payer.leaseParticipant().lease(), AttachLevel.Attached);
-        Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                payer.leaseParticipant().lease().billingAccount(), VistaApplication.resident);
-        // get payer's payment methods and remove non-allowed ones: 
-        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer);
-        Iterator<LeasePaymentMethod> it = methods.iterator();
-        while (it.hasNext()) {
-            if (!allowedTypes.contains(it.next().type().getValue())) {
-                it.remove();
-            }
-        }
-
-        callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
+        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
     }
 }

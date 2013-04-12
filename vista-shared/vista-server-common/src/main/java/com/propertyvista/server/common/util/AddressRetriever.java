@@ -13,8 +13,6 @@
  */
 package com.propertyvista.server.common.util;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,7 +23,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class AddressRetriever {
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<?> participant) {
+    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseTermParticipant<?> participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
@@ -40,10 +38,10 @@ public class AddressRetriever {
         address.set(participant.leaseTermV().holder().lease().unit().building().info().address());
         address.suiteNumber().set(participant.leaseTermV().holder().lease().unit().info().number());
 
-        callback.onSuccess(address);
+        return address;
     }
 
-    public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant<?> participant) {
+    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
         Persistence.service().retrieve(participant);
         if ((participant == null) || (participant.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
@@ -57,6 +55,6 @@ public class AddressRetriever {
         address.set(participant.lease().unit().building().info().address());
         address.suiteNumber().set(participant.lease().unit().info().number());
 
-        callback.onSuccess(address);
+        return address;
     }
 }

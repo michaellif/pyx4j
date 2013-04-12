@@ -14,8 +14,6 @@
 package com.propertyvista.crm.server.services.billing;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -29,14 +27,12 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -50,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
 
@@ -158,30 +155,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> participant) {
-        AddressRetriever.getLeaseParticipantCurrentAddress(callback, participant);
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(participant));
     }
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
-        Persistence.service().retrieve(payer);
-        if ((payer == null) || (payer.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
-                    + " NotFound");
-        }
-
-        Persistence.ensureRetrieve(payer.leaseParticipant().lease(), AttachLevel.Attached);
-        Collection<PaymentType> allowedTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                payer.leaseParticipant().lease().billingAccount(), VistaApplication.crm);
-        // get payer's payment methods and remove non-allowed ones: 
-        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(payer);
-        Iterator<LeasePaymentMethod> it = methods.iterator();
-        while (it.hasNext()) {
-            if (!allowedTypes.contains(it.next().type().getValue())) {
-                it.remove();
-            }
-        }
-
-        callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
+        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(payer)));
     }
 
     // Payment operations:

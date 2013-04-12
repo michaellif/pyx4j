@@ -113,7 +113,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback, DTO participantId) {
-        AddressRetriever.getLeaseParticipantCurrentAddress(callback, EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey())));
     }
 
     private LeaseTerm.LeaseTermV retrieveLeaseTerm(DBO leaseParticipant) {
