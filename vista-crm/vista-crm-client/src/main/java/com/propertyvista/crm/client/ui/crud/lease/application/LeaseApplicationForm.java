@@ -69,6 +69,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         get(proto().leaseApplication().decisionReason()).setVisible(status.isProcessed());
     }
 
+    @Override
+    protected String getChargesTabTitle() {
+        return i18n.tr("Potential Charges");
+    }
+
     private FormFlexPanel createInfoTab() {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("Information"));
 

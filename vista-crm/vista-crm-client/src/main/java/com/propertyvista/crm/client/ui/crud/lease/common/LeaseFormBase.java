@@ -58,7 +58,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void createCommonContent() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+            chargesTab = addTab(createChargesTab());
         }
     }
 
@@ -231,8 +231,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return main;
     }
 
-    private FormFlexPanel createChargesTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    protected String getChargesTabTitle() {
+        return i18n.tr("Charges");
+    }
+
+    private FormFlexPanel createChargesTab() {
+        FormFlexPanel main = new FormFlexPanel(getChargesTabTitle());
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
