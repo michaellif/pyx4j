@@ -75,9 +75,9 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
-                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "25em"), 
-                    new EntityFolderColumnDescriptor(proto().value(), "10em"), 
-                    new EntityFolderColumnDescriptor(proto().percent(), "10em")
+                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"), 
+                    new EntityFolderColumnDescriptor(proto().value(), "8em"), 
+                    new EntityFolderColumnDescriptor(proto().percent(), "7em")
             ); //@formatter:on
         }
 

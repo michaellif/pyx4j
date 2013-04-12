@@ -57,7 +57,7 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         int row = -1;
         Widget w;
 
-        content.setWidget(++row, 0, w = new HTML(i18n.tr("Auto Payment Submitted Successfully!")));
+        content.setWidget(++row, 0, w = new HTML(i18n.tr("Automatic Payment Submitted Successfully!")));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         w.getElement().getStyle().setFontSize(1.2, Unit.EM);
 
