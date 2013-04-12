@@ -17,22 +17,36 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class MerchantAccountParser {
+
+    private MerchantAccount retrievedAccount = null;
 
     private final static Logger log = LoggerFactory.getLogger(MerchantAccountParser.class);
 
@@ -45,7 +59,7 @@ public class MerchantAccountParser {
         pads = parseFile(data, format);
         counters.add(saveMerchantAccounts(pads));
 
-        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} unchanged", counters.imported, counters.unchanged, counters.updated);
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} unchanged", counters.imported, counters.skipped, counters.updated);
         log.info(message);
         return message;
     }
@@ -85,9 +99,85 @@ public class MerchantAccountParser {
     private MerchantAccountCounter saveMerchantAccounts(List<MerchantAccountFileModel> entities) {
         MerchantAccountCounter counters = new MerchantAccountCounter();
 
-        for (MerchantAccountFileModel model : entities) {
-            MerchantAccount account = EntityFactory.create(MerchantAccount.class);
-            // TODO create and save a merchant account
+        for (final MerchantAccountFileModel model : entities) {
+
+            Pmc pmc = EntityFactory.create(Pmc.class);
+            {
+                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                criteria.eq(criteria.proto().namespace(), model.pmc().getValue());
+                pmc = Persistence.service().retrieve(criteria);
+            }
+
+            if (model.pmc() != null && model.propertyCode() != null) {
+
+                List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
+                {
+                    EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+                    indexes = Persistence.service().query(criteria);
+                }
+
+                for (final PmcMerchantAccountIndex index : indexes) {
+                    TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+                        @Override
+                        public Void call() {
+                            MerchantAccount rAccount = EntityFactory.create(MerchantAccount.class);
+                            {
+                                EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+                                criteria.eq(criteria.proto().id(), index.merchantAccountKey());
+                                rAccount = Persistence.service().retrieve(criteria);
+                            }
+
+                            if (rAccount.bankId().getValue().equals(model.bankId().getValue())
+                                    && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue())
+                                    && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue())) {
+                                retrievedAccount = rAccount;
+                            }
+                            return null;
+                        }
+                    });
+                }
+
+                if (retrievedAccount != null) {
+
+                    // TODO case for duplicate accounts
+                    throw new Error("Duplicate merchant account exists");
+
+                } else {
+
+                    final MerchantAccount account = EntityFactory.create(MerchantAccount.class);
+                    account.accountNumber().setValue(model.accountNumber().getValue());
+                    account.bankId().setValue(model.bankId().getValue());
+                    account.branchTransitNumber().setValue(model.transitNumber().getValue());
+                    account.merchantTerminalId().setValue(model.terminalId().getValue());
+                    account.status().setValue(MerchantAccountActivationStatus.Active);
+                    ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
+                    counters.imported++;
+                    TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+                        @Override
+                        public Void call() {
+                            Building building = EntityFactory.create(Building.class);
+                            {
+                                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                                criteria.eq(criteria.proto().propertyCode(), model.propertyCode().getValue());
+                                building = Persistence.service().retrieve(criteria);
+                            }
+
+                            Persistence.service().retrieveMember(building.merchantAccounts());
+                            building.merchantAccounts().clear();
+                            BuildingMerchantAccount bma = building.merchantAccounts().$();
+                            bma.merchantAccount().set(account);
+                            building.merchantAccounts().add(bma);
+                            Persistence.service().persist(building);
+                            Persistence.service().commit();
+                            return null;
+                        }
+                    });
+                }
+
+            } else {
+                // TODO find the right account and assign Terminal ID to it
+            }
         }
 
         return counters;
@@ -121,19 +211,19 @@ public class MerchantAccountParser {
 
         public int imported;
 
-        public int unchanged;
+        public int skipped;
 
         public int updated;
 
         public MerchantAccountCounter() {
             this.imported = 0;
-            this.unchanged = 0;
+            this.skipped = 0;
             this.updated = 0;
         }
 
         public void add(MerchantAccountCounter counters) {
             this.imported += counters.imported;
-            this.unchanged += counters.unchanged;
+            this.skipped += counters.skipped;
             this.updated += counters.updated;
         }
     }
