@@ -128,16 +128,23 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
 
         private void setAmountEditor(AmountType amountType) {
             amountPlaceholder.clear();
+            get(proto().percent()).setVisible(false);
+            get(proto().value()).setVisible(false);
+
             if (amountType != null) {
                 switch (amountType) {
                 case Percent:
                     amountPlaceholder.setWidget(percent);
+                    get(proto().percent()).setVisible(true);
                     break;
+
                 case Value:
                     amountPlaceholder.setWidget(value);
+                    get(proto().value()).setVisible(true);
                     break;
+
                 default:
-                    break;
+                    throw new IllegalArgumentException();
                 }
             }
         }

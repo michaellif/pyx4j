@@ -53,6 +53,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -391,19 +392,32 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
+                setAmountEditor(getValue().amountType().getValue());
+            }
 
+            private void setAmountEditor(AmountType amountType) {
                 amountPlaceholder.clear();
-                switch (getValue().amountType().getValue()) {
-                case Percent:
-                    amountPlaceholder.setWidget(percent);
-                    break;
-                case Value:
-                    amountPlaceholder.setWidget(value);
-                    break;
-                default:
-                    break;
+                get(proto().percent()).setVisible(false);
+                get(proto().value()).setVisible(false);
+
+                if (amountType != null) {
+                    switch (amountType) {
+                    case Percent:
+                        amountPlaceholder.setWidget(percent);
+                        get(proto().percent()).setVisible(true);
+                        break;
+
+                    case Value:
+                        amountPlaceholder.setWidget(value);
+                        get(proto().value()).setVisible(true);
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException();
+                    }
                 }
             }
+
         }
     }
 }

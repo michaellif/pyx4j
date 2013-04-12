@@ -199,9 +199,11 @@ class PreauthorisedPaymentsManager {
                         recordLargest = record;
                     }
                     break;
+
                 case Value:
                     record.amount = pap.value().getValue();
                     break;
+
                 default:
                     throw new IllegalArgumentException();
                 }

@@ -273,15 +273,23 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private void setAmountEditor(AmountType amountType) {
         amountPlaceholder.clear();
+        get(proto().percent()).setVisible(false);
+        get(proto().value()).setVisible(false);
+
         if (amountType != null) {
             switch (amountType) {
             case Percent:
                 amountPlaceholder.setWidget(percent);
+                get(proto().percent()).setVisible(true);
                 break;
 
             case Value:
                 amountPlaceholder.setWidget(value);
+                get(proto().value()).setVisible(true);
                 break;
+
+            default:
+                throw new IllegalArgumentException();
             }
         }
     }
@@ -335,6 +343,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             amount.add(w = new HTML("$" + get(proto().value()).getValue().toString()));
             w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             break;
+
+        default:
+            throw new IllegalArgumentException();
         }
         panel.add(amount);
 
