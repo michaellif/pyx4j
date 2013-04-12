@@ -27,7 +27,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -55,7 +54,7 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentWizardService {
 
-    private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
+    private static final I18n i18n = I18n.get(PaymentWizardServiceImpl.class);
 
     public PaymentWizardServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
@@ -68,11 +67,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
 
     @Override
     public void create(AsyncCallback<PaymentRecordDTO> callback) {
-        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseTermV());
-        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
-
-        Lease lease = tenant.leaseTermV().holder().lease();
+        Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -81,7 +76,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         dto.billingAccount().set(lease.billingAccount());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.resident));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
         AddressStructured fullAddress = lease.unit().building().info().address().duplicate();
         fullAddress.suiteNumber().setValue(lease.unit().info().number().getValue());
@@ -90,10 +85,10 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
 
-        dto.leaseTermParticipant().set(tenant);
-
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
+
+        dto.leaseTermParticipant().set(TenantAppContext.getCurrentUserTenantInLease());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));

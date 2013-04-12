@@ -15,64 +15,15 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
-@ExtendsDBO
-public interface PaymentRecordDTO extends PaymentRecord {
-
-    @I18n
-    enum PaymentSelect {
-
-        New,
-
-        Profiled;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    };
-
-    AddressSimple propertyAddress();
-
-    IPrimitive<String> propertyCode();
-
-    IPrimitive<String> unitNumber();
-
-    IPrimitive<String> leaseId();
-
-    IPrimitive<Status> leaseStatus();
+@ExtendsDBO(PaymentRecord.class)
+public interface PaymentRecordDTO extends PaymentDataDTO, PaymentRecord {
 
     IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();
-
-    IPrimitive<Boolean> electronicPaymentsAllowed();
-
-    IPrimitiveSet<PaymentType> allowedPaymentTypes();
-
-    // UI-only (control organization) members:
-
-    @NotNull
-    @Transient
-    IPrimitive<PaymentSelect> selectPaymentMethod();
-
-    @NotNull
-    @Transient
-    LeasePaymentMethod profiledPaymentMethod();
-
-    @Transient
-    IPrimitive<Boolean> addThisPaymentMethodToProfile();
 }

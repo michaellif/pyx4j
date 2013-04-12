@@ -7,20 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-11
+ * Created on 2013-04-10
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.dto.PaymentDataDTO;
+public interface PreauthorizedPaymentSubmittedView extends View<PreauthorizedPaymentDTO> {
 
-@Transient
-@ExtendsDBO(PreauthorizedPayment.class)
-public interface PreauthorizedPaymentDTO extends PaymentDataDTO, PreauthorizedPayment {
+    interface Presenter extends View.Presenter<PreauthorizedPaymentDTO> {
 
+    }
 }

@@ -11,21 +11,21 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.util.Vector;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.rpc.AbstractWizardService;
-
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.common.client.ui.wizard.VistaAbstractWizard;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public interface PreauthorizedPaymentWizardService extends AbstractWizardService<PreauthorizedPaymentDTO> {
+public class PreauthorizedPaymentWizardViewImpl extends VistaAbstractWizard<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView {
 
-    void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+    private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardViewImpl.class);
 
-    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
+    public PreauthorizedPaymentWizardViewImpl() {
+        super(i18n.tr("Automatic Payment Setup"));
+        setForm(new PreauthorizedPaymentWizardForm(this));
+
+        setEndButtonCaption(i18n.tr("Submit"));
+    }
 }

@@ -53,6 +53,10 @@ import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedViewImpl;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
@@ -107,12 +111,18 @@ public class ResidentsViewFactory extends ViewFactoryBase {
                 map.put(type, new ViewBillViewImpl());
             } else if (FinancialSummaryView.class.equals(type)) {
                 map.put(type, new FinancialSummaryViewImpl());
+
             } else if (PaymentWizardView.class.equals(type)) {
                 map.put(type, new PaymentWizardViewImpl());
             } else if (PaymentSubmittedView.class.equals(type)) {
                 map.put(type, new PaymentSubmittedViewImpl());
+
             } else if (PreauthorizedPaymentsView.class.equals(type)) {
                 map.put(type, new PreauthorizedPaymentsViewImpl());
+            } else if (PreauthorizedPaymentWizardView.class.equals(type)) {
+                map.put(type, new PreauthorizedPaymentWizardViewImpl());
+            } else if (PreauthorizedPaymentSubmittedView.class.equals(type)) {
+                map.put(type, new PreauthorizedPaymentSubmittedViewImpl());
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());

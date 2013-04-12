@@ -35,6 +35,8 @@ import com.propertyvista.portal.client.activity.residents.maintenance.Maintenanc
 import com.propertyvista.portal.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PaymentSubmittedActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PaymentWizardActivity;
+import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentSubmittedActivity;
+import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentWizardActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentsActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
@@ -105,12 +107,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ViewBillActivity(appPlace);
                     } else if (appPlace instanceof Residents.Financial.FinancialSummary) {
                         activity = new FinancialSummaryActivity(appPlace);
+
                     } else if (appPlace instanceof Financial.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentSubmitted) {
                         activity = new PaymentSubmittedActivity(appPlace);
+
                     } else if (appPlace instanceof Financial.AutoPay) {
                         activity = new PreauthorizedPaymentsActivity(appPlace);
+                    } else if (appPlace instanceof Financial.AutoPay.NewPreauthorizedPayment) {
+                        activity = new PreauthorizedPaymentWizardActivity(appPlace);
+                    } else if (appPlace instanceof Financial.AutoPay.PreauthorizedPaymentSubmitted) {
+                        activity = new PreauthorizedPaymentSubmittedActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Residents.TenantInsurance) {
                         activity = new TenantInsuranceActivity();

@@ -17,27 +17,24 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
+import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public class PaymentSubmittedActivity extends SecurityAwareActivity implements PaymentSubmittedView.Presenter {
+public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity implements PreauthorizedPaymentSubmittedView.Presenter {
 
-    private final PaymentSubmittedView view;
+    private final PreauthorizedPaymentSubmittedView view;
 
-    private final PaymentRecordDTO value;
+    private final PreauthorizedPaymentDTO value;
 
-    public PaymentSubmittedActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PaymentSubmittedView.class);
+    public PreauthorizedPaymentSubmittedActivity(Place place) {
+        this.view = ResidentsViewFactory.instance(PreauthorizedPaymentSubmittedView.class);
         this.view.setPresenter(this);
 
-        assert (place instanceof Financial.PaymentSubmitted);
-        value = ((Financial.PaymentSubmitted) place).getPaymentRecord();
+        assert (place instanceof Financial.AutoPay.PreauthorizedPaymentSubmitted);
+        value = ((Financial.AutoPay.PreauthorizedPaymentSubmitted) place).getPreauthorizedPayment();
     }
 
     @Override
@@ -51,17 +48,13 @@ public class PaymentSubmittedActivity extends SecurityAwareActivity implements P
     }
 
     @Override
-    public void save(PaymentRecordDTO entity) {
+    public void save(PreauthorizedPaymentDTO entity) {
         // TODO Auto-generated method stub
+
     }
 
     @Override
     public void cancel() {
         // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void goToAutoPay() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.AutoPay());
     }
 }

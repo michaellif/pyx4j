@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.payment;
+package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,14 +53,17 @@ import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog;
 import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
+public class PreauthorizedPaymentWizardForm extends VistaWizardForm<PreauthorizedPaymentDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentWizardForm.class);
+    private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
 
     private static final String DETAILS_STEP_TITLE = i18n.tr("Details");
 
@@ -74,6 +77,12 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
+    private final SimplePanel amountPlaceholder = new SimplePanel();
+
+    private final Widget percent;
+
+    private final Widget value;
+
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Collection<PaymentType> defaultPaymentTypes() {
@@ -84,7 +93,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                     @Override
                     public void onSuccess(AddressStructured result) {
                         comp.setValue(result, false);
@@ -96,8 +105,12 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentWizardForm(IWizard<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class, view);
+    public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view) {
+        super(PreauthorizedPaymentDTO.class, view);
+
+        amountPlaceholder.setWidth("15em");
+        percent = new DecoratorBuilder(inject(proto().percent()), 10).build();
+        value = new DecoratorBuilder(inject(proto().value()), 10).build();
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
@@ -109,18 +122,23 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
 
         int row = -1;
-        panel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).customLabel(i18n.tr("Tenant"))
-                        .build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
 
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
 
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10).build());
+        panel.setWidget(++row, 0, amountPlaceholder);
 
         // tweak UI:
         get(proto().propertyAddress()).setViewable(true);
+        get(proto().amountType()).addValueChangeHandler(new ValueChangeHandler<AmountType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<AmountType> event) {
+                setAmountEditor(event.getValue());
+            }
+        });
 
         return panel;
     }
@@ -221,6 +239,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
+        setAmountEditor(getValue().amountType().getValue());
+
         paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
@@ -249,9 +269,25 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
     }
 
+    private void setAmountEditor(AmountType amountType) {
+        amountPlaceholder.clear();
+        if (amountType != null) {
+            switch (amountType) {
+            case Percent:
+                amountPlaceholder.setWidget(percent);
+                break;
+            case Value:
+                amountPlaceholder.setWidget(value);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
-        ((PaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
+        ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(List<LeasePaymentMethod> result) {
                 profiledPaymentMethodsCombo.setOptions(result);
@@ -291,7 +327,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         VerticalPanel panel = new VerticalPanel();
         Widget w;
 
-        panel.add(new HTML(getValue().leaseTermParticipant().getStringView()));
+        panel.add(new HTML(getValue().tenant().getStringView()));
         panel.add(new HTML(getValue().propertyAddress().getStringView()));
 
         panel.add(new HTML("<br/>"));
@@ -304,10 +340,25 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         panel.add(pm);
 
         HorizontalPanel amount = new HorizontalPanel();
-        amount.add(w = new HTML(i18n.tr("Amount to pay:")));
-        w.setWidth("10em");
-        amount.add(w = new HTML("$" + get(proto().amount()).getValue().toString()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        switch (get(proto().amountType()).getValue()) {
+        case Percent:
+            amount.add(w = new HTML(i18n.tr("Percent to pay:")));
+            w.setWidth("10em");
+            amount.add(w = new HTML(get(proto().percent()).getValue().toString() + "%"));
+            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            break;
+
+        case Value:
+            amount.add(w = new HTML(i18n.tr("Amount to pay:")));
+            w.setWidth("10em");
+            amount.add(w = new HTML("$" + get(proto().value()).getValue().toString()));
+            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            break;
+
+        default:
+            break;
+        }
         panel.add(amount);
 
         return panel;
