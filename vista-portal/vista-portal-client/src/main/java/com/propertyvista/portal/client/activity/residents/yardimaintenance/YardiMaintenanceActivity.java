@@ -73,8 +73,7 @@ public class YardiMaintenanceActivity extends SecurityAwareActivity implements Y
     @Override
     public void editRequest(YardiServiceRequestDTO requests) {
         AppPlace place = new PortalSiteMap.Residents.YardiMaintenance.EditYardiMaintenanceRequest();
-        place.placeArg(PortalSiteMap.ARG_ENTITY_ID, requests.id().getValue().toString());
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(place.formPlace(requests.id().getValue()));
     }
 
     @Override

@@ -14,16 +14,16 @@
 package com.propertyvista.portal.client.activity.residents.yardimaintenance;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.YardiServiceRequestDTO;
 
 public class NewYardiMaintenanceRequestActivity extends EditYardiMaintenanceRequestActivity {
 
-    public NewYardiMaintenanceRequestActivity(Place place) {
+    public NewYardiMaintenanceRequestActivity(AppPlace place) {
         super(place);
     }
 

@@ -62,9 +62,11 @@ import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenter
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittedService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
+import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
@@ -190,10 +192,12 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ViewBillService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentWizardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentSubmittedService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentListService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentWizardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentSubmittedService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(YardiMaintenanceService.class));

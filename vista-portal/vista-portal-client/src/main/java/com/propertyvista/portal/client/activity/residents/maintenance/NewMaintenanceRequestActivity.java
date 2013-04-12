@@ -14,17 +14,17 @@
 package com.propertyvista.portal.client.activity.residents.maintenance;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivity {
 
-    public NewMaintenanceRequestActivity(Place place) {
+    public NewMaintenanceRequestActivity(AppPlace place) {
         super(place);
     }
 

@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.activity.residents.billing;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -29,7 +28,6 @@ import com.propertyvista.dto.BillDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.ViewBillView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 
@@ -39,18 +37,14 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
 
     protected final ViewBillService srv;
 
-    private Key entityId;
+    private final Key entityId;
 
-    public ViewBillActivity(Place place) {
+    public ViewBillActivity(AppPlace place) {
         this.view = ResidentsViewFactory.instance(ViewBillView.class);
         this.view.setPresenter(this);
         srv = GWT.create(ViewBillService.class);
 
-        String val;
-        assert (place instanceof AppPlace);
-        if ((val = ((AppPlace) place).getFirstArg(PortalSiteMap.ARG_ENTITY_ID)) != null) {
-            entityId = new Key(val);
-        }
+        entityId = place.getItemId();
     }
 
     @Override

@@ -73,8 +73,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
     @Override
     public void editRequest(MaintenanceRequestDTO requests) {
         AppPlace place = new PortalSiteMap.Residents.Maintenance.EditMaintenanceRequest();
-        place.placeArg(PortalSiteMap.ARG_ENTITY_ID, requests.id().getValue().toString());
-        AppSite.getPlaceController().goTo(place);
+        AppSite.getPlaceController().goTo(place.formPlace(requests.id().getValue()));
     }
 
     @Override

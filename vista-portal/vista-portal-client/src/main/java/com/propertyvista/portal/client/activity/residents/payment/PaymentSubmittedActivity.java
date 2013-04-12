@@ -13,31 +13,37 @@
  */
 package com.propertyvista.portal.client.activity.residents.payment;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittedService;
 
 public class PaymentSubmittedActivity extends SecurityAwareActivity implements PaymentSubmittedView.Presenter {
 
     private final PaymentSubmittedView view;
 
-    private final PaymentRecordDTO value;
+    protected final PaymentSubmittedService srv;
 
-    public PaymentSubmittedActivity(Place place) {
+    private final Key entityId;
+
+    public PaymentSubmittedActivity(AppPlace place) {
         this.view = ResidentsViewFactory.instance(PaymentSubmittedView.class);
         this.view.setPresenter(this);
 
-        assert (place instanceof Financial.PaymentSubmitted);
-        value = ((Financial.PaymentSubmitted) place).getPaymentRecord();
+        srv = GWT.create(PaymentSubmittedService.class);
+
+        entityId = place.getItemId();
     }
 
     @Override
@@ -45,9 +51,13 @@ public class PaymentSubmittedActivity extends SecurityAwareActivity implements P
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        if (value != null && !value.isEmpty()) {
-            view.populate(value);
-        }
+        assert (entityId != null);
+        srv.retrieve(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 
     @Override

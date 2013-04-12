@@ -19,6 +19,7 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractWizardActivity;
@@ -60,11 +61,8 @@ public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<P
     }
 
     @Override
-    protected void onSaved() {
-        PreauthorizedPaymentDTO PreauthorizedPayment = getView().getValue();
-
+    protected void onSaved(Key result) {
         getView().reset();
-
-        AppSite.getPlaceController().goTo(new Financial.AutoPay.PreauthorizedPaymentSubmitted(PreauthorizedPayment));
+        AppSite.getPlaceController().goTo(new Financial.AutoPay.PreauthorizedPaymentSubmitted(result));
     }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.portal.client.activity.residents.yardimaintenance;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -38,18 +37,14 @@ public class EditYardiMaintenanceRequestActivity extends SecurityAwareActivity i
 
     protected final YardiMaintenanceService srv;
 
-    private Key entityId;
+    private final Key entityId;
 
-    public EditYardiMaintenanceRequestActivity(Place place) {
+    public EditYardiMaintenanceRequestActivity(AppPlace place) {
         this.view = ResidentsViewFactory.instance(EditYardiMaintenanceRequestView.class);
         this.view.setPresenter(this);
         srv = GWT.create(YardiMaintenanceService.class);
 
-        String val;
-        assert (place instanceof AppPlace);
-        if ((val = ((AppPlace) place).getFirstArg(PortalSiteMap.ARG_ENTITY_ID)) != null) {
-            entityId = new Key(val);
-        }
+        entityId = place.getItemId();
     }
 
     @Override

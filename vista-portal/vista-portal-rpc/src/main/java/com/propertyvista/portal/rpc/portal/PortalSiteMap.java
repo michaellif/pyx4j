@@ -13,14 +13,11 @@
  */
 package com.propertyvista.portal.rpc.portal;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
-
-import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public class PortalSiteMap implements SiteMap {
 
@@ -99,18 +96,11 @@ public class PortalSiteMap implements SiteMap {
 
             public static class PaymentSubmitted extends AppPlace {
 
-                private final PaymentRecordDTO paymentRecord;
-
                 public PaymentSubmitted() {
-                    paymentRecord = EntityFactory.create(PaymentRecordDTO.class);
                 }
 
-                public PaymentSubmitted(PaymentRecordDTO paymentRecord) {
-                    this.paymentRecord = paymentRecord;
-                }
-
-                public PaymentRecordDTO getPaymentRecord() {
-                    return paymentRecord;
+                public PaymentSubmitted(Key paymentRecordID) {
+                    formPlace(paymentRecordID);
                 }
             }
 
@@ -121,18 +111,11 @@ public class PortalSiteMap implements SiteMap {
 
                 public static class PreauthorizedPaymentSubmitted extends AppPlace {
 
-                    private final PreauthorizedPaymentDTO preauthorizedPayment;
-
                     public PreauthorizedPaymentSubmitted() {
-                        preauthorizedPayment = EntityFactory.create(PreauthorizedPaymentDTO.class);
                     }
 
-                    public PreauthorizedPaymentSubmitted(PreauthorizedPaymentDTO preauthorizedPayment) {
-                        this.preauthorizedPayment = preauthorizedPayment;
-                    }
-
-                    public PreauthorizedPaymentDTO getPreauthorizedPayment() {
-                        return preauthorizedPayment;
+                    public PreauthorizedPaymentSubmitted(Key preauthorizedPaymentID) {
+                        formPlace(preauthorizedPaymentID);
                     }
                 }
             }

@@ -13,28 +13,35 @@
  */
 package com.propertyvista.portal.client.activity.residents.payment;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
 
 public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity implements PreauthorizedPaymentSubmittedView.Presenter {
 
     private final PreauthorizedPaymentSubmittedView view;
 
-    private final PreauthorizedPaymentDTO value;
+    protected final PreauthorizedPaymentSubmittedService srv;
 
-    public PreauthorizedPaymentSubmittedActivity(Place place) {
+    private final Key entityId;
+
+    public PreauthorizedPaymentSubmittedActivity(AppPlace place) {
         this.view = ResidentsViewFactory.instance(PreauthorizedPaymentSubmittedView.class);
         this.view.setPresenter(this);
 
-        assert (place instanceof Financial.AutoPay.PreauthorizedPaymentSubmitted);
-        value = ((Financial.AutoPay.PreauthorizedPaymentSubmitted) place).getPreauthorizedPayment();
+        srv = GWT.create(PreauthorizedPaymentSubmittedService.class);
+
+        entityId = place.getItemId();
     }
 
     @Override
@@ -42,9 +49,13 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        if (value != null && !value.isEmpty()) {
-            view.populate(value);
-        }
+        assert (entityId != null);
+        srv.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentDTO>() {
+            @Override
+            public void onSuccess(PreauthorizedPaymentDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 
     @Override
