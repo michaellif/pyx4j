@@ -107,8 +107,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private FormFlexPanel createDetailsStep() {
         FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
-
         int row = -1;
+
         panel.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).customLabel(i18n.tr("Tenant"))
                         .build());
@@ -127,8 +127,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private FormFlexPanel createSelectPaymentMethodStep() {
         FormFlexPanel panel = new FormFlexPanel(SELECTPAYMENTMETHOD_STEP_TITLE);
-
         int row = -1;
+
         panel.setWidget(
                 ++row,
                 0,
@@ -164,6 +164,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
+
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
 
@@ -213,7 +214,9 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
+
         panel.setHR(++row, 0, 1);
+
         panel.setWidget(++row, 0, createLegalTermsPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 

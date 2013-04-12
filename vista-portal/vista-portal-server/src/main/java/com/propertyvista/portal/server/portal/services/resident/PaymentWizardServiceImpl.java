@@ -101,15 +101,14 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
     public void finish(AsyncCallback<VoidSerializable> callback, PaymentRecordDTO dto) {
         PaymentRecord entity = createDBO(dto);
 
-        entity.paymentMethod().customer().set(dto.leaseTermParticipant().leaseParticipant().customer());
-
-        Validate.isTrue(entity.paymentMethod().customer().equals(TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer()));
+        // some validation:
         Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
-
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
                 VistaApplication.resident);
         Validate.isTrue(allowedPaymentTypes.contains(dto.paymentMethod().type().getValue()));
+
+        entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
 
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {
@@ -131,7 +130,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         try {
             ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
         } catch (PaymentException e) {
-            throw new UserRuntimeException(i18n.tr("Payment processing Failed!"), e);
+            throw new UserRuntimeException(i18n.tr("Payment processing has been Failed!"), e);
         }
 
         Persistence.service().commit();

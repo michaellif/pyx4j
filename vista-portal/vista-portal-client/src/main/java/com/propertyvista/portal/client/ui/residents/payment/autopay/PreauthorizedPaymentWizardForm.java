@@ -120,8 +120,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private FormFlexPanel createDetailsStep() {
         FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
-
         int row = -1;
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
 
         panel.setBR(++row, 0, 1);
@@ -145,8 +145,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private FormFlexPanel createSelectPaymentMethodStep() {
         FormFlexPanel panel = new FormFlexPanel(SELECTPAYMENTMETHOD_STEP_TITLE);
-
         int row = -1;
+
         panel.setWidget(
                 ++row,
                 0,
@@ -182,6 +182,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
                         setProfiledPaymentMethodsVisible(false);
                         break;
+
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
 
@@ -215,11 +216,12 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private FormFlexPanel createConfirmationStep() {
         FormFlexPanel panel = new FormFlexPanel(CONFIRMATION_STEP_TITLE);
-
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
+
         panel.setHR(++row, 0, 1);
+
         panel.setWidget(++row, 0, createLegalTermsPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
@@ -276,10 +278,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             case Percent:
                 amountPlaceholder.setWidget(percent);
                 break;
+
             case Value:
                 amountPlaceholder.setWidget(value);
-                break;
-            default:
                 break;
             }
         }
@@ -300,27 +301,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-    }
-
-    private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
-        if (paymentType != null) {
-            switch (paymentType) {
-            case CreditCard:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
-                break;
-
-            case Echeck:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
-                break;
-
-            default:
-                get(proto().addThisPaymentMethodToProfile()).setValue(false);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
-                break;
-            }
-        }
     }
 
     private Widget createConfirmationDetailsPanel() {
@@ -354,9 +334,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             w.setWidth("10em");
             amount.add(w = new HTML("$" + get(proto().value()).getValue().toString()));
             w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            break;
-
-        default:
             break;
         }
         panel.add(amount);
