@@ -33,7 +33,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.reports.IReportsView;
+import com.pyx4j.site.client.ui.reports.ReportSettingsManagementVizor;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
@@ -44,6 +46,39 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 public abstract class ReportActivityBase extends AbstractActivity implements IReportsView.Presenter {
 
     private static final I18n i18n = I18n.get(ReportActivityBase.class);
+
+    public static class ReportSettingsManagementVizorController extends AbstractVisorController {
+
+        private final ReportSettingsManagementVizor visor;
+
+        public ReportSettingsManagementVizorController(IPane parentView, final IReportsView.Presenter presenter) {
+            super(parentView);
+            visor = new ReportSettingsManagementVizor(this) {
+
+                @Override
+                public void onLoadRequest(String selectedReportSettingsId) {
+                    presenter.loadSettings(selectedReportSettingsId);
+                }
+
+                @Override
+                public void onDeleteRequest(String selectedReportSettingsId) {
+                    presenter.deleteSettings(selectedReportSettingsId);
+                }
+            };
+            visor.setAvailableReportSettingsIds(null);
+
+        }
+
+        @Override
+        public void show() {
+            getParentView().showVisor(visor);
+        }
+
+        public void setAvailableReportSettingsIds(List<String> reportSettingsIds) {
+            visor.setAvailableReportSettingsIds(reportSettingsIds);
+        }
+
+    }
 
     protected final IReportsView view;
 
@@ -144,16 +179,12 @@ public abstract class ReportActivityBase extends AbstractActivity implements IRe
 
             @Override
             public void onSuccess(Vector<String> result) {
-                setAvailableReportSettings(result);
-                reportSettingsManagementVizorController.show();
+                getReportSettingsManagementVizorController().setAvailableReportSettingsIds(result);
+                getReportSettingsManagementVizorController().show();
             }
 
         }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
 
-    }
-
-    public void setAvailableReportSettings(List<String> reportSettingsIds) {
-        reportSettingsManagementVizorController.setAvailableReportSettingsIds(reportSettingsIds);
     }
 
     protected ReportMetadata retrieveReportSettings(AppPlace place) {
