@@ -52,6 +52,10 @@ public abstract class CrudAppPlace extends AppPlace {
         setType(type);
     }
 
+    public CrudAppPlace(Key itemID) {
+        super(itemID);
+    }
+
     public void setType(Type type) {
         queryArg(ARG_NAME_CRUD_TYPE, type.name());
     }

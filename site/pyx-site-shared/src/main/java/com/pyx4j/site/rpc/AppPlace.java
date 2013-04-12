@@ -66,6 +66,10 @@ public class AppPlace extends Place {
     public AppPlace() {
     }
 
+    public AppPlace(Key itemID) {
+        formPlace(itemID);
+    }
+
     public AppPlace queryArg(String key, String... value) {
         if (queryArgs == null) {
             queryArgs = new HashMap<String, List<String>>();
@@ -129,6 +133,22 @@ public class AppPlace extends Place {
             }
         }
         return null;
+    }
+
+    public Key getItemId() {
+        Key itemId = null;
+
+        String val;
+        if ((val = getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+            itemId = new Key(val);
+            // Validate argument
+            try {
+                itemId.asLong();
+            } catch (NumberFormatException e) {
+                itemId = null;
+            }
+        }
+        return itemId;
     }
 
     public String getToken() {
