@@ -62,12 +62,11 @@ public abstract class ReportActivityBase extends AbstractActivity implements IRe
         this.view = view;
         this.view.setPresenter(this);
         this.place = place;
-        this.reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(this);
     }
 
     public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
         if (reportSettingsManagementVizorController == null) {
-            reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(this);
+            reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(view, this);
         }
         return reportSettingsManagementVizorController;
     }
@@ -146,11 +145,15 @@ public abstract class ReportActivityBase extends AbstractActivity implements IRe
             @Override
             public void onSuccess(Vector<String> result) {
                 setAvailableReportSettings(result);
-                reportSettingsManagementVizorController.show(view);
+                reportSettingsManagementVizorController.show();
             }
 
         }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
 
+    }
+
+    public void setAvailableReportSettings(List<String> reportSettingsIds) {
+        reportSettingsManagementVizorController.setAvailableReportSettingsIds(reportSettingsIds);
     }
 
     protected ReportMetadata retrieveReportSettings(AppPlace place) {
@@ -161,7 +164,11 @@ public abstract class ReportActivityBase extends AbstractActivity implements IRe
         }
     }
 
-    private void setAvailableReportSettings(List<String> reportSettingsIds) {
-        reportSettingsManagementVizorController.setAvailableReportSettingsIds(reportSettingsIds);
+    @Override
+    public void populate() {
+    }
+
+    @Override
+    public void refresh() {
     }
 }

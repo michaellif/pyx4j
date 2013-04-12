@@ -25,7 +25,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface IReportsView extends IPane {
 
-    public interface Presenter {
+    public interface Presenter extends IPane.Presenter {
 
         void apply(ReportMetadata settings);
 

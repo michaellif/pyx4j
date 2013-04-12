@@ -39,7 +39,7 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
 
     private final Controller controller;
 
-    public AbstractVisorPane(Controller controller) {
+    public AbstractVisorPane(final Controller controller) {
         super();
         this.controller = controller;
         setStyleName(DefaultPaneTheme.StyleName.Visor.name());
@@ -50,9 +50,7 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
         closeImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (!(AbstractVisorPane.this instanceof AbstractVisorEditor) || ((AbstractVisorEditor) AbstractVisorPane.this).onBeforeClose(true)) {
-                    getParentPane().hideVisor();
-                }
+                controller.hide();
             }
         });
         closeImage.addMouseOverHandler(new MouseOverHandler() {

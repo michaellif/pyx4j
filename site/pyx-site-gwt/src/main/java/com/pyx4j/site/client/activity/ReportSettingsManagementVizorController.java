@@ -25,13 +25,13 @@ import java.util.List;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.reports.IReportsView;
 import com.pyx4j.site.client.ui.reports.ReportSettingsManagementVizor;
-import com.pyx4j.site.client.ui.visor.IVisor;
 
-public class ReportSettingsManagementVizorController implements IVisor.Controller {
+public class ReportSettingsManagementVizorController extends AbstractVisorController {
 
     private final ReportSettingsManagementVizor visor;
 
-    public ReportSettingsManagementVizorController(final IReportsView.Presenter presenter) {
+    public ReportSettingsManagementVizorController(IPane parentView, final IReportsView.Presenter presenter) {
+        super(parentView);
         visor = new ReportSettingsManagementVizor(this) {
 
             @Override
@@ -49,8 +49,8 @@ public class ReportSettingsManagementVizorController implements IVisor.Controlle
     }
 
     @Override
-    public void show(final IPane view) {
-        view.showVisor(visor);
+    public void show() {
+        getParentView().showVisor(visor);
     }
 
     public void setAvailableReportSettingsIds(List<String> reportSettingsIds) {

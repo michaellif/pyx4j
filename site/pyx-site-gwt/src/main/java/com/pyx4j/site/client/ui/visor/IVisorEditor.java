@@ -20,10 +20,7 @@
  */
 package com.pyx4j.site.client.ui.visor;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
 
@@ -32,16 +29,15 @@ public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
 
         void save();
 
-        void cancel();
     }
 
     public E getValue();
 
     public boolean isDirty();
 
-    void save(AsyncCallback<VoidSerializable> asyncCallback);
-
-    void apply();
-
-    boolean onBeforeClose(boolean saved);
+//    void save(AsyncCallback<VoidSerializable> asyncCallback);
+//
+//    void apply();
+//
+//    boolean onBeforeClose(boolean saved);
 }

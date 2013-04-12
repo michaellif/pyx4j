@@ -102,7 +102,7 @@ public class VisorHolder extends ComplexPanel implements RequiresResize, Provide
         vizorCmd.schedule(animationDuration, null);
     }
 
-    public void hideVisor() {
+    public void hideVisorPane() {
         previousVisorPaneWidget = visorPaneWidget;
         visorPaneWidget = null;
         if (previousVisorPaneWidget != null) {

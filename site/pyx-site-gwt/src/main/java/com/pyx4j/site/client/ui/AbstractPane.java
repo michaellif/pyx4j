@@ -117,7 +117,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     @Override
     public void hideVisor() {
-        visorHolder.hideVisor();
+        visorHolder.hideVisorPane();
     }
 
     @Override

@@ -14,22 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Mar 14, 2013
+ * Created on Apr 12, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.visor;
+package com.pyx4j.site.client.activity;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
-public interface IVisor extends IsWidget {
+public abstract class AbstractVisorController implements IVisor.Controller {
 
-    public interface Controller {
+    private final IPane parentView;
 
-        void show();
-
-        void hide();
+    public AbstractVisorController(IPane parentView) {
+        this.parentView = parentView;
     }
 
-    Controller getController();
+    public IPane getParentView() {
+        return parentView;
+    }
+
+    @Override
+    public final void hide() {
+        parentView.hideVisor();
+    }
 }
