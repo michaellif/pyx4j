@@ -59,7 +59,7 @@
         </site>
         <repository>
             <id>pyx4j.com-file-release</id>
-            <url>${scp-apache-repository-release}</url>
+            <url>${scp-apache-repository-snapshot}</url>
         </repository>
         <snapshotRepository>
             <id>pyx4j.com-file-development</id>
