@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.Validate;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -26,7 +28,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -49,8 +50,6 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
         PreauthorizedPaymentWizardService {
-
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardServiceImpl.class);
 
     public PreauthorizedPaymentWizardServiceImpl() {
         super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
@@ -98,7 +97,21 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         PreauthorizedPayment entity = createDBO(dto);
 
         if (entity.paymentMethod().getPrimaryKey() == null) {
-            // TODO: persist new PM here... 
+            Lease lease = TenantAppContext.getCurrentUserLease();
+            Persistence.service().retrieve(lease.unit());
+
+            entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+
+            Validate.isTrue(PaymentType.avalableInPortal().contains(entity.paymentMethod().type().getValue()));
+            Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
+                    VistaApplication.resident);
+
+            // save just allowed methods here:
+            if (allowedPaymentTypes.contains(entity.paymentMethod().type().getValue())) {
+                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+
+                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity.paymentMethod(), lease.unit().building());
+            }
         }
 
         ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(entity,

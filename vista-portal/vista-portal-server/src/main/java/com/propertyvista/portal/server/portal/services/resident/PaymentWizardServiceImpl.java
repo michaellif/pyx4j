@@ -137,7 +137,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         try {
             ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
         } catch (PaymentException e) {
-            throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
+            throw new UserRuntimeException(i18n.tr("Payment processing Failed!"), e);
         }
 
         Persistence.service().commit();
