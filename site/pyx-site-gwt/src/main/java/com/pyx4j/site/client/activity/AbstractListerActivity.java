@@ -37,13 +37,13 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class ListerActivityBase<E extends IEntity> extends ListerController<E> implements Activity {
+public abstract class AbstractListerActivity<E extends IEntity> extends ListerController<E> implements Activity {
 
     private final AppPlace place;
 
     private List<Criterion> externalFilters;
 
-    public ListerActivityBase(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
+    public AbstractListerActivity(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
         super(view, service, entityClass);
 
         this.place = (AppPlace) place;

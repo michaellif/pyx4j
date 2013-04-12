@@ -37,9 +37,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class WizardActivityBase<E extends IEntity> extends AbstractActivity implements IWizard.Presenter {
+public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizard.Presenter {
 
-    private static final I18n i18n = I18n.get(WizardActivityBase.class);
+    private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 
     private final IWizard<E> view;
 
@@ -53,7 +53,7 @@ public class WizardActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final String parentClassName;
 
-    public WizardActivityBase(AppPlace place, IWizard<E> view, AbstractWizardService<E> service, Class<E> entityClass) {
+    public AbstractWizardActivity(AppPlace place, IWizard<E> view, AbstractWizardService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);

@@ -35,7 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
+public abstract class AbstractViewerActivity<E extends IEntity> extends AbstractActivity implements IViewer.Presenter {
 
     private final IViewer<E> view;
 
@@ -47,7 +47,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private int tabIndex;
 
-    public ViewerActivityBase(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
+    public AbstractViewerActivity(CrudAppPlace place, IViewer<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);

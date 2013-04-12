@@ -41,9 +41,9 @@ import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IEditor.EditMode;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public class EditorActivityBase<E extends IEntity> extends AbstractActivity implements IEditor.Presenter {
+public abstract class AbstractEditorActivity<E extends IEntity> extends AbstractActivity implements IEditor.Presenter {
 
-    private static final I18n i18n = I18n.get(EditorActivityBase.class);
+    private static final I18n i18n = I18n.get(AbstractEditorActivity.class);
 
     private final IEditor<E> view;
 
@@ -61,7 +61,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private int tabIndex;
 
-    public EditorActivityBase(CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractEditorActivity(CrudAppPlace place, IEditor<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
