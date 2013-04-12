@@ -41,6 +41,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentTransactionsServiceURL()), 50).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sysBatchServiceURL()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), 50).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 30).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().username()), 30).build());
@@ -91,6 +92,13 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
             get(proto().credential()).setValue("access@123");
             get(proto().serverName()).setValue("SLDB02");
             get(proto().database()).setValue("PropertyVista_TEST");
+            break;
+        case 2:
+            get(proto().maintenanceRequestsServiceURL()).setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
+            get(proto().username()).setValue("propertyvista-srws");
+            get(proto().credential()).setValue("55548");
+            get(proto().serverName()).setValue("aspdb04");
+            get(proto().database()).setValue("afqoml_live");
             break;
         }
         q++;

@@ -53,6 +53,13 @@ public class DevYardiCredentials {
             cr.credential().setValue("access@123");
             cr.serverName().setValue("SLDB02");
             cr.database().setValue("PropertyVista_TEST");
+        } else if (false) {
+            cr.propertyCode().setValue("prvista1");
+            cr.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
+            cr.username().setValue("propertyvista-srws");
+            cr.credential().setValue("55548");
+            cr.serverName().setValue("aspdb04");
+            cr.database().setValue("afqoml_live");
         }
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
 

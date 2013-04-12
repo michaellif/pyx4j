@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.maintenance.IssuePriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 
 public class MaintenanceRequestMapper {
@@ -57,9 +58,14 @@ public class MaintenanceRequestMapper {
         //?? serviceRequest.getServiceRequestBriefDescription();
         req.description().setValue(serviceRequest.getServiceRequestFullDescription());
 
-        req.issueClassification().priority().setValue(getPriority(serviceRequest.getPriority()));
-        req.issueClassification().issue().setValue(serviceRequest.getCategory());
-        req.issueClassification().subjectDetails().name().setValue(serviceRequest.getSubCategory());
+        //?? serviceRequest.getPriority();
+
+        req.category().name().setValue(serviceRequest.getCategory());
+        if (StringUtils.isNotEmpty(serviceRequest.getSubCategory())) {
+            MaintenanceRequestCategory subCategory = EntityFactory.create(MaintenanceRequestCategory.class);
+            subCategory.name().setValue(serviceRequest.getSubCategory());
+            req.category().subCategories().add(subCategory);
+        }
 
         req.permissionToEnter().setValue(serviceRequest.isHasPermissionToEnter());
 
@@ -103,7 +109,9 @@ public class MaintenanceRequestMapper {
     public ServiceRequest map(MaintenanceRequest maintenanceRequest) throws YardiServiceException {
         ServiceRequest req = new ServiceRequest();
 
-        req.setServiceRequestId((short) maintenanceRequest.id().getValue().asLong());
+        if (maintenanceRequest.id().getValue() != null) {
+            req.setServiceRequestId((short) maintenanceRequest.id().getValue().asLong());
+        }
         req.setPropertyCode(maintenanceRequest.leaseParticipant().lease().unit().building().propertyCode().getValue());
         req.setUnitCode(maintenanceRequest.leaseParticipant().lease().unit().info().number().getValue());
         req.setTenantCode(maintenanceRequest.leaseParticipant().participantId().getValue());
@@ -113,13 +121,16 @@ public class MaintenanceRequestMapper {
         //req.setCurrentStatus(getStatus(maintenanceRequest.status().getValue()));
         //req.setPriority(value);
 
-        req.setCategory(maintenanceRequest.issueClassification().issue().getValue());
-        req.setSubCategory(maintenanceRequest.issueClassification().subjectDetails().name().getValue());
+        req.setCategory(maintenanceRequest.category().name().getValue());
+        if (!maintenanceRequest.category().subCategories().isEmpty()) {
+            req.setSubCategory(maintenanceRequest.category().subCategories().get(0).name().getValue());
+        }
+
         req.setHasPermissionToEnter(maintenanceRequest.permissionToEnter().getValue());
         req.setRequestorName(maintenanceRequest.leaseParticipant().customer().person().name().firstName().getValue());
 
         String homePhone = maintenanceRequest.leaseParticipant().customer().person().homePhone().getValue();
-        if (StringUtils.isNotEmpty(homePhone)) {
+        if (StringUtils.isNotEmpty(homePhone) && StringUtils.isNumeric(homePhone)) {
             req.setRequestorPhoneNumber(Long.valueOf(homePhone));
         }
         req.setRequestorEmail(maintenanceRequest.leaseParticipant().customer().person().email().getValue());

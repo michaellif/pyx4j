@@ -18,24 +18,29 @@ import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.mapper.MaintenanceRequestCategoryMapper;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
-public class MaintenanceYardiCategoryManager {
+public class YardiIntegrationMaintenanceCategoryAgent {
 
     private static class SingletonHolder {
-        public static final MaintenanceYardiCategoryManager INSTANCE = new MaintenanceYardiCategoryManager();
+        public static final YardiIntegrationMaintenanceCategoryAgent INSTANCE = new YardiIntegrationMaintenanceCategoryAgent();
     }
 
-    static MaintenanceYardiCategoryManager instance() {
+    static YardiIntegrationMaintenanceCategoryAgent instance() {
         return SingletonHolder.INSTANCE;
     }
 
-    protected MaintenanceRequestCategory getMaintenanceRequestCategories() throws YardiServiceException {
+    MaintenanceRequestCategory getMaintenanceRequestCategories() throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
-        YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(VistaDeployment.getPmcYardiCredential());
+        YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(getYardiCredential());
 
         return new MaintenanceRequestCategoryMapper().map(meta);
+    }
+
+    PmcYardiCredential getYardiCredential() {
+        return VistaDeployment.getPmcYardiCredential();
     }
 }

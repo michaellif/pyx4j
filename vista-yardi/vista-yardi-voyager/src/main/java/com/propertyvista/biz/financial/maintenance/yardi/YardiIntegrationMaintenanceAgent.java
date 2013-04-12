@@ -23,63 +23,69 @@ import com.yardi.entity.maintenance.ServiceRequests;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.yardi.mapper.MaintenanceRequestMapper;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
-public class MaintenanceYardiManager {
+public class YardiIntegrationMaintenanceAgent {
 
     private static class SingletonHolder {
-        public static final MaintenanceYardiManager INSTANCE = new MaintenanceYardiManager();
+        public static final YardiIntegrationMaintenanceAgent INSTANCE = new YardiIntegrationMaintenanceAgent();
     }
 
-    static MaintenanceYardiManager instance() {
+    static YardiIntegrationMaintenanceAgent instance() {
         return SingletonHolder.INSTANCE;
     }
 
-    protected void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant) throws YardiServiceException {
+    void postMaintenanceRequest(MaintenanceRequest maintenanceRequest) throws YardiServiceException {
         Validate.notNull(maintenanceRequest, "maintenanceRequest can not be null");
-        Validate.notNull(tenant, "tenant can not be null");
+        Validate.notNull(maintenanceRequest.leaseParticipant(), "leaseParticipant can not be null");
 
         ServiceRequest serviceRequest = new MaintenanceRequestMapper().map(maintenanceRequest);
 
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(VistaDeployment.getPmcYardiCredential(), wrapToRequests(serviceRequest));
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), wrapToRequests(serviceRequest));
     }
 
-    protected List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) throws YardiServiceException {
+    List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) throws YardiServiceException {
         Validate.notNull(tenant, "tenant can not be null");
 
         String propertyCode = tenant.lease().unit().building().propertyCode().getValue();
-        ServiceRequests serviceRequests = YardiMaintenanceRequestsService.getInstance().getClosedMaintenanceRequests(VistaDeployment.getPmcYardiCredential(),
-                propertyCode, tenant.participantId().getValue());
+        String residentCode = tenant.participantId().getValue();
+        ServiceRequests serviceRequests = YardiMaintenanceRequestsService.getInstance().getClosedMaintenanceRequests(getYardiCredential(), propertyCode,
+                residentCode);
 
         return new MaintenanceRequestMapper().map(serviceRequests);
     }
 
-    protected List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) throws YardiServiceException {
+    List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) throws YardiServiceException {
         Validate.notNull(tenant, "tenant can not be null");
 
         String propertyCode = tenant.lease().unit().building().propertyCode().getValue();
-        ServiceRequests serviceRequests = YardiMaintenanceRequestsService.getInstance().getOpenMaintenanceRequests(VistaDeployment.getPmcYardiCredential(),
-                propertyCode, tenant.participantId().getValue());
+        String residentCode = tenant.participantId().getValue();
+        ServiceRequests serviceRequests = YardiMaintenanceRequestsService.getInstance().getOpenMaintenanceRequests(getYardiCredential(), propertyCode,
+                residentCode);
 
         return new MaintenanceRequestMapper().map(serviceRequests);
     }
 
-    public void cancelMaintenanceRequest(MaintenanceRequestDTO dto) throws YardiServiceException {
-        Validate.notNull(dto, "dto can not be null");
+    void cancelMaintenanceRequest(MaintenanceRequest maintenanceRequest) throws YardiServiceException {
+        Validate.notNull(maintenanceRequest, "maintenanceRequest can not be null");
 
-        ServiceRequest serviceRequest = new MaintenanceRequestMapper().mapStrict(dto);
+        ServiceRequest serviceRequest = new MaintenanceRequestMapper().mapStrict(maintenanceRequest);
         serviceRequest.setCurrentStatus("Canceled");
 
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(VistaDeployment.getPmcYardiCredential(), wrapToRequests(serviceRequest));
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), wrapToRequests(serviceRequest));
     }
 
     private ServiceRequests wrapToRequests(ServiceRequest request) {
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(request);
         return requests;
+    }
+
+    PmcYardiCredential getYardiCredential() {
+        return VistaDeployment.getPmcYardiCredential();
     }
 
 }
