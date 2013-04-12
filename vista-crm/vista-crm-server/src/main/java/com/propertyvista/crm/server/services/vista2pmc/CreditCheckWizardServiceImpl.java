@@ -17,10 +17,10 @@ import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
@@ -51,7 +51,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     }
 
     @Override
-    public void finish(AsyncCallback<VoidSerializable> callback, final CreditCheckSetupDTO dto) {
+    public void finish(AsyncCallback<Key> callback, final CreditCheckSetupDTO dto) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         final AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
 

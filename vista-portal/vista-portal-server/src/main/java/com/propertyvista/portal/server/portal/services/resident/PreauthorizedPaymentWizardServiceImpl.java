@@ -21,12 +21,12 @@ import org.apache.commons.lang.Validate;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.rpc.shared.ServiceExecution;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -88,7 +88,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentDTO dto) {
+    public void finish(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
         PreauthorizedPayment entity = createDBO(dto);
 
         if (entity.paymentMethod().getPrimaryKey() == null) {
@@ -113,7 +113,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
                 EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
         Persistence.service().commit();
 
-        callback.onSuccess(null);
+        callback.onSuccess(entity.getPrimaryKey());
     }
 
     @Override
