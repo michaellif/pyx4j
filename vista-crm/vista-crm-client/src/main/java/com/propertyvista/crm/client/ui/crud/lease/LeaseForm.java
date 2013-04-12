@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
@@ -31,8 +30,6 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
     private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab;
-
-    private Label noFinanicalHistoryLabel;
 
     public LeaseForm(IForm<LeaseDTO> view) {
         super(LeaseDTO.class, view);
@@ -55,13 +52,15 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         setTabVisible(billsTab, !getValue().status().getValue().isDraft());
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
+
+        setTabVisible(depositsTab, !VistaFeatures.instance().yardiIntegration());
+        setTabVisible(adjustmentsTab, !VistaFeatures.instance().yardiIntegration());
+        setTabVisible(billsTab, !VistaFeatures.instance().yardiIntegration());
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
         FormFlexPanel financialTransactionHistory = new FormFlexPanel();
         int row = -1;
-
-        financialTransactionHistory.setWidget(++row, 0, noFinanicalHistoryLabel);
 
         CEntityViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
                 : new TransactionHistoryViewer();

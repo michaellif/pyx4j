@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
-
 public class FormerTenantLister extends TenantLister {
 
     public FormerTenantLister() {
+        super(false);
     }
 }

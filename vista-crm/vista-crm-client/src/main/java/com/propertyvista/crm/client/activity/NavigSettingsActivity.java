@@ -97,24 +97,36 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
+        }
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
+        }
         if (!VistaTODO.Equifax_Short_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.Billing());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.Dates());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.Deposits());
+        }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.IdAssignment());
 // TODO VISTA-2187       folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTermination());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.LeaseAdjustment());
+        }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.LegalDocumentation());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.Pet());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.PADs());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());
+        }
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
+        }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
         list.add(folder);
 

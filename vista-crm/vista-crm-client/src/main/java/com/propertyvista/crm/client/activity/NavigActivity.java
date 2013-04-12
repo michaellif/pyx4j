@@ -110,11 +110,15 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                     CrmImages.INSTANCE.tenantsActive());
             folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
             folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
-            folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
+            }
             folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
-            folder.addNavigItem(new CrmSiteMap.Tenants.FormerTenant());
-            folder.addNavigItem(new CrmSiteMap.Tenants.FormerGuarantor());
-            folder.addNavigItem(new CrmSiteMap.Tenants.FormerLease());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                folder.addNavigItem(new CrmSiteMap.Tenants.FormerTenant());
+                folder.addNavigItem(new CrmSiteMap.Tenants.FormerGuarantor());
+                folder.addNavigItem(new CrmSiteMap.Tenants.FormerLease());
+            }
             list.add(folder);
         }
 
@@ -146,7 +150,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
                 CrmImages.INSTANCE.companyActive());
         folder.addNavigItem(new CrmSiteMap.Organization.Employee());
         folder.addNavigItem(new CrmSiteMap.Organization.Portfolio());
-        folder.addNavigItem(new CrmSiteMap.Organization.Vendor());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Organization.Vendor());
+        }
         list.add(folder);
 
         //Reports

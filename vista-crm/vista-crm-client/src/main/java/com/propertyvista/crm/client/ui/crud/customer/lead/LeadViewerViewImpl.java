@@ -90,7 +90,9 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 });
             }
         });
-        addAction(convertAction);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(convertAction);
+        }
 
         closeAction = new MenuItem(i18n.tr("Close"), new ConfirmCommand(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {
             @Override

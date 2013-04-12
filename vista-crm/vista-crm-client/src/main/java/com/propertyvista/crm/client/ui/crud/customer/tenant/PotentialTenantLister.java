@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
-
 public class PotentialTenantLister extends TenantLister {
 
     public PotentialTenantLister() {
+        super(false);
     }
 }
