@@ -33,9 +33,9 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeasePaymentMethod> implements PaymentMethodCrudService {
 
@@ -90,14 +90,6 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.leaseTermV());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
-
-        AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
-        callback.onSuccess(address);
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
     }
 }

@@ -74,9 +74,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
-        AddressStructured fullAddress = lease.unit().building().info().address().duplicate();
-        fullAddress.suiteNumber().setValue(lease.unit().info().number().getValue());
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(fullAddress, dto.propertyAddress());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.propertyAddress());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -142,7 +140,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenantInLease()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
     }
 
     @Override

@@ -18,42 +18,31 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class AddressRetriever {
 
-    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseTermParticipant<?> participant) {
-        Persistence.service().retrieve(participant);
-        if ((participant == null) || (participant.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
-                    + " NotFound");
-        }
-
-        Persistence.service().retrieve(participant.leaseTermV());
-        Persistence.service().retrieve(participant.leaseTermV().holder().lease());
-        Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit().building());
-
-        AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.set(participant.leaseTermV().holder().lease().unit().building().info().address());
-        address.suiteNumber().set(participant.leaseTermV().holder().lease().unit().info().number());
-
-        return address;
+    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
+        Persistence.ensureRetrieve(participant, AttachLevel.Attached);
+        return getLeaseAddress(participant.lease());
     }
 
-    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseParticipant<?> participant) {
-        Persistence.service().retrieve(participant);
-        if ((participant == null) || (participant.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseTermParticipant.class).getCaption() + "' " + participant.getPrimaryKey()
-                    + " NotFound");
-        }
+    public static AddressStructured getLeaseParticipantCurrentAddress(LeaseTermParticipant<?> participant) {
+        Persistence.ensureRetrieve(participant, AttachLevel.Attached);
+        Persistence.ensureRetrieve(participant.leaseTermV(), AttachLevel.Attached);
 
-        Persistence.ensureRetrieve(participant.lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(participant.lease().unit().building(), AttachLevel.Attached);
+        return getLeaseAddress(participant.leaseTermV().holder().lease());
+    }
+
+    public static AddressStructured getLeaseAddress(Lease lease) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.set(participant.lease().unit().building().info().address());
-        address.suiteNumber().set(participant.lease().unit().info().number());
+        address.set(lease.unit().building().info().address());
+        address.suiteNumber().set(lease.unit().info().number());
 
         return address;
     }

@@ -197,7 +197,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
 
     @Override
     public void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenantInLease()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
     }
     
     @Override

@@ -21,13 +21,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardServiceImpl implements DashboardService {
@@ -45,9 +45,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         dashboard.general().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
         dashboard.general().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-        AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
-        dashboard.general().tenantAddress().setValue(address.getStringView());
+        dashboard.general().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
         dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());

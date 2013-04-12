@@ -44,6 +44,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantPadParser {
 
@@ -260,15 +261,7 @@ public class TenantPadParser {
     }
 
     private AddressStructured getAddress(LeaseTermTenant leaseTermTenant) {
-        Persistence.service().retrieve(leaseTermTenant.leaseTermV());
-        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease());
-        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(leaseTermTenant.leaseTermV().holder().lease().unit().building());
-
-        AddressStructured address = leaseTermTenant.leaseTermV().holder().lease().unit().building().info().address().duplicate();
-        address.suiteNumber().set(leaseTermTenant.leaseTermV().holder().lease().unit().info().number());
-
-        return address;
+        return AddressRetriever.getLeaseParticipantCurrentAddress(leaseTermTenant);
     }
 
     public class TenantPadCounter {
