@@ -16,13 +16,13 @@ package com.propertyvista.operations.client.activity.crud;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ViewerActivityBase;
+import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.event.CrudNavigateEvent;
 
-public class AdminViewerActivity<E extends IEntity> extends ViewerActivityBase<E> {
+public class AdminViewerActivity<E extends IEntity> extends AbstractViewerActivity<E> {
 
     private final CrudAppPlace place;
 

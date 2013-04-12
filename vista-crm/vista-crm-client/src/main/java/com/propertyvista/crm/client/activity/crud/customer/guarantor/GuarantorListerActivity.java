@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
+public class GuarantorListerActivity extends AbstractListerActivity<GuarantorDTO> {
 
     @SuppressWarnings("unchecked")
     public GuarantorListerActivity(Place place) {

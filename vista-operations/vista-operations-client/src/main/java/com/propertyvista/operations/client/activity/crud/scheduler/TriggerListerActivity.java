@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerListerActivity extends ListerActivityBase<TriggerDTO> {
+public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.activity.reports;
 
 import com.google.gwt.core.shared.GWT;
 
-import com.pyx4j.site.client.activity.ReportActivityBase;
+import com.pyx4j.site.client.activity.AbstractReportActivity;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
 import com.propertyvista.crm.client.ui.reports.CrmReportsView;
@@ -23,7 +23,7 @@ import com.propertyvista.crm.client.ui.viewfactories.ReportsViewFactory;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 
-public class CrmReportsActivity extends ReportActivityBase {
+public class CrmReportsActivity extends AbstractReportActivity {
 
     public CrmReportsActivity(ReportsAppPlace reportsPlace) {
         super(//@formatter:off

@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionListerView;
 import com.propertyvista.operations.client.viewfactories.crud.SimulationViewFactory;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.rpc.services.sim.CardServiceSimulationTransactionCrudService;
 
-public class CardServiceSimulationTransactionListerActivity extends ListerActivityBase<CardServiceSimulationTransaction> {
+public class CardServiceSimulationTransactionListerActivity extends AbstractListerActivity<CardServiceSimulationTransaction> {
 
     public CardServiceSimulationTransactionListerActivity(Place place) {
         super(place, SimulationViewFactory.instance(CardServiceSimulationTransactionListerView.class), GWT

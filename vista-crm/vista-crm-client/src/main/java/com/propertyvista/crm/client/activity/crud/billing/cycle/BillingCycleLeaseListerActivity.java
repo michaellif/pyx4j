@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseListerView;
@@ -28,7 +28,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.dto.LeaseDTO;
 
-public class BillingCycleLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
+public class BillingCycleLeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
 
     private Key billingCycleId;
 

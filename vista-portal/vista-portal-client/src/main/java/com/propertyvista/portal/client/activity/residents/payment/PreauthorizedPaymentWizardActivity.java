@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.WizardActivityBase;
+import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 
-public class PreauthorizedPaymentWizardActivity extends WizardActivityBase<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
+public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
 
     public PreauthorizedPaymentWizardActivity(AppPlace place) {
         super(place, ResidentsViewFactory.instance(PreauthorizedPaymentWizardView.class), GWT

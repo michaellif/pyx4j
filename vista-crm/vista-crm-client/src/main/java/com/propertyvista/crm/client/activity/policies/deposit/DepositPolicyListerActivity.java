@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.deposit;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.DepositPolicyCrudService;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
-public class DepositPolicyListerActivity extends ListerActivityBase<DepositPolicyDTO> {
+public class DepositPolicyListerActivity extends AbstractListerActivity<DepositPolicyDTO> {
 
     public DepositPolicyListerActivity(Place place) {
         super(place, PolicyViewFactory.instance(DepositPolicyListerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class),

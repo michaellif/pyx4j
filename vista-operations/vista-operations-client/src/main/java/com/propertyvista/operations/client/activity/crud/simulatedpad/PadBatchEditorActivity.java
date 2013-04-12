@@ -19,7 +19,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.padsimulation.batch.PadBatchEditorView;
@@ -30,7 +30,7 @@ import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.operations.rpc.services.sim.PadSimBatchCrudService;
 
-public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> implements PadBatchEditorView.Presenter {
+public class PadBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> implements PadBatchEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public PadBatchEditorActivity(CrudAppPlace place) {

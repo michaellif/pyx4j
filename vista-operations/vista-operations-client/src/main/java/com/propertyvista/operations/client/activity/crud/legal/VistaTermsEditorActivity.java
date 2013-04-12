@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.legal;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.legal.VistaTermsEditorView;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiw
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
 
-public class VistaTermsEditorActivity extends EditorActivityBase<VistaTerms> {
+public class VistaTermsEditorActivity extends AbstractEditorActivity<VistaTerms> {
 
     public VistaTermsEditorActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(VistaTermsEditorView.class), GWT

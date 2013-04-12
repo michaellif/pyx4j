@@ -22,7 +22,7 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class TenantListerActivity extends ListerActivityBase<TenantDTO> implements TenantListerView.Presenter {
+public class TenantListerActivity extends AbstractListerActivity<TenantDTO> implements TenantListerView.Presenter {
 
     private static final I18n i18n = I18n.get(TenantListerView.class);
 

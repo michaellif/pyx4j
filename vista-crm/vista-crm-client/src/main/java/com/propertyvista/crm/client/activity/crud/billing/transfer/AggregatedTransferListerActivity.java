@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.crud.billing.transfer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class AggregatedTransferListerActivity extends ListerActivityBase<AggregatedTransfer> {
+public class AggregatedTransferListerActivity extends AbstractListerActivity<AggregatedTransfer> {
 
     public AggregatedTransferListerActivity(Place place) {
         super(place, FinancialViewFactory.instance(AggregatedTransferListerView.class), GWT

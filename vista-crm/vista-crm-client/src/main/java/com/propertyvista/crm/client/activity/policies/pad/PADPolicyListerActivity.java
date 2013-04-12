@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.pad;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.pad.PADPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.PADPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PADPolicyDTO;
 
-public class PADPolicyListerActivity extends ListerActivityBase<PADPolicyDTO> {
+public class PADPolicyListerActivity extends AbstractListerActivity<PADPolicyDTO> {
 
     public PADPolicyListerActivity(Place place) {
         super(place, PolicyViewFactory.instance(PADPolicyListerView.class), GWT.<PADPolicyCrudService> create(PADPolicyCrudService.class), PADPolicyDTO.class);

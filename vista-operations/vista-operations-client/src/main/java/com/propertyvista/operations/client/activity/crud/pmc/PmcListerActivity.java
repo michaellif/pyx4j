@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
@@ -31,7 +31,7 @@ import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadServic
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class PmcListerActivity extends ListerActivityBase<PmcDTO> implements PmcListerView.Presenter {
+public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements PmcListerView.Presenter {
 
     private static final I18n i18n = I18n.get(PmcListerActivity.class);
 

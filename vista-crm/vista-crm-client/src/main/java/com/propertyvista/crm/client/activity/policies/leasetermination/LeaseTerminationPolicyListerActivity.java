@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.leasetermination;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.leasetermination.LeaseTerminationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseTerminationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 
-public class LeaseTerminationPolicyListerActivity extends ListerActivityBase<LeaseTerminationPolicyDTO> {
+public class LeaseTerminationPolicyListerActivity extends AbstractListerActivity<LeaseTerminationPolicyDTO> {
 
     public LeaseTerminationPolicyListerActivity(Place place) {
         super(place, PolicyViewFactory.instance(LeaseTerminationPolicyListerView.class), GWT

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.onboardingusers;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserEditorView;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFact
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 
-public class OnboardingUserEditorActivity extends EditorActivityBase<OnboardingUserDTO> {
+public class OnboardingUserEditorActivity extends AbstractEditorActivity<OnboardingUserDTO> {
 
     public OnboardingUserEditorActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(OnboardingUserEditorView.class), GWT.<OnboardingUserCrudService> create(OnboardingUserCrudService.class),

@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.common;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
-public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase> extends EditorActivityBase<POLICY_DTO> {
+public abstract class PolicyEditorActivityBase<POLICY_DTO extends PolicyDTOBase> extends AbstractEditorActivity<POLICY_DTO> {
 
     public PolicyEditorActivityBase(CrudAppPlace place, IEditor<POLICY_DTO> view, AbstractPolicyCrudService<POLICY_DTO> service,
             Class<POLICY_DTO> entityClass) {

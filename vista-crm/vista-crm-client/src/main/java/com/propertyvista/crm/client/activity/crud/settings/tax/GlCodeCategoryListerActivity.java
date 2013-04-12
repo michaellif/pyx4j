@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryListerActivity extends ListerActivityBase<GlCodeCategory> {
+public class GlCodeCategoryListerActivity extends AbstractListerActivity<GlCodeCategory> {
 
     public GlCodeCategoryListerActivity(Place place) {
         super(place, SettingsViewFactory.instance(GlCodeCategoryListerView.class), GWT

@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.emailtemplates;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
-public class EmailTemplatesPolicyListerActivity extends ListerActivityBase<EmailTemplatesPolicyDTO> {
+public class EmailTemplatesPolicyListerActivity extends AbstractListerActivity<EmailTemplatesPolicyDTO> {
 
     public EmailTemplatesPolicyListerActivity(Place place) {
         super(place, PolicyViewFactory.instance(EmailTemplatesPolicyListerView.class), GWT

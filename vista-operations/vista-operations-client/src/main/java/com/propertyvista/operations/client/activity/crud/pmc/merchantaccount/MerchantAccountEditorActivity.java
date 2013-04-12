@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
@@ -29,7 +29,7 @@ import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountEditorActivity extends EditorActivityBase<PmcMerchantAccountDTO> {
+public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
         super(//@formatter:off

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -29,7 +29,7 @@ import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFact
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 
-public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
+public class PmcEditorActivity extends AbstractEditorActivity<PmcDTO> {
 
     private final PmcDTO newItem;
 

@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
-public class LeaseApplicationListerActivity extends ListerActivityBase<LeaseApplicationDTO> {
+public class LeaseApplicationListerActivity extends AbstractListerActivity<LeaseApplicationDTO> {
 
     @SuppressWarnings("unchecked")
     public LeaseApplicationListerActivity(Place place) {

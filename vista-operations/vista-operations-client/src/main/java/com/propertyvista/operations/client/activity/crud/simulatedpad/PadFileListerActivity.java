@@ -18,14 +18,14 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.ui.crud.simulatedpad.PadFileListerView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.operations.rpc.services.sim.PadSimFileCrudService;
 
-public class PadFileListerActivity extends ListerActivityBase<PadSimFile> implements PadFileListerView.Presenter {
+public class PadFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadFileListerView.Presenter {
 
     @SuppressWarnings("unchecked")
     public PadFileListerActivity(Place place) {

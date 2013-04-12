@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerView;
@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class PaymentListerActivity extends ListerActivityBase<PaymentRecord> {
+public class PaymentListerActivity extends AbstractListerActivity<PaymentRecord> {
 
     public PaymentListerActivity(AppPlace place) {
         super(place, FinancialViewFactory.instance(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),

@@ -20,7 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
@@ -33,7 +33,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
-public class DashboardManagementEditorActivity extends EditorActivityBase<DashboardMetadata> {
+public class DashboardManagementEditorActivity extends AbstractEditorActivity<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
     public DashboardManagementEditorActivity(CrudAppPlace place) {

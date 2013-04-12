@@ -16,14 +16,14 @@ package com.propertyvista.operations.client.activity.crud.onboardingusers;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserListerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 
-public class OnboardingUserListerActivity extends ListerActivityBase<OnboardingUserDTO> {
+public class OnboardingUserListerActivity extends AbstractListerActivity<OnboardingUserDTO> {
 
     public OnboardingUserListerActivity(Place place) {
         super(place, ManagementVeiwFactory.instance(OnboardingUserListerView.class), GWT.<OnboardingUserCrudService> create(OnboardingUserCrudService.class),

@@ -19,7 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementListerView;
@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class DashboardManagementListerActivity extends ListerActivityBase<DashboardMetadata> {
+public class DashboardManagementListerActivity extends AbstractListerActivity<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
     public DashboardManagementListerActivity(Place place) {

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.cardservicesimulation;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorView;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.viewfactories.crud.SimulationViewFact
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.rpc.services.sim.CardServiceSimulationMerchantAccountCrudService;
 
-public class CardServiceSimulationMerchantAccountEditorActivity extends EditorActivityBase<CardServiceSimulationMerchantAccount> {
+public class CardServiceSimulationMerchantAccountEditorActivity extends AbstractEditorActivity<CardServiceSimulationMerchantAccount> {
 
     public CardServiceSimulationMerchantAccountEditorActivity(CrudAppPlace place) {
         super(place, SimulationViewFactory.instance(CardServiceSimulationMerchantAccountEditorView.class), GWT

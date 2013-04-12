@@ -16,14 +16,14 @@ package com.propertyvista.crm.client.activity.policies.leaseadjustment;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseAdjustmentPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
-public class LeaseAdjustmentPolicyListerActivity extends ListerActivityBase<LeaseAdjustmentPolicyDTO> {
+public class LeaseAdjustmentPolicyListerActivity extends AbstractListerActivity<LeaseAdjustmentPolicyDTO> {
 
     public LeaseAdjustmentPolicyListerActivity(Place place) {
         super(place, PolicyViewFactory.instance(LeaseAdjustmentPolicyListerView.class), GWT

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.maintenance.MaintenanceEditorView;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiw
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
-public class MaintenanceEditorActivity extends EditorActivityBase<VistaSystemMaintenanceState> implements MaintenanceEditorView.Presenter {
+public class MaintenanceEditorActivity extends AbstractEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.Presenter {
 
     public MaintenanceEditorActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(MaintenanceEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),

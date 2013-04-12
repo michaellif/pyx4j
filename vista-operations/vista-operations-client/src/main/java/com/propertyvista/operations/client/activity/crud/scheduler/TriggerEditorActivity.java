@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorView;
@@ -27,7 +27,7 @@ import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFact
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerEditorActivity extends EditorActivityBase<TriggerDTO> {
+public class TriggerEditorActivity extends AbstractEditorActivity<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerEditorActivity(CrudAppPlace place) {

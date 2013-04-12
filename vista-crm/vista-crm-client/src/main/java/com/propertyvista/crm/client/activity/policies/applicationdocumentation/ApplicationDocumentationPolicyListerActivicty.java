@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class ApplicationDocumentationPolicyListerActivicty extends ListerActivityBase<ApplicationDocumentationPolicyDTO> {
+public class ApplicationDocumentationPolicyListerActivicty extends AbstractListerActivity<ApplicationDocumentationPolicyDTO> {
 
     public ApplicationDocumentationPolicyListerActivicty(Place place) {
         super(place, PolicyViewFactory.instance(ApplicationDocumentationPolicyListerView.class), (AbstractListService<ApplicationDocumentationPolicyDTO>) GWT

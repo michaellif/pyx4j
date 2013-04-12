@@ -17,7 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.ViewerActivityBase;
+import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -28,7 +28,7 @@ import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
-public class AdminUserViewerActivity extends ViewerActivityBase<OperationsUserDTO> implements AdminUserViewerView.Presenter {
+public class AdminUserViewerActivity extends AbstractViewerActivity<OperationsUserDTO> implements AdminUserViewerView.Presenter {
 
     public AdminUserViewerActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(AdminUserViewerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class));

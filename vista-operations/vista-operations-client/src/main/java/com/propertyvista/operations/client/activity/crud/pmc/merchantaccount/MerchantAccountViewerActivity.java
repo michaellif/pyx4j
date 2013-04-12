@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.ViewerActivityBase;
+import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountViewerView;
@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFact
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountViewerActivity extends ViewerActivityBase<PmcMerchantAccountDTO> {
+public class MerchantAccountViewerActivity extends AbstractViewerActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountViewerActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(MerchantAccountViewerView.class), GWT

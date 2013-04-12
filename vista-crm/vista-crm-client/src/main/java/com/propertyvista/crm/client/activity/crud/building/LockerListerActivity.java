@@ -17,14 +17,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
 
-public class LockerListerActivity extends ListerActivityBase<Locker> {
+public class LockerListerActivity extends AbstractListerActivity<Locker> {
 
     @SuppressWarnings("unchecked")
     public LockerListerActivity(Place place) {

@@ -18,7 +18,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.ListerActivityBase;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.ui.crud.building.BuildingListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerActivity extends ListerActivityBase<BuildingDTO> {
+public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> {
 
     @SuppressWarnings("unchecked")
     public BuildingListerActivity(Place place) {

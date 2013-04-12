@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.EditorActivityBase;
+import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionEditorView;
@@ -29,7 +29,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.rpc.services.sim.CardServiceSimulationCardCrudService;
 import com.propertyvista.operations.rpc.services.sim.CardServiceSimulationTransactionCrudService;
 
-public class CardServiceSimulationTransactionEditorActivity extends EditorActivityBase<CardServiceSimulationTransaction> {
+public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> {
 
     public CardServiceSimulationTransactionEditorActivity(CrudAppPlace place) {
         super(place, SimulationViewFactory.instance(CardServiceSimulationTransactionEditorView.class), GWT
