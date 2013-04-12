@@ -22,15 +22,15 @@ package com.pyx4j.entity.rpc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.ServiceExecution;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface AbstractWizardService<E extends IEntity> extends IService {
 
     public void create(AsyncCallback<E> callback);
 
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<VoidSerializable> callback, E editableEntity);
+    public void finish(AsyncCallback<Key> callback, E editableEntity);
 }

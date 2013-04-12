@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.rpc.AppPlace;
@@ -140,9 +139,9 @@ public class WizardActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public void trySave() {
-        service.finish(new AsyncCallback<VoidSerializable>() {
+        service.finish(new AsyncCallback<Key>() {
             @Override
-            public void onSuccess(VoidSerializable key) {
+            public void onSuccess(Key key) {
                 ReferenceDataManager.invalidate(entityClass);
                 onSaved();
             }
