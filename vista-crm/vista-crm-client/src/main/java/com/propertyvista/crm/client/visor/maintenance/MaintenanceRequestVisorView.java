@@ -27,6 +27,7 @@ public class MaintenanceRequestVisorView extends AbstractVisorPane {
     private final ILister<MaintenanceRequestDTO> lister;
 
     public MaintenanceRequestVisorView(MaintenanceRequestVisorController controller) {
+        super(controller);
         this.lister = new ListerInternalViewImplBase<MaintenanceRequestDTO>(new MaintenanceRequestLister());
 
         // UI:

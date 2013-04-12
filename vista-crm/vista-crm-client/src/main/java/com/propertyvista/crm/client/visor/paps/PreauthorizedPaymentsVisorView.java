@@ -27,17 +27,20 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
 
     private final CEntityForm<PreauthorizedPaymentsDTO> form = new PreauthorizedPaymentsForm();
 
-    private final PreauthorizedPaymentsVisorController controller;
-
     public PreauthorizedPaymentsVisorView(PreauthorizedPaymentsVisorController controller) {
-        this.controller = controller;
+        super(controller);
 
         setForm(form);
         getElement().getStyle().setProperty("padding", "6px");
     }
 
+    @Override
+    public PreauthorizedPaymentsVisorController getController() {
+        return (PreauthorizedPaymentsVisorController) super.getController();
+    }
+
     public void populate(final Command onPopulate) {
-        controller.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentsDTO>() {
+        getController().retrieve(new DefaultAsyncCallback<PreauthorizedPaymentsDTO>() {
             @Override
             public void onSuccess(PreauthorizedPaymentsDTO result) {
                 populate(result);
@@ -48,12 +51,12 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
 
     @Override
     public void save(AsyncCallback<VoidSerializable> callback) {
-        controller.save(callback, form.getValue());
+        getController().save(callback, form.getValue());
     }
 
     @Override
     public void apply() {
-        controller.save(new DefaultAsyncCallback<VoidSerializable>() {
+        getController().save(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
             }
@@ -62,6 +65,6 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
 
     @Override
     public boolean onBeforeClose(boolean saved) {
-        return controller.onClose(form.getValue().preauthorizedPayments());
+        return getController().onClose(form.getValue().preauthorizedPayments());
     }
 }

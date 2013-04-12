@@ -36,8 +36,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardVisorView extends AbstractVisorPane {
 
-    private final IDashboardVisorController controller;
-
     private final AbstractDashboard dashboard;
 
     private final EventBus eventBus;
@@ -45,7 +43,7 @@ public class DashboardVisorView extends AbstractVisorPane {
     private List<Building> buildingsFilter;
 
     public DashboardVisorView(IDashboardVisorController controller) {
-        this.controller = controller;
+        super(controller);
 
         this.buildingsFilter = new ArrayList<Building>();
         this.eventBus = new SimpleEventBus();
@@ -73,13 +71,18 @@ public class DashboardVisorView extends AbstractVisorPane {
 
             @Override
             protected void onDashboardMetadataChanged() {
-                DashboardVisorView.this.controller.saveDashboardMetadata();
+                DashboardVisorView.this.getController().saveDashboardMetadata();
             }
 
         };
 
         setContentPane(dashboard);
 
+    }
+
+    @Override
+    public IDashboardVisorController getController() {
+        return (IDashboardVisorController) super.getController();
     }
 
     public void populate(DashboardMetadata result) {

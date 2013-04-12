@@ -13,9 +13,9 @@
  */
 package com.propertyvista.crm.client.visor.dashboard;
 
-import com.propertyvista.crm.client.visor.IVisorController;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
-public interface IDashboardVisorController extends IVisorController {
+public interface IDashboardVisorController extends IVisor.Controller {
 
     void saveDashboardMetadata();
 

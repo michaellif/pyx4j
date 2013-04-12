@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.site.client.ui.reports.AbstractReportsView;
+import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -560,7 +560,7 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initReportsStyles() {
-        Style style = new Style("." + AbstractReportsView.Styles.SettingsFormPanel.name());
+        Style style = new Style("." + AbstractReport.Styles.SettingsFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         addStyle(style);
     }

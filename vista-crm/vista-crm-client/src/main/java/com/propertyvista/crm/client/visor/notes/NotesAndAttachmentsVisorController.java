@@ -23,13 +23,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
-import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.shared.NotesParentId;
 
-public class NotesAndAttachmentsVisorController implements IVisorController {
+public class NotesAndAttachmentsVisorController implements IVisor.Controller {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorController.class);
 

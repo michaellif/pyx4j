@@ -24,14 +24,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
-import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-public abstract class PreauthorizedPaymentsVisorController implements IVisorController {
+public abstract class PreauthorizedPaymentsVisorController implements IVisorEditor.Controller {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
 
@@ -72,4 +72,22 @@ public abstract class PreauthorizedPaymentsVisorController implements IVisorCont
      * @return - allow/disable visor close
      */
     public abstract boolean onClose(List<PreauthorizedPayment> pads);
+
+    @Override
+    public void apply() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void save() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancel() {
+        // TODO Auto-generated method stub
+
+    }
 }

@@ -31,10 +31,8 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
 
     private static final I18n i18n = I18n.get(ChargesVisorView.class);
 
-    private final ChargesVisorController controller;
-
     public ChargesVisorView(ChargesVisorController controller) {
-        this.controller = controller;
+        super(controller);
 
         setCaption(i18n.tr("Charges"));
 
@@ -43,7 +41,7 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
     }
 
     public void populate(final Command onPopulate) {
-        controller.populate(new DefaultAsyncCallback<BillDTO>() {
+        getController().populate(new DefaultAsyncCallback<BillDTO>() {
             @Override
             public void onSuccess(BillDTO result) {
                 BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
@@ -52,6 +50,11 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
                 onPopulate.execute();
             }
         });
+    }
+
+    @Override
+    public ChargesVisorController getController() {
+        return (ChargesVisorController) super.getController();
     }
 
     private class ChargesForm extends CEntityForm<BillDataDTO> {

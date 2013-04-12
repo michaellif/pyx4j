@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.reports;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.site.client.ui.reports.AbstractReportsView;
+import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -27,7 +27,7 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.PapReportMetadata;
 
-public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
+public class CrmReportsViewImpl extends AbstractReport implements CrmReportsView {
 
     private static Map<Class<? extends ReportMetadata>, ReportFactory<?>> factoryMap;
 

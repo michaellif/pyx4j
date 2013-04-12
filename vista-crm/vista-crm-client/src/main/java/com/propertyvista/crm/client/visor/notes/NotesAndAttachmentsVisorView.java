@@ -62,13 +62,10 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
 
-    private final NotesAndAttachmentsVisorController controller;
-
     private final NotesAndAttachmentsForm form;
 
     public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
-        super();
-        this.controller = controller;
+        super(controller);
 
         form = new NotesAndAttachmentsForm();
         form.initContent();
@@ -77,7 +74,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
     }
 
     public void populate(final Command onPopulate) {
-        controller.populate(new DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>>() {
+        getController().populate(new DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>>() {
             @Override
             public void onSuccess(EntitySearchResult<NotesAndAttachments> result) {
                 NotesAndAttachmentsDTO dto = EntityFactory.create(NotesAndAttachmentsDTO.class);
@@ -90,8 +87,9 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         });
     }
 
+    @Override
     public NotesAndAttachmentsVisorController getController() {
-        return controller;
+        return (NotesAndAttachmentsVisorController) super.getController();
     }
 
     public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachmentsDTO> {
@@ -170,7 +168,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 Dialog confirm = new OkCancelDialog(i18n.tr("Delete Note")) {
                     @Override
                     public boolean onClickOk() {
-                        controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
+                        getController().remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
                             @Override
                             public void onSuccess(Boolean result) {
                                 NotesAndAttachmentsFolder.super.removeItem(item);

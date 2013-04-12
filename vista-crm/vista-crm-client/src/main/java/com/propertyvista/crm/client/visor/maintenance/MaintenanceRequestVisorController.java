@@ -19,14 +19,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
+import com.pyx4j.site.client.ui.visor.IVisor;
 
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
-import com.propertyvista.crm.client.visor.IVisorController;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class MaintenanceRequestVisorController implements IVisorController {
+public class MaintenanceRequestVisorController implements IVisor.Controller {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestVisorController.class);
 
