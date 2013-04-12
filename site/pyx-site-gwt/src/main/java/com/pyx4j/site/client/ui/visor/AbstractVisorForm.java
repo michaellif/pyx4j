@@ -30,8 +30,8 @@ public abstract class AbstractVisorForm<E extends IEntity> extends AbstractVisor
 
     private CEntityForm<E> form;
 
-    public AbstractVisorForm() {
-        super();
+    public AbstractVisorForm(Controller controller) {
+        super(controller);
     }
 
     @Override

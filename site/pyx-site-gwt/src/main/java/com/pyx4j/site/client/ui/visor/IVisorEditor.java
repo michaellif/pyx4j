@@ -27,6 +27,18 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
 
+    public interface Controller extends IVisor.Controller {
+        void apply();
+
+        void save();
+
+        void cancel();
+    }
+
+    public E getValue();
+
+    public boolean isDirty();
+
     void save(AsyncCallback<VoidSerializable> asyncCallback);
 
     void apply();

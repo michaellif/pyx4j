@@ -33,9 +33,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.visor.AbstractVisorPane;
 import com.pyx4j.widgets.client.Button;
 
-public abstract class ReportSettingsManagementPanel extends AbstractVisorPane {
+public abstract class ReportSettingsManagementVizor extends AbstractVisorPane {
 
-    private static final I18n i18n = I18n.get(ReportSettingsManagementPanel.class);
+    private static final I18n i18n = I18n.get(ReportSettingsManagementVizor.class);
 
     private final DockLayoutPanel panel;
 
@@ -45,8 +45,8 @@ public abstract class ReportSettingsManagementPanel extends AbstractVisorPane {
 
     private final Button deleteButton;
 
-    public ReportSettingsManagementPanel() {
-        super();
+    public ReportSettingsManagementVizor(Controller controller) {
+        super(controller);
         panel = new DockLayoutPanel(Unit.EM);
 
         setCaption(i18n.tr("Load report configuration preset"));

@@ -37,8 +37,11 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
 
     private IPane parentPane;
 
-    public AbstractVisorPane() {
+    private final Controller controller;
+
+    public AbstractVisorPane(Controller controller) {
         super();
+        this.controller = controller;
         setStyleName(DefaultPaneTheme.StyleName.Visor.name());
 
         final Image closeImage = new Image(ImageFactory.getImages().closeTab());
@@ -72,6 +75,11 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
         getHeaderCaption().add(closeImage);
     }
 
+    @Override
+    public Controller getController() {
+        return controller;
+    }
+
     protected void setParentPane(IPane parentPane) {
         this.parentPane = parentPane;
     }
@@ -79,4 +87,5 @@ public abstract class AbstractVisorPane extends AbstractPane implements IVisor {
     protected IPane getParentPane() {
         return parentPane;
     }
+
 }

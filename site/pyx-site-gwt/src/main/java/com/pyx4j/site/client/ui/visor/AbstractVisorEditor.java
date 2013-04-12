@@ -37,8 +37,8 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
 
     protected final Button btnSave;
 
-    public AbstractVisorEditor() {
-        super();
+    public AbstractVisorEditor(IVisorEditor.Controller controller) {
+        super(controller);
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
@@ -82,4 +82,13 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
 
     }
 
+    @Override
+    public E getValue() {
+        return getForm().getValue();
+    }
+
+    @Override
+    public boolean isDirty() {
+        return getForm().isDirty();
+    }
 }

@@ -18,9 +18,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.site.client.activity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -32,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.ui.reports.IReportsView;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.customization.CustomizationOverwriteAttemptException;
@@ -39,9 +41,9 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
+public abstract class ReportActivityBase extends AbstractActivity implements IReportsView.Presenter {
 
-    private static final I18n i18n = I18n.get(AbstractReportsActivity.class);
+    private static final I18n i18n = I18n.get(ReportActivityBase.class);
 
     protected final IReportsView view;
 
@@ -51,13 +53,22 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
 
     private final ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService;
 
-    public AbstractReportsActivity(IReportsService reportsService, ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService,
+    private ReportSettingsManagementVizorController reportSettingsManagementVizorController;
+
+    public ReportActivityBase(IReportsService reportsService, ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService,
             IReportsView view, ReportsAppPlace place) {
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
         this.view = view;
         this.view.setPresenter(this);
         this.place = place;
+    }
+
+    public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
+        if (reportSettingsManagementVizorController == null) {
+            reportSettingsManagementVizorController = new ReportSettingsManagementVizorController(this);
+        }
+        return reportSettingsManagementVizorController;
     }
 
     @Override
@@ -133,11 +144,16 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
 
             @Override
             public void onSuccess(Vector<String> result) {
-                view.setAvailableReportSettings(result);
+                setAvailableReportSettings(result);
+                reportSettingsManagementVizorController.show(view);
             }
 
         }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
 
+    }
+
+    public void setAvailableReportSettings(List<String> reportSettingsIds) {
+        reportSettingsManagementVizorController.setAvailableReportSettingsIds(reportSettingsIds);
     }
 
     protected ReportMetadata retrieveReportSettings(AppPlace place) {

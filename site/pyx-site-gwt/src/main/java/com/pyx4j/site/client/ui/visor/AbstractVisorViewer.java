@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 
 public abstract class AbstractVisorViewer<E extends IEntity> extends AbstractVisorForm<E> implements IVisorViewer<E> {
 
-    public AbstractVisorViewer() {
-        super();
+    public AbstractVisorViewer(Controller controller) {
+        super(controller);
     }
 
 }

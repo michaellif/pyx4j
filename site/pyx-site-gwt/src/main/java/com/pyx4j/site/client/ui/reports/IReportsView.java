@@ -20,8 +20,6 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import java.util.List;
-
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -46,8 +44,6 @@ public interface IReportsView extends IPane {
     <E extends ReportMetadata> void setReportSettings(E reportSettings, String settingsId);
 
     void setReportData(Object data);
-
-    void setAvailableReportSettings(List<String> reportSettingsIds);
 
     void onReportSettingsSaveSucceed(String reportSettingsId);
 

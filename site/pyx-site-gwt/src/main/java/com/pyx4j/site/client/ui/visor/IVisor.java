@@ -22,6 +22,13 @@ package com.pyx4j.site.client.ui.visor;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.site.client.ui.IPane;
+
 public interface IVisor extends IsWidget {
 
+    public interface Controller {
+        void show(IPane view);
+    }
+
+    Controller getController();
 }

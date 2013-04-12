@@ -20,7 +20,6 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Command;
@@ -46,7 +45,7 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReportsView extends AbstractPane implements IReportsView {
+public abstract class AbstractReport extends AbstractPane implements IReportsView {
 
     public enum Styles {
 
@@ -89,7 +88,7 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
         PRINT_THEME = stylesString.toString();
     }
 
-    private static final I18n i18n = I18n.get(AbstractReportsView.class);
+    private static final I18n i18n = I18n.get(AbstractReport.class);
 
     private IReportsView.Presenter presenter;
 
@@ -109,26 +108,11 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
 
     private String settingsId;
 
-    private final ReportSettingsManagementPanel reportSettingsManagementPanel;
-
-    public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
+    public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
         this.settingsForm = null;
         this.presenter = null;
-
-        reportSettingsManagementPanel = new ReportSettingsManagementPanel() {
-
-            @Override
-            public void onLoadRequest(String selectedReportSettingsId) {
-                presenter.loadSettings(selectedReportSettingsId);
-            }
-
-            @Override
-            public void onDeleteRequest(String selectedReportSettingsId) {
-                presenter.deleteSettings(selectedReportSettingsId);
-            }
-        };
 
         viewPanel = new FlowPanel();
         viewPanel.setWidth("100%");
@@ -169,7 +153,7 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
             @Override
             public void execute() {
-                onLoadSettingsClicked();
+                presenter.populateAvailableReportSettings();
             }
         }));
 
@@ -232,11 +216,6 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
     }
 
     @Override
-    public void setAvailableReportSettings(List<String> reportSettingsIds) {
-        reportSettingsManagementPanel.setAvailableReportSettingsIds(reportSettingsIds);
-    }
-
-    @Override
     public void onReportSettingsSaveFailed(String reason) {
         MessageDialog.error(i18n.tr("Save Failed"), reason);
     }
@@ -285,15 +264,6 @@ public abstract class AbstractReportsView extends AbstractPane implements IRepor
         }
         settingsFormPanel.setWidget(settingsForm);
         settingsForm.populate(reportSettings);
-    }
-
-    private void onLoadSettingsClicked() {
-        reportSettingsManagementPanel.setAvailableReportSettingsIds(null);
-
-        showVisor(reportSettingsManagementPanel);
-
-        presenter.populateAvailableReportSettings();
-
     }
 
     private void onSaveSettingsAsClicked() {
