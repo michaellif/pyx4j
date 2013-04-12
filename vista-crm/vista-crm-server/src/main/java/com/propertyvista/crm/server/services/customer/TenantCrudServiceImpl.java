@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantInsuranceCertificateDTO;
 import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<Tenant, TenantDTO> implements TenantCrudService {
 
@@ -68,6 +69,12 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                 TenantInsurancePolicy.class);
         if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
             dto.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
+        }
+
+        if (VistaFeatures.instance().yardiIntegration() & (retrieveTraget == RetrieveTraget.View || retrieveTraget == RetrieveTraget.Edit)) {
+            LeaseTerm leaseTerm = Persistence.service().retrieve(LeaseTerm.class, dto.leaseTermV().holder().getPrimaryKey());
+            boolean isPotentialTenant = leaseTerm.status().getValue() != LeaseTerm.Status.Current & leaseTerm.status().getValue() != LeaseTerm.Status.Historic;
+            dto.isPotentialTenant().setValue(isPotentialTenant);
         }
     }
 

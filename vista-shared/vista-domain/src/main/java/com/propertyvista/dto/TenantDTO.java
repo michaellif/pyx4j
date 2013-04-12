@@ -38,4 +38,5 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IList<TenantInsuranceCertificateDTO> insuranceCertificates();
 
+    IPrimitive<Boolean> isPotentialTenant();
 }
