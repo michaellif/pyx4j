@@ -54,6 +54,10 @@ public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane 
         return captionBase;
     }
 
+    protected void setCaptionBase(String captionBase) {
+        this.captionBase = captionBase;
+    }
+
     @Override
     protected final void setContentPane(IsWidget widget) {
         throw new Error("Call setForm instead of calling setContentPane");
