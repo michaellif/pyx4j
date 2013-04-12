@@ -49,10 +49,6 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     private final Class<E> entityClass;
 
-    private final Key entityId;
-
-    private final String parentClassName;
-
     public AbstractWizardActivity(AppPlace place, IWizard<E> view, AbstractWizardService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
@@ -64,11 +60,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
         this.service = service;
         this.entityClass = entityClass;
 
-        entityId = null;
-        parentClassName = null;
-
         view.getMemento().setCurrentPlace(place);
-
     }
 
     public IWizard<E> getView() {
@@ -85,14 +77,6 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     public Class<E> getEntityClass() {
         return entityClass;
-    }
-
-    public Key getEntityId() {
-        return entityId;
-    }
-
-    public String getParentClassName() {
-        return parentClassName;
     }
 
     @Override
@@ -141,9 +125,9 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
     public void trySave() {
         service.finish(new AsyncCallback<Key>() {
             @Override
-            public void onSuccess(Key key) {
+            public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
-                onSaved();
+                onSaved(result);
             }
 
             @Override
@@ -154,7 +138,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     }
 
-    protected void onSaved() {
+    protected void onSaved(Key result) {
         view.reset();
         AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
