@@ -16,43 +16,42 @@ package com.propertyvista.portal.client.ui.residents.payment.autopay;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentSubmittedViewForm.class);
 
-    private final SimplePanel contentHolder = new SimplePanel();
+    private final SimplePanel amountPlaceholder = new SimplePanel();
+
+    private final Widget percent;
+
+    private final Widget value;
 
     public PreauthorizedPaymentSubmittedViewForm() {
         super(PreauthorizedPaymentDTO.class);
         setViewable(true);
         inheritViewable(false);
+
+        amountPlaceholder.setWidth("15em");
+        percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).labelAlignment(Alignment.left).build();
+        value = new DecoratorBuilder(inject(proto().value()), 10, 10).labelAlignment(Alignment.left).build();
     }
 
     @Override
     public IsWidget createContent() {
-        return contentHolder;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        contentHolder.clear();
-        contentHolder.setWidget(internalCreateContent());
-    }
-
-    public IsWidget internalCreateContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         Widget w;
@@ -63,36 +62,34 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
 
         content.setBR(++row, 0, 1);
 
-        HorizontalPanel pm = new HorizontalPanel();
-        pm.add(w = new HTML(i18n.tr("Payment Method:")));
-        w.setWidth("10em");
-        pm.add(w = new HTML(getValue().paymentMethod().getStringView()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        content.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
+        content.setWidget(++row, 0, amountPlaceholder);
 
-        content.setWidget(++row, 0, pm);
-
-        HorizontalPanel amount = new HorizontalPanel();
-        switch (getValue().amountType().getValue()) {
-        case Percent:
-            amount.add(w = new HTML(i18n.tr("Percent to pay:")));
-            w.setWidth("10em");
-            amount.add(w = new HTML(getValue().percent().getValue().toString() + "%"));
-            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            break;
-
-        case Value:
-            amount.add(w = new HTML(i18n.tr("Amount to pay:")));
-            w.setWidth("10em");
-            amount.add(w = new HTML("$" + getValue().value().getValue().toString()));
-            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            break;
-
-        default:
-            break;
-        }
-
-        content.setWidget(++row, 0, amount);
+        content.setHR(++row, 0, 1);
 
         return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        setAmountEditor(getValue().amountType().getValue());
+    }
+
+    private void setAmountEditor(AmountType amountType) {
+        amountPlaceholder.clear();
+        if (amountType != null) {
+            switch (amountType) {
+            case Percent:
+                amountPlaceholder.setWidget(percent);
+                break;
+
+            case Value:
+                amountPlaceholder.setWidget(value);
+                break;
+            }
+        }
     }
 }

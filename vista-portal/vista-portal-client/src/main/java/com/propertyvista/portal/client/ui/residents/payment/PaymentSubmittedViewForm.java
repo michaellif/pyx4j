@@ -60,9 +60,9 @@ public class PaymentSubmittedViewForm extends CEntityDecoratableForm<PaymentReco
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10, 10).labelAlignment(Alignment.left).build());
         content.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10, 10).labelAlignment(Alignment.left).build());
 
         content.setHR(++row, 0, 1);
 
