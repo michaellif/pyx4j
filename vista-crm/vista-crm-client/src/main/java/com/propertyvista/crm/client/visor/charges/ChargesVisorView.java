@@ -33,17 +33,12 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
 
     private final ChargesVisorController controller;
 
-    private final CEntityForm<BillDataDTO> form;
-
     public ChargesVisorView(ChargesVisorController controller) {
         this.controller = controller;
 
         setCaption(i18n.tr("Charges"));
 
-        // UI:
-        form = new ChargesForm();
-
-        setForm(form);
+        setForm(new ChargesForm());
         getElement().getStyle().setProperty("padding", "6px");
     }
 
@@ -53,7 +48,7 @@ public class ChargesVisorView extends AbstractVisorViewer<BillDataDTO> {
             public void onSuccess(BillDTO result) {
                 BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
                 dto.bill().set(result);
-                form.populate(dto);
+                populate(dto);
                 onPopulate.execute();
             }
         });

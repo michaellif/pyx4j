@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
@@ -136,7 +137,7 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
     }
 
     @Override
-    public void setPresenter(com.pyx4j.site.client.ui.prime.form.IViewer.Presenter presenter) {
+    public void setPresenter(IForm.Presenter presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             ((PmcForm) getForm()).setOnboardingMerchantAccountsSource(((PmcViewerView.Presenter) presenter).getOnboardingMerchantAccountsSource());

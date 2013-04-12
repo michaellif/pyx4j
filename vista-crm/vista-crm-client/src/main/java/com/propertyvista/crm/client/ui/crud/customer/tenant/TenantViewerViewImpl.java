@@ -83,9 +83,9 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     public void populate(TenantDTO value) {
         // tweak legal naming: 
         if (value.lease().status().getValue().isDraft()) {
-            captionBase = i18n.tr("Applicant");
+            setCaptionBase(i18n.tr("Applicant"));
         } else {
-            captionBase = i18n.tr("Tenant");
+            setCaptionBase(i18n.tr("Tenant"));
         }
 
         super.populate(value);

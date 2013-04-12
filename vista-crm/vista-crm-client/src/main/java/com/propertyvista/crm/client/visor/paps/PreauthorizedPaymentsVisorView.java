@@ -40,7 +40,7 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
         controller.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentsDTO>() {
             @Override
             public void onSuccess(PreauthorizedPaymentsDTO result) {
-                form.populate(result);
+                populate(result);
                 onPopulate.execute();
             }
         });
