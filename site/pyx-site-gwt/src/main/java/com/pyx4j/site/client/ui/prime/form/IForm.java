@@ -32,4 +32,9 @@ public interface IForm<E extends IEntity> extends IPrimePane {
     void setActiveTab(int index);
 
     int getActiveTab();
+
+    void setPresenter(Presenter presenter);
+
+    Presenter getPresenter();
+
 }

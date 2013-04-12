@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -39,10 +38,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> implements IEditor<E> {
 
     private static final I18n i18n = I18n.get(AbstractEditor.class);
-
-    private IEditor.Presenter presenter;
-
-    protected String captionBase;
 
     protected final Button btnApply;
 
@@ -146,10 +141,10 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
         }
 
         if (EditMode.newItem.equals(mode)) {
-            setCaption(captionBase + " " + i18n.tr("New Item..."));
+            setCaption(getCaptionBase() + " " + i18n.tr("New Item..."));
             getForm().setActiveTab(0);
         } else {
-            setCaption(captionBase + " " + value.getStringView());
+            setCaption(getCaptionBase() + " " + value.getStringView());
         }
     }
 
@@ -167,14 +162,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     @Override
-    public void setPresenter(IEditor.Presenter presenter) {
-        this.presenter = presenter;
-        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
-    }
-
-    @Override
     public IEditor.Presenter getPresenter() {
-        return presenter;
+        return (IEditor.Presenter) super.getPresenter();
     }
 
     @Override

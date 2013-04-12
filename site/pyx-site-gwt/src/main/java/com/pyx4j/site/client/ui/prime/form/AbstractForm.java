@@ -24,14 +24,34 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
 public abstract class AbstractForm<E extends IEntity> extends AbstractPrimePane implements IForm<E> {
 
     private PrimeEntityForm<E> form;
 
+    private IForm.Presenter presenter;
+
+    private String captionBase;
+
     public AbstractForm() {
         super();
+    }
+
+    @Override
+    public void setPresenter(IForm.Presenter presenter) {
+        this.presenter = presenter;
+        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
+    }
+
+    @Override
+    public IForm.Presenter getPresenter() {
+        return presenter;
+    }
+
+    protected String getCaptionBase() {
+        return captionBase;
     }
 
     @Override

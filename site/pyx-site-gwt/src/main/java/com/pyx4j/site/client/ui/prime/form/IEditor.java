@@ -37,10 +37,6 @@ public interface IEditor<E extends IEntity> extends IForm<E> {
         existingItem, newItem
     }
 
-    void setPresenter(Presenter presenter);
-
-    Presenter getPresenter();
-
     /**
      * Notifies view about supposed editing mode - view can select appropriate from here.
      * 

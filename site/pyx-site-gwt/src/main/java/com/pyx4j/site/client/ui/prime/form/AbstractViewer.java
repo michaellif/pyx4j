@@ -25,36 +25,25 @@ import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 
 public abstract class AbstractViewer<E extends IEntity> extends AbstractForm<E> implements IViewer<E> {
 
     private static final I18n i18n = I18n.get(AbstractViewer.class);
-
-    private IViewer.Presenter presenter;
-
-    protected String captionBase;
 
     public AbstractViewer() {
         super();
     }
 
     @Override
-    public void setPresenter(IViewer.Presenter presenter) {
-        this.presenter = presenter;
-        captionBase = (presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
-    }
-
-    @Override
     public IViewer.Presenter getPresenter() {
-        return presenter;
+        return (IViewer.Presenter) super.getPresenter();
     }
 
     @Override
     public void populate(E value) {
         super.populate(value);
 
-        String caption = (captionBase + " " + value.getStringView());
+        String caption = (getCaptionBase() + " " + value.getStringView());
         if (value instanceof IVersionedEntity) {
             IVersionData<?> version = ((IVersionedEntity<?>) value).version();
 

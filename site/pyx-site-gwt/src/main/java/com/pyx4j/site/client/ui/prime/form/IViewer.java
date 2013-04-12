@@ -38,7 +38,4 @@ public interface IViewer<E extends IEntity> extends IForm<E> {
         void approveFinal();
     }
 
-    void setPresenter(Presenter presenter);
-
-    Presenter getPresenter();
 }
