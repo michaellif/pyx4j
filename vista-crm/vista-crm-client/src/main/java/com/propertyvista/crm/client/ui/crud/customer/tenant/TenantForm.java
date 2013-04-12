@@ -29,7 +29,9 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
@@ -102,5 +104,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         (get(proto().minimumRequiredLiability())).setVisible(!getValue().minimumRequiredLiability().isNull());
         noRequirementsLabel.setVisible(getValue().minimumRequiredLiability().isNull());
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            boolean isPotentialTenant = getValue().leaseTermV().holder().status().getValue() != LeaseTerm.Status.Current
+                    | getValue().leaseTermV().holder().status().getValue() != LeaseTerm.Status.Historic;
+            get(proto().leaseTermV()).setVisible(isPotentialTenant);
+        }
     }
 }

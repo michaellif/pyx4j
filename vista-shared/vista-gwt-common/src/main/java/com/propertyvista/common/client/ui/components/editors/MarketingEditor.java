@@ -27,6 +27,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
@@ -41,6 +42,9 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 30).build());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().name()).setViewable(true);
+        }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().visibility()), 30).build());
 

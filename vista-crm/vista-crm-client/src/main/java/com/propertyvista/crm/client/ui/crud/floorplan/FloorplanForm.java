@@ -30,6 +30,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
@@ -96,6 +97,11 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().name()).setViewable(true);
+            get(proto().bedrooms()).setViewable(true);
+            get(proto().bathrooms()).setViewable(true);
+        }
         return main;
     }
 }

@@ -25,6 +25,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<LegalDocumentationPolicyDTO> {
 
@@ -34,13 +35,19 @@ public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<Leg
 
     @Override
     protected List<FormFlexPanel> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-            createMainApplicatinoTermsPanel(),
-            createCoApplicatinoTermsPanel(),
-            createGuarantorApplicationPanel(),
-            createLeaseTermsPanel(),
-            createPaymentAuthorizationPanel() 
-        );//@formatter:on
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return Arrays.asList(//@formatter:off
+                        createPaymentAuthorizationPanel() 
+            );//@formatter:on
+        } else {
+            return Arrays.asList(//@formatter:off
+                        createMainApplicatinoTermsPanel(),
+                        createCoApplicatinoTermsPanel(),
+                        createGuarantorApplicationPanel(),
+                        createLeaseTermsPanel(),
+                        createPaymentAuthorizationPanel() 
+            );//@formatter:on
+        }
     }
 
     private FormFlexPanel createMainApplicatinoTermsPanel() {

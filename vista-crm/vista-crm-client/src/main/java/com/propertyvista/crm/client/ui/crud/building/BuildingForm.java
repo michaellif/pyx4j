@@ -154,6 +154,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         }
                     });
         }
+
     }
 
     @Override
@@ -175,6 +176,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 12).build());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().propertyCode()).setViewable(true);
+        }
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().shape()), 7).build());
 
         main.setWidget(row, 0, new DecoratorBuilder(inject(proto().info().name()), 15).build());
@@ -202,6 +206,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().info().address()).setViewable(true);
+        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());

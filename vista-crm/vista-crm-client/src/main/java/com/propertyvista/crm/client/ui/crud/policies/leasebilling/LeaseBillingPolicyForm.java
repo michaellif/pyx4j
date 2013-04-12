@@ -58,6 +58,7 @@ import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBillingPolicyDTO> {
 
@@ -73,22 +74,33 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     @Override
     protected List<FormFlexPanel> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                createBillingPanel(),
-                createLateFeesPanel(),
-               createNsfFeesPanel()
-        );//@formatter:on
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return Arrays.asList(//@formatter:off
+                    createBillingPanel()
+            );//@formatter:on
+        } else {
+            return Arrays.asList(//@formatter:off
+                    createBillingPanel(),
+                    createLateFeesPanel(),
+                   createNsfFeesPanel()
+            );//@formatter:on
+        }
     }
 
     private FormFlexPanel createBillingPanel() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Billing"));
 
         int row = -1;
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmationMethod()), 10).build());
         panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
         panel.setWidget(++row, 0, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
 
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            get(proto().prorationMethod()).setVisible(false);
+            get(proto().confirmationMethod()).setVisible(false);
+        }
         return panel;
     }
 
@@ -303,6 +315,9 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     }
                 });
 
+                if (!VistaFeatures.instance().yardiIntegration()) {
+                    get(proto().finalDueDayOffset()).setVisible(false);
+                }
                 return content;
             }
 

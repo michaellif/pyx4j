@@ -20,7 +20,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
 
@@ -99,5 +101,12 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         } else {
             setActionVisible(passwordAction, false);
         }
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            boolean isPotentialTenant = value.leaseTermV().holder().status().getValue() != LeaseTerm.Status.Current
+                    | value.leaseTermV().holder().status().getValue() != LeaseTerm.Status.Historic;
+            setActionVisible(maintenanceAction, isPotentialTenant);
+        }
+
     }
 }

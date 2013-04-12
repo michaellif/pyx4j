@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
 
@@ -118,6 +119,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15).build());
         }
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().customer().person().name()).setViewable(true);
+        }
         return main;
     }
 
