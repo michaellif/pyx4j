@@ -44,7 +44,7 @@ public class MerchantAccountManager {
             pmcMerchantAccountIndex.pmc().set(pmc);
         }
 
-        TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+        TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
             @Override
             public Void call() {
                 Persistence.service().persist(merchantAccount);

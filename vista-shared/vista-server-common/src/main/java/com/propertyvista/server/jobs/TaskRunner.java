@@ -29,6 +29,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 
 public class TaskRunner {
 
@@ -36,6 +37,10 @@ public class TaskRunner {
 
     public static <T> T runInOperationsNamespace(final Callable<T> task) {
         return NamespaceManager.runInTargetNamespace(VistaNamespace.operationsNamespace, task);
+    }
+
+    public static <T> T runInTargetNamespace(final Pmc pmc, final Callable<T> task) {
+        return NamespaceManager.runInTargetNamespace(pmc.namespace().getValue(), task);
     }
 
     public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
