@@ -7,21 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 1, 2013
+ * Created on Apr 12, 2013
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.rpc;
+package com.propertyvista.field.client.event;
 
-public interface HeaderMode {
-
-    public interface Toolbar {
-    }
-
-    public interface NavigationToolbar {
-    }
-
-    public interface SearchToolbar {
-    }
-
+public enum EventSource {
+    ToolbarMenuImage, AlertsImage;
 }

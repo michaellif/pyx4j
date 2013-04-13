@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.field.client.event.ScreenShiftEvent;
 import com.propertyvista.field.client.event.ScreenShiftHandler;
+import com.propertyvista.field.client.event.ShowAlertsEvent;
+import com.propertyvista.field.client.event.ShowAlertsHandler;
 import com.propertyvista.field.client.ui.ScreenViewer;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 import com.propertyvista.field.rpc.ScreenMode.FullScreen;
@@ -27,7 +29,7 @@ import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
 import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
-public class ScreenActivity extends AbstractActivity implements ScreenShiftHandler {
+public class ScreenActivity extends AbstractActivity implements ScreenShiftHandler, ShowAlertsHandler {
 
     private final ScreenViewer view;
 
@@ -52,11 +54,17 @@ public class ScreenActivity extends AbstractActivity implements ScreenShiftHandl
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         eventBus.addHandler(ScreenShiftEvent.getType(), this);
+        eventBus.addHandler(ShowAlertsEvent.getType(), this);
     }
 
     @Override
     public void onScreenShift(ScreenShiftEvent event) {
-        view.shiftScreen();
+        view.shiftScreen(event.getEventSource());
+    }
+
+    @Override
+    public void onShowAlerts(ShowAlertsEvent event) {
+        view.showAlerts();
     }
 
 }

@@ -15,6 +15,7 @@ package com.propertyvista.field.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.field.client.event.EventSource;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
 public interface ScreenViewer extends IsWidget {
@@ -35,6 +36,8 @@ public interface ScreenViewer extends IsWidget {
 
     void setScreenLayout(ScreenLayout layout);
 
-    void shiftScreen();
+    void shiftScreen(EventSource eventSource);
+
+    void showAlerts();
 
 }

@@ -99,4 +99,7 @@ public class FieldSite extends VistaSite {
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
     }
 
+    public static boolean isVerticalOrientation() {
+        return true;
+    }
 }

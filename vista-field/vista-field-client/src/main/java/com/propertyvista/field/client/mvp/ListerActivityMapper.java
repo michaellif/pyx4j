@@ -18,6 +18,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.field.client.activity.building.BuildingListerActivity;
+import com.propertyvista.field.client.activity.search.SearchResultsActivity;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
 public class ListerActivityMapper implements ActivityMapper {
@@ -30,6 +31,8 @@ public class ListerActivityMapper implements ActivityMapper {
 
         if (isBuidingListerPlace(place)) {
             return new BuildingListerActivity();
+        } else if (place instanceof FieldSiteMap.Search) {
+            return new SearchResultsActivity();
         }
 
         return null;

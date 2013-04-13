@@ -15,34 +15,24 @@ package com.propertyvista.field.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-public class ScreenShiftEvent extends GwtEvent<ScreenShiftHandler> {
+public class ShowAlertsEvent extends GwtEvent<ShowAlertsHandler> {
 
-    private static Type<ScreenShiftHandler> TYPE;
+    private static Type<ShowAlertsHandler> TYPE;
 
-    private final EventSource source;
-
-    public ScreenShiftEvent(EventSource source) {
-        this.source = source;
-    }
-
-    public EventSource getEventSource() {
-        return source;
-    }
-
-    public static Type<ScreenShiftHandler> getType() {
+    public static Type<ShowAlertsHandler> getType() {
         if (TYPE == null) {
-            TYPE = new Type<ScreenShiftHandler>();
+            TYPE = new Type<ShowAlertsHandler>();
         }
         return TYPE;
     }
 
     @Override
-    public final Type<ScreenShiftHandler> getAssociatedType() {
+    public final Type<ShowAlertsHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(ScreenShiftHandler handler) {
-        handler.onScreenShift(this);
+    protected void dispatch(ShowAlertsHandler handler) {
+        handler.onShowAlerts(this);
     }
 }

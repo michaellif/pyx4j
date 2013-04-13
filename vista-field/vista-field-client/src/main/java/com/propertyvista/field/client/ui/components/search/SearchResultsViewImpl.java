@@ -11,17 +11,19 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.rpc;
+package com.propertyvista.field.client.ui.components.search;
 
-public interface HeaderMode {
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 
-    public interface Toolbar {
-    }
+import com.propertyvista.field.client.theme.FieldTheme;
 
-    public interface NavigationToolbar {
-    }
+public class SearchResultsViewImpl extends FlowPanel implements SearchResultsView {
 
-    public interface SearchToolbar {
+    public SearchResultsViewImpl() {
+        setSize("100%", "100%");
+        setStyleName(FieldTheme.StyleName.SearchResults.name());
+        add(new Button("Search Results"));
     }
 
 }

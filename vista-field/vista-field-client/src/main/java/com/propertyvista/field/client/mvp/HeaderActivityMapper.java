@@ -18,8 +18,10 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.field.client.activity.header.NavigToolbarActivity;
+import com.propertyvista.field.client.activity.header.SearchToolbarActivity;
 import com.propertyvista.field.client.activity.header.ToolbarActivity;
 import com.propertyvista.field.rpc.HeaderMode.NavigationToolbar;
+import com.propertyvista.field.rpc.HeaderMode.SearchToolbar;
 import com.propertyvista.field.rpc.HeaderMode.Toolbar;
 
 public class HeaderActivityMapper implements ActivityMapper {
@@ -34,6 +36,8 @@ public class HeaderActivityMapper implements ActivityMapper {
             return new ToolbarActivity(place);
         } else if (place instanceof NavigationToolbar) {
             return new NavigToolbarActivity(place);
+        } else if (place instanceof SearchToolbar) {
+            return new SearchToolbarActivity(place);
         }
 
         return null;

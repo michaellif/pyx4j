@@ -11,17 +11,11 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.rpc;
+package com.propertyvista.field.client.ui.components.alerts;
 
-public interface HeaderMode {
+import com.google.gwt.user.client.ui.IsWidget;
 
-    public interface Toolbar {
-    }
+public interface AlertsInfoView extends IsWidget {
 
-    public interface NavigationToolbar {
-    }
-
-    public interface SearchToolbar {
-    }
-
+    void setUnread(int alertsNumber);
 }

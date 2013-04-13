@@ -14,13 +14,14 @@
 package com.propertyvista.field.client.ui.components.sort;
 
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.PopupPanel;
+
+import com.pyx4j.widgets.client.DropDownPanel;
 
 import com.propertyvista.field.client.theme.FieldTheme;
 
-public class SortPanel extends PopupPanel {
+public class SortDropDownPanel extends DropDownPanel {
 
-    public SortPanel() {
+    public SortDropDownPanel() {
         setStyleName(FieldTheme.StyleName.SortPanel.name());
         add(new Button("Sort Panel"));
     }

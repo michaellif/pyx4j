@@ -17,55 +17,47 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.DropDownPanel;
 
+import com.propertyvista.field.client.event.EventSource;
 import com.propertyvista.field.client.event.ScreenShiftEvent;
 import com.propertyvista.field.client.resources.FieldImages;
 import com.propertyvista.field.client.theme.FieldTheme;
-import com.propertyvista.field.client.ui.components.search.SearchPanel;
-import com.propertyvista.field.client.ui.components.sort.SortPanel;
+import com.propertyvista.field.client.ui.components.sort.SortDropDownPanel;
+import com.propertyvista.field.rpc.FieldSiteMap;
 
 public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
 
     private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
-    private final SortPanel sortPopup = new SortPanel();
-
-    private final SearchPanel searchPopup = new SearchPanel();
-
     public ToolbarViewImpl() {
         setSize("100%", "100%");
         setStyleName(FieldTheme.StyleName.Toolbar.name());
+
+        final SortDropDownPanel sortPanel = new SortDropDownPanel();
 
         final Image menuImage = new Image(FieldImages.INSTANCE.menu());
         menuImage.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.instance();
-                AppSite.getEventBus().fireEvent(new ScreenShiftEvent());
+                AppSite.getEventBus().fireEvent(new ScreenShiftEvent(EventSource.ToolbarMenuImage));
             }
         });
-
-        final Label sortLabel = new Label();
-        sortLabel.setText(i18n.tr("Sort"));
-        sortLabel.setStyleName(FieldTheme.StyleName.ToolbarLabel.name());
 
         final Image sortImage = new Image(FieldImages.INSTANCE.sort());
         sortImage.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                if (sortPopup.isShowing()) {
-                    sortPopup.hide();
+                if (sortPanel.isShowing()) {
+                    sortPanel.hide();
                 } else {
-                    sortPopup.show();
+                    showPanel(sortPanel);
                 }
             }
         });
@@ -75,13 +67,17 @@ public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
 
             @Override
             public void onClick(ClickEvent event) {
-                searchPopup.show();
+                AppSite.getPlaceController().goTo(new FieldSiteMap.Search());
             }
         });
 
         add(createHolder(menuImage));
-        add(createHolder(sortImage, sortLabel));
+        add(createHolder(sortImage));
         add(createHolder(searchImage));
+    }
+
+    private void showPanel(DropDownPanel panel) {
+        panel.showRelativeTo(this);
     }
 
     private SimplePanel createHolder(Image image) {
@@ -91,11 +87,4 @@ public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
         return holder;
     }
 
-    private Panel createHolder(Image image, Widget label) {
-        HorizontalPanel holder = new HorizontalPanel();
-        holder.setStyleName(FieldTheme.StyleName.ToolbarImageHolder.name());
-        holder.add(label);
-        holder.add(image);
-        return holder;
-    }
 }

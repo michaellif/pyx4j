@@ -18,7 +18,10 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.field.client.event.EventSource;
 import com.propertyvista.field.client.theme.FieldTheme;
+import com.propertyvista.field.client.ui.components.alerts.AlertsInfoView;
+import com.propertyvista.field.client.ui.components.alerts.AlertsScreenView;
 import com.propertyvista.field.client.ui.components.menu.MenuScreenView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
@@ -33,7 +36,11 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
 
     private final DisplayPanel fullScreen;
 
-    private final DisplayPanel background;
+    private final DisplayPanel menuBackground;
+
+    private final DisplayPanel alertsBackground;
+
+    private final DisplayPanel alertsInfo;
 
     private final DockLayoutPanel overlap;
 
@@ -49,7 +56,10 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
         details = initDisplay();
         fullScreen = initDisplay();
 
-        background = initBackgroundDisplay();
+        menuBackground = initDisplay(FieldTheme.StyleName.MenuScreen, FieldViewFactory.instance(MenuScreenView.class));
+        alertsBackground = initDisplay(FieldTheme.StyleName.AlertsScreen, FieldViewFactory.instance(AlertsScreenView.class));
+        alertsInfo = initDisplay(FieldTheme.StyleName.AlertsInfo, FieldViewFactory.instance(AlertsInfoView.class), false);
+        alertsInfo.setVisible(false);
 
         overlap = new DockLayoutPanel(Unit.PCT);
         overlap.setSize("100%", "100%");
@@ -57,9 +67,13 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
         overlap.addWest(lister, 100);
         overlap.addEast(details, 0);
         overlap.addSouth(fullScreen, 100);
-        setOverlapStyle(ScreenPosition.NORMAL);
 
-        add(background);
+        overlapPosition = ScreenPosition.NORMAL;
+        overlap.setStyleName(FieldTheme.StyleName.OverlapScreenNormal.name());
+
+        add(menuBackground);
+        add(alertsBackground);
+        add(alertsInfo);
         add(overlap);
     }
 
@@ -89,11 +103,17 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
         return display;
     }
 
-    private DisplayPanel initBackgroundDisplay() {
+    private DisplayPanel initDisplay(FieldTheme.StyleName style, IsWidget widget) {
+        return initDisplay(style, widget, true);
+    }
+
+    private DisplayPanel initDisplay(FieldTheme.StyleName style, IsWidget widget, boolean setSize) {
         DisplayPanel display = new DisplayPanel();
-        display.setSize("100%", "100%");
-        display.setStyleName(FieldTheme.StyleName.MenuScreen.name());
-        display.setWidget(FieldViewFactory.instance(MenuScreenView.class));
+        if (setSize) {
+            display.setSize("100%", "100%");
+        }
+        display.setStyleName(style.name());
+        display.setWidget(widget);
         return display;
     }
 
@@ -109,6 +129,7 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
         overlap.setWidgetHidden(lister, true);
         overlap.setWidgetHidden(details, true);
         overlap.setWidgetHidden(fullScreen, true);
+        alertsBackground.setVisible(false);
     }
 
     @Override
@@ -150,13 +171,36 @@ public class ScreenViewerImpl extends FlowPanel implements ScreenViewer {
     }
 
     @Override
-    public void shiftScreen() {
-        setOverlapStyle(overlapPosition == ScreenPosition.NORMAL ? ScreenPosition.SHIFTED : ScreenPosition.NORMAL);
+    public void shiftScreen(EventSource eventSource) {
+        overlapPosition = changeScreenPosition(eventSource);
+        overlap.setStyleName(chooseStyle(overlapPosition, eventSource));
+
+        alertsBackground.setVisible(eventSource == EventSource.AlertsImage && overlapPosition == ScreenPosition.SHIFTED);
     }
 
-    private void setOverlapStyle(ScreenPosition position) {
-        this.overlapPosition = position;
-        overlap.setStyleName(position == ScreenPosition.NORMAL ? FieldTheme.StyleName.OverlapScreenNormal.name() : FieldTheme.StyleName.OverlapScreenShifted
-                .name());
+    private ScreenPosition changeScreenPosition(EventSource eventSource) {
+        return overlapPosition == ScreenPosition.NORMAL ? ScreenPosition.SHIFTED : ScreenPosition.NORMAL;
+    }
+
+    @Override
+    public void showAlerts() {
+        alertsInfo.setVisible(true);
+    }
+
+    private String chooseStyle(ScreenPosition position, EventSource eventSource) {
+        String style = FieldTheme.StyleName.OverlapScreenNormal.name();
+
+        if (ScreenPosition.SHIFTED == position) {
+            switch (eventSource) {
+            case ToolbarMenuImage:
+                style = FieldTheme.StyleName.OverlapScreenShiftedRight.name();
+                break;
+            case AlertsImage:
+                style = FieldTheme.StyleName.OverlapScreenShiftedLeft.name();
+                break;
+            }
+        }
+
+        return style;
     }
 }

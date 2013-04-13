@@ -21,6 +21,7 @@ import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 import com.propertyvista.field.rpc.HeaderMode.NavigationToolbar;
+import com.propertyvista.field.rpc.HeaderMode.SearchToolbar;
 import com.propertyvista.field.rpc.HeaderMode.Toolbar;
 import com.propertyvista.field.rpc.ScreenMode.FullScreen;
 import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
@@ -114,6 +115,9 @@ public class FieldSiteMap implements SiteMap {
     }
 
     public static class ApplicationSelection extends AppPlace implements FullScreen {
+    }
+
+    public static class Search extends AppPlace implements HeaderLister, SearchToolbar {
     }
 
     public static class BuildingLister extends AppPlace implements HeaderLister, Toolbar {

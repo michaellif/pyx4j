@@ -26,7 +26,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImage, ToolbarImageHolder, ToolbarLabel, BuildingLister, BuildingDetails, MenuScreen, OverlapScreenNormal, OverlapScreenShifted, SortPanel, SearchPanel, SearchPanelToolbar, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget;
+        SiteView, SiteViewContent, SiteViewHeader, SiteMainArea, SiteViewDisplay, LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, ToolbarImage, ToolbarImageHolder, ToolbarLabel, BuildingLister, BuildingDetails, MenuScreen, AlertsScreen, AlertsScreenContent, AlertsInfo, OverlapScreenNormal, OverlapScreenShiftedLeft, OverlapScreenShiftedRight, SortPanel, SearchPanel, SearchPanelToolbar, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget;
     }
 
     public FieldTheme() {
@@ -171,8 +171,25 @@ public class FieldTheme extends VistaTheme {
 
         style = new Style(".", StyleName.MenuScreen);
         style.addProperty("position", "fixed");
-        style.addProperty("z-index", "-1");
+        style.addProperty("z-index", "-2");
         style.addProperty("background-color", "green");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AlertsScreen);
+        style.addProperty("position", "fixed");
+        style.addProperty("z-index", "-1");
+        style.addProperty("background-color", "red");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AlertsScreenContent);
+        style.addProperty("margin-left", "30%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.AlertsInfo);
+        style.addProperty("position", "fixed");
+        style.addProperty("z-index", "10");
+        style.addProperty("right", "0");
+        style.addProperty("bottom", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.OverlapScreenNormal);
@@ -180,15 +197,19 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("background-color", "white");
         addStyle(style);
 
-        style = new Style(".", StyleName.OverlapScreenShifted);
-        style.addProperty("margin-left", "80%");
+        style = new Style(".", StyleName.OverlapScreenShiftedLeft);
+        style.addProperty("margin-left", "-75%");
+        style.addProperty("background-color", "white");
+        addStyle(style);
+
+        style = new Style(".", StyleName.OverlapScreenShiftedRight);
+        style.addProperty("margin-left", "75%");
         style.addProperty("background-color", "white");
         addStyle(style);
 
         style = new Style(".", StyleName.SortPanel);
-        style.addProperty("margin-top", "5%");
         style.addProperty("width", "100%");
-        style.addProperty("height", "50%");
+        style.addProperty("bottom", "0");
         style.addProperty("background-color", "yellow");
         addStyle(style);
 

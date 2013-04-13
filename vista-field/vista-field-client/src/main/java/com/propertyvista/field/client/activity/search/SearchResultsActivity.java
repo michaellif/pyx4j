@@ -11,37 +11,26 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.field.client.activity.appselection;
+package com.propertyvista.field.client.activity.search;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.field.client.activity.alerts.AlertsActivity;
-import com.propertyvista.field.client.event.CheckAlertsEvent;
-import com.propertyvista.field.client.ui.appselection.ApplicationSelectionView;
+import com.propertyvista.field.client.ui.components.search.SearchResultsView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class ApplicationSelectionActivity extends AbstractActivity implements ApplicationSelectionView.Presenter {
+public class SearchResultsActivity extends AbstractActivity {
 
-    private final ApplicationSelectionView view;
+    private final SearchResultsView view;
 
-    public ApplicationSelectionActivity() {
-        view = FieldViewFactory.instance(ApplicationSelectionView.class);
-        AppSite.getEventBus().addHandler(CheckAlertsEvent.getType(), AlertsActivity.instance());
+    public SearchResultsActivity() {
+        view = FieldViewFactory.instance(SearchResultsView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
         panel.setWidget(view);
-    }
-
-    @Override
-    public void checkAlerts() {
-        AppSite.getEventBus().fireEvent(new CheckAlertsEvent());
     }
 
 }

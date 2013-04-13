@@ -37,4 +37,6 @@ public interface FieldImages extends VistaImages {
     @Source("back.png")
     ImageResource back();
 
+    @Source("alerts.png")
+    ImageResource alerts();
 }

@@ -19,7 +19,7 @@ public interface ApplicationSelectionView extends IsWidget {
 
     interface Presenter {
 
-        void selectApplication(String appName);
+        void checkAlerts();
 
     }
 
