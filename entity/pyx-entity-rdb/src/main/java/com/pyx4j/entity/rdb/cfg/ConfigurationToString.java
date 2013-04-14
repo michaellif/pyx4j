@@ -28,29 +28,29 @@ public class ConfigurationToString {
 
     public static String toString(Configuration conf) {
         StringBuilder b = new StringBuilder();
-        b.append("configurationClass                           : ").append(conf.getClass().getName()).append("\n");
-        b.append("driverClass                                  : ").append(conf.driverClass()).append("\n");
-        b.append("connectionUrl                                : ").append(conf.connectionUrl()).append("\n");
-        b.append("dbHost                                       : ").append(conf.dbHost()).append("\n");
-        b.append("dbName                                       : ").append(conf.dbName()).append("\n");
-        b.append("userName                                     : ").append(conf.userName()).append("\n");
-        b.append("Multitenant                                  : ").append(conf.getMultitenancyType()).append("\n");
-        b.append("Ddl                                          : ").append(conf.ddl()).append("\n");
+        b.append("configurationClass                                : ").append(conf.getClass().getName()).append("\n");
+        b.append("driverClass                                       : ").append(conf.driverClass()).append("\n");
+        b.append("connectionUrl                                     : ").append(conf.connectionUrl()).append("\n");
+        b.append("dbHost                                            : ").append(conf.dbHost()).append("\n");
+        b.append("dbName                                            : ").append(conf.dbName()).append("\n");
+        b.append("userName                                          : ").append(conf.userName()).append("\n");
+        b.append("Multitenant                                       : ").append(conf.getMultitenancyType()).append("\n");
+        b.append("Ddl                                               : ").append(conf.ddl()).append("\n");
 
         for (ConnectionType ct : ConnectionType.poolable()) {
             ConnectionPoolConfiguration cpc = conf.connectionPoolConfiguration(ct);
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".initialPoolSize", 46, ' ')).append(": ").append(cpc.initialPoolSize()).append("\n");
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".minPoolSize", 46, ' ')).append(": ").append(cpc.minPoolSize()).append("\n");
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolSize", 46, ' ')).append(": ").append(cpc.maxPoolSize()).append("\n");
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".unreturnedConnectionTimeout", 46, ' ')).append(": ")
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".initialPoolSize", 50, ' ')).append(": ").append(cpc.initialPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".minPoolSize", 50, ' ')).append(": ").append(cpc.minPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolSize", 50, ' ')).append(": ").append(cpc.maxPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".unreturnedConnectionTimeout", 50, ' ')).append(": ")
                     .append(cpc.unreturnedConnectionTimeout()).append("\n");
-            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolPreparedStatements", 46, ' ')).append(": ").append(cpc.maxPoolPreparedStatements())
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolPreparedStatements", 50, ' ')).append(": ").append(cpc.maxPoolPreparedStatements())
                     .append("\n");
         }
 
-        b.append("tablesIdentityOffset                         : ").append(conf.tablesIdentityOffset()).append("\n");
-        b.append("createForeignKeys                            : ").append(conf.createForeignKeys()).append("\n");
-        b.append("allowForeignKeyDeferrable                    : ").append(conf.allowForeignKeyDeferrable()).append("\n");
+        b.append("tablesIdentityOffset                              : ").append(conf.tablesIdentityOffset()).append("\n");
+        b.append("createForeignKeys                                 : ").append(conf.createForeignKeys()).append("\n");
+        b.append("allowForeignKeyDeferrable                         : ").append(conf.allowForeignKeyDeferrable()).append("\n");
 
         return b.toString();
     }
