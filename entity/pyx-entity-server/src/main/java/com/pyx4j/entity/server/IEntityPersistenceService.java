@@ -50,7 +50,8 @@ public interface IEntityPersistenceService {
      * 
      * @param transactionScopeOption
      * @param connectionType
-     *            Web (Online Transaction), BackgroundProcess all the rest
+     *            Web (Online Transaction), BackgroundProcess all the rest,
+     *            Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
      */
     public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget);
 

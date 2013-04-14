@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.server;
 
-
 /**
  * This defines what connection pool would be used.
  */
@@ -32,14 +31,26 @@ public enum ConnectionTarget {
     Web,
 
     /**
-     * Long lived transactions, may take days.
-     */
-    BackgroundProcess,
-
-    /**
      * Transactions started from BackgroundProcess.
      * Transaction duration is limited to ~10 minutes to accommodate external systems connection and complex internal processing.
      */
-    TransactionProcessing;
+    TransactionProcessing,
+
+    /**
+     * Long lived transactions, may take days.
+     */
+    BackgroundProcess;
+
+    public boolean canStartNested(ConnectionTarget connectionTarget) {
+        switch (this) {
+        case Web:
+            return connectionTarget == ConnectionTarget.Web;
+        case TransactionProcessing:
+            return connectionTarget == ConnectionTarget.Web || connectionTarget == ConnectionTarget.TransactionProcessing;
+        case BackgroundProcess:
+            return true;
+        }
+        throw new IllegalArgumentException();
+    }
 
 }

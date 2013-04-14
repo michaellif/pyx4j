@@ -208,7 +208,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
-            createTransactionContext(persistenceContext, TransactionType.SingelAPICallAutoCommit, false);
+            createTransactionContext(persistenceContext, TransactionType.SingelAPICallAutoCommit, ConnectionTarget.Web);
         } else {
             assert (!persistenceContext.isSingelAPICallTransaction()) : "PersistenceContext leftover detected, Context open from "
                     + persistenceContext.getContextOpenFrom();
@@ -238,26 +238,36 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void startTransaction() {
-        startTransactionImpl(null, false);
+        startTransactionImpl(null, ConnectionTarget.Web);
     }
 
     @Override
     public void startBackgroundProcessTransaction() {
-        startTransactionImpl(null, true);
+        startTransactionImpl(null, ConnectionTarget.BackgroundProcess);
     }
 
     @Override
     public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget) {
         assert transactionScopeOption != null;
-        startTransactionImpl(transactionScopeOption, connectionTarget == ConnectionTarget.BackgroundProcess);
+        startTransactionImpl(transactionScopeOption, connectionTarget);
     }
 
-    private void startTransactionImpl(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
+    private void startTransactionImpl(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget) {
         PersistenceContext persistenceContext = threadSessions.get();
         PersistenceContext newPersistenceContext;
 
-        if ((persistenceContext != null) && (backgroundProcess) && (!persistenceContext.isBackgroundProcessTransaction())) {
-            throw new Error("Online Transaction should be closed before starting BackgroundProcess");
+        ConnectionTarget newConnectionTarget = connectionTarget;
+
+        if (persistenceContext != null) {
+            if (!persistenceContext.getConnectionTarget().canStartNested(newConnectionTarget)) {
+                throw new Error("Online Transaction should be closed before starting BackgroundProcess or TransactionProcessing");
+            }
+
+            // Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
+            if (newConnectionTarget == ConnectionTarget.Web
+                    && ((persistenceContext.getConnectionTarget() == ConnectionTarget.BackgroundProcess || persistenceContext.getConnectionTarget() == ConnectionTarget.TransactionProcessing))) {
+                newConnectionTarget = ConnectionTarget.TransactionProcessing;
+            }
         }
 
         //TODO make it betters
@@ -268,7 +278,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 persistenceContext.starNestedContext(false);
                 newPersistenceContext = persistenceContext;
             } else {
-                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.JDBCPersistence, backgroundProcess);
+                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.JDBCPersistence, newConnectionTarget);
             }
         } else {
             switch (transactionScopeOption) {
@@ -285,7 +295,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     persistenceContext.starNestedContext(true);
                     newPersistenceContext = persistenceContext;
                 } else {
-                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, backgroundProcess);
+                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, newConnectionTarget);
                 }
                 break;
             case Required:
@@ -294,15 +304,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     persistenceContext.starNestedContext(true);
                     newPersistenceContext = persistenceContext;
                 } else {
-                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, backgroundProcess);
+                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, newConnectionTarget);
                 }
                 break;
             case RequiresNew:
-                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, backgroundProcess);
+                newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, newConnectionTarget);
                 break;
             case Suppress:
                 if ((persistenceContext == null) || (persistenceContext.isTransaction())) {
-                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.AutoCommit, backgroundProcess);
+                    newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.AutoCommit, newConnectionTarget);
                 } else {
                     tracedSavepoint = true;
                     persistenceContext.starNestedContext(false);
@@ -316,8 +326,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         newPersistenceContext.startTransaction();
 
         if (PersistenceContext.traceTransaction) {
-            log.info("{} startTransaction scope {} {}\n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption, backgroundProcess ? "Background"
-                    : "Online", Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class));
+            log.info("{} startTransaction scope {} {}\n\tfrom:{} ", newPersistenceContext.txId(), transactionScopeOption, newConnectionTarget,
+                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class, UnitOfWork.class));
             if (tracedSavepoint) {
                 if (PersistenceContext.traceTransaction) {
                     log.info("{} setSavepoint SP{}", newPersistenceContext.txId(), newPersistenceContext.savepoints);
@@ -327,9 +337,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private PersistenceContext createTransactionContext(PersistenceContext suppressedPersistenceContext, TransactionType transactionType,
-            boolean backgroundProcessTransaction) {
-        PersistenceContext newPersistenceContext = new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType,
-                backgroundProcessTransaction);
+            ConnectionTarget connectionTarget) {
+        PersistenceContext newPersistenceContext = new PersistenceContext(suppressedPersistenceContext, connectionProvider, transactionType, connectionTarget);
         threadSessions.set(newPersistenceContext);
         return newPersistenceContext;
     }

@@ -23,6 +23,8 @@ package com.pyx4j.entity.rdb.cfg;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.entity.server.ConnectionTarget;
+
 /**
  * This defines what connection pool would be used.
  */
@@ -34,15 +36,15 @@ public enum ConnectionPoolType {
     Web,
 
     /**
-     * Long lived transactions, may take days.
-     */
-    BackgroundProcess,
-
-    /**
      * Transactions started from BackgroundProcess.
      * Transaction duration is limited to ~10 minutes to accommodate external systems connection and complex internal processing.
      */
     TransactionProcessing,
+
+    /**
+     * Long lived transactions, may take days.
+     */
+    BackgroundProcess,
 
     /**
      * Internal administrative transactions.
@@ -53,6 +55,18 @@ public enum ConnectionPoolType {
 
     public static Collection<ConnectionPoolType> poolable() {
         return EnumSet.of(ConnectionPoolType.Web, ConnectionPoolType.BackgroundProcess, ConnectionPoolType.TransactionProcessing);
+    }
+
+    public static ConnectionPoolType translate(ConnectionTarget connectionTarget) {
+        switch (connectionTarget) {
+        case Web:
+            return ConnectionPoolType.Web;
+        case TransactionProcessing:
+            return ConnectionPoolType.TransactionProcessing;
+        case BackgroundProcess:
+            return ConnectionPoolType.BackgroundProcess;
+        }
+        throw new IllegalArgumentException();
     }
 
 }

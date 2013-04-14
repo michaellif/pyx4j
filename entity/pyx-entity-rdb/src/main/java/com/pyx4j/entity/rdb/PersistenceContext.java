@@ -39,6 +39,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -54,7 +55,7 @@ public class PersistenceContext {
 
     private final ConnectionProvider connectionProvider;
 
-    private final boolean backgroundProcess;
+    private final ConnectionTarget connectionTarget;
 
     private final TransactionType transactionType;
 
@@ -117,10 +118,10 @@ public class PersistenceContext {
     private final Stack<TransactionContextOptions> options = new Stack<TransactionContextOptions>();
 
     PersistenceContext(PersistenceContext suppressedPersistenceContext, ConnectionProvider connectionProvider, TransactionType transactionType,
-            boolean backgroundProcess) {
+            ConnectionTarget connectionTarget) {
         this.suppressedPersistenceContext = suppressedPersistenceContext;
         this.connectionProvider = connectionProvider;
-        this.backgroundProcess = backgroundProcess;
+        this.connectionTarget = connectionTarget;
         this.transactionType = transactionType;
         if (traceOpenSession) {
             this.contextOpenFrom = Trace.getStackTrace(new Throwable());
@@ -196,8 +197,8 @@ public class PersistenceContext {
         return transactionType == TransactionType.Transaction || transactionType == TransactionType.JDBCPersistence;
     }
 
-    public boolean isBackgroundProcessTransaction() {
-        return backgroundProcess;
+    public ConnectionTarget getConnectionTarget() {
+        return connectionTarget;
     }
 
     void setTimeNow(Date date) {
@@ -224,11 +225,7 @@ public class PersistenceContext {
 
     public Connection getConnection() {
         if (connection == null) {
-            if (backgroundProcess) {
-                connection = connectionProvider.getBackgroundProcessConnection();
-            } else {
-                connection = connectionProvider.getConnection();
-            }
+            connection = connectionProvider.getConnection(getConnectionTarget());
             transactionStart = -1;
             if (isExplicitTransaction()) {
                 try {
@@ -242,8 +239,7 @@ public class PersistenceContext {
             }
 
             if (traceOpenSession) {
-                log.info("*** connection open  {} {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType, backgroundProcess ? "Background"
-                        : "Online");
+                log.info("*** connection open  {} {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType, getConnectionTarget());
                 synchronized (openSessionLock) {
                     openSessionCount++;
                     openSessions.add(this);

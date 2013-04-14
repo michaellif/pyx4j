@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
@@ -47,6 +47,7 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
 import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 
 public class ConnectionProvider {
@@ -205,18 +206,9 @@ public class ConnectionProvider {
         }
     }
 
-    public Connection getConnection() {
+    public Connection getConnection(ConnectionTarget connectionTarget) {
         try {
-            return connectionPool.getDataSource(ConnectionPoolType.Web).getConnection();
-        } catch (SQLException e) {
-            log.error("SQL connection error", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Connection getBackgroundProcessConnection() {
-        try {
-            return connectionPool.getDataSource(ConnectionPoolType.BackgroundProcess).getConnection();
+            return connectionPool.getDataSource(ConnectionPoolType.translate(connectionTarget)).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);

@@ -32,14 +32,16 @@ public class UnitOfWork {
     private final ConnectionTarget connectionTarget;
 
     /**
-     * Start short lived Online Transaction
+     * Start short lived Online Transaction.
+     * Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
      */
     public UnitOfWork() {
         this(TransactionScopeOption.Nested);
     }
 
     /**
-     * Start short lived Online Transaction
+     * Start short lived Online Transaction.
+     * Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
      */
     public UnitOfWork(TransactionScopeOption transactionScopeOption) {
         this(transactionScopeOption, ConnectionTarget.Web);
@@ -48,7 +50,8 @@ public class UnitOfWork {
     /**
      * @param transactionScopeOption
      * @param connectionTarget
-     *            Web (Online Transaction), BackgroundProcess all the rest
+     *            Web (Online Transaction), BackgroundProcess all the rest.
+     *            Web transactions are replaced with TransactionProcessing when started in context of BackgroundProcess.
      */
     public UnitOfWork(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget) {
         this.transactionScopeOption = transactionScopeOption;
