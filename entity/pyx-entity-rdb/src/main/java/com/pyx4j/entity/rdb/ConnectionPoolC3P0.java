@@ -36,8 +36,8 @@ import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
 
@@ -45,7 +45,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private static boolean singleInstanceCreated = false;
 
-    private final Map<ConnectionType, DataSource> dataSources = new HashMap<ConnectionType, DataSource>();
+    private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
     public ConnectionPoolC3P0(Configuration configuration) throws Exception {
         if (singleInstanceCreated) {
@@ -53,7 +53,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         }
         log.debug("initialize DB ConnectionPool {}", configuration);
 
-        for (ConnectionType connectionType : ConnectionType.poolable()) {
+        for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             ConnectionPoolConfiguration cpc = configuration.connectionPoolConfiguration(connectionType);
 
             ComboPooledDataSource dataSource = createDataSource(configuration);
@@ -67,7 +67,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setUnreturnedConnectionTimeout(cpc.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
-            if (ServerSideConfiguration.isRunningInDeveloperEnviroment() || (connectionType != ConnectionType.Web)) {
+            if (ServerSideConfiguration.isRunningInDeveloperEnviroment() || (connectionType != ConnectionPoolType.Web)) {
                 dataSource.setTestConnectionOnCheckout(true);
             }
 
@@ -80,7 +80,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
         {
             dataSources.put(
-                    ConnectionType.DDL,
+                    ConnectionPoolType.DDL,
                     DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
                             configuration.dbAdministrationPassword()));
         }
@@ -109,7 +109,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     }
 
     @Override
-    public DataSource getDataSource(ConnectionType connectionType) {
+    public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
     }
 

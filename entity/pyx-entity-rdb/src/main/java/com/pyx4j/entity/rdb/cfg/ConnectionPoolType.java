@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.server;
+package com.pyx4j.entity.rdb.cfg;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -26,7 +26,7 @@ import java.util.EnumSet;
 /**
  * This defines what connection pool would be used.
  */
-public enum ConnectionType {
+public enum ConnectionPoolType {
 
     /**
      * Short lived web request transactions. 1 minute.
@@ -51,8 +51,8 @@ public enum ConnectionType {
      */
     DDL;
 
-    public static Collection<ConnectionType> poolable() {
-        return EnumSet.of(ConnectionType.Web, ConnectionType.BackgroundProcess, ConnectionType.TransactionProcessing);
+    public static Collection<ConnectionPoolType> poolable() {
+        return EnumSet.of(ConnectionPoolType.Web, ConnectionPoolType.BackgroundProcess, ConnectionPoolType.TransactionProcessing);
     }
 
 }

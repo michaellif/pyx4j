@@ -24,7 +24,6 @@ import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
 
@@ -88,7 +87,7 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return properties.connectionPoolConfiguration(connectionType);
     }
 

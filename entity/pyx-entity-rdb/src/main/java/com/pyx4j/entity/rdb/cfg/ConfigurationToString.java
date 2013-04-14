@@ -22,7 +22,6 @@ package com.pyx4j.entity.rdb.cfg;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationToString {
 
@@ -37,7 +36,7 @@ public class ConfigurationToString {
         b.append("Multitenant                                       : ").append(conf.getMultitenancyType()).append("\n");
         b.append("Ddl                                               : ").append(conf.ddl()).append("\n");
 
-        for (ConnectionType ct : ConnectionType.poolable()) {
+        for (ConnectionPoolType ct : ConnectionPoolType.poolable()) {
             ConnectionPoolConfiguration cpc = conf.connectionPoolConfiguration(ct);
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".initialPoolSize", 50, ' ')).append(": ").append(cpc.initialPoolSize()).append("\n");
             b.append(CommonsStringUtils.paddingRight(ct.name() + ".minPoolSize", 50, ' ')).append(": ").append(cpc.minPoolSize()).append("\n");

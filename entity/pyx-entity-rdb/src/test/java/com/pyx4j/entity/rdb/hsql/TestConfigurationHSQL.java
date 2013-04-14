@@ -22,11 +22,11 @@ package com.pyx4j.entity.rdb.hsql;
 
 import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
 import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
 
@@ -51,7 +51,7 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new TestsConnectionPoolConfiguration(connectionType);
     }
 

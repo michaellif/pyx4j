@@ -51,7 +51,7 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionReason;
 import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -70,7 +70,7 @@ import com.pyx4j.entity.rdb.mapping.TableModleVersioned;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -174,7 +174,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void pingConnection() {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         endCallContext();
     }
 
@@ -202,8 +202,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return connectionProvider.getDialect().getMultitenancyType();
     }
 
-    private void startCallContext(ConnectionTarget reason) {
-        if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
+    private void startCallContext(ConnectionReason reason) {
+        if ((reason == ConnectionReason.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
             throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
         PersistenceContext persistenceContext = threadSessions.get();
@@ -247,9 +247,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionType connectionType) {
+    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget) {
         assert transactionScopeOption != null;
-        startTransactionImpl(transactionScopeOption, connectionType == ConnectionType.BackgroundProcess);
+        startTransactionImpl(transactionScopeOption, connectionTarget == ConnectionTarget.BackgroundProcess);
     }
 
     private void startTransactionImpl(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
@@ -420,7 +420,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private void databaseVersion() {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             DatabaseMetaData dbMeta = getPersistenceContext().getConnection().getMetaData();
             log.debug("DB {} {}", dbMeta.getDatabaseProductName(), dbMeta.getDatabaseProductVersion());
@@ -478,11 +478,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public Connection getAministrationConnection() {
-        return connectionProvider.getConnection(ConnectionTarget.forDDL);
+        return connectionProvider.getConnection(ConnectionReason.forDDL);
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             return TableModel.isTableExists(getPersistenceContext(), EntityFactory.getEntityMeta(entityClass));
         } catch (SQLException e) {
@@ -494,7 +494,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public void dropTable(Class<? extends IEntity> entityClass) {
-        startCallContext(ConnectionTarget.forDDL);
+        startCallContext(ConnectionReason.forDDL);
         try {
             mappings.dropTable(getPersistenceContext(), EntityFactory.getEntityMeta(entityClass));
         } catch (SQLException e) {
@@ -519,7 +519,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public int dropForeignKeys(Class<? extends IEntity> entityClass) {
-        startCallContext(ConnectionTarget.forDDL);
+        startCallContext(ConnectionReason.forDDL);
         try {
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = new TableModel(getPersistenceContext().getDialect(), mappings, entityMeta);
@@ -541,7 +541,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     public TableMetadata getTableMetadata(EntityMeta entityMeta) throws SQLException {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             return TableMetadata.getTableMetadata(getPersistenceContext(), configuration,
                     TableModel.getTableName(getPersistenceContext().getDialect(), entityMeta));
@@ -552,7 +552,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void persist(IEntity entity) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             entity = entity.cast();
             persist(tableModel(entity.getEntityMeta()), entity);
@@ -816,7 +816,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     //TODO remove this function, see proper implementation below
     @Override
     public <T extends IEntity> void persist(Iterable<T> entityIterable) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
                 for (T entity : entityIterable) {
@@ -835,7 +835,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
      */
     @Deprecated
     public <T extends IEntity> void persistListOneLevel(Iterable<T> entityIterable, boolean returnId) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
                 T entity = entityIterable.iterator().next();
@@ -849,7 +849,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     //@Override
     //TODO Fix this to save collection
     public <T extends IEntity> void persist_TODO_FIX(Iterable<T> entityIterable) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
                 T entity = entityIterable.iterator().next();
@@ -862,7 +862,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void merge(Iterable<T> entityIterable) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             if (entityIterable.iterator().hasNext()) {
                 for (T entity : entityIterable) {
@@ -935,7 +935,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public void merge(IEntity entity) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             entity = entity.cast();
             merge(tableModel(entity.getEntityMeta()), entity);
@@ -1266,7 +1266,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             Mappings.assertPersistableEntity(entity.getEntityMeta());
             return false;
         }
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             entity = entity.cast();
             clearRetrieveValues(entity);
@@ -1292,7 +1292,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             break;
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
-            startCallContext(ConnectionTarget.forRead);
+            startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
@@ -1329,7 +1329,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
         case Detached:
             assert (collectionMember.getOwner().getPrimaryKey() != null);
-            startCallContext(ConnectionTarget.forRead);
+            startCallContext(ConnectionReason.forRead);
             try {
                 TableModel tm = tableModel(collectionMember.getOwner().getEntityMeta());
                 //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
@@ -1449,7 +1449,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> rs = tm.query(getPersistenceContext(), criteria, 1, attachLevel);
@@ -1481,7 +1481,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> Map<Key, T> retrieve(Class<T> entityClass, Iterable<Key> primaryKeys) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         Map<Key, T> entities = new HashMap<Key, T>();
         TableModel tm = null;
         try {
@@ -1546,7 +1546,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<T> query(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<T> l = tm.query(getPersistenceContext(), criteria, -1, attachLevel);
@@ -1561,7 +1561,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> ICursorIterator<T> query(final String encodedCursorReference, EntityQueryCriteria<T> criteria, final AttachLevel attachLevel) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorReference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
@@ -1615,7 +1615,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> List<Key> queryKeys(EntityQueryCriteria<T> criteria) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             return tm.queryKeys(getPersistenceContext(), criteria, -1);
@@ -1626,7 +1626,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> ICursorIterator<Key> queryKeys(final String encodedCursorReference, EntityQueryCriteria<T> criteria) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         final TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
         if (encodedCursorReference != null) {
             log.info("Received encodedCursorReference:" + encodedCursorReference + ", will use it");
@@ -1679,7 +1679,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> boolean exists(Class<T> entityClass, Key primaryKey) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(entityClass));
             return tm.exists(getPersistenceContext(), primaryKey);
@@ -1700,7 +1700,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int count(EntityQueryCriteria<T> criteria) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             Number count = (Number) tm.aggregate(getPersistenceContext(), criteria, SQLAggregateFunctions.COUNT, null);
@@ -1725,7 +1725,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private <T extends IEntity> void delete(EntityMeta entityMeta, Key primaryKey) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             cascadeDelete(entityMeta, primaryKey);
         } finally {
@@ -1818,7 +1818,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> int delete(EntityQueryCriteria<T> criteria) {
-        startCallContext(ConnectionTarget.forRead);
+        startCallContext(ConnectionReason.forRead);
         try {
             TableModel tm = tableModel(EntityFactory.getEntityMeta(criteria.getEntityClass()));
             List<Key> l = tm.queryKeys(getPersistenceContext(), criteria, -1);
@@ -1835,7 +1835,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void delete(Class<T> entityClass, Iterable<Key> primaryKeys) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(entityMeta);
@@ -1861,7 +1861,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> void truncate(Class<T> entityClass) {
-        startCallContext(ConnectionTarget.forUpdate);
+        startCallContext(ConnectionReason.forUpdate);
         try {
             EntityMeta entityMeta = EntityFactory.getEntityMeta(entityClass);
             TableModel tm = tableModel(entityMeta);

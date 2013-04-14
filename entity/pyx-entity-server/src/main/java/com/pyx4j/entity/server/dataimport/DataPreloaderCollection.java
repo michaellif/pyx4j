@@ -33,7 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -148,7 +148,7 @@ public class DataPreloaderCollection extends AbstractDataPreloader {
             log.debug("create preloader {}", preloader.getClass());
             long start = System.currentTimeMillis();
 
-            String txt = new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionType.BackgroundProcess)
+            String txt = new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess)
                     .execute(new Executable<String, RuntimeException>() {
 
                         @Override

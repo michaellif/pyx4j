@@ -24,7 +24,6 @@ import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationOracleProperties extends ConfigurationOracle {
 
@@ -97,7 +96,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return properties.connectionPoolConfiguration(connectionType);
     }
 

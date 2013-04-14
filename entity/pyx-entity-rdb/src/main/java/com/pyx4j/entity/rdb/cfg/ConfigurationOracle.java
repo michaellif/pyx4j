@@ -25,7 +25,6 @@ import java.util.List;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
-import com.pyx4j.entity.server.ConnectionType;
 
 public abstract class ConfigurationOracle implements Configuration {
 
@@ -144,7 +143,7 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new ConnectionPoolConfiguration(connectionType);
     }
 

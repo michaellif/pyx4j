@@ -69,7 +69,7 @@ import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.IEntityCacheService;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -226,7 +226,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     }
 
     @Override
-    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionType connectionType) {
+    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionTarget connectionTarget) {
         // TODO
     }
 

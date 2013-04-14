@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -84,7 +84,7 @@ public abstract class DatastoreTestBase extends TestCase {
         if (srv == null) {
             srv = PersistenceServicesFactory.getPersistenceService();
         }
-        srv.startTransaction(TransactionScopeOption.Suppress, ConnectionType.Web);
+        srv.startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.Web);
         log.debug("start test {}.{}", this.getClass().getName(), this.getName());
     }
 

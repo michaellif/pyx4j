@@ -22,10 +22,10 @@ package com.pyx4j.entity.rdb.postgresql;
 
 import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
 import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQL {
 
@@ -50,7 +50,7 @@ public class TestConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Config
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new TestsConnectionPoolConfiguration(connectionType);
     }
 

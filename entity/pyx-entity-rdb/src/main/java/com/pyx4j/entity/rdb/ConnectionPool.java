@@ -22,11 +22,11 @@ package com.pyx4j.entity.rdb;
 
 import javax.sql.DataSource;
 
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 
 public interface ConnectionPool {
 
-    public DataSource getDataSource(ConnectionType connectionType);
+    public DataSource getDataSource(ConnectionPoolType connectionType);
 
     public void resetConnectionPool();
 

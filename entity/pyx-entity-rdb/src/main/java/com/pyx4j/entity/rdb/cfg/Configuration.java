@@ -26,7 +26,6 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.server.ConnectionType;
 
 public interface Configuration extends IPersistenceConfiguration {
 
@@ -53,8 +52,8 @@ public interface Configuration extends IPersistenceConfiguration {
         /**
          * Set the default values for all DB types
          */
-        public ConnectionPoolConfiguration(ConnectionType connectionType) {
-            assert connectionType != ConnectionType.DDL;
+        public ConnectionPoolConfiguration(ConnectionPoolType connectionType) {
+            assert connectionType != ConnectionPoolType.DDL;
 
             switch (connectionType) {
             case BackgroundProcess:
@@ -170,7 +169,7 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public ConnectionPoolProvider connectionPool();
 
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType);
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType);
 
     /**
      * 

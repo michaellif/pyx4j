@@ -18,17 +18,28 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb;
+package com.pyx4j.entity.server;
 
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
-import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 
-public class TestsConnectionPoolConfiguration extends ConnectionPoolConfiguration {
+/**
+ * This defines what connection pool would be used.
+ */
+public enum ConnectionTarget {
 
-    public TestsConnectionPoolConfiguration(ConnectionPoolType connectionType) {
-        super(connectionType);
-        minPoolSize = 1;
-        maxPoolSize = 5;
-    }
+    /**
+     * Short lived web request transactions. 1 minute.
+     */
+    Web,
+
+    /**
+     * Long lived transactions, may take days.
+     */
+    BackgroundProcess,
+
+    /**
+     * Transactions started from BackgroundProcess.
+     * Transaction duration is limited to ~10 minutes to accommodate external systems connection and complex internal processing.
+     */
+    TransactionProcessing;
 
 }

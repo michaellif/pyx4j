@@ -32,17 +32,17 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 
 public class ConnectionPoolDBCP implements ConnectionPool {
 
-    private final Map<ConnectionType, DataSource> dataSources = new HashMap<ConnectionType, DataSource>();
+    private final Map<ConnectionPoolType, DataSource> dataSources = new HashMap<ConnectionPoolType, DataSource>();
 
-    private final Map<ConnectionType, GenericObjectPool> connectionPools = new HashMap<ConnectionType, GenericObjectPool>();
+    private final Map<ConnectionPoolType, GenericObjectPool> connectionPools = new HashMap<ConnectionPoolType, GenericObjectPool>();
 
     public ConnectionPoolDBCP(Configuration cfg) {
 
-        for (ConnectionType connectionType : ConnectionType.poolable()) {
+        for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             GenericObjectPool connectionPool = new GenericObjectPool(null);
             connectionPool.setTestWhileIdle(true);
 
@@ -71,13 +71,13 @@ public class ConnectionPoolDBCP implements ConnectionPool {
 
             DataSource dataSourceAministration = new PoolingDataSource(connectionPool);
 
-            dataSources.put(ConnectionType.DDL, dataSourceAministration);
-            connectionPools.put(ConnectionType.DDL, connectionPool);
+            dataSources.put(ConnectionPoolType.DDL, dataSourceAministration);
+            connectionPools.put(ConnectionPoolType.DDL, connectionPool);
         }
     }
 
     @Override
-    public DataSource getDataSource(ConnectionType connectionType) {
+    public DataSource getDataSource(ConnectionPoolType connectionType) {
         return dataSources.get(connectionType);
     }
 

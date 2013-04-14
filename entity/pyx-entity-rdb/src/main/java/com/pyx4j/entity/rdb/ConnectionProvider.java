@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
@@ -46,7 +47,6 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
 import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
-import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 
 public class ConnectionProvider {
@@ -57,7 +57,7 @@ public class ConnectionProvider {
 
     private Dialect dialect;
 
-    public static enum ConnectionTarget {
+    public static enum ConnectionReason {
 
         forDDL,
 
@@ -189,15 +189,15 @@ public class ConnectionProvider {
         return dialect;
     }
 
-    public Connection getConnection(ConnectionTarget reason) {
+    public Connection getConnection(ConnectionReason reason) {
         try {
-            if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
+            if ((reason == ConnectionReason.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
                 throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
-            if (reason == ConnectionTarget.forDDL) {
-                return connectionPool.getDataSource(ConnectionType.DDL).getConnection();
+            if (reason == ConnectionReason.forDDL) {
+                return connectionPool.getDataSource(ConnectionPoolType.DDL).getConnection();
             } else {
-                return connectionPool.getDataSource(ConnectionType.Web).getConnection();
+                return connectionPool.getDataSource(ConnectionPoolType.Web).getConnection();
             }
         } catch (SQLException e) {
             log.error("SQL connection error", e);
@@ -207,7 +207,7 @@ public class ConnectionProvider {
 
     public Connection getConnection() {
         try {
-            return connectionPool.getDataSource(ConnectionType.Web).getConnection();
+            return connectionPool.getDataSource(ConnectionPoolType.Web).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
@@ -216,7 +216,7 @@ public class ConnectionProvider {
 
     public Connection getBackgroundProcessConnection() {
         try {
-            return connectionPool.getDataSource(ConnectionType.BackgroundProcess).getConnection();
+            return connectionPool.getDataSource(ConnectionPoolType.BackgroundProcess).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
@@ -225,7 +225,7 @@ public class ConnectionProvider {
 
     public Connection getAdministrationConnection() {
         try {
-            return connectionPool.getDataSource(ConnectionType.DDL).getConnection();
+            return connectionPool.getDataSource(ConnectionPoolType.DDL).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);

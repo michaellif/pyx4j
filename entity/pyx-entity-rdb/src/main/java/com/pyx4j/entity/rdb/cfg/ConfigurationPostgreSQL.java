@@ -23,7 +23,6 @@ package com.pyx4j.entity.rdb.cfg;
 import java.util.List;
 
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.server.ConnectionType;
 
 public abstract class ConfigurationPostgreSQL implements Configuration {
 
@@ -124,7 +123,7 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new ConnectionPoolConfiguration(connectionType);
     }
 

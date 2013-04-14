@@ -28,7 +28,6 @@ import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationProperties {
 
@@ -62,10 +61,10 @@ public class ConfigurationProperties {
 
     public Ddl ddl = Ddl.auto;
 
-    public final Map<ConnectionType, ConnectionPoolConfiguration> connectionPoolCfg = new HashMap<ConnectionType, ConnectionPoolConfiguration>();
+    public final Map<ConnectionPoolType, ConnectionPoolConfiguration> connectionPoolCfg = new HashMap<ConnectionPoolType, ConnectionPoolConfiguration>();
 
     ConfigurationProperties() {
-        for (ConnectionType connectionType : ConnectionType.poolable()) {
+        for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             connectionPoolCfg.put(connectionType, new ConnectionPoolConfiguration(connectionType));
         }
     }
@@ -91,7 +90,7 @@ public class ConfigurationProperties {
         this.forceQualifiedNames = c.getBooleanValue("forceQualifiedNames", this.forceQualifiedNames);
         this.tablesSchema = c.getValue("tablesSchema", this.tablesSchema);
 
-        for (ConnectionType connectionType : ConnectionType.poolable()) {
+        for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             ConnectionPoolConfiguration cpc = connectionPoolConfiguration(connectionType);
             cpc.initialPoolSize = c.getIntegerValue(connectionType.name() + ".initialPoolSize", cpc.initialPoolSize);
             cpc.minPoolSize = c.getIntegerValue(connectionType.name() + ".minPoolSize", cpc.minPoolSize);
@@ -120,7 +119,7 @@ public class ConfigurationProperties {
         }
     }
 
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return connectionPoolCfg.get(connectionType);
     }
 }

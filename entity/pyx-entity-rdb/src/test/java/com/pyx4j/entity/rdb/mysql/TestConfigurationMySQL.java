@@ -23,10 +23,10 @@ package com.pyx4j.entity.rdb.mysql;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
 import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
-import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
@@ -51,7 +51,7 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     }
 
     @Override
-    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
         return new TestsConnectionPoolConfiguration(connectionType);
     }
 

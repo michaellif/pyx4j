@@ -43,7 +43,7 @@ import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.ConnectionProvider;
-import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
+import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionReason;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
@@ -330,7 +330,7 @@ public class Mappings {
     }
 
     private void createSharedSequence(PersistenceContext persistenceContext, String sequenceName) throws SQLException {
-        Connection connection = connectionProvider.getConnection(ConnectionTarget.forDDL);
+        Connection connection = connectionProvider.getConnection(ConnectionReason.forDDL);
         try {
             SQLUtils.execute(connection, persistenceContext.getDialect().getCreateSequenceSql(sequenceName, nextIdentityOffset()));
         } finally {
@@ -380,7 +380,7 @@ public class Mappings {
         sequences = new HashSet<String>();
         Connection connection = null;
         if (configuration.sharedSequencesSchema() != null) {
-            connection = connectionProvider.getConnection(ConnectionTarget.forRead);
+            connection = connectionProvider.getConnection(ConnectionReason.forRead);
         } else {
             connection = persistenceContext.getConnection();
         }
