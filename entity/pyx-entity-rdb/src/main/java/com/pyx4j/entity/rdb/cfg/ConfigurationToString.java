@@ -20,6 +20,10 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
+import com.pyx4j.entity.server.ConnectionType;
+
 public class ConfigurationToString {
 
     public static String toString(Configuration conf) {
@@ -32,15 +36,18 @@ public class ConfigurationToString {
         b.append("userName                                     : ").append(conf.userName()).append("\n");
         b.append("Multitenant                                  : ").append(conf.getMultitenancyType()).append("\n");
         b.append("Ddl                                          : ").append(conf.ddl()).append("\n");
-        b.append("initialPoolSize                              : ").append(conf.initialPoolSize()).append("\n");
-        b.append("minPoolSize                                  : ").append(conf.minPoolSize()).append("\n");
-        b.append("maxPoolSize                                  : ").append(conf.maxPoolSize()).append("\n");
-        b.append("initialBackgroundProcessPoolSize             : ").append(conf.initialBackgroundProcessPoolSize()).append("\n");
-        b.append("minBackgroundProcessPoolSize                 : ").append(conf.minBackgroundProcessPoolSize()).append("\n");
-        b.append("maxBackgroundProcessPoolSize                 : ").append(conf.maxBackgroundProcessPoolSize()).append("\n");
-        b.append("maxPoolPreparedStatements                    : ").append(conf.maxPoolPreparedStatements()).append("\n");
-        b.append("unreturnedConnectionTimeout                  : ").append(conf.unreturnedConnectionTimeout()).append("\n");
-        b.append("unreturnedConnectionBackgroundProcessTimeout : ").append(conf.unreturnedConnectionBackgroundProcessTimeout()).append("\n");
+
+        for (ConnectionType ct : ConnectionType.poolable()) {
+            ConnectionPoolConfiguration cpc = conf.connectionPoolConfiguration(ct);
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".initialPoolSize", 46, ' ')).append(": ").append(cpc.initialPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".minPoolSize", 46, ' ')).append(": ").append(cpc.minPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolSize", 46, ' ')).append(": ").append(cpc.maxPoolSize()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".unreturnedConnectionTimeout", 46, ' ')).append(": ")
+                    .append(cpc.unreturnedConnectionTimeout()).append("\n");
+            b.append(CommonsStringUtils.paddingRight(ct.name() + ".maxPoolPreparedStatements", 46, ' ')).append(": ").append(cpc.maxPoolPreparedStatements())
+                    .append("\n");
+        }
+
         b.append("tablesIdentityOffset                         : ").append(conf.tablesIdentityOffset()).append("\n");
         b.append("createForeignKeys                            : ").append(conf.createForeignKeys()).append("\n");
         b.append("allowForeignKeyDeferrable                    : ").append(conf.allowForeignKeyDeferrable()).append("\n");

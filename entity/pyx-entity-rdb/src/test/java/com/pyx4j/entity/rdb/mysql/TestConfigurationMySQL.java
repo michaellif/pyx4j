@@ -22,9 +22,11 @@ package com.pyx4j.entity.rdb.mysql;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
+import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
@@ -49,13 +51,8 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
     }
 
     @Override
-    public int minPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 5;
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return new TestsConnectionPoolConfiguration(connectionType);
     }
 
     @Override
@@ -74,15 +71,6 @@ public class TestConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurati
             return true;
         } else {
             return Boolean.valueOf(System.getProperty("com.pyx4j.tests.mysql.trace", "false")).booleanValue();
-        }
-    }
-
-    @Override
-    public int unreturnedConnectionTimeout() {
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            return 0;
-        } else {
-            return super.unreturnedConnectionTimeout();
         }
     }
 

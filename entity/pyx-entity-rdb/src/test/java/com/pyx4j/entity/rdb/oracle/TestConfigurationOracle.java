@@ -20,10 +20,11 @@
  */
 package com.pyx4j.entity.rdb.oracle;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.ConfigurationOracle {
 
@@ -48,13 +49,8 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
-    public int minPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 5;
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return new TestsConnectionPoolConfiguration(connectionType);
     }
 
     @Override
@@ -125,12 +121,4 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         return new NamingConventionOracle(30, shortWords);
     }
 
-    @Override
-    public int unreturnedConnectionTimeout() {
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            return 0;
-        } else {
-            return super.unreturnedConnectionTimeout();
-        }
-    }
 }

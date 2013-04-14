@@ -32,7 +32,6 @@ import java.util.Vector;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +46,7 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
 import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 
 public class ConnectionProvider {
@@ -54,10 +54,6 @@ public class ConnectionProvider {
     private static final Logger log = LoggerFactory.getLogger(ConnectionProvider.class);
 
     private ConnectionPool connectionPool;
-
-    private DataSource dataSource;
-
-    public DataSource backgroundProcessDataSource;
 
     private Dialect dialect;
 
@@ -95,9 +91,6 @@ public class ConnectionProvider {
             }
 
             log.debug("Using connection pool {}", connectionPool);
-
-            dataSource = connectionPool.getDataSource();
-            backgroundProcessDataSource = connectionPool.getBackgroundProcessDataSource();
         } catch (Exception e) {
             throw new SQLException("Failed to initialize connection pool: " + e.getMessage(), e);
         }
@@ -135,9 +128,9 @@ public class ConnectionProvider {
             connectionPool.close();
         } catch (Throwable e) {
             log.error("pool close error", e);
+        } finally {
+            connectionPool = null;
         }
-        this.dataSource = null;
-        this.backgroundProcessDataSource = null;
     }
 
     public void dispose() {
@@ -202,9 +195,9 @@ public class ConnectionProvider {
                 throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             if (reason == ConnectionTarget.forDDL) {
-                return connectionPool.getAministrationDataSource().getConnection();
+                return connectionPool.getDataSource(ConnectionType.DDL).getConnection();
             } else {
-                return dataSource.getConnection();
+                return connectionPool.getDataSource(ConnectionType.Web).getConnection();
             }
         } catch (SQLException e) {
             log.error("SQL connection error", e);
@@ -214,7 +207,7 @@ public class ConnectionProvider {
 
     public Connection getConnection() {
         try {
-            return dataSource.getConnection();
+            return connectionPool.getDataSource(ConnectionType.Web).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
@@ -223,7 +216,7 @@ public class ConnectionProvider {
 
     public Connection getBackgroundProcessConnection() {
         try {
-            return backgroundProcessDataSource.getConnection();
+            return connectionPool.getDataSource(ConnectionType.BackgroundProcess).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);
@@ -232,7 +225,7 @@ public class ConnectionProvider {
 
     public Connection getAdministrationConnection() {
         try {
-            return connectionPool.getAministrationDataSource().getConnection();
+            return connectionPool.getDataSource(ConnectionType.DDL).getConnection();
         } catch (SQLException e) {
             log.error("SQL connection error", e);
             throw new RuntimeException(e);

@@ -23,6 +23,7 @@ package com.pyx4j.entity.rdb.cfg;
 import java.util.List;
 
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.server.ConnectionType;
 
 public abstract class ConfigurationPostgreSQL implements Configuration {
 
@@ -123,48 +124,8 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
-    public int initialPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public int minPoolSize() {
-        return 3;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 15;
-    }
-
-    @Override
-    public int initialBackgroundProcessPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public int minBackgroundProcessPoolSize() {
-        return 2;
-    }
-
-    @Override
-    public int maxBackgroundProcessPoolSize() {
-        return 40;
-    }
-
-    @Override
-    public int maxPoolPreparedStatements() {
-        return 1000;
-    }
-
-    @Override
-    public int unreturnedConnectionTimeout() {
-        return 60;
-    }
-
-    @Override
-    public int unreturnedConnectionBackgroundProcessTimeout() {
-        return 60 * 60;
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return new ConnectionPoolConfiguration(connectionType);
     }
 
     @Override

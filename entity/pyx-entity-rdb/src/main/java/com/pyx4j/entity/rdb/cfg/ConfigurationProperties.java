@@ -20,10 +20,15 @@
  */
 package com.pyx4j.entity.rdb.cfg;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationProperties {
 
@@ -41,24 +46,6 @@ public class ConfigurationProperties {
 
     private String dbAdministrationPassword;
 
-    public int initialPoolSize = 1;
-
-    public int minPoolSize = 3;
-
-    public int maxPoolSize = 15;
-
-    public int initialBackgroundProcessPoolSize = 1;
-
-    public int minBackgroundProcessPoolSize = 2;
-
-    public int maxBackgroundProcessPoolSize = 40;
-
-    public int maxPoolPreparedStatements = 1000;
-
-    public int unreturnedConnectionTimeout = 60;
-
-    public int unreturnedConnectionBackgroundProcessTimeout = 60 * 60;
-
     public int tablesIdentityOffset;
 
     public boolean createForeignKeys = true;
@@ -74,6 +61,14 @@ public class ConfigurationProperties {
     public String tablesSchema = null;
 
     public Ddl ddl = Ddl.auto;
+
+    public final Map<ConnectionType, ConnectionPoolConfiguration> connectionPoolCfg = new HashMap<ConnectionType, ConnectionPoolConfiguration>();
+
+    ConfigurationProperties() {
+        for (ConnectionType connectionType : ConnectionType.poolable()) {
+            connectionPoolCfg.put(connectionType, new ConnectionPoolConfiguration(connectionType));
+        }
+    }
 
     public void readProperties(PropertiesConfiguration c) {
 
@@ -96,17 +91,14 @@ public class ConfigurationProperties {
         this.forceQualifiedNames = c.getBooleanValue("forceQualifiedNames", this.forceQualifiedNames);
         this.tablesSchema = c.getValue("tablesSchema", this.tablesSchema);
 
-        this.initialPoolSize = c.getIntegerValue("initialPoolSize", this.initialPoolSize);
-        this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
-        this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
-        this.maxPoolPreparedStatements = c.getIntegerValue("maxPoolPreparedStatements", this.maxPoolPreparedStatements);
-        this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
-
-        this.initialBackgroundProcessPoolSize = c.getIntegerValue("initialBackgroundProcessPoolSize", this.initialBackgroundProcessPoolSize);
-        this.minBackgroundProcessPoolSize = c.getIntegerValue("minBackgroundProcessPoolSize", this.minBackgroundProcessPoolSize);
-        this.maxBackgroundProcessPoolSize = c.getIntegerValue("maxBackgroundProcessPoolSize", this.maxBackgroundProcessPoolSize);
-        this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
-                this.unreturnedConnectionBackgroundProcessTimeout);
+        for (ConnectionType connectionType : ConnectionType.poolable()) {
+            ConnectionPoolConfiguration cpc = connectionPoolConfiguration(connectionType);
+            cpc.initialPoolSize = c.getIntegerValue(connectionType.name() + ".initialPoolSize", cpc.initialPoolSize);
+            cpc.minPoolSize = c.getIntegerValue(connectionType.name() + ".minPoolSize", cpc.minPoolSize);
+            cpc.maxPoolSize = c.getIntegerValue(connectionType.name() + ".maxPoolSize", cpc.maxPoolSize);
+            cpc.maxPoolPreparedStatements = c.getIntegerValue(connectionType.name() + ".maxPoolPreparedStatements", cpc.maxPoolPreparedStatements);
+            cpc.unreturnedConnectionTimeout = c.getIntegerValue(connectionType.name() + ".unreturnedConnectionTimeout", cpc.unreturnedConnectionTimeout);
+        }
 
         this.tablesIdentityOffset = c.getIntegerValue("tablesIdentityOffset", this.tablesIdentityOffset);
         this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
@@ -126,5 +118,9 @@ public class ConfigurationProperties {
         } else {
             return password;
         }
+    }
+
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return connectionPoolCfg.get(connectionType);
     }
 }

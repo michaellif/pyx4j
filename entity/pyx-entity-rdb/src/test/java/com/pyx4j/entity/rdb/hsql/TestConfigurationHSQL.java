@@ -20,12 +20,13 @@
  */
 package com.pyx4j.entity.rdb.hsql;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBDatastorePersistenceEnvironment;
+import com.pyx4j.entity.rdb.TestsConnectionPoolConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.ShortWords;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationHSQL {
 
@@ -50,13 +51,8 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     }
 
     @Override
-    public int minPoolSize() {
-        return 1;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 5;
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return new TestsConnectionPoolConfiguration(connectionType);
     }
 
     @Override
@@ -67,15 +63,6 @@ public class TestConfigurationHSQL extends com.pyx4j.entity.rdb.cfg.Configuratio
     @Override
     public int tablesIdentityOffset() {
         return 997;
-    }
-
-    @Override
-    public int unreturnedConnectionTimeout() {
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
-            return 0;
-        } else {
-            return super.unreturnedConnectionTimeout();
-        }
     }
 
     @Override

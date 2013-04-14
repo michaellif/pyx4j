@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.ConnectionFactory;
@@ -29,24 +32,18 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class ConnectionPoolDBCP implements ConnectionPool {
 
-    private final GenericObjectPool connectionPool;
+    private final Map<ConnectionType, DataSource> dataSources = new HashMap<ConnectionType, DataSource>();
 
-    private final DataSource dataSource;
-
-    private final GenericObjectPool connectionPoolBackgroundProcess;
-
-    private final DataSource dataSourceBackgroundProcess;
-
-    private final GenericObjectPool connectionPoolAministration;
-
-    private final DataSource dataSourceAministration;
+    private final Map<ConnectionType, GenericObjectPool> connectionPools = new HashMap<ConnectionType, GenericObjectPool>();
 
     public ConnectionPoolDBCP(Configuration cfg) {
-        {
-            connectionPool = new GenericObjectPool(null);
+
+        for (ConnectionType connectionType : ConnectionType.poolable()) {
+            GenericObjectPool connectionPool = new GenericObjectPool(null);
             connectionPool.setTestWhileIdle(true);
 
             ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
@@ -55,50 +52,33 @@ public class ConnectionPoolDBCP implements ConnectionPool {
                     cfg.readOnly(), true);
             poolable.setValidationQueryTimeout(1);
 
-            dataSource = new PoolingDataSource(connectionPool);
+            DataSource dataSource = new PoolingDataSource(connectionPool);
+
+            dataSources.put(connectionType, dataSource);
+            connectionPools.put(connectionType, connectionPool);
         }
 
         {
-            connectionPoolBackgroundProcess = new GenericObjectPool(null);
-            connectionPoolBackgroundProcess.setTestWhileIdle(true);
-
-            ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.userName(), cfg.password());
-
-            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPoolBackgroundProcess, null,
-                    cfg.connectionValidationQuery(), cfg.readOnly(), true);
-            poolable.setValidationQueryTimeout(1);
-
-            dataSourceBackgroundProcess = new PoolingDataSource(connectionPoolBackgroundProcess);
-        }
-
-        {
-            connectionPoolAministration = new GenericObjectPool(null);
-            connectionPoolAministration.setTestWhileIdle(true);
+            GenericObjectPool connectionPool = new GenericObjectPool(null);
+            connectionPool.setTestWhileIdle(true);
 
             ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(cfg.connectionUrl(), cfg.dbAdministrationUserName(),
                     cfg.dbAdministrationPassword());
 
-            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPoolAministration, null,
-                    cfg.connectionValidationQuery(), cfg.readOnly(), true);
+            PoolableConnectionFactory poolable = new PoolableConnectionFactory(connectionFactory, connectionPool, null, cfg.connectionValidationQuery(),
+                    cfg.readOnly(), true);
             poolable.setValidationQueryTimeout(1);
 
-            dataSourceAministration = new PoolingDataSource(connectionPoolAministration);
+            DataSource dataSourceAministration = new PoolingDataSource(connectionPool);
+
+            dataSources.put(ConnectionType.DDL, dataSourceAministration);
+            connectionPools.put(ConnectionType.DDL, connectionPool);
         }
     }
 
     @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    @Override
-    public DataSource getBackgroundProcessDataSource() {
-        return dataSourceBackgroundProcess;
-    }
-
-    @Override
-    public DataSource getAministrationDataSource() {
-        return dataSourceAministration;
+    public DataSource getDataSource(ConnectionType connectionType) {
+        return dataSources.get(connectionType);
     }
 
     @Override
@@ -107,11 +87,17 @@ public class ConnectionPoolDBCP implements ConnectionPool {
     }
 
     @Override
-    public void close() throws Exception {
-        try {
-            connectionPool.close();
-        } finally {
-            connectionPoolBackgroundProcess.close();
+    public void close() throws Throwable {
+        Throwable closeError = null;
+        for (GenericObjectPool connectionPool : connectionPools.values()) {
+            try {
+                connectionPool.close();
+            } catch (Exception e) {
+                closeError = e;
+            }
+        }
+        if (closeError != null) {
+            throw closeError;
         }
     }
 

@@ -22,8 +22,11 @@ package com.pyx4j.entity.rdb.cfg;
 
 import java.util.List;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.server.ConnectionType;
 
 public interface Configuration extends IPersistenceConfiguration {
 
@@ -34,6 +37,67 @@ public interface Configuration extends IPersistenceConfiguration {
     public enum ConnectionPoolProvider {
         dbcp, c3p0
     };
+
+    public class ConnectionPoolConfiguration {
+
+        public int initialPoolSize = 1;
+
+        public int minPoolSize = 3;
+
+        public int maxPoolSize = 15;
+
+        public int unreturnedConnectionTimeout = Consts.MIN2SEC;
+
+        public int maxPoolPreparedStatements = 1000;
+
+        /**
+         * Set the default values for all DB types
+         */
+        public ConnectionPoolConfiguration(ConnectionType connectionType) {
+            assert connectionType != ConnectionType.DDL;
+
+            switch (connectionType) {
+            case BackgroundProcess:
+                maxPoolSize = 20;
+                unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
+                break;
+            case TransactionProcessing:
+                maxPoolSize = 40;
+                unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
+                break;
+            default:
+                break;
+            }
+            if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+                unreturnedConnectionTimeout = 0;
+            }
+        }
+
+        public int initialPoolSize() {
+            return initialPoolSize;
+        }
+
+        public int minPoolSize() {
+            return minPoolSize;
+        }
+
+        public int maxPoolSize() {
+            return maxPoolSize;
+        }
+
+        /**
+         * Defines a limit (in seconds) to how long a Connection may remain checked out.
+         * If set to a nozero value, unreturned, checked-out Connections that exceed this limit will be summarily destroyed, and then replaced in the pool.
+         */
+        public int unreturnedConnectionTimeout() {
+            return unreturnedConnectionTimeout;
+        }
+
+        public int maxPoolPreparedStatements() {
+            return maxPoolPreparedStatements;
+        }
+
+    }
 
     public enum DatabaseType {
         Oracle, MySQL, PostgreSQL, HSQLDB, Other
@@ -75,6 +139,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String tablesSchema();
 
+    public boolean sequencesBaseIdentity();
+
     /**
      * Applicable for MultitenancyType.SeparateSchemas
      */
@@ -104,25 +170,7 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public ConnectionPoolProvider connectionPool();
 
-    public boolean sequencesBaseIdentity();
-
-    public int initialPoolSize();
-
-    public int minPoolSize();
-
-    public int maxPoolSize();
-
-    public int initialBackgroundProcessPoolSize();
-
-    public int minBackgroundProcessPoolSize();
-
-    public int maxBackgroundProcessPoolSize();
-
-    public int maxPoolPreparedStatements();
-
-    public int unreturnedConnectionTimeout();
-
-    public int unreturnedConnectionBackgroundProcessTimeout();
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType);
 
     /**
      * 

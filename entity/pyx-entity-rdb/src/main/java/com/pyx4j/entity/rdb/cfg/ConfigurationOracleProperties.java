@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class ConfigurationOracleProperties extends ConfigurationOracle {
 
@@ -96,48 +97,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
-    public int initialPoolSize() {
-        return properties.initialPoolSize;
-    }
-
-    @Override
-    public int minPoolSize() {
-        return properties.minPoolSize;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return properties.maxPoolSize;
-    }
-
-    @Override
-    public int initialBackgroundProcessPoolSize() {
-        return properties.initialBackgroundProcessPoolSize;
-    }
-
-    @Override
-    public int minBackgroundProcessPoolSize() {
-        return properties.minBackgroundProcessPoolSize;
-    }
-
-    @Override
-    public int maxBackgroundProcessPoolSize() {
-        return properties.maxBackgroundProcessPoolSize;
-    }
-
-    @Override
-    public int maxPoolPreparedStatements() {
-        return properties.maxPoolPreparedStatements;
-    }
-
-    @Override
-    public int unreturnedConnectionTimeout() {
-        return properties.unreturnedConnectionTimeout;
-    }
-
-    @Override
-    public int unreturnedConnectionBackgroundProcessTimeout() {
-        return properties.unreturnedConnectionBackgroundProcessTimeout;
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionType connectionType) {
+        return properties.connectionPoolConfiguration(connectionType);
     }
 
     @Override

@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -33,6 +36,8 @@ import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
+import com.pyx4j.entity.server.ConnectionType;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
 
@@ -40,59 +45,44 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private static boolean singleInstanceCreated = false;
 
-    private final ComboPooledDataSource dataSource;
-
-    private final ComboPooledDataSource dataSourceBackgroundProcess;
-
-    private final DataSource dataSourceAministration;
+    private final Map<ConnectionType, DataSource> dataSources = new HashMap<ConnectionType, DataSource>();
 
     public ConnectionPoolC3P0(Configuration configuration) throws Exception {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
         log.debug("initialize DB ConnectionPool {}", configuration);
-        {
-            dataSource = createDataSource(configuration);
-            dataSource.setDataSourceName("default");
 
-            // the settings below are optional -- c3p0 can work with defaults
-            dataSource.setInitialPoolSize(configuration.initialPoolSize());
-            dataSource.setMinPoolSize(configuration.minPoolSize()); // default is 3
-            dataSource.setMaxPoolSize(configuration.maxPoolSize()); // default is 15, we may need more for the server
+        for (ConnectionType connectionType : ConnectionType.poolable()) {
+            ConnectionPoolConfiguration cpc = configuration.connectionPoolConfiguration(connectionType);
 
-            dataSource.setUnreturnedConnectionTimeout(configuration.unreturnedConnectionTimeout());
+            ComboPooledDataSource dataSource = createDataSource(configuration);
+            dataSource.setDataSourceName(connectionType.name());
+
+            dataSource.setInitialPoolSize(cpc.initialPoolSize());
+            dataSource.setMinPoolSize(cpc.minPoolSize());
+            dataSource.setMaxPoolSize(cpc.maxPoolSize());
+            dataSource.setMaxStatements(cpc.maxPoolPreparedStatements());
+
+            dataSource.setUnreturnedConnectionTimeout(cpc.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
-            if (ServerSideConfiguration.isRunningInDeveloperEnviroment()) {
+            if (ServerSideConfiguration.isRunningInDeveloperEnviroment() || (connectionType != ConnectionType.Web)) {
                 dataSource.setTestConnectionOnCheckout(true);
             }
 
-            log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+            log.debug("{} Pool size is {} min and {} max", connectionType, dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
             dataSource.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSource));
             C3P0Registry.reregister(dataSource);
+
+            dataSources.put(connectionType, dataSource);
         }
 
         {
-            dataSourceBackgroundProcess = createDataSource(configuration);
-            dataSourceBackgroundProcess.setDataSourceName("backgroundProcess");
-
-            // the settings below are optional -- c3p0 can work with defaults
-            dataSourceBackgroundProcess.setInitialPoolSize(configuration.initialBackgroundProcessPoolSize());
-            dataSourceBackgroundProcess.setMinPoolSize(configuration.minBackgroundProcessPoolSize()); // default is 3
-            dataSourceBackgroundProcess.setMaxPoolSize(configuration.maxBackgroundProcessPoolSize());
-
-            dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(configuration.unreturnedConnectionBackgroundProcessTimeout());
-            dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
-            dataSourceBackgroundProcess.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSourceBackgroundProcess));
-
-            dataSourceBackgroundProcess.setTestConnectionOnCheckout(true);
-
-            C3P0Registry.reregister(dataSourceBackgroundProcess);
-        }
-
-        {
-            dataSourceAministration = DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
-                    configuration.dbAdministrationPassword());
+            dataSources.put(
+                    ConnectionType.DDL,
+                    DataSources.unpooledDataSource(configuration.connectionUrl(), configuration.dbAdministrationUserName(),
+                            configuration.dbAdministrationPassword()));
         }
         singleInstanceCreated = true;
     }
@@ -115,39 +105,38 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setPreferredTestQuery(cfg.connectionValidationQuery());
         }
         dataSource.setIdleConnectionTestPeriod(5 * Consts.MIN2SEC); //If this is a number greater than 0, c3p0 will test all idle, pooled but unchecked-out connections, every this number of seconds.
-
-        dataSource.setMaxStatements(cfg.maxPoolPreparedStatements());
         return dataSource;
     }
 
     @Override
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    @Override
-    public DataSource getBackgroundProcessDataSource() {
-        return dataSourceBackgroundProcess;
-    }
-
-    @Override
-    public DataSource getAministrationDataSource() {
-        return dataSourceAministration;
+    public DataSource getDataSource(ConnectionType connectionType) {
+        return dataSources.get(connectionType);
     }
 
     @Override
     public void resetConnectionPool() {
-        dataSource.resetPoolManager(false);
-        dataSourceBackgroundProcess.resetPoolManager(false);
+        for (DataSource dataSource : dataSources.values()) {
+            if (dataSource instanceof ComboPooledDataSource) {
+                ((ComboPooledDataSource) dataSource).resetPoolManager(false);
+            }
+        }
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws Throwable {
         singleInstanceCreated = false;
-        try {
-            dataSource.close();
-        } finally {
-            dataSourceBackgroundProcess.close();
+        Throwable closeError = null;
+        for (DataSource dataSource : dataSources.values()) {
+            if (dataSource instanceof ComboPooledDataSource) {
+                try {
+                    ((ComboPooledDataSource) dataSource).close();
+                } catch (Throwable e) {
+                    closeError = e;
+                }
+            }
+        }
+        if (closeError != null) {
+            throw closeError;
         }
     }
 

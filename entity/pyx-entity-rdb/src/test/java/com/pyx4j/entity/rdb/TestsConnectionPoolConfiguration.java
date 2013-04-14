@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 10, 2011
- * @author dmitry
+ * Created on 2013-04-13
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.rdb;
 
-import javax.sql.DataSource;
-
+import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
 import com.pyx4j.entity.server.ConnectionType;
 
-public interface ConnectionPool {
+public class TestsConnectionPoolConfiguration extends ConnectionPoolConfiguration {
 
-    public DataSource getDataSource(ConnectionType connectionType);
+    public TestsConnectionPoolConfiguration(ConnectionType connectionType) {
+        super(connectionType);
+        minPoolSize = 1;
+        maxPoolSize = 5;
+    }
 
-    public void resetConnectionPool();
-
-    public void close() throws Throwable;
 }
