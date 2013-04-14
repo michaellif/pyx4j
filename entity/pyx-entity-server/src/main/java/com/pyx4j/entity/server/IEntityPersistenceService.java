@@ -49,10 +49,10 @@ public interface IEntityPersistenceService {
     /**
      * 
      * @param transactionScopeOption
-     * @param backgroundProcess
-     *            as opposite to Online Transaction
+     * @param connectionType
+     *            Web (Online Transaction), BackgroundProcess all the rest
      */
-    public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess);
+    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionType connectionType);
 
     //TODO VladS& MishaL proper enum and proper name
     // return  not null when there are transaction.

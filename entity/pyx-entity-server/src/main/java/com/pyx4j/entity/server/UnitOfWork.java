@@ -29,7 +29,7 @@ public class UnitOfWork {
 
     private final TransactionScopeOption transactionScopeOption;
 
-    private final boolean backgroundProcessTransaction;
+    private final ConnectionType connectionType;
 
     /**
      * Start short lived Online Transaction
@@ -42,23 +42,23 @@ public class UnitOfWork {
      * Start short lived Online Transaction
      */
     public UnitOfWork(TransactionScopeOption transactionScopeOption) {
-        this(transactionScopeOption, false);
+        this(transactionScopeOption, ConnectionType.Web);
     }
 
     /**
      * @param transactionScopeOption
-     * @param backgroundProcessTransaction
-     *            as opposite to Online Transaction
+     * @paramconnectionType
+     *                      Web (Online Transaction), BackgroundProcess all the rest
      */
-    public UnitOfWork(TransactionScopeOption transactionScopeOption, boolean backgroundProcessTransaction) {
+    public UnitOfWork(TransactionScopeOption transactionScopeOption, ConnectionType connectionType) {
         this.transactionScopeOption = transactionScopeOption;
-        this.backgroundProcessTransaction = backgroundProcessTransaction;
+        this.connectionType = connectionType;
     }
 
     public <R, E extends Throwable> R execute(final Executable<R, E> task) throws E {
         boolean success = false;
         try {
-            Persistence.service().startTransaction(transactionScopeOption, backgroundProcessTransaction);
+            Persistence.service().startTransaction(transactionScopeOption, connectionType);
             Persistence.service().setAssertTransactionManangementCallOrigin();
 
             try {

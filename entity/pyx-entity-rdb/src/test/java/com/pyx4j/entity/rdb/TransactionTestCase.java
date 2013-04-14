@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -72,17 +73,17 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         srv.endTransaction();
 
         assertTransactionNotPresent();
-        srv.startTransaction(TransactionScopeOption.Suppress, false);
+        srv.startTransaction(TransactionScopeOption.Suppress, ConnectionType.Web);
         {
             srv.persist(createEntity(setId, "1.0"));
 
-            srv.startTransaction(TransactionScopeOption.RequiresNew, false);
+            srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionType.Web);
             {
                 // This will lock DB
                 //srv.persist(createEntity(setId, "2.0"));
                 srv.count(EntityQueryCriteria.create(Employee.class));
 
-                srv.startTransaction(TransactionScopeOption.Suppress, false);
+                srv.startTransaction(TransactionScopeOption.Suppress, ConnectionType.Web);
                 {
                     srv.persist(createEntity(setId, "3.0"));
                 }
@@ -102,14 +103,14 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction(TransactionScopeOption.Nested, false);
+        srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
         {
             srv.persist(emp1);
 
             srv.persist(createEntity(setId, "1.1"));
 
             // Tx2
-            srv.startTransaction(TransactionScopeOption.Nested, false);
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -144,7 +145,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction(TransactionScopeOption.Nested, false);
+        srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
         {
             srv.persist(emp1);
             srv.commit();
@@ -153,7 +154,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
             srv.rollback();
 
             // Tx2
-            srv.startTransaction(TransactionScopeOption.Nested, false);
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -184,12 +185,12 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         Employee emp1 = createEntity(setId, "1.0");
 
         // Tx1
-        srv.startTransaction(TransactionScopeOption.Nested, false);
+        srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
         {
             srv.persist(emp1);
 
             // Tx2
-            srv.startTransaction(TransactionScopeOption.Nested, false);
+            srv.startTransaction(TransactionScopeOption.Nested, ConnectionType.Web);
             {
                 srv.persist(createEntity(setId, "2.0"));
                 srv.commit();
@@ -313,7 +314,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         srv.endTransaction();
         final String setId = uniqueString();
 
-        srv.startTransaction(TransactionScopeOption.RequiresNew, true);
+        srv.startTransaction(TransactionScopeOption.RequiresNew, ConnectionType.Web);
 
         srv.persist(createEntity(setId, "1.0"));
 

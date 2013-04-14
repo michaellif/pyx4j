@@ -70,6 +70,7 @@ import com.pyx4j.entity.rdb.mapping.TableModleVersioned;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -246,9 +247,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @Override
-    public void startTransaction(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
+    public void startTransaction(TransactionScopeOption transactionScopeOption, ConnectionType connectionType) {
         assert transactionScopeOption != null;
-        startTransactionImpl(transactionScopeOption, backgroundProcess);
+        startTransactionImpl(transactionScopeOption, connectionType == ConnectionType.BackgroundProcess);
     }
 
     private void startTransactionImpl(TransactionScopeOption transactionScopeOption, boolean backgroundProcess) {
