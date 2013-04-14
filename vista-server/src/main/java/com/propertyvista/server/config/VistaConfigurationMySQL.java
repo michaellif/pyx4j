@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -61,16 +60,6 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
     }
 
     @Override
-    public int minPoolSize() {
-        return 3;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 10;
-    }
-
-    @Override
     public int tablesIdentityOffset() {
         return 997;
     }
@@ -80,12 +69,4 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
         return new VistaDBNamingConvention();
     }
 
-    @Override
-    public int unreturnedConnectionTimeout() {
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isStartedUnderEclipse()) {
-            return 0;
-        } else {
-            return super.unreturnedConnectionTimeout();
-        }
-    }
 }

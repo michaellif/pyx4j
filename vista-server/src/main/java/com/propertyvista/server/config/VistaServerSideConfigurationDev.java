@@ -67,15 +67,6 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
                 }
             }
 
-            @Override
-            public int minPoolSize() {
-                return 1;
-            }
-
-            @Override
-            public int maxPoolSize() {
-                return 2;
-            }
         };
     }
 

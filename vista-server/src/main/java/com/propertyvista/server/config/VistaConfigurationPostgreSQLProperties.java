@@ -20,6 +20,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -28,7 +29,7 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
 
     public VistaConfigurationPostgreSQLProperties(File configDirectory, Map<String, String> properties) {
 
-        this.properties.unreturnedConnectionBackgroundProcessTimeout = 4 * Consts.HOURS2SEC;
+        this.properties.connectionPoolConfiguration(ConnectionType.BackgroundProcess).unreturnedConnectionTimeout = 4 * Consts.HOURS2SEC;
         this.properties.allowForeignKeyDeferrable = true;
 
         readProperties("db", properties);

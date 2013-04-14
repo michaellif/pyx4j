@@ -13,7 +13,6 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -38,16 +37,6 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
     @Override
     public String password() {
         return "vista";
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 100;
-    }
-
-    @Override
-    public int maxPoolPreparedStatements() {
-        return 1000;
     }
 
     @Override
@@ -87,12 +76,4 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
         return true;
     }
 
-    @Override
-    public int unreturnedConnectionTimeout() {
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isStartedUnderEclipse()) {
-            return 0;
-        } else {
-            return super.unreturnedConnectionTimeout();
-        }
-    }
 }

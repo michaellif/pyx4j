@@ -51,16 +51,6 @@ public class PaymentPadConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Confi
     }
 
     @Override
-    public int minPoolSize() {
-        return 2;
-    }
-
-    @Override
-    public int maxPoolSize() {
-        return 10;
-    }
-
-    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionModern();
     }
