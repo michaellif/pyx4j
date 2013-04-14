@@ -325,6 +325,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             l.setYardiPropertyId(propertyId);
 
             GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
+            if (response == null) {
+                throw new YardiServiceException("Yardi connection configuration error, probably database '" + yc.database().getValue()
+                        + "' do not exists on Yardi server");
+            }
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 
             log.info("GetResidentTransactions: {}", xml);
