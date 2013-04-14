@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.pyx4j.commons.Consts;
+
 public class PropertiesConfiguration {
 
     private final String prefix;
@@ -65,6 +67,36 @@ public class PropertiesConfiguration {
             return defaultValue;
         } else {
             return Integer.valueOf(value).intValue();
+        }
+    }
+
+    public int getSecondsValue(String key, int defaultValue) {
+        String value = getValue(key);
+        if (value == null) {
+            return defaultValue;
+        } else {
+            value = value.trim();
+            int multiplier = 1;
+
+            Map<String, Integer> timeUnits = new HashMap<String, Integer>();
+            timeUnits.put("s", 1);
+            timeUnits.put("sec", 1);
+            timeUnits.put("seconds", 1);
+            timeUnits.put("m", Consts.MIN2SEC);
+            timeUnits.put("min", Consts.MIN2SEC);
+            timeUnits.put("minutes", Consts.MIN2SEC);
+            timeUnits.put("h", Consts.HOURS2SEC);
+            timeUnits.put("hours", Consts.HOURS2SEC);
+
+            for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
+                if (value.endsWith(me.getKey())) {
+                    value.substring(0, value.length() - me.getKey().length());
+                    multiplier = me.getValue();
+                    break;
+                }
+            }
+
+            return Integer.valueOf(value.trim()).intValue() * multiplier;
         }
     }
 
