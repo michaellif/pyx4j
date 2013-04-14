@@ -18,6 +18,7 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 import java.util.Date;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,7 +39,7 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        Persistence.service().startTransaction(TransactionScopeOption.Suppress, false);
+        Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess);
         mockupConfig = new MockupCleanupPmcProcessConfig();
         cleanupProcessInstance = new CleanupPmcProcess(mockupConfig);
     }

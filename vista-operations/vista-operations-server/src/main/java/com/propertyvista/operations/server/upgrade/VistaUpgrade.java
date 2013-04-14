@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -62,7 +63,7 @@ public class VistaUpgrade {
     }
 
     private static void runOneStepInTransaction(final Pmc pmc, final UpgradeProcedure procedure, final int step) {
-        new UnitOfWork(TransactionScopeOption.RequiresNew, true).execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() {

@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.ConnectionType;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -841,7 +842,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 public void execute() throws Exception {
 
                     try {
-                        Persistence.service().startTransaction(TransactionScopeOption.Suppress, true);
+                        Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess);
                         Date runDate = getSysDate();
                         PmcProcessContext sharedContext = new PmcProcessContext(runDate);
                         if (pmcProcess.start(sharedContext)) {
