@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -82,7 +82,7 @@ public class PmcProcessDispatcherJob implements Job {
         try {
             Lifecycle.startElevatedUserContext();
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess);
+            Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
 
             Date scheduledFireTime = context.getScheduledFireTime();
@@ -297,7 +297,7 @@ public class PmcProcessDispatcherJob implements Job {
                 try {
                     Lifecycle.startElevatedUserContext();
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
-                    new UnitOfWork(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+                    new UnitOfWork(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                         @Override
                         public Void execute() {

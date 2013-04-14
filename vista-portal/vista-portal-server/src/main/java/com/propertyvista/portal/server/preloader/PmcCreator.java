@@ -25,7 +25,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -61,7 +61,7 @@ public class PmcCreator {
         final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
                 public Void execute() {

@@ -14,7 +14,7 @@
 package com.propertyvista.ob.server;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -39,7 +39,7 @@ public class PmcActivationDeferredProcess extends AbstractDeferredProcess {
         try {
             Lifecycle.startElevatedUserContext();
 
-            new UnitOfWork(TransactionScopeOption.Nested, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.Nested, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
                 public Void execute() {

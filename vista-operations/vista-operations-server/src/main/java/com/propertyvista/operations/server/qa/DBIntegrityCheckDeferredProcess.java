@@ -24,7 +24,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
-import com.pyx4j.entity.server.ConnectionType;
+import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -58,7 +58,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     @Override
     public void execute() {
-        new UnitOfWork(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() {
@@ -85,7 +85,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
-            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
                 public Void execute() {
@@ -118,7 +118,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
 
-                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                     @Override
                     public Void execute() {
@@ -142,7 +142,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     }
 
     private void exportTablesInfo(final Filter<Class<? extends IEntity>> filter) {
-        new UnitOfWork(TransactionScopeOption.Suppress, ConnectionType.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+        new UnitOfWork(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
             @Override
             public Void execute() {
