@@ -90,7 +90,8 @@ $$
                 WHEN constraint_type = 'f' THEN ' FOREIGN KEY('||column_name||') '||
                 'REFERENCES '||ref_table_name||'('||ref_column_name||') '||
                         CASE WHEN is_deferrable THEN ' DEFERRABLE' END ||
-                        CASE WHEN is_deferred THEN ' INITIALLY DEFERRED' END ||
+                        CASE WHEN is_deferred THEN ' INITIALLY DEFERRED' 
+                        ELSE ' INITIALLY IMMEDIATE' END ||
                 ';'       
                 WHEN constraint_type = 'c' THEN ' CHECK '||constraint_text||';' END
         FROM    t1

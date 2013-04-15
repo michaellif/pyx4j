@@ -120,6 +120,35 @@ BEGIN
         
         ALTER TABLE lease_adjustment_policy_item ADD COLUMN code BIGINT;
         
+        -- maintenance_request
+        
+        ALTER TABLE maintenance_request ADD COLUMN category BIGINT;
+        
+        -- maintenance_request_category
+        
+        CREATE TABLE maintenance_request_category
+        (
+                id                      BIGINT                  NOT NULL,
+                name                    VARCHAR(500),
+                        CONSTRAINT      maintenance_request_category_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_category OWNER TO vista;
+        
+        -- maintenance_request_category$sub_categories
+        
+        CREATE TABLE maintenance_request_category$sub_categories
+        (
+                id                      BIGINT                  NOT NULL,
+                owner                   BIGINT,
+                value                   BIGINT,
+                seq                     INTEGER,
+                        CONSTRAINT      maintenance_request_category$sub_categories_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_category$sub_categories OWNER TO vista;
+        
+        
         -- padpolicy_item
         
         ALTER TABLE padpolicy_item RENAME COLUMN debit_type TO debit_type_old;
@@ -141,6 +170,35 @@ BEGIN
         -- yardi_charge_code
         
         ALTER TABLE yardi_charge_code ADD COLUMN ar_code BIGINT;
+        
+        -- yardi_service_request
+        
+        CREATE TABLE yardi_service_request
+        (
+                id                              BIGINT          NOT NULL,
+                request_id                      INT,
+                property_code                   VARCHAR(500),
+                unit_code                       VARCHAR(500),
+                tenant_code                     VARCHAR(500),
+                vendor_code                     VARCHAR(500),
+                request_description_brief       VARCHAR(500),
+                request_description_full        VARCHAR(250),
+                priority                        VARCHAR(500),
+                permission_to_enter             BOOLEAN,
+                access_notes                    VARCHAR(500),
+                problem_description             VARCHAR(500),
+                technical_notes                 VARCHAR(500),
+                tenant_caused                   BOOLEAN,
+                requestor_name                  VARCHAR(500),
+                requestor_phone                 VARCHAR(500),
+                requestor_email                 VARCHAR(500),
+                authorized_by                   VARCHAR(500),
+                current_status                  VARCHAR(500),
+                resolution                      VARCHAR(500),
+                        CONSTRAINT      yardi_service_request_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_service_request OWNER TO vista;
         
         
         /**
@@ -212,7 +270,26 @@ BEGIN
         
         -- billing_invoice_line_item
         
-        -- ???????
+        EXECUTE 'WITH t AS (SELECT      id,CASE WHEN debit_type = ''accountCharge'' THEN ''AccountCharge'' '
+                ||'             WHEN debit_type = ''addOn'' THEN ''AddOn'' '
+                ||'             WHEN debit_type = ''booking'' THEN ''OneTime'' '
+                ||'             WHEN debit_type = ''deposit'' THEN ''Deposit'' '
+                ||'             WHEN debit_type = ''latePayment'' THEN ''LatePayment'' '
+                ||'             WHEN debit_type = ''lease'' THEN ''Residential'' '
+                ||'             WHEN debit_type = ''locker'' THEN ''Locker'' '
+                ||'             WHEN debit_type = ''nsf'' THEN ''NSF'' '
+                ||'             WHEN debit_type = ''other'' THEN ''ExternalCharge'' '
+                ||'             WHEN debit_type = ''parking'' THEN ''Parking'' '
+                ||'             WHEN debit_type = ''pet'' THEN ''Pet'' '
+                ||'             WHEN debit_type = ''total'' THEN NULL '
+                ||'             WHEN debit_type = ''utility'' THEN ''Utility'' END  AS debit_type_new '
+                ||'     FROM    '||v_schema_name||'.billing_invoice_line_item ) '
+                ||'UPDATE '||v_schema_name||'.billing_invoice_line_item AS a '
+                ||'SET  ar_code = b.arcode '
+                ||'FROM (SELECT t.id,a.id AS arcode '
+                ||'     FROM t '
+                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type_new = a.name)) AS b '
+                ||'WHERE a.id = b.id ';   
         
         
         -- concession_v
@@ -230,6 +307,11 @@ BEGIN
                 ||'FROM '||v_schema_name||'.arcode  AS a '
                 ||'WHERE d.product_type = a.pit_id ';
         
+        
+        -- html_content
+        
+        ALTER TABLE html_content ADD COLUMN updated TIMESTAMP;
+                
         
         -- lead
         
@@ -286,8 +368,49 @@ BEGIN
         
         -- pet_constraints
         
+        EXECUTE 'UPDATE '||v_schema_name||'.pet_constraints AS p '
+                ||'SET  pet = a.id '
+                ||'FROM '||v_schema_name||'.arcode AS a '
+                ||'WHERE p.pet = a.pit_id ';    
+                
+         
+        -- product 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product AS p '
+                ||'SET  code_type = '
+                ||'CASE WHEN service_type = ''commercialUnit'' THEN ''Commercial'' '
+                ||'WHEN service_type = ''residentialShortTermUnit'' THEN ''ResidentialShortTerm'' '
+                ||'WHEN service_type = ''residentialUnit'' THEN ''Residential'' '
+                ||'WHEN feature_type = ''addOn'' THEN ''AddOn'' '
+                ||'WHEN feature_type = ''booking'' THEN ''Residential'' '
+                ||'WHEN feature_type = ''locker'' THEN ''Locker'' '
+                ||'WHEN feature_type = ''oneTimeCharge'' THEN ''OneTime'' '
+                ||'WHEN feature_type = ''parking'' THEN ''Parking'' '
+                ||'WHEN feature_type = ''pet'' THEN ''Pet'' '
+                ||'WHEN feature_type = ''utility'' THEN ''Utility'' END ';
+            
+        
+        -- product_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product_item  AS p '
+                ||'SET  code = a.id '
+                ||'FROM '||v_schema_name||'.arcode a '
+                ||'WHERE p.item_type = a.pit_id ';
         
         
+        -- product_tax_policy_item
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.product_tax_policy_item AS p '
+                ||'SET  product_code = a.id '
+                ||'FROM '||v_schema_name||'.arcode a '
+                ||'WHERE p.product_item_type = a.pit_id ';
+                
+        -- yardi_charge_code
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.yardi_charge_code AS y '
+                ||'SET  ar_code = a.id '
+                ||'FROM '||v_schema_name||'.arcode a '
+                ||'WHERE y.product_item_type = a.pit_id ';
         
         /**
         ***     ==========================================================================================================
@@ -301,9 +424,19 @@ BEGIN
         
         ALTER TABLE aging_buckets DROP COLUMN debit_type;
         
+        -- arcode 
+        
+        ALTER TABLE arcode      DROP COLUMN lad_id,
+                                DROP COLUMN pit_id;
+                                
+        --  billing_bill
+        
+        ALTER TABLE  billing_bill DROP COLUMN previous_cycle_bill;
+        
         -- billing_invoice_line_item
         
-        ALTER TABLE billing_invoice_line_item DROP COLUMN target_date;
+        ALTER TABLE billing_invoice_line_item   DROP COLUMN target_date,
+                                                DROP COLUMN debit_type ;
         
         -- concession_v
         
@@ -328,6 +461,10 @@ BEGIN
         
         DROP TABLE lease_adjustment_reason;
         
+        
+        -- padpolicy_item
+        
+        ALTER TABLE padpolicy_item DROP COLUMN debit_type_old;
         
         -- pet_constraints
         
@@ -371,8 +508,8 @@ BEGIN
         
         -- Not Null
         
-        --ALTER TABLE product ALTER COLUMN code_type SET NOT NULL;
-        --ALTER TABLE yardi_charge_code ALTER COLUMN ar_code SET NOT NULL;
+        ALTER TABLE product ALTER COLUMN code_type SET NOT NULL;
+        ALTER TABLE yardi_charge_code ALTER COLUMN ar_code SET NOT NULL;
         
         -- Foreign Keys
         
@@ -390,23 +527,23 @@ BEGIN
 
         -- Check Constraints
         
-        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
-                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
-                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+         ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
+                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
+                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arcode ADD CONSTRAINT arcode_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
-                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
+                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_credit_debit_rule_e_ck CHECK ((credit_debit_rule) IN ('oldestDebtFirst', 'rentDebtLast'));
         ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
-                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
+                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
-                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
+                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('Any', 'FixedAmount', 'OwingBalance'));
         ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit', 'LatePayment', 
-                'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
+                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
 
         
         /**
@@ -416,6 +553,10 @@ BEGIN
         ***
         ***     ====================================================================================================
         **/
+        
+        CREATE INDEX billing_invoice_line_item_billing_account_idx ON billing_invoice_line_item USING btree (billing_account);
+        CREATE INDEX billing_invoice_line_item_billing_account_discriminator_idx ON billing_invoice_line_item USING btree (billing_account_discriminator);
+        CREATE INDEX maintenance_request_category$sub_categories_owner_idx ON maintenance_request_category$sub_categories USING btree (owner);
         
         
         -- Finishing touch

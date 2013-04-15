@@ -21,12 +21,14 @@ BEGIN TRANSACTION;
 -- New sequences
  CREATE SEQUENCE arcode_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE maintenance_request_category_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE maintenance_request_category$sub_categories_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE yardi_service_request_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
   
  -- Change owner to vista
  ALTER SEQUENCE arcode_seq OWNER TO vista ;
  ALTER SEQUENCE maintenance_request_category_seq OWNER TO vista ;
+ ALTER SEQUENCE maintenance_request_category$sub_categories_seq OWNER TO vista ;
  ALTER SEQUENCE yardi_service_request_seq OWNER TO vista ;
 
  
