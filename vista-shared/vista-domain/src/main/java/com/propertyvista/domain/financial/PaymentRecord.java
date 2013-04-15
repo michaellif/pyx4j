@@ -211,6 +211,8 @@ public interface PaymentRecord extends IEntity {
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<Key> padReconciliationReturnRecordKey();
 
+    IPrimitive<String> notice();
+
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 

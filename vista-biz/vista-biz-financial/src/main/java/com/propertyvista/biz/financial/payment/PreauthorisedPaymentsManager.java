@@ -53,6 +53,8 @@ class PreauthorisedPaymentsManager {
         PreauthorizedPayment preauthorizedPayment;
 
         BigDecimal amount;
+
+        String notice;
     }
 
     void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate) {
@@ -141,6 +143,7 @@ class PreauthorisedPaymentsManager {
             paymentRecord.leaseTermParticipant().set(record.leaseTermTenant);
             paymentRecord.paymentMethod().set(record.preauthorizedPayment.paymentMethod());
             paymentRecord.preauthorizedPayment().set(record.preauthorizedPayment);
+            paymentRecord.notice().setValue(record.notice);
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);
             paymentRecord.targetDate().setValue(billingCycle.padExecutionDate().getValue());
@@ -163,6 +166,7 @@ class PreauthorisedPaymentsManager {
         Lease lease = billingAccount.lease();
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
+        BigDecimal total = BigDecimal.ZERO;
         // Calculate Percentage with rounding.
         BigDecimal percentTotal = BigDecimal.ZERO;
         BigDecimal percentAmountTotal = BigDecimal.ZERO;
@@ -194,7 +198,7 @@ class PreauthorisedPaymentsManager {
                     percentTotal = percentTotal.add(pap.percent().getValue());
                     record.amount = DomainUtil.roundMoney(currentBalance.multiply(pap.percent().getValue()));
                     percentAmountTotal = percentAmountTotal.add(record.amount);
-
+                    total = total.add(record.amount);
                     if ((recordLargest == null) || (record.amount.compareTo(recordLargest.amount) > 0)) {
                         recordLargest = record;
                     }
@@ -202,6 +206,7 @@ class PreauthorisedPaymentsManager {
 
                 case Value:
                     record.amount = pap.value().getValue();
+                    total = total.add(record.amount);
                     break;
 
                 default:
@@ -216,6 +221,14 @@ class PreauthorisedPaymentsManager {
             BigDecimal unapidBalance = currentBalance.subtract(percentAmountTotal);
             // Make the Largest to  pay fractions
             recordLargest.amount = recordLargest.amount.add(unapidBalance);
+        }
+
+        if ((currentBalance != null) && (total.compareTo(currentBalance) != 0)) {
+            // Validate total
+            String notice = SimpleMessageFormat.format("Outstanding account Balance {0} is not equal sum of payments {1}", currentBalance, total);
+            for (PreauthorizedAmount record : records) {
+                record.notice = notice;
+            }
         }
 
         return records;
@@ -278,6 +291,7 @@ class PreauthorisedPaymentsManager {
             PaymentRecord paymentRecord = Persistence.service().retrieve(criteria);
             if ((paymentRecord != null) && (paymentRecord.amount().getValue().compareTo(record.amount) != 0)) {
                 paymentRecord.amount().setValue(record.amount);
+                paymentRecord.notice().setValue(record.notice);
                 ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
                 executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
             }
