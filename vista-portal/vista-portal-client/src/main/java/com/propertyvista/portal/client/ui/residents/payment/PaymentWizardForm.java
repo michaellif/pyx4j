@@ -38,6 +38,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -323,7 +324,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         HorizontalPanel amount = new HorizontalPanel();
         amount.add(w = new HTML(i18n.tr("Amount to pay:")));
         w.setWidth("10em");
-        amount.add(w = new HTML("$" + get(proto().amount()).getValue().toString()));
+        amount.add(w = new HTML(((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         panel.add(amount);
 
