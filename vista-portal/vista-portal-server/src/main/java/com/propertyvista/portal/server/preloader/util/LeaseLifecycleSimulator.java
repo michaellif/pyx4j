@@ -71,8 +71,6 @@ public class LeaseLifecycleSimulator {
 
     private final static boolean debug = false;
 
-    private final static Random RND = new Random(1);
-
     private long minReserveTerm = 0L;
 
     private long maxReserveTerm = 1000L * 60L * 60L * 24L * 60L; // 60 days
@@ -99,8 +97,6 @@ public class LeaseLifecycleSimulator {
 
     private boolean runBilling = false;
 
-    private TenantAgent tenantAgent = new DefaultTenantAgent();
-
     private LogicalDate leaseTo;
 
     private final int maintenanceRequestsPerMonth = 0;
@@ -111,7 +107,14 @@ public class LeaseLifecycleSimulator {
 
     public int numOfPayments = -1;
 
+    private Random random;
+
+    private TenantAgent tenantAgent;
+
     private LeaseLifecycleSimulator() {
+        this.random = new Random(1);
+        this.tenantAgent = new DefaultTenantAgent(new Random(1));
+
         this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
             @Override
             public int compare(LeaseEventContainer arg0, LeaseEventContainer arg1) {
@@ -152,12 +155,14 @@ public class LeaseLifecycleSimulator {
             }
         }
 
-        LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(minAvailableTerm, maxAvailableTerm));
+        LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()),
+                LeaseLifecycleSimulatorUtils.rndBetween(random, minAvailableTerm, maxAvailableTerm));
 
-        LogicalDate leaseFrom = add(reservedOn, rndBetween(minReserveTerm, maxReserveTerm));
-        LogicalDate leaseTo = this.leaseTo != null ? this.leaseTo : add(leaseFrom, rndBetween(MIN_LEASE_TERM, MAX_LEASE_TERM));
-
+        LogicalDate leaseFrom = add(reservedOn, LeaseLifecycleSimulatorUtils.rndBetween(random, minReserveTerm, maxReserveTerm));
         lease.currentTerm().termFrom().setValue(leaseFrom);
+
+        LogicalDate leaseTo = this.leaseTo != null ? this.leaseTo : add(leaseFrom,
+                LeaseLifecycleSimulatorUtils.rndBetween(random, MIN_LEASE_TERM, MAX_LEASE_TERM));
         lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(leaseFrom);
 
@@ -168,7 +173,7 @@ public class LeaseLifecycleSimulator {
         clearEvents();
 
         queueEvent(reservedOn, new Begin(lease));
-        queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
+        queueEvent(max(leaseFrom, sub(leaseTo, LeaseLifecycleSimulatorUtils.rndBetween(random, MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new MoveOut(lease));
         queueEvent(DateUtils.daysAdd(leaseTo, 1), new Complete(lease));
 
@@ -260,7 +265,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease.status().setValue(Status.Application);
-            lease.currentTerm().type().setValue((RND.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
+            lease.currentTerm().type().setValue((random.nextInt() % 10 < 7) ? Type.Fixed : Type.FixedEx);
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
             Persistence.service().retrieveMember(lease.leaseParticipants());
 
@@ -299,7 +304,8 @@ public class LeaseLifecycleSimulator {
 
             // TODO change that to Employee Agent Decision
             hasImmideateApproval = true; // till now..
-            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
+            queueEvent(hasImmideateApproval ? now() : LeaseLifecycleSimulatorUtils.rndBetween(random, now(), lease.leaseFrom().getValue()),
+                    new ApproveApplication(lease));
         }
     }
 
@@ -558,19 +564,6 @@ public class LeaseLifecycleSimulator {
         return new LogicalDate(calendar.getTime());
     }
 
-    private static long rndBetween(long min, long max) {
-        assert min <= max;
-        if (max == min) {
-            return min;
-        } else {
-            return min + Math.abs(RND.nextLong()) % (max - min);
-        }
-    }
-
-    private static LogicalDate rndBetween(LogicalDate min, LogicalDate max) {
-        return new LogicalDate(rndBetween(min.getTime(), max.getTime()));
-    }
-
     @Deprecated
     private static LogicalDate add(LogicalDate date, long term) {
         // TODO get rid of this (it doesn't work with daylight savings)
@@ -658,15 +651,21 @@ public class LeaseLifecycleSimulator {
 
     public static class DefaultTenantAgent implements TenantAgent {
 
+        private final Random random;
+
+        public DefaultTenantAgent(Random random) {
+            this.random = random;
+        }
+
         @Override
         public BigDecimal pay(Bill bill) {
             if (bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) < 0) {
                 return null;
             }
-            if (RND.nextDouble() < 0.66) {
-                if (RND.nextDouble() < 0.5) {
+            if (random.nextDouble() < 0.66) {
+                if (random.nextDouble() < 0.5) {
                     // pay just a part of the bill
-                    BigDecimal part = new BigDecimal(0.1d + RND.nextDouble());
+                    BigDecimal part = new BigDecimal(0.1d + random.nextDouble());
                     return bill.totalDueAmount().getValue().multiply(part);
                 } else {
                     // don't pay at all
