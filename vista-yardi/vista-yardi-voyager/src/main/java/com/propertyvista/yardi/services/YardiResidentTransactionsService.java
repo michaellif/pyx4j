@@ -106,8 +106,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
      *             if operation fails
      */
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException {
-
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(yc);
 
         List<ResidentTransactions> allTransactions;
         if (yc.propertyCode().isNull()) {
@@ -127,7 +127,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
 
     public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
         Persistence.service().retrieve(lease.unit().building());
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(yc);
         String propertyCode = lease.unit().building().propertyCode().getValue();
         ResidentTransactions transaction = getResidentTransaction(client, yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null) {
@@ -141,7 +142,8 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
-        YardiClient client = new YardiClient(yc.residentTransactionsServiceURL().getValue());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(yc);
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);

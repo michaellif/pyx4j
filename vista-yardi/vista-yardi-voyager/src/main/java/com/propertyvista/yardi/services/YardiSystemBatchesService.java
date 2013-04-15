@@ -34,6 +34,7 @@ import com.yardi.ws.operations.PostReceiptBatch;
 import com.yardi.ws.operations.PostReceiptBatchResponse;
 import com.yardi.ws.operations.TransactionXml_type1;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -61,7 +62,8 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
     }
 
     public void validateReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(yc);
 
         Persistence.service().retrieve(receipt.billingAccount());
         Persistence.service().retrieve(receipt.billingAccount().lease());
@@ -77,7 +79,8 @@ public class YardiSystemBatchesService extends YardiAbstarctService {
     }
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        YardiClient client = new YardiClient(yc.sysBatchServiceURL().getValue());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(yc);
 
         Persistence.service().retrieve(receipt.billingAccount());
         Persistence.service().retrieve(receipt.billingAccount().lease());

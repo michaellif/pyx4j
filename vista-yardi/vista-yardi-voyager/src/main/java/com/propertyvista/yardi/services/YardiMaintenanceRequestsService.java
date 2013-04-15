@@ -36,6 +36,7 @@ import com.yardi.ws.operations.GetServiceRequest_Search;
 import com.yardi.ws.operations.GetServiceRequest_SearchResponse;
 import com.yardi.ws.operations.ServiceRequestXml_type0;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
@@ -60,9 +61,10 @@ public class YardiMaintenanceRequestsService {
     public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException {
         try {
 
-            YardiClient c = new YardiClient(yc.maintenanceRequestsServiceURL().getValue());
-            c.transactionIdStart();
-            c.setCurrentAction(Action.GetCustomValues);
+            YardiClient client = ServerSideFactory.create(YardiClient.class);
+            client.setPmcYardiCredential(yc);
+            client.transactionIdStart();
+            client.setCurrentAction(Action.GetCustomValues);
 
             GetCustomValues params = new GetCustomValues();
             params.setUserName(yc.username().getValue());
@@ -72,7 +74,7 @@ public class YardiMaintenanceRequestsService {
             params.setPlatform(yc.platform().getValue().name());
             params.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
 
-            GetCustomValuesResponse response = c.getMaintenanceRequestsService().getCustomValues(params);
+            GetCustomValuesResponse response = client.getMaintenanceRequestsService().getCustomValues(params);
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
 
             log.info("GetCustomValues: {}", xml);
@@ -104,9 +106,10 @@ public class YardiMaintenanceRequestsService {
             Validate.notEmpty(residentCode, "residentCode can not be empty or null");
             Validate.notEmpty(propertyCode, "propertyCode can not be empty or null");
 
-            YardiClient c = new YardiClient(yc.maintenanceRequestsServiceURL().getValue());
-            c.transactionIdStart();
-            c.setCurrentAction(Action.GetServiceRequests);
+            YardiClient client = ServerSideFactory.create(YardiClient.class);
+            client.setPmcYardiCredential(yc);
+            client.transactionIdStart();
+            client.setCurrentAction(Action.GetServiceRequests);
 
             GetServiceRequest_Search params = new GetServiceRequest_Search();
             params.setUserName(yc.username().getValue());
@@ -119,7 +122,7 @@ public class YardiMaintenanceRequestsService {
             params.setResidentCode(residentCode);
             params.setOpenOrClosed(openOrClosed);
 
-            GetServiceRequest_SearchResponse response = c.getMaintenanceRequestsService().getServiceRequest_Search(params);
+            GetServiceRequest_SearchResponse response = client.getMaintenanceRequestsService().getServiceRequest_Search(params);
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
 
             log.info("GetServiceRequests: {}", xml);
@@ -141,9 +144,10 @@ public class YardiMaintenanceRequestsService {
         try {
             Validate.notNull(requests, "requests can not be null");
 
-            YardiClient c = new YardiClient(yc.maintenanceRequestsServiceURL().getValue());
-            c.transactionIdStart();
-            c.setCurrentAction(Action.CreateOrEditServiceRequests);
+            YardiClient client = ServerSideFactory.create(YardiClient.class);
+            client.setPmcYardiCredential(yc);
+            client.transactionIdStart();
+            client.setCurrentAction(Action.CreateOrEditServiceRequests);
 
             CreateOrEditServiceRequests params = new CreateOrEditServiceRequests();
             params.setUserName(yc.username().getValue());
@@ -160,7 +164,7 @@ public class YardiMaintenanceRequestsService {
             serviceRequestXml.setExtraElement(element);
             params.setServiceRequestXml(serviceRequestXml);
 
-            CreateOrEditServiceRequestsResponse response = c.getMaintenanceRequestsService().createOrEditServiceRequests(params);
+            CreateOrEditServiceRequestsResponse response = client.getMaintenanceRequestsService().createOrEditServiceRequests(params);
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
             log.info("CreateOrEditServiceRequests: {}", responseXml);
 
