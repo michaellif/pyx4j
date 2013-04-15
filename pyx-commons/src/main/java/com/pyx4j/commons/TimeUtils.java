@@ -30,12 +30,6 @@ public class TimeUtils {
 
     public static int[] MONTH_DAYS_LEAP = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    /**
-     * Use TimeUtils.simpleFormat(, "MMM")
-     */
-    @Deprecated
-    public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
     public static boolean isOlderThan(final Date bithday, int years) {
         if (bithday == null) {
             return false;
@@ -57,9 +51,8 @@ public class TimeUtils {
     }
 
     public static boolean isLeapYear(int year) {
-        if (year % 4 == 0) // divisible by 4
-        {
-            if (year % 100 == 0) { // divible by 100 is not a leap year
+        if (year % 4 == 0) { // divisible by 4
+            if (year % 100 == 0) { // divisible by 100 is not a leap year
                 return year % 400 == 0; // unless that year is divisible by 400
             }
             return true;
@@ -99,7 +92,7 @@ public class TimeUtils {
         sb.append(CommonsStringUtils.d00((int) sec));
         sb.append("sec");
 
-        if ((h == 0) && (min == 0) && (sec <= 1)) {
+        if ((h == 0) && (min == 0) && (sec <= 7)) {
             msec -= 1000 * sec;
             sb.append(' ');
             sb.append(CommonsStringUtils.d000((int) msec));
