@@ -20,15 +20,38 @@
  */
 package com.pyx4j.config.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pyx4j.commons.RuntimeExceptionSerializable;
 
 public class ServerSideFactory {
+
+    private static Map<Class<?>, Class<?>> registeredImplementations = null;
 
     /**
      * Created new instance of interface implementation by finding class name+Factory first, if not exists finds name+Impl
      */
     @SuppressWarnings("unchecked")
     public static <T> T create(Class<T> interfaceCalss) {
+        if (registeredImplementations != null) {
+            Class<T> klass = (Class<T>) registeredImplementations.get(interfaceCalss);
+            if (klass != null) {
+                try {
+                    return klass.newInstance();
+                } catch (Throwable e) {
+                    throw new RuntimeException("Can't create " + klass.getName(), e);
+                }
+            }
+        }
+        return createDefaultImplementation(interfaceCalss);
+    }
+
+    /**
+     * Should be used only during unit tests
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T createDefaultImplementation(Class<T> interfaceCalss) {
         String interfaceClassName = interfaceCalss.getName();
         if (interfaceClassName.contains(".shared.")) {
             interfaceClassName = interfaceClassName.replace(".shared.", ".server.");
@@ -60,5 +83,19 @@ public class ServerSideFactory {
         } catch (Throwable e) {
             throw new RuntimeException("Can't create " + interfaceClassName, e);
         }
+    }
+
+    /**
+     * Should be used only during unit tests
+     */
+    public static <T> void register(Class<T> interfaceCalss, Class<? extends T> implCalss) {
+        if (registeredImplementations == null) {
+            registeredImplementations = new HashMap<Class<?>, Class<?>>();
+        }
+        registeredImplementations.put(interfaceCalss, implCalss);
+    }
+
+    public static <T> void unregister(Class<T> interfaceCalss) {
+        registeredImplementations.remove(interfaceCalss);
     }
 }
