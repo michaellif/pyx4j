@@ -25,6 +25,103 @@ function fillCity() {
 </script>
 <link href="http://www.larlyn.com/includes/styles.css" rel="stylesheet"
 	type="text/css">
+	
+<style>
+div.LandingCaption {
+	font: 16px Arial,Helvetica,sans-serif;
+	color: #663333;
+} 
+
+div.FormFlexPanelH1Label {
+	font: bold 16px Arial,Helvetica,sans-serif;
+	color: #663333;
+}
+
+div.Button,button.gwt-Button {
+	background: #a16281;
+	border: 5px double #FFFFFF;
+}
+
+div.Button:hover,button.gwt-Button:hover {
+	background: #814c66;
+	border: 5px double #FFFFFF;
+}
+
+div.ButtonText,button.gwt-Button {
+	color: #FFFFFF;
+	text-transform: uppercase;
+	text-shadow: 0 2px 4px #000000;
+	font-size: 14px;
+}
+
+button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
+	padding: 3px;
+}
+
+.ProvideTIBGetTenantSure .ButtonText{
+	text-transform: inherit;
+} 
+
+div.secondaryNavig ul li:hover {
+	color: #663333;
+}
+
+.EntityFolderAddButton {
+
+}
+
+div#siteAuthInsert {
+	bottom: 0 !important;
+}
+
+div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
+	{
+	width: 95% !important;
+}
+
+ol li {
+	line-height: 1.5em;
+	padding-bottom: 10px;
+	position: relative;
+	text-align: justify;
+}
+
+div#body_inside {
+}
+
+div.LandingOrLineSeparator div {
+	border-color: #663333;
+}
+
+.Dialog {
+	background: none repeat scroll 0 0 #663333 !important;
+}
+
+.DialogCaption {
+	background: #CCCCCC !important;
+	color: #fff !important;
+	padding-left: 0.5em;
+}
+
+.caption {
+	padding-left: 3em;
+}
+
+.DatePickerWeekendDayLabel {
+    color: #663333;
+}
+
+.FormFlexPanelH2 {
+  /* border-bottom: 2px solid #117140 !important; */
+}
+
+#gwt-debug-login:hover,#gwt-debug-account:hover,#gwt-debug-logout:hover {
+	text-decoration: underline;
+}
+
+</style>
 </head>
 <body
 	onLoad="MM_preloadImages('/im/menu/residential_on.gif','/im/menu/commercial_on.gif','/im/menu/corporate_on.gif','/im/menu/management_on.gif','/im/menu/relations_on.gif','/im/menu/vendors_on.gif','/im/menu/careers_on.gif','/im/menu/contact_on.gif')">
@@ -66,48 +163,48 @@ function fillCity() {
 				src="http://www.larlyn.com/im/spacer.gif" width="1" height="1"></td>
 			<td><a href="http://www.larlyn.com/commercial/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('commercial1','','/im/menu/commercial_on.gif',1)"><img
+				onMouseOver="MM_swapImage('commercial1','','http://www.larlyn.com/im/menu/commercial_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/commercial_off.gif"
 					alt="Commercial Leasing" name="commercial1" width="112" height="25"
 					border="0"></a><a
 				href="http://www.larlyn.com/residential/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('residential1','','/im/menu/residential_on.gif',1)"><img
+				onMouseOver="MM_swapImage('residential1','','http://www.larlyn.com/im/menu/residential_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/residential_off.gif"
 					alt="Residential Properties" name="residential1" width="101"
 					height="25" border="0"></a><a
 				href="http://www.larlyn.com/corporate/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('corporate1','','/im/menu/corporate_on.gif',1)"><img
+				onMouseOver="MM_swapImage('corporate1','','http://www.larlyn.com/im/menu/corporate_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/corporate_off.gif"
 					alt="Corporate Profile" name="corporate1" width="118" height="25"
 					border="0"></a><a
 				href="http://www.larlyn.com/management/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('management1','','/im/menu/management_on.gif',1)"><img
+				onMouseOver="MM_swapImage('management1','','http://www.larlyn.com/im/menu/management_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/management_off.gif"
 					alt="Management Services" name="management1" width="120"
 					height="25" border="0"></a><a
 				href="http://www.larlyn.com/client/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('client1','','/im/menu/relations_on.gif',1)"><img
+				onMouseOver="MM_swapImage('client1','','http://www.larlyn.com/im/menu/relations_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/relations_act.gif"
 					alt="Client Relations" name="client1" width="86" height="25"
 					border="0"></a><a
 				href="http://www.larlyn.com/vendors/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('vendors1','','/im/menu/vendors_on.gif',1)"><img
+				onMouseOver="MM_swapImage('vendors1','','http://www.larlyn.com/im/menu/vendors_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/vendors_off.gif"
 					alt="Vendor Registration" name="vendors1" width="105" height="25"
 					border="0"></a><a
 				href="http://www.larlyn.com/careers/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('careers1','','/im/menu/careers_on.gif',1)"><img
+				onMouseOver="MM_swapImage('careers1','','http://www.larlyn.com/im/menu/careers_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/careers_off.gif" alt="Careers"
 					name="careers1" width="50" height="25" border="0"></a><a
 				href="http://www.larlyn.com/contact/default.asp"
 				onMouseOut="MM_swapImgRestore()"
-				onMouseOver="MM_swapImage('contact1','','/im/menu/contact_on.gif',1)"><img
+				onMouseOver="MM_swapImage('contact1','','http://www.larlyn.com/im/menu/contact_on.gif',1)"><img
 					src="http://www.larlyn.com/im/menu/contact_off.gif"
 					alt="Contact Us" name="contact1" width="66" height="25" border="0"></a></td>
 			<td width="1" background="http://www.larlyn.com/im/main/bg_hor.gif"><img
