@@ -37,9 +37,9 @@ import com.propertyvista.crm.client.ui.reports.components.ITableColumnFormatter;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class PapReport extends Composite implements Report {
+public class EftReport extends Composite implements Report {
 
-    private final static I18n i18n = I18n.get(PapReportFactory.class);
+    private final static I18n i18n = I18n.get(EftReportFactory.class);
 
     private final static List<ITableColumnFormatter> COLUMN_DESCRIPTORS;
     static {
@@ -86,7 +86,7 @@ public class PapReport extends Composite implements Report {
 
     private final HTML reportHtml;
 
-    public PapReport() {
+    public EftReport() {
         reportHtml = new HTML();
         initWidget(reportHtml);
     }
@@ -95,7 +95,7 @@ public class PapReport extends Composite implements Report {
     public void setData(Object data) {
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         builder.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
-        builder.appendEscaped(i18n.tr("PAP Report"));
+        builder.appendEscaped(i18n.tr("EFT Report"));
         builder.appendHtmlConstant("</div>");
 
         builder.appendHtmlConstant("<table style=\"white-space: nowrap; border-collapse: separate; border-spacing: 15pt;\">");

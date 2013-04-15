@@ -22,13 +22,13 @@ import com.pyx4j.site.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.reports.PapReportMetadata;
+import com.propertyvista.domain.reports.EftReportMetadata;
 
-public class PapReportGenerator implements ReportGenerator {
+public class EftReportGenerator implements ReportGenerator {
 
     @Override
     public Serializable generateReport(ReportMetadata metadata) {
-        PapReportMetadata reportMetadata = (PapReportMetadata) metadata;
+        EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
         EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
         Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
         for (PaymentRecord paymentRecord : paymentRecords) {
@@ -39,7 +39,7 @@ public class PapReportGenerator implements ReportGenerator {
         return paymentRecords;
     }
 
-    private EntityQueryCriteria<PaymentRecord> makeCriteria(PapReportMetadata reportMetadata) {
+    private EntityQueryCriteria<PaymentRecord> makeCriteria(EftReportMetadata reportMetadata) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.desc(criteria.proto().padBillingCycle().billingType());
         criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());

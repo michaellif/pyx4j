@@ -18,21 +18,21 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.factories.pad.PadReportForm;
-import com.propertyvista.domain.reports.PapReportMetadata;
+import com.propertyvista.crm.client.ui.reports.factories.pad.EftReportSettingsForm;
+import com.propertyvista.domain.reports.EftReportMetadata;
 
-public class PapReportFactory implements ReportFactory<PapReportMetadata> {
+public class EftReportFactory implements ReportFactory<EftReportMetadata> {
 
     @Override
-    public CEntityForm<PapReportMetadata> getReportSettingsForm() {
-        CEntityDecoratableForm<PapReportMetadata> form = new PadReportForm();
+    public CEntityForm<EftReportMetadata> getReportSettingsForm() {
+        CEntityDecoratableForm<EftReportMetadata> form = new EftReportSettingsForm();
         form.initContent();
         return form;
     }
 
     @Override
     public Report getReport() {
-        return new PapReport();
+        return new EftReport();
     }
 
 }

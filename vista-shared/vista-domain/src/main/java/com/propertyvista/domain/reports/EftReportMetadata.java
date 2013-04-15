@@ -25,8 +25,8 @@ import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
-@Caption(name = "PAP Report")
-public interface PapReportMetadata extends ReportMetadata {
+@Caption(name = "EFT Report")
+public interface EftReportMetadata extends ReportMetadata {
 
     IPrimitive<Boolean> onlyWithNotice();
 

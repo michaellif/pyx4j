@@ -20,12 +20,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.reports.PapReportMetadata;
+import com.propertyvista.domain.reports.EftReportMetadata;
 
-public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
+public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetadata> {
 
-    public PadReportForm() {
-        super(PapReportMetadata.class);
+    public EftReportSettingsForm() {
+        super(EftReportMetadata.class);
     }
 
     @Override

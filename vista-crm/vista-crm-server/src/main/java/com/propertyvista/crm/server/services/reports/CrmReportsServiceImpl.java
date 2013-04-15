@@ -23,10 +23,10 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.server.services.reports.generators.AvailabilityReportsGenerator;
 import com.propertyvista.crm.server.services.reports.generators.CustomerCreditCheckReportGenerator;
-import com.propertyvista.crm.server.services.reports.generators.PapReportGenerator;
+import com.propertyvista.crm.server.services.reports.generators.EftReportGenerator;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
-import com.propertyvista.domain.reports.PapReportMetadata;
+import com.propertyvista.domain.reports.EftReportMetadata;
 
 public class CrmReportsServiceImpl extends AbstractReportsService implements CrmReportsService {
 
@@ -37,7 +37,7 @@ public class CrmReportsServiceImpl extends AbstractReportsService implements Crm
 
         reportsGeneratorMap.put(AvailabilityReportMetadata.class, new AvailabilityReportsGenerator());
         reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, new CustomerCreditCheckReportGenerator());
-        reportsGeneratorMap.put(PapReportMetadata.class, new PapReportGenerator());
+        reportsGeneratorMap.put(EftReportMetadata.class, new EftReportGenerator());
     }
 
     public CrmReportsServiceImpl() {
