@@ -21,5 +21,6 @@ public class ViewPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod>
 
     public ViewPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class));
+        getSubmit().setVisible(false);
     }
 }
