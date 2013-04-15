@@ -155,6 +155,11 @@ BEGIN
         
         ALTER TABLE padpolicy_item ADD COLUMN debit_type BIGINT;
         
+        
+        -- payment_record
+        
+        ALTER TABLE payment_record ADD COLUMN notice VARCHAR(500);
+        
         -- product
         
         ALTER TABLE product ADD COLUMN code_type VARCHAR(50);
@@ -404,6 +409,13 @@ BEGIN
                 ||'SET  product_code = a.id '
                 ||'FROM '||v_schema_name||'.arcode a '
                 ||'WHERE p.product_item_type = a.pit_id ';
+        
+        
+        -- reports_settings_holder
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.reports_settings_holder '
+                ||'WHERE        class_name = ''PapReportMetadata'' ';
+        
                 
         -- yardi_charge_code
         

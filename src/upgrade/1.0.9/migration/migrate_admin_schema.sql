@@ -109,6 +109,10 @@ SET search_path = '_admin_';
         ALTER TABLE pad_sim_file        ADD COLUMN original_file BIGINT,
                                         ADD COLUMN return_sent TIMESTAMP,
                                         ADD COLUMN returns BOOLEAN;
+                                        
+        -- scheduler_run
+        
+        ALTER TABLE scheduler_run ADD COLUMN completed TIMESTAMP;
        
         
         
