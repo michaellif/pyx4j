@@ -36,9 +36,10 @@ public class RunForm extends OperationsEntityForm<Run> {
                 40).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 40).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().completed()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));

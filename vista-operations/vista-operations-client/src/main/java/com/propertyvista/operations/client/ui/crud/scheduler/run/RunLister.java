@@ -36,6 +36,7 @@ public class RunLister extends AbstractLister<Run> {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.status()).build(),
                 new MemberColumnDescriptor.Builder(proto.started()).build(),
+                new MemberColumnDescriptor.Builder(proto.completed()).build(),
                 new MemberColumnDescriptor.Builder(proto.forDate()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().total()).build(),
                 new MemberColumnDescriptor.Builder(proto.executionReport().processed()).build(),

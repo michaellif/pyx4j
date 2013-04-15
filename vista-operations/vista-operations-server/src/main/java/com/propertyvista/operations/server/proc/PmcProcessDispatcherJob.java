@@ -134,6 +134,9 @@ public class PmcProcessDispatcherJob implements Job {
             }
         }
 
+        if (run.status().getValue() != RunStatus.Sleeping) {
+            run.completed().setValue(new Date());
+        }
         Persistence.service().persist(run);
 
         if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {

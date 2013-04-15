@@ -53,9 +53,6 @@ public interface Run extends IEntity {
     @Indexed
     IPrimitive<RunStatus> status();
 
-    @Format("MM/dd/yyyy HH:mm")
-    IPrimitive<Date> started();
-
     @ToString(index = 0)
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
@@ -68,6 +65,12 @@ public interface Run extends IEntity {
 
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> forDate();
+
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> started();
+
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> completed();
 
     @Caption(name = "Statistics")
     @Owned(forceCreation = true, cascade = {})
