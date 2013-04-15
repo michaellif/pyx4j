@@ -24,9 +24,9 @@ public class ARFacadeFactory implements FacadeFactory<ARFacade> {
     @Override
     public ARFacade getFacade() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return ARYardiFacadeImpl.instance();
+            return new ARYardiFacadeImpl();
         } else {
-            return ARInternalFacadeImpl.instance();
+            return new ARInternalFacadeImpl();
         }
     }
 

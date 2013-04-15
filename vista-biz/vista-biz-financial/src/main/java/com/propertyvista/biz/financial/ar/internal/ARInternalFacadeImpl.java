@@ -52,18 +52,6 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARInternalFacadeImpl implements ARFacade {
 
-    private static class SingletonHolder {
-        public static final ARInternalFacadeImpl INSTANCE = new ARInternalFacadeImpl();
-    }
-
-    public static ARInternalFacadeImpl instance() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    private ARInternalFacadeImpl() {
-
-    }
-
     @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
         postInvoiceLineItem(invoiceLineItem, null);

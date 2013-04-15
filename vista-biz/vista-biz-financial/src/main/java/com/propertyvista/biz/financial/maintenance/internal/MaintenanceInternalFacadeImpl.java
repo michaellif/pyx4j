@@ -33,14 +33,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
-    private static class SingletonHolder {
-        public static final MaintenanceInternalFacadeImpl INSTANCE = new MaintenanceInternalFacadeImpl();
-    }
-
-    public static MaintenanceFacade instance() {
-        return SingletonHolder.INSTANCE;
-    }
-
     @Override
     public MaintenanceRequestCategory getMaintenanceRequestCategory() {
         return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategories();

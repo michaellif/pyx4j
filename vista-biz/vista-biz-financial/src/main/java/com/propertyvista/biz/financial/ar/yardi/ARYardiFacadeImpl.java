@@ -53,18 +53,6 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARYardiFacadeImpl implements ARFacade {
 
-    private static class SingletonHolder {
-        public static final ARYardiFacadeImpl INSTANCE = new ARYardiFacadeImpl();
-    }
-
-    public static ARYardiFacadeImpl instance() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    private ARYardiFacadeImpl() {
-
-    }
-
     @Override
     public boolean validatePayment(PaymentRecord paymentRecord) throws ARException {
         // Avoid creation of two payments in Yadi

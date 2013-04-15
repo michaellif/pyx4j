@@ -24,9 +24,9 @@ public class MaintenanceFacadeFactory implements FacadeFactory<MaintenanceFacade
     @Override
     public MaintenanceFacade getFacade() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return MaintenanceYardiFacadeImpl.instance();
+            return new MaintenanceYardiFacadeImpl();
         } else {
-            return MaintenanceInternalFacadeImpl.instance();
+            return new MaintenanceInternalFacadeImpl();
         }
     }
 

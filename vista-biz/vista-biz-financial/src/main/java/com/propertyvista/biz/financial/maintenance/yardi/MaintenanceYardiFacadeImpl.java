@@ -27,14 +27,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
 
-    private static class SingletonHolder {
-        public static final MaintenanceYardiFacadeImpl INSTANCE = new MaintenanceYardiFacadeImpl();
-    }
-
-    public static MaintenanceFacade instance() {
-        return SingletonHolder.INSTANCE;
-    }
-
     @Override
     public MaintenanceRequestCategory getMaintenanceRequestCategory() {
         return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategories();
