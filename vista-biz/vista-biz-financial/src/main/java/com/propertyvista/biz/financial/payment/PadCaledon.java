@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -177,7 +178,7 @@ public class PadCaledon {
      * Length 4 Must be incremented by one for each file submitted per Company ID
      */
     private String getNextFileCreationNumber() {
-        boolean useSimulator = CaledonPadSftpClient.usePadSimulator();
+        boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.FALSE);
 
         EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().simulator(), useSimulator));

@@ -15,7 +15,6 @@ package com.propertyvista.payment.pad;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -35,10 +34,9 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAkFile;
-import com.propertyvista.shared.VistaSystemIdentification;
 
 public class CaledonPadSftpClient {
 
@@ -52,8 +50,6 @@ public class CaledonPadSftpClient {
 
     private final String getSrc = "out";
 
-    private static boolean usePadSimulator = defaultUsePadSimulator();
-
     public static enum PadFileType {
 
         PadFile,
@@ -63,16 +59,8 @@ public class CaledonPadSftpClient {
         Reconciliation;
     }
 
-    private static boolean defaultUsePadSimulator() {
-        return !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification());
-    }
-
-    public static boolean usePadSimulator() {
-        return usePadSimulator;
-    }
-
-    public static void setUsePadSimulator(boolean usePadSymulator) {
-        CaledonPadSftpClient.usePadSimulator = usePadSymulator;
+    private static boolean usePadSimulator() {
+        return VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.FALSE);
     }
 
     private static Credentials getCredentials() {

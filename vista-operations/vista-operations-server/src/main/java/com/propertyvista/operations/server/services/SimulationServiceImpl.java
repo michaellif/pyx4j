@@ -28,12 +28,11 @@ import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.operations.rpc.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
-import com.propertyvista.config.VistaSystemsSimulationConfig;
-import com.propertyvista.payment.pad.CaledonPadSftpClient;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
@@ -50,7 +49,6 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         result.networkSimulation().set(NetworkSimulationServiceFilter.getNetworkSimulationConfig());
 
         result.systems().set(VistaSystemsSimulationConfig.getConfiguration());
-        result.systems().usePadSimulator().setValue(CaledonPadSftpClient.usePadSimulator());
 
         result.equifax().set(Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class)));
 
@@ -72,7 +70,6 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
 
-        CaledonPadSftpClient.setUsePadSimulator(entity.systems().usePadSimulator().getValue());
         VistaSystemsSimulationConfig.setConfiguration(entity.systems());
 
         Persistence.service().persist(entity.equifax());

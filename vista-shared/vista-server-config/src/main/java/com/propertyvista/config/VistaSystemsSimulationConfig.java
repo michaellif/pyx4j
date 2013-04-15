@@ -13,10 +13,13 @@
  */
 package com.propertyvista.config;
 
+import java.util.EnumSet;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.dto.VistaSystemsSimulationConfigDTO;
+import com.propertyvista.shared.VistaSystemIdentification;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaSystemsSimulationConfig {
@@ -26,6 +29,8 @@ public class VistaSystemsSimulationConfig {
     static {
         configuration = EntityFactory.create(VistaSystemsSimulationConfigDTO.class);
         configuration.useEquifaxSimulator().setValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
+        configuration.usePadSimulator().setValue(
+                !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification()));
     }
 
     public static VistaSystemsSimulationConfigDTO getConfiguration() {
