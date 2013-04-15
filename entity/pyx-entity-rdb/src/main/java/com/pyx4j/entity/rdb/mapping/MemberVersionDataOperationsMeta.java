@@ -45,6 +45,11 @@ public class MemberVersionDataOperationsMeta extends MemberExternalOperationsMet
         sqlToDateColumnName = dialect.getNamingConvention().sqlFieldName(EntityOperationsMeta.memberPersistenceName(proto.toDate().getMeta()));
     }
 
+    @Override
+    public boolean isVersionData() {
+        return true;
+    }
+
     public String getSqlFromDateColumnName() {
         return sqlFromDateColumnName;
     }

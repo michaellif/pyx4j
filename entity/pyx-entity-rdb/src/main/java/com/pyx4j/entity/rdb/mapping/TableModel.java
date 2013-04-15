@@ -724,6 +724,8 @@ public class TableModel {
         for (MemberCollectionOperationsMeta member : entityOperationsMeta.getCollectionMembers()) {
             if (member.getMemberMeta().getAttachLevel() != AttachLevel.Detached) {
                 TableModelCollections.retrieve(persistenceContext, entity, member);
+            } else {
+                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
             }
         }
         for (MemberExternalOperationsMeta member : entityOperationsMeta.getExternalMembers()) {
@@ -733,6 +735,7 @@ public class TableModel {
                 continue;
             }
             if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
+                member.getMember(entity).setAttachLevel(AttachLevel.Detached);
                 continue;
             }
             if (attachLevel == AttachLevel.ToStringMembers) {

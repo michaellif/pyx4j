@@ -33,14 +33,16 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.version.ItemA;
 import com.pyx4j.entity.test.shared.domain.version.ItemA.ItemAVersion;
 import com.pyx4j.entity.test.shared.domain.version.ItemAInconclusive;
 import com.pyx4j.entity.test.shared.domain.version.ItemB;
-import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyChild;
+import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyMChild;
 import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent;
+import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyUChild;
 import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedA;
 import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedB;
 import com.pyx4j.entity.test.shared.domain.version.PolymorphicVersionedSuper;
@@ -675,14 +677,26 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         o.testId().setValue(testId);
         o.name().setValue(uniqueString());
 
-        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
-        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
+        o.version().childrenM().add(EntityFactory.create(OwnedByVerOneToManyMChild.class));
+        o.version().childrenM().add(EntityFactory.create(OwnedByVerOneToManyMChild.class));
 
-        o.version().children().get(0).testId().setValue(testId);
-        o.version().children().get(0).name().setValue(uniqueString());
+        o.version().childrenM().get(0).testId().setValue(testId);
+        o.version().childrenM().get(0).name().setValue(uniqueString());
 
-        o.version().children().get(1).testId().setValue(testId);
-        o.version().children().get(1).name().setValue(uniqueString());
+        o.version().childrenM().get(1).testId().setValue(testId);
+        String cNameM1 = "om" + uniqueString();
+        o.version().childrenM().get(1).name().setValue(cNameM1);
+
+        //
+        o.version().childrenU().add(EntityFactory.create(OwnedByVerOneToManyUChild.class));
+        o.version().childrenU().get(0).testId().setValue(testId);
+        String cNameU1 = "ou" + uniqueString();
+        o.version().childrenU().get(0).name().setValue(cNameU1);
+
+        o.version().childE().childrenU().add(EntityFactory.create(OwnedByVerOneToManyUChild.class));
+        o.version().childE().childrenU().get(0).testId().setValue(testId);
+        String cNameEU1 = "oeu" + uniqueString();
+        o.version().childE().childrenU().get(0).name().setValue(cNameEU1);
 
         // Save child and owner
         srvSave(o, testCaseMethod);
@@ -690,8 +704,88 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         // finalize, Save draft as version
         {
             OwnedByVerOneToManyParent o1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            Assert.assertEquals(cNameM1, o1r.version().childrenM().get(1).name().getValue());
+
             o1r.saveAction().setValue(SaveAction.saveAsFinal);
             srv.persist(o1r);
+        }
+
+        // Update childM
+        {
+            OwnedByVerOneToManyParent o2 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+            o2.version().set(EntityGraph.businessDuplicate(o2.version()));
+            VersionedEntityUtils.setAsDraft(o2.version());
+
+            String cName2 = "uM" + uniqueString();
+            o2.version().childrenM().get(1).name().setValue(cName2);
+
+            // Save draft
+            srvSave(o2, testCaseMethod);
+            {
+                OwnedByVerOneToManyParent o1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+                Assert.assertEquals(cName2, o1r.version().childrenM().get(1).name().getValue());
+            }
+
+            // Save final
+            OwnedByVerOneToManyParent o2r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            o2r.saveAction().setValue(SaveAction.saveAsFinal);
+            srv.persist(o2r);
+            {
+                OwnedByVerOneToManyParent o2r1 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+                Assert.assertEquals(cName2, o2r1.version().childrenM().get(1).name().getValue());
+            }
+        }
+
+        // Update childU
+        {
+            OwnedByVerOneToManyParent o2 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+            o2.version().set(EntityGraph.businessDuplicate(o2.version()));
+            VersionedEntityUtils.setAsDraft(o2.version());
+
+            String cName2 = "uU" + uniqueString();
+            o2.version().childrenU().get(0).name().setValue(cName2);
+
+            // Save draft
+            srvSave(o2, testCaseMethod);
+            {
+                OwnedByVerOneToManyParent o1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+                Assert.assertEquals(cName2, o1r.version().childrenU().get(0).name().getValue());
+            }
+
+            // Save final
+            OwnedByVerOneToManyParent o2e = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            o2e.saveAction().setValue(SaveAction.saveAsFinal);
+            srvSave(o2e, testCaseMethod);
+            {
+                OwnedByVerOneToManyParent o2r1 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+                Assert.assertEquals(cName2, o2r1.version().childrenU().get(0).name().getValue());
+            }
+        }
+
+        // Update childU.childU
+        {
+            OwnedByVerOneToManyParent o2 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+            o2.version().set(EntityGraph.businessDuplicate(o2.version()));
+            VersionedEntityUtils.setAsDraft(o2.version());
+
+            String cName2 = "uEU" + uniqueString();
+            o2.version().childE().childrenU().get(0).name().setValue(cName2);
+
+            // Save draft
+            srvSave(o2, testCaseMethod);
+            {
+                OwnedByVerOneToManyParent o1r = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+                Assert.assertEquals(cName2, o1r.version().childE().childrenU().get(0).name().getValue());
+            }
+
+            // Save final
+            OwnedByVerOneToManyParent o2e = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asDraftKey());
+            o2e.saveAction().setValue(SaveAction.saveAsFinal);
+            srvSave(o2e, testCaseMethod);
+            {
+                OwnedByVerOneToManyParent o2r1 = srv.retrieve(OwnedByVerOneToManyParent.class, o.getPrimaryKey().asCurrentKey());
+                Assert.assertEquals(cName2, o2r1.version().childE().childrenU().get(0).name().getValue());
+            }
         }
     }
 
@@ -820,11 +914,11 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         o.version().name().setValue(uniqueString());
         o.version().testId().setValue(testId);
 
-        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
-        o.version().children().add(EntityFactory.create(OwnedByVerOneToManyChild.class));
-        o.version().children().get(0).testId().setValue(testId);
-        o.version().children().get(0).name().setValue(uniqueString());
-        o.version().children().get(1).testId().setValue(testId);
+        o.version().childrenM().add(EntityFactory.create(OwnedByVerOneToManyMChild.class));
+        o.version().childrenM().add(EntityFactory.create(OwnedByVerOneToManyMChild.class));
+        o.version().childrenM().get(0).testId().setValue(testId);
+        o.version().childrenM().get(0).name().setValue(uniqueString());
+        o.version().childrenM().get(1).testId().setValue(testId);
 
         //(Draft then finalize)
         srv.persist(o);
@@ -847,7 +941,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
         }
 
         {
-            EntityQueryCriteria<OwnedByVerOneToManyChild> criteriaChildren = EntityQueryCriteria.create(OwnedByVerOneToManyChild.class);
+            EntityQueryCriteria<OwnedByVerOneToManyMChild> criteriaChildren = EntityQueryCriteria.create(OwnedByVerOneToManyMChild.class);
             criteriaChildren.add(PropertyCriterion.eq(criteriaChildren.proto().testId(), testId));
             assertEquals("ChildrenRemain", 0, srv.count(criteriaChildren));
         }

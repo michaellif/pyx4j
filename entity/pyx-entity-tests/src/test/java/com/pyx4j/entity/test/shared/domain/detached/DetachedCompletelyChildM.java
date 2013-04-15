@@ -20,9 +20,13 @@
  */
 package com.pyx4j.entity.test.shared.domain.detached;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -37,4 +41,6 @@ public interface DetachedCompletelyChildM extends IEntity {
 
     IPrimitive<String> name();
 
+    @Timestamp(Update.Updated)
+    IPrimitive<Date> updated();
 }

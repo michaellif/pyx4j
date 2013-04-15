@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -46,7 +47,13 @@ public interface OwnedByVerOneToManyParent extends IVersionedEntity<OwnedByVerOn
         IPrimitive<String> name();
 
         @Owned
-        IList<OwnedByVerOneToManyChild> children();
+        IList<OwnedByVerOneToManyUChild> childrenU();
+
+        @Owned
+        IList<OwnedByVerOneToManyMChild> childrenM();
+
+        @EmbeddedEntity
+        OwnedByVerOneToManyEChild childE();
     }
 
 }

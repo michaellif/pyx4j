@@ -14,34 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-01-14
+ * Created on 2012-03-11
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain.detached;
+package com.pyx4j.entity.test.shared.domain.version;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent.OwnedByVerOneToManyParentV;
 
 @Table(prefix = "test")
-public interface DetachedCompletelyChildS extends IEntity {
-
-    @Owner
-    @JoinColumn
-    DetachedCompletely owner();
+public interface OwnedByVerOneToManyMChild extends IEntity {
 
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
 
-    @Timestamp(Update.Updated)
-    IPrimitive<Date> updated();
+    @Owner
+    OwnedByVerOneToManyParentV parent();
 
 }

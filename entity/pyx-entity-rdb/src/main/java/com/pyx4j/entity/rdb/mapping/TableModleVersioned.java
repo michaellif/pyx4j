@@ -47,7 +47,7 @@ public class TableModleVersioned {
         EntityQueryCriteria<? extends IVersionData<?>> criteria = EntityQueryCriteria.create(targetEntityClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().holder(), entity));
 
-        if (versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT) {
+        if ((versionedEntity.getPrimaryKey().getVersion() == Key.VERSION_DRAFT)) {
             criteria.add(PropertyCriterion.isNull(criteria.proto().fromDate()));
             criteria.add(PropertyCriterion.isNull(criteria.proto().toDate()));
         } else {
@@ -70,6 +70,14 @@ public class TableModleVersioned {
             memberEntity.setPrimaryKey(keys.get(0));
             memberEntity.setValueDetached();
         }
+    }
+
+    public static SaveAction getSaveAction(IVersionedEntity<?> versionedEntity) {
+        SaveAction defaultSaveAction = SaveAction.saveAsDraft;
+        if (versionedEntity instanceof ILooseVersioning) {
+            defaultSaveAction = SaveAction.saveNonVersioned;
+        }
+        return versionedEntity.saveAction().getValue(defaultSaveAction);
     }
 
     public static List<IVersionData<IVersionedEntity<?>>> update(PersistenceContext persistenceContext, Mappings mappings, IEntity entity, boolean newEntity,
@@ -108,12 +116,7 @@ public class TableModleVersioned {
             versionData.holder().set(versionedEntity);
             versionData.createdByUserKey().setValue(persistenceContext.getCurrentUserKey());
 
-            SaveAction defaultSaveAction = SaveAction.saveAsDraft;
-            if (versionedEntity instanceof ILooseVersioning) {
-                defaultSaveAction = SaveAction.saveNonVersioned;
-            }
-
-            switch (versionedEntity.saveAction().getValue(defaultSaveAction)) {
+            switch (getSaveAction(versionedEntity)) {
             case saveNonVersioned: {
                 if (versionData.fromDate().isNull()) {
                     versionData.fromDate().setValue(persistenceContext.getTimeNow());

@@ -66,6 +66,7 @@ import com.pyx4j.entity.rdb.mapping.ResultSetIterator;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel;
 import com.pyx4j.entity.rdb.mapping.TableModelCollections;
+import com.pyx4j.entity.rdb.mapping.TableModelExternal;
 import com.pyx4j.entity.rdb.mapping.TableModleVersioned;
 import com.pyx4j.entity.rdb.mapping.ValueAdapterEntityPolymorphic;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -947,7 +948,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         startCallContext(ConnectionReason.forUpdate);
         try {
             entity = entity.cast();
-            merge(tableModel(entity.getEntityMeta()), entity);
+            TableModel tm = tableModel(entity.getEntityMeta());
+            merge(tm, entity);
         } finally {
             endCallContext();
         }
@@ -965,14 +967,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             MemberMeta memberMeta = member.getMemberMeta();
             Serializable value;
             Serializable lastValue;
-            if (IEntity.class.isAssignableFrom(memberMeta.getObjectClass())) {
+            if (memberMeta.getObjectClassType() == ObjectClassType.Entity) {
                 IEntity memberEntity = (IEntity) member.getMember(entity);
                 if (memberEntity.getAttachLevel() == AttachLevel.Detached) {
                     continue;
                 }
                 value = memberEntity.getPrimaryKey();
                 // merge incomplete data
-                if (memberMeta.isCascadePersist() && (AttachLevel.Detached == memberMeta.getAttachLevel())) {
+                if (AttachLevel.Detached == member.getMember(baseEntity).getAttachLevel()) {
                     tm.retrieveMember(getPersistenceContext(), baseEntity, (IEntity) member.getMember(baseEntity));
                 }
                 lastValue = ((IEntity) member.getMember(baseEntity)).getPrimaryKey();
@@ -987,6 +989,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                 }
             } else {
+                if (member.getMember(entity).getAttachLevel() == AttachLevel.Detached) {
+                    continue;
+                }
+
                 value = member.getMemberValue(entity);
                 lastValue = member.getMemberValue(baseEntity);
                 // merge incomplete data
@@ -1025,7 +1031,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         }
                     }
                 }
-            } else if (memberMeta.isOwnedRelationships() && memberMeta.isCascadePersist()) {
+            } else if ((memberMeta.isOwnedRelationships() && memberMeta.isCascadePersist()) || (member.isVersionData())) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     // Special case for child collections update. Collection itself is the same and in the same order, since we compared it.
                     ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
@@ -1045,6 +1051,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     IEntity childEntity = (IEntity) member.getMember(entity);
                     IEntity baseChildEntity = (IEntity) member.getMember(baseEntity);
                     if (!childEntity.isValueDetached()) {
+                        if (baseChildEntity.isNull() && member.isExternal() && !member.isVersionData()) {
+                            TableModelExternal.retrieve(getPersistenceContext(), baseEntity, (MemberExternalOperationsMeta) member);
+                        }
                         if (!baseChildEntity.isNull()) {
                             childEntity = childEntity.cast();
                             baseChildEntity = baseChildEntity.cast();
@@ -1071,7 +1080,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     private boolean retrieveAndApplyModifications(TableModel tm, IEntity baseEntity, IEntity entity) {
-        if (!tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), baseEntity, AttachLevel.Attached)) {
+        Key primaryKey = entity.getPrimaryKey();
+        if (entity instanceof IVersionedEntity) {
+            IVersionedEntity<?> versionedEntity = (IVersionedEntity<?>) entity;
+            if (TableModleVersioned.getSaveAction(versionedEntity) == IVersionedEntity.SaveAction.saveAsFinal) {
+                primaryKey = primaryKey.asCurrentKey();
+            }
+        }
+        if (!tm.retrieve(getPersistenceContext(), primaryKey, baseEntity, AttachLevel.Attached)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
                 throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
             } else {

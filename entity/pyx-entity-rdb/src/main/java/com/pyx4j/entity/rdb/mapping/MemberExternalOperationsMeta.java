@@ -49,6 +49,11 @@ public class MemberExternalOperationsMeta extends MemberOperationsMeta {
         this.sqlChildJoinContition = sqlChildJoinContition;
     }
 
+    @Override
+    public boolean isExternal() {
+        return true;
+    }
+
     public Class<? extends IEntity> joinTableClass() {
         return joinTableClass;
     }

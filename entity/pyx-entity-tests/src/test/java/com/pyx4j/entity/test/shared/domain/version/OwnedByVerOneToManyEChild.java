@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2012-03-11
+ * Created on 2013-04-12
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.test.shared.domain.version;
 
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.test.shared.domain.version.OwnedByVerOneToManyParent.OwnedByVerOneToManyParentV;
 
-@Table(prefix = "test")
-public interface OwnedByVerOneToManyChild extends IEntity {
+@EmbeddedEntity
+public interface OwnedByVerOneToManyEChild extends IEntity {
 
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
 
-    @Owner
-    OwnedByVerOneToManyParentV parent();
+    @Owned
+    IList<OwnedByVerOneToManyUChild> childrenU();
 
 }

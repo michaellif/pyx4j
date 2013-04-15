@@ -20,8 +20,13 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.util.Date;
+
 import junit.framework.Assert;
 
+import org.apache.commons.lang.time.DateUtils;
+
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -244,14 +249,46 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
         // Create child
         o.child().testId().setValue(testId);
-        o.child().name().setValue("c" + uniqueString());
+        String cName1 = "c" + uniqueString();
+        o.child().name().setValue(cName1);
         // Save child and owner
         srvSave(o, testCaseMethod);
 
+        Assert.assertEquals(testId, o.child().testId().getValue());
+        Assert.assertEquals(cName1, o.child().name().getValue());
+
+        {
+            DetachedCompletely or1 = srv.retrieve(DetachedCompletely.class, o.getPrimaryKey());
+            Assert.assertEquals("child data is not retrived", AttachLevel.Detached, or1.child().getAttachLevel());
+            Assert.assertEquals("child data is not retrived", AttachLevel.Detached, or1.children().getAttachLevel());
+            srv.retrieveMember(or1.child());
+            Assert.assertEquals(testId, or1.child().testId().getValue());
+            Assert.assertEquals(cName1, or1.child().name().getValue());
+        }
+
         // Update child
-        o.child().testId().setValue(testId);
-        o.child().name().setValue("u" + uniqueString());
+        String cName2 = "u" + uniqueString();
+        o.child().name().setValue(cName2);
         // Save child and owner
         srvSave(o, testCaseMethod);
+
+        Assert.assertEquals(testId, o.child().testId().getValue());
+        Assert.assertEquals(cName2, o.child().name().getValue());
+    }
+
+    public void testDetachedMerge() {
+        String testId = uniqueString();
+        DetachedCompletely o = EntityFactory.create(DetachedCompletely.class);
+        o.testId().setValue(testId);
+        o.name().setValue(uniqueString());
+        srv.merge(o);
+
+        Date initialDate = o.updated().getValue();
+
+        SystemDateManager.setDate(DateUtils.addHours(SystemDateManager.getDate(), 1));
+
+        srv.merge(o);
+        Assert.assertEquals("Entity should not be saved", initialDate, o.updated().getValue());
+
     }
 }

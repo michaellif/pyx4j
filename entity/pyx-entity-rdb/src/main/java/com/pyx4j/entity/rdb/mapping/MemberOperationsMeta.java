@@ -113,6 +113,14 @@ public class MemberOperationsMeta implements EntityMemberAccess {
         return memberMeta.isOwnedRelationships() && (!memberMeta.isEmbedded()) && memberMeta.getAnnotation(Owned.class).forceCreation();
     }
 
+    public boolean isVersionData() {
+        return false;
+    }
+
+    public boolean isExternal() {
+        return false;
+    }
+
     public String getMemberPath() {
         return memberPath;
     }
