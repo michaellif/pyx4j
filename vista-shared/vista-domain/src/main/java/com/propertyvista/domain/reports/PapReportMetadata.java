@@ -28,6 +28,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 @Caption(name = "PAP Report")
 public interface PapReportMetadata extends ReportMetadata {
 
+    IPrimitive<Boolean> onlyWithNotice();
+
     @Caption(name = "Filter by Billing Cycle")
     IPrimitive<Boolean> filterByBillingCycle();
 

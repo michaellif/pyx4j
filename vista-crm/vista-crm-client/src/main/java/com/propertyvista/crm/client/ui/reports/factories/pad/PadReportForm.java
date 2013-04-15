@@ -32,6 +32,7 @@ public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onlyWithNotice())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(10).build());
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -43,7 +44,7 @@ public class PadReportForm extends CEntityDecoratableForm<PapReportMetadata> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriod())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(10).build());
 
-        row = -1;
+        row = 0;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

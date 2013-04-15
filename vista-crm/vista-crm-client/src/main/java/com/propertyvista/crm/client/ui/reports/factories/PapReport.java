@@ -17,10 +17,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -43,6 +46,21 @@ public class PapReport extends Composite implements Report {
         // TODO use AppPlaceEntityMapper to resolve places (now its' not optimized and works really slow)        
         final PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
         COLUMN_DESCRIPTORS = Arrays.<ITableColumnFormatter> asList(//@formatter:off
+                new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.notice()).build()) {
+                    @Override
+                    public SafeHtml formatContent(IEntity entity) {                        
+                        PaymentRecord r = (PaymentRecord) entity;
+                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+                            return new SafeHtmlBuilder()
+                                    .appendHtmlConstant("<div title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) +"' style='width:100%;text-align:center;cursor:default'>")
+                                    .appendEscaped("!")
+                                    .appendHtmlConstant("</div>")
+                                    .toSafeHtml();
+                        } else {
+                            return new SafeHtmlBuilder().toSafeHtml();
+                        }
+                    }
+                },
                 new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build()),
                 new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build()),
                 new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
