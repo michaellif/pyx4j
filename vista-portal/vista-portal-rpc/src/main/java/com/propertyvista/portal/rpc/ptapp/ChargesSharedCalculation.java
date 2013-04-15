@@ -55,6 +55,12 @@ public class ChargesSharedCalculation {
         return true;
     }
 
+    /**
+     * Use TimeUtils.simpleFormat(, "MMM")
+     */
+    @Deprecated
+    public static String[] MONTH_NAMES_SHORT = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
     private static ChargeLine calculateProrateCharge(Date rentStart, ChargeLine charge) {
         BigDecimal monthly = charge.amount().getValue();
 
@@ -66,9 +72,9 @@ public class ChargesSharedCalculation {
         // build label
         StringBuilder sb = new StringBuilder();
         sb.append(charge.label().getStringView() + " (");
-        sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
+        sb.append(MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(currentDay).append(" - ");
-        sb.append(TimeUtils.MONTH_NAMES_SHORT[rentStart.getMonth()]);
+        sb.append(MONTH_NAMES_SHORT[rentStart.getMonth()]);
         sb.append(" ").append(monthDays).append(")");
 
         BigDecimal propation = new BigDecimal(numDays).divide(new BigDecimal(monthDays), 2, RoundingMode.HALF_UP);
