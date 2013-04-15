@@ -29,9 +29,11 @@ public interface MerchantAccountFileModel extends IEntity {
     ImportInformation _import();
 
     @ImportColumn(names = { "PMC" })
+    @NotNull
     IPrimitive<String> pmc();
 
     @ImportColumn(names = { "Property Code" })
+    @NotNull
     IPrimitive<String> propertyCode();
 
     @ImportColumn(names = { "Terminal ID" })
