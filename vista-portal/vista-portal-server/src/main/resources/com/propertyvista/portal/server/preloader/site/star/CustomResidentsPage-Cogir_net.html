@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-CA" lang="en-CA"
+	xmlns:fb="http://ogp.me/ns/fb#">
+
+<head>
+
+<title>Corporate brochure</title>
+<meta name="msvalidate.01" content="4C73257C704F7762FEBBF15428A0CE70" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="content-language" content="en" />
+<meta name="robots" content="index,follow" />
+<meta name="title" content="Corporate brochure" />
+
+<link rel="start" title="Accueil" href="http://www.cogir.net/" />
+<link rel="index" href="http://www.cogir.net/en/site-map.html" title="Site map" />
+<link rel="copyright" href="http://www.cogir.net/en/terms-conditions.html"
+	title="Copyright © 2013 Cogir Inc. Tous droits réservés." />
+
+<link rel="shortcut icon" type="images/x-icon"
+	href="http://www.cogir.net/gx/favicon.ico" />
+
+
+
+<link rel="image_src" href="http://www.cogir.net/gx/icone-cogir-en.jpg" />
+
+
+<link rel="canonical"
+	href="http://www.cogir.net/en/corporate-brochure.html" />
+
+
+
+
+<link rel="stylesheet" type="text/css" href="http://www.cogir.net/stylesheet.css"
+	media="screen" title="Normal" />
+<link rel="stylesheet" type="text/css" href="http://www.cogir.net/print.css" media="print"
+	title="Normal" />
+
+
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+
+
+
+
+<script type="text/javascript"
+	src="http://www.cogir.net/js/jQuery/watermark/jquery.watermark.js"></script>
+
+
+<script type="text/javascript"
+	src="http://www.cogir.net/js/jQuery/jcarousel/jquery.jcarousel.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="http://www.cogir.net/js/jQuery/jcarousel/skin.css" />
+
+
+<script src="http://www.cogir.net/js/jQuery/prettyphoto/js/jquery.prettyPhoto.js"
+	type="text/javascript"></script>
+<link rel="stylesheet" type="text/css"
+	href="http://www.cogir.net/js/jQuery/prettyphoto/css/prettyPhoto.css" />
+
+
+
+<script src="http://www.cogir.net/js/jQuery/slides.min.jquery.js"></script>
+
+
+<script language="JavaScript" type="text/javascript">
+	function StyleBoutonFichier()
+	{
+		document.formCarriere.MonFichier.click();
+		document.formCarriere.FauxChamp.value = document.formCarriere.MonFichier.value;
+	}
+	</script>
+
+<script>
+		$(function(){
+			$('.section'+14).addClass("actif");
+			
+			$("a[rel^='prettyPhoto']").prettyPhoto({theme: 'light_square', social_tools: false, deeplinking: false, allow_resize: false })
+			
+			$('.menuConteneur li').hover(function(){
+			  $('.menuConteneur li').removeClass("smActif");
+			  $('.sousMenu').hide();
+			  var $this = $(this);
+			  var relLien = $this.find('a').attr('rel');
+			  $('#' + relLien).show();
+			  $('.' + relLien).addClass("smActif");
+			},function(){});
+			
+			$('.sousMenu').hover(function(){},
+			function(){
+				var $this = $(this);
+				var idDiv = $this.attr('id');
+				$('a[rel=' + idDiv + ']').parent('li').show();
+				$('a[rel=' + idDiv + ']').parent('li').removeClass("smActif");
+				$this.hide();
+
+			});
+			$('#menu').hover(function(){},
+			function(){
+				$('.sousMenu').hide();
+			});
+
+					
+			$(".watermark").each(function(){ $(this).watermark($(this).attr('title'));});	
+			
+			
+			jQuery('#mycarousel').jcarousel();
+			
+			
+			$('#slides').slides({
+				preload: true,
+				preloadImage: 'gx/slidesjs/loading.gif',
+				play: 5000,
+				pause: 2500,
+				hoverPause: true,
+				animationStart: function(current){
+					$('.caption').animate({
+						bottom:-35
+					},100);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationStart on slide: ', current);
+					};
+				},
+				animationComplete: function(current){
+					$('.caption').animate({
+						bottom:0
+					},200);
+					if (window.console && console.log) {
+						// example return of current slide number
+						console.log('animationComplete on slide: ', current);
+					};
+				},
+				slidesLoaded: function() {
+					$('.caption').animate({
+						bottom:0
+					},200);
+				}
+			});
+		});
+	</script>
+
+
+
+
+
+<!--[if IE 6]>
+	<script src="http://www.cogir.net/js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('div,img,a,li,input,h1,h2','.lienRSS');
+	</script>
+	<![endif]-->
+
+
+
+
+<!--[if LTE IE 9]>
+	<style type="text/css">
+		//img{_behavior:url(js/iepngfix.htc);}
+		.incTinyMce ol{margin-left:4px;}
+		#formCarriere .champTexte{height: 25px; padding-top: 5px;}
+		#hautRecherche .champRech{height: 22px; padding: 7px 20px 0 31px;}
+		#boiteInfolettre .champInfolettre{height: 20px;padding: 5px 20px 4px 20px;}		
+		#boiteRechLogement .bgDDrech{height: 22px; padding: 0px 0 2px 0;}
+	</style>
+	<![endif]-->
+
+
+
+<link rel="alternate" href="http://www.cogir.net/inc/nouvelle/rss.cfm?l=en"
+	type="application/rss+xml" title="Cogir - News" />
+
+
+
+
+
+
+<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-23485011-1']);
+		_gaq.push(['_trackPageview']);
+		
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		</script>
+
+</head>
+<body>
+
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+	<div id="conteneur">
+		<div id="haut" role="banner" class="clearfix">
+			<div id="logo">
+				<a href="http://www.cogir.net/" title="Home"><img
+					src="http://www.cogir.net/gx/cogir-logo-en.png" width="143" height="132" alt="" /></a>
+			</div>
+			<div id="hautDroit">
+				<div id="menuSec">
+					<ul>
+						<li><a href="http://www.cogir.net/en/home.html">Home</a><span class="sep">&nbsp;</span></li>
+						<li><a href="http://intranet.cogir.net/" target="_blank">Intranet</a><span
+							class="sep">&nbsp;</span></li>
+						<li><a href="http://www.cogir.net/en/news.html">News</a><span class="sep">&nbsp;</span></li>
+						<li><a href="http://www.cogir.net/en/corporate-brochure.html" class="actif">Corporate
+								brochure</a><span class="sep">&nbsp;</span></li>
+						<li><a href="http://www.cogir.net/en/contact-us.html">Contact us</a><span
+							class="sep">&nbsp;</span></li>
+						<li><a href="http://www.cogir.net/"><a href="http://www.cogir.net/brochure-corporative.html"
+								lang="fr">Français</a></a></li>
+					</ul>
+				</div>
+				<div id="hautRecherche">
+					<form action="search.html" method="post" id="formRechercheMotCle">
+						<input type="text" name="Recherche" id="Recherche"
+							class="champRech watermark" value="" title="Search"> <input
+							type="submit" value="ok" class="btnRech">
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<br class="both" /> <br class="both" />
+
+		<div id="menu">
+			<ul class="menuConteneur" role="navigation">
+				<li><a href="http://www.cogir.net/en/home.html" class="mAccueil">Home</a><span
+					class="ligneDroiteMenu">&nbsp;</span></li>
+				<li><a rel="ddQui" href="http://www.cogir.net/en/who-we-are.html" class="mQui ddQui">Who
+						we are</a><span class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddProprieteCat1"
+					href="http://www.cogir.net/en/offices-and-industrials.html"
+					class="mProprieteCat1 ddProprieteCat1 section3 en">Offices</a><span
+					class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddProprieteCat2" href="http://www.cogir.net/en/industrial.html"
+					class="mProprieteCat2 ddProprieteCat2 section4 en">Industrial</a><span
+					class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddProprieteCat3" href="http://www.cogir.net/en/commercial-centres.html"
+					class="mProprieteCat3 ddProprieteCat3 section5 en">Commercial<br />centers
+				</a><span class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddProprieteCat4"
+					href="http://www.cogir.net/en/residential-buildings.html"
+					class="mProprieteCat4 ddProprieteCat4 section6 en">Residential<br />buildings
+				</a><span class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddProprieteCat5" href="http://www.cogir.net/en/retirement-homes.html"
+					class="mProprieteCat5 ddProprieteCat5 section7 en">Retirement<br />homes
+				</a><span class="ligneDroiteMenu">&nbsp;</span></li>
+
+				<li><a rel="ddCarrieres" href="http://www.cogir.net/en/careers.html"
+					class="mCarrieres dernier">Careers</a></li>
+			</ul>
+
+			<div id="ddQui" class="sousMenu">
+				<ul>
+
+
+					<li><a href="http://www.cogir.net/en/the-company.html">The Company</a></li>
+					<li><a href="http://www.cogir.net/en/our-philosophy.html">Our philosophy</a></li>
+					<li><a href="http://www.cogir.net/en/structure.html">Structure</a></li>
+					<li><a href="http://www.cogir.net/en/services.html">Services</a></li>
+					<li><a href="http://www.cogir.net/en/associations-and-implications.html">Associations
+							and implications</a></li>
+					<li><a href="http://www.cogir.net/en/partners-and-suppliers.html">Partners and
+							suppliers</a></li>
+					<li><a href="http://www.cogir.net/en/investors.html">Investors</a></li>
+					<li><a href="http://www.cogir.net/en/careers.html">Careers</a></li>
+					<li class="dernier"><a href="http://www.cogir.net/events.html">Events</a></li>
+				</ul>
+			</div>
+
+
+
+			<div id="ddProprieteCat1" class="sousMenu">
+				<ul>
+
+					<li class="smProv"><a
+						href="http://www.cogir.net/en/offices-and-industrials.html?prov=9">Québec</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/offices-and-industrials.html?prov=9&amp;reg=4">Québec
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/offices-and-industrials.html?prov=9&amp;reg=12">Montréal
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/offices-and-industrials.html?prov=9&amp;reg=49">Laval</a></li>
+
+						</ul></li>
+
+				</ul>
+			</div>
+
+
+			<div id="ddProprieteCat2" class="sousMenu">
+				<ul>
+
+					<li class="smProv"><a href="http://www.cogir.net/en/industrial.html?prov=9">Québec</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/industrial.html?prov=9&amp;reg=12">Montréal </a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/industrial.html?prov=9&amp;reg=49">Laval</a></li>
+
+						</ul></li>
+
+				</ul>
+			</div>
+
+
+			<div id="ddProprieteCat3" class="sousMenu">
+				<ul>
+
+					<li class="smProv"><a href="http://www.cogir.net/en/commercial-centres.html?prov=6">Nova
+							Scotia</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=6&amp;reg=38">Halifax</a></li>
+
+						</ul></li>
+
+					<li class="smProv"><a href="http://www.cogir.net/en/commercial-centres.html?prov=8">Ontario</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=8&amp;reg=19">Metropolitan
+									Toronto</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=8&amp;reg=21">Eastern
+									Ontario</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=8&amp;reg=54">Whitby</a></li>
+
+						</ul></li>
+
+					<li class="smProv"><a href="http://www.cogir.net/en/commercial-centres.html?prov=9">Québec</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=4">Québec </a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=6">Chaudière-Appalaches</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=7">Mauricie
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=9">Montérégie</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=10">Lanaudière</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=11">Laurentides
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=12">Montréal
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=14">Abitibi-Témiscamingue</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/commercial-centres.html?prov=9&amp;reg=50">Centre-du-Québec</a></li>
+
+						</ul></li>
+
+				</ul>
+			</div>
+
+
+			<div id="ddProprieteCat4" class="sousMenu">
+				<ul>
+
+					<li class="smProv"><a
+						href="http://www.cogir.net/en/residential-buildings.html?prov=8">Ontario</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=8&amp;reg=19">Metropolitan
+									Toronto</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=8&amp;reg=52">Oshawa</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=8&amp;reg=53">Bowmanville</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=8&amp;reg=55">Ajax</a></li>
+
+						</ul></li>
+
+					<li class="smProv"><a
+						href="http://www.cogir.net/en/residential-buildings.html?prov=9">Québec</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=9&amp;reg=4">Québec
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=9&amp;reg=9">Montérégie</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=9&amp;reg=12">Montréal
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/residential-buildings.html?prov=9&amp;reg=49">Laval</a></li>
+
+						</ul></li>
+
+				</ul>
+			</div>
+
+
+			<div id="ddProprieteCat5" class="sousMenu">
+				<ul>
+
+					<li class="smProv"><a href="http://www.cogir.net/en/retirement-homes.html?prov=9">Québec</a>
+						<ul>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=3">Bas-Saint-Laurent</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=4">Québec </a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=7">Mauricie </a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=8">Cantons-de-l'Est</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=9">Montérégie</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=11">Laurentides
+							</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=12">Montréal </a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=13">Outaouais</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=49">Laval</a></li>
+
+							<li class="smReg"><a
+								href="http://www.cogir.net/en/retirement-homes.html?prov=9&amp;reg=50">Centre-du-Québec</a></li>
+
+						</ul></li>
+
+				</ul>
+			</div>
+
+		</div>
+
+
+		<br class="both" />
+		<div id="contenu" role="main" class="">
+
+			<div id="filAriane">
+
+				<div style="float: right; position: relative; bottom: 30px"
+					id="resident_login" />
+
+			</div>
+			<br class="both" /> <br class="both" />
+
+			<div id="contenuGen">
+				<div class="incTinyMce">
+
+					<div id="resident_content" />
+
+				</div>
+			</div>
+			<br class="both" />
+		</div>
+
+		<br class="both" />
+	</div>
+	<br class="both" />
+	<div class="bgGrisFonce">
+		<div id="menuPiedPage">
+			<ul>
+				<li><a href="http://www.cogir.net/en/home.html">Home</a></li>
+				<li><a href="http://www.cogir.net/en/who-we-are.html">Who we are</a></li>
+				<li><a href="http://www.cogir.net/en/offices-and-industrials.html">Offices</a></li>
+				<li><a href="http://www.cogir.net/en/industrial.html">Industrial</a></li>
+				<li><a href="http://www.cogir.net/en/commercial-centres.html">Commercial centers</a></li>
+				<li><a href="http://www.cogir.net/en/residential-buildings.html">Residential
+						buildings</a></li>
+				<li><a href="http://www.cogir.net/en/retirement-homes.html">Retirement homes</a></li>
+				<li><a href="http://www.cogir.net/en/careers.html">Careers</a></li>
+			</ul>
+		</div>
+		<br class="both" />
+	</div>
+
+
+
+
+	<div class="bgGrisFonce">
+		<div id="menuBas">
+			<ul>
+				<li><a href="http://intranet.cogir.net" target="_blank">Intranet</a></li>
+
+				<li><a href="http://www.cogir.net/en/news.html">News</a></li>
+				<li><a href="http://www.cogir.net/en/site-map.html">Site map</a></li>
+				<li><a href="http://www.cogir.net/en/contact-us.html">Contact us</a></li>
+
+			</ul>
+		</div>
+	</div>
+	<div class="bgGrisPale">
+		<div id="blocCopyrights">
+			<div id="copyrights">
+				<a href="http://www.cogir.net/en/terms-conditions.html" id="lienCopyrights"
+					rel="nofollow">&copy; 2013 <b>Cogir Inc.</b> All rights
+					reserved.
+				</a> <a href="http://www.vortexsolution.com" rel="external nofollow"
+					title="Website design">Website design</a><a
+					href="http://www.vortexsolution.com" rel="external nofollow"
+					title="Vortex Solution"> by Vortex Solution</a>.<br />
+			</div>
+			<div id="partager">
+				<a href="http://www.addtoany.com/share_save" id="lienPartager"
+					class="a2a_dd clearfix">Share&nbsp;</a> <br class="both" />
+			</div>
+			<br class="both" />
+		</div>
+	</div>
+
+
+
+	<script type="text/javascript">
+	function externalLinks() {
+	 if (!document.getElementsByTagName) return;
+	 var anchors = document.getElementsByTagName("a");
+	 for (var i=0; i<anchors.length; i++) {
+	   var anchor = anchors[i];
+	   if (anchor.getAttribute("href") && (anchor.getAttribute("rel") == "external" || anchor.getAttribute("rel") == "external nofollow") )
+	     anchor.target = "_blank";
+	 }
+	}
+	window.onload = externalLinks;
+</script>
+
+	<script type="text/javascript">
+	a2a_config = {
+	    num_services: 10,
+	    show_title: 1
+		,locale: 'en'
+	};
+	
+	/*a2a_config.templates = {
+	    twitter: "${title} - ${link} via @vortexsolution"
+	};*/
+</script>
+
+
+	<script type="text/javascript"
+		src="http://static.addtoany.com/menu/page.js"></script>
+
+
+</body>
+</html>
