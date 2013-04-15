@@ -128,6 +128,9 @@ public class PortalSiteMap implements SiteMap {
 
             public static class EditPaymentMethod extends AppPlace {
             }
+
+            public static class ViewPaymentMethod extends AppPlace {
+            }
         }
 
         public static class Maintenance extends AppPlace {
