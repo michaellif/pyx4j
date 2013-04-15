@@ -13,20 +13,16 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -44,9 +40,7 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.payment.pad.CaledonPadFileWriter;
-import com.propertyvista.payment.pad.CaledonPadSftpClient;
-import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
+import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.data.PadAkFile;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -56,28 +50,19 @@ public class PadCaledon {
 
     private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
 
-    private File getPadBaseDir() {
-        File padWorkdir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonInterfaceWorkDirectory();
-        if (!padWorkdir.exists()) {
-            if (!padWorkdir.mkdirs()) {
-                log.error("Unable to create directory {}", padWorkdir.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", padWorkdir.getAbsolutePath()));
-            }
-        }
-        return padWorkdir;
-    }
-
     public PadFile preparePadFile() {
         return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
             @Override
             public PadFile call() {
                 EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-                criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError));
+                criteria.eq(criteria.proto().companyId(), companyId);
+                criteria.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError);
                 PadFile padFile = Persistence.service().retrieve(criteria);
                 if (padFile == null) {
                     padFile = EntityFactory.create(PadFile.class);
                     padFile.status().setValue(PadFile.PadFileStatus.Creating);
                     padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
+                    padFile.companyId().setValue(companyId);
                     Persistence.service().persist(padFile);
                     Persistence.service().commit();
                 }
@@ -86,7 +71,7 @@ public class PadCaledon {
         });
     }
 
-    public boolean sendPadFile(PadFile padFile) {
+    public boolean sendPadFile(final PadFile padFile) {
         EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
         int records = Persistence.service().count(criteria);
@@ -94,84 +79,80 @@ public class PadCaledon {
             return false;
         }
 
-        padFile.status().setValue(PadFile.PadFileStatus.Sending);
-        padFile.sent().setValue(new Date());
-        Persistence.service().merge(padFile);
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-        File padWorkdir = getPadBaseDir();
+            @Override
+            public Void execute() {
+                padFile.status().setValue(PadFile.PadFileStatus.Sending);
+                padFile.sent().setValue(new Date());
+                Persistence.service().merge(padFile);
+                return null;
+            }
 
-        File file = null;
+        });
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+
+                // Calculate Totals
+                int fileRecordsCount = 0;
+                BigDecimal fileAmount = BigDecimal.ZERO;
+                int batchNumberCount = 0;
+                Persistence.service().retrieveMember(padFile.batches());
+                for (PadBatch padBatch : padFile.batches()) {
+                    Persistence.service().retrieveMember(padBatch.records());
+
+                    padBatch.batchNumber().setValue(++batchNumberCount);
+                    BigDecimal batchAmount = BigDecimal.ZERO;
+                    for (PadDebitRecord record : padBatch.records()) {
+                        batchAmount = batchAmount.add(record.amount().getValue());
+                    }
+                    padBatch.batchAmount().setValue(batchAmount);
+
+                    fileRecordsCount += padBatch.records().size();
+                    fileAmount = fileAmount.add(batchAmount);
+                    // Save Calculated totals
+                    Persistence.service().persist(padBatch);
+                }
+                padFile.recordsCount().setValue(fileRecordsCount);
+                padFile.fileAmount().setValue(fileAmount);
+                Persistence.service().persist(padFile);
+
+                return null;
+            }
+
+        });
+
+        Throwable sendError = null;
         try {
-            File fileSent;
-            do {
-                String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(padFile.sent().getValue());
-                file = new File(padWorkdir, filename + "." + companyId);
-                fileSent = new File(new File(padWorkdir, "processed"), file.getName());
-                if (file.exists() || fileSent.exists()) {
-                    padFile.sent().setValue(new Date());
-                    padFile.fileName().setValue(file.getName());
-                    Persistence.service().merge(padFile);
-                }
-            } while (file.exists() || fileSent.exists());
-
-            // Calculate Totals
-            int fileRecordsCount = 0;
-            BigDecimal fileAmount = BigDecimal.ZERO;
-            int batchNumberCount = 0;
-            Persistence.service().retrieveMember(padFile.batches());
-            for (PadBatch padBatch : padFile.batches()) {
-                Persistence.service().retrieveMember(padBatch.records());
-
-                padBatch.batchNumber().setValue(++batchNumberCount);
-                BigDecimal batchAmount = BigDecimal.ZERO;
-                for (PadDebitRecord record : padBatch.records()) {
-                    batchAmount = batchAmount.add(record.amount().getValue());
-                }
-                padBatch.batchAmount().setValue(batchAmount);
-
-                fileRecordsCount += padBatch.records().size();
-                fileAmount = fileAmount.add(batchAmount);
-                // Save Calculated totals
-                Persistence.service().persist(padBatch);
-            }
-            padFile.recordsCount().setValue(fileRecordsCount);
-            padFile.fileAmount().setValue(fileAmount);
-            Persistence.service().persist(padFile);
-
-            log.info("sending pad file {}", file.getAbsolutePath());
-
-            CaledonPadFileWriter writer = new CaledonPadFileWriter(padFile, file);
-            try {
-                writer.write(companyId);
-            } finally {
-                writer.close();
-            }
-
-            String errorMessage = new CaledonPadSftpClient().sftpPut(file);
-            if (errorMessage != null) {
-                throw new Error(errorMessage);
-            }
-            log.info("pad file sent {}", file.getAbsolutePath());
+            ServerSideFactory.create(EFTTransportFacade.class).sendPadFile(padFile);
+            padFile.status().setValue(PadFile.PadFileStatus.Sent);
+            padFile.sent().setValue(new Date());
         } catch (Throwable e) {
-            log.error("pad write error", e);
-            //Error recovery
+            sendError = e;
             padFile.status().setValue(PadFile.PadFileStatus.SendError);
-            Persistence.service().merge(padFile);
-
-            if (file != null) {
-                move(file, padWorkdir, "error");
-            }
-
-            throw new Error(e.getMessage());
         }
 
-        move(file, padWorkdir, "processed");
-
-        padFile.status().setValue(PadFile.PadFileStatus.Sent);
-        Persistence.service().merge(padFile);
-
         padFile.batches().setAttachLevel(AttachLevel.Detached);
+
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() {
+                Persistence.service().merge(padFile);
+                return null;
+            }
+
+        });
+
+        if (sendError != null) {
+            throw new Error(sendError.getMessage(), sendError);
+        }
+
         return true;
+
     }
 
     /**
@@ -198,8 +179,8 @@ public class PadCaledon {
         // Find and verify that previous file has acknowledgment
         {
             EntityQueryCriteria<PadFile> previousFileCriteria = EntityQueryCriteria.create(PadFile.class);
-            previousFileCriteria.add(PropertyCriterion.eq(previousFileCriteria.proto().fileCreationNumber(),
-                    fileCreationNumberFormat(useSimulator, sequence.number().getValue())));
+            previousFileCriteria.eq(previousFileCriteria.proto().companyId(), companyId);
+            previousFileCriteria.eq(previousFileCriteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
             PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
             if (padFile != null) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.AcknowledgeProcesed, PadFile.PadFileStatus.Procesed,
@@ -235,97 +216,47 @@ public class PadCaledon {
     }
 
     public PadFile receivePadAcknowledgementFile() {
-        File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
-        if (files.size() == 0) {
-            return null;
-        }
-        final File file = files.get(0);
-        files.remove(0);
-        if (!file.getName().endsWith(PadAkFile.FileNameSufix)) {
-            throw new Error("Invalid acknowledgment file name" + file.getName());
-        }
+        final PadAkFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
 
-        PadFile padFile = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
+        PadFile padFile;
+        boolean processedOk = false;
+        try {
+            padFile = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
 
-            @Override
-            public PadFile execute() {
-                return new PadCaledonAcknowledgement().processFile(file);
-            }
+                @Override
+                public PadFile execute() {
+                    return new PadCaledonAcknowledgement().processFile(padAkFile);
+                }
+            });
 
-        });
-
-        move(file, padWorkdir, "processed");
-
-        // Cleanup SFTP directory
-        {
-            List<File> filesToRemove = new ArrayList<File>();
-            filesToRemove.add(file);
-            new CaledonPadSftpClient().removeFiles(filesToRemove);
+            processedOk = true;
+        } finally {
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(padAkFile.fileName().getValue(), !processedOk);
         }
 
-        // Ignore other files received if any
-        for (File otherFiles : files) {
-            otherFiles.delete();
-        }
         return padFile;
     }
 
     public PadReconciliationFile receivePadReconciliation() {
-        File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Reconciliation, padWorkdir);
-        if (files.size() == 0) {
-            return null;
-        }
-        File file = files.get(0);
-        files.remove(0);
-        if (!file.getName().endsWith(PadReconciliationFile.FileNameSufix + companyId)) {
-            throw new Error("Invalid Reconciliation file name" + file.getName());
-        }
-        PadReconciliationFile padFile = new PadCaledonReconciliation().processFile(file);
-        move(file, padWorkdir, "processed");
+        final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
 
-        // Cleanup SFTP directory
-        {
-            List<File> filesToRemove = new ArrayList<File>();
-            filesToRemove.add(file);
-            new CaledonPadSftpClient().removeFiles(filesToRemove);
-        }
+        boolean processedOk = false;
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-        // Ignore other files received if any
-        for (File otherFiles : files) {
-            otherFiles.delete();
-        }
-        return padFile;
-    }
-
-    private String uniqueNameTimeStamp() {
-        return new SimpleDateFormat("-yyMMdd-HHmmss.S").format(new Date());
-    }
-
-    private File move(File file, File baseDir, String subdir) {
-        File dir = new File(baseDir, subdir);
-        if (!dir.isDirectory() && !dir.mkdirs()) {
-            log.error("Unable to create directory {}", dir.getAbsolutePath());
-            return null;
-        } else {
-            File dst = new File(dir, file.getName());
-            int attemptCount = 0;
-            while (dst.exists()) {
-                attemptCount++;
-                if (attemptCount > 10) {
-                    log.error("File {} already exists", dst.getAbsolutePath());
+                @Override
+                public Void execute() {
+                    new PadCaledonReconciliation().processFile(reconciliationFile);
                     return null;
                 }
-                dst = new File(dir, file.getName() + uniqueNameTimeStamp());
-            }
-            if (!file.renameTo(dst)) {
-                log.error("Rename {} to {} failed", file.getAbsolutePath(), dst.getAbsolutePath());
-                return null;
-            } else {
-                return dst;
-            }
+            });
+
+            processedOk = true;
+        } finally {
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(reconciliationFile.fileName().getValue(), !processedOk);
         }
+
+        return reconciliationFile;
     }
 
 }

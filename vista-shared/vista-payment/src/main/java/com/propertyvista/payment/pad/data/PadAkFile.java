@@ -33,6 +33,8 @@ public interface PadAkFile extends IEntity {
 
     public static String FileNameSufix = "_acknowledgement.csv";
 
+    IPrimitive<String> fileName();
+
     IPrimitive<Integer> version();
 
     @Length(20)

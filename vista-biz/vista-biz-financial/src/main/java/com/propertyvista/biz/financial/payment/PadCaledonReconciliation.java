@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.io.File;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -22,24 +20,20 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
-import com.propertyvista.payment.pad.CaledonPadReconciliationParser;
 
 class PadCaledonReconciliation {
 
-    PadReconciliationFile processFile(File file) {
-        PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(file);
-
+    PadReconciliationFile processFile(PadReconciliationFile reconciliationFile) {
         // Match merchantAccounts.
         for (PadReconciliationSummary summary : reconciliationFile.batches()) {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
             PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
             if (macc == null) {
-                throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + file.getName());
+                throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + reconciliationFile.fileName().getValue());
             }
             summary.merchantAccount().set(macc);
         }
-
         Persistence.service().persist(reconciliationFile);
         return reconciliationFile;
     }

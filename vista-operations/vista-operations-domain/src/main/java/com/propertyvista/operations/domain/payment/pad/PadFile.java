@@ -96,6 +96,8 @@ public interface PadFile extends IEntity {
 
     IPrimitive<String> fileName();
 
+    IPrimitive<String> companyId();
+
     IPrimitive<PadFileStatus> status();
 
     @Owned(cascade = {})

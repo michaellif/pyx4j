@@ -29,9 +29,9 @@ import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRec
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 
-public class CaledonPadReconciliationParser {
+class CaledonPadReconciliationParser {
 
-    public PadReconciliationFile parsReport(File file) {
+    PadReconciliationFile parsReport(File file) {
         final PadReconciliationFile reconciliationFile = EntityFactory.create(PadReconciliationFile.class);
         reconciliationFile.fileName().setValue(file.getName());
 

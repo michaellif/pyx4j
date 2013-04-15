@@ -28,9 +28,9 @@ import com.propertyvista.payment.pad.data.PadAkBatch;
 import com.propertyvista.payment.pad.data.PadAkDebitRecord;
 import com.propertyvista.payment.pad.data.PadAkFile;
 
-public class CaledonPadAcknowledgmentParser {
+class CaledonPadAcknowledgmentParser {
 
-    public PadAkFile parsReport(File file) {
+    PadAkFile parsReport(File file) {
         final PadAkFile akFile = EntityFactory.create(PadAkFile.class);
 
         InputStream is;
@@ -42,6 +42,7 @@ public class CaledonPadAcknowledgmentParser {
         CSVParser parser = new CSVParser();
 
         akFile.version().setValue(1);
+        akFile.fileName().setValue(file.getName());
 
         CSVLoad.loadFile(is, parser, new CSVReciver() {
 

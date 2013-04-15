@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.io.File;
 import java.util.EnumSet;
 
 import com.pyx4j.config.server.SystemDateManager;
@@ -25,7 +24,6 @@ import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
-import com.propertyvista.payment.pad.CaledonPadAcknowledgmentParser;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAkBatch;
 import com.propertyvista.payment.pad.data.PadAkDebitRecord;
@@ -33,18 +31,17 @@ import com.propertyvista.payment.pad.data.PadAkFile;
 
 class PadCaledonAcknowledgement {
 
-    PadFile processFile(File file) {
-        PadAkFile akFile = new CaledonPadAcknowledgmentParser().parsReport(file);
+    PadFile processFile(PadAkFile akFile) {
         PadFile padFile;
         {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().fileCreationNumber(), akFile.fileCreationNumber().getValue()));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
-                throw new Error("Unexpected fileCreationNumber '" + akFile.fileCreationNumber().getValue() + "' in file " + file.getName());
+                throw new Error("Unexpected fileCreationNumber '" + akFile.fileCreationNumber().getValue() + "' in file " + akFile.fileName().getValue());
             }
             if (padFile.status().getValue() != PadFile.PadFileStatus.Sent) {
-                throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + file.getName());
+                throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + akFile.fileName().getValue());
             }
         }
 
@@ -56,7 +53,8 @@ class PadCaledonAcknowledgement {
             }
         }
         if (padFile.acknowledgmentStatus().isNull()) {
-            throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file " + file.getName());
+            throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
+                    + akFile.fileName().getValue());
         }
 
         padFile.acknowledged().setValue(SystemDateManager.getDate());
@@ -66,11 +64,11 @@ class PadCaledonAcknowledgement {
             assertAcknowledgedValues(padFile, akFile);
             if (akFile.batches().size() > 0) {
                 throw new Error("Unexpected batches rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
-                        + file.getName());
+                        + akFile.fileName().getValue());
             }
             if (akFile.records().size() > 0) {
                 throw new Error("Unexpected record level rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
-                        + file.getName());
+                        + akFile.fileName().getValue());
             }
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);

@@ -17,7 +17,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -80,9 +79,7 @@ public class PadSim {
         Persistence.service().commit();
         // remove the loaded file from server
         {
-            List<File> filesToRemove = new ArrayList<File>();
-            filesToRemove.add(file);
-            new CaledonPadSftpClient().removeFilesSim(filesToRemove);
+            new CaledonPadSftpClient().removeFilesSim(file.getName());
         }
 
         // Ignore other files received if any
