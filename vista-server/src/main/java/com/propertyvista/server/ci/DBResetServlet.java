@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -52,6 +53,8 @@ import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
@@ -68,6 +71,7 @@ import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
+import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -163,7 +167,9 @@ public class DBResetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("DBReset requested");
+        long requestStart = System.currentTimeMillis();
+        log.debug("DBReset requested from ip:{}, {}", Context.getRequestRemoteAddr(),
+                DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
         response.setDateHeader("Expires", System.currentTimeMillis());
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
@@ -173,6 +179,12 @@ public class DBResetServlet extends HttpServlet {
         try {
             synchronized (DBResetServlet.class) {
                 long start = System.currentTimeMillis();
+                if (start - requestStart > 10 * Consts.MIN2MSEC) {
+                    log.warn("Outdated DBReset request from ip:{}, {}", Context.getRequestRemoteAddr(),
+                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
                 try {
                     AbstractVistaServerSideConfiguration conf = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
                     if (!conf.openDBReset()) {
@@ -181,7 +193,8 @@ public class DBResetServlet extends HttpServlet {
                             return;
                         }
                     }
-                    log.debug("DBReset started");
+                    log.warn("DBReset started from ip:{}, {}", Context.getRequestRemoteAddr(),
+                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                     ResetType type = null;
                     String tp = req.getParameter("type");
                     if (CommonsStringUtils.isStringSet(tp)) {
