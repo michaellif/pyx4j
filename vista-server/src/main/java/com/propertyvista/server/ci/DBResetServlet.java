@@ -381,6 +381,8 @@ public class DBResetServlet extends HttpServlet {
                 } finally {
                     DataGenerator.cleanup();
                     CacheService.reset();
+                    log.warn("DBReset compleated from ip:{}, {}", Context.getRequestRemoteAddr(),
+                            DevSession.getSession().getAttribute(DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE));
                 }
             }
         } finally {
