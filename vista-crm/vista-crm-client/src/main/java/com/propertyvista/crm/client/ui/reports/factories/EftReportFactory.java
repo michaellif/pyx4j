@@ -18,7 +18,7 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.factories.pad.EftReportSettingsForm;
+import com.propertyvista.crm.client.ui.reports.factories.eft.EftReportSettingsForm;
 import com.propertyvista.domain.reports.EftReportMetadata;
 
 public class EftReportFactory implements ReportFactory<EftReportMetadata> {

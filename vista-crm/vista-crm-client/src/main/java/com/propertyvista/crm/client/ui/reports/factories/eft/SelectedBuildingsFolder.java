@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.factories.pad;
+package com.propertyvista.crm.client.ui.reports.factories.eft;
 
 import java.util.Arrays;
 import java.util.List;

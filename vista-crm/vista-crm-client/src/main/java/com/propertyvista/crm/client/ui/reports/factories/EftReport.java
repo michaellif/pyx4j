@@ -41,6 +41,8 @@ public class EftReport extends Composite implements Report {
 
     private final static I18n i18n = I18n.get(EftReportFactory.class);
 
+    private final static String warningImageBase64 = "iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAACCUlEQVR42q2Sy08TURjF+ZuMYaULNrqwPoIgVjrpA7CClTYiSKQV2o7QEWig2hQ0pi2PWhITfICJiY/ERt0QIlETXUCspdS209phpnYcY44zt8500RA2nuTb3d853+M2NPxv/UmsQrrtRGXUhjLdg7L/KsSXj7AvKMkPi95eCLEAxJUIKT42jazrAgru7r0NxNFL4EI0fr9Ygjh/Ez+Zi6TEOQbS8zjYwDDSl/X1BpWJfpRCXgKWPR2kVPHXzeCdJvx6FkNucgjJK4aagfTqMVi3rQa6LRBGLBrMXTOiNGjEjwEK4uoiNh0U8stzVQN+coDMJUZ9BFKTVClQsc8A1tEO7pYH7AyDz45/7ReHzBCfRiHQVgKpSaoUKN97DjmbHlm7EVz8Lt7rm6pwTnauPIlgd6RLa09Jkr58ILACfe8+i4y1DRkbBW5xFmuth6pw1tODUtgPYZbW2lOSuHtT4JdjBNrpOoO0pRV5xoXM9A2sd56owqWVOL72meT0Ba09JUmVAqXMLfhmPI3dpTA2zKeQXAjVNr4lL2DHN4jyw3ktqRBg5Nv6CJSkmgm46bLjbVtT/a0/mY4iRfdDeBAFOz6MbasBqfPtyI255CXJoNOO18cO7P3LNjp0+NjZjMyUPH8kiEI4iLTfi3VKh0TL4f3/d+r+HaxZdHhzshGJ4wfxjjqCrWiwDvwL0obNBjcGJxMAAAAASUVORK5CYII=";
+
     private final static List<ITableColumnFormatter> COLUMN_DESCRIPTORS;
     static {
         // TODO use AppPlaceEntityMapper to resolve places (now its' not optimized and works really slow)        
@@ -50,10 +52,14 @@ public class EftReport extends Composite implements Report {
                     @Override
                     public SafeHtml formatContent(IEntity entity) {                        
                         PaymentRecord r = (PaymentRecord) entity;
-                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {
+                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                                                       
                             return new SafeHtmlBuilder()
-                                    .appendHtmlConstant("<div title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) +"' style='width:100%;text-align:center;cursor:default'>")
-                                    .appendEscaped("!")
+                                    .appendHtmlConstant("<div style='text-align:center'>")
+                                    .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
+                                             " src='data:image/png;base64," + warningImageBase64 + "'" + 
+                                             " border='0' " +
+                                             " style='width:15px; height:15px;text-al'" + 
+                                             ">")
                                     .appendHtmlConstant("</div>")
                                     .toSafeHtml();
                         } else {
