@@ -63,6 +63,10 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
         return text == null ? "" : text;
     }
 
+    public String getFormattedValue() {
+        return format(getValue());
+    }
+
     @Override
     public void setValueByString(String name) {
         try {
