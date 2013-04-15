@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -35,6 +36,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
 import com.propertyvista.portal.domain.dto.PreauthorizedPaymentListDTO;
 
@@ -75,9 +77,10 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
-                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "30em"), 
-                    new EntityFolderColumnDescriptor(proto().value(), "8em"), 
-                    new EntityFolderColumnDescriptor(proto().percent(), "7em")
+                    new EntityFolderColumnDescriptor(proto().tenant(), "18em"), 
+                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "20em"), 
+                    new EntityFolderColumnDescriptor(proto().value(), "5em"), 
+                    new EntityFolderColumnDescriptor(proto().percent(), "5em")
             ); //@formatter:on
         }
 
@@ -114,7 +117,9 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
-                if (member.equals(proto().paymentMethod())) {
+                if (member == (proto().tenant())) {
+                    comp = new CEntityLabel<Tenant>();
+                } else if (member.equals(proto().paymentMethod())) {
                     comp = new CEntityHyperlink<PaymentDetails>(null, new Command() {
                         @Override
                         public void execute() {

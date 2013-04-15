@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -40,8 +41,15 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceImpl
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPayment> dtoCriteria) {
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant(), TenantAppContext.getCurrentUserTenant()));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPayment dto) {
+        super.enhanceListRetrieved(entity, dto);
+        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.ToStringMembers);
+//        Persistence.service().retrieveMember(dto.tenant(), AttachLevel.ToStringMembers);
     }
 
     @Override
