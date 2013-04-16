@@ -18,15 +18,18 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.report;
+package com.pyx4j.essentials.rpc.download;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.download.DownloadableService;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface ReportService<E extends IEntity> extends DownloadableService {
+public interface DownloadableService extends IService {
 
-    public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest);
+    /**
+     * Remove Downloadable data from user session
+     */
+    public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl);
 
 }

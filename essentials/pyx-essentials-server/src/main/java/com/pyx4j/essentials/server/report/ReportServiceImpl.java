@@ -27,11 +27,10 @@ import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
-import com.pyx4j.essentials.server.download.Downloadable;
+import com.pyx4j.essentials.server.download.DownloadableServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
-public class ReportServiceImpl<E extends IEntity> implements ReportService<E> {
+public class ReportServiceImpl<E extends IEntity> extends DownloadableServiceImpl implements ReportService<E> {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
@@ -42,12 +41,4 @@ public class ReportServiceImpl<E extends IEntity> implements ReportService<E> {
         }
     }
 
-    @Override
-    public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
-        String fileName = Downloadable.getDownloadableFileName(downloadUrl);
-        if (fileName != null) {
-            Downloadable.cancel(fileName);
-        }
-        callback.onSuccess(null);
-    }
 }

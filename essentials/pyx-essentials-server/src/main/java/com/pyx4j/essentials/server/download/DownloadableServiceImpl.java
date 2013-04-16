@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 20, 2011
+ * Created on 2013-04-16
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.rpc.report;
+package com.pyx4j.essentials.server.download;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface ReportService<E extends IEntity> extends DownloadableService {
+public class DownloadableServiceImpl implements DownloadableService {
 
-    public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest);
+    @Override
+    public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
+        String fileName = Downloadable.getDownloadableFileName(downloadUrl);
+        if (fileName != null) {
+            Downloadable.cancel(fileName);
+        }
+        callback.onSuccess(null);
+    }
 
 }
