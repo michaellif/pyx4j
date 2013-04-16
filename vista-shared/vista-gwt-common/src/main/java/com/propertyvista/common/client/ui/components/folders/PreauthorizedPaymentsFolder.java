@@ -101,7 +101,7 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
         public PreauthorizedPaymentEditor() {
             super(PreauthorizedPayment.class);
 
-            amountPlaceholder.setWidth("15em");
+            amountPlaceholder.setWidth("21em");
             percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).build();
             value = new DecoratorBuilder(inject(proto().value()), 10, 10).build();
         }

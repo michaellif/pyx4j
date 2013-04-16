@@ -113,7 +113,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
                 setViewable(true);
                 inheritViewable(false);
 
-                amountPlaceholder.setWidth("15em");
+                amountPlaceholder.setWidth("21em");
                 percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).build();
                 value = new DecoratorBuilder(inject(proto().value()), 10, 10).build();
             }
@@ -124,8 +124,10 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
                 int row = -1;
 
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
+                content.setHR(++row, 0, 2);
                 content.setWidget(++row, 0, amountPlaceholder);
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).build());
+                content.setWidget(row, 1, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
+                content.getCellFormatter().setWidth(row, 0, "25em");
 
                 return content;
             }
