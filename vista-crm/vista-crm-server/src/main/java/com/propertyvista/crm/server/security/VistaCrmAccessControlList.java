@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.security;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.rpc.report.ReportServices;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
@@ -232,6 +233,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BreadcrumbsService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PmcTermsOfServiceService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DownloadableService.class));
 
 // - Reports:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmReportsService.class));

@@ -25,7 +25,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
@@ -41,7 +41,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
 
     @Override
     public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response) {
+            UploadResponse<DownloadableUploadResponseDTO> response) {
 
         status.setProgressMaximum(data.buildings().size() * 2);
         MediaConfig mediaConfig = MediaConfig.create(uploadRequestInfo);
@@ -68,7 +68,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
 
     @Override
     public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response) {
+            UploadResponse<DownloadableUploadResponseDTO> response) {
         SharedGeoLocator.setMode(Mode.updateCache);
         ImportCounters counters = new ImportCounters();
         status.setProgressMaximum(data.buildings().size() * 2);

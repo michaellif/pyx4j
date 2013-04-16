@@ -33,8 +33,8 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUploadDeferredProcess;
@@ -43,7 +43,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements UpdateUploadService {
+public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, DownloadableUploadResponseDTO> implements UpdateUploadService {
 
     private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -66,13 +66,13 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Override
-    protected UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+    protected UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
         return new ImportUploadDeferredProcess(data);
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            final UploadResponse<ImportUploadResponseDTO> response) {
+    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            final UploadResponse<DownloadableUploadResponseDTO> response) {
         process.getData().type().setValue(ImportUploadDTO.ImportType.updateUnitAvailability);
         process.onUploadReceived(data, response);
         DeferredProcessRegistry.start(data.deferredCorrelationId, process, ThreadPoolNames.IMPORTS);
@@ -81,8 +81,8 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Deprecated
-    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            final UploadResponse<ImportUploadResponseDTO> response) {
+    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            final UploadResponse<DownloadableUploadResponseDTO> response) {
         final String namespace = NamespaceManager.getNamespace();
 
         //TODO This is not the very best example how to for execution on server. VladS - Change!
@@ -99,8 +99,8 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            UploadResponse<ImportUploadResponseDTO> response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            UploadResponse<DownloadableUploadResponseDTO> response) {
 
         ImportIO importIO = ImportUtils.parse(process.getData().dataFormat().getValue(), data.data,
                 DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));

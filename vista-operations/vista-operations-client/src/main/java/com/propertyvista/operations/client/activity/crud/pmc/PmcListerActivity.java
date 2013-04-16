@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
@@ -29,7 +28,6 @@ import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFact
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements PmcListerView.Presenter {
 
@@ -43,16 +41,8 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     @Override
     public void uploadMerchantAccounts() {
-        new UploadDialogBase<IEntity, IEntity>(//@formatter:off
-                i18n.tr("Upload PAD File"),
-                GWT.<UploadService<IEntity, IEntity>>create(MerchantAccountFileUploadService.class),
-                GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping,
-                MerchantAccountFileUploadService.SUPPORTED_FORMATS
-        ) {
-            @Override
-            protected void onUploadComplete(com.pyx4j.gwt.rpc.upload.UploadResponse<IEntity> serverUploadResponse) {
-                MessageDialog.info("", i18n.tr(serverUploadResponse.message));
-            };
-        }.show();//@formatter:on
+        new UploadDialogBase<IEntity, IEntity>(i18n.tr("Upload Merchant Accounts"),
+                GWT.<UploadService<IEntity, IEntity>> create(MerchantAccountFileUploadService.class), MerchantAccountFileUploadService.SUPPORTED_FORMATS)
+                .show();
     }
 }

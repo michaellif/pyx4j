@@ -36,9 +36,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
@@ -50,7 +50,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
-public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements ImportUploadService {
+public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUploadDTO, DownloadableUploadResponseDTO> implements ImportUploadService {
 
     private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 
@@ -70,13 +70,13 @@ public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Override
-    protected UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+    protected UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
         return new ImportUploadDeferredProcess(data);
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            final UploadResponse<ImportUploadResponseDTO> response) {
+    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            final UploadResponse<DownloadableUploadResponseDTO> response) {
 
         process.onUploadReceived(data, response);
 
@@ -93,8 +93,8 @@ public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Deprecated
-    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            final UploadResponse<ImportUploadResponseDTO> response) {
+    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            final UploadResponse<DownloadableUploadResponseDTO> response) {
 
         //TODO This is not the very best example how to for execution on server. VladS - Change!
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
@@ -121,8 +121,8 @@ public class ImportUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Deprecated
-    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
-            UploadResponse<ImportUploadResponseDTO> response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+            UploadResponse<DownloadableUploadResponseDTO> response) {
         try {
             ImportUploadDTO importDTO = process.getData();
             if (importDTO.id().isNull()) {

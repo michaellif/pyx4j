@@ -48,7 +48,6 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
             @Override
             public void execute() {
                 ImportUploadDialog d = new ImportUploadDialog(getForm().getValue());
-                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
                 d.show();
             }
         });

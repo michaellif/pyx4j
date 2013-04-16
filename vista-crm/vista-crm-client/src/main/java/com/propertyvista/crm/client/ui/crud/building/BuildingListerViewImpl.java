@@ -40,7 +40,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
 
                 @Override
                 public void execute() {
-                    UpdateUploadDialog.show();
+                    new UpdateUploadDialog().show();
                 }
             });
             addHeaderToolbarItem(upload);

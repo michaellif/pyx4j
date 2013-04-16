@@ -13,12 +13,14 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -54,6 +56,7 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
             @Override
             public void onClick(ClickEvent event) {
                 DownloadLinkDialog.this.hide();
+                closeDownloadable();
             }
         });
 
@@ -62,9 +65,11 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
 
     @Override
     public boolean onClickCancel() {
-        //TODO
-        //downloadService.cancelDownload(downloadUrl);
+        closeDownloadable();
         return true;
     }
 
+    protected void closeDownloadable() {
+        GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
+    }
 }

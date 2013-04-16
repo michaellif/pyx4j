@@ -15,13 +15,21 @@ package com.propertyvista.common.client.ui.components;
 
 import java.util.Collection;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.upload.UploadPanel;
+import com.pyx4j.gwt.client.upload.UploadResponseReciver;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class UploadDialogBase<U extends IEntity, R extends IEntity> extends OkCancelDialog {
 
@@ -29,7 +37,9 @@ public class UploadDialogBase<U extends IEntity, R extends IEntity> extends OkCa
 
     private UploadPanel<U, R> uploadPanel;
 
-    public UploadDialogBase(String caption, UploadService<U, R> uploadService, String uploadServletPath, Collection<DownloadFormat> supportedFormats) {
+    private UploadResponseReciver<R> uploadReciver;
+
+    public UploadDialogBase(String caption, UploadService<U, R> uploadService, Collection<DownloadFormat> supportedFormats) {
         super(caption);
 
         uploadPanel = new UploadPanel<U, R>(uploadService) {
@@ -49,20 +59,35 @@ public class UploadDialogBase<U extends IEntity, R extends IEntity> extends OkCa
             @Override
             protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
                 UploadDialogBase.this.hide();
-                UploadDialogBase.this.onUploadComplete(serverUploadResponse);
+                if (UploadDialogBase.this.uploadReciver != null) {
+                    UploadDialogBase.this.uploadReciver.onUploadComplete(serverUploadResponse);
+                } else {
+                    if (CommonsStringUtils.isStringSet(serverUploadResponse.message)) {
+                        MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                    }
+                }
             }
 
             @Override
             protected U getUploadData() {
-                return null;
+                return UploadDialogBase.this.getUploadData();
             }
+
         };
         uploadPanel.setSupportedExtensions(supportedFormats);
-        uploadPanel.setServletPath(uploadServletPath);
+        uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
         uploadPanel.setSize("400px", "100%");
 
-        setBody(uploadPanel);
+        setBody(createContent(uploadPanel));
 
+    }
+
+    protected IsWidget createContent(UploadPanel<U, R> uploadPanel) {
+        return uploadPanel;
+    }
+
+    public void setUploadReciver(UploadResponseReciver<R> uploadReciver) {
+        this.uploadReciver = uploadReciver;
     }
 
     @Override
@@ -82,8 +107,8 @@ public class UploadDialogBase<U extends IEntity, R extends IEntity> extends OkCa
         return i18n.tr("Upload");
     }
 
-    protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
-
+    protected U getUploadData() {
+        return null;
     }
 
 }

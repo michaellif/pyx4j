@@ -35,12 +35,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
@@ -63,7 +63,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
     @Override
     public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response) {
+            UploadResponse<DownloadableUploadResponseDTO> response) {
         status.setProgressMaximum(data.buildings().size() * 2);
         int count = 0;
         boolean result = true;
@@ -120,7 +120,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
     @Override
     public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response) {
+            UploadResponse<DownloadableUploadResponseDTO> response) {
         SharedGeoLocator.setMode(Mode.updateCache);
         status.setProgressMaximum(data.buildings().size() * 2);
         ImportCounters counters = new ImportCounters();

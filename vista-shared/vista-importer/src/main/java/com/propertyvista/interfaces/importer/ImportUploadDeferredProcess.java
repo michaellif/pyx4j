@@ -25,17 +25,17 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
-import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.processor.ImportProcessor;
 
-public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> {
+public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> {
 
     private static final long serialVersionUID = 1L;
 
     private byte[] binaryData;
 
-    private UploadResponse<ImportUploadResponseDTO> response;
+    private UploadResponse<DownloadableUploadResponseDTO> response;
 
     private ProcessingResponseReport errorReport;
 
@@ -46,10 +46,10 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
     }
 
     @Override
-    public void onUploadReceived(final UploadData data, final UploadResponse<ImportUploadResponseDTO> response) {
+    public void onUploadReceived(final UploadData data, final UploadResponse<DownloadableUploadResponseDTO> response) {
         binaryData = data.data;
         this.response = response;
-        this.response.data = EntityFactory.create(ImportUploadResponseDTO.class);
+        this.response.data = EntityFactory.create(DownloadableUploadResponseDTO.class);
         this.response.data.success().setValue(Boolean.FALSE);
     }
 

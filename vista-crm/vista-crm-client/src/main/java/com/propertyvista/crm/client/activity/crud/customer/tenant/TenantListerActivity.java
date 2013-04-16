@@ -21,7 +21,6 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
@@ -31,7 +30,6 @@ import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class TenantListerActivity extends AbstractListerActivity<TenantDTO> implements TenantListerView.Presenter {
 
@@ -49,17 +47,7 @@ public class TenantListerActivity extends AbstractListerActivity<TenantDTO> impl
 
     @Override
     public void uploadPadFile() {
-        new UploadDialogBase<IEntity, IEntity>(//@formatter:off
-                i18n.tr("Upload PAD File"),
-                GWT.<UploadService<IEntity, IEntity>>create(TenantPadFileUploadService.class),
-                GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping,
-                TenantPadFileUploadService.SUPPORTED_FORMATS
-        ) {
-            @Override
-            protected void onUploadComplete(com.pyx4j.gwt.rpc.upload.UploadResponse<IEntity> serverUploadResponse) {
-                // TODO i18n the string
-                MessageDialog.info("", serverUploadResponse.message);
-            };
-        }.show();//@formatter:on
+        new UploadDialogBase<IEntity, IEntity>(i18n.tr("Upload PAD File"), GWT.<UploadService<IEntity, IEntity>> create(TenantPadFileUploadService.class),
+                TenantPadFileUploadService.SUPPORTED_FORMATS).show();
     }
 }

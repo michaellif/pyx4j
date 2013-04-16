@@ -11,14 +11,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto;
+package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface ImportUploadResponseDTO extends IEntity {
+public interface DownloadableUploadResponseDTO extends IEntity {
 
     IPrimitive<Boolean> success();
 
