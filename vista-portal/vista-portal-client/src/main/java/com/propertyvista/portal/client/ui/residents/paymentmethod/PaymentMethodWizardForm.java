@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -133,6 +134,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 
         HorizontalPanel pm = new HorizontalPanel();
         pm.add(w = new HTML(i18n.tr("Payment Method:")));
+        w.getElement().getStyle().setMarginLeft(5, Unit.EM);
         w.setWidth("10em");
         pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
