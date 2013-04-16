@@ -80,7 +80,7 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
             }
         }
 
-        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
+        policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
         Persistence.service().persist(policy);
         addItem(policy);

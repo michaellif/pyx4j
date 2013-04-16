@@ -50,7 +50,7 @@ public class ARCodeAdapter {
         return Persistence.service().retrieve(criteria);
     }
 
-    public ARCode retrieveDefaultUnkownARCode(ARCode.ActionType actionType) {
+    private ARCode retrieveDefaultUnkownARCode(ARCode.ActionType actionType) {
         EntityQueryCriteria<ARCode> unknownExternalCodeCriteria = EntityQueryCriteria.create(ARCode.class);
         unknownExternalCodeCriteria.in(unknownExternalCodeCriteria.proto().type(), actionType == ActionType.Credit ? ARCode.Type.ExternalCredit
                 : ARCode.Type.ExternalCharge);

@@ -68,7 +68,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
 
         policy.confirmationMethod().setValue(getConfig().billConfirmationMethod);
 
-        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
+        policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
 
         {
             LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);

@@ -30,7 +30,7 @@ public class ARPolicyDataModel extends MockDataModel<ARPolicy> {
     protected void generate() {
         ARPolicy policy = EntityFactory.create(ARPolicy.class);
         policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.oldestDebtFirst);
-        policy.node().set(getDataModel(BuildingDataModel.class).getCurrentItem());
+        policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
         super.setCurrentItem(policy);

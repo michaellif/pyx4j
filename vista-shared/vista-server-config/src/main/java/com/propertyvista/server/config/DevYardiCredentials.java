@@ -29,7 +29,7 @@ public class DevYardiCredentials {
             cr.username().setValue("sa");
             cr.credential().setValue("akan1212");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
-            cr.database().setValue("sl_0404");
+            cr.database().setValue("sl_0411");
         } else if (false) {
             cr.propertyCode().setValue("prvista2");
             cr.residentTransactionsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/ItfResidentTransactions20.asmx");
