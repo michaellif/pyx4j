@@ -131,6 +131,16 @@ public class PortalSiteMap implements SiteMap {
 
             public static class ViewPaymentMethod extends AppPlace {
             }
+
+            public static class PaymentMethodSubmitted extends AppPlace {
+
+                public PaymentMethodSubmitted() {
+                }
+
+                public PaymentMethodSubmitted(Key preauthorizedPaymentID) {
+                    formPlace(preauthorizedPaymentID);
+                }
+            }
         }
 
         public static class Maintenance extends AppPlace {

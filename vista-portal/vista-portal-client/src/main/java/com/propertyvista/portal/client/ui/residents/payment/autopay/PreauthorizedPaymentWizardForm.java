@@ -267,9 +267,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         } else {
             paymentMethodEditor.setViewable(false);
         }
-
-        // TODO : this is the HACK - check CComponent.setVisible implementation!!!
-        paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
     }
 
     private void setAmountEditor(AmountType amountType) {
