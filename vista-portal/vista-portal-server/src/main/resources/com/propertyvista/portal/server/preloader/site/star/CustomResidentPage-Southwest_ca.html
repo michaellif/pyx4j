@@ -40,16 +40,12 @@ div.LandingCaption {
 	color: #0491C0;
 }
 
-.FormFlexPanel {
+div.FormFlexPanelH1Label, .Header, .EntityFolderTableHeader  {
+	font: bold 1.1em "facitweb",Helvetica,Arial,sans-serif;
+	color: #0491C0 !important;
 }
 
-div.FormFlexPanelH1Label, .Header {
-	font: bold 1.2em "facitweb",Helvetica,Arial,sans-serif;
-	color: #0491C0;
-}
-
-
-.FormFlexPanelH1, .Header {
+.FormFlexPanelH1, .Header, .EntityFolderTableHeader {
     background-color: #FFFFFF !important;
     border-color: #D7D7D7 #D7D7D7 white;
     border-radius: 3px 3px 3px 3px;
@@ -58,23 +54,27 @@ div.FormFlexPanelH1Label, .Header {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
 }
 
-div.Button,button.gwt-Button {
-	background: #00AEEF;
-    border: medium none;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
-    height: 100%;
+.FormFlexPanelH1Label, .FormFlexPanelActionWidget, .Header {
+    padding: 0.75em !important;
 }
 
-div.Button:hover,button.gwt-Button:hover {
-	background: #0ABCFF;
+div.Button,button.gwt-Button,.FooterToolbar .Button {
+	background: #00AEEF !important;
+    border: medium none !important;
+    border-radius: 3px 3px 3px 3px !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35) !important;
 }
 
-div.ButtonText,button.gwt-Button {
+div.Button:hover,button.gwt-Button:hover,.FooterToolbar .Button:hover {
+	background: #0ABCFF !important;
+}
+
+div.ButtonText,button.gwt-Button, .FooterToolbar .Button {
 	color: #FFFFFF;
-	text-decoration: none;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    font-weight: 600;
+	text-decoration: none !important;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25) !important;
+    font-weight: 600 !important;
+    font-size: 1em !important;
 }
 
 .ProvideTIBGetTenantSure .ButtonText {
@@ -85,9 +85,6 @@ div.secondaryNavig ul li {
 	font-family: "facitweb",Helvetica,Arial,sans-serif;
 }
 
-
-div.secondaryNavig .MainMenuLabel {
-}
 
 div.secondaryNavig .MainMenuLabel:hover {
 	color: #00AEEF;
@@ -100,6 +97,28 @@ div#siteAuthInsert {
 
 div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
 	{
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-clip: padding-box;
+    background-color: white;
+    border-color: #D7D7D7 #D7D7D7 white;
+    border-image: none;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    font-family: "adelle",georgia,times,serif;
+    font-size: 0.95em;
+    min-height: 1.5em;
+    line-height: 1.5;
+    margin-bottom: 9px;
+    overflow: hidden;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    padding: 0.25em 0.2em !important;
+    width: 90% !important;
 }
 
 ol li {
@@ -111,24 +130,16 @@ div.LandingOrLineSeparator div {
 	color: #0491C0;
 }
 
-.Dialog {
-	
-}
-
 .DialogCaption {
 	padding-left: 0.5em;
 }
 
-.caption {
-	
-}
-
-#gwt-debug-login,#gwt-debug-account,#gwt-debug-logout {
+#gwt-debug-login,#gwt-debug-account,#gwt-debug-logout,.TenantSureManagementActionsPanel .Anchor {
 	text-decoration: none;
-	
+	color: #0491C0;
 }
 
-#gwt-debug-login:hover,#gwt-debug-account:hover,#gwt-debug-logout:hover {
+#gwt-debug-login:hover,#gwt-debug-account:hover,#gwt-debug-logout:hover,.TenantSureManagementActionsPanel .Anchor:hover {
 	color: #00AEEF !important;
 	text-decoration: underline;
 }
@@ -139,6 +150,40 @@ div.LandingOrLineSeparator div {
 
 .WidgetDecoratorLabel {
     margin-left: 5px !important;
+}
+
+.gwt-DatePicker {
+    border: 1px solid #0491C0  !important;
+}
+
+.DatePickerMonthSelector tr {
+	background-color: #a8e1f4 !important;
+}
+
+.PaymentEditorForm {
+    width: 650px !important;
+}
+
+.popupContent .gwt-FileUpload {
+ 	width: 100%;
+}
+
+* {
+    -moz-box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
+    box-sizing:content-box !important;
+}
+
+
+header #main-nav #search form input[type="text"] {
+    padding: 0.4em 0.75em !important;
+    width: 68% !important;
+}
+
+.TriggerPannel .Button {
+    background: inherit !important;
+    border-radius: inherit !important;
+    box-shadow: none !important;
 }
 
 </style>
