@@ -137,6 +137,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
                 setAmountEditor(getValue().amountType().getValue());
 
                 setEditable(getValue().getPrimaryKey() == null);
+                setRemovable(!getValue().isCoTenant().isBooleanTrue());
             }
 
             private void setAmountEditor(AmountType amountType) {
