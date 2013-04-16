@@ -125,6 +125,16 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         }
     }
 
+    /**
+     * binds DTO member of DBO type to DBO
+     */
+    protected final void bindDtoMember(DBO dtoEntityMember) {
+        addBinding(new Binding(dtoEntityMember.getMember(IEntity.PRIMARY_KEY), dboProto.getMember(IEntity.PRIMARY_KEY), null));
+        for (String memberName : EntityFactory.getEntityMeta(dboClass).getMemberNames()) {
+            addBinding(new Binding(dtoEntityMember.getMember(memberName), dboProto.getMember(memberName), null));
+        }
+    }
+
     private void init() {
         if (binding.isEmpty()) {
             synchronized (binding) {
