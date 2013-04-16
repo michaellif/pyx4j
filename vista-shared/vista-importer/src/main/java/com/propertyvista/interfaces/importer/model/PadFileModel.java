@@ -28,9 +28,11 @@ public interface PadFileModel extends IEntity {
     @XmlTransient
     ImportInformation _import();
 
-    @ImportColumn(names = { "Tenant ID" })
+    @ImportColumn(names = { "Tenant ID", "Lease ID" })
     @NotNull
     IPrimitive<String> tenantId();
+
+    IPrimitive<String> roommateId();
 
     @ImportColumn(names = { "Bank Account Holder", "Name" })
     IPrimitive<String> name();
@@ -51,5 +53,7 @@ public interface PadFileModel extends IEntity {
     IPrimitive<String> charge();
 
     IPrimitive<String> percent();
+
+    IPrimitive<String> estimatedCharge();
 
 }
