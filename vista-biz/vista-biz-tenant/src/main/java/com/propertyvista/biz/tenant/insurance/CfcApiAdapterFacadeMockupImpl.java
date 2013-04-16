@@ -45,22 +45,13 @@ public class CfcApiAdapterFacadeMockupImpl implements CfcApiAdapterFacade {
         TenantSureQuoteDTO quote = EntityFactory.create(TenantSureQuoteDTO.class);
         quote.annualPremium().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.underwriterFee().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.totalAnnualTax().setValue(new BigDecimal(Math.abs(new Random().nextInt() % 50)));
         quote.totalAnnualPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.totalFirstPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.totalAnniversaryFirstMonthPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
+        quote.totalMonthlyPayable().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
         quote.quoteId().setValue("MockupTSQuote-" + RandomStringUtils.randomAlphanumeric(10));
         quote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));
-
-        // TODO make mockup taxes
-//        InsuranceTenantSureTax taxMpt = EntityFactory.create(InsuranceTenantSureTax.class);
-//        taxMpt.absoluteAmount().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-//        taxMpt.description().setValue("MPT");
-//        taxMpt.buinessLine().setValue("buiness line");
-//        quote.taxBreakdown().add(taxMpt);
-//
-//        InsuranceTenantSureTax taxMft = EntityFactory.create(InsuranceTenantSureTax.class);
-//        taxMft.absoluteAmount().setValue(new BigDecimal(10 + Math.abs(new Random().nextInt() % 50)));
-//        taxMft.description().setValue("MFT");
-//        taxMft.buinessLine().setValue("buiness line");
-//        quote.taxBreakdown().add(taxMft);
 
         try {
             Thread.sleep(2000);
