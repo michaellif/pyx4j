@@ -36,7 +36,7 @@ public class PaymentMethodSubmittedServiceImpl extends EntityDtoBinder<LeasePaym
 
     @Override
     protected void bind() {
-        bindDtoMember(dtoProto.paymentMethod());
+        bindCompleteDtoMember(dtoProto.paymentMethod());
     }
 
     @Override

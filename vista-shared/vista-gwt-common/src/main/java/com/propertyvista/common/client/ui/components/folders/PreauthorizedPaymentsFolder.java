@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -48,6 +49,30 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
     }
 
     @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof PreauthorizedPayment) {
+            return new PreauthorizedPaymentEditor();
+        }
+        return super.create(member);
+    }
+
+    @Override
+    protected void addItem() {
+    }
+
+    @Override
+    protected CEntityFolderItem<PreauthorizedPayment> createItem(boolean first) {
+        // TODO Auto-generated method stub
+        return super.createItem(first);
+    }
+
+    @Override
+    protected void createNewEntity(PreauthorizedPayment newEntity, AsyncCallback<PreauthorizedPayment> callback) {
+        // TODO Auto-generated method stub
+        super.createNewEntity(newEntity, callback);
+    }
+
+    @Override
     protected void removeItem(final CEntityFolderItem<PreauthorizedPayment> item) {
         MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
             @Override
@@ -55,14 +80,6 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
                 PreauthorizedPaymentsFolder.super.removeItem(item);
             }
         });
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PreauthorizedPayment) {
-            return new PreauthorizedPaymentEditor();
-        }
-        return super.create(member);
     }
 
     public abstract List<LeasePaymentMethod> getAvailablePaymentMethods();
@@ -79,18 +96,20 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
             super(PreauthorizedPayment.class);
 
             amountPlaceholder.setWidth("15em");
-            percent = new DecoratorBuilder(inject(proto().percent()), 10, 5).build();
-            value = new DecoratorBuilder(inject(proto().value()), 10, 5).build();
+            percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).build();
+            value = new DecoratorBuilder(inject(proto().value()), 10, 10).build();
         }
 
         @Override
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
+            int row = -1;
 
-            content.setWidget(0, 0, new DecoratorBuilder(inject(proto().amountType()), 10, 5).build());
-            content.setWidget(0, 1, amountPlaceholder);
-            content.setWidget(0, 2, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10, 10).build());
+            content.getFlexCellFormatter().setWidth(row, 0, "21em");
+            content.setWidget(row, 1, amountPlaceholder);
 
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
                 @Override
                 protected AppPlace getTargetPlace() {
                     return null; // not intended to navigate - just edit mode!
@@ -106,7 +125,8 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
                         }
                     };
                 }
-            }), 30, 10).build());
+            }), 33, 10).build());
+            content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             get(proto().amountType()).addValueChangeHandler(new ValueChangeHandler<AmountType>() {
                 @Override

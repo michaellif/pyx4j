@@ -13,29 +13,30 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
 import com.propertyvista.portal.domain.dto.PreauthorizedPaymentListDTO;
@@ -67,21 +68,11 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
         super.populate(dto);
     }
 
-    private class PreauthorizedPaymentFolder extends VistaTableFolder<PreauthorizedPayment> {
+    private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPayment> {
 
         public PreauthorizedPaymentFolder() {
             super(PreauthorizedPayment.class, true);
             setOrderable(false);
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off                    
-                    new EntityFolderColumnDescriptor(proto().tenant(), "18em"), 
-                    new EntityFolderColumnDescriptor(proto().paymentMethod(), "20em"), 
-                    new EntityFolderColumnDescriptor(proto().value(), "5em"), 
-                    new EntityFolderColumnDescriptor(proto().percent(), "5em")
-            ); //@formatter:on
         }
 
         @Override
@@ -108,29 +99,66 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityFolderRowEditor<PreauthorizedPayment> {
+        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
+
+            private final SimplePanel amountPlaceholder = new SimplePanel();
+
+            private final Widget percent;
+
+            private final Widget value;
 
             public PreauthorizedPaymentEditor() {
-                super(PreauthorizedPayment.class, columns());
+                super(PreauthorizedPayment.class);
+
+                setViewable(true);
+                inheritViewable(false);
+
+                amountPlaceholder.setWidth("15em");
+                percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).build();
+                value = new DecoratorBuilder(inject(proto().value()), 10, 10).build();
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                CComponent<?, ?> comp = null;
-                if (member == (proto().tenant())) {
-                    comp = new CEntityLabel<Tenant>();
-                } else if (member.equals(proto().paymentMethod())) {
-                    comp = new CEntityHyperlink<PaymentDetails>(null, new Command() {
-                        @Override
-                        public void execute() {
-                            presenter.viewPaymentMethod(getValue().paymentMethod());
-                        }
-                    });
-                    comp.setViewable(true);
-                } else {
-                    comp = super.create(member);
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
+                content.setWidget(++row, 0, amountPlaceholder);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).build());
+
+                return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                setAmountEditor(getValue().amountType().getValue());
+
+                setEditable(getValue().getPrimaryKey() == null);
+            }
+
+            private void setAmountEditor(AmountType amountType) {
+                amountPlaceholder.clear();
+                get(proto().percent()).setVisible(false);
+                get(proto().value()).setVisible(false);
+
+                if (amountType != null) {
+                    switch (amountType) {
+                    case Percent:
+                        amountPlaceholder.setWidget(percent);
+                        get(proto().percent()).setVisible(true);
+                        break;
+
+                    case Value:
+                        amountPlaceholder.setWidget(value);
+                        get(proto().value()).setVisible(true);
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException();
+                    }
                 }
-                return comp;
             }
         }
     }

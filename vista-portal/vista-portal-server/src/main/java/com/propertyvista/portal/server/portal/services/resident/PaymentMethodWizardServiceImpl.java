@@ -46,7 +46,7 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
 
     @Override
     protected void bind() {
-        bindDtoMember(dtoProto.paymentMethod());
+        bindCompleteDtoMember(dtoProto.paymentMethod());
     }
 
     @Override
