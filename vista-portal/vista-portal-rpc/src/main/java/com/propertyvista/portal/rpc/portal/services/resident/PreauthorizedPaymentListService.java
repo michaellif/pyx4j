@@ -15,8 +15,8 @@ package com.propertyvista.portal.rpc.portal.services.resident;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public interface PreauthorizedPaymentListService extends AbstractListService<PreauthorizedPayment> {
+public interface PreauthorizedPaymentListService extends AbstractListService<PreauthorizedPaymentListDTO.itemDTO> {
 
 }

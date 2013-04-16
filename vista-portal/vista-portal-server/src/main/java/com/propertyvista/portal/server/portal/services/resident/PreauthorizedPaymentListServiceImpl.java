@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -25,13 +25,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceImpl<PreauthorizedPayment> implements PreauthorizedPaymentListService {
+public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentListDTO.itemDTO> implements
+        PreauthorizedPaymentListService {
 
     public PreauthorizedPaymentListServiceImpl() {
-        super(PreauthorizedPayment.class);
+        super(PreauthorizedPayment.class, PreauthorizedPaymentListDTO.itemDTO.class);
     }
 
     @Override
@@ -40,16 +42,21 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceImpl
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPayment> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPaymentListDTO.itemDTO> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
     }
 
     @Override
-    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPayment dto) {
+    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPaymentListDTO.itemDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.ToStringMembers);
-//        Persistence.service().retrieveMember(dto.tenant(), AttachLevel.ToStringMembers);
+
+        // prepare co-tenant data:
+        dto.isCoTenant().setValue(!dto.tenant().equals(TenantAppContext.getCurrentUserTenant()));
+        if (dto.isCoTenant().isBooleanTrue()) {
+            dto.paymentMethod().clearValues();
+        }
     }
 
     @Override

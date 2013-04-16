@@ -11,16 +11,22 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 @Transient
 public interface PreauthorizedPaymentListDTO extends IEntity {
 
-    IList<PreauthorizedPayment> preauthorizedPayments();
+    interface itemDTO extends PreauthorizedPayment {
+
+        IPrimitive<Boolean> isCoTenant();
+    }
+
+    IList<itemDTO> preauthorizedPayments();
 }

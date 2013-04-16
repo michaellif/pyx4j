@@ -35,11 +35,10 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
-import com.propertyvista.portal.domain.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
 public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentListDTO> {
 
@@ -62,22 +61,22 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
         return container;
     }
 
-    public void populate(List<PreauthorizedPayment> preauthorizedPayment) {
+    public void populate(List<PreauthorizedPaymentListDTO.itemDTO> preauthorizedPayment) {
         PreauthorizedPaymentListDTO dto = EntityFactory.create(PreauthorizedPaymentListDTO.class);
         dto.preauthorizedPayments().addAll(preauthorizedPayment);
         super.populate(dto);
     }
 
-    private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPayment> {
+    private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentListDTO.itemDTO> {
 
         public PreauthorizedPaymentFolder() {
-            super(PreauthorizedPayment.class, true);
+            super(PreauthorizedPaymentListDTO.itemDTO.class, true);
             setOrderable(false);
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PreauthorizedPayment) {
+            if (member instanceof PreauthorizedPaymentListDTO.itemDTO) {
                 return new PreauthorizedPaymentEditor();
             }
             return super.create(member);
@@ -89,7 +88,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PreauthorizedPayment> item) {
+        protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentListDTO.itemDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
                 @Override
                 public void execute() {
@@ -99,7 +98,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
+        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentListDTO.itemDTO> {
 
             private final SimplePanel amountPlaceholder = new SimplePanel();
 
@@ -108,7 +107,7 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
             private final Widget value;
 
             public PreauthorizedPaymentEditor() {
-                super(PreauthorizedPayment.class);
+                super(PreauthorizedPaymentListDTO.itemDTO.class);
 
                 setViewable(true);
                 inheritViewable(false);

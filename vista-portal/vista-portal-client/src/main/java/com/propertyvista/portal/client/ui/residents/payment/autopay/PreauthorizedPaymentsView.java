@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO.itemDTO;
 
 public interface PreauthorizedPaymentsView extends IsWidget {
 
@@ -28,10 +28,10 @@ public interface PreauthorizedPaymentsView extends IsWidget {
 
         void addPreauthorizedPayment();
 
-        void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment);
+        void deletePreauthorizedPayment(itemDTO preauthorizedPayment);
     }
 
-    void populate(List<PreauthorizedPayment> preauthorizedPayments);
+    void populate(List<itemDTO> preauthorizedPayments);
 
     void setPresenter(Presenter presenter);
 }

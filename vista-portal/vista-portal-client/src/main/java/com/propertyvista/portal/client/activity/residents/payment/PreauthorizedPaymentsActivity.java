@@ -25,11 +25,11 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 
 public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
@@ -49,12 +49,12 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.list(new DefaultAsyncCallback<EntitySearchResult<PreauthorizedPayment>>() {
+        srv.list(new DefaultAsyncCallback<EntitySearchResult<PreauthorizedPaymentListDTO.itemDTO>>() {
             @Override
-            public void onSuccess(EntitySearchResult<PreauthorizedPayment> result) {
+            public void onSuccess(EntitySearchResult<PreauthorizedPaymentListDTO.itemDTO> result) {
                 view.populate(result.getData());
             }
-        }, new EntityListCriteria<PreauthorizedPayment>(PreauthorizedPayment.class));
+        }, new EntityListCriteria<PreauthorizedPaymentListDTO.itemDTO>(PreauthorizedPaymentListDTO.itemDTO.class));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
     }
 
     @Override
-    public void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment) {
+    public void deletePreauthorizedPayment(PreauthorizedPaymentListDTO.itemDTO preauthorizedPayment) {
         srv.delete(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
