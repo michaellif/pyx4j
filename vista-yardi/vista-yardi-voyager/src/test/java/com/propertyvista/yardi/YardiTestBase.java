@@ -37,6 +37,7 @@ import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
@@ -98,6 +99,7 @@ public class YardiTestBase {
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
+        models.add(GLCodeDataModel.class);
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(IdAssignmentPolicyDataModel.class);

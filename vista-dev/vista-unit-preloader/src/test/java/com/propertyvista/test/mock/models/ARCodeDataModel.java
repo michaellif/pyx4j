@@ -13,13 +13,11 @@
  */
 package com.propertyvista.test.mock.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class ARCodeDataModel extends MockDataModel<ARCode> {
@@ -30,53 +28,70 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
     @Override
     protected void generate() {
 
-        List<ARCode> serviceItemTypes = new ArrayList<ARCode>();
+        generateARCode("Regular Residential Unit", ARCode.Type.Residential, 5110, 1, true, new String[] { "rrent" });
+        generateARCode("Ocean View Residential Unit", ARCode.Type.Residential, 5110, 1, false);
+        generateARCode("Regular Short Term Residential Unit", ARCode.Type.ResidentialShortTerm, 5110, 1, false);
+        generateARCode("Regular Commercial Unit", ARCode.Type.Commercial, 5110, 1, false);
 
-        serviceItemTypes.add(generateChargeItemType("Regular Residential Unit", ARCode.Type.Residential, true));
-        serviceItemTypes.add(generateChargeItemType("Ocean View Residential Unit", ARCode.Type.Residential, false));
-        serviceItemTypes.add(generateChargeItemType("Regular Short Term Residential Unit", ARCode.Type.ResidentialShortTerm, false));
-        serviceItemTypes.add(generateChargeItemType("Regular Commercial Unit", ARCode.Type.Commercial, false));
+        generateARCode("Outdoor Parking", ARCode.Type.Parking, 5110, 1, false, new String[] { "routpark" });
+        generateARCode("Indoor Parking", ARCode.Type.Parking, 5110, 1, false, new String[] { "rinpark" });
+        generateARCode("Cat", ARCode.Type.Pet, 5930, 1, false);
+        generateARCode("Dog", ARCode.Type.Pet, 5930, 1, false);
+        generateARCode("Small Locker", ARCode.Type.Locker, 5110, 1, false);
+        generateARCode("Medium Locker", ARCode.Type.Locker, 5110, 1, false);
+        generateARCode("Large Locker", ARCode.Type.Locker, 5110, 1, false);
+        generateARCode("Fitness", ARCode.Type.AddOn, 5110, 1, false);
+        generateARCode("Pool", ARCode.Type.AddOn, 5110, 1, false);
+        generateARCode("Furnished", ARCode.Type.AddOn, 6110, 1, false);
+        generateARCode("Key", ARCode.Type.AddOn, 6240, 1, false);
+        generateARCode("Access Card", ARCode.Type.AddOn, 6240, 1, false);
+        generateARCode("Cable", ARCode.Type.AddOn, 5110, 1, false);
+        generateARCode("Water", ARCode.Type.Utility, 5999, 1, false);
+        generateARCode("Gas", ARCode.Type.Utility, 5997, 1, false);
+        generateARCode("Hydro", ARCode.Type.Utility, 5998, 1, false);
+        generateARCode("Booking", ARCode.Type.OneTime, 5934, 1, false);
+        generateARCode("Legal Charge", ARCode.Type.AccountCharge, 0, 1, false, new String[] { "rlegal" });
+        generateARCode("Superintendent", ARCode.Type.AccountCredit, 0, 1, false, new String[] { "rsuper" });
 
-        serviceItemTypes.add(generateChargeItemType("Regular Parking", ARCode.Type.Parking, false));
-        serviceItemTypes.add(generateChargeItemType("Wide Parking", ARCode.Type.Parking, false));
-        serviceItemTypes.add(generateChargeItemType("Narrow Parking", ARCode.Type.Parking, false));
-        serviceItemTypes.add(generateChargeItemType("Disabled Parking", ARCode.Type.Parking, false));
-        serviceItemTypes.add(generateChargeItemType("Cat", ARCode.Type.Pet, false));
-        serviceItemTypes.add(generateChargeItemType("Dog", ARCode.Type.Pet, false));
-        serviceItemTypes.add(generateChargeItemType("Small Locker", ARCode.Type.Locker, false));
-        serviceItemTypes.add(generateChargeItemType("Medium Locker", ARCode.Type.Locker, false));
-        serviceItemTypes.add(generateChargeItemType("Large Locker", ARCode.Type.Locker, false));
-        serviceItemTypes.add(generateChargeItemType("Fitness", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Pool", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Furnished", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Key", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Access Card", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Cable", ARCode.Type.AddOn, false));
-        serviceItemTypes.add(generateChargeItemType("Water", ARCode.Type.Utility, false));
-        serviceItemTypes.add(generateChargeItemType("Gas", ARCode.Type.Utility, false));
-        serviceItemTypes.add(generateChargeItemType("Hydro", ARCode.Type.Utility, false));
-        serviceItemTypes.add(generateChargeItemType("Booking", ARCode.Type.OneTime, false));
+        generateARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, 1, false);
+        generateARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, 1, false);
 
-        serviceItemTypes.add(generateChargeItemType("Deposit", ARCode.Type.Deposit, true));
-        serviceItemTypes.add(generateChargeItemType("LatePayment", ARCode.Type.LatePayment, true));
-        serviceItemTypes.add(generateChargeItemType("NSF", ARCode.Type.NSF, true));
+        generateARCode("Deposit", ARCode.Type.Deposit, 0, 1, true);
+        generateARCode("LatePayment", ARCode.Type.LatePayment, 0, 1, true);
+        generateARCode("NSF", ARCode.Type.NSF, 0, 1, true, new String[] { "rnsffee" });
 
-        serviceItemTypes.add(generateChargeItemType("Account Credit", ARCode.Type.AccountCredit, true));
-        serviceItemTypes.add(generateChargeItemType("Account Charge", ARCode.Type.AccountCharge, true));
+        generateARCode("Account Credit", ARCode.Type.AccountCredit, 0, 1, true);
+        generateARCode("Account Charge", ARCode.Type.AccountCharge, 0, 1, true);
 
-        serviceItemTypes.add(generateChargeItemType("Carry Forward Charge", ARCode.Type.CarryForwardCharge, true));
+        generateARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, 1, true);
 
-        Persistence.service().persist(serviceItemTypes);
+        //rlmrint rintpay rlmr rbaddebt rsuper rfree
     }
 
-    private ARCode generateChargeItemType(String name, ARCode.Type serviceType, boolean defaultCode) {
-        ARCode type = EntityFactory.create(ARCode.class);
-        type.name().setValue(name);
-        type.type().setValue(serviceType);
-        type.type().setValue(serviceType);
-        type.defaultCode().setValue(defaultCode);
-        addItem(type);
-        return type;
+    private void generateARCode(String name, ARCode.Type codeType, int glCodeId, int glCategoryId, boolean reserved) {
+        generateARCode(name, codeType, glCodeId, glCategoryId, reserved, null);
+    }
+
+    private void generateARCode(String name, ARCode.Type codeType, int glCodeId, int glCategoryId, boolean reserved, String[] yardiChargeCodes) {
+
+        ARCode code = EntityFactory.create(ARCode.class);
+        code.name().setValue(name);
+        code.type().setValue(codeType);
+        code.glCode().set(getDataModel(GLCodeDataModel.class).addGLCode(name, glCodeId, glCategoryId, reserved));
+        code.reserved().setValue(reserved);
+
+        if (yardiChargeCodes != null) {
+            for (String string : yardiChargeCodes) {
+                YardiChargeCode yardiChargeCode = EntityFactory.create(YardiChargeCode.class);
+                yardiChargeCode.yardiChargeCode().setValue(string);
+                code.yardiChargeCodes().add(yardiChargeCode);
+            }
+        }
+
+        Persistence.service().persist(code);
+
+        addItem(code);
+
     }
 
 }

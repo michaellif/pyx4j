@@ -33,6 +33,7 @@ import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
+import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 
@@ -83,6 +84,7 @@ public class RSOapiTestBase extends JerseyTest {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
+        models.add(GLCodeDataModel.class);
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         return models;

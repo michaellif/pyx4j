@@ -68,7 +68,7 @@ public class ARCodesGenerator {
         code.name().setValue(name);
         code.type().setValue(type);
         code.glCode().codeId().setValue(glCode);
-        code.defaultCode().setValue(reserved);
+        code.reserved().setValue(reserved);
 
         codes.add(code);
     }

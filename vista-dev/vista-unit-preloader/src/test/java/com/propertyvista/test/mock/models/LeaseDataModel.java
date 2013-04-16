@@ -117,7 +117,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
         return lease;
     }
 
-    public PaymentRecord addPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
+    public PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
         LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().get(0);
 
@@ -137,7 +137,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      * 
      * Set Preauthorized Payment to first found tenant with eCheck payment method, otherwise returns false
      */
-    public PreauthorizedPayment createPreauthorizedPayment(BigDecimal value) {
+    public PreauthorizedPayment createPreauthorizedPayment(String value) {
         Persistence.service().retrieveMember(getCurrentItem().leaseParticipants());
         while (getCurrentItem().leaseParticipants().iterator().hasNext()) {
             Tenant tenant = getCurrentItem().leaseParticipants().iterator().next().cast();
@@ -152,10 +152,10 @@ public class LeaseDataModel extends MockDataModel<Lease> {
                     PADPolicy policy = getDataModel(PADPolicyDataModel.class).getCurrentItem();
                     if (policy.chargeType().getValue() == PADPolicy.PADChargeType.OwingBalance) {
                         pap.amountType().setValue(AmountType.Percent);
-                        pap.percent().setValue(value);
+                        pap.percent().setValue(new BigDecimal(value));
                     } else {
                         pap.amountType().setValue(AmountType.Value);
-                        pap.value().setValue(value);
+                        pap.value().setValue(new BigDecimal(value));
                     }
                     pap.comments().setValue("Preauthorized Payment");
 

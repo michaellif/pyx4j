@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
-
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -72,7 +70,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         receiveAndPostPayment("20-Mar-2011", "1070.30"); //2269.04 - 1198.74(pad) = 1070.30
 
-        setPreauthorizedPayment(new BigDecimal("1"));
+        setPreauthorizedPayment("1");
 
         advanceSysDate("18-Apr-2011");
 

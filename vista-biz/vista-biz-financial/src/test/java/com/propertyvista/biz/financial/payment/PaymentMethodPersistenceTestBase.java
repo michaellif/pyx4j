@@ -62,7 +62,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).addPaymentRecord(profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(profileMethods.get(0), "100");
 
         Assert.assertEquals("Just one PaymentMethod remains", existingPaymentMethodsCount + 1, customerDataModel.retrieveAllPaymentMethods().size());
 
@@ -90,7 +90,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).addPaymentRecord(profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(profileMethods.get(0), "100");
 
         Persistence.service().commit();
 

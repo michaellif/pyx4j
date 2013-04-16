@@ -144,7 +144,7 @@ public interface ARCode extends IEntity {
     @Timestamp
     IPrimitive<Date> updated();
 
-    IPrimitive<Boolean> defaultCode();
+    IPrimitive<Boolean> reserved();
 
     /** Named "charge code", however it's applied to both charges and credits */
     @Owned

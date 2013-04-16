@@ -71,7 +71,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
 
                     @Override
                     public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(new BigDecimal("1"));
+                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment("1");
                     }
 
                 });
@@ -113,7 +113,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
 
                     @Override
                     public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(new BigDecimal("1"));
+                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment("1");
                     }
 
                 });

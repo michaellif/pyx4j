@@ -107,6 +107,7 @@ import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
+import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
@@ -197,6 +198,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         models.add(PmcDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
+        models.add(GLCodeDataModel.class);
         models.add(ARCodeDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(MerchantAccountDataModel.class);
@@ -605,7 +607,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected void setPreauthorizedPayment(BigDecimal value) {
+    protected void setPreauthorizedPayment(String value) {
         PreauthorizedPayment preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(value);
         Assert.assertNotNull("CreatePreauthorizedPayment failed to create PAP", preauthorizedPayment);
         Persistence.service().commit();

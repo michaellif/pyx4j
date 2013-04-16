@@ -29,15 +29,14 @@ public class ARCodeAdapter {
 
     /** @return product item type or <code>null</code> if a product item type for the given chargeCode haven't been found */
     public ARCode findARCode(ARCode.ActionType actionType, String chargeCode) {
-
         ARCode code = retrieveARCode(chargeCode);
 
-        if ((code != null) && (code.type().getValue().getActionType() != actionType)) {
-            throw new IllegalStateException(SimpleMessageFormat.format("An AR Code for yardi charge code has unexpected action type: got {0} but expected {1}",
-                    code.type().getValue().getActionType(), actionType));
-        } else {
+        if (code == null) {
             log.warn("An AR Code for yardi charge code {} wasn''t found: will try to find a default with action type {}", chargeCode, actionType);
             code = retrieveDefaultUnkownARCode(actionType);
+        } else if (code.type().getValue().getActionType() != actionType) {
+            throw new IllegalStateException(SimpleMessageFormat.format("An AR Code for yardi charge code has unexpected action type: got {0} but expected {1}",
+                    code.type().getValue().getActionType(), actionType));
         }
 
         return code;

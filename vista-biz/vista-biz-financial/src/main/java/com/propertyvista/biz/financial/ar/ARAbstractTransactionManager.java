@@ -167,7 +167,7 @@ public abstract class ARAbstractTransactionManager {
     public ARCode getDefaultARCode(Type type) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().type(), type));
-        criteria.add(PropertyCriterion.eq(criteria.proto().defaultCode(), Boolean.TRUE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().reserved(), Boolean.TRUE));
         List<ARCode> codes = Persistence.service().query(criteria);
         if (codes.size() == 0) {
             throw new Error("Default ARCode for " + type + " is not found");
