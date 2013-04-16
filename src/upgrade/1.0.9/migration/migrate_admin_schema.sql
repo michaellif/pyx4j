@@ -104,6 +104,10 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_yardi_credential  ADD COLUMN maintenance_requests_service_url VARCHAR(500);
         
+        -- pad_file
+        
+        ALTER TABLE pad_file ADD COLUMN company_id VARCHAR(500);
+        
         -- pad_sim_file
         
         ALTER TABLE pad_sim_file        ADD COLUMN original_file BIGINT,
@@ -125,7 +129,8 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
        
-       
+        UPDATE  _admin_.pad_file
+        SET     company_id = 'BIRCHWOOD';
         
         
         
