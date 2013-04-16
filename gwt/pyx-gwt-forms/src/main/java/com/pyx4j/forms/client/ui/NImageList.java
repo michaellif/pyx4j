@@ -181,7 +181,7 @@ public class NImageList<T extends IImageFile> extends NComponent<IList<T>, Image
         }
 
         @Override
-        protected void createNewEntity(T newEntity, final AsyncCallback<T> callback) {
+        protected void createNewEntity(final AsyncCallback<T> callback) {
             new FileUploadDialog<T>("Upload Image File", null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {

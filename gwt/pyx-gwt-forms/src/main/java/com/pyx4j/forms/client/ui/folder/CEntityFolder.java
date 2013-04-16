@@ -193,9 +193,13 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         return folderDecorator;
     }
 
-    @SuppressWarnings("unchecked")
     protected void addItem() {
-        addItem((E) EntityFactory.create(entityPrototype.getValueClass()));
+        createNewEntity(new DefaultAsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                addItem(result);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -207,22 +211,16 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
         final CEntityFolderItem<E> item = createItemPrivate();
 
-        createNewEntity(newEntity, new DefaultAsyncCallback<E>() {
-            @Override
-            public void onSuccess(E result) {
-                adopt(item);
-                getValue().add(result);
-                item.populate(result);
+        adopt(item);
+        getValue().add(newEntity);
+        item.populate(newEntity);
 
-                revalidate();
-                ValueChangeEvent.fire(CEntityFolder.this, getValue());
-            }
-        });
+        revalidate();
+        ValueChangeEvent.fire(CEntityFolder.this, getValue());
 
         if (item.getDecorator() instanceof BoxFolderItemDecorator) {
             ((BoxFolderItemDecorator<E>) item.getDecorator()).setExpended(true);
         }
-
     }
 
     protected void removeItem(CEntityFolderItem<E> item) {
@@ -234,7 +232,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     protected void moveUpItem(CEntityFolderItem<E> item) {
         moveItem(item, true);
-
     }
 
     protected void moveDownItem(CEntityFolderItem<E> item) {
@@ -260,7 +257,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;
-
     }
 
     /**
@@ -270,8 +266,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
      * @param newEntity
      * @param callback
      */
-    protected void createNewEntity(E newEntity, AsyncCallback<E> callback) {
-        callback.onSuccess(newEntity);
+    @SuppressWarnings("unchecked")
+    protected void createNewEntity(AsyncCallback<E> callback) {
+        callback.onSuccess((E) EntityFactory.create(entityPrototype.getValueClass()));
     }
 
     @Override
