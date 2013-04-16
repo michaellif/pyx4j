@@ -367,7 +367,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
-        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator(VistaFeatures.instance().yardiIntegration()).validate(lease);
+        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
         if (!validationFailures.isEmpty()) {
             List<String> errorMessages = new ArrayList<String>();
             for (ValidationFailure failure : validationFailures) {

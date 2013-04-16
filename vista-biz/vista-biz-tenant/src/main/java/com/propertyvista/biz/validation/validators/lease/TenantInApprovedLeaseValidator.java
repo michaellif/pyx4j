@@ -17,8 +17,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantInApprovedLeaseValidator extends LeaseParticipantInApprovedLeaseValidator<LeaseTermTenant> {
 
-    public TenantInApprovedLeaseValidator(boolean yardiIntegrationMode) {
-        super(LeaseTermTenant.class, yardiIntegrationMode);
+    public TenantInApprovedLeaseValidator() {
+        super(LeaseTermTenant.class);
     }
 
 }

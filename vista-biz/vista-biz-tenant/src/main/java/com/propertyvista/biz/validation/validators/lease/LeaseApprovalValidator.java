@@ -25,11 +25,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
  */
 public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
-    private final boolean yardiIntegrationMode;
-
-    public LeaseApprovalValidator(boolean yardiIntegrationMode) {
+    public LeaseApprovalValidator() {
         super(Lease.class);
-        this.yardiIntegrationMode = yardiIntegrationMode;
     }
 
     @Override
@@ -43,8 +40,8 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
         bind(proto().currentTerm(), new NotNullValidator());
 
         bind(proto().currentTerm().version().tenants(), new HasAtLeastOneApplicantValidator());
-        bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator(yardiIntegrationMode));
-        bind(proto().currentTerm().version().guarantors(), new GuarantorInApprovedLeaseValidator(yardiIntegrationMode));
+        bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator());
+        bind(proto().currentTerm().version().guarantors(), new GuarantorInApprovedLeaseValidator());
 
         bind(proto().currentTerm().version().leaseProducts().serviceItem(), new NotNullValidator());
 

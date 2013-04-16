@@ -20,11 +20,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermParticipant<?>> extends CompositeEntityValidator<E> {
 
-    private final boolean yardiIntegrationMode;
-
-    public LeaseParticipantInApprovedLeaseValidator(Class<E> entityClassLiteral, boolean yardiIntegrationMode) {
+    public LeaseParticipantInApprovedLeaseValidator(Class<E> entityClassLiteral) {
         super(entityClassLiteral);
-        this.yardiIntegrationMode = yardiIntegrationMode;
     }
 
     @Override
@@ -32,7 +29,10 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermPartici
         bind(proto().role(), new NotNullValidator());
 
         bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
-        bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
+        }
         if (!VistaFeatures.instance().yardiIntegration()) {
             bind(proto().leaseParticipant().customer().person().birthDate(), new NotNullValidator());
         }
