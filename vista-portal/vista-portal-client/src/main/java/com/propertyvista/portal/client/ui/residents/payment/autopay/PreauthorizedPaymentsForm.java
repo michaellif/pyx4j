@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -125,7 +126,12 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
                 content.setHR(++row, 0, 2);
                 content.setWidget(++row, 0, amountPlaceholder);
-                content.setWidget(row, 1, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
+                content.setWidget(row, 1, inject(proto().paymentMethod(), new CEntityHyperlink<LeasePaymentMethod>(null, new Command() {
+                    @Override
+                    public void execute() {
+                        presenter.viewPaymentMethod(getValue());
+                    }
+                })));
                 content.getCellFormatter().setWidth(row, 0, "25em");
 
                 return content;

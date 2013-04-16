@@ -77,7 +77,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
                     new EntityFolderColumnDescriptor(proto().type(), "15em"), 
-                    new EntityFolderColumnDescriptor(proto().details(), "25em")
+                    new EntityFolderColumnDescriptor(proto().details(), "30em")
             ); //@formatter:on
         }
 

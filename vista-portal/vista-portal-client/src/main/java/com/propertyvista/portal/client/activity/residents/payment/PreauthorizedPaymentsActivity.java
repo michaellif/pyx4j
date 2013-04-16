@@ -24,7 +24,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
@@ -58,9 +57,9 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
     }
 
     @Override
-    public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
+    public void viewPaymentMethod(PreauthorizedPaymentListDTO.itemDTO preauthorizedPayment) {
         AppPlace place = new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
 
     @Override

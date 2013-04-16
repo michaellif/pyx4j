@@ -17,14 +17,13 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO.itemDTO;
 
 public interface PreauthorizedPaymentsView extends IsWidget {
 
     interface Presenter {
 
-        void viewPaymentMethod(LeasePaymentMethod paymentMethod);
+        void viewPaymentMethod(itemDTO preauthorizedPayment);
 
         void addPreauthorizedPayment();
 
