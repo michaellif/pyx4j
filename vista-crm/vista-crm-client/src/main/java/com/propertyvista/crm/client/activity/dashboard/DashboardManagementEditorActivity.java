@@ -45,7 +45,9 @@ public class DashboardManagementEditorActivity extends AbstractEditorActivity<Da
     @Override
     protected void createNewEntity(final AsyncCallback<DashboardMetadata> callback) {
         DashboardMetadata entity = EntityFactory.create(getEntityClass());
+
         entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
+
         callback.onSuccess(entity);
     }
 

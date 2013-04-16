@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -23,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -67,9 +69,13 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
     }
 
     @Override
-    protected void createNewEntity(PreauthorizedPayment newEntity, AsyncCallback<PreauthorizedPayment> callback) {
-        // TODO Auto-generated method stub
-        super.createNewEntity(newEntity, callback);
+    protected void createNewEntity(AsyncCallback<PreauthorizedPayment> callback) {
+        PreauthorizedPayment newEntity = EntityFactory.create(PreauthorizedPayment.class);
+
+        newEntity.amountType().setValue(AmountType.Value);
+        newEntity.percent().setValue(BigDecimal.ZERO);
+
+        callback.onSuccess(newEntity);
     }
 
     @Override

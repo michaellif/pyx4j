@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -63,9 +64,12 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
     }
 
     @Override
-    protected void createNewEntity(Media newEntity, AsyncCallback<Media> callback) {
+    protected void createNewEntity(AsyncCallback<Media> callback) {
+        Media newEntity = EntityFactory.create(Media.class);
+
         newEntity.visibility().setValue(PublicVisibilityType.global);
-        super.createNewEntity(newEntity, callback);
+
+        callback.onSuccess(newEntity);
     }
 
     @Override

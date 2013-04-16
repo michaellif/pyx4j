@@ -47,7 +47,9 @@ public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> imple
     @Override
     protected void createNewEntity(AsyncCallback<EmployeeDTO> callback) {
         EmployeeDTO newEmployee = EntityFactory.create(getEntityClass());
+
         newEmployee.enabled().setValue(true);
+
         callback.onSuccess(newEmployee);
     }
 }

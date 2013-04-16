@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -118,10 +119,13 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
     }
 
     @Override
-    protected void createNewEntity(TriggerSchedule newEntity, AsyncCallback<TriggerSchedule> callback) {
+    protected void createNewEntity(AsyncCallback<TriggerSchedule> callback) {
+        TriggerSchedule newEntity = EntityFactory.create(TriggerSchedule.class);
+
         newEntity.repeatType().setValue(ScheduleType.Weekly);
         newEntity.repeatEvery().setValue(1);
         newEntity.startsOn().setValue(new LogicalDate());
+
         callback.onSuccess(newEntity);
     }
 

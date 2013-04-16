@@ -41,7 +41,6 @@ public class LegalDocumentationPolicyEditorActivity extends PolicyEditorActivity
     @Override
     protected void createNewEntity(final AsyncCallback<LegalDocumentationPolicyDTO> callback) {
         super.createNewEntity(new DefaultAsyncCallback<LegalDocumentationPolicyDTO>() {
-
             @Override
             public void onSuccess(LegalDocumentationPolicyDTO policy) {
                 try {

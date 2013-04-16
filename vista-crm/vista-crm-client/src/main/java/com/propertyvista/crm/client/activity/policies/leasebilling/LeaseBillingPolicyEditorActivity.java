@@ -36,7 +36,6 @@ public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<L
     @Override
     protected void createNewEntity(final AsyncCallback<LeaseBillingPolicyDTO> callback) {
         super.createNewEntity(new DefaultAsyncCallback<LeaseBillingPolicyDTO>() {
-
             @Override
             public void onSuccess(LeaseBillingPolicyDTO entity) {
                 entity.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);

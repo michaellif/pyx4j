@@ -41,7 +41,6 @@ public class CardServiceSimulationTransactionEditorActivity extends AbstractEdit
     protected void createNewEntity(final AsyncCallback<CardServiceSimulationTransaction> callback) {
         CardServiceSimulationCardCrudService srv = GWT.create(CardServiceSimulationCardCrudService.class);
         srv.retrieve(new DefaultAsyncCallback<CardServiceSimulationCard>() {
-
             @Override
             public void onSuccess(CardServiceSimulationCard result) {
                 CardServiceSimulationTransaction tx = EntityFactory.create(CardServiceSimulationTransaction.class);

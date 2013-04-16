@@ -108,8 +108,11 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    protected void createNewEntity(PageContent newEntity, AsyncCallback<PageContent> callback) {
+    protected void createNewEntity(AsyncCallback<PageContent> callback) {
+        PageContent newEntity = EntityFactory.create(PageContent.class);
+
         newEntity.descriptor().set(parent.getValue());
+
         callback.onSuccess(newEntity);
     }
 

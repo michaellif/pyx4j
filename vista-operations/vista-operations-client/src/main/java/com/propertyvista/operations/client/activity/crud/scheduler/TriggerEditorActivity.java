@@ -38,7 +38,9 @@ public class TriggerEditorActivity extends AbstractEditorActivity<TriggerDTO> {
     @Override
     protected void createNewEntity(AsyncCallback<TriggerDTO> callback) {
         TriggerDTO process = EntityFactory.create(getEntityClass());
+
         process.created().setValue(ClientContext.getServerDate());
+
         callback.onSuccess(process);
     }
 
