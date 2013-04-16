@@ -45,8 +45,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
     public void testScenario() throws Exception {
 
         createLease("23-Mar-2011", "03-Aug-2011");
-        addParking();
-        addParking("23-Apr-2011", "03-Aug-2011");
+        addOutdoorParking();
+        addOutdoorParking("23-Apr-2011", "03-Aug-2011");
 
         //==================== RUN 1 ======================//
 

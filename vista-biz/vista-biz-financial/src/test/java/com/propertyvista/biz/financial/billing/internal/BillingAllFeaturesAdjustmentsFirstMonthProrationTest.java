@@ -49,13 +49,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("15-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -91,13 +91,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("16-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -130,13 +130,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("17-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -168,13 +168,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("18-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -206,13 +206,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("19-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -244,13 +244,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("20-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -282,13 +282,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("21-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -320,13 +320,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("22-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -358,13 +358,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("23-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -396,13 +396,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("24-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -434,13 +434,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("25-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -472,13 +472,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("26-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -510,13 +510,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("27-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -548,13 +548,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("28-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -586,13 +586,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("29-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -624,13 +624,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("30-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -662,13 +662,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("31-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -700,13 +700,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("01-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -738,13 +738,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("02-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -776,13 +776,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("03-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -814,13 +814,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("04-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -852,13 +852,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("05-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -891,13 +891,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("06-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -929,13 +929,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("07-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -967,13 +967,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("08-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1005,13 +1005,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("09-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1043,13 +1043,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("10-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1081,13 +1081,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("11-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1119,13 +1119,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("12-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1157,13 +1157,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("13-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -1195,13 +1195,13 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends Financ
         createLease("14-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
         addServiceAdjustment("-0.15", Type.percentage);
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-3.03", Type.monetary);
-        BillableItem parking2 = addParking();
+        BillableItem parking2 = addOutdoorParking();
         addFeatureAdjustment(parking2.uid().getValue(), "-17.99", Type.monetary);
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.17", Type.percentage);
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//

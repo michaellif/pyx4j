@@ -53,7 +53,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
     public void testScenario() {
 
         createLease("01-Mar-2011", "31-Aug-2011");
-        addParking();
+        addOutdoorParking();
 
         //==================== RUN 1 ======================//
 

@@ -37,8 +37,8 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         setSysDate("10-Mar-2011");
 
         createLease("1-Apr-2011", "31-Mar-2012");
-        addParking();
-        addLocker();
+        addOutdoorParking();
+        addLargeLocker();
 
         setBillingBatchProcess();
         setLeaseBatchProcess();

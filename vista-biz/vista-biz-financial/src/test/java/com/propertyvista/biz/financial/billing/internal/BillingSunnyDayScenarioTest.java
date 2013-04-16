@@ -48,13 +48,13 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         createLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
 
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
+        BillableItem parking2 = addOutdoorParking("23-Apr-2011", "03-Aug-2011");
         addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
         setBillingBatchProcess();
@@ -81,7 +81,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         totalDueAmount("1403.05");
         // @formatter:on
 
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         // @formatter:off

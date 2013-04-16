@@ -369,33 +369,32 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return ServerSideFactory.create(LeaseFacade.class).load(getLease(), true);
     }
 
-    protected BillableItem addParking(String effectiveDate, String expirationDate) {
-        return addBillableItem(ARCode.Type.Parking, effectiveDate, expirationDate);
+    protected BillableItem addOutdoorParking(String effectiveDate, String expirationDate) {
+        return addBillableItem(ARCodeDataModel.Code.outdoorParking, effectiveDate, expirationDate);
     }
 
-    protected BillableItem addParking() {
-        return addBillableItem(ARCode.Type.Parking);
+    protected BillableItem addOutdoorParking() {
+        return addBillableItem(ARCodeDataModel.Code.outdoorParking);
     }
 
-    protected BillableItem addLocker(String effectiveDate, String expirationDate) {
-        return addBillableItem(ARCode.Type.Locker, effectiveDate, expirationDate);
+    protected BillableItem addLargeLocker(String effectiveDate, String expirationDate) {
+        return addBillableItem(ARCodeDataModel.Code.largeLocker, effectiveDate, expirationDate);
     }
 
-    protected BillableItem addLocker() {
-        return addBillableItem(ARCode.Type.Locker);
+    protected BillableItem addLargeLocker() {
+        return addBillableItem(ARCodeDataModel.Code.largeLocker);
     }
 
     protected BillableItem addPet(String effectiveDate, String expirationDate) {
-        return addBillableItem(ARCode.Type.Pet, effectiveDate, expirationDate);
+        return addBillableItem(ARCodeDataModel.Code.catRent, effectiveDate, expirationDate);
     }
 
-    protected BillableItem addPet() {
-        BillableItem billableItem = addBillableItem(ARCode.Type.Pet);
-        return billableItem;
+    protected BillableItem addCat() {
+        return addBillableItem(ARCodeDataModel.Code.catRent);
     }
 
     protected BillableItem addBooking(String date) {
-        return addBillableItem(ARCode.Type.OneTime, date, date);
+        return addBillableItem(ARCodeDataModel.Code.booking, date, date);
     }
 
     protected void cancelBillableItem(String billableItemId, String expirationDate) {
@@ -423,64 +422,72 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    private BillableItem addBillableItem(ARCode.Type featureType) {
+    private BillableItem addBillableItem(ARCodeDataModel.Code code) {
         Lease lease = retrieveLease();
-        return addBillableItem(featureType, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
+        return addBillableItem(code, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
-    private BillableItem addBillableItem(ARCode.Type featureType, String effectiveDate, String expirationDate) {
-        return addBillableItem(featureType, getDate(effectiveDate), getDate(expirationDate));
+    private BillableItem addBillableItem(ARCodeDataModel.Code code, String effectiveDate, String expirationDate) {
+        return addBillableItem(code, getDate(effectiveDate), getDate(expirationDate));
     }
 
-    private BillableItem addBillableItem(ARCode.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
+    private BillableItem addBillableItem(ARCodeDataModel.Code code, LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = retrieveLeaseDraft();
-
-        // correct agreed price for existing leases:
-        BigDecimal agreedPrice = null;
-        if (lease.status().getValue() == Lease.Status.ExistingLease) {
-            switch (featureType) {
-            case Parking:
-                agreedPrice = new BigDecimal("80.00");
-                break;
-            case Locker:
-                agreedPrice = new BigDecimal("60.00");
-                break;
-            case AddOn:
-                agreedPrice = new BigDecimal("40.00");
-                break;
-            case Pet:
-                agreedPrice = new BigDecimal("20.00");
-                break;
-            case OneTime:
-                agreedPrice = new BigDecimal("50.00");
-                break;
-            default:
-                break;
-            }
-        }
 
         ProductItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem().item();
         Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
-            if (featureType.equals(feature.type().getValue()) && feature.version().items().size() != 0) {
-                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                BillableItem billableItem = leaseFacade.createBillableItem(lease, feature.version().items().get(0), lease.unit().building());
 
-                billableItem.effectiveDate().setValue(effectiveDate);
-                billableItem.expirationDate().setValue(expirationDate);
+            Persistence.service().retrieve(feature.version().items());
+            for (ProductItem item : feature.version().items()) {
 
-                lease.currentTerm().version().leaseProducts().featureItems().add(billableItem);
+                ARCode arCode = getDataModel(ARCodeDataModel.class).getARCode(code);
 
-                if (agreedPrice != null) {
-                    billableItem.agreedPrice().setValue(agreedPrice);
+                if (arCode.equals(item.code())) {
+
+                    LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                    BillableItem billableItem = leaseFacade.createBillableItem(lease, item, lease.unit().building());
+
+                    billableItem.effectiveDate().setValue(effectiveDate);
+                    billableItem.expirationDate().setValue(expirationDate);
+
+                    lease.currentTerm().version().leaseProducts().featureItems().add(billableItem);
+
+                    // correct agreed price for existing leases:
+                    BigDecimal agreedPrice = null;
+                    if (lease.status().getValue() == Lease.Status.ExistingLease) {
+                        switch (code) {
+                        case outdoorParking:
+                            agreedPrice = new BigDecimal("80.00");
+                            break;
+                        case largeLocker:
+                            agreedPrice = new BigDecimal("60.00");
+                            break;
+                        case catRent:
+                            agreedPrice = new BigDecimal("20.00");
+                            break;
+                        case booking:
+                            agreedPrice = new BigDecimal("50.00");
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    if (agreedPrice != null) {
+                        billableItem.agreedPrice().setValue(agreedPrice);
+                    } else {
+                        billableItem.agreedPrice().setValue(item.price().getValue());
+                    }
+
+                    leaseFacade.persist(lease.currentTerm());
+                    Persistence.service().commit();
+                    return billableItem;
+
                 }
-
-                leaseFacade.persist(lease.currentTerm());
-                Persistence.service().commit();
-                return billableItem;
             }
+
         }
 
         return null;
@@ -585,7 +592,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCharge), immediate);
     }
 
-    private LeaseAdjustment addLeaseAdjustment(String amount, ARCode reason, boolean immediate) {
+    private LeaseAdjustment addLeaseAdjustment(String amount, ARCode arCode, boolean immediate) {
         Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
@@ -593,8 +600,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
         adjustment.targetDate().setValue(new LogicalDate(getSysDate()));
-        adjustment.description().setValue(reason.name().getValue());
-        adjustment.code().setValue(reason.getValue());
+        adjustment.description().setValue(arCode.name().getValue());
+        adjustment.code().setValue(arCode.getValue());
         adjustment.billingAccount().set(lease.billingAccount());
 
         Persistence.service().persist(adjustment);

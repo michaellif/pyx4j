@@ -46,9 +46,9 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
-        addParking();
+        addOutdoorParking();
 
-        addLocker();
+        addLargeLocker();
 
         setLeaseBatchProcess();
         setDepositBatchProcess();
@@ -150,9 +150,9 @@ public class BillingLeaseTerminationTest extends FinancialTestBase {
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
-        addParking();
+        addOutdoorParking();
 
-        addLocker();
+        addLargeLocker();
 
         setLeaseBatchProcess();
         setDepositBatchProcess();

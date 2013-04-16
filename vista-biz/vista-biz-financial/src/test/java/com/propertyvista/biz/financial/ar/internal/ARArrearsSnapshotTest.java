@@ -26,7 +26,7 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // SET UP
         // tax is 12%
         createLease("23-Mar-2011", "03-Aug-2011"); // lease $930 
-        addParking(); // parking $80
+        addOutdoorParking(); // parking $80
 
         // BILLING RUN 1
         setSysDate("18-Mar-2011");

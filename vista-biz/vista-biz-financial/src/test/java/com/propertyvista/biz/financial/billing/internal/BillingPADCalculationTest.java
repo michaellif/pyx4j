@@ -48,11 +48,11 @@ public class BillingPADCalculationTest extends FinancialTestBase {
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addOutdoorParking();
 
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLargeLocker();
 
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addCat();
 
         setLeaseBatchProcess();
         setDepositBatchProcess();

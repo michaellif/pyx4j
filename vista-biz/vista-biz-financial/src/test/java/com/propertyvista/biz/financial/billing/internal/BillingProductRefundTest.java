@@ -47,7 +47,7 @@ public class BillingProductRefundTest extends FinancialTestBase {
 
         createLease("23-Mar-2011", "03-Aug-2011");
 
-        BillableItem parking = addParking();
+        BillableItem parking = addOutdoorParking();
 
         setLeaseBatchProcess(); // activates and completes lease
         setDepositBatchProcess(); // background deposit processing
