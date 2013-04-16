@@ -100,6 +100,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
 
+        panel.setBR(++row, 0, 1);
         panel.setHR(++row, 0, 1);
 
         panel.setWidget(++row, 0, createLegalTermsPanel());
@@ -121,7 +122,6 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
     }
 

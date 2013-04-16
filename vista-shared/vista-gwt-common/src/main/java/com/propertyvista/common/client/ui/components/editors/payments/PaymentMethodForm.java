@@ -63,7 +63,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
         Widget w;
         paymentMethods.add(w = inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
-        w.getElement().getStyle().setMarginLeft(10, Unit.EM);
+        w.getElement().getStyle().setMarginLeft(15, Unit.EM);
 
         paymentMethods.add(paymentDetailsHolder);
         DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
@@ -72,9 +72,12 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         // Form content pane:
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
+
         content.setWidget(++row, 0, paymentMethods);
+
         content.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
 

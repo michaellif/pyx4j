@@ -61,6 +61,10 @@ import com.propertyvista.portal.client.ui.residents.payment.autopay.Preauthorize
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodViewImpl;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodSubmittedView;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodSubmittedViewImpl;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodWizardView;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodWizardViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.ViewPaymentMethodView;
@@ -128,6 +132,10 @@ public class ResidentsViewFactory extends ViewFactoryBase {
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
+            } else if (PaymentMethodWizardView.class.equals(type)) {
+                map.put(type, new PaymentMethodWizardViewImpl());
+            } else if (PaymentMethodSubmittedView.class.equals(type)) {
+                map.put(type, new PaymentMethodSubmittedViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
                 map.put(type, new EditPaymentMethodViewImpl());
             } else if (ViewPaymentMethodView.class.equals(type)) {

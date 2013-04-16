@@ -210,7 +210,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
             }
 
             if (editor != null) {
-                this.inject(proto().details(), editor);
+                inject(proto().details(), editor);
                 editor.populate(details.cast());
                 setPaymentDetailsWidget(editor.asWidget());
             }

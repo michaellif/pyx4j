@@ -17,10 +17,11 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
-public class ViewPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements EditPaymentMethodView {
+public class ViewPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements ViewPaymentMethodView {
 
     public ViewPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class));
+        getForm().setViewable(true);
         getSubmit().setVisible(false);
     }
 }

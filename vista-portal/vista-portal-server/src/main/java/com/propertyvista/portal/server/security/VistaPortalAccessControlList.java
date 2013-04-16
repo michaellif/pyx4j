@@ -62,6 +62,8 @@ import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenter
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittedService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
@@ -193,7 +195,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentSubmittedService.class));
+
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodWizardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodSubmittedService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentListService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentWizardService.class));

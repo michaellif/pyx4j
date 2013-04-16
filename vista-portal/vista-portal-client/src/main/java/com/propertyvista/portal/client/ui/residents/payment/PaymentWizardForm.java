@@ -237,7 +237,6 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {

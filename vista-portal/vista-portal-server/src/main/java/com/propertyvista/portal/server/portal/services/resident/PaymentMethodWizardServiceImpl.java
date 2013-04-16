@@ -61,6 +61,8 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
+        dto.paymentMethod().type().setValue(PaymentType.Echeck);
+
         callback.onSuccess(dto);
     }
 

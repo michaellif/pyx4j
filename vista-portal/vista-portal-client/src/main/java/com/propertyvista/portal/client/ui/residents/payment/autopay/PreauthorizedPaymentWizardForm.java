@@ -244,7 +244,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         setAmountEditor(getValue().amountType().getValue());
 
-        paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {

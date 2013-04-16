@@ -39,7 +39,8 @@ import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedP
 import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentWizardActivity;
 import com.propertyvista.portal.client.activity.residents.payment.PreauthorizedPaymentsActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
-import com.propertyvista.portal.client.activity.residents.paymentmethod.NewPaymentMethodActivity;
+import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodSubmittedActivity;
+import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.yardimaintenance.EditYardiMaintenanceRequestActivity;
@@ -55,7 +56,6 @@ import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.Tenan
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -82,7 +82,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Residents.PaymentMethods) {
                         activity = new PaymentMethodsActivity(appPlace);
                     } else if (appPlace instanceof Residents.PaymentMethods.NewPaymentMethod) {
-                        activity = new NewPaymentMethodActivity(appPlace);
+                        activity = new PaymentMethodWizardActivity(appPlace);
+                    } else if (appPlace instanceof Residents.PaymentMethods.PaymentMethodSubmitted) {
+                        activity = new PaymentMethodSubmittedActivity(appPlace);
                     } else if (appPlace instanceof Residents.PaymentMethods.EditPaymentMethod) {
                         activity = new EditPaymentMethodActivity(appPlace);
                     } else if (appPlace instanceof Residents.PaymentMethods.ViewPaymentMethod) {
@@ -111,16 +113,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Residents.Financial.FinancialSummary) {
                         activity = new FinancialSummaryActivity(appPlace);
 
-                    } else if (appPlace instanceof Financial.PayNow) {
+                    } else if (appPlace instanceof Residents.Financial.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
-                    } else if (appPlace instanceof Financial.PaymentSubmitted) {
+                    } else if (appPlace instanceof Residents.Financial.PaymentSubmitted) {
                         activity = new PaymentSubmittedActivity(appPlace);
 
-                    } else if (appPlace instanceof Financial.AutoPay) {
+                    } else if (appPlace instanceof Residents.Financial.AutoPay) {
                         activity = new PreauthorizedPaymentsActivity(appPlace);
-                    } else if (appPlace instanceof Financial.AutoPay.NewPreauthorizedPayment) {
+                    } else if (appPlace instanceof Residents.Financial.AutoPay.NewPreauthorizedPayment) {
                         activity = new PreauthorizedPaymentWizardActivity(appPlace);
-                    } else if (appPlace instanceof Financial.AutoPay.PreauthorizedPaymentSubmitted) {
+                    } else if (appPlace instanceof Residents.Financial.AutoPay.PreauthorizedPaymentSubmitted) {
                         activity = new PreauthorizedPaymentSubmittedActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Residents.TenantInsurance) {
