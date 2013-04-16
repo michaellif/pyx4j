@@ -106,6 +106,16 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         bind((Class<IEntity>) dboProto.getValueClass(), dtoProto, dboProto);
     }
 
+    /**
+     * binds DTO member of DBO type to DBO
+     */
+    protected final void bindCompleteDtoMember(DBO dtoEntityMember) {
+        addBinding(new Binding(dtoEntityMember.getMember(IEntity.PRIMARY_KEY), dboProto.getMember(IEntity.PRIMARY_KEY), null));
+        for (String memberName : EntityFactory.getEntityMeta(dboClass).getMemberNames()) {
+            addBinding(new Binding(dtoEntityMember.getMember(memberName), dboProto.getMember(memberName), null));
+        }
+    }
+
     protected final <TYPE> void bind(IObject<TYPE> dtoMember, IObject<TYPE> dboMember) {
         addBinding(new Binding(dtoMember, dboMember, null));
     }
@@ -122,16 +132,6 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         addBinding(new Binding(dto.getMember(IEntity.PRIMARY_KEY), dbo.getMember(IEntity.PRIMARY_KEY), null));
         for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
             addBinding(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
-        }
-    }
-
-    /**
-     * binds DTO member of DBO type to DBO
-     */
-    protected final void bindDtoMember(DBO dtoEntityMember) {
-        addBinding(new Binding(dtoEntityMember.getMember(IEntity.PRIMARY_KEY), dboProto.getMember(IEntity.PRIMARY_KEY), null));
-        for (String memberName : EntityFactory.getEntityMeta(dboClass).getMemberNames()) {
-            addBinding(new Binding(dtoEntityMember.getMember(memberName), dboProto.getMember(memberName), null));
         }
     }
 
