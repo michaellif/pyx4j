@@ -28,8 +28,9 @@ public class LeaseParticipantInApprovedLeaseValidator<E extends LeaseTermPartici
     protected void init() {
         bind(proto().role(), new NotNullValidator());
 
-        bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
-
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            bind(proto().leaseParticipant().customer().person().name().firstName(), new NotNullValidator());
+        }
         if (!VistaFeatures.instance().yardiIntegration()) {
             bind(proto().leaseParticipant().customer().person().name().lastName(), new NotNullValidator());
         }
