@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -48,6 +49,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
+
+        Random random = new Random(1);
 
         int numCreated = 0;
         int numCreatedWithBilling = 0;
@@ -103,7 +106,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
                 SystemDateManager.setDate(trDate);
             } else {
-                LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
+                LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim(random);
 
                 if (numCreatedWithBilling < config().numOfPseudoRandomLeasesWithSimulatedBilling) {
                     // create simulation events that happen between 4 years ago, and and the end of the previous month
@@ -173,7 +176,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     leaseFrom.add(Calendar.MONTH, 2);
                     lease2.leaseFrom().setValue(new LogicalDate(leaseFrom.getTime()));
 
-                    LeaseLifecycleSimulatorBuilder simBuilder2 = LeaseLifecycleSimulator.sim();
+                    LeaseLifecycleSimulatorBuilder simBuilder2 = LeaseLifecycleSimulator.sim(random);
                     simBuilder2.start(new LogicalDate(leaseFrom.getTime()));
                     simBuilder2.end(new LogicalDate());
                     simBuilder2.create().generateRandomLifeCycle(lease2);

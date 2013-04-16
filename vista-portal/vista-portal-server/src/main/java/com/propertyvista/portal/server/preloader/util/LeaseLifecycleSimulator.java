@@ -111,8 +111,8 @@ public class LeaseLifecycleSimulator {
 
     private TenantAgent tenantAgent;
 
-    private LeaseLifecycleSimulator() {
-        this.random = new Random(1);
+    private LeaseLifecycleSimulator(Random random) {
+        this.random = random;
         this.tenantAgent = new DefaultTenantAgent(new Random(1));
 
         this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
@@ -136,8 +136,8 @@ public class LeaseLifecycleSimulator {
         }
     }
 
-    public static LeaseLifecycleSimulatorBuilder sim() {
-        return new LeaseLifecycleSimulatorBuilder();
+    public static LeaseLifecycleSimulatorBuilder sim(Random random) {
+        return new LeaseLifecycleSimulatorBuilder(random);
     }
 
     public void generateRandomLifeCycle(Lease lease) {
@@ -682,8 +682,8 @@ public class LeaseLifecycleSimulator {
 
         private final LeaseLifecycleSimulator leaseLifecycleSim;
 
-        public LeaseLifecycleSimulatorBuilder() {
-            this.leaseLifecycleSim = new LeaseLifecycleSimulator();
+        public LeaseLifecycleSimulatorBuilder(Random random) {
+            this.leaseLifecycleSim = new LeaseLifecycleSimulator(random);
             this.leaseLifecycleSim.runBilling = false;
         }
 
