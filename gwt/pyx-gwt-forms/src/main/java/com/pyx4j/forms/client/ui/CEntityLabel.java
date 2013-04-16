@@ -22,7 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
 
-@Deprecated
 public class CEntityLabel<E extends IEntity> extends CLabel<E> {
 
     public CEntityLabel() {
