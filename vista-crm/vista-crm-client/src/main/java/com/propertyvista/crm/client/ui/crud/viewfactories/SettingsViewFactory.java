@@ -70,6 +70,8 @@ import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.tenantsecurity.TenantSecurityView;
+import com.propertyvista.crm.client.ui.crud.settings.tenantsecurity.TenantSecurityViewImpl;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusView;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.CreditCheckStatusViewImpl;
 
@@ -145,6 +147,9 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new PmcPaymentMethodsViewerViewImpl());
             } else if (PmcPaymentMethodsEditorView.class.equals(type)) {
                 map.put(type, new PmcPaymentMethodsEditorViewImpl());
+
+            } else if (TenantSecurityView.class.equals(type)) {
+                map.put(type, new TenantSecurityViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

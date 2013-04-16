@@ -17,8 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.client.ReportDialog;
-import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -29,7 +27,6 @@ import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -48,13 +45,6 @@ public class TenantListerActivity extends AbstractListerActivity<TenantDTO> impl
     @Override
     public boolean canCreateNewItem() {
         return false; // disable creation of the new stand-alone Tenant - just from within the Lease!..
-    }
-
-    @Override
-    public void downloadTenantsSecrets() {
-        ReportDialog d = new ReportDialog(i18n.tr(""), i18n.tr("Preparing the list of tenant portal registration codes..."));
-        d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
-        d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, null);
     }
 
     @Override

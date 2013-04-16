@@ -386,6 +386,9 @@ public class CrmSiteMap implements SiteMap {
             public static class UserRole extends CrmCrudAppPlace {
             }
 
+            public static class TenantSecurity extends CrmCrudAppPlace {
+            }
+
         }
 
         public static class Financial extends AppPlace {

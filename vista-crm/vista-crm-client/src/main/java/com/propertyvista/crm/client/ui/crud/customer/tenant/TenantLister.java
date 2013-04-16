@@ -56,13 +56,6 @@ public class TenantLister extends AbstractLister<TenantDTO> {
             new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
         ); // @formatter:on
 
-        addActionItem(new Button(i18n.tr("Download list of tenants without portal account"), new Command() {
-            @Override
-            public void execute() {
-                ((TenantListerView.Presenter) getPresenter()).downloadTenantsSecrets();
-            }
-        }));
-
         addActionItem(padFileUpload = new Button(i18n.tr("Upload PAD File"), new Command() {
             @Override
             public void execute() {

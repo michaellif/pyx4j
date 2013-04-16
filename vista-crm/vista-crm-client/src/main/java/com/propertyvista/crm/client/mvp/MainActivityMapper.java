@@ -139,6 +139,7 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryVie
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tenantsecurity.TenantSecurityActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
@@ -1146,6 +1147,8 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Security.TenantSecurity) {
+                        activity = new TenantSecurityActivity(place);
                     } // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again

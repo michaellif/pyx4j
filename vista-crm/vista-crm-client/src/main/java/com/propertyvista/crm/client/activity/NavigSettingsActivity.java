@@ -83,6 +83,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
             folder.addNavigItem(new CrmSiteMap.Administration.Security.AuditRecords());
         }
         folder.addNavigItem(new Security.UserRole());
+        folder.addNavigItem(new CrmSiteMap.Administration.Security.TenantSecurity());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Financial"));

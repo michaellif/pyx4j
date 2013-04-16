@@ -21,8 +21,6 @@ public interface TenantListerView extends ILister<TenantDTO> {
 
     interface Presenter extends ILister.Presenter<TenantDTO> {
 
-        void downloadTenantsSecrets();
-
         void uploadPadFile();
 
     }
