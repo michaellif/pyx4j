@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -119,13 +120,18 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
         deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
         deferredProgressPanel.setVisible(false);
 
-        service.obtainSupportedExtensions(new DefaultAsyncCallback<Vector<String>>() {
+        service.obtainSupportedExtensions(new AsyncCallback<Vector<String>>() {
 
             @Override
             public void onSuccess(Vector<String> result) {
                 if (result != null) {
                     supportedExtensions.addAll(result);
                 }
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onUploadError(UploadError.ServerMessage, caught.getMessage());
             }
         });
     }
