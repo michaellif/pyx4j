@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 
-public class PaymentMethodSubmittedViewImpl extends BasicViewImpl<PaymentMethodDTO> implements PaymentMethodSubmittedView {
+public class PaymentMethodSubmittedViewImpl extends ViewImpl<PaymentMethodDTO> implements PaymentMethodSubmittedView {
 
     public PaymentMethodSubmittedViewImpl() {
         setForm(new PaymentMethodSubmittedViewForm(this));

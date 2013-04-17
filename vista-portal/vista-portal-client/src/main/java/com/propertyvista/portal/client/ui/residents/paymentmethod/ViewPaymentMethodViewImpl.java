@@ -15,9 +15,9 @@ package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
-public class ViewPaymentMethodViewImpl extends BasicViewImpl<LeasePaymentMethod> implements ViewPaymentMethodView {
+public class ViewPaymentMethodViewImpl extends ViewImpl<LeasePaymentMethod> implements ViewPaymentMethodView {
 
     public ViewPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class));

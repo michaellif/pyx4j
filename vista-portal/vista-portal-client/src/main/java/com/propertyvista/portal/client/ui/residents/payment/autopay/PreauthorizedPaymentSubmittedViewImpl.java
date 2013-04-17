@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public class PreauthorizedPaymentSubmittedViewImpl extends BasicViewImpl<PreauthorizedPaymentDTO> implements PreauthorizedPaymentSubmittedView {
+public class PreauthorizedPaymentSubmittedViewImpl extends ViewImpl<PreauthorizedPaymentDTO> implements PreauthorizedPaymentSubmittedView {
 
     public PreauthorizedPaymentSubmittedViewImpl() {
         setForm(new PreauthorizedPaymentSubmittedViewForm());

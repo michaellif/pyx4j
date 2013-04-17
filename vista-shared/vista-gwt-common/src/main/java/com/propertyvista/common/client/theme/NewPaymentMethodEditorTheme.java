@@ -18,6 +18,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
@@ -28,7 +29,11 @@ public class NewPaymentMethodEditorTheme extends Theme {
         PaymentEditor, 
         PaymentEditorButtons, 
         PaymentEditorImages, 
+        
         PaymentEditorLegalTerms, 
+        PaymentEditorLegalTermsHeader,
+        PaymentEditorLegalTermsContent, 
+        
         PaymentEditorForm
         //@formatter:on
     }
@@ -88,16 +93,14 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style = new Style(".", StyleName.PaymentEditorForm);
         style.addProperty("margin", "10px");
         style.addProperty("margin-right", "0");
+
         style.addProperty("border-radius", "5px");
         style.addProperty("border", "solid 1px #666");
+
         style.addProperty("padding", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorLegalTerms);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-color", "#bbb");
-
         style.addProperty("font-weight", "normal");
 
         style.addProperty("background-color", "white");
@@ -106,9 +109,30 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style.addProperty("padding-left", "0.5em");
         style.addProperty("padding-right", "0.5em");
 
-        style.addProperty("height", "20em");
+        style.addProperty("height", "30em");
+        style.addProperty("width", "60em");
         addStyle(style);
 
+        style = new Style(".", StyleName.PaymentEditorLegalTermsHeader);
+        style.addProperty("background-color", ThemeColor.background, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.8);
+
+        style.addProperty("border-bottom", "solid 2px #666");
+
+        style.addProperty("padding", "0.5em 1em");
+
+        style.addProperty("font-size", "1.3em");
+        style.addProperty("font-weight", "bold");
+
+        style.addProperty("height", "1.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorLegalTermsContent);
+        style.addProperty("height", "25em");
+        style.addProperty("padding-top", "4px");
+        style.addProperty("padding-bottom", "4px");
+        style.addProperty("border-bottom", "solid 1px #666");
+        addStyle(style);
     }
 
     @Override

@@ -11,13 +11,15 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.payment;
+package com.propertyvista.portal.client.ui.residents;
 
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -45,28 +47,31 @@ public class LegalTermsDialog extends OkDialog {
     }
 
     private IsWidget createBody(TermsType type) {
-        CRichTextArea legalTerms = new CRichTextArea();
-        legalTerms.setViewable(true);
+        HTML legalTerms = new HTML();
         switch (type) {
         case TermsOfUse:
-            legalTerms.setValue(VistaResources.INSTANCE.termsAndConditions().getText());
+            legalTerms.setHTML(VistaResources.INSTANCE.termsAndConditions().getText());
             break;
         case PrivacyPolicy:
-            legalTerms.setValue(VistaResources.INSTANCE.privacyPolicy().getText());
+            legalTerms.setHTML(VistaResources.INSTANCE.privacyPolicy().getText());
             break;
         case BillingAndRefundPolicy:
-            legalTerms.setValue(VistaResources.INSTANCE.billingAndRefundPolicy().getText());
+            legalTerms.setHTML(VistaResources.INSTANCE.billingAndRefundPolicy().getText());
             break;
         default:
             assert false : "Illegal term type!?";
             break;
         }
 
-        FormFlexPanel content = new FormFlexPanel();
+        FlowPanel content = new FlowPanel();
+        content.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
 
-        content.setH1(0, 0, 1, type.toString());
-        content.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
-        content.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+        Widget w;
+        content.add(w = new Label(type.toString()));
+        w.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTermsHeader.name());
+
+        content.add(w = new ScrollPanel(legalTerms));
+        w.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTermsContent.name());
 
         return content;
     }

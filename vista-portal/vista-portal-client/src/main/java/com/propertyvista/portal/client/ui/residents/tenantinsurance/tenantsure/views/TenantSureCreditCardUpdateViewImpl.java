@@ -22,10 +22,10 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 
-public class TenantSureCreditCardUpdateViewImpl extends BasicViewImpl<InsurancePaymentMethod> implements TenantSureCreditCardUpdateView {
+public class TenantSureCreditCardUpdateViewImpl extends ViewImpl<InsurancePaymentMethod> implements TenantSureCreditCardUpdateView {
 
     private static final I18n i18n = I18n.get(TenantSureCreditCardUpdateViewImpl.class);
 

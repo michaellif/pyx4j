@@ -57,7 +57,8 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
 
 public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 

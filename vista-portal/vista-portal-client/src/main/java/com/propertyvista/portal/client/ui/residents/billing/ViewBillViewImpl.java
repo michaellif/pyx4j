@@ -16,9 +16,9 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.dto.BillDTO;
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
-public class ViewBillViewImpl extends BasicViewImpl<BillDTO> implements ViewBillView {
+public class ViewBillViewImpl extends ViewImpl<BillDTO> implements ViewBillView {
 
     private static final I18n i18n = I18n.get(ViewBillViewImpl.class);
 

@@ -15,9 +15,9 @@ package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
-public class EditMaintenanceRequestViewImpl extends BasicViewImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
+public class EditMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
     public EditMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());

@@ -29,9 +29,9 @@ import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
-public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
+public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
 
-    protected static final I18n i18n = I18n.get(BasicViewImpl.class);
+    protected static final I18n i18n = I18n.get(ViewImpl.class);
 
     private final UserMessagePanel messagePanel;
 
@@ -45,11 +45,15 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
     private Presenter<E> presenter;
 
-    public BasicViewImpl() {
+    public ViewImpl() {
         this(null);
     }
 
-    public BasicViewImpl(CEntityForm<E> viewForm) {
+    public ViewImpl(CEntityForm<E> viewForm) {
+        this(viewForm, false);
+    }
+
+    public ViewImpl(CEntityForm<E> viewForm, boolean readOnly) {
         add(messagePanel = new UserMessagePanel());
 
         add(formHolder = new SimplePanel());
@@ -63,7 +67,9 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
                 onSubmit();
             }
         });
-        add(DecorationUtils.inline(submit));
+        if (!readOnly) {
+            add(DecorationUtils.inline(submit));
+        }
 
         cancel = new Anchor(i18n.tr("Cancel"), new Command() {
             @Override

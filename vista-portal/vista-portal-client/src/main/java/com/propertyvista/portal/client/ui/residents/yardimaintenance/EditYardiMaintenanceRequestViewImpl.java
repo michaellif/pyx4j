@@ -14,9 +14,9 @@
 package com.propertyvista.portal.client.ui.residents.yardimaintenance;
 
 import com.propertyvista.dto.YardiServiceRequestDTO;
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
-public class EditYardiMaintenanceRequestViewImpl extends BasicViewImpl<YardiServiceRequestDTO> implements EditYardiMaintenanceRequestView {
+public class EditYardiMaintenanceRequestViewImpl extends ViewImpl<YardiServiceRequestDTO> implements EditYardiMaintenanceRequestView {
 
     public EditYardiMaintenanceRequestViewImpl() {
         super(new YardiMaintenanceRequestForm());

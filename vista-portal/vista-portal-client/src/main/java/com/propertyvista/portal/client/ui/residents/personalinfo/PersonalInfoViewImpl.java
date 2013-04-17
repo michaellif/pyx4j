@@ -19,10 +19,10 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements PersonalInfoView {
+public class PersonalInfoViewImpl extends ViewImpl<ResidentDTO> implements PersonalInfoView {
 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm());

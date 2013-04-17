@@ -57,8 +57,8 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
-import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog;
-import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 

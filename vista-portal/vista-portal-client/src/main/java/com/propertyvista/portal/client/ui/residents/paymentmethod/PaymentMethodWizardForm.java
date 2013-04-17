@@ -43,8 +43,8 @@ import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog;
-import com.propertyvista.portal.client.ui.residents.payment.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
+import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 

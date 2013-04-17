@@ -16,13 +16,10 @@ package com.propertyvista.portal.server.portal.services.resident;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
@@ -48,10 +45,6 @@ public class PaymentMethodSubmittedServiceImpl extends EntityDtoBinder<LeasePaym
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
-
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(lease.billingAccount()));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
         callback.onSuccess(dto);
     }
