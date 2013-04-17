@@ -47,6 +47,11 @@ public class VistaServerSideConfigurationD22 extends VistaServerSideConfiguratio
     }
 
     @Override
+    public int interfaceSSHDPort() {
+        return 8822;
+    }
+
+    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support22\" <support.www22@birchwoodsoftwaregroup.com>";
     }
