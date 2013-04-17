@@ -13,10 +13,11 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -27,26 +28,39 @@ public class ARCodeAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(ARCodeAdapter.class);
 
-    /** @return product item type or <code>null</code> if a product item type for the given chargeCode haven't been found */
-    public ARCode findARCode(ARCode.ActionType actionType, String chargeCode) {
-        ARCode code = retrieveARCode(chargeCode);
+    /**
+     * @param customerId
+     *            something to identify the charge for logging puposes
+     * @return product item type or <code>null</code> if a product item type for the given chargeCode haven't been found
+     */
+    public ARCode findARCode(ARCode.ActionType actionType, String chargeCode, String customerId) {
+        ARCode code = retrieveARCode(actionType, chargeCode);
 
         if (code == null) {
             log.warn("An AR Code for yardi charge code {} wasn''t found: will try to find a default with action type {}", chargeCode, actionType);
             code = retrieveDefaultUnkownARCode(actionType);
         } else if (code.type().getValue().getActionType() != actionType) {
-            throw new IllegalStateException(SimpleMessageFormat.format("An AR Code for yardi charge code has unexpected action type: got {0} but expected {1}",
-                    code.type().getValue().getActionType(), actionType));
+            log.warn("An AR Code for yardi charge code has unexpected action type: got {0} but expected {1}", code.type().getValue().getActionType(),
+                    actionType, customerId);
+            code = retrieveDefaultUnkownARCode(actionType);
         }
 
         return code;
 
     }
 
-    public ARCode retrieveARCode(String chargeCode) {
+    public ARCode retrieveARCode(ARCode.ActionType actionType, String chargeCode) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().yardiChargeCodes().$().yardiChargeCode(), chargeCode);
-        return Persistence.service().retrieve(criteria);
+        List<ARCode> codes = Persistence.service().query(criteria);
+        ARCode code = null;
+        for (ARCode cd : codes) {
+            if (cd.type().getValue().getActionType() == actionType) {
+                code = cd;
+                break;
+            }
+        }
+        return code;
     }
 
     private ARCode retrieveDefaultUnkownARCode(ARCode.ActionType actionType) {

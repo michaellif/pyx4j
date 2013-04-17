@@ -108,13 +108,13 @@ public class YardiIntegrationAgent {
         LogicalDate transactionDate = new LogicalDate(detail.getTransactionDate().getTime());
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(account.lease(), transactionDate);
         if (billingCycle == null) {
-            throw new IllegalStateException("failed to create charge for yurid account = " + account.getPrimaryKey() + ": billing cycle was not found");
+            throw new IllegalStateException("failed to create charge for Yardi account = " + account.getPrimaryKey() + ": billing cycle was not found");
         }
         InvoiceLineItem item = null;
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiCharge charge = EntityFactory.create(YardiCharge.class);
             charge.chargeCode().setValue(detail.getChargeCode());
-            charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode()));
+            charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode(), detail.getCustomerID()));
             charge.transactionId().setValue(detail.getTransactionID());
             charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
             charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
@@ -132,7 +132,7 @@ public class YardiIntegrationAgent {
             item = charge;
         } else {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
-            credit.arCode().set(new ARCodeAdapter().findARCode(ActionType.Credit, detail.getChargeCode()));
+            credit.arCode().set(new ARCodeAdapter().findARCode(ActionType.Credit, detail.getChargeCode(), detail.getCustomerID()));
             credit.postDate().setValue(transactionDate);
             item = credit;
         }
