@@ -22,7 +22,11 @@ public class OccupancyFacadeFactory implements FacadeFactory<OccupancyFacade> {
     @Override
     public OccupancyFacade getFacade() {
         if (VistaFeatures.instance().occupancyModel()) {
-            return new OccupancyFacadeImpl();
+            if (VistaFeatures.instance().yardiIntegration()) {
+                return new OccupancyFacadeYardiImpl();
+            } else {
+                return new OccupancyFacadeImpl();
+            }
         } else {
             return new OccupancyFacadeAvailableForRentOnlyImpl();
         }

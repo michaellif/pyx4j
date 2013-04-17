@@ -64,7 +64,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         setTabEnabled(tab, !isEditable());
 
-        if (VistaFeatures.instance().occupancyModel()) {
+        if (VistaFeatures.instance().occupancyModel() & !VistaFeatures.instance().yardiIntegration()) {
             tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
             setTabEnabled(tab, !isEditable());
         }
@@ -78,7 +78,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         super.onValueSet(populate);
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
-        if (VistaFeatures.instance().occupancyModel()) {
+        if (VistaFeatures.instance().occupancyModel() & !VistaFeatures.instance().yardiIntegration()) {
             get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
             get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
         }
