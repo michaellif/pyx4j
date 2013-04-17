@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -52,6 +53,8 @@ public class YardiTestBase {
     @Before
     public void init() throws Exception {
         VistaTestDBSetup.init();
+
+        ServerSideFactory.register(YardiClient.class, YardiTestClientImpl.class);
 
         Persistence.service().startBackgroundProcessTransaction();
 
