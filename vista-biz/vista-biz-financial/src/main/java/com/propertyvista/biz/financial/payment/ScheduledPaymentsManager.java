@@ -69,18 +69,17 @@ class ScheduledPaymentsManager {
                         PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
                         if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
                             executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
-                                    SimpleMessageFormat.format("Payment was rejected"));
+                                    SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
                         } else {
-                            executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue(),
-                                    SimpleMessageFormat.format("Payment was processed"));
+                            executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
                         }
                     }
                     return null;
                 }
             });
         } catch (PaymentException e) {
-            log.error("Preauthorised payment creation failed", e);
-            executionMonitor.addErredEvent("Erred", paymentRecord.amount().getValue(), e);
+            log.error("ScheduledPayment {} processing failed", paymentRecord, e);
+            executionMonitor.addErredEvent("Erred", paymentRecord.amount().getValue(), SimpleMessageFormat.format("PaymentRecord {0} ", paymentRecord.id()), e);
         }
     }
 

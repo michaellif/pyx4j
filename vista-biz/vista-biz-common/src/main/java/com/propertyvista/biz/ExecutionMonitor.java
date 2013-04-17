@@ -182,6 +182,11 @@ public class ExecutionMonitor {
         addErredEvent(sectionName, value, throwable.toString());
     }
 
+    public void addErredEvent(String sectionName, BigDecimal value, String message, Throwable throwable) {
+        log.error("Event Erred {}", message, throwable);
+        addErredEvent(sectionName, value, message + " " + throwable.toString());
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }
