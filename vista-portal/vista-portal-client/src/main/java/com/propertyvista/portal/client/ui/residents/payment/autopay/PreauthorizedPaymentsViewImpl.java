@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO.itemDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 
 public class PreauthorizedPaymentsViewImpl extends FlowPanel implements PreauthorizedPaymentsView {
 
@@ -40,7 +40,7 @@ public class PreauthorizedPaymentsViewImpl extends FlowPanel implements Preautho
     }
 
     @Override
-    public void populate(List<itemDTO> paymentMethods) {
+    public void populate(List<PreauthorizedPaymentItemDTO> paymentMethods) {
         messagePanel.clearMessage();
 
         form.reset();

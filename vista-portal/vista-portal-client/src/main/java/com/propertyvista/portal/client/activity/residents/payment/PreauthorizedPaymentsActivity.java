@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 
 public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
@@ -48,16 +48,16 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.list(new DefaultAsyncCallback<EntitySearchResult<PreauthorizedPaymentListDTO.itemDTO>>() {
+        srv.list(new DefaultAsyncCallback<EntitySearchResult<PreauthorizedPaymentItemDTO>>() {
             @Override
-            public void onSuccess(EntitySearchResult<PreauthorizedPaymentListDTO.itemDTO> result) {
+            public void onSuccess(EntitySearchResult<PreauthorizedPaymentItemDTO> result) {
                 view.populate(result.getData());
             }
-        }, new EntityListCriteria<PreauthorizedPaymentListDTO.itemDTO>(PreauthorizedPaymentListDTO.itemDTO.class));
+        }, new EntityListCriteria<PreauthorizedPaymentItemDTO>(PreauthorizedPaymentItemDTO.class));
     }
 
     @Override
-    public void viewPaymentMethod(PreauthorizedPaymentListDTO.itemDTO preauthorizedPayment) {
+    public void viewPaymentMethod(PreauthorizedPaymentItemDTO preauthorizedPayment) {
         AppPlace place = new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
@@ -68,7 +68,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
     }
 
     @Override
-    public void deletePreauthorizedPayment(PreauthorizedPaymentListDTO.itemDTO preauthorizedPayment) {
+    public void deletePreauthorizedPayment(PreauthorizedPaymentItemDTO preauthorizedPayment) {
         srv.delete(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

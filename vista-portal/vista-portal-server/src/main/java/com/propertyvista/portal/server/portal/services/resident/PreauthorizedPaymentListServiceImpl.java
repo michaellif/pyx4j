@@ -25,15 +25,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentListDTO.itemDTO> implements
+public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentItemDTO> implements
         PreauthorizedPaymentListService {
 
     public PreauthorizedPaymentListServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentListDTO.itemDTO.class);
+        super(PreauthorizedPayment.class, PreauthorizedPaymentItemDTO.class);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPaymentListDTO.itemDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPaymentItemDTO> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
     }
 
     @Override
-    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPaymentListDTO.itemDTO dto) {
+    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPaymentItemDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.ToStringMembers);
 
