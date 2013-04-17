@@ -13,7 +13,6 @@
  */
 package com.propertyvista.common.client.ui.wizard;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -43,7 +42,7 @@ public class VistaWizardStep extends SimplePanel implements IValidatable {
     public VistaWizardStep(Widget content, String title) {
         setStepTitle(title);
         assert (content != null);
-        setWidget(new ScrollPanel(this.content = content));
+        setWidget(this.content = content);
         addStyleName(VistaWizardPaneTheme.StyleName.WizardStep.name());
     }
 
