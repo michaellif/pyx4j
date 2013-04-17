@@ -16,7 +16,9 @@ package com.propertyvista.server.config;
 import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.server.ThrottleConfig;
+import com.pyx4j.server.contexts.Context;
 
 public class VistaServerSideConfigurationDemo extends VistaServerSideConfiguration {
 
@@ -36,5 +38,28 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
     @Override
     public ThrottleConfig getThrottleConfig() {
         return null;
+    }
+
+    @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        if (Context.getRequest() != null) {
+            String serverName = Context.getRequest().getServerName();
+            String[] serverNameParts = serverName.split("\\.");
+
+            String dnsBase = serverNameParts[serverNameParts.length - 3] + "." + serverNameParts[serverNameParts.length - 2] + "."
+                    + serverNameParts[serverNameParts.length - 1];
+
+            StringBuilder b = new StringBuilder();
+            b.append(".");
+            b.append(dnsBase);
+
+            b.append(":").append(Context.getRequest().getServerPort());
+
+            b.append("/");
+            b.append(LoggerConfig.getContextName()).append("/");
+            return b.toString();
+        } else {
+            return ".dev.birchwoodsoftwaregroup.com";
+        }
     }
 }

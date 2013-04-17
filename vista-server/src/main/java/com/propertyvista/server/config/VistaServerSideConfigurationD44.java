@@ -47,11 +47,6 @@ public class VistaServerSideConfigurationD44 extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace(boolean secure) {
-        return ".44.propertyvista.com/";
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support44\" <support.www22@birchwoodsoftwaregroup.com>";
     }

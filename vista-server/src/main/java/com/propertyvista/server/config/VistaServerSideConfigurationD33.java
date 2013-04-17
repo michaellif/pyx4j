@@ -47,11 +47,6 @@ public class VistaServerSideConfigurationD33 extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace(boolean secure) {
-        return ".33.propertyvista.com/";
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support33\" <support.www33@birchwoodsoftwaregroup.com>";
     }

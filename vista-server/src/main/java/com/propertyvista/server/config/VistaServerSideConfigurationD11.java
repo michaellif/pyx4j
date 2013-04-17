@@ -47,11 +47,6 @@ public class VistaServerSideConfigurationD11 extends VistaServerSideConfiguratio
     }
 
     @Override
-    public String getApplicationURLNamespace(boolean secure) {
-        return ".11.propertyvista.com/";
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista Support22\" <support.www22@birchwoodsoftwaregroup.com>";
     }
