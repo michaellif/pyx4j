@@ -20,6 +20,8 @@ import com.pyx4j.security.server.ThrottleConfig;
 
 public class VistaServerSideConfigurationDemo extends VistaServerSideConfiguration {
 
+    protected boolean demoUsePostgreSQL = true;
+
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=

@@ -19,22 +19,31 @@ public class VistaServerSideConfigurationD44 extends VistaServerSideConfiguratio
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
-            @Override
-            public String dbName() {
-                return "vista44";
-            }
+        if (demoUsePostgreSQL) {
+            return new VistaConfigurationPostgreSQL() {
+                @Override
+                public String dbName() {
+                    return "vista44";
+                }
+            };
+        } else {
+            return new VistaConfigurationMySQL() {
+                @Override
+                public String dbName() {
+                    return "vista44";
+                }
 
-            @Override
-            public String userName() {
-                return "vista44";
-            }
+                @Override
+                public String userName() {
+                    return "vista44";
+                }
 
-            @Override
-            public String password() {
-                return "vista44";
-            }
-        };
+                @Override
+                public String password() {
+                    return "vista44";
+                }
+            };
+        }
     }
 
     @Override

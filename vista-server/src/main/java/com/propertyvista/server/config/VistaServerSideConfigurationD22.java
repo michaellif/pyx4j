@@ -19,22 +19,31 @@ public class VistaServerSideConfigurationD22 extends VistaServerSideConfiguratio
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
-            @Override
-            public String dbName() {
-                return "vista22";
-            }
+        if (demoUsePostgreSQL) {
+            return new VistaConfigurationPostgreSQL() {
+                @Override
+                public String dbName() {
+                    return "vista22";
+                }
+            };
+        } else {
+            return new VistaConfigurationMySQL() {
+                @Override
+                public String dbName() {
+                    return "vista22";
+                }
 
-            @Override
-            public String userName() {
-                return "vista22";
-            }
+                @Override
+                public String userName() {
+                    return "vista22";
+                }
 
-            @Override
-            public String password() {
-                return "vista22";
-            }
-        };
+                @Override
+                public String password() {
+                    return "vista22";
+                }
+            };
+        }
     }
 
     @Override

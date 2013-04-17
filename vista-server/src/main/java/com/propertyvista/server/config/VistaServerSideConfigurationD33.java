@@ -19,22 +19,31 @@ public class VistaServerSideConfigurationD33 extends VistaServerSideConfiguratio
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationMySQL() {
-            @Override
-            public String dbName() {
-                return "vista33";
-            }
+        if (demoUsePostgreSQL) {
+            return new VistaConfigurationPostgreSQL() {
+                @Override
+                public String dbName() {
+                    return "vista33";
+                }
+            };
+        } else {
+            return new VistaConfigurationMySQL() {
+                @Override
+                public String dbName() {
+                    return "vista33";
+                }
 
-            @Override
-            public String userName() {
-                return "vista33";
-            }
+                @Override
+                public String userName() {
+                    return "vista33";
+                }
 
-            @Override
-            public String password() {
-                return "vista33";
-            }
-        };
+                @Override
+                public String password() {
+                    return "vista33";
+                }
+            };
+        }
     }
 
     @Override
