@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.ci;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -148,21 +149,58 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void o(OutputStream out, String... messages) throws IOException {
-        out.write("<pre>".getBytes());
-        for (String message : messages) {
-            out.write(message.getBytes());
+    private class OutputHolder implements Closeable {
+
+        boolean pipeBroken = false;
+
+        OutputStream out;
+
+        OutputHolder(OutputStream out) {
+            this.out = out;
         }
 
-        out.write("</pre>".getBytes());
-        out.flush();
+        @Override
+        public void close() throws IOException {
+            if (this.out != null) {
+                this.out.close();
+                this.out = null;
+            }
+        }
+
     }
 
-    private void h(OutputStream out, String... messages) throws IOException {
-        for (String message : messages) {
-            out.write(message.getBytes());
+    private void o(OutputHolder out, String... messages) throws IOException {
+        if (out.pipeBroken) {
+            return;
         }
-        out.flush();
+        try {
+            out.out.write("<pre>".getBytes());
+            for (String message : messages) {
+                out.out.write(message.getBytes());
+            }
+
+            out.out.write("</pre>".getBytes());
+            out.out.flush();
+        } catch (Throwable e) {
+            log.error("db-reset out put error", e);
+            log.error("db-reset will continue");
+            out.pipeBroken = true;
+        }
+    }
+
+    private void h(OutputHolder out, String... messages) throws IOException {
+        if (out.pipeBroken) {
+            return;
+        }
+        try {
+            for (String message : messages) {
+                out.out.write(message.getBytes());
+            }
+            out.out.flush();
+        } catch (Throwable e) {
+            log.error("db-reset out put error", e);
+            out.pipeBroken = true;
+        }
     }
 
     @Override
@@ -174,7 +212,7 @@ public class DBResetServlet extends HttpServlet {
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
         response.setContentType("text/html");
-        OutputStream out = response.getOutputStream();
+        OutputHolder out = new OutputHolder(response.getOutputStream());
         h(out, "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head><body>");
         try {
             synchronized (DBResetServlet.class) {
@@ -411,7 +449,7 @@ public class DBResetServlet extends HttpServlet {
         }
     }
 
-    private void preloadPmc(HttpServletRequest req, OutputStream out, String pmcDnsName, ResetType type) throws IOException {
+    private void preloadPmc(HttpServletRequest req, OutputHolder out, String pmcDnsName, ResetType type) throws IOException {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         log.debug("Preload PMC '{}'", pmcDnsName);
