@@ -15,7 +15,7 @@ package com.propertyvista.generator;
 
 public class PreloadData {
 
-    public final static String ElectronicPaymentsNotAllowedAccountPrefix = "99";
+    public final static String ElectronicPaymentsNotAllowedAccountPrefix = "099";
 
     public final static String[] MANAGEMENT_COMPANY = { "Blue Realty Inc.", "Green Property Management Inc.", "Red Corporation", "White Management" };
 

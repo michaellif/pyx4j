@@ -22,6 +22,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.biz.system.PmcFacade;
@@ -31,10 +32,10 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.preloader.ido.MerchantAccountImport;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.shared.config.VistaDemo;
 
 public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
 
@@ -55,15 +56,11 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
             public Void call() {
 
                 Persistence.service().retrieveMember(pmc.paymentTypeInfo());
-
                 int ordinal = -1;
                 try {
                     DemoPmc pmcId = DemoData.DemoPmc.valueOf(pmc.namespace().getValue());
                     ordinal = pmcId.ordinal();
                 } catch (IllegalArgumentException ignore) {
-                    if (VistaDemo.isDemo()) {
-                        ordinal = 0;
-                    }
                 }
                 if (ordinal >= 0) {
                     String caledonCompanyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
@@ -123,6 +120,28 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                         ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
                     }
 
+                } else {
+                    int internalAccounts = 2;
+                    int offsetNumber = Persistence.service().count(EntityQueryCriteria.create(PmcMerchantAccountIndex.class));
+                    for (int n = 0; n <= internalAccounts; n++) {
+                        MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
+                        merchantAccount.merchantTerminalId().setValue("DEMO" + offsetNumber + n);
+                        merchantAccount.bankId().setValue(ordinal + "01");
+                        merchantAccount.branchTransitNumber().setValue("0110" + n);
+                        merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
+
+                        // Make one ElectronicPaymentsAllowed FALSE
+                        if (n == internalAccounts) {
+                            merchantAccount.accountNumber().setValue(
+                                    PreloadData.ElectronicPaymentsNotAllowedAccountPrefix + String.valueOf(offsetNumber) + "789");
+                            merchantAccount.invalid().setValue(Boolean.TRUE);
+                        } else {
+                            merchantAccount.accountNumber().setValue(String.valueOf(offsetNumber) + "998");
+                            merchantAccount.invalid().setValue(Boolean.FALSE);
+                        }
+                        merchantAccount.chargeDescription().setValue("Pay for " + pmc.name().getValue() + " er " + n);
+                        ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, merchantAccount);
+                    }
                 }
 
                 return null;
