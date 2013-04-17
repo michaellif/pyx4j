@@ -46,8 +46,12 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
             String serverName = Context.getRequest().getServerName();
             String[] serverNameParts = serverName.split("\\.");
 
-            String dnsBase = serverNameParts[serverNameParts.length - 3] + "." + serverNameParts[serverNameParts.length - 2] + "."
-                    + serverNameParts[serverNameParts.length - 1];
+            String dnsBase = serverName;
+
+            if (serverNameParts.length > 3) {
+                dnsBase = serverNameParts[serverNameParts.length - 3] + "." + serverNameParts[serverNameParts.length - 2] + "."
+                        + serverNameParts[serverNameParts.length - 1];
+            }
 
             StringBuilder b = new StringBuilder();
             b.append(".");
