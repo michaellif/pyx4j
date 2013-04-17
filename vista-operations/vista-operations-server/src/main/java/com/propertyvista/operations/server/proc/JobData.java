@@ -17,6 +17,8 @@ public enum JobData {
 
     triggerId,
 
-    forDate
+    forDate,
+
+    manualExecution,
 
 }

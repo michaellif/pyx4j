@@ -63,6 +63,8 @@ public interface Trigger extends IEntity {
     @Owned
     IList<TriggerPmc> population();
 
+    IPrimitive<Boolean> scheduleSuspended();
+
     @Owned
     IList<TriggerSchedule> schedules();
 

@@ -79,6 +79,7 @@ public class JobUtils {
                 jobDetail = createJobDetail(trigger);
             }
             TriggerBuilder<Trigger> tb = TriggerBuilder.newTrigger().forJob(jobDetail).startNow();
+            tb.usingJobData(JobData.manualExecution.name(), Boolean.TRUE);
             if (executionDate != null) {
                 tb.usingJobData(JobData.forDate.name(), executionDate.getTime());
             }
