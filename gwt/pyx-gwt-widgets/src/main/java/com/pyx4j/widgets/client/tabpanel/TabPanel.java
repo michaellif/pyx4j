@@ -225,6 +225,10 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         return tabBar.getTabBarIndex(selectedTab.getTabBarItem());
     }
 
+    public Tab getTab(int index) {
+        return tabs.get(tabBar.getTabBarItem(index));
+    }
+
     public List<Tab> getTabs() {
         List<Tab> list = new ArrayList<Tab>();
         for (int i = 0; i < size(); i++) {

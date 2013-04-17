@@ -24,5 +24,5 @@ public interface IValidatable {
 
     ValidationResults getValidationResults();
 
-    void showErrors();
+    void showErrors(boolean show);
 }

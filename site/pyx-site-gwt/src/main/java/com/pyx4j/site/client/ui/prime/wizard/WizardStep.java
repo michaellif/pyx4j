@@ -49,9 +49,9 @@ public class WizardStep extends Tab implements IValidatable {
     }
 
     @Override
-    public void showErrors() {
+    public void showErrors(boolean show) {
         if (content instanceof IValidatable) {
-            ((IValidatable) content).showErrors();
+            ((IValidatable) content).showErrors(show);
         }
     }
 

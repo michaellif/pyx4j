@@ -117,6 +117,10 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     public void previous() {
         int index = wizardPanel.getSelectedIndex();
+
+        WizardStep step = (WizardStep) wizardPanel.getTab(index - 1);
+        step.showErrors(false);
+
         if (index > 0) {
             wizardPanel.selectTab(index - 1);
         }
@@ -124,7 +128,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     public void next() {
         WizardStep step = (WizardStep) wizardPanel.getSelectedTab();
-        step.showErrors();
+        step.showErrors(true);
         ValidationResults validationResults = step.getValidationResults();
         if (validationResults.isValid()) {
             int index = wizardPanel.getSelectedIndex();

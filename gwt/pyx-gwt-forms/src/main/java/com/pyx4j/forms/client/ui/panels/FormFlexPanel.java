@@ -195,9 +195,9 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     }
 
     @Override
-    public void showErrors() {
+    public void showErrors(boolean show) {
         for (CComponent<?, ?> component : components) {
-            component.setUnconditionalValidationErrorRendering(true);
+            component.setUnconditionalValidationErrorRendering(show);
         }
     }
 
