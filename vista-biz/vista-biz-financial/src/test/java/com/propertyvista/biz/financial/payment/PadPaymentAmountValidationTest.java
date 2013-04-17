@@ -23,10 +23,8 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.MockConfig;
 
 @Category(RegressionTests.class)
@@ -53,15 +51,12 @@ public class PadPaymentAmountValidationTest extends FinancialTestBase {
         addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
-        Lease lease = getLease();
         addServiceAdjustment("-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
         addServiceAdjustment("-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
 
         approveApplication(true);
 
         advanceSysDate("1-Apr-2013");
-
-        Bill bill = getLatestBill();
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -71,8 +66,6 @@ public class PadPaymentAmountValidationTest extends FinancialTestBase {
         // @formatter:on
 
         advanceSysDate("1-May-2013");
-
-        bill = getLatestBill();
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -85,8 +78,6 @@ public class PadPaymentAmountValidationTest extends FinancialTestBase {
 
         advanceSysDate("1-Jun-2013");
 
-        bill = getLatestBill();
-
         // @formatter:off
         new BillTester(getLatestBill()).
         paymentReceivedAmount("0.00").
@@ -96,13 +87,20 @@ public class PadPaymentAmountValidationTest extends FinancialTestBase {
 
         advanceSysDate("1-Jul-2013");
 
-        bill = getLatestBill();
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        paymentReceivedAmount("-1453.50"). // 3 lockers + 3 parkings + tax + 1 month worth of rent
+        taxes("122.13").
+        totalDueAmount("4326.40"); // 4590.00(previous) + 1139.90(monthly charges and adjustments all in one) + 50(late payment fees) - 1453.50(received amount)
+        // @formatter:on
+
+        advanceSysDate("1-Aug-2013");
 
         // @formatter:off
         new BillTester(getLatestBill()).
-        paymentReceivedAmount("-1453.50"). // why?
+        paymentReceivedAmount("-1610.30"). // 4 lockers + 4 parkings (????) + 1 month worth of rent + tax
         taxes("122.13").
-        totalDueAmount("4326.40"); // 4590.00(previous) + 1139.90(monthly charges and adjustments all in one) + 50(late payment fees) - ....
+        totalDueAmount("3906.00");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
