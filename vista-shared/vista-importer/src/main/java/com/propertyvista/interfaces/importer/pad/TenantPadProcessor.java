@@ -15,7 +15,9 @@ package com.propertyvista.interfaces.importer.pad;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
@@ -47,7 +50,9 @@ public class TenantPadProcessor {
 
     private static final I18n i18n = I18n.get(TenantPadProcessor.class);
 
-    public static class TenantPadCounter {
+    private static class TenantPadCounter {
+
+        public int notFound;
 
         public int imported;
 
@@ -56,6 +61,7 @@ public class TenantPadProcessor {
         public int updated;
 
         public TenantPadCounter() {
+            this.notFound = 0;
             this.imported = 0;
             this.unchanged = 0;
             this.updated = 0;
@@ -65,12 +71,25 @@ public class TenantPadProcessor {
             this.imported += counters.imported;
             this.unchanged += counters.unchanged;
             this.updated += counters.updated;
+            this.notFound += counters.notFound;
         }
     }
 
+    private static boolean newImpl = false;
+
     public String process(List<PadFileModel> model) {
         TenantPadCounter counters = new TenantPadCounter();
-        counters.add(savePads(model));
+
+        if (newImpl) {
+            Map<Lease, List<PadFileModel>> mappedByLease = findLeases(model, counters);
+
+            for (Map.Entry<Lease, List<PadFileModel>> me : mappedByLease.entrySet()) {
+                processLeasePads(me.getKey(), me.getValue(), counters);
+            }
+
+        } else {
+            counters.add(savePads(model));
+        }
 
         String message = SimpleMessageFormat.format("{0} payment methods created, {1} unchanged, {2} amounts updated", counters.imported, counters.unchanged,
                 counters.updated);
@@ -78,6 +97,40 @@ public class TenantPadProcessor {
         return message;
     }
 
+    /**
+     * Find corresponding Tenants and Leases
+     */
+    private Map<Lease, List<PadFileModel>> findLeases(List<PadFileModel> entities, TenantPadCounter counters) {
+        Map<Lease, List<PadFileModel>> mappedByLease = new LinkedHashMap<Lease, List<PadFileModel>>();
+        for (PadFileModel padFileModel : entities) {
+            String tenantId = padFileModel.tenantId().getValue().trim();
+            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.eq(criteria.proto().participantId(), tenantId);
+            padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+
+            if (padFileModel._processorInformation().isNull()) {
+                padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database, row {1}", tenantId));
+                counters.notFound++;
+            } else {
+                List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());
+                if (leaseEntities == null) {
+                    leaseEntities = new ArrayList<PadFileModel>();
+                    mappedByLease.put(padFileModel._processorInformation().tenant().lease(), leaseEntities);
+                }
+                leaseEntities.add(padFileModel);
+            }
+        }
+        return mappedByLease;
+    }
+
+    /**
+     * Load existing LeasePaymentMethods and calculate proper percentage rounding
+     */
+    private void processLeasePads(Lease lease, List<PadFileModel> leaseEntities, TenantPadCounter counters) {
+
+    }
+
+    @Deprecated
     private TenantPadCounter savePads(List<PadFileModel> entities) {
         TenantPadCounter counters = new TenantPadCounter();
         for (PadFileModel padFileModel : entities) {
