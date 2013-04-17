@@ -19,7 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 
 public class UpgradeProcedure109 implements UpgradeProcedure {
@@ -42,11 +42,13 @@ public class UpgradeProcedure109 implements UpgradeProcedure {
 
     private void runMigrateArrearsGadgetSettigns() {
         EntityQueryCriteria<GadgetMetadataHolder> criteria = EntityQueryCriteria.create(GadgetMetadataHolder.class);
-        criteria.eq(criteria.proto().className(), ArrearsSummaryGadgetMetadata.class);
+        criteria.eq(criteria.proto().className(), ArrearsStatusGadgetMetadata.class.getSimpleName());
         List<GadgetMetadataHolder> gadgetSettingsList = Persistence.service().query(criteria);
         for (GadgetMetadataHolder gadgetSettings : gadgetSettingsList) {
             gadgetSettings.serializedForm().setValue(ArrearsStatusGadgetSettingsUpgrader.upgradeSettings(gadgetSettings.serializedForm().getValue()));
+            Persistence.service().persist(gadgetSettings);
         }
+
     }
 
 }

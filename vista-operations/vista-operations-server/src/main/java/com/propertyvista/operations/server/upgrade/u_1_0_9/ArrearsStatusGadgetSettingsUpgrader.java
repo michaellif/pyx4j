@@ -33,17 +33,15 @@ class ArrearsStatusGadgetSettingsUpgrader {
     private static final Map<String, String> categoryUpgradeMap;
     static {
         HashMap<String, String> map = new HashMap<String, String>();
-        // debit types:
-        // lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, other, total;
 
         map.put("total", "");
-        map.put("lease", ARCode.Type.Residential.name()); // TODO we also have 'short term' and 'commercial' ARCodes
+        map.put("lease", ARCode.Type.Residential.name());
         map.put("parking", ARCode.Type.Parking.name());
         map.put("pet", ARCode.Type.Pet.name());
         map.put("addOn", ARCode.Type.AddOn.name());
         map.put("utility", ARCode.Type.Utility.name());
         map.put("locker", ARCode.Type.Locker.name());
-        // TODO map DebitType: 'booking' ?
+        map.put("booking", ARCode.Type.OneTime.name());
         map.put("deposit", ARCode.Type.Deposit.name());
         map.put("accountCharge", ARCode.Type.AccountCharge.name());
         map.put("nsf", ARCode.Type.NSF.name());
@@ -71,9 +69,12 @@ class ArrearsStatusGadgetSettingsUpgrader {
                 "<category>" + upgradedCategoryName + "</category>";
             //@formatter:on
 
+            String upgradedSettingXml = m.replaceAll(upgradedConfigPortion);
+            log.info("Upgraded arrears status gadget settings :'" + upgradedSettingXml + "'");
             return m.replaceAll(upgradedConfigPortion);
         } else {
-            log.warn("could not find category in arrears status gadget settings for the following settings: '" + settingsXml + "'");
+            log.info("Could not find 'category' setting in arrears status gadget settings (upgrade is not required) for the following settings: '"
+                    + settingsXml + "'");
             return settingsXml;
         }
     }
