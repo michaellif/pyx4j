@@ -385,7 +385,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return addBillableItem(ARCodeDataModel.Code.largeLocker);
     }
 
-    protected BillableItem addPet(String effectiveDate, String expirationDate) {
+    protected BillableItem addCat(String effectiveDate, String expirationDate) {
         return addBillableItem(ARCodeDataModel.Code.catRent, effectiveDate, expirationDate);
     }
 
@@ -469,7 +469,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                             agreedPrice = new BigDecimal("20.00");
                             break;
                         case booking:
-                            agreedPrice = new BigDecimal("50.00");
+                            agreedPrice = new BigDecimal("30.00");
                             break;
                         default:
                             break;

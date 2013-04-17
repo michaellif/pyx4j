@@ -27,8 +27,6 @@ public class MockConfig {
 
     public LeaseBillingPolicy.BillConfirmationMethod billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.manual;
 
-    public boolean depositsEnabled = true;
-
     public boolean yardiIntegration = false;
 
     public Map<ARCode, OwingBalanceType> padBalanceTypeMap;

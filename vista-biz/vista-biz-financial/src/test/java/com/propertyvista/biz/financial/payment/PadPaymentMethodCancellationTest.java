@@ -43,7 +43,6 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
     @Override
     protected void preloadData() {
         MockConfig config = new MockConfig();
-        config.depositsEnabled = false;
         config.billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.automatic;
         preloadData(config);
     }

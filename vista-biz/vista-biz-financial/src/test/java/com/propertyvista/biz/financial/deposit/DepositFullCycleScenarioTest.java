@@ -40,7 +40,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         addOutdoorParking();
         addOutdoorParking("01-Apr-2012", "30-Apr-2012");
         addLargeLocker();
-        addPet("01-Mar-2012", "31-Mar-2012");
+        addCat("01-Mar-2012", "31-Mar-2012");
 
         setLeaseBatchProcess();
         setDepositBatchProcess();

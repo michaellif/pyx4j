@@ -154,10 +154,10 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("0.00").
         serviceCharge("812.90"). // service prorated
         recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("50.00").
+        oneTimeFeatureCharges("30.00").
         depositAmount("0.00").
-        taxes("103.55").
-        carryForwardCredit("-1066.45"). // 812.90 +50 +103.55 +100
+        taxes("101.15").
+        carryForwardCredit("-1044.05"). // 812.90 +30 +103.55 +100
         totalDueAmount("-100.00");
         // @formatter:on
 

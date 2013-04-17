@@ -96,7 +96,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
 
         setSysDate("18-Apr-2011");
-        addPet("10-Apr-2011", null);
+        addCat("10-Apr-2011", null);
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
         finalizeLeaseAdendum();
 
