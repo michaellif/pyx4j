@@ -24,6 +24,10 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 
+/**
+ * This was never executed the version SQL was executed
+ * 
+ */
 public class UpgradeProcedure107 implements UpgradeProcedure {
 
     private final static Logger log = LoggerFactory.getLogger(UpgradeProcedure107.class);
