@@ -41,6 +41,16 @@ public class VistaServerSideConfigurationDemo extends VistaServerSideConfigurati
     }
 
     @Override
+    public boolean isAppsContextlessDepoyment() {
+        if (Context.getRequest() != null) {
+            return true;
+        } else {
+            // Default tomcat port
+            return Context.getRequest().getServerPort() != 8080;
+        }
+    }
+
+    @Override
     public String getApplicationURLNamespace(boolean secure) {
         if (Context.getRequest() != null) {
             String serverName = Context.getRequest().getServerName();
