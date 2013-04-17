@@ -102,7 +102,12 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
     }
 
     public void previous() {
+
         int index = wizardPanel.getSelectedIndex();
+
+        VistaWizardStep step = wizardPanel.getStep(index - 1);
+        step.showErrors(false);
+
         if (index > 0) {
             wizardPanel.selectStep(index - 1);
         }
@@ -110,7 +115,7 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
 
     public void next() {
         VistaWizardStep step = wizardPanel.getSelectedStep();
-        step.showErrors();
+        step.showErrors(true);
         ValidationResults validationResults = step.getValidationResults();
         if (validationResults.isValid()) {
             int index = wizardPanel.getSelectedIndex();

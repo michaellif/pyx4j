@@ -97,9 +97,9 @@ public class VistaWizardStep extends SimplePanel implements IValidatable {
     }
 
     @Override
-    public void showErrors() {
+    public void showErrors(boolean show) {
         if (content instanceof IValidatable) {
-            ((IValidatable) content).showErrors();
+            ((IValidatable) content).showErrors(show);
         }
     }
 }

@@ -45,13 +45,13 @@ public class VistaWizardPanel extends DeckPanel implements HasWidgets, IndexedPa
         selectStep(getWidgetIndex(step));
     }
 
-    public void selectStep(int i) {
-        BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, (VistaWizardStep) getWidget(i));
+    public void selectStep(int index) {
+        BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, (VistaWizardStep) getWidget(index));
         if (event != null && event.isCanceled()) {
             return;
         }
 
-        showWidget(i);
+        showWidget(index);
         SelectionEvent.fire(this, getSelectedStep());
     }
 
@@ -61,6 +61,10 @@ public class VistaWizardPanel extends DeckPanel implements HasWidgets, IndexedPa
 
     public VistaWizardStep getSelectedStep() {
         return (VistaWizardStep) getWidget(getVisibleWidget());
+    }
+
+    public VistaWizardStep getStep(int index) {
+        return (VistaWizardStep) getWidget(index);
     }
 
     public int size() {
