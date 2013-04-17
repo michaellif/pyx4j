@@ -31,7 +31,7 @@ public class MockConfig {
 
     public boolean yardiIntegration = false;
 
-    public Map<ARCode.Type, OwingBalanceType> padBalanceTypeMap;
+    public Map<ARCode, OwingBalanceType> padBalanceTypeMap;
 
     public PADChargeType padChargeType;
 
@@ -41,10 +41,10 @@ public class MockConfig {
         padChargeType = type;
     }
 
-    public void setPadBalanceType(ARCode.Type chargeType, OwingBalanceType type) {
+    public void setPadBalanceType(ARCode arCode, OwingBalanceType type) {
         if (padBalanceTypeMap == null) {
-            padBalanceTypeMap = new HashMap<ARCode.Type, OwingBalanceType>();
+            padBalanceTypeMap = new HashMap<ARCode, OwingBalanceType>();
         }
-        padBalanceTypeMap.put(chargeType, type);
+        padBalanceTypeMap.put(arCode, type);
     }
 }

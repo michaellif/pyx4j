@@ -14,14 +14,11 @@
 package com.propertyvista.test.mock.models;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy;
@@ -53,29 +50,22 @@ public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
         policy.chargeType().setValue(PADChargeType.OwingBalance);
 
         if (getConfig().padBalanceTypeMap == null) {
-            getConfig().padBalanceTypeMap = new HashMap<ARCode.Type, OwingBalanceType>();
-            getConfig().padBalanceTypeMap.put(ARCode.Type.Residential, OwingBalanceType.LastBill);
-            getConfig().padBalanceTypeMap.put(ARCode.Type.Parking, OwingBalanceType.ToDateTotal);
-            getConfig().padBalanceTypeMap.put(ARCode.Type.Locker, OwingBalanceType.ToDateTotal);
+            getConfig().padBalanceTypeMap = new HashMap<ARCode, OwingBalanceType>();
+            getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.rent), OwingBalanceType.LastBill);
+            getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.outdoorParking), OwingBalanceType.ToDateTotal);
+            getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.largeLocker), OwingBalanceType.ToDateTotal);
         }
-        for (ARCode.Type debitType : getConfig().padBalanceTypeMap.keySet()) {
-            for (ARCode code : getARCodes(debitType)) {
-                PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-                item.debitType().set(code);
-                item.owingBalanceType().setValue(getConfig().padBalanceTypeMap.get(debitType));
-                policy.debitBalanceTypes().add(item);
-            }
+        for (ARCode code : getConfig().padBalanceTypeMap.keySet()) {
+            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
+            item.debitType().set(code);
+            item.owingBalanceType().setValue(getConfig().padBalanceTypeMap.get(code));
+            policy.debitBalanceTypes().add(item);
+
         }
         policy.node().set(pmcDataModel.getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
         super.setCurrentItem(policy);
-    }
-
-    private List<ARCode> getARCodes(ARCode.Type type) {
-        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().type(), type));
-        return Persistence.service().query(criteria);
     }
 
     @Override
