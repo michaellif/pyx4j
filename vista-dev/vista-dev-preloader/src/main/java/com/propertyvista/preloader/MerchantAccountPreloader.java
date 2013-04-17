@@ -126,7 +126,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                     for (int n = 0; n <= internalAccounts; n++) {
                         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
                         merchantAccount.merchantTerminalId().setValue("DEMO" + offsetNumber + n);
-                        merchantAccount.bankId().setValue(ordinal + "01");
+                        merchantAccount.bankId().setValue("001");
                         merchantAccount.branchTransitNumber().setValue("0110" + n);
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
 
