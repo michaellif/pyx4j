@@ -21,6 +21,7 @@ import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -45,6 +46,7 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
     protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPaymentItemDTO> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
+        dbCriteria.sort(new Sort(dbCriteria.proto().tenant(), false));
     }
 
     @Override
