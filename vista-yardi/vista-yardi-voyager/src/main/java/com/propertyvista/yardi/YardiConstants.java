@@ -19,7 +19,7 @@ public class YardiConstants {
         ping, ImportResidentTransactions, GetPropertyConfigurations, GetUnitInformation, GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate, GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges, ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, PostReceiptBatch, GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues
     }
 
-    public static final long TIMEOUT = 30; // minutes
+    public static final long TIMEOUT = 180; // minutes
 
     public static final String INTERFACE_ENTITY = "Property Vista";
 
