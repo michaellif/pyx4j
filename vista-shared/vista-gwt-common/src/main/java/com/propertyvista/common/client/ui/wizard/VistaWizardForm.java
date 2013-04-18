@@ -102,30 +102,36 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
     }
 
     public void previous() {
-
         int index = wizardPanel.getSelectedIndex();
 
-        VistaWizardStep step = wizardPanel.getStep(index - 1);
-        step.showErrors(false);
+        VistaWizardStep step;
+        do {
+            step = wizardPanel.getStep(--index);
+        } while (!step.isStepVisible() && index > 0);
 
-        if (index > 0) {
-            wizardPanel.selectStep(index - 1);
+        if (index >= 0) {
+            step.showErrors(false);
+            wizardPanel.selectStep(index);
         }
     }
 
     public void next() {
         VistaWizardStep step = wizardPanel.getSelectedStep();
         step.showErrors(true);
+
         ValidationResults validationResults = step.getValidationResults();
         if (validationResults.isValid()) {
             int index = wizardPanel.getSelectedIndex();
-            if (index < wizardPanel.size() - 1) {
-                wizardPanel.selectStep(index + 1);
+            do {
+                step = wizardPanel.getStep(++index);
+            } while (!step.isStepVisible() && index < wizardPanel.size() - 1);
+
+            if (step.isStepVisible() && index < wizardPanel.size()) {
+                wizardPanel.selectStep(index);
             }
         } else {
             MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true));
         }
-
     }
 
     protected final void finish() {
@@ -135,7 +141,6 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
         } else {
             view.getPresenter().finish();
         }
-
     }
 
     public boolean isFirst() {

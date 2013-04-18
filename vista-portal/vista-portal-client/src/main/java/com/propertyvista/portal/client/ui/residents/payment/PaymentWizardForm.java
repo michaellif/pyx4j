@@ -64,13 +64,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
-    private static final String DETAILS_STEP_TITLE = i18n.tr("Details");
-
-    private static final String SELECTPAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method Selection");
-
-    private static final String PAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method");
-
-    private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
+    private final VistaWizardStep paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -103,16 +97,16 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
-        addStep(createPaymentMethodStep());
-        addStep(createConfirmationStep());
+        paymentMethodStep = addStep(createPaymentMethodStep());
+        comfirmationStep = addStep(createConfirmationStep());
     }
 
     private FormFlexPanel createDetailsStep() {
-        FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
         int row = -1;
 
         panel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant>()), 25).customLabel(i18n.tr("Tenant"))
+                new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 25).customLabel(i18n.tr("Tenant"))
                         .build());
 
         panel.setBR(++row, 0, 1);
@@ -128,7 +122,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     private FormFlexPanel createSelectPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(SELECTPAYMENTMETHOD_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
@@ -165,6 +159,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                         paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
                         setProfiledPaymentMethodsVisible(false);
+
+                        paymentMethodStep.setStepVisible(true);
                         break;
 
                     case Profiled:
@@ -172,6 +168,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
+
+                        paymentMethodStep.setStepVisible(false);
                         break;
                     }
                 }
@@ -191,7 +189,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     private FormFlexPanel createPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(PAYMENTMETHOD_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
@@ -212,7 +210,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     private FormFlexPanel createConfirmationStep() {
-        FormFlexPanel panel = new FormFlexPanel(CONFIRMATION_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
@@ -228,7 +226,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     @Override
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
-        if (event.getSelectedItem().getStepTitle().equals(CONFIRMATION_STEP_TITLE)) {
+        if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }
@@ -279,8 +277,9 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
-        profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
+        profiledPaymentMethodsCombo.setVisible(visible);
+
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !getValue().paymentMethod().type().isNull());
         setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
     }
 

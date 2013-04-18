@@ -52,9 +52,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodWizardForm.class);
 
-    private static final String PAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method");
-
-    private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
+    private final VistaWizardStep comfirmationStep;
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
@@ -84,11 +82,11 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         super(PaymentMethodDTO.class, view);
 
         addStep(createPaymentMethodStep());
-        addStep(createConfirmationStep());
+        comfirmationStep = addStep(createConfirmationStep());
     }
 
     private FormFlexPanel createPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(PAYMENTMETHOD_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
@@ -96,7 +94,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
     }
 
     private FormFlexPanel createConfirmationStep() {
-        FormFlexPanel panel = new FormFlexPanel(CONFIRMATION_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
@@ -113,7 +111,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
     @Override
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
-        if (event.getSelectedItem().getStepTitle().equals(CONFIRMATION_STEP_TITLE)) {
+        if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }

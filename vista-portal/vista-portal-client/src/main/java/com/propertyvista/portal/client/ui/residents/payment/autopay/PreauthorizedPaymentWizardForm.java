@@ -66,13 +66,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
 
-    private static final String DETAILS_STEP_TITLE = i18n.tr("Details");
-
-    private static final String SELECTPAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method Selection");
-
-    private static final String PAYMENTMETHOD_STEP_TITLE = i18n.tr("Payment Method");
-
-    private static final String CONFIRMATION_STEP_TITLE = i18n.tr("Confirmation");
+    private final VistaWizardStep paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -115,12 +109,12 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
-        addStep(createPaymentMethodStep());
-        addStep(createConfirmationStep());
+        paymentMethodStep = addStep(createPaymentMethodStep());
+        comfirmationStep = addStep(createConfirmationStep());
     }
 
     private FormFlexPanel createDetailsStep() {
-        FormFlexPanel panel = new FormFlexPanel(DETAILS_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
@@ -145,7 +139,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     }
 
     private FormFlexPanel createSelectPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(SELECTPAYMENTMETHOD_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
@@ -181,14 +175,18 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
                         paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
-                        setProfiledPaymentMethodsVisible(false);
+                        profiledPaymentMethodsCombo.setVisible(false);
+
+                        paymentMethodStep.setStepVisible(true);
                         break;
 
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
 
                         profiledPaymentMethodsCombo.reset();
-                        setProfiledPaymentMethodsVisible(true);
+                        profiledPaymentMethodsCombo.setVisible(true);
+
+                        paymentMethodStep.setStepVisible(false);
                         break;
                     }
                 }
@@ -208,7 +206,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     }
 
     private FormFlexPanel createPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(PAYMENTMETHOD_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
@@ -216,7 +214,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     }
 
     private FormFlexPanel createConfirmationStep() {
-        FormFlexPanel panel = new FormFlexPanel(CONFIRMATION_STEP_TITLE);
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
@@ -232,7 +230,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     @Override
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
-        if (event.getSelectedItem().getStepTitle().equals(CONFIRMATION_STEP_TITLE)) {
+        if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }
@@ -302,10 +300,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }
         });
-    }
-
-    private void setProfiledPaymentMethodsVisible(boolean visible) {
-        profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
     }
 
     private Widget createConfirmationDetailsPanel() {
