@@ -20,32 +20,23 @@
  */
 package com.pyx4j.tester.client.ui;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.AppActivityManager;
-import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.tester.client.mvp.ConsoleActivityMapper;
 import com.pyx4j.tester.client.mvp.MainActivityMapper;
 import com.pyx4j.tester.client.mvp.NavigActivityMapper;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
 
-public class TesterPanel extends LayoutPanel {
+public class TesterRootPane extends LayoutPanel {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
@@ -53,7 +44,7 @@ public class TesterPanel extends LayoutPanel {
         Content, Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
-    public TesterPanel() {
+    public TesterRootPane() {
 
         EventBus eventBus = AppSite.getEventBus();
 
@@ -85,61 +76,9 @@ public class TesterPanel extends LayoutPanel {
         DisplayPanel mainDisplay = new DisplayPanel();
         splitPanel.add(mainDisplay);
 
-        bind(new NavigActivityMapper(), navigDisplay, eventBus);
-        bind(new ConsoleActivityMapper(), consoleDisplay, eventBus);
-        bind(new MainActivityMapper(), mainDisplay, eventBus);
+        DisplayPanel.bind(new NavigActivityMapper(), navigDisplay, eventBus);
+        DisplayPanel.bind(new ConsoleActivityMapper(), consoleDisplay, eventBus);
+        DisplayPanel.bind(new MainActivityMapper(), mainDisplay, eventBus);
     }
 
-    private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        ActivityManager activityManager = new ActivityManager(mapper, eventBus);
-        activityManager.setDisplay(widget);
-    }
-
-    private static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        AppActivityManager activityManager = new AppActivityManager(mapper, eventBus);
-        activityManager.setDisplay(widget);
-    }
-
-    class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
-        DisplayPanel() {
-            String prefix = DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleSuffix.Display);
-        }
-
-        @Override
-        public void onResize() {
-            Widget child = getWidget();
-            if ((child != null) && (child instanceof RequiresResize)) {
-                ((RequiresResize) child).onResize();
-            }
-        }
-    }
-
-    class UtilityDisplayPanel extends SimplePanel {
-
-        private final LayoutPanel parent;
-
-        UtilityDisplayPanel(LayoutPanel parent) {
-            this.parent = parent;
-            String prefix = DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + StyleSuffix.Display);
-        }
-
-        @Override
-        public void setWidget(IsWidget w) {
-            super.setWidget(w);
-            if (w == null) {
-                removeFromParent();
-                for (int i = 0; i < parent.getWidgetCount(); i++) {
-                    parent.getWidget(i).setVisible(true);
-                }
-            } else {
-                for (int i = 0; i < parent.getWidgetCount(); i++) {
-                    parent.getWidget(i).setVisible(false);
-                }
-                parent.add(this);
-            }
-        }
-
-    }
 }

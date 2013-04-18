@@ -39,7 +39,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.tester.client.ui.TesterPanel;
+import com.pyx4j.tester.client.ui.TesterRootPane;
 import com.pyx4j.tester.shared.TesterAuthenticationService;
 import com.pyx4j.widgets.client.GlassPanel;
 
@@ -77,7 +77,7 @@ public class TesterSite extends AppSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new TesterPanel());
+        RootLayoutPanel.get().add(new TesterRootPane());
 
         hideLoadingIndicator();
 
