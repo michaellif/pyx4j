@@ -114,6 +114,7 @@ import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActiv
 import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeListerViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageViewerActivity;
@@ -838,6 +839,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof Financial.ARCode) {
                         switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ARCodeListerViewActivity(crudPlace);
+                            break;
                         case editor:
                             activity = new ARCodeEditorActivity(crudPlace);
                             break;

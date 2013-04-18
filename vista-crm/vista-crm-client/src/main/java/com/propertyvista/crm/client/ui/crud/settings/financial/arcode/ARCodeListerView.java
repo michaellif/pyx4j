@@ -13,18 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.property.asset.Utility;
 
-public interface ARCodeListerView extends IViewer<ARCode> {
+public interface ARCodeListerView extends ILister<ARCode> {
 
-    public interface Presenter extends IViewer.Presenter {
+    public interface Presenter extends ILister.Presenter<ARCode> {
     }
 
-    ILister<ARCode> getProductCodeListerView();
-
-    ILister<Utility> getUtilityListerView();
 }
