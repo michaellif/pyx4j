@@ -19,9 +19,7 @@ import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 public class PaymentMethodSubmittedViewImpl extends ViewImpl<PaymentMethodDTO> implements PaymentMethodSubmittedView {
 
     public PaymentMethodSubmittedViewImpl() {
+        super(true, true);
         setForm(new PaymentMethodSubmittedViewForm(this));
-
-        getSubmit().setVisible(false);
-        getCancel().setVisible(false);
     }
 }

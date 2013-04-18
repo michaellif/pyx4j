@@ -49,11 +49,15 @@ public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
         this(null);
     }
 
-    public ViewImpl(CEntityForm<E> viewForm) {
-        this(viewForm, false);
+    public ViewImpl(boolean noSubmit, boolean noCancel) {
+        this(null, noSubmit, noCancel);
     }
 
-    public ViewImpl(CEntityForm<E> viewForm, boolean readOnly) {
+    public ViewImpl(CEntityForm<E> viewForm) {
+        this(viewForm, false, false);
+    }
+
+    public ViewImpl(CEntityForm<E> viewForm, boolean noSubmit, boolean noCancel) {
         add(messagePanel = new UserMessagePanel());
 
         add(formHolder = new SimplePanel());
@@ -67,7 +71,7 @@ public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
                 onSubmit();
             }
         });
-        if (!readOnly) {
+        if (!noSubmit) {
             add(DecorationUtils.inline(submit));
         }
 
@@ -79,7 +83,9 @@ public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
         });
         cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
         cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(cancel);
+        if (!noCancel) {
+            add(cancel);
+        }
 
         if (viewForm != null) {
             setForm(viewForm);
@@ -139,5 +145,4 @@ public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
     protected Anchor getCancel() {
         return cancel;
     }
-
 }

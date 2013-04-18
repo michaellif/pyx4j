@@ -13,34 +13,23 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 
-public class BillSummaryViewImpl extends FlowPanel implements BillSummaryView {
+public class BillSummaryViewImpl extends ViewImpl<PvBillingFinancialSummaryDTO> implements BillSummaryView {
 
     private static final I18n i18n = I18n.get(BillSummaryViewImpl.class);
 
-    private final BillSummaryForm form;
-
     public BillSummaryViewImpl() {
-        form = new BillSummaryForm();
-        form.initContent();
-        add(form);
+        super(new BillSummaryForm());
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        form.setPresenter(presenter);
-    }
-
-    @Override
-    public void populate(PvBillingFinancialSummaryDTO bill) {
-        form.getPayButton().setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
-        form.populate(bill);
+    public void setPresenter(View.Presenter<PvBillingFinancialSummaryDTO> presenter) {
+        super.setPresenter(presenter);
+        ((BillSummaryForm) getForm()).setPresenter((BillSummaryView.Presenter) presenter);
     }
 }

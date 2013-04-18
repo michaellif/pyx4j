@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
@@ -32,6 +33,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView.Presenter;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
@@ -89,8 +91,11 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         this.presenter = presenter;
     }
 
-    public Button getPayButton() {
-        return payButton;
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {

@@ -19,9 +19,7 @@ import com.propertyvista.portal.client.ui.residents.ViewImpl;
 public class PaymentSubmittedViewImpl extends ViewImpl<PaymentRecordDTO> implements PaymentSubmittedView {
 
     public PaymentSubmittedViewImpl() {
+        super(true, true);
         setForm(new PaymentSubmittedViewForm(this));
-
-        getSubmit().setVisible(false);
-        getCancel().setVisible(false);
     }
 }

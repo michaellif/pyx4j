@@ -19,9 +19,7 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentSubmittedViewImpl extends ViewImpl<PreauthorizedPaymentDTO> implements PreauthorizedPaymentSubmittedView {
 
     public PreauthorizedPaymentSubmittedViewImpl() {
+        super(true, true);
         setForm(new PreauthorizedPaymentSubmittedViewForm());
-
-        getSubmit().setVisible(false);
-        getCancel().setVisible(false);
     }
 }

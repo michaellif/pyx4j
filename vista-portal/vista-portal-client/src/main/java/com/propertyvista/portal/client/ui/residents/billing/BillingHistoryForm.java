@@ -34,7 +34,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
-public class BillingHistoryForm extends CEntityForm<BillListDTO> implements BillingHistoryView {
+public class BillingHistoryForm extends CEntityForm<BillListDTO> {
 
     private static final I18n i18n = I18n.get(BillingHistoryForm.class);
 
@@ -51,10 +51,8 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
         return container;
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(BillingHistoryView.Presenter presenter) {
         this.presenter = presenter;
-
     }
 
     private class BillingHistoryFolder extends VistaTableFolder<BillDataDTO> {

@@ -25,8 +25,7 @@ import com.propertyvista.portal.domain.dto.ResidentDTO;
 public class PersonalInfoViewImpl extends ViewImpl<ResidentDTO> implements PersonalInfoView {
 
     public PersonalInfoViewImpl() {
-        super(new PersonalInfoForm());
-        getCancel().setVisible(false);
+        super(new PersonalInfoForm(), false, true);
 
         Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
             @Override

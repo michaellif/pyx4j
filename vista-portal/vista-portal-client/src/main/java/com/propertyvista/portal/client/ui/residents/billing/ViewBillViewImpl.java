@@ -23,9 +23,7 @@ public class ViewBillViewImpl extends ViewImpl<BillDTO> implements ViewBillView 
     private static final I18n i18n = I18n.get(ViewBillViewImpl.class);
 
     public ViewBillViewImpl() {
-        super(new ViewBillForm());
-
-        getSubmit().setVisible(false);
+        super(new ViewBillForm(), true, false);
         getCancel().setText(i18n.tr("Back"));
     }
 }

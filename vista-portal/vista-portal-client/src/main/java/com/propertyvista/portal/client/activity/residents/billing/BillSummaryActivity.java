@@ -66,4 +66,15 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
         AppSite.getPlaceController().goTo(new Financial.PayNow());
     }
 
+    @Override
+    public void save(PvBillingFinancialSummaryDTO entity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancel() {
+        // TODO Auto-generated method stub
+
+    }
 }
