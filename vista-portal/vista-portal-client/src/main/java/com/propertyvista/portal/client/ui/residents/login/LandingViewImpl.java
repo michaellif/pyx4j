@@ -66,7 +66,7 @@ import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel;
 import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel.Side;
 import com.propertyvista.portal.client.ui.residents.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecoratorBuilder;
+import com.propertyvista.portal.client.ui.residents.decorators.LoginDecoratorBuilder;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
@@ -97,11 +97,11 @@ public class LandingViewImpl extends Composite implements LandingView {
             FlowPanel contentPanel = new FlowPanel();
 
             CTextField emailField = (CTextField) inject(proto().email(), new CTextField());
-            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextField>(emailField).watermark(i18n.tr("Email")).build()));
+            contentPanel.add(center(new LoginDecoratorBuilder(emailField, true).watermark(i18n.tr("Email")).build()));
             setMandatoryValidationMessage(emailField, i18n.tr("Enter your email address"));
 
             CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField());
-            contentPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>(passwordField).watermark(i18n.tr("Password")).build()));
+            contentPanel.add(center(new LoginDecoratorBuilder(passwordField, true).watermark(i18n.tr("Password")).build()));
             setMandatoryValidationMessage(passwordField, i18n.tr("Enter your password"));
 
             captchaField = (CCaptcha) inject(proto().captcha());

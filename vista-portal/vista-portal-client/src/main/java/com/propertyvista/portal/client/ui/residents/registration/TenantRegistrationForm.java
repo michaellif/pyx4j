@@ -18,13 +18,10 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -37,7 +34,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
-import com.propertyvista.portal.client.ui.residents.decorators.WatermarkDecoratorBuilder;
+import com.propertyvista.portal.client.ui.residents.decorators.LoginDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -65,65 +62,43 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
 
         FlowPanel selectBuildingPanel = new FlowPanel();
 
-        Label buildingFieldLabel = new Label();
-        buildingFieldLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        buildingFieldLabel.setText(i18n.tr("Select your building:"));
-        selectBuildingPanel.add(buildingFieldLabel);
-        selectBuildingPanel.add(new DecoratorBuilder(buildingComboBox).componentWidth(20).labelWidth(0).customLabel("").useLabelSemicolon(false)
-                .mandatoryMarker(false).build());
+        selectBuildingPanel.add(new LoginDecoratorBuilder(buildingComboBox, false).customLabel(i18n.tr("Select your building")).build());
 
         contentPanel.add(center(selectBuildingPanel));
 
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        FlowPanel userDataLabelHolder = new FlowPanel();
-        SimplePanel tooltipImageHolder = new SimplePanel();
-        tooltipImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        tooltipImageHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        Image tooltipImage = new Image(ImageFactory.getImages().formTooltipInfo());
-        tooltipImage
-                .setTitle(i18n
-                        .tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you. You should have received this code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly"));
-
-        tooltipImageHolder.add(tooltipImage);
-
         Label userDataLabel = new Label();
         userDataLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         userDataLabel.getElement().getStyle().setDisplay(Display.INLINE);
-        userDataLabel.setText(i18n.tr("Please fill in your name, email address, and the security code:"));
+        userDataLabel.setText(i18n.tr("Please fill in your name, email address, and the security code"));
+        userDataPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
-        userDataLabelHolder.add(userDataLabel);
-        userDataLabelHolder.add(tooltipImageHolder);
+        userDataPanel.add(center(userDataLabel));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().firstName()), true).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().middleName()), true).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().lastName()), true).build()));
 
-        userDataPanel.add(center(userDataLabelHolder));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().firstName())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().middleName())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().lastName())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().email())).build()));
-        userDataPanel.add(center(new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().securityCode())).build()));
+        CTextFieldBase<?, ?> emailField;
+        userDataPanel.add(center(new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email()), true).build()));
+        emailField.setNote(i18n.tr("Please note: your email will be your user name"));
+
+        CTextFieldBase<?, ?> securityCodeField;
+        userDataPanel.add(center(new LoginDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode()), true).build()));
+        securityCodeField.setNote(i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
+        securityCodeField
+                .setTooltip(i18n
+                        .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
+
         contentPanel.add(center(userDataPanel));
 
         FlowPanel definePasswordPanel = new FlowPanel();
         definePasswordPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
-        Label definePasswordLabel = new Label();
-        definePasswordLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        definePasswordLabel.setText(i18n.tr("Set up your password:"));
-        definePasswordPanel.add(definePasswordLabel);
 
-        // TODO the following ugly top margin setup via 'w' is temporary since these labels are here to stay only until watermark for password has been implemented
-        Widget w = null;
-        definePasswordPanel.add(center(w = new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().password())).watermark("")
-                .build()));
-        w.getElement().getStyle().setMarginTop(0, Unit.PX);
+        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().password()), false).customLabel(i18n.tr("Set up your password")).build()));
 
-        Label confirmPasswordLabel = new Label();
-        confirmPasswordLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        confirmPasswordLabel.setText(proto().passwordConfirm().getMeta().getCaption() + ":");
-        definePasswordPanel.add(confirmPasswordLabel);
-        definePasswordPanel.add(center(w = new WatermarkDecoratorBuilder<CTextFieldBase<?, ?>>((CTextFieldBase<?, ?>) inject(proto().passwordConfirm()))
-                .watermark("").build()));
-        w.getElement().getStyle().setMarginTop(0, Unit.PX);
+        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().passwordConfirm()), false).build()));
 
         contentPanel.add(center(definePasswordPanel));
 

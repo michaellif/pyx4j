@@ -13,23 +13,21 @@
  */
 package com.propertyvista.portal.client.ui.residents.decorators;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 /** Sets up defaults for Landing Forms (Login, Password Reset, TenantRegsitration etc.. ), right now intended to be used not with 'editable' forms only */
-public class WatermarkDecoratorBuilder<C extends CTextFieldBase<?, ?>> extends WidgetDecorator.Builder {
+public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
 
     private String watermark;
 
-    public WatermarkDecoratorBuilder(C component) {
+    private final boolean useWatermark;
+
+    public LoginDecoratorBuilder(CComponent<?, ?> component, boolean useWatermark) {
         super(component);
-        this.watermark = null;
-        customLabel("");
-        labelWidth(0);
-        componentWidth(20);
-        useLabelSemicolon(false);
-        mandatoryMarker(false);
+        this.useWatermark = useWatermark;
     }
 
     public Builder watermark(String watermark) {
@@ -39,7 +37,21 @@ public class WatermarkDecoratorBuilder<C extends CTextFieldBase<?, ?>> extends W
 
     @Override
     public WidgetDecorator build() {
-        ((C) getComponent()).setWatermark(watermark != null ? watermark : getComponent().getTitle());
+        if (useWatermark) {
+            customLabel("");
+            labelWidth(0);
+            useLabelSemicolon(false);
+            if (getComponent() instanceof CTextFieldBase) {
+                ((CTextFieldBase<?, ?>) getComponent()).setWatermark(watermark != null ? watermark : getComponent().getTitle());
+            }
+        } else {
+            layout(Layout.vertical);
+            labelAlignment(Alignment.left);
+            useLabelSemicolon(true);
+        }
+        mandatoryMarker(false);
+        componentWidth(20);
+
         return super.build();
     }
 
