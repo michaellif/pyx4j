@@ -125,9 +125,9 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                     int offsetNumber = Persistence.service().count(EntityQueryCriteria.create(PmcMerchantAccountIndex.class));
                     for (int n = 0; n <= internalAccounts; n++) {
                         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
-                        merchantAccount.merchantTerminalId().setValue("DEMO" + offsetNumber + n);
+                        merchantAccount.merchantTerminalId().setValue("tD" + String.valueOf(offsetNumber) + String.valueOf(n));
                         merchantAccount.bankId().setValue("001");
-                        merchantAccount.branchTransitNumber().setValue("0110" + n);
+                        merchantAccount.branchTransitNumber().setValue("3" + String.valueOf(offsetNumber));
                         merchantAccount.status().setValue(MerchantAccount.MerchantAccountActivationStatus.Active);
 
                         // Make one ElectronicPaymentsAllowed FALSE
@@ -136,7 +136,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                                     PreloadData.ElectronicPaymentsNotAllowedAccountPrefix + String.valueOf(offsetNumber) + "789");
                             merchantAccount.invalid().setValue(Boolean.TRUE);
                         } else {
-                            merchantAccount.accountNumber().setValue(String.valueOf(offsetNumber) + "998");
+                            merchantAccount.accountNumber().setValue(String.valueOf(n) + "998");
                             merchantAccount.invalid().setValue(Boolean.FALSE);
                         }
                         merchantAccount.chargeDescription().setValue("Pay for " + pmc.name().getValue() + " er " + n);
