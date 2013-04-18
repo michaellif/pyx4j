@@ -117,6 +117,10 @@ SET search_path = '_admin_';
         -- scheduler_run
         
         ALTER TABLE scheduler_run ADD COLUMN completed TIMESTAMP;
+        
+        -- scheduler_trigger
+        
+        ALTER TABLE scheduler_trigger ADD COLUMN schedule_suspended BOOLEAN;
        
         
         
