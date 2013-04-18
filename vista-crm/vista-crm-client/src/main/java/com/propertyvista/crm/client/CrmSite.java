@@ -54,7 +54,7 @@ import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
-import com.propertyvista.crm.client.ui.CrmPanel;
+import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
@@ -85,7 +85,7 @@ public class CrmSite extends VistaSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new CrmPanel());
+        RootLayoutPanel.get().add(new CrmRootPane());
 
         CrmEntityMapper.init();
 

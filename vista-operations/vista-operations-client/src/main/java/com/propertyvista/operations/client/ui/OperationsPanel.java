@@ -35,6 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.operations.client.mvp.FooterActivityMapper;
 import com.propertyvista.operations.client.mvp.LoginActivityMapper;
 import com.propertyvista.operations.client.mvp.LogoActivityMapper;
@@ -44,7 +45,6 @@ import com.propertyvista.operations.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.operations.client.mvp.TopRightActionsActivityMapper;
 import com.propertyvista.operations.client.themes.OperationsPalette;
 import com.propertyvista.operations.client.themes.OperationsTheme;
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class OperationsPanel extends LayoutPanel {
 
@@ -88,7 +88,6 @@ public class OperationsPanel extends LayoutPanel {
          * one more panel needs to be introduced
          */
         LayoutPanel centerAreaContent = new LayoutPanel();
-        centerAreaContent.ensureDebugId("just_checking");
         contentPanel.add(centerAreaContent);
 
         //================ Main application area - splitter with navig menu and content ======= 
@@ -162,8 +161,6 @@ public class OperationsPanel extends LayoutPanel {
 
     class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
         DisplayPanel() {
-            String prefix = DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override
@@ -181,8 +178,6 @@ public class OperationsPanel extends LayoutPanel {
 
         UtilityDisplayPanel(LayoutPanel parent) {
             this.parent = parent;
-            String prefix = DEFAULT_STYLE_PREFIX;
-            setStyleName(prefix + CrmSitePanelTheme.StyleName.SiteViewDisplay.name());
         }
 
         @Override

@@ -1,0 +1,76 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Feb 1, 2011
+ * @author Misha
+ * @version $Id$
+ */
+package com.propertyvista.crm.client.ui;
+
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.web.bindery.event.shared.EventBus;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.DisplayPanel;
+
+import com.propertyvista.common.client.theme.CrmSitePanelTheme;
+import com.propertyvista.crm.client.mvp.LogoActivityMapper;
+import com.propertyvista.crm.client.mvp.MainDisplayActivityMapper;
+import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
+
+public class CrmRootPane extends LayoutPanel {
+
+    public CrmRootPane() {
+
+        HTML feedbackWidgetContainer = new HTML();
+        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
+        add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
+
+        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
+
+        DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
+        contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
+
+        add(contentPanel);
+
+        //============ Header Panel ============
+
+        FlowPanel headerPanel = new FlowPanel();
+        contentPanel.addNorth(headerPanel, 5);
+        headerPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewHeader.name());
+
+        DisplayPanel logoDisplay = new DisplayPanel();
+        //VS should correspond with the logo size
+        logoDisplay.setSize("30%", "100%");
+        logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
+        headerPanel.add(logoDisplay);
+
+        DisplayPanel actionsDisplay = new DisplayPanel();
+        //actionsDisplay.setWidth("20em");
+        actionsDisplay.setSize("70%", "100%");
+        actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
+        headerPanel.add(actionsDisplay);
+
+        DisplayPanel mainDisplay = new DisplayPanel();
+        contentPanel.add(mainDisplay);
+
+        EventBus eventBus = AppSite.getEventBus();
+
+        DisplayPanel.bind(new LogoActivityMapper(), logoDisplay, eventBus);
+        DisplayPanel.bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
+        DisplayPanel.bind(new MainDisplayActivityMapper(), mainDisplay, eventBus);
+
+    }
+
+}

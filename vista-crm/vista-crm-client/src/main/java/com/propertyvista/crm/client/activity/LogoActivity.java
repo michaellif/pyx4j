@@ -30,7 +30,6 @@ public class LogoActivity extends AbstractActivity implements LogoView.Presenter
 
     public LogoActivity(Place place) {
         view = CrmVeiwFactory.instance(LogoView.class);
-        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

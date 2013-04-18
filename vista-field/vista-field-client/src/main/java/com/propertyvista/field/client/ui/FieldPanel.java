@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.DisplayPanel;
 
 import com.propertyvista.field.client.mvp.DetailsActivityMapper;
 import com.propertyvista.field.client.mvp.FullScreenActivityMapper;

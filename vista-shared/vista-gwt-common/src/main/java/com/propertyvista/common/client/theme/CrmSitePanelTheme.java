@@ -23,7 +23,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class CrmSitePanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewNavigation, SiteViewFooter, SiteViewDisplay, SiteViewNavigContainer;
+        SiteView, SiteViewContent, SiteViewAction, SiteViewHeader, SiteViewNavigation, SiteViewFooter, SiteViewNavigContainer;
     }
 
     public CrmSitePanelTheme() {

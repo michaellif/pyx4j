@@ -217,9 +217,9 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 
-public class MainActivityMapper implements AppActivityMapper {
+public class ContentActivityMapper implements AppActivityMapper {
 
-    public MainActivityMapper() {
+    public ContentActivityMapper() {
     }
 
     @Override

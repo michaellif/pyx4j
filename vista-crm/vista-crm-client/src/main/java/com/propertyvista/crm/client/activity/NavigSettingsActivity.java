@@ -43,7 +43,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
     public NavigSettingsActivity(Place place) {
         view = CrmVeiwFactory.instance(NavigView.class);
-        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }

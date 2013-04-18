@@ -30,7 +30,6 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     public RuntimeErrorActivity(Place place) {
         view = CrmVeiwFactory.instance(RuntimeErrorView.class);
-        assert (view != null);
         view.setPresenter(this);
     }
 

@@ -22,6 +22,8 @@ import com.propertyvista.crm.client.ui.FooterView;
 import com.propertyvista.crm.client.ui.FooterViewImpl;
 import com.propertyvista.crm.client.ui.LogoView;
 import com.propertyvista.crm.client.ui.LogoViewImpl;
+import com.propertyvista.crm.client.ui.MainDisplayView;
+import com.propertyvista.crm.client.ui.MainDisplayViewImpl;
 import com.propertyvista.crm.client.ui.MessageView;
 import com.propertyvista.crm.client.ui.MessageViewImpl;
 import com.propertyvista.crm.client.ui.NavigView;
@@ -37,7 +39,9 @@ public class CrmVeiwFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (NavigView.class.equals(type)) {
+            if (MainDisplayView.class.equals(type)) {
+                map.put(type, new MainDisplayViewImpl());
+            } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
             } else if (ShortCutsView.class.equals(type)) {
                 map.put(type, new ShortCutsViewImpl());

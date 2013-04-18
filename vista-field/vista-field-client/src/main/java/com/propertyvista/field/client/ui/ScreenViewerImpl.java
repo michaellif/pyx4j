@@ -18,6 +18,8 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.site.client.DisplayPanel;
+
 import com.propertyvista.field.client.event.EventSource;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.components.alerts.AlertsInfoView;

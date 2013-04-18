@@ -15,6 +15,8 @@ package com.propertyvista.field.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.site.client.DisplayPanel;
+
 import com.propertyvista.field.client.event.EventSource;
 import com.propertyvista.field.rpc.ScreenMode.ScreenLayout;
 
