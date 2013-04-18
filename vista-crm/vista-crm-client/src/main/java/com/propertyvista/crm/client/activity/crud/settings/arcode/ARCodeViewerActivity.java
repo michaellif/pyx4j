@@ -28,6 +28,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class ARCodeViewerActivity extends CrmViewerActivity<ARCode> {
 
+    private boolean canEdit;
+
     @SuppressWarnings("unchecked")
     public ARCodeViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(ARCodeViewerView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class));
@@ -37,5 +39,16 @@ public class ARCodeViewerActivity extends CrmViewerActivity<ARCode> {
     protected void onPopulateSuccess(ARCode result) {
         super.onPopulateSuccess(result);
         ((HasYardiIntegrationMode) getView()).setYardiIntegrationModeEnabled(VistaFeatures.instance().yardiIntegration());
+    }
+
+    @Override
+    public boolean canEdit() {
+        return canEdit;
+    }
+
+    @Override
+    protected void populateView(ARCode result) {
+        canEdit = !result.reserved().isBooleanTrue();
+        super.populateView(result);
     }
 }

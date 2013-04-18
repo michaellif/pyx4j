@@ -33,7 +33,8 @@ public class ARCodeLister extends AbstractLister<ARCode> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().glCode()).build()
+            new MemberColumnDescriptor.Builder(proto().glCode()).build(),
+            new MemberColumnDescriptor.Builder(proto().reserved()).build()
         );//@formatter:on
     }
 
