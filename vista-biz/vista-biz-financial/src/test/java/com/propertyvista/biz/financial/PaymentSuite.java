@@ -16,15 +16,16 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.payment.PadPaymentAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScenarioTest;
+import com.propertyvista.biz.financial.payment.PadPaymentFixedAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentMethodCancellationTest;
+import com.propertyvista.biz.financial.payment.PadPaymentPercentAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class,
-        PadPaymentMethodCancellationTest.class, PadPaymentAmountValidationTest.class })
+        PadPaymentMethodCancellationTest.class, PadPaymentPercentAmountValidationTest.class, PadPaymentFixedAmountValidationTest.class })
 public class PaymentSuite {
 
 }
