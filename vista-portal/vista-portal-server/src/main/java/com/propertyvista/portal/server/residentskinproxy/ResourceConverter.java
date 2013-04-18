@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
@@ -48,7 +49,9 @@ public class ResourceConverter {
             in = method.getResponseBodyAsStream();
 
             if (contentType.equalsIgnoreCase("text/css")) {
-                return convertCSS(in, encoding, host);
+                String rcPath = method.getURI().getPath();
+                rcPath = rcPath.substring(0, rcPath.lastIndexOf("/"));
+                return convertCSS(in, encoding, host, rcPath);
             }
         } catch (IOException ex) {
         }
@@ -56,15 +59,22 @@ public class ResourceConverter {
         return in;
     }
 
-    public static InputStream convertCSS(InputStream in, String encoding, String host) throws IOException {
-        // replace: url("/<path>") -> url("<proxyPrefix>/<resourceHost>/<path>")
-        String regex = "url *\\( *([\"']?)/";
-        String replace = "url($1" + DeploymentConsts.portalInectionProxy + host + "/";
-
+    public static InputStream convertCSS(InputStream in, String encoding, String host, String rcPath) throws IOException {
         StringWriter writer = new StringWriter();
         IOUtils.copy(in, writer, encoding);
         String out = writer.toString();
-        out = out.toLowerCase().replaceAll(regex, replace);
+
+        // relative urls should be prefixed with the css resource path
+        // replace1: url("<path>") -> url("/<rcPath>/<path>")
+        String regex = "url *\\( *([\"']?)([^/])";
+        String replace = "url($1" + rcPath + "/$2";
+        out = Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(out).replaceAll(replace);
+
+        // replace2: url("/<path>") -> url("<proxyPrefix>/<resourceHost>/<path>")
+        regex = "url *\\( *([\"']?)/";
+        replace = "url($1" + DeploymentConsts.portalInectionProxy + host + "/";
+        out = Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(out).replaceAll(replace);
+
         return new ByteArrayInputStream(out.getBytes(encoding));
     }
 }
