@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Filter;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -46,6 +49,8 @@ import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 
     private static final long serialVersionUID = 1L;
+
+    private final static Logger log = LoggerFactory.getLogger(DBIntegrityCheckDeferredProcess.class);
 
     public DBIntegrityCheckDeferredProcess(ReportRequest request) {
         super(request);
@@ -82,9 +87,9 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     }
 
     @Override
-    protected void reportEntity(Pmc entity) {
+    protected void reportEntity(Pmc pmc) {
         try {
-            NamespaceManager.setNamespace(entity.namespace().getValue());
+            NamespaceManager.setNamespace(pmc.namespace().getValue());
             new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
                 @Override
@@ -94,8 +99,10 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                 }
 
             });
+            log.debug("tables verified for {}", pmc.namespace());
             commonNamespaceIntegrityCheck();
-            VistaUpgrade.upgradePmcData(entity);
+            log.debug("tables count created for {}", pmc.namespace());
+            VistaUpgrade.upgradePmcData(pmc);
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         }
@@ -146,8 +153,6 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
             @Override
             public Void execute() {
-
-                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
                 List<String> allClasses = EntityClassFinder.getEntityClassesNames();
                 TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
                 for (String className : allClasses) {
