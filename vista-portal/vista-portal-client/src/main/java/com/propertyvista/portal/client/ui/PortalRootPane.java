@@ -33,7 +33,7 @@ import com.propertyvista.portal.client.mvp.NavigActivityMapper;
 import com.propertyvista.portal.client.mvp.TopRightActivityMapper;
 import com.propertyvista.portal.client.mvp.UtilityActivityMapper;
 
-public class PortalScreen extends SimplePanel {
+public class PortalRootPane extends SimplePanel {
 
     public static String DEFAULT_STYLE_PREFIX = "PortalView";
 
@@ -47,9 +47,7 @@ public class PortalScreen extends SimplePanel {
 
     DisplayPanel contentDisplayPanel;
 
-    public PortalScreen() {
-
-        EventBus eventBus = AppSite.getEventBus();
+    public PortalRootPane() {
 
         String prefix = DEFAULT_STYLE_PREFIX;
 
@@ -67,13 +65,13 @@ public class PortalScreen extends SimplePanel {
         sidebar.setStyleName("vista-pmsite-sidebar");
         sidebarWrap.add(sidebar);
 
-        FlowPanel main = new FlowPanel();
-        main.setStyleName("vista-pmsite-main");
-        sidebarWrap.add(main);
-
         navigDisplayPanel = new DisplayPanel();
         navigDisplayPanel.setStyleName("secondaryNavig");
         sidebar.setWidget(navigDisplayPanel);
+
+        FlowPanel main = new FlowPanel();
+        main.setStyleName("vista-pmsite-main");
+        sidebarWrap.add(main);
 
         DisplayPanel captionDisplayPanel = new DisplayPanel();
         captionDisplayPanel.setStyleName("caption");
@@ -102,10 +100,13 @@ public class PortalScreen extends SimplePanel {
             throw new UserRuntimeException("Custom HTML page is missing <div>" + PortalSite.TOP_RIGHT_INSERTION_ID);
         }
 
+        EventBus eventBus = AppSite.getEventBus();
+
         bind(new TopRightActivityMapper(), topRightDisplay, eventBus);
         bind(new UtilityActivityMapper(), utilityDisplay, eventBus);
-        bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new CaptionActivityMapper(), captionDisplayPanel, eventBus);
+
+        bind(new NavigActivityMapper(), navigDisplayPanel, eventBus);
         bind(new ContentActivityMapper(), contentDisplayPanel, eventBus);
 
     }

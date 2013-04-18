@@ -40,7 +40,7 @@ import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
-import com.propertyvista.portal.client.ui.PortalScreen;
+import com.propertyvista.portal.client.ui.PortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
@@ -71,9 +71,9 @@ public class PortalSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
         if (RootPanel.get(RESIDENT_INSERTION_ID) != null) {
-            RootPanel.get(RESIDENT_INSERTION_ID).add(new PortalScreen());
+            RootPanel.get(RESIDENT_INSERTION_ID).add(new PortalRootPane());
         } else {
-            RootPanel.get().add(new PortalScreen());
+            RootPanel.get().add(new PortalRootPane());
         }
 
         hideLoadingIndicator();

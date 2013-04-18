@@ -34,7 +34,7 @@ import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
-import com.propertyvista.portal.client.ui.PortalScreen;
+import com.propertyvista.portal.client.ui.PortalRootPane;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
@@ -169,7 +169,7 @@ public class PortalTheme extends VistaTheme {
     }
 
     protected void initSiteViewStyles() {
-        String prefix = PortalScreen.DEFAULT_STYLE_PREFIX;
+        String prefix = PortalRootPane.DEFAULT_STYLE_PREFIX;
 
         int minWidth = 960;
         int maxWidth = 960;
@@ -183,7 +183,7 @@ public class PortalTheme extends VistaTheme {
         style.addProperty("margin", "0 auto");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalScreen.StyleSuffix.Display));
+        style = new Style(Selector.valueOf(prefix, PortalRootPane.StyleSuffix.Display));
         addStyle(style);
 
         String gwtButton = (".gwt-Button");
