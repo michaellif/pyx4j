@@ -41,22 +41,28 @@ public class CrmVeiwFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (MainDisplayView.class.equals(type)) {
                 map.put(type, new MainDisplayViewImpl());
+
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
+
             } else if (ShortCutsView.class.equals(type)) {
                 map.put(type, new ShortCutsViewImpl());
+
             } else if (TopRightActionsView.class.equals(type)) {
                 map.put(type, new TopRightActionsViewImpl());
 
             } else if (LogoView.class.equals(type)) {
                 map.put(type, new LogoViewImpl());
+
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
 
             } else if (AlertView.class.equals(type)) {
                 map.put(type, new AlertViewImpl());
+
             } else if (MessageView.class.equals(type)) {
                 map.put(type, new MessageViewImpl());
+
             } else if (RuntimeErrorView.class.equals(type)) {
                 map.put(type, new RuntimeErrorViewImpl());
             }

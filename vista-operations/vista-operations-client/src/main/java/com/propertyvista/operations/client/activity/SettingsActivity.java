@@ -26,8 +26,7 @@ public class SettingsActivity extends AbstractActivity {
     private final SettingsView view;
 
     public SettingsActivity(Place place) {
-        view = (SettingsView) OperationsVeiwFactory.instance(SettingsView.class);
-        assert (view != null);
+        view = OperationsVeiwFactory.instance(SettingsView.class);
     }
 
     @Override

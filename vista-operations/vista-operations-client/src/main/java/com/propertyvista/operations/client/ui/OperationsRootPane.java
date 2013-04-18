@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -11,38 +11,39 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.operations.client.ui;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.crm.client.mvp.LogoActivityMapper;
-import com.propertyvista.crm.client.mvp.MainDisplayActivityMapper;
-import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
+import com.propertyvista.operations.client.mvp.LogoActivityMapper;
+import com.propertyvista.operations.client.mvp.MainDisplayActivityMapper;
+import com.propertyvista.operations.client.mvp.TopRightActionsActivityMapper;
+import com.propertyvista.operations.client.themes.OperationsPalette;
+import com.propertyvista.operations.client.themes.OperationsTheme;
+import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 
-public class CrmRootPane extends LayoutPanel {
+public class OperationsRootPane extends LayoutPanel {
 
-    public CrmRootPane() {
+    public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
-        HTML feedbackWidgetContainer = new HTML();
-        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
-        add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
+    public OperationsRootPane() {
+
+        StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
         setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
-
         add(contentPanel);
 
         //============ Header Panel ============
@@ -71,7 +72,7 @@ public class CrmRootPane extends LayoutPanel {
         DisplayPanel.bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
         DisplayPanel.bind(new MainDisplayActivityMapper(), mainDisplay, eventBus);
 
-        CrmVeiwFactory.instance(MainDisplayView.class);
+        OperationsVeiwFactory.instance(MainDisplayView.class);
 
     }
 

@@ -26,8 +26,7 @@ public class LogoActivity extends AbstractActivity implements LogoView.Presenter
     private final LogoView view;
 
     public LogoActivity(Place place) {
-        view = (LogoView) OperationsVeiwFactory.instance(LogoView.class);
-        assert (view != null);
+        view = OperationsVeiwFactory.instance(LogoView.class);
         view.setPresenter(this);
         withPlace(place);
     }

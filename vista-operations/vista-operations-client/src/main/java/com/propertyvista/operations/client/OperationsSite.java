@@ -23,7 +23,7 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.operations.client.ui.OperationsPanel;
+import com.propertyvista.operations.client.ui.OperationsRootPane;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.common.client.site.Message;
@@ -43,7 +43,7 @@ public class OperationsSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OperationsSiteMap.Management());
         RootPanel.get().add(RootLayoutPanel.get());
-        RootLayoutPanel.get().add(new OperationsPanel());
+        RootLayoutPanel.get().add(new OperationsRootPane());
         hideLoadingIndicator();
         SessionInactiveDialog.register();
         obtainAuthenticationData();

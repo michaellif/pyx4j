@@ -22,6 +22,7 @@ import com.propertyvista.operations.client.activity.FooterActivity;
 public class FooterActivityMapper implements ActivityMapper {
 
     public FooterActivityMapper() {
+
     }
 
     @Override

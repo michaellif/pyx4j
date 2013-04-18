@@ -31,7 +31,7 @@ public interface PADPolicy extends Policy {
 
     @I18n
     public enum PADChargeType {
-        FixedAmount, OwingBalance, Any;
+        FixedAmount, OwingBalance;
 
         @Override
         public String toString() {

@@ -73,9 +73,9 @@ import com.propertyvista.operations.client.activity.security.PasswordChangeActiv
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class MainActivityMapper implements AppActivityMapper {
+public class ContentActivityMapper implements AppActivityMapper {
 
-    public MainActivityMapper() {
+    public ContentActivityMapper() {
     }
 
     @Override

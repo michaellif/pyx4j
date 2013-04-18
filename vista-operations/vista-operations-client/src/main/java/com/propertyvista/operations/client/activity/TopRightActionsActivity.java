@@ -34,7 +34,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     public TopRightActionsActivity(Place place) {
         view = OperationsVeiwFactory.instance(TopRightActionsView.class);
-        assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
