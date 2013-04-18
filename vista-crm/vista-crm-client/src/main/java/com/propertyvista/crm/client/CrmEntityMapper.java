@@ -114,7 +114,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
         AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
 
-        AppPlaceEntityMapper.register(ARCode.class, Financial.ProductDictionary.ARCode.class, defaultImage);
+        AppPlaceEntityMapper.register(ARCode.class, Financial.ARCode.class, defaultImage);
         AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
 
