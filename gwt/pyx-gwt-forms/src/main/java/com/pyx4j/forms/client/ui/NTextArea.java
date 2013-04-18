@@ -43,7 +43,6 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
     @Override
     protected HTML createViewer() {
         HTML viewer = super.createViewer();
-        viewer.getElement().getStyle().setProperty("whiteSpace", "pre");
         return viewer;
     }
 
