@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.financial.ARCode;
 
 public interface ProductCodeEditorView extends IEditor<ARCode>, HasYardiIntegrationMode {
+
+    void reportSaveError(UserRuntimeException caught);
 
 }

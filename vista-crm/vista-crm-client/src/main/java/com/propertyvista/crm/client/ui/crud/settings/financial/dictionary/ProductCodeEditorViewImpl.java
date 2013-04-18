@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
 
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.financial.ARCode;
 
@@ -25,6 +28,11 @@ public class ProductCodeEditorViewImpl extends CrmEditorViewImplBase<ARCode> imp
     @Override
     public void setYardiIntegrationModeEnabled(boolean enabled) {
         ((HasYardiIntegrationMode) getForm()).setYardiIntegrationModeEnabled(enabled);
+    }
+
+    @Override
+    public void reportSaveError(UserRuntimeException caught) {
+        MessageDialog.error("", caught.getMessage());
     }
 
 }

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -38,5 +39,14 @@ public class ProductCodeEditorActivity extends CrmEditorActivity<ARCode> {
     public void onPopulateSuccess(ARCode result) {
         super.onPopulateSuccess(result);
         ((HasYardiIntegrationMode) getView()).setYardiIntegrationModeEnabled(VistaFeatures.instance().yardiIntegration());
+    }
+
+    @Override
+    protected void onSaveFail(Throwable caught) {
+        if (caught instanceof UserRuntimeException) {
+            ((ProductCodeEditorView) getView()).reportSaveError((UserRuntimeException) caught);
+        } else {
+            super.onSaveFail(caught);
+        }
     }
 }
