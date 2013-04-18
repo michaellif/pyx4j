@@ -55,7 +55,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
 public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
 
@@ -110,7 +109,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         if (caption == null) {
             caption = "";
         } else {
-            caption += builder.useLabelSemicolon && builder.layout != Layout.vertical ? ":" : "";
+            caption += builder.useLabelSemicolon ? ":" : "";
         }
 
         label = new Label(caption);
