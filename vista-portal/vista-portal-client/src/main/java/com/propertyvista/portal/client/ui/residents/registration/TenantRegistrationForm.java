@@ -57,22 +57,17 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
     public IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
 
-        buildingComboBox = ((CSimpleEntityComboBox<SelfRegistrationBuildingDTO>) inject(proto().building(),
-                new CSimpleEntityComboBox<SelfRegistrationBuildingDTO>()));
-
-        FlowPanel selectBuildingPanel = new FlowPanel();
-
-        selectBuildingPanel.add(new LoginDecoratorBuilder(buildingComboBox, false).customLabel(i18n.tr("Select your building")).build());
-
-        contentPanel.add(center(selectBuildingPanel));
-
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
+
+        buildingComboBox = ((CSimpleEntityComboBox<SelfRegistrationBuildingDTO>) inject(proto().building(),
+                new CSimpleEntityComboBox<SelfRegistrationBuildingDTO>()));
+        userDataPanel.add(new LoginDecoratorBuilder(buildingComboBox, false).customLabel(i18n.tr("Select your building")).build());
 
         Label userDataLabel = new Label();
         userDataLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         userDataLabel.getElement().getStyle().setDisplay(Display.INLINE);
-        userDataLabel.setText(i18n.tr("Please fill in your name, email address, and the security code"));
+        userDataLabel.setText(i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement"));
         userDataPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
         userDataPanel.add(center(userDataLabel));
@@ -81,7 +76,9 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().lastName()), true).build()));
 
         CTextFieldBase<?, ?> emailField;
-        userDataPanel.add(center(new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email()), true).build()));
+        Widget w = center(new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email()), true).build());
+        w.getElement().getStyle().setMarginTop(20, Unit.PX);
+        userDataPanel.add(w);
         emailField.setNote(i18n.tr("Please note: your email will be your user name"));
 
         CTextFieldBase<?, ?> securityCodeField;
