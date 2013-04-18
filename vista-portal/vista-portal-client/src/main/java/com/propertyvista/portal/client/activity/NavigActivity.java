@@ -89,7 +89,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
-            items.add(new Residents.Financial.AutoPay());
+            items.add(new Residents.Financial.PreauthorizedPayments());
             items.add(new Residents.PaymentMethods());
         }
 

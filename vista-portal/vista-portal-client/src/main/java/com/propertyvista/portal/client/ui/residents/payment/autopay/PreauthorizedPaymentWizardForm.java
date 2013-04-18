@@ -135,6 +135,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             }
         });
 
+        // filled with 'percent' by default and isn't allowed to change!
+        get(proto().amountType()).setEditable(false);
+
         return panel;
     }
 

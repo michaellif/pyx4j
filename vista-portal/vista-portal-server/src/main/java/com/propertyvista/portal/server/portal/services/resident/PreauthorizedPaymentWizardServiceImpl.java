@@ -80,8 +80,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         dto.tenant().set(TenantAppContext.getCurrentUserTenant());
 
         // some default values:
-        dto.amountType().setValue(AmountType.Value);
-        dto.value().setValue(BigDecimal.ZERO);
+        dto.amountType().setValue(AmountType.Percent);
+        dto.value().setValue(BigDecimal.ONE);
 
         callback.onSuccess(dto);
     }

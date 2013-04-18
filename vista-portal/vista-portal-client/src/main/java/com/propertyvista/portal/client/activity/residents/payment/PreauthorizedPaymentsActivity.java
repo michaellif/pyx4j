@@ -64,7 +64,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
 
     @Override
     public void addPreauthorizedPayment() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.AutoPay.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override
