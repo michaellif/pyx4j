@@ -834,9 +834,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Financial.ProductDictionary) {
-                        activity = new ARPolicyListerActivity(crudPlace);
-
                     } else if (crudPlace instanceof Financial.ARCode) {
                         switch (crudPlace.getType()) {
                         case lister:

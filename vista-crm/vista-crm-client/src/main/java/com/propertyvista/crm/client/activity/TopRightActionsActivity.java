@@ -131,7 +131,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showSettings() {
-        AppSite.getPlaceController().goTo(new Financial.ProductDictionary());
+        AppSite.getPlaceController().goTo(new Financial.ARCode());
     }
 
     @Override
