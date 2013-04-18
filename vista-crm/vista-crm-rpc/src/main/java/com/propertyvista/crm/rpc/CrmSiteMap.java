@@ -397,14 +397,8 @@ public class CrmSiteMap implements SiteMap {
             public static class MerchantAccount extends CrmCrudAppPlace {
             }
 
+            @PlaceProperties(navigLabel = "AR Codes")
             public static class ARCode extends CrmCrudAppPlace {
-            }
-
-            public static class ProductDictionary extends CrmCrudAppPlace {
-                public ProductDictionary() {
-                    super(Type.viewer);
-                }
-
             }
 
             @PlaceProperties(navigLabel = "GL Codes", caption = "GL Code Category")
