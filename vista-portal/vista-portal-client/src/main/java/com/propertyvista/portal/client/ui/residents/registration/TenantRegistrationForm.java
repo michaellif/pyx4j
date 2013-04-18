@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
-import com.propertyvista.portal.client.ui.residents.decorators.LoginDecoratorBuilder;
+import com.propertyvista.portal.client.ui.util.decorators.LoginDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;

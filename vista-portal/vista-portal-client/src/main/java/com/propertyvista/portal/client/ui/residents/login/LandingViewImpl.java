@@ -65,8 +65,8 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel;
 import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel.Side;
-import com.propertyvista.portal.client.ui.residents.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.client.ui.residents.decorators.LoginDecoratorBuilder;
+import com.propertyvista.portal.client.ui.util.decorators.CheckBoxDecorator;
+import com.propertyvista.portal.client.ui.util.decorators.LoginDecoratorBuilder;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
