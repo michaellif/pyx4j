@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings.dictionary;
+package com.propertyvista.crm.client.activity.crud.settings.arcode;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -23,28 +23,28 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.ProductCodeCrudService;
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.Utility;
 
-public class ProductDictionaryViewActivity extends AbstractActivity implements ProductDictionaryView.Presenter {
+public class ARCodeListerViewActivity extends AbstractActivity implements ARCodeListerView.Presenter {
 
     private final AppPlace place;
 
-    protected final ProductDictionaryView view;
+    protected final ARCodeListerView view;
 
     ILister.Presenter<ARCode> productCodeLister;
 
     ILister.Presenter<Utility> utilityLister;
 
-    public ProductDictionaryViewActivity(AppPlace place) {
+    public ARCodeListerViewActivity(AppPlace place) {
         this.place = place;
-        this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
+        this.view = SettingsViewFactory.instance(ARCodeListerView.class);
 
-        productCodeLister = new ListerController<ARCode>(view.getProductCodeListerView(), GWT.<ProductCodeCrudService> create(ProductCodeCrudService.class),
+        productCodeLister = new ListerController<ARCode>(view.getProductCodeListerView(), GWT.<ARCodeCrudService> create(ARCodeCrudService.class),
                 ARCode.class);
         utilityLister = new ListerController<Utility>(view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class), Utility.class);
     }

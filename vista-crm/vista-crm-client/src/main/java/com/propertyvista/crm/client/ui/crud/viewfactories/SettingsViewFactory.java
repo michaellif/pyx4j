@@ -40,12 +40,12 @@ import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCredit
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeEditorView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeViewerView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryView;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductDictionaryViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeListerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryListerView;
@@ -99,13 +99,13 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (CityIntroPageEditor.class.equals(type)) {
                 map.put(type, new CityIntroPageEditorImpl());
 
-            } else if (ProductDictionaryView.class.equals(type)) {
-                map.put(type, new ProductDictionaryViewImpl());
+            } else if (ARCodeListerView.class.equals(type)) {
+                map.put(type, new ARCodeListerViewImpl());
 
-            } else if (ProductCodeViewerView.class.equals(type)) {
-                map.put(type, new ProductCodeViewerViewImpl());
-            } else if (ProductCodeEditorView.class.equals(type)) {
-                map.put(type, new ProductCodeEditorViewImpl());
+            } else if (ARCodeViewerView.class.equals(type)) {
+                map.put(type, new ARCodeViewerViewImpl());
+            } else if (ARCodeEditorView.class.equals(type)) {
+                map.put(type, new ARCodeEditorViewImpl());
 
             } else if (CrmRoleListerView.class.equals(type)) {
                 map.put(type, new CrmRoleListerViewImpl());

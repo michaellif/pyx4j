@@ -402,7 +402,7 @@ public class CrmSiteMap implements SiteMap {
                     super(Type.viewer);
                 }
 
-                public static class ProductCode extends CrmCrudAppPlace {
+                public static class ARCode extends CrmCrudAppPlace {
                 }
             }
 

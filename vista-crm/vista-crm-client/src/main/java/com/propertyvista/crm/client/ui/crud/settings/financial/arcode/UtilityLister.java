@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import java.util.Arrays;
 import java.util.List;

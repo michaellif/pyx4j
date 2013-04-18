@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -19,10 +19,10 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.financial.ARCode;
 
-public class ProductCodeEditorViewImpl extends CrmEditorViewImplBase<ARCode> implements ProductCodeEditorView {
+public class ARCodeEditorViewImpl extends CrmEditorViewImplBase<ARCode> implements ARCodeEditorView {
 
-    public ProductCodeEditorViewImpl() {
-        setForm(new ProductCodeForm(this));
+    public ARCodeEditorViewImpl() {
+        setForm(new ARCodeForm(this));
     }
 
     @Override

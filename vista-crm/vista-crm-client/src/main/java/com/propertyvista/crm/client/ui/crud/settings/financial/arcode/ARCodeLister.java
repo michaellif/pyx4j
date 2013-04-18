@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +23,11 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.financial.ARCode;
 
-public class ProductCodeLister extends AbstractLister<ARCode> {
+public class ARCodeLister extends AbstractLister<ARCode> {
 
-    private static final I18n i18n = I18n.get(ProductCodeLister.class);
+    private static final I18n i18n = I18n.get(ARCodeLister.class);
 
-    public ProductCodeLister() {
+    public ARCodeLister() {
         super(ARCode.class, true, true);
 
         setColumnDescriptors(//@formatter:off

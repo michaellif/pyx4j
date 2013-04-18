@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,15 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
- * @author Vlad
+ * Created on 2013-03-11
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+public interface HasYardiIntegrationMode {
 
-import com.propertyvista.domain.financial.ARCode;
-
-public interface ProductCodeCrudService extends AbstractCrudService<ARCode> {
+    void setYardiIntegrationModeEnabled(boolean enabled);
 }

@@ -37,7 +37,7 @@ import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
-import com.propertyvista.crm.rpc.services.admin.ProductCodeCrudService;
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
@@ -431,7 +431,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadService.class));
 
 // - Administration:
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ProductCodeCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ARCodeCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UtilityCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectProductCodeListService.class));

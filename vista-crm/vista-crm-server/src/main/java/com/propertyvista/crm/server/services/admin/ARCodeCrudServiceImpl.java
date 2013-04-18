@@ -25,16 +25,16 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.admin.ProductCodeCrudService;
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProductCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> implements ProductCodeCrudService {
+public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> implements ARCodeCrudService {
 
-    private static final I18n i18n = I18n.get(ProductCodeCrudServiceImpl.class);
+    private static final I18n i18n = I18n.get(ARCodeCrudServiceImpl.class);
 
-    public ProductCodeCrudServiceImpl() {
+    public ARCodeCrudServiceImpl() {
         super(ARCode.class);
     }
 

@@ -113,6 +113,8 @@ import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerAc
 import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetEditorActivity;
@@ -124,9 +126,6 @@ import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorAct
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductCodeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductCodeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountViewerActivity;
@@ -835,15 +834,15 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 
                     } else if (crudPlace instanceof Financial.ProductDictionary) {
-                        activity = new ProductDictionaryViewActivity(crudPlace);
+                        activity = new ARPolicyListerActivity(crudPlace);
 
-                    } else if (crudPlace instanceof Financial.ProductDictionary.ProductCode) {
+                    } else if (crudPlace instanceof Financial.ProductDictionary.ARCode) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new ProductCodeEditorActivity(crudPlace);
+                            activity = new ARCodeEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new ProductCodeViewerActivity(crudPlace);
+                            activity = new ARCodeViewerActivity(crudPlace);
                             break;
                         default:
                             break;

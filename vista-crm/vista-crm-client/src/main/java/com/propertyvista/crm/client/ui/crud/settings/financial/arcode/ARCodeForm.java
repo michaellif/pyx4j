@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,13 +26,13 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.GlCode;
 
-public class ProductCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegrationMode {
+public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegrationMode {
 
-    private static final I18n i18n = I18n.get(ProductCodeForm.class);
+    private static final I18n i18n = I18n.get(ARCodeForm.class);
 
     private final FormFlexPanel yardiIntegrationPanel;
 
-    public ProductCodeForm(IForm<ARCode> view) {
+    public ARCodeForm(IForm<ARCode> view) {
         super(ARCode.class, view);
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
@@ -52,7 +52,7 @@ public class ProductCodeForm extends CrmEntityForm<ARCode> implements HasYardiIn
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            get(ProductCodeForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
+                            get(ARCodeForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
                         }
                         return !getSelectedItems().isEmpty();
                     }

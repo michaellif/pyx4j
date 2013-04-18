@@ -11,20 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.property.asset.Utility;
 
-public interface ProductDictionaryView extends IViewer<ARCode> {
+public interface ARCodeViewerView extends IViewer<ARCode>, HasYardiIntegrationMode {
 
-    public interface Presenter extends IViewer.Presenter {
-    }
-
-    ILister<ARCode> getProductCodeListerView();
-
-    ILister<Utility> getUtilityListerView();
 }

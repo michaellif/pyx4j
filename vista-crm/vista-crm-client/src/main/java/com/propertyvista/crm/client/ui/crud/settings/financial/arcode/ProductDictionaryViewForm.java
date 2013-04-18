@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,10 +31,10 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ARCode> {
 
         int row = -1;
         content.setH3(++row, 0, 1, i18n.tr("Product Codes"));
-        content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getProductCodeListerView().asWidget());
+        content.setWidget(++row, 0, ((ARCodeListerView) getParentView()).getProductCodeListerView().asWidget());
 
         content.setH3(++row, 0, 1, i18n.tr("Utilities"));
-        content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getUtilityListerView().asWidget());
+        content.setWidget(++row, 0, ((ARCodeListerView) getParentView()).getUtilityListerView().asWidget());
 
         selectTab(addTab(content));
     }

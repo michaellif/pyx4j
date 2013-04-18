@@ -11,15 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.financial.dictionary;
+package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.ARCode;
 
-public class ProductCodeViewerViewImpl extends CrmViewerViewImplBase<ARCode> implements ProductCodeViewerView {
+public class ARCodeViewerViewImpl extends CrmViewerViewImplBase<ARCode> implements ARCodeViewerView {
 
-    public ProductCodeViewerViewImpl() {
-        setForm(new ProductCodeForm(this));
+    public ARCodeViewerViewImpl() {
+        setForm(new ARCodeForm(this));
     }
 
     @Override

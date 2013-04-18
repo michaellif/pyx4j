@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings.dictionary;
+package com.propertyvista.crm.client.activity.crud.settings.arcode;
 
 import com.google.gwt.core.client.GWT;
 
@@ -20,18 +20,18 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.HasYardiIntegrationMode;
-import com.propertyvista.crm.client.ui.crud.settings.financial.dictionary.ProductCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.HasYardiIntegrationMode;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.ProductCodeCrudService;
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProductCodeEditorActivity extends CrmEditorActivity<ARCode> {
+public class ARCodeEditorActivity extends CrmEditorActivity<ARCode> {
 
     @SuppressWarnings("unchecked")
-    public ProductCodeEditorActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(ProductCodeEditorView.class), (AbstractCrudService<ARCode>) GWT.create(ProductCodeCrudService.class),
+    public ARCodeEditorActivity(CrudAppPlace place) {
+        super(place, SettingsViewFactory.instance(ARCodeEditorView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class),
                 ARCode.class);
     }
 
@@ -44,7 +44,7 @@ public class ProductCodeEditorActivity extends CrmEditorActivity<ARCode> {
     @Override
     protected void onSaveFail(Throwable caught) {
         if (caught instanceof UserRuntimeException) {
-            ((ProductCodeEditorView) getView()).reportSaveError((UserRuntimeException) caught);
+            ((ARCodeEditorView) getView()).reportSaveError((UserRuntimeException) caught);
         } else {
             super.onSaveFail(caught);
         }
