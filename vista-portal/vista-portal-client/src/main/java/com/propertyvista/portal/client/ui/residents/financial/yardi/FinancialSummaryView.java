@@ -13,22 +13,15 @@
  */
 package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
-public interface FinancialSummaryView extends IsWidget {
+public interface FinancialSummaryView extends View<YardiFinancialSummaryDTO> {
 
-    interface Presenter {
+    interface Presenter extends View.Presenter<YardiFinancialSummaryDTO> {
 
         void payNow();
-
     }
 
-    void setPresenter(Presenter presenter);
-
-    void populate(YardiFinancialSummaryDTO financialSummary);
-
     void setEnablePayments(boolean eable);
-
 }

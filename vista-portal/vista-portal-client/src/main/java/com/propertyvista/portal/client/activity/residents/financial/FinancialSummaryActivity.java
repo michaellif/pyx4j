@@ -53,10 +53,9 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
                 view.setPresenter(FinancialSummaryActivity.this);
                 view.setEnablePayments(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
                 // TODO need to merge FinancialSummaryView someday
-                view.populate(result.duplicate(YardiFinancialSummaryDTO.class));
+                view.populate(result.<YardiFinancialSummaryDTO> cast());
                 panel.setWidget(view);
             }
-
         });
     }
 
@@ -65,5 +64,17 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new Financial.PayNow());
         }
+    }
+
+    @Override
+    public void save(YardiFinancialSummaryDTO entity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancel() {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -14,46 +14,34 @@
 package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
-public class FinancialSummaryViewImpl extends Composite implements FinancialSummaryView {
+public class FinancialSummaryViewImpl extends ViewImpl<YardiFinancialSummaryDTO> implements FinancialSummaryView {
 
-    private final SimplePanel viewPanel;
-
-    private Presenter presenter;
+    private FinancialSummaryView.Presenter presenter;
 
     private final FinancialSummaryForm form;
 
     public FinancialSummaryViewImpl() {
-        viewPanel = new SimplePanel();
-        form = new FinancialSummaryForm(new Command() {
+        super(true, true);
+        setForm(form = new FinancialSummaryForm(new Command() {
             @Override
             public void execute() {
                 presenter.payNow();
             }
-        });
-        form.initContent();
-        viewPanel.add(form);
-        initWidget(viewPanel);
+        }));
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(View.Presenter<YardiFinancialSummaryDTO> presenter) {
+        this.presenter = (FinancialSummaryView.Presenter) presenter;
     }
 
     @Override
     public void setEnablePayments(boolean enable) {
         form.setPayNowVisible(enable);
     }
-
-    @Override
-    public void populate(YardiFinancialSummaryDTO financialSummary) {
-        form.setVisited(false);
-        form.populate(financialSummary);
-    }
-
 }
