@@ -13,32 +13,19 @@
  */
 package com.propertyvista.portal.client.ui.residents.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
-
-import com.pyx4j.security.shared.SecurityController;
-
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
-public class DashboardViewImpl extends SimplePanel implements DashboardView {
-
-    private final DashboardForm form;
+public class DashboardViewImpl extends ViewImpl<TenantDashboardDTO> implements DashboardView {
 
     public DashboardViewImpl() {
-        form = new DashboardForm();
-        form.initContent();
-        setWidget(form);
+        super(new DashboardForm(), true, true);
     }
 
     @Override
-    public void populate(TenantDashboardDTO dashboard) {
-        form.populate(dashboard);
-        form.getPayButton().setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        form.setPresenter(presenter);
+    public void setPresenter(View.Presenter<TenantDashboardDTO> presenter) {
+        ((DashboardForm) getForm()).setPresenter((DashboardView.Presenter) presenter);
     }
 
 }

@@ -13,20 +13,15 @@
  */
 package com.propertyvista.portal.client.ui.residents.dashboard;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
-public interface DashboardView extends IsWidget {
+public interface DashboardView extends View<TenantDashboardDTO> {
 
-    interface Presenter {
+    interface Presenter extends View.Presenter<TenantDashboardDTO> {
 
         void viewCurrentBill();
 
         void payNow();
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(TenantDashboardDTO dashboard);
 }

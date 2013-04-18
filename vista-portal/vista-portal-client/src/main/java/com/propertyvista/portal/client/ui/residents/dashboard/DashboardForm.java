@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -41,6 +42,7 @@ import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
@@ -54,13 +56,13 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> implements DashboardView {
+public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
     private static final I18n i18n = I18n.get(DashboardForm.class);
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 
-    private Presenter presenter;
+    private DashboardView.Presenter presenter;
 
     private Button payButton;
 
@@ -68,8 +70,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(DashboardView.Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -141,6 +142,12 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
         }
         return container;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class CommunicationViewer extends CEntityViewer<IList<Message>> {
@@ -271,10 +278,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             return content;
         }
 
-    }
-
-    public Button getPayButton() {
-        return payButton;
     }
 
     class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {

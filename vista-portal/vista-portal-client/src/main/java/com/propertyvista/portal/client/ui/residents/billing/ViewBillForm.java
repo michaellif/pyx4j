@@ -13,16 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 
 public class ViewBillForm extends BillForm {
 
-    private static final I18n i18n = I18n.get(ViewBillForm.class);
-
     public ViewBillForm() {
         super();
     }
-
 }

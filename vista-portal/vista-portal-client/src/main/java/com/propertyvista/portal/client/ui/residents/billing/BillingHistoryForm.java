@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -36,12 +35,14 @@ import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public class BillingHistoryForm extends CEntityForm<BillListDTO> {
 
-    private static final I18n i18n = I18n.get(BillingHistoryForm.class);
-
     private BillingHistoryView.Presenter presenter;
 
     public BillingHistoryForm() {
         super(BillListDTO.class, new VistaViewersComponentFactory());
+    }
+
+    public void setPresenter(BillingHistoryView.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -49,10 +50,6 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> {
         FlowPanel container = new FlowPanel();
         container.add(inject(proto().bills(), new BillingHistoryFolder()));
         return container;
-    }
-
-    public void setPresenter(BillingHistoryView.Presenter presenter) {
-        this.presenter = presenter;
     }
 
     private class BillingHistoryFolder extends VistaTableFolder<BillDataDTO> {

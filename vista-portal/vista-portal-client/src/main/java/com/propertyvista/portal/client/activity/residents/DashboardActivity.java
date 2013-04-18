@@ -67,4 +67,16 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
             AppSite.getPlaceController().goTo(new Financial.PayNow());
         }
     }
+
+    @Override
+    public void save(TenantDashboardDTO entity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancel() {
+        // TODO Auto-generated method stub
+
+    }
 }

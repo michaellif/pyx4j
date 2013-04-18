@@ -51,6 +51,10 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         setViewable(true);
     }
 
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
@@ -87,14 +91,10 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         return content;
     }
 
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
+    
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 

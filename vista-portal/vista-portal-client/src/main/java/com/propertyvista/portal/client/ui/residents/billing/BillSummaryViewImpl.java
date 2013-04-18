@@ -13,15 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 
 public class BillSummaryViewImpl extends ViewImpl<PvBillingFinancialSummaryDTO> implements BillSummaryView {
-
-    private static final I18n i18n = I18n.get(BillSummaryViewImpl.class);
 
     public BillSummaryViewImpl() {
         super(new BillSummaryForm());
