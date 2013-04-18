@@ -124,6 +124,17 @@ public class EntityMetaTest extends InitializerTestBase {
         assertTrue("Has member nameB1", base.getEntityMeta().getMemberNames().contains("nameB1"));
         assertTrue("Has member nameB2", base.getEntityMeta().getMemberNames().contains("nameB2"));
         assertTrue("Has member nameC2", base.getEntityMeta().getMemberNames().contains("nameC2"));
+
+        // Verify order
+        System.out.println(base.getEntityMeta().getMemberNames());
+        assertEquals("order of testId", 0, base.getEntityMeta().getMemberNames().indexOf("testId"));
+        assertEquals("order of nameB1", 1, base.getEntityMeta().getMemberNames().indexOf("nameB1"));
+        assertEquals("order of ownedItems", 2, base.getEntityMeta().getMemberNames().indexOf("ownedItems"));
+        assertEquals("order of ownedItem", 3, base.getEntityMeta().getMemberNames().indexOf("ownedItem"));
+        assertEquals("order of nameB2", 4, base.getEntityMeta().getMemberNames().indexOf("nameB2"));
+        assertEquals("order of nameC2", 5, base.getEntityMeta().getMemberNames().indexOf("nameC2"));
+        assertEquals("order of reference", 6, base.getEntityMeta().getMemberNames().indexOf("reference"));
+
     }
 
     public void testAbstractMember() {

@@ -28,6 +28,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -419,27 +421,59 @@ public class EntityImplGenerator {
         }
     }
 
-    List<CtMethod> getAllMethodsSortedByDeclaration(CtClass interfaceCtClass) {
+    List<CtMethod> getAllMethodsSortedByDeclaration(CtClass interfaceCtClass) throws NotFoundException {
+        List<String> allMethodsNames = new Vector<String>();
         List<CtMethod> allMethodsSortedByDeclaration = new Vector<CtMethod>();
         for (CtMethod method : interfaceCtClass.getDeclaredMethods()) {
-            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
-                    || (method.getDeclaringClass().equals(ctClassIObject))) {
-                continue;
-            }
+//            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+//                    || (method.getDeclaringClass().equals(ctClassIObject))) {
+//                continue;
+//            }
             allMethodsSortedByDeclaration.add(method);
+            allMethodsNames.add(method.getName());
         }
-        List<CtMethod> allSuperMethods = new Vector<CtMethod>();
-        for (CtMethod method : interfaceCtClass.getMethods()) {
-            if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
-                    || (method.getDeclaringClass().equals(ctClassIObject))) {
-                continue;
+        List<CtMethod> allSuperMethods = new ArrayList<CtMethod>();
+        for (CtClass itf : getInterfacesSortedByDeclaration(interfaceCtClass)) {
+            for (CtMethod method : itf.getDeclaredMethods()) {
+                if ((!allMethodsNames.contains(method.getName()))) {
+                    allSuperMethods.add(method);
+                    allMethodsNames.add(method.getName());
+                }
             }
-            if ((!allMethodsSortedByDeclaration.contains(method)) && (!allSuperMethods.contains(method))) {
-                allSuperMethods.add(method);
+        }
+        if (false) {
+            for (CtMethod method : interfaceCtClass.getMethods()) {
+                if (method.getDeclaringClass().equals(ctClassObject) || (method.getDeclaringClass().equals(ctClassIEntity))
+                        || (method.getDeclaringClass().equals(ctClassIObject))) {
+                    continue;
+                }
+                if ((!allMethodsSortedByDeclaration.contains(method)) && (!allSuperMethods.contains(method))) {
+                    allSuperMethods.add(method);
+                }
             }
         }
         allSuperMethods.addAll(allMethodsSortedByDeclaration);
         return allSuperMethods;
+    }
+
+    private List<CtClass> getInterfacesSortedByDeclaration(CtClass interfaceCtClass) throws NotFoundException {
+        List<CtClass> list = new ArrayList<CtClass>();
+        for (CtClass itf : interfaceCtClass.getInterfaces()) {
+            if ((itf == ctClassObject) || (itf == ctClassIEntity) || (itf == ctClassIObject)) {
+                continue;
+            } else {
+                if (!list.contains(itf)) {
+                    list.add(itf);
+                    for (CtClass ic : getInterfacesSortedByDeclaration(itf)) {
+                        if (!list.contains(ic)) {
+                            list.add(ic);
+                        }
+                    }
+                }
+            }
+        }
+        Collections.reverse(list);
+        return list;
     }
 
     private void assertOwnership(CtClass interfaceCtClass, CtMethod method) throws ClassNotFoundException, NotFoundException {
