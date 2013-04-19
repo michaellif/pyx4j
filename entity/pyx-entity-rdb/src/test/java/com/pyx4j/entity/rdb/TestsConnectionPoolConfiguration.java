@@ -33,10 +33,10 @@ public class TestsConnectionPoolConfiguration extends ConnectionPoolConfiguratio
         if (unreturnedConnectionTimeout != 0) {
             switch (connectionType) {
             case BackgroundProcess:
-                unreturnedConnectionTimeout = 1 * Consts.MIN2SEC;
+                unreturnedConnectionTimeout = 1 * Consts.MIN2SEC + 20;
                 break;
             case TransactionProcessing:
-                unreturnedConnectionTimeout = 1 * Consts.MIN2SEC;
+                unreturnedConnectionTimeout = 1 * Consts.MIN2SEC + 10;
                 break;
             default:
                 break;

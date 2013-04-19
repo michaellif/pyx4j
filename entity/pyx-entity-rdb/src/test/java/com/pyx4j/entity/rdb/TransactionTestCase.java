@@ -34,31 +34,56 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Simple1;
+import com.pyx4j.entity.test.shared.domain.Simple2;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedChild;
 import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToOneInversedParent;
 
 public abstract class TransactionTestCase extends DatastoreTestBase {
 
-    private Employee createEntity(String setId, String id) {
-        Employee emp = EntityFactory.create(Employee.class);
-        emp.workAddress().streetName().setValue(setId);
-        emp.firstName().setValue(id);
+    private Simple1 createEntity(String setId, String id) {
+        Simple1 emp = EntityFactory.create(Simple1.class);
+        emp.testId().setValue(setId);
+        emp.name().setValue(id);
+        return emp;
+    }
+
+    private Simple2 createEntity2(String setId, String id) {
+        Simple2 emp = EntityFactory.create(Simple2.class);
+        emp.testId().setValue(setId);
+        emp.name().setValue(id);
         return emp;
     }
 
     private void assertExists(String setId, String id) {
-        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.eq(criteria.proto().workAddress().streetName(), setId);
-        criteria.eq(criteria.proto().firstName(), id);
-        List<Employee> emps = srv.query(criteria);
+        EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        criteria.eq(criteria.proto().name(), id);
+        List<Simple1> emps = srv.query(criteria);
+        Assert.assertEquals(id + " NotExists, result set size", 1, emps.size());
+    }
+
+    private void assertExists2(String setId, String id) {
+        EntityQueryCriteria<Simple2> criteria = EntityQueryCriteria.create(Simple2.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        criteria.eq(criteria.proto().name(), id);
+        List<Simple2> emps = srv.query(criteria);
         Assert.assertEquals(id + " NotExists, result set size", 1, emps.size());
     }
 
     private void assertNotExists(String setId, String id) {
-        EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.eq(criteria.proto().workAddress().streetName(), setId);
-        criteria.eq(criteria.proto().firstName(), id);
-        List<Employee> emps = srv.query(criteria);
+        EntityQueryCriteria<Simple1> criteria = EntityQueryCriteria.create(Simple1.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        criteria.eq(criteria.proto().name(), id);
+        List<Simple1> emps = srv.query(criteria);
+        Assert.assertEquals(id + " Exists, result set size", 0, emps.size());
+    }
+
+    private void assertNotExists2(String setId, String id) {
+        EntityQueryCriteria<Simple2> criteria = EntityQueryCriteria.create(Simple2.class);
+        criteria.eq(criteria.proto().testId(), setId);
+        criteria.eq(criteria.proto().name(), id);
+        List<Simple2> emps = srv.query(criteria);
         Assert.assertEquals(id + " Exists, result set size", 0, emps.size());
     }
 
@@ -100,7 +125,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     public void testNestedTransactionRollback() {
         String setId = uniqueString();
-        Employee emp1 = createEntity(setId, "1.0");
+        Simple1 emp1 = createEntity(setId, "1.0");
 
         // Tx1
         srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
@@ -142,7 +167,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     public void testNestedTransactionsFragmentL1() {
         String setId = uniqueString();
-        Employee emp1 = createEntity(setId, "1.0");
+        Simple1 emp1 = createEntity(setId, "1.0");
 
         // Tx1
         srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
@@ -182,7 +207,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
 
     public void testNestedTransactionsFragmentL2() {
         String setId = uniqueString();
-        Employee emp1 = createEntity(setId, "1.0");
+        Simple1 emp1 = createEntity(setId, "1.0");
 
         // Tx1
         srv.startTransaction(TransactionScopeOption.Nested, ConnectionTarget.Web);
@@ -213,6 +238,38 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertNotExists(setId, "2.1");
         assertExists(setId, "2.2");
         assertExists(setId, "1.2");
+    }
+
+    protected boolean isHSQLBug() {
+        return false;
+    }
+
+    public void testSuppress() {
+        final String setId = uniqueString();
+        srv.endTransaction();
+
+        srv.startBackgroundProcessTransaction();
+
+        srv.persist(createEntity(setId, "1.1"));
+        srv.commit();
+        srv.persist(createEntity(setId, "1.2"));
+
+        srv.startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.Web);
+        {
+            srv.persist(createEntity2(setId, "2.0"));
+            // TODO verify HSQL Lock in next version
+            if (!isHSQLBug()) {
+                assertNotExists(setId, "1.2");
+            }
+        }
+        srv.endTransaction();
+
+        srv.commit();
+        srv.endTransaction();
+
+        assertExists(setId, "1.1");
+        assertExists(setId, "1.2");
+        assertExists2(setId, "2.0");
     }
 
     public void testTransactionsCompensationHandler() {

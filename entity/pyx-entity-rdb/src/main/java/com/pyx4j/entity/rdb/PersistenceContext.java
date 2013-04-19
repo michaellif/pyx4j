@@ -45,9 +45,9 @@ import com.pyx4j.gwt.server.DateUtils;
 
 public class PersistenceContext {
 
-    public static final boolean traceOpenSession = false;
+    public static final boolean traceOpenSession = true;
 
-    public static final boolean traceTransaction = false;
+    public static final boolean traceTransaction = true;
 
     private static final Logger log = LoggerFactory.getLogger(PersistenceContext.class);
 
