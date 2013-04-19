@@ -190,7 +190,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                         profiledPaymentMethodsCombo.reset();
                         profiledPaymentMethodsCombo.setVisible(true);
                         if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
-                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0), false, true);
+                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
                         }
 
                         paymentMethodStep.setStepVisible(false);

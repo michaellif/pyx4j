@@ -170,7 +170,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
                         if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
-                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0), false, true);
+                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
                         }
 
                         paymentMethodStep.setStepVisible(false);
