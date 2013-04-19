@@ -453,35 +453,6 @@ td.DatePickerMonth {
 		to(#c2c2c2) );
 }
 
-.FooterToolbar .Button {
-	border: 1px solid;
-	border-color: #f7f7f7;
-	color: #ffffff;
-	padding: 2px 12px;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666',
-		endColorstr='#000000' );
-	background: -moz-linear-gradient(top, #666666, #000000);
-	background: -webkit-gradient(linear, left top, left bottom, from(#666666),
-		to(#000000) );
-	font-size: 11px;
-	font-weight: bold;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-}
-
-.FooterToolbar .Button-hover {
-	border-color: #d1d1d1;
-}
-
-.FooterToolbar .Button-disabled {
-	color: #ffffff;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c2c2c2',
-		endColorstr='#c2c2c2' );
-	background: -moz-linear-gradient(top, #c2c2c2, #c2c2c2);
-	background: -webkit-gradient(linear, left top, left bottom, from(#c2c2c2),
-		to(#c2c2c2) );
-}
-
 .HeaderToolbar .HighlightedButton {
 	border: 1px solid;
 	border-color: #f7f7f7;
@@ -1628,7 +1599,6 @@ ul.footer_locations li {
 }
 
 .secondaryNavig {
-	padding: 1.5em 0;
 	width: 14em;
 	float: left;
 	min-height: 30em;
@@ -1646,6 +1616,10 @@ ul.footer_locations li {
 	outline: medium none;
 	text-decoration: none;
 	text-decoration: underline;
+}
+
+.MainMenu {
+    padding: 1.5em 0;
 }
 
 .vista-pmsite-main .content {

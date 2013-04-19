@@ -13,7 +13,6 @@
 	padding: 40px 0 0 30px;
 }
 .vista-pmsite-residentPage .secondaryNavig {
-	padding: 35px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
@@ -35,7 +34,6 @@
 	padding: 0 10px 0 35px;
 }
 
-
 .vista-pmsite-residentPage .secondaryNavig ul li:hover div {
 	border-bottom:1px solid ${object2_100};
 }
@@ -44,6 +42,9 @@
 	border-bottom:2px solid ${object2_100};
 }
 
+.vista-pmsite-residentPage .MainMenu {
+    padding: 35px 0;
+}
 
 .vista-pmsite-residentPage .vista-pmsite-main .content {
 	min-height: 396px;

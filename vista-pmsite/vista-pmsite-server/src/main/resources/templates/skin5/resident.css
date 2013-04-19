@@ -15,7 +15,6 @@
 
 .vista-pmsite-residentPage .secondaryNavig {
 	border-top: 3px solid #1F1B1C;
-	padding: 20px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
@@ -62,6 +61,11 @@
     background-color: #756033;
     color: #1F1B1C;
 }
+
+.vista-pmsite-residentPage .MainMenu {
+    padding: 20px 0;
+}
+
 .LandingOrLineSeparator {
 	padding-top: 30px;
 }
@@ -329,4 +333,8 @@ h2 {
 	color: #b4afb0 !important;
     text-decoration: none;
     cursor: default;
+}
+
+.PaymentEditorLegalTerms {
+    height: auto !important;
 }

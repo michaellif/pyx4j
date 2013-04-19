@@ -10,7 +10,6 @@
 	padding: 40px 0 0 30px;
 }
 .vista-pmsite-residentPage .secondaryNavig {
-	padding: 35px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
@@ -32,13 +31,16 @@
 	padding: 0 10px 0 35px;
 }
 
-
 .vista-pmsite-residentPage .secondaryNavig ul li:hover div {
 	border-bottom:1px solid ${object2_100};
 }
 
 .vista-pmsite-residentPage .secondaryNavig ul li.active div {
 	border-bottom:2px solid ${object2_100};
+}
+
+.vista-pmsite-residentPage .MainMenu {
+    padding: 35px 0;
 }
 
 .vista-pmsite-residentPage .content {
@@ -63,6 +65,13 @@
     font-size: 18px;
     font-weight: bold;
     text-shadow: none;
+}
+
+.vista-pmsite-residentPage .Header {
+	border-bottom: 1px solid #D1D1D1 !important;
+	padding-top: 10px;
+	background-color: #E0E0E0;
+	vertical-align: middle;
 }
 
 .vista-pmsite-residentPage .LandingTermsAndConditionsBox {
@@ -138,4 +147,10 @@
 
 .LandingButtonHolder {
     text-align: center !important;
+}
+
+.PaymentEditorLegalTerms {
+    height: auto !important;
+    padding-right: 0 !important;
+    width: auto !important;
 }

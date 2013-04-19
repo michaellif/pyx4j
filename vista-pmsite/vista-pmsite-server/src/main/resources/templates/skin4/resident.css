@@ -10,7 +10,6 @@
 
 .vista-pmsite-residentPage .secondaryNavig {
 	border-top: 1px solid #000000;
-	padding: 20px 0;
 	width: 211px;
 	float: left;
 	min-height: 400px;
@@ -44,13 +43,16 @@
     text-decoration: underline;
 }
 
+.vista-pmsite-residentPage .MainMenu {
+    padding: 20px 0;
+}
+
 .vista-pmsite-residentPage .vista-pmsite-main .content {
 	min-height: 200px;
 	line-height: 20px;
 	padding-top: 30px;
     overflow: hidden;
 }
-
 
 .vista-pmsite-residentPage .TenantDashboard .FormFlexPanelH1Label, .FormFlexPanel .FormFlexPanelH1Label, .LandingCaptionTextEmph  {
 	font-family: monospace;
@@ -125,6 +127,12 @@
 	font-weight: bold;
 }
 
+.vista-pmsite-residentPage .Header {
+	background-color: #F0F0F0 !important;
+    border: medium none !important;
+    line-height: 35px !important;
+    width: 100% !important;
+}
 
 .vista-pmsite-residentPage .TextBox, .vista-pmsite-residentPage .ListBox {
 	border: 1px solid #000000;
