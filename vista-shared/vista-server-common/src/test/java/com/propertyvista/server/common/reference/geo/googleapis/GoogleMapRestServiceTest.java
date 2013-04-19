@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.common.reference.geo.googleapis;
 
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,9 +25,13 @@ public class GoogleMapRestServiceTest {
 
         GeocodeResponse result = GoogleMapRestService.getGeocode("1600 Amphitheatre Parkway, Mountain View, CA");
 
-        Assert.assertEquals("37.4214009", result.result.geometry.location.lat);
-        Assert.assertEquals("-122.0853701", result.result.geometry.location.lng);
+        Assert.assertEquals(round("37.4221627", 2), round(result.result.geometry.location.lat, 2));
+        Assert.assertEquals(round("-122.0830590", 2), round(result.result.geometry.location.lng, 2));
 
+    }
+
+    private String round(String value, int scale) {
+        return new BigDecimal(value).setScale(scale, BigDecimal.ROUND_DOWN).toString();
     }
 
 }
