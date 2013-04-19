@@ -56,7 +56,9 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
 
     private int countTurnovers(LogicalDate from, LogicalDate to, List<Building> buildingIds) {
         EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        criteria.in(criteria.proto().unit().building(), buildingIds);
+        if (!buildingIds.isEmpty()) {
+            criteria.in(criteria.proto().unit().building(), buildingIds);
+        }
         criteria.ge(criteria.proto().dateTo(), from);
         criteria.le(criteria.proto().dateTo(), to);
         return Persistence.service().count(criteria);

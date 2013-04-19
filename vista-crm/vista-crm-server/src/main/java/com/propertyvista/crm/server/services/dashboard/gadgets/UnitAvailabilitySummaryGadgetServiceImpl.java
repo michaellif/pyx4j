@@ -96,7 +96,9 @@ public class UnitAvailabilitySummaryGadgetServiceImpl implements UnitAvailabilit
 
     private static EntityQueryCriteria<UnitAvailabilityStatus> makeAvaiabilityStatusCriteria(Vector<Building> buildingsFilter, LogicalDate asOf) {
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
+        if (!buildingsFilter.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingsFilter));
+        }
         criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
         criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), asOf));
         return criteria;
