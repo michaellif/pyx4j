@@ -23,6 +23,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EftReportGenerator implements ReportGenerator {
 
@@ -33,8 +34,24 @@ public class EftReportGenerator implements ReportGenerator {
         Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
         for (PaymentRecord paymentRecord : paymentRecords) {
             Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
-            Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease()); // this is for lease id
-            Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease().unit().building()); // this is for lease id
+
+            Lease lease = Persistence.service().retrieve(Lease.class, paymentRecord.preauthorizedPayment().tenant().lease().getPrimaryKey());
+            Persistence.service().retrieve(lease.unit());
+            Persistence.service().retrieve(lease.unit().building());
+
+            paymentRecord.preauthorizedPayment().tenant().lease().set(null); // set to null to disable the 'detached' state
+            paymentRecord.preauthorizedPayment().tenant().lease().setPrimaryKey(lease.getPrimaryKey());
+            paymentRecord.preauthorizedPayment().tenant().lease().leaseId().setValue(lease.leaseId().getValue());
+            paymentRecord.preauthorizedPayment().tenant().lease().setValuePopulated();
+
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().set(null);
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().setPrimaryKey(lease.unit().getPrimaryKey());
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().info().number().setValue(lease.unit().info().number().getValue());
+
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
+            paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
+
         }
         return paymentRecords;
     }
