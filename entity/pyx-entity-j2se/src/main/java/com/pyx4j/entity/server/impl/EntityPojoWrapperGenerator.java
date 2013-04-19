@@ -56,9 +56,13 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -81,12 +85,16 @@ public class EntityPojoWrapperGenerator {
 
     private final ClassPool pool;
 
+    private final boolean trace = false;
+
+    private static final Logger log = LoggerFactory.getLogger(EntityPojoWrapperGenerator.class);
+
     private EntityPojoWrapperGenerator() {
         classLoader = EntityImplGenerator.instance().getContextClassLoader();
         try {
             pool = EntityImplGenerator.instance().getClassPool();
         } catch (NotFoundException e) {
-            throw new Error("Can't ininitate ClassPool", e);
+            throw new Error("Can't initiate ClassPool", e);
         }
     }
 
@@ -145,6 +153,9 @@ public class EntityPojoWrapperGenerator {
             return pool.get(pojoClassName);
         } catch (NotFoundException e) {
             // If not found then create one
+        }
+        if (trace) {
+            log.info("{} {}", Trace.enter(), pojoClassName);
         }
         try {
             CtClass implClass = pool.makeClass(pojoClassName);
@@ -225,7 +236,11 @@ public class EntityPojoWrapperGenerator {
 
                 CtMethod memberGet = new CtMethod(ctValueClass, "get" + beanMemberName, null, implClass);
                 if (!abstractClass) {
-                    memberGet.setBody(createGetBody(ctValueClass, memberMeta, entityClassName));
+                    String src = createGetBody(ctValueClass, memberMeta, entityClassName);
+                    if (trace) {
+                        log.info("{} {} {}", Trace.id(), beanMemberName, src);
+                    }
+                    memberGet.setBody(src);
                 }
                 implClass.addMethod(memberGet);
 
@@ -272,7 +287,9 @@ public class EntityPojoWrapperGenerator {
                 } catch (IOException e) {
                 }
             }
-
+            if (trace) {
+                log.info("{} {}", Trace.returns(), pojoClassName);
+            }
             return implClass;
         } catch (CannotCompileException e) {
             throw new Error("Can't create class " + pojoClassName, e);
@@ -313,7 +330,7 @@ public class EntityPojoWrapperGenerator {
         case EntitySet:
         case EntityList: {
             StringBuilder b = new StringBuilder("{");
-            b.append("return (" + ctValueClass.getName() + ") toArray(");
+            b.append("return (" + ctValueClass.getName() + ") toArrayN(");
             b.append(" new ").append(ctValueClass.getName().replace("[]", "[0]")).append(", ");
             b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
             b.append(");}");
@@ -343,7 +360,7 @@ public class EntityPojoWrapperGenerator {
         case EntitySet:
         case EntityList: {
             StringBuilder b = new StringBuilder("{");
-            b.append("fromArray($1, ");
+            b.append("fromArrayN($1, ");
             b.append("((" + entityClassName + ")super.entity)." + memberMeta.getFieldName() + "()");
             b.append(");}");
             return b.toString();

@@ -75,10 +75,32 @@ public abstract class IPojoImpl<E extends IEntity> implements IPojo<E> {
         return a.toArray(pojoArray);
     }
 
+    /**
+     * Used instead of one above to avoid recursive class creation
+     */
+    @SuppressWarnings("unchecked")
+    protected static final <T extends IEntity> Object[] toArrayN(Object[] pojoArray, ICollection<T, ?> entityList) {
+        ArrayList<IPojo<T>> a = new ArrayList<IPojo<T>>();
+        for (T ent : entityList) {
+            a.add(ServerEntityFactory.getPojo(ent));
+        }
+        return a.toArray((IPojo<T>[]) pojoArray);
+    }
+
     protected static final <T extends IEntity> void fromArray(IPojo<T>[] pojoArray, ICollection<T, ?> entityList) {
         entityList.clear();
         if (pojoArray != null) {
             for (IPojo<T> p : pojoArray) {
+                entityList.add(p.getEntityValue());
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static final <T extends IEntity> void fromArrayN(Object[] pojoArray, ICollection<T, ?> entityList) {
+        entityList.clear();
+        if (pojoArray != null) {
+            for (IPojo<T> p : (IPojo<T>[]) pojoArray) {
                 entityList.add(p.getEntityValue());
             }
         }
