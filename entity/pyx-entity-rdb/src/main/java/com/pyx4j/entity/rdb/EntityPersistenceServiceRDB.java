@@ -312,7 +312,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.Transaction, newConnectionTarget);
                 break;
             case Suppress:
-                if ((persistenceContext == null) || (persistenceContext.isTransaction())) {
+                if ((persistenceContext == null) || (persistenceContext.isExplicitTransaction())) {
                     newPersistenceContext = createTransactionContext(persistenceContext, TransactionType.AutoCommit, newConnectionTarget);
                 } else {
                     tracedSavepoint = true;
