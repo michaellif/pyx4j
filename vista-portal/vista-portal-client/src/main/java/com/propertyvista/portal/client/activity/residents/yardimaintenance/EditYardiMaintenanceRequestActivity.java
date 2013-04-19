@@ -70,7 +70,7 @@ public class EditYardiMaintenanceRequestActivity extends SecurityAwareActivity i
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.YardiMaintenance());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
             }
         }, entity);
     }

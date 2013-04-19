@@ -20,7 +20,7 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 public class BillSummaryViewImpl extends ViewImpl<PvBillingFinancialSummaryDTO> implements BillSummaryView {
 
     public BillSummaryViewImpl() {
-        super(new BillSummaryForm());
+        super(new BillSummaryForm(), true, true);
     }
 
     @Override
