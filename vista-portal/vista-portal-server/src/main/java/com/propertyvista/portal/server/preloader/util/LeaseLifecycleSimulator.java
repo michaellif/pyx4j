@@ -476,7 +476,7 @@ public class LeaseLifecycleSimulator {
                 if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                    if (lastBill.billingPeriodStartDate().isNull()) {
+                    if (lastBill.billingPeriodStartDate().isNull() | lastBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) >= 0) {
                         // lease ended
                         return;
                     }
@@ -484,7 +484,8 @@ public class LeaseLifecycleSimulator {
                     LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate()
                             .getValue();
 
-                    if (now().equals(billingRunDay)) {
+                    if (now().equals(billingRunDay) & (now().compareTo(lease.leaseTo().getValue()) < 0)
+                            & (now().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         try {
                             billing.runBilling(lease);
