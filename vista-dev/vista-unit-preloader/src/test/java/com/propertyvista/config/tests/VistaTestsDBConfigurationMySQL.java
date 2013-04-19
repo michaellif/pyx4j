@@ -14,6 +14,7 @@
 package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -62,6 +63,11 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     @Override
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention();
+    }
+
+    @Override
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
+        return new VistaTestsConnectionPoolConfiguration(connectionType);
     }
 
 }

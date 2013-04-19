@@ -14,6 +14,7 @@
 package com.propertyvista.config.tests;
 
 import com.pyx4j.entity.rdb.cfg.ConfigurationHSQL;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 import com.propertyvista.config.VistaDBNamingConvention;
@@ -44,4 +45,10 @@ public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
     public NamingConvention namingConvention() {
         return new VistaDBNamingConvention(true);
     }
+
+    @Override
+    public ConnectionPoolConfiguration connectionPoolConfiguration(ConnectionPoolType connectionType) {
+        return new VistaTestsConnectionPoolConfiguration(connectionType);
+    }
+
 }
