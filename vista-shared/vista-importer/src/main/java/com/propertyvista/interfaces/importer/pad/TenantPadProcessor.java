@@ -109,7 +109,8 @@ public class TenantPadProcessor {
             padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
 
             if (padFileModel._processorInformation().isNull()) {
-                padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database, row {1}", tenantId));
+                padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database", tenantId));
+                padFileModel._import().invalid().setValue(Boolean.TRUE);
                 counters.notFound++;
             } else {
                 List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());

@@ -23,12 +23,14 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
+import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantListerActivity extends AbstractListerActivity<TenantDTO> implements TenantListerView.Presenter {
@@ -47,7 +49,10 @@ public class TenantListerActivity extends AbstractListerActivity<TenantDTO> impl
 
     @Override
     public void uploadPadFile() {
-        new UploadDialogBase<IEntity, IEntity>(i18n.tr("Upload PAD File"), GWT.<UploadService<IEntity, IEntity>> create(TenantPadFileUploadService.class),
-                TenantPadFileUploadService.SUPPORTED_FORMATS).show();
+        UploadDialogBase<IEntity, DownloadableUploadResponseDTO> dialog = new UploadDialogBase<IEntity, DownloadableUploadResponseDTO>(
+                i18n.tr("Upload PAD File"), GWT.<UploadService<IEntity, DownloadableUploadResponseDTO>> create(TenantPadFileUploadService.class),
+                TenantPadFileUploadService.SUPPORTED_FORMATS);
+        dialog.setUploadReciver(new UploadResponseDownloadableReciver<DownloadableUploadResponseDTO>(i18n.tr("PAD Upload")));
+        dialog.show();
     }
 }

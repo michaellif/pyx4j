@@ -20,15 +20,18 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
+import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 @Transient
 public interface PadFileModel extends IEntity {
 
     @ImportColumn(ignore = true)
+    @ReportColumn(ignore = true)
     @XmlTransient
     ImportInformation _import();
 
     @ImportColumn(ignore = true)
+    @ReportColumn(ignore = true)
     @XmlTransient
     PadProcessorInformation _processorInformation();
 

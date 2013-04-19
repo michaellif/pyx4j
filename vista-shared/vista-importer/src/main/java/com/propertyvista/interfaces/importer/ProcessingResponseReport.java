@@ -21,12 +21,12 @@ import com.propertyvista.interfaces.importer.model.ImportInformation;
 
 class ProcessingResponseReport {
 
-    protected ReportTableFormatter formater;
+    protected ReportTableFormatter formatter;
 
     protected int messagesCount = 0;
 
     ProcessingResponseReport() {
-        this.formater = new ReportTableXLSXFormatter();
+        this.formatter = new ReportTableXLSXFormatter();
     }
 
     public int getMessagesCount() {
@@ -34,10 +34,10 @@ class ProcessingResponseReport {
     }
 
     protected void createHeader() {
-        formater.header("Sheet");
-        formater.header("Row");
-        formater.header("Message");
-        formater.newRow();
+        formatter.header("Sheet");
+        formatter.header("Row");
+        formatter.header("Message");
+        formatter.newRow();
     }
 
     void addMessage(ImportInformation info) {
@@ -45,14 +45,14 @@ class ProcessingResponseReport {
             createHeader();
         }
         messagesCount++;
-        formater.cell(info.sheet().getValue());
-        formater.cell(info.row().getValue());
-        formater.cell(info.message().getValue());
-        formater.newRow();
+        formatter.cell(info.sheet().getValue());
+        formatter.cell(info.row().getValue());
+        formatter.cell(info.message().getValue());
+        formatter.newRow();
     }
 
     protected void createDownloadable(String fileName) {
-        Downloadable d = new Downloadable(formater.getBinaryData(), formater.getContentType());
+        Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
         d.save(fileName);
     }
 
