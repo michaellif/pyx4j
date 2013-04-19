@@ -113,6 +113,8 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
+        Persistence.service().commit();
+
         addItem(lease);
         return lease;
     }
