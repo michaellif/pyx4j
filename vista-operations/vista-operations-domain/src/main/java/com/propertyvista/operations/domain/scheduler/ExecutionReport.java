@@ -49,6 +49,7 @@ public interface ExecutionReport extends IEntity {
     IPrimitive<Long> averageDuration();
 
     /** This used for avg calculation **/
+    @Format(value = "{0,duration}", messageFormat = true)
     IPrimitive<Long> totalDuration();
 
     @Owned
