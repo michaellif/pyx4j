@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.portal.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
@@ -21,6 +22,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.dto.PaymentDataDTO;
 
 @Transient
+@ToStringFormat("")
 @ExtendsDBO(PreauthorizedPayment.class)
 public interface PreauthorizedPaymentDTO extends PaymentDataDTO, PreauthorizedPayment {
 

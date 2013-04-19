@@ -169,6 +169,9 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
+                        if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
+                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0), false, true);
+                        }
 
                         paymentMethodStep.setStepVisible(false);
                         break;
@@ -279,7 +282,9 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         profiledPaymentMethodsCombo.setVisible(visible);
 
         get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !getValue().paymentMethod().type().isNull());
-        setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
+        if (get(proto().addThisPaymentMethodToProfile()).isVisible()) {
+            setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
+        }
     }
 
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
