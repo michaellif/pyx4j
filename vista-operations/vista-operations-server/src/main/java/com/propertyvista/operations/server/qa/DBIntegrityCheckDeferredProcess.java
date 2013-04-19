@@ -99,9 +99,9 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                 }
 
             });
-            log.debug("tables verified for {}", pmc.namespace());
+            log.debug("tables verified for {}", pmc.namespace().getValue());
             commonNamespaceIntegrityCheck();
-            log.debug("tables count created for {}", pmc.namespace());
+            log.debug("tables count created for {}", pmc.namespace().getValue());
             VistaUpgrade.upgradePmcData(pmc);
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
