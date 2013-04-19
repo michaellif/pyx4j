@@ -168,6 +168,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         List<Property> properties = getProperties(transaction);
 
         for (final Property property : properties) {
+        	String propertyId = null;
+        	if ((property.getPropertyID()!= null) && (property.getPropertyID().size() > 0)) {
+        		propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
+        	}
+        	
             try {
                 final Building building = importProperty(property);
                 executionMonitor.addProcessedEvent("Building");
@@ -178,15 +183,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                         executionMonitor.addProcessedEvent("Unit");
                         try {
                             LeaseFinancialState stats = importLease(building.propertyCode().getValue(), rtCustomer);
-                            executionMonitor.addProcessedEvent("Charges", stats.getCharges(),
-                                    SimpleMessageFormat.format("Charges for {0}", rtCustomer.getCustomerID()));
-                            executionMonitor.addProcessedEvent("Payments", stats.getPayments(),
-                                    SimpleMessageFormat.format("Payments for {0}", rtCustomer.getCustomerID()));
+                            executionMonitor.addProcessedEvent("Charges", stats.getCharges());
+                            executionMonitor.addProcessedEvent("Payments", stats.getPayments());
                             executionMonitor.addProcessedEvent("Lease");
                         } catch (YardiServiceException e) {
-                            executionMonitor.addFailedEvent("Lease", e);
+                            executionMonitor.addFailedEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
                         } catch (Throwable t) {
-                            executionMonitor.addErredEvent("Lease", t);
+                            executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
                         }
                     } catch (YardiServiceException e) {
                         executionMonitor.addFailedEvent("Unit", e);
@@ -195,9 +198,9 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     }
                 }
             } catch (YardiServiceException e) {
-                executionMonitor.addFailedEvent("Building", e);
+                executionMonitor.addFailedEvent("Building", propertyId, e);
             } catch (Throwable t) {
-                executionMonitor.addErredEvent("Building", t);
+                executionMonitor.addErredEvent("Building", propertyId, t);
             }
 
         }

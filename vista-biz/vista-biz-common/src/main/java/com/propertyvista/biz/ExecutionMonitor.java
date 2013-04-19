@@ -160,6 +160,11 @@ public class ExecutionMonitor {
         addFailedEvent(sectionName, throwable.toString());
     }
 
+    public void addFailedEvent(String sectionName, String message,  Throwable throwable) {
+        log.error("Event Failed {}", message, throwable);
+        addFailedEvent(sectionName, message + " " + throwable.toString());
+    }
+    
     public void addErredEvent(String sectionName, String message) {
         addEvent(sectionName, CompletionType.erred, null, message);
     }
@@ -185,6 +190,11 @@ public class ExecutionMonitor {
     public void addErredEvent(String sectionName, BigDecimal value, String message, Throwable throwable) {
         log.error("Event Erred {}", message, throwable);
         addErredEvent(sectionName, value, message + " " + throwable.toString());
+    }
+    
+    public void addErredEvent(String sectionName,String message, Throwable throwable) {
+        log.error("Event Erred {}", message, throwable);
+        addErredEvent(sectionName, null, message + " " + throwable.toString());
     }
 
     public void setMessage(String message) {

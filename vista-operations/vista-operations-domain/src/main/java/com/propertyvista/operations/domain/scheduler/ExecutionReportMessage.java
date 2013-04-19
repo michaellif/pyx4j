@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.scheduler;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -34,6 +35,7 @@ public interface ExecutionReportMessage extends IEntity {
     @Owner
     @JoinColumn
     @Indexed
+    @Detached
     ExecutionReportSection executionReportSection();
 
     @Format("MM/dd/yyyy HH:mm")
