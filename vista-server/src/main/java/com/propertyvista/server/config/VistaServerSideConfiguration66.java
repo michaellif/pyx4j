@@ -13,39 +13,8 @@
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.IPersistenceConfiguration;
 
-public class VistaServerSideConfiguration66 extends VistaServerSideConfiguration {
-
-    @Override
-    public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationPostgreSQL() {
-            @Override
-            public String dbName() {
-                return "vista66";
-            }
-
-            @Override
-            public String userName() {
-                return "vista66";
-            }
-
-            @Override
-            public String password() {
-                return "vista66";
-            }
-        };
-    }
-
-    @Override
-    public boolean isDevelopmentBehavior() {
-        return getConfigProperties().getBooleanValue("isDevelopmentBehavior", true);
-    }
-
-    @Override
-    public boolean openIdrequired() {
-        return getConfigProperties().getBooleanValue("openIdrequired", true);
-    }
+public class VistaServerSideConfiguration66 extends VistaServerSideConfigurationCustom {
 
     @Override
     protected String getApplicationDeploymentProtocol() {
