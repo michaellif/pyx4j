@@ -57,7 +57,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
-import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
@@ -157,8 +156,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().selectPaymentMethod(),
-                        new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
+                new DecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(
+                        PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
 
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
 
@@ -195,7 +194,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {
-                        chageLeaseParticipant();
+                        changeLeaseParticipant();
                     }
                 });
 
@@ -320,7 +319,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         get(proto().selectPaymentMethod()).reset();
                         get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                         get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
-                        get(proto().selectPaymentMethod()).setValue((isProfiledMethod ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New), false, populate);
+                        get(proto().selectPaymentMethod()).setValue(
+                                (isProfiledMethod ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New), false, populate);
 
                         profiledPaymentMethodsCombo.setVisible(isProfiledMethod);
                     }
@@ -389,7 +389,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 }, getValue().leaseTermParticipant());
     }
 
-    private void chageLeaseParticipant() {
+    private void changeLeaseParticipant() {
         paymentMethodEditor.reset();
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
         paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
@@ -399,9 +399,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             public void onSuccess(Void result) {
                 boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
                 get(proto().selectPaymentMethod()).reset();
-                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New);
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
+                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New);
             }
         });
     }

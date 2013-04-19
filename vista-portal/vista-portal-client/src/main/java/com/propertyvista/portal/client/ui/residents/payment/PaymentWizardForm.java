@@ -55,6 +55,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
@@ -242,14 +243,12 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
             @Override
             public void onSuccess(Void result) {
                 boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
-                boolean isProfiledMethod = profiledPaymentMethodsCombo.getOptions().contains(getValue().paymentMethod());
 
                 get(proto().selectPaymentMethod()).reset();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
-                get(proto().selectPaymentMethod()).setValue((isProfiledMethod ? PaymentSelect.Profiled : PaymentSelect.New), !isProfiledMethod, populate);
-
-                profiledPaymentMethodsCombo.setVisible(isProfiledMethod);
+                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
+                        true, populate);
             }
         });
 
