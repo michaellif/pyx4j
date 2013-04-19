@@ -222,6 +222,8 @@ public class TenantPadProcessor {
     }
 
     static void calulateLeasePercents(List<PadFileModel> leasePadEntities) {
+        // Merge PaymentMethods
+
         BigDecimal percentTotal = BigDecimal.ZERO;
         BigDecimal percentRoundTotal = BigDecimal.ZERO;
         PadFileModel recordLargest = null;
@@ -334,17 +336,17 @@ public class TenantPadProcessor {
     }
 
     private boolean isSameAmount(PreauthorizedPayment pap, PadFileModel padFileModel) {
-        if (!padFileModel.charge().isNull()) {
+        if (!padFileModel._processorInformation().percent().isNull()) {
+            if (pap.amountType().getValue() != AmountType.Percent) {
+                return false;
+            }
+            return pap.percent().getValue().compareTo(padFileModel._processorInformation().percent().getValue()) == 0;
+        } else if (!padFileModel.charge().isNull()) {
             if (pap.amountType().getValue() != AmountType.Value) {
                 return false;
             }
             BigDecimal amount = new BigDecimal(padFileModel.charge().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
             return pap.value().getValue().compareTo(amount) == 0;
-        } else if (!padFileModel.percent().isNull()) {
-            if (pap.amountType().getValue() != AmountType.Percent) {
-                return false;
-            }
-            return pap.percent().getValue().compareTo(padFileModel._processorInformation().percent().getValue()) == 0;
         } else {
             return false;
         }
@@ -354,13 +356,13 @@ public class TenantPadProcessor {
         PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
         pap.paymentMethod().set(method);
 
-        if (!padFileModel.charge().isNull()) {
+        if (!padFileModel._processorInformation().percent().isNull()) {
+            pap.amountType().setValue(AmountType.Percent);
+            pap.percent().setValue(padFileModel._processorInformation().percent().getValue());
+        } else if (!padFileModel.charge().isNull()) {
             pap.amountType().setValue(AmountType.Value);
             BigDecimal amount = new BigDecimal(padFileModel.charge().getValue());
             pap.value().setValue(amount);
-        } else if (!padFileModel.percent().isNull()) {
-            pap.amountType().setValue(AmountType.Percent);
-            pap.percent().setValue(padFileModel._processorInformation().percent().getValue());
         } else {
             throw new IllegalArgumentException();
         }
