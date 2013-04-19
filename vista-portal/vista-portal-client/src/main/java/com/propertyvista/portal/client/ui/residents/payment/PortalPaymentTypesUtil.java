@@ -15,6 +15,7 @@ package com.propertyvista.portal.client.ui.residents.payment;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 
 import com.pyx4j.security.shared.SecurityController;
 
@@ -69,5 +70,11 @@ public class PortalPaymentTypesUtil {
             }
         }
         return allowedTypes;
+    }
+
+    public static boolean isPreauthorizedPaumentAllowed() {
+        Collection<PaymentType> available = getAllowedPaymentTypes();
+        available.retainAll(EnumSet.of(PaymentType.Echeck, PaymentType.CreditCard));
+        return !available.isEmpty();
     }
 }

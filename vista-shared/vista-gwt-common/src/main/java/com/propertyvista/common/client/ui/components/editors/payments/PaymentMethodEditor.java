@@ -305,7 +305,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     public void setElectronicPaymentsEnabled(Boolean electronicPaymentsEnabled) {
         if (electronicPaymentsEnabled != Boolean.TRUE) {
             this.setPaymentTypesEnabled(PaymentType.electronicPayments(), false);
-            (get(proto().type())).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"));
+            (get(proto().type())).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"), NoteStyle.Warn);
         }
     }
 

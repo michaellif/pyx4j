@@ -30,6 +30,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
+import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
@@ -85,7 +86,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
-            items.add(new Residents.Financial.PreauthorizedPayments());
+
+            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
+                items.add(new Residents.Financial.PreauthorizedPayments());
+            }
+
             items.add(new Residents.PaymentMethods());
         }
 
