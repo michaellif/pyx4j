@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceRequestEditorView extends IEditor<MaintenanceRequestDTO> {
 
     interface Presenter extends IEditor.Presenter {
+        void getCategoryMeta(AsyncCallback<MaintenanceRequestCategoryMeta> callback);
     }
 }

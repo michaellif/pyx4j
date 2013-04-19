@@ -18,9 +18,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
@@ -32,13 +30,10 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.components.IssueClassificationChoice;
+import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.maintenance.IssueClassification;
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -47,22 +42,28 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
+    private VerticalPanel categoryPanel;
+
     private FormFlexPanel statusPanel;
 
     private FormFlexPanel surveyPanel;
 
-    IssueClassificationChoice<?> mainChoice;
+    private MaintenanceRequestCategoryMeta meta;
 
-    private CComponent<?, ?> comp1, comp2, comp3, comp4;
-
-    public MaintenanceRequestForm(Class<MaintenanceRequestDTO> rootClass, IForm<MaintenanceRequestDTO> view) {
-        super(rootClass, view);
-    }
+    private boolean choicesReady = false;
 
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
-
         selectTab(addTab(createGeneralTab()));
+    }
+
+    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestCategoryMeta meta) {
+        this.meta = meta;
+        initSelectors();
+        // set value again in case meta comes after the form was populated
+        if (getValue() != null) {
+            setComponentsValue(getValue(), true, true);
+        }
     }
 
     private FormFlexPanel createGeneralTab() {
@@ -93,57 +94,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         }), 25).build());
         panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
-
-        if (isEditable()) {
-            // create selectors
-            final IssueClassificationChoice<IssueElement> choice1 = new IssueClassificationChoice<IssueElement>(IssueElement.class) {
-                @Override
-                protected boolean isLeaf(IssueElement opt) {
-                    return !opt.isEmpty() && opt.name().isNull();
-                }
-            };
-            final IssueClassificationChoice<IssueRepairSubject> choice2 = new IssueClassificationChoice<IssueRepairSubject>(IssueRepairSubject.class) {
-                @Override
-                protected boolean isLeaf(IssueRepairSubject opt) {
-                    return !opt.isEmpty() && opt.name().isNull();
-                }
-            };
-            final IssueClassificationChoice<IssueSubjectDetails> choice3 = new IssueClassificationChoice<IssueSubjectDetails>(IssueSubjectDetails.class) {
-                @Override
-                protected boolean isLeaf(IssueSubjectDetails opt) {
-                    return !opt.isEmpty() && opt.name().isNull();
-                }
-            };
-            final IssueClassificationChoice<IssueClassification> choice4 = new IssueClassificationChoice<IssueClassification>(IssueClassification.class) {
-                @Override
-                protected boolean isLeaf(IssueClassification opt) {
-                    return !opt.isEmpty() && opt.issue().isNull();
-                }
-            };
-            mainChoice = choice1;
-            choice2.assignParent(choice1, choice2.proto().issueElement());
-            choice3.assignParent(choice2, choice3.proto().subject());
-            choice4.assignParent(choice3, choice4.proto().subjectDetails());
-
-            // assign components
-            comp1 = choice1;
-            comp2 = choice2;
-            comp3 = choice3;
-            comp4 = choice4;
-        } else {
-            // explicitly create labels instead of default combo boxes to prevent lengthy option download
-            comp1 = new CEntityLabel();
-            comp2 = new CEntityLabel();
-            comp3 = new CEntityLabel();
-            comp4 = new CEntityLabel();
-        }
-        VerticalPanel subjPanel = new VerticalPanel();
-//        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category()), 25).build());
-        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), comp1), 20).build());
-        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), comp2), 20).build());
-        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), comp3), 20).build());
-        subjPanel.add(new DecoratorBuilder(inject(proto().issueClassification(), comp4), 20).build());
-        panel.setWidget(row + 1, 0, subjPanel);
+        // create category selection panel
+        categoryPanel = new VerticalPanel();
+        panel.setWidget(row + 1, 0, categoryPanel);
         panel.getCellFormatter().setVerticalAlignment(row + 1, 0, HasVerticalAlignment.ALIGN_TOP);
 
         VerticalPanel permPanel = new VerticalPanel();
@@ -187,12 +140,36 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         return panel;
     }
 
-    @Override
-    protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
-        if (isEditable() && mainChoice != null) {
-            mainChoice.init();
+    public void initSelectors() {
+        if (meta == null || choicesReady) {
+            return;
         }
-        return super.preprocessValue(value, fireEvent, populate);
+        int levels = meta.levels().size();
+        // create selectors
+        MaintenanceRequestCategoryChoice child = null;
+        MaintenanceRequestCategoryChoice mrCategory = null;
+        for (int i = 0; i < levels; i++) {
+            MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
+            String choiceLabel = meta.levels().get(levels - 1 - i).name().getValue();
+            if (i == 0) {
+                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
+                mrCategory = choice;
+            } else {
+                categoryPanel.insert(new DecoratorBuilder(choice, 20).customLabel(choiceLabel).build(), 0);
+            }
+            if (child != null) {
+                child.assignParent(choice);
+            }
+            child = choice;
+        }
+        mrCategory.setOptionsMeta(meta);
+        choicesReady = true;
+    }
+
+    @Override
+    protected void setNativeValue(MaintenanceRequestDTO value) {
+        initSelectors();
+        super.setNativeValue(value);
     }
 
     @Override
@@ -200,10 +177,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         super.onValueSet(populate);
 
         MaintenanceRequestDTO mr = getValue();
-
-        comp2.setVisible(!mr.issueClassification().subjectDetails().subject().name().isNull());
-        comp3.setVisible(!mr.issueClassification().subjectDetails().name().isNull());
-        comp4.setVisible(!mr.issueClassification().issue().isNull());
+        if (mr == null) {
+            return;
+        }
 
         get(proto().scheduledDate()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
         get(proto().scheduledTime()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
@@ -212,7 +188,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().updated()).setVisible(!mr.updated().isNull());
         get(proto().status()).setVisible(!mr.submitted().isNull());
 
-        statusPanel.setVisible(!mr.issueClassification().isNull());
+        statusPanel.setVisible(!mr.category().isNull());
         surveyPanel.setVisible(mr.status().getValue() == MaintenanceRequestStatus.Resolved);
 
         if (isEditable()) {

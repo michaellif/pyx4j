@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -26,11 +27,13 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewer
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> implements MaintenanceRequestViewerView.Presenter {
+    private MaintenanceRequestCategoryMeta meta;
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
@@ -81,5 +84,20 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
                 populate();
             }
         }, getEntityId());
+    }
+
+    @Override
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+        if (meta == null) {
+            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                    meta = result;
+                    callback.onSuccess(result);
+                }
+            }, true);
+        } else {
+            callback.onSuccess(meta);
+        }
     }
 }

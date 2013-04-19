@@ -19,19 +19,24 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
+/*
+ * Open/Update/Close request
+ * Get request
+ */
 public interface MaintenanceFacade {
 
-    MaintenanceRequestCategory getMaintenanceRequestCategory();
+    MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean labelsOnly);
 
     List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant);
 
     List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant);
+
+    MaintenanceRequest getMaintenanceRequest(String id);
 
     void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant);
 

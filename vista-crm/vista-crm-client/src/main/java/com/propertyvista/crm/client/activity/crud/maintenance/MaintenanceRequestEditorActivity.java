@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -24,11 +23,12 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
+
+    private MaintenanceRequestCategoryMeta meta;
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
         super(place, MaintenanceViewFactory.instance(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
@@ -37,23 +37,21 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
 
     @Override
     protected void createNewEntity(final AsyncCallback<MaintenanceRequestDTO> callback) {
-        super.createNewEntity(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
-            @Override
-            public void onSuccess(final MaintenanceRequestDTO entity) {
-                entity.status().setValue(MaintenanceRequestStatus.Submitted);
+        ((MaintenanceCrudService) getService()).createNewRequest(callback, getParentId());
+    }
 
-                if (getParentId() != null) {
-                    ((MaintenanceCrudService) getService()).loadTenant(new DefaultAsyncCallback<Tenant>() {
-                        @Override
-                        public void onSuccess(Tenant result) {
-                            entity.leaseParticipant().set(result);
-                            callback.onSuccess(entity);
-                        }
-                    }, EntityFactory.createIdentityStub(Tenant.class, getParentId()));
-                } else {
-                    callback.onSuccess(entity);
+    @Override
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+        if (meta == null) {
+            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                    meta = result;
+                    callback.onSuccess(result);
                 }
-            }
-        });
+            }, false);
+        } else {
+            callback.onSuccess(meta);
+        }
     }
 }

@@ -16,14 +16,18 @@ package com.propertyvista.portal.client.activity.residents.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
@@ -39,10 +43,12 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     private final Key entityId;
 
+    private MaintenanceRequestCategoryMeta meta;
+
     public EditMaintenanceRequestActivity(AppPlace place) {
+        srv = GWT.create(MaintenanceService.class);
         this.view = ResidentsViewFactory.instance(EditMaintenanceRequestView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(MaintenanceService.class);
 
         entityId = place.getItemId();
     }
@@ -67,6 +73,10 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void save(MaintenanceRequestDTO entity) {
+        // don't want all the attached info back over the wire
+        MaintenanceRequestCategory newCat = EntityFactory.createIdentityStub(MaintenanceRequestCategory.class, entity.category().getPrimaryKey());
+        entity.category().set(newCat);
+
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
@@ -78,5 +88,20 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     @Override
     public void cancel() {
         History.back();
+    }
+
+    @Override
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+        if (meta == null) {
+            srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                    meta = result;
+                    callback.onSuccess(result);
+                }
+            }, false);
+        } else {
+            callback.onSuccess(meta);
+        }
     }
 }

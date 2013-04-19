@@ -28,6 +28,10 @@ public enum MaintenanceRequestStatus {
         return EnumSet.of(Submitted, Scheduled);
     }
 
+    public static Set<MaintenanceRequestStatus> closed() {
+        return EnumSet.of(Resolved, Cancelled);
+    }
+
     @Override
     public String toString() {
         return I18nEnum.toString(this);

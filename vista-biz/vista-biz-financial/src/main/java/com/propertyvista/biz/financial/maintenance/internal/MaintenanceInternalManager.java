@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.maintenance.internal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -40,25 +39,17 @@ public class MaintenanceInternalManager {
     }
 
     protected List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) {
-        List<MaintenanceRequest> requests = new ArrayList<MaintenanceRequest>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved, MaintenanceRequestStatus.Cancelled));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.closed()));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        if (Persistence.service().query(criteria.desc(criteria.proto().submitted())) == null) {
-            requests = Persistence.service().query(criteria.desc(criteria.proto().submitted()));
-        }
-        return requests;
+        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
     protected List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) {
-        List<MaintenanceRequest> requests = new ArrayList<MaintenanceRequest>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.opened()));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        if (Persistence.service().query(criteria.desc(criteria.proto().submitted())) == null) {
-            requests = Persistence.service().query(criteria.desc(criteria.proto().submitted()));
-        }
-        return requests;
+        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
 }

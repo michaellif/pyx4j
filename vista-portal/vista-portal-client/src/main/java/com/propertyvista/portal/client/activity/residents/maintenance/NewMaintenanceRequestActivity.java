@@ -16,10 +16,9 @@ package com.propertyvista.portal.client.activity.residents.maintenance;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivity {
@@ -33,9 +32,12 @@ public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivit
         securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
-        // create default empty request:
-        MaintenanceRequestDTO request = EntityFactory.create(MaintenanceRequestDTO.class);
-        request.status().setValue(MaintenanceRequestStatus.Submitted);
-        view.populate(request);
+        // create new empty request:
+        srv.createNewRequest(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestDTO result) {
+                view.populate(result);
+            }
+        });
     }
 }

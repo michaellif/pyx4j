@@ -22,12 +22,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -35,6 +38,8 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestViewerViewImpl.class);
+
+    private MaintenanceRequestCategoryMeta categoryMeta;
 
     private final MenuItem scheduleAction;
 
@@ -95,6 +100,22 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             }
         });
         addAction(cancelAction);
+    }
+
+    @Override
+    public void setPresenter(IForm.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (categoryMeta != null) {
+            ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
+        } else if (presenter != null) {
+            ((MaintenanceRequestViewerView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                    MaintenanceRequestViewerViewImpl.this.categoryMeta = meta;
+                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+                }
+            });
+        }
     }
 
     @Override

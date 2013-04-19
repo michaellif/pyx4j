@@ -26,7 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -34,8 +34,8 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestCategory getMaintenanceRequestCategory() {
-        return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategories();
+    public MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean levelsOnly) {
+        return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategoryMeta(levelsOnly);
     }
 
     @Override
@@ -84,5 +84,11 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
         } else {
             callback.onFailure(new Throwable("Ticket not found."));
         }
+    }
+
+    @Override
+    public MaintenanceRequest getMaintenanceRequest(String id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

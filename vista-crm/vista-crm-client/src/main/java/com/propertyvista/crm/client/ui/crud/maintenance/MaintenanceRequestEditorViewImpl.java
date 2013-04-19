@@ -13,13 +13,45 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.prime.form.IForm;
+
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView {
+
+    private MaintenanceRequestCategoryMeta categoryMeta;
 
     public MaintenanceRequestEditorViewImpl() {
         setForm(new MaintenanceRequestForm(this));
     }
 
+    @Override
+    public void setPresenter(IForm.Presenter presenter) {
+        super.setPresenter(presenter);
+        if (categoryMeta != null) {
+            ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
+        } else if (presenter != null) {
+            ((MaintenanceRequestEditorView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                    MaintenanceRequestEditorViewImpl.this.categoryMeta = meta;
+                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+                }
+            });
+        }
+    }
+
+    @Override
+    public MaintenanceRequestDTO getValue() {
+        // don't want all the attached info back over the wire
+        MaintenanceRequestDTO value = super.getValue();
+        MaintenanceRequestCategory newCat = EntityFactory.createIdentityStub(MaintenanceRequestCategory.class, value.category().getPrimaryKey());
+        value.category().set(newCat);
+        return value;
+    }
 }

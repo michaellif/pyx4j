@@ -40,7 +40,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -296,7 +295,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
                 int row = 0;
                 for (MaintenanceRequestDTO mr : value) {
-                    container.setHTML(++row, 0, issueDetail(mr.issueClassification()));
+                    container.setHTML(++row, 0, issueDetail(mr));
                     container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
                     if (MaintenanceRequestStatus.Resolved.equals(mr.status().getValue())) {
                         RateIt rateIt = new RateIt(5);
@@ -321,16 +320,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
             return scrollPanel;
         }
 
-        private String issueDetail(IssueClassification ic) {
-            if (!ic.issue().isNull()) {
-                return ic.issue().getValue();
-            } else if (!ic.subjectDetails().name().isNull()) {
-                return ic.subjectDetails().name().getValue();
-            } else if (!ic.subjectDetails().subject().name().isNull()) {
-                return ic.subjectDetails().subject().name().getValue();
-            } else if (!ic.subjectDetails().subject().issueElement().name().isNull()) {
-                return ic.subjectDetails().subject().issueElement().name().getValue();
-            } else {
+        private String issueDetail(MaintenanceRequestDTO request) {
+            try {
+                return request.category().getStringView();
+            } catch (Exception ignore) {
                 return "Invalid Entry";
             }
         }

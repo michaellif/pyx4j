@@ -29,6 +29,7 @@ import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryLevel;
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.portal.server.preloader.ido.MaintenanceTreeImport;
 
@@ -50,19 +51,9 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createNamed(PhoneProvider.class, "Rogers", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
-        createIssueClassifications();
+//        createIssueClassifications();
         createMaintenanceCategories();
         return null;
-    }
-
-    private void normalizePreload(MaintenanceTreeImport row) {
-        if (row.subjectDetails().isNull()) {
-            row.subjectDetails().setValue(row.repairSubject().getValue());
-        }
-        if (row.issue().isNull()) {
-            // Defaults to value in Subject Details
-            row.issue().set(row.subjectDetails());
-        }
     }
 
     private void createIssueClassifications() {
@@ -71,8 +62,6 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
 
         Map<String, IssueElement> elements = new HashMap<String, IssueElement>();
         for (MaintenanceTreeImport row : data) {
-//            No need to normalize for now as we use null-value to indicate that no more input is required
-//            normalizePreload(row);
             // Find or create Element
             IssueElement element = elements.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {
@@ -122,23 +111,31 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     }
 
     private void createMaintenanceCategories() {
+        // persist levels
+        MaintenanceRequestCategoryLevel level1 = createMaintenanceCategoryLevel("IssueElement", 1);
+        MaintenanceRequestCategoryLevel level2 = createMaintenanceCategoryLevel("IssueRepairSubject", 2);
+        MaintenanceRequestCategoryLevel level3 = createMaintenanceCategoryLevel("IssueSubjectDetails", 3);
+        MaintenanceRequestCategoryLevel level4 = createMaintenanceCategoryLevel("IssueClassification", 4);
+        Persistence.service().persist(level1);
+        Persistence.service().persist(level2);
+        Persistence.service().persist(level3);
+        Persistence.service().persist(level4);
+        // create categories for each level
+        MaintenanceRequestCategory root = createMaintenanceCategory("ROOT", null);
         List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
 
-        Map<String, MaintenanceRequestCategory> elements = new HashMap<String, MaintenanceRequestCategory>();
+        Map<String, MaintenanceRequestCategory> categories = new HashMap<String, MaintenanceRequestCategory>();
         for (MaintenanceTreeImport row : data) {
-            // TODO No need to normalize for now as we use null-value to indicate that no more input is required
             // Find or create Element
-            MaintenanceRequestCategory element = elements.get(row.type().getValue() + row.rooms().getValue());
+            MaintenanceRequestCategory element = categories.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {
-                element = EntityFactory.create(MaintenanceRequestCategory.class);
-                element.name().set(row.rooms());
-                Persistence.service().persist(element);
-                elements.put(row.type().getValue() + row.rooms().getValue(), element);
+                element = createMaintenanceCategory(row.rooms().getValue(), level1);
+                categories.put(row.type().getValue() + row.rooms().getValue(), element);
+                root.subCategories().add(element);
             }
             // Find or create  Subject
             MaintenanceRequestCategory subject = null;
-            Persistence.service().retrieveMember(element.subCategories());
             for (MaintenanceRequestCategory subj : element.subCategories()) {
                 if (subj.name().getValue().equals(row.repairSubject().getValue())) {
                     subject = subj;
@@ -146,15 +143,12 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (subject == null) {
-                subject = EntityFactory.create(MaintenanceRequestCategory.class);
+                subject = createMaintenanceCategory(row.repairSubject().getValue(), level2);
                 subject.parent().set(element);
-                subject.name().set(row.repairSubject());
-                Persistence.service().persist(subject);
                 element.subCategories().add(subject);
             }
             // Find or create Subject Details
             MaintenanceRequestCategory detail = null;
-            Persistence.service().retrieveMember(subject.subCategories());
             for (MaintenanceRequestCategory det : subject.subCategories()) {
                 if (det.name().getValue().equals(row.subjectDetails().getValue())) {
                     detail = det;
@@ -162,18 +156,29 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (detail == null) {
-                detail = EntityFactory.create(MaintenanceRequestCategory.class);
+                detail = createMaintenanceCategory(row.subjectDetails().getValue(), level3);
                 detail.parent().set(subject);
-                detail.name().set(row.subjectDetails());
-                Persistence.service().persist(detail);
                 subject.subCategories().add(detail);
             }
             // Create IssueClassification
-            MaintenanceRequestCategory classification = EntityFactory.create(MaintenanceRequestCategory.class);
+            MaintenanceRequestCategory classification = createMaintenanceCategory(row.issue().getValue(), level4);
             classification.parent().set(detail);
-            classification.name().set(row.issue());
-//            classification.priority().set(row.priority());
-            Persistence.service().persist(classification);
+            detail.subCategories().add(classification);
         }
+        Persistence.service().persist(root);
+    }
+
+    private MaintenanceRequestCategory createMaintenanceCategory(String name, MaintenanceRequestCategoryLevel level) {
+        MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
+        category.level().set(level);
+        category.name().setValue(name);
+        return category;
+    }
+
+    private MaintenanceRequestCategoryLevel createMaintenanceCategoryLevel(String name, int level) {
+        MaintenanceRequestCategoryLevel catLevel = EntityFactory.create(MaintenanceRequestCategoryLevel.class);
+        catLevel.name().setValue(name);
+        catLevel.level().setValue(level);
+        return catLevel;
     }
 }

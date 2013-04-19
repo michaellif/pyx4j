@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -30,5 +33,7 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
         void rateAction(SurveyResponse rate);
 
         void cancelAction();
+
+        void getCategoryMeta(AsyncCallback<MaintenanceRequestCategoryMeta> callback);
     }
 }

@@ -13,14 +13,36 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
 public class EditMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
+    private MaintenanceRequestCategoryMeta categoryMeta;
+
     public EditMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());
+    }
+
+    @Override
+    public void setPresenter(View.Presenter<MaintenanceRequestDTO> presenter) {
+        super.setPresenter(presenter);
+        if (categoryMeta != null) {
+            ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
+        } else if (presenter != null) {
+            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+                @Override
+                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                    EditMaintenanceRequestViewImpl.this.categoryMeta = meta;
+                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+                }
+            });
+        }
     }
 
     @Override

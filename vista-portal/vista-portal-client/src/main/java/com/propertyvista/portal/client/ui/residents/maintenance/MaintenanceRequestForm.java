@@ -13,32 +13,40 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.IssueClassificationChoice;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.maintenance.IssueClassification;
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private IssueClassificationChoice<?> mainChoice;
+    private MaintenanceRequestCategoryMeta meta;
 
-    private MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice;
+    private VerticalPanel categoryPanel;
+
+    private boolean choicesReady = false;
 
     public MaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
+    }
+
+    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestCategoryMeta meta) {
+        this.meta = meta;
+        initSelectors();
+        // set value again in case meta comes after the form was populated
+        if (getValue() != null) {
+            setComponentsValue(getValue(), true, true);
+        }
     }
 
     @Override
@@ -49,85 +57,9 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         content.setBR(++row, 0, 1);
 
-        // Add components
-        final IssueClassificationChoice<IssueElement> choice1 = new IssueClassificationChoice<IssueElement>(IssueElement.class) {
-            @Override
-            protected boolean isLeaf(IssueElement opt) {
-                return !opt.isEmpty() && opt.name().isNull();
-            }
-        };
-        final IssueClassificationChoice<IssueRepairSubject> choice2 = new IssueClassificationChoice<IssueRepairSubject>(IssueRepairSubject.class) {
-            @Override
-            protected boolean isLeaf(IssueRepairSubject opt) {
-                return !opt.isEmpty() && opt.name().isNull();
-            }
-        };
-        final IssueClassificationChoice<IssueSubjectDetails> choice3 = new IssueClassificationChoice<IssueSubjectDetails>(IssueSubjectDetails.class) {
-            @Override
-            protected boolean isLeaf(IssueSubjectDetails opt) {
-                return !opt.isEmpty() && opt.name().isNull();
-            }
-        };
-        final IssueClassificationChoice<IssueClassification> choice4 = new IssueClassificationChoice<IssueClassification>(IssueClassification.class) {
-            @Override
-            protected boolean isLeaf(IssueClassification opt) {
-                return !opt.isEmpty() && opt.issue().isNull();
-            }
-        };
-        mainChoice = choice1;
-
-        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice5 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
-                MaintenanceRequestCategory.class, 0) {
-            @Override
-            protected boolean isLeaf(MaintenanceRequestCategory opt) {
-                return !opt.isEmpty() && opt.name().isNull();
-            }
-        };
-
-        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice6 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
-                MaintenanceRequestCategory.class, 1) {
-            @Override
-            protected boolean isLeaf(MaintenanceRequestCategory opt) {
-                Boolean a = opt.parent().isNull();
-                return !opt.isEmpty() && opt.parent().isNull();
-            }
-        };
-
-        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice7 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
-                MaintenanceRequestCategory.class, 2) {
-            @Override
-            protected boolean isLeaf(MaintenanceRequestCategory opt) {
-                return !opt.isEmpty() && opt.parent().parent().isNull();
-            }
-        };
-
-        final MaintenanceRequestCategoryChoice<MaintenanceRequestCategory> choice8 = new MaintenanceRequestCategoryChoice<MaintenanceRequestCategory>(
-                MaintenanceRequestCategory.class, 3) {
-            @Override
-            protected boolean isLeaf(MaintenanceRequestCategory opt) {
-                return !opt.isEmpty() && opt.parent().parent().parent().isNull();
-            }
-        };
-
-        choice = choice5;
-
-        choice6.assignParent(choice5, choice6.proto().parent());
-        choice7.assignParent(choice6, choice7.proto().parent());
-        choice8.assignParent(choice7, choice8.proto().parent());
-
-        choice2.assignParent(choice1, choice2.proto().issueElement());
-        choice3.assignParent(choice2, choice3.proto().subject());
-        choice4.assignParent(choice3, choice4.proto().subjectDetails());
-
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), choice1), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), choice2), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails(), choice3), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification(), choice4), 15).build());
-
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent().parent().parent(), choice5), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent().parent(), choice6), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category().parent(), choice7), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category(), choice8), 15).build());
+        categoryPanel = new VerticalPanel();
+        content.setWidget(++row, 0, categoryPanel);
+        content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
@@ -140,16 +72,29 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         return content;
     }
 
-    @Override
-    public void onReset() {
-        mainChoice.init();
-        choice.init();
-        super.onReset();
+    public void initSelectors() {
+        if (meta == null || choicesReady) {
+            return;
+        }
+        int levels = meta.levels().size();
+        // create selectors
+        MaintenanceRequestCategoryChoice child = null;
+        MaintenanceRequestCategoryChoice mrCategory = null;
+        for (int i = 0; i < levels; i++) {
+            MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
+            String choiceLabel = meta.levels().get(levels - 1 - i).name().getValue();
+            if (i == 0) {
+                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
+                mrCategory = choice;
+            } else {
+                categoryPanel.insert(new DecoratorBuilder(choice, 20).customLabel(choiceLabel).build(), 0);
+            }
+            if (child != null) {
+                child.assignParent(choice);
+            }
+            child = choice;
+        }
+        mrCategory.setOptionsMeta(meta);
+        choicesReady = true;
     }
-
-    @Override
-    public void onValueSet(boolean populate) {
-
-    }
-
 }

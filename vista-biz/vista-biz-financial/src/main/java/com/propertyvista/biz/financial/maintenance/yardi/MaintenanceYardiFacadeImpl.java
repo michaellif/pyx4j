@@ -21,15 +21,15 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestCategory getMaintenanceRequestCategory() {
-        return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategories();
+    public MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean labelsOnly) {
+        return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategoryMeta(labelsOnly);
     }
 
     @Override
@@ -55,6 +55,12 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     @Override
     public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
         throw new Error("This method should not be called for Yardi maintenance requests");
+    }
+
+    @Override
+    public MaintenanceRequest getMaintenanceRequest(String id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

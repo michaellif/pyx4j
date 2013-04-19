@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RateIt;
 
-import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 
@@ -208,8 +207,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
     private String issueDetails(MaintenanceRequestDTO request) {
         try {
-            IssueClassification ic = request.issueClassification();
-            return ic.subjectDetails().subject().issueElement().name().getValue() + "/" + ic.subjectDetails().subject().name().getValue();
+            return request.category().getStringView();
         } catch (Exception ignore) {
             return "Invalid Entry";
         }

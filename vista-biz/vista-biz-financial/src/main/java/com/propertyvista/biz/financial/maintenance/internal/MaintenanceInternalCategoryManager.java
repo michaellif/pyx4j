@@ -13,14 +13,18 @@
  */
 package com.propertyvista.biz.financial.maintenance.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryLevel;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
 
 public class MaintenanceInternalCategoryManager {
+
+    private MaintenanceRequestCategoryMeta meta;
 
     private static class SingletonHolder {
         public static final MaintenanceInternalCategoryManager INSTANCE = new MaintenanceInternalCategoryManager();
@@ -30,17 +34,34 @@ public class MaintenanceInternalCategoryManager {
         return SingletonHolder.INSTANCE;
     }
 
-    protected MaintenanceRequestCategory getMaintenanceRequestCategories() {
-        // TODO replace with real preload data
-        MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
-        List<MaintenanceRequestCategory> subCategories = new ArrayList<MaintenanceRequestCategory>();
-        for (int i = 0; i < 5; i++) {
-            category.name().setValue("subCategory" + i);
-            subCategories.add(category);
+    protected MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean levelsOnly) {
+        MaintenanceRequestCategoryMeta result = EntityFactory.create(MaintenanceRequestCategoryMeta.class);
+        if (meta == null) {
+            meta = EntityFactory.create(MaintenanceRequestCategoryMeta.class);
         }
-        category.name().setValue("topCategory");
-
-        return category;
+        if (meta.levels().isEmpty()) {
+            EntityQueryCriteria<MaintenanceRequestCategoryLevel> labelCrit = EntityQueryCriteria.create(MaintenanceRequestCategoryLevel.class);
+            meta.levels().addAll(Persistence.service().query(labelCrit));
+        }
+        result.levels().set(meta.levels());
+        if (!levelsOnly) {
+            if (meta.root().isEmpty()) {
+                EntityQueryCriteria<MaintenanceRequestCategory> rootCrit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
+                rootCrit.add(PropertyCriterion.eq(rootCrit.proto().name(), "ROOT"));
+                meta.root().set(Persistence.service().retrieve(rootCrit));
+                retrieveSubCategories(meta.root());
+            }
+            result.root().set(meta.root());
+        }
+        return result;
     }
 
+    private void retrieveSubCategories(MaintenanceRequestCategory parent) {
+        if (parent.subCategories() != null) {
+            Persistence.service().retrieveMember(parent.subCategories());
+            for (MaintenanceRequestCategory cat : parent.subCategories()) {
+                retrieveSubCategories(cat);
+            }
+        }
+    }
 }

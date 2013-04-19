@@ -15,8 +15,12 @@ package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface MaintenanceRequestCategoryMeta extends IEntity {
 
+    MaintenanceRequestCategory root();
+
+    IList<MaintenanceRequestCategoryLevel> levels();
 }
