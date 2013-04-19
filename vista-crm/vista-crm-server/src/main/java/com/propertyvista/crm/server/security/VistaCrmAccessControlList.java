@@ -32,12 +32,12 @@ import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.crm.rpc.services.PmcTermsOfServiceService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
+import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
-import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
@@ -61,7 +61,6 @@ import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
-import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
@@ -432,7 +431,6 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Administration:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ARCodeCrudService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UtilityCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectProductCodeListService.class));
 

@@ -52,8 +52,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         super.retrievedSingle(entity, retrieveTraget);
 
         Persistence.service().retrieveMember(entity.amenities());
-        Persistence.service().retrieveMember(entity.includedUtilities());
-        Persistence.service().retrieveMember(entity.externalUtilities());
     }
 
     @Override

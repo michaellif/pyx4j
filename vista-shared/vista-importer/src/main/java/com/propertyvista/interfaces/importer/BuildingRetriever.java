@@ -28,7 +28,6 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Roof;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -42,7 +41,6 @@ import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
-import com.propertyvista.interfaces.importer.converter.UtilityConverter;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -80,17 +78,6 @@ public class BuildingRetriever {
             Persistence.service().retrieveMember(building.amenities());
             for (BuildingAmenity amenity : building.amenities()) {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
-            }
-        }
-        {
-            Persistence.service().retrieveMember(building.includedUtilities());
-            Persistence.service().retrieveMember(building.externalUtilities());
-
-            for (Utility utility : building.includedUtilities()) {
-                buildingIO.includedUtilities().add(new UtilityConverter().createDTO(utility));
-            }
-            for (Utility utility : building.externalUtilities()) {
-                buildingIO.externalUtilities().add(new UtilityConverter().createDTO(utility));
             }
         }
 

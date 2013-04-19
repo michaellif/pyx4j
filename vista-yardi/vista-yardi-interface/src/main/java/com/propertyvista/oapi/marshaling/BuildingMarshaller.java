@@ -55,9 +55,6 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         Persistence.service().retrieveMember(building.parkings());
         buildingIO.parkings = ParkingMarshaller.getInstance().marshal(building.parkings());
 
-        Persistence.service().retrieveMember(building.includedUtilities());
-        buildingIO.includedUtilities = UtilityMarshaller.getInstance().marshal(building.includedUtilities());
-
         return buildingIO;
     }
 
@@ -73,7 +70,6 @@ public class BuildingMarshaller implements Marshaller<Building, BuildingIO> {
         building.media().addAll(MediaMarshaller.getInstance().unmarshal(buildingIO.medias));
         building.amenities().addAll(BuildingAmenityMarshaller.getInstance().unmarshal(buildingIO.amenities));
         building.parkings().addAll(ParkingMarshaller.getInstance().unmarshal(buildingIO.parkings));
-        building.includedUtilities().addAll(UtilityMarshaller.getInstance().unmarshal(buildingIO.includedUtilities));
         return building;
     }
 }

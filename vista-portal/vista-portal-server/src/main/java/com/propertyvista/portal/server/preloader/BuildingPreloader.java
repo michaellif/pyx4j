@@ -47,7 +47,6 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -155,13 +154,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {
                 MediaGenerator.generatedBuildingMedia(building);
             }
-
-            DataGenerator.cleanRandomDuplicates(Utility.class.getName());
-            building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
-            if (DataGenerator.randomBoolean()) {
-                building.includedUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
-            }
-            building.externalUtilities().add(RandomUtil.randomRetrieveNamed(Utility.class, 3));
 
 // TODO : let's leave dashboard empty - in runtime the first Building dashboard will be used by default!
 //            building.dashboard().set(DataGenerator.random(availableDashboards.buildingDashboards));

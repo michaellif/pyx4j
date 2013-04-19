@@ -32,7 +32,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -51,7 +50,6 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -181,14 +179,6 @@ public class BuildingsResource {
                         }
                     }
 
-                    {
-                        if (building.includedUtilities().getAttachLevel() == AttachLevel.Detached) {
-                            Persistence.service().retrieveMember(building.includedUtilities());
-                        }
-                        for (Utility utility : building.includedUtilities()) {
-                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
-                        }
-                    }
                 }
 
                 EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
