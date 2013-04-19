@@ -13,10 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -27,5 +30,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public interface PadProcessorInformation extends IEntity {
 
     Tenant tenant();
+
+    IPrimitive<BigDecimal> percent();
 
 }
