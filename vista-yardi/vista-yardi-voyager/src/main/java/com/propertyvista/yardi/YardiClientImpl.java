@@ -67,16 +67,36 @@ public class YardiClientImpl implements YardiClient {
         transactionId = TransactionLog.getNextNumber();
     }
 
+    private String serviceWithPath(String path) {
+        if (pmcYardiCredential.serviceURLBase().getValue().endsWith("/")) {
+            return pmcYardiCredential.serviceURLBase().getValue() + path;
+        } else {
+            return pmcYardiCredential.serviceURLBase().getValue() + "/" + path;
+        }
+    }
+
     private String getResidentTransactionsServiceURL() {
-        return pmcYardiCredential.residentTransactionsServiceURL().getValue();
+        if (pmcYardiCredential.residentTransactionsServiceURL().isNull()) {
+            return serviceWithPath("webservices/itfresidenttransactions20.asmx");
+        } else {
+            return pmcYardiCredential.residentTransactionsServiceURL().getValue();
+        }
     }
 
     private String sysBatchServiceURL() {
-        return pmcYardiCredential.sysBatchServiceURL().getValue();
+        if (pmcYardiCredential.sysBatchServiceURL().isNull()) {
+            return serviceWithPath("webservices/itfresidenttransactions20_SysBatch.asmx");
+        } else {
+            return pmcYardiCredential.sysBatchServiceURL().getValue();
+        }
     }
 
     private String maintenanceRequestsServiceURL() {
-        return pmcYardiCredential.maintenanceRequestsServiceURL().getValue();
+        if (pmcYardiCredential.maintenanceRequestsServiceURL().isNull()) {
+            return serviceWithPath("webservices/itfservicerequests.asmx");
+        } else {
+            return pmcYardiCredential.maintenanceRequestsServiceURL().getValue();
+        }
     }
 
     @Override

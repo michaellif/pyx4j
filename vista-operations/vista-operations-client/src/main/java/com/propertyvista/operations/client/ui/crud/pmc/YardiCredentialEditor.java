@@ -39,6 +39,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceURLBase()), 50).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentTransactionsServiceURL()), 50).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sysBatchServiceURL()), 50).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), 50).build());
@@ -74,27 +75,28 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
 
     private void devGenerateTestCredencials() {
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
+
+        get(proto().residentTransactionsServiceURL()).setValue(null);
+        get(proto().sysBatchServiceURL()).setValue(null);
+        get(proto().maintenanceRequestsServiceURL()).setValue(null);
+
         switch (q) {
         case 0:
-            get(proto().residentTransactionsServiceURL()).setValue(
-                    "http://yardi.birchwoodsoftwaregroup.com/Voyager60/webservices/itfresidenttransactions20.asmx");
-            get(proto().sysBatchServiceURL()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60/webservices/itfresidenttransactions20_SysBatch.asmx");
+            get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             get(proto().username()).setValue("sa");
             get(proto().credential()).setValue("akan1212");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
-            get(proto().database()).setValue("sl_0404");
+            get(proto().database()).setValue("sl_0411");
             break;
         case 1:
-            get(proto().residentTransactionsServiceURL()).setValue(
-                    "https://yardi.starlightinvest.com/voyager6008sp17/webservices/itfresidenttransactions20.asmx");
-            get(proto().sysBatchServiceURL()).setValue("https://yardi.starlightinvest.com/voyager6008sp17/webservices/itfresidenttransactions20_SysBatch.asmx");
+            get(proto().serviceURLBase()).setValue("https://yardi.starlightinvest.com/voyager6008sp17");
             get(proto().username()).setValue("propvist");
             get(proto().credential()).setValue("access@123");
             get(proto().serverName()).setValue("SLDB02");
             get(proto().database()).setValue("PropertyVista_TEST");
             break;
         case 2:
-            get(proto().maintenanceRequestsServiceURL()).setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
+            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
             get(proto().username()).setValue("propertyvista-srws");
             get(proto().credential()).setValue("55548");
             get(proto().serverName()).setValue("aspdb04");

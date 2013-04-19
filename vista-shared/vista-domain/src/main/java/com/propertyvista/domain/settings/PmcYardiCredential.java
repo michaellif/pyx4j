@@ -44,13 +44,12 @@ public interface PmcYardiCredential extends IEntity {
         SQL, Oracle
     }
 
-    @Caption(name = "Resident Transactions Service URL")
+    IPrimitive<String> serviceURLBase();
+
     IPrimitive<String> residentTransactionsServiceURL();
 
-    @Caption(name = "Sys Batch Service URL")
     IPrimitive<String> sysBatchServiceURL();
 
-    @Caption(name = "Maintenance Requests Service URL")
     IPrimitive<String> maintenanceRequestsServiceURL();
 
     @Caption(name = "Web Service User")
