@@ -19,7 +19,18 @@ import com.propertyvista.portal.client.ui.residents.ViewImpl;
 public class EditYardiMaintenanceRequestViewImpl extends ViewImpl<YardiServiceRequestDTO> implements EditYardiMaintenanceRequestView {
 
     public EditYardiMaintenanceRequestViewImpl() {
-        super(new YardiMaintenanceRequestForm(), true, false);
-        getCancel().setText(i18n.tr("Back"));
+        super(new YardiMaintenanceRequestForm());
+    }
+
+    @Override
+    public void populate(YardiServiceRequestDTO value) {
+        boolean editable = true;
+
+        getForm().setViewable(!editable);
+
+        getSubmit().setVisible(editable);
+        getCancel().setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
+
+        super.populate(value);
     }
 }
