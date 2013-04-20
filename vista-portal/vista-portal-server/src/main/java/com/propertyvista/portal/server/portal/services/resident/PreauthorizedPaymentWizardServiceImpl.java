@@ -85,7 +85,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         // some default values:
         dto.amountType().setValue(AmountType.Percent);
-        dto.value().setValue(BigDecimal.ONE);
+        dto.percent().setValue(BigDecimal.ONE);
+        dto.value().setValue(BigDecimal.ZERO);
 
         callback.onSuccess(dto);
     }
