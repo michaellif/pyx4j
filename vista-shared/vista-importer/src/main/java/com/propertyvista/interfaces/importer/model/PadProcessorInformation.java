@@ -29,8 +29,29 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadProcessorInformation extends IEntity {
 
+    public static enum PadProcessingStatus {
+
+        invalid,
+
+        anotherRecordInvalid,
+
+        notFound,
+
+        mergedWithAnotherRecord,
+
+        // Statuses set in persist
+
+        unchangedInDB,
+    }
+
     Tenant tenant();
 
+    IPrimitive<PadProcessingStatus> status();
+
     IPrimitive<BigDecimal> percent();
+
+    IPrimitive<Double> percentNotRounded();
+
+    IPrimitive<Double> estimatedChargeSplit();
 
 }

@@ -23,6 +23,7 @@ import org.junit.Test;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 
 public class PadPercentsCalulationsTests {
 
@@ -33,7 +34,7 @@ public class PadPercentsCalulationsTests {
     }
 
     private void assertEquals(BigDecimal expected, BigDecimal actual) {
-        Assert.assertEquals(expected.setScale(4, BigDecimal.ROUND_HALF_UP).toString(), actual.setScale(4, BigDecimal.ROUND_HALF_UP).toString());
+        Assert.assertEquals(expected.setScale(4).toString(), (actual == null) ? null : actual.toString());
     }
 
     @Test
@@ -47,4 +48,44 @@ public class PadPercentsCalulationsTests {
         assertEquals(new BigDecimal("0.6667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
     }
 
+    private PadFileModel createModelFull(String account, String chargeCode, String percent, double estimatedCharge) {
+        PadFileModel model = EntityFactory.create(PadFileModel.class);
+        model.percent().setValue(percent);
+
+        model.bankId().setValue("1");
+        model.transitNumber().setValue("1");
+        model.accountNumber().setValue(account);
+
+        model.chargeCode().setValue(chargeCode);
+        model.estimatedCharge().setValue(Double.toString(estimatedCharge));
+
+        return model;
+    }
+
+    @Test
+    public void testRent_30_60() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "33.333", 1000));
+        leasePadEntities.add(createModelFull("2", "rent", "66.666", 1000));
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.3333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.6667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+    }
+
+    @Test
+    public void testRentParking_30_60() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1000));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1000));
+
+        leasePadEntities.add(createModelFull("1", "park", "100", 100));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.5455"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(2)._processorInformation().status().getValue());
+    }
 }

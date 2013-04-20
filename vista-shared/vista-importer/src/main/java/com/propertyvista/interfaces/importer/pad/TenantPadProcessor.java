@@ -22,6 +22,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -43,6 +45,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantPadProcessor {
@@ -108,9 +111,10 @@ public class TenantPadProcessor {
             criteria.eq(criteria.proto().participantId(), tenantId);
             padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
 
-            if (padFileModel._processorInformation().isNull()) {
+            if (padFileModel._processorInformation().tenant().isNull()) {
                 padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database", tenantId));
                 padFileModel._import().invalid().setValue(Boolean.TRUE);
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.notFound);
                 counters.notFound++;
             } else {
                 List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());
@@ -126,7 +130,7 @@ public class TenantPadProcessor {
 
     /**
      * TODO Load existing LeasePaymentMethods.
-     * Calculate proper percentage rounding
+     * Calculate proper percentage with consideration of rounding
      */
     private void processLeasePads(Lease lease, List<PadFileModel> leasePadEntities, TenantPadCounter counters) {
         if (!validateLeasePads(leasePadEntities, counters)) {
@@ -135,6 +139,10 @@ public class TenantPadProcessor {
         calulateLeasePercents(leasePadEntities);
 
         for (final PadFileModel padFileModel : leasePadEntities) {
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
+
             TenantPadCounter saveCounter;
             try {
                 saveCounter = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<TenantPadCounter, RuntimeException>() {
@@ -159,6 +167,7 @@ public class TenantPadProcessor {
             if (message != null) {
                 padFileModel._import().message().setValue(message);
                 padFileModel._import().invalid().setValue(Boolean.TRUE);
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
                 valid = false;
             }
         }
@@ -167,6 +176,7 @@ public class TenantPadProcessor {
             for (PadFileModel padFileModel : leasePadEntities) {
                 if (!padFileModel._import().invalid().getValue(Boolean.FALSE)) {
                     padFileModel._import().invalid().setValue(Boolean.TRUE);
+                    padFileModel._processorInformation().status().setValue(PadProcessingStatus.anotherRecordInvalid);
                     padFileModel._import().message().setValue(i18n.tr("Other Pads on this lease are invalid"));
                 }
             }
@@ -221,16 +231,122 @@ public class TenantPadProcessor {
         }
     }
 
-    static void calulateLeasePercents(List<PadFileModel> leasePadEntities) {
-        // Merge PaymentMethods
+    static boolean allHaveMember(List<PadFileModel> leasePadEntities, IPrimitive<String> proto) {
+        for (PadFileModel padFileModel : leasePadEntities) {
+            String v = (String) padFileModel.getMember(proto.getFieldName()).getValue();
+            if (!CommonsStringUtils.isStringSet(v)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    static void calulateLeasePercents(List<PadFileModel> leasePadEntities) {
+        if (leasePadEntities.size() == 1) {
+            // Split is not required
+            PadFileModel padFileModel = leasePadEntities.get(0);
+            if (!padFileModel.percent().isNull()) {
+                BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
+                BigDecimal percentRound = percent.setScale(4, BigDecimal.ROUND_HALF_UP);
+                padFileModel._processorInformation().percent().setValue(percentRound);
+            }
+            return;
+        }
+
+        boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeCode());
+        boolean allHaveEstimatedCharge = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).estimatedCharge());
+
+        if (allHaveChargeCode && allHaveEstimatedCharge) {
+            double estimatedChargeTotal = calulateEstimatedChargeTotal(leasePadEntities);
+            // Merge PaymentMethods from the same account
+            Map<String, List<PadFileModel>> mappedByAccount = mapByAccount(leasePadEntities);
+
+            for (Map.Entry<String, List<PadFileModel>> me : mappedByAccount.entrySet()) {
+                mergeToFirstRow(estimatedChargeTotal, me.getValue());
+            }
+            calulateSubsetPercentsRounding(leasePadEntities);
+        } else {
+            // just do Rounding
+            calulateSubsetPercentsRounding(leasePadEntities);
+        }
+
+    }
+
+    static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
+        double estimatedChargeTotal = 0;
+        for (PadFileModel padFileModel : leasePadEntities) {
+            double estimatedChargeSplit = 0;
+            if (!padFileModel.percent().isNull()) {
+                estimatedChargeSplit = Double.parseDouble(padFileModel.percent().getValue()) * Double.parseDouble(padFileModel.estimatedCharge().getValue())
+                        / 100.0;
+            } else {
+                estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
+            }
+
+            estimatedChargeTotal += estimatedChargeSplit;
+            padFileModel._processorInformation().estimatedChargeSplit().setValue(estimatedChargeSplit);
+        }
+        return estimatedChargeTotal;
+    }
+
+    private static void mergeToFirstRow(double estimatedChargeTotal, List<PadFileModel> accountPadEntities) {
+        PadFileModel firstPadFileModel = accountPadEntities.get(0);
+        double accountChargeTotal = firstPadFileModel._processorInformation().estimatedChargeSplit().getValue();
+
+        for (int i = 1; i < accountPadEntities.size(); i++) {
+            PadFileModel padFileModel = accountPadEntities.get(i);
+            accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
+            padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
+        }
+
+        firstPadFileModel._processorInformation().estimatedChargeSplit().setValue(accountChargeTotal);
+
+        double percentNotRounded = accountChargeTotal / estimatedChargeTotal;
+        firstPadFileModel._processorInformation().percentNotRounded().setValue(percentNotRounded);
+    }
+
+    private static String getAccount(PadFileModel padFileModel) {
+        StringBuilder b = new StringBuilder();
+        b.append(padFileModel.accountNumber().getValue().trim()).append(':');
+        b.append(padFileModel.bankId().getValue().trim()).append(':');
+        b.append(padFileModel.transitNumber().getValue().trim());
+        return b.toString();
+    }
+
+    private static Map<String, List<PadFileModel>> mapByAccount(List<PadFileModel> entities) {
+        Map<String, List<PadFileModel>> mappedByAccount = new LinkedHashMap<String, List<PadFileModel>>();
+        for (PadFileModel padFileModel : entities) {
+            String account = getAccount(padFileModel);
+            List<PadFileModel> accountEntities = mappedByAccount.get(account);
+            if (accountEntities == null) {
+                accountEntities = new ArrayList<PadFileModel>();
+                mappedByAccount.put(account, accountEntities);
+            }
+            accountEntities.add(padFileModel);
+        }
+        return mappedByAccount;
+    }
+
+    private static void enshurePercentNotRoundedIsSet(PadFileModel padFileModel) {
+        if (!padFileModel.percent().isNull() && padFileModel._processorInformation().percentNotRounded().isNull()) {
+            double percentNotRounded = (Double.parseDouble(padFileModel.percent().getValue())) / 100.0;
+            padFileModel._processorInformation().percentNotRounded().setValue(percentNotRounded);
+        }
+    }
+
+    static void calulateSubsetPercentsRounding(List<PadFileModel> leasePadEntities) {
         BigDecimal percentTotal = BigDecimal.ZERO;
         BigDecimal percentRoundTotal = BigDecimal.ZERO;
         PadFileModel recordLargest = null;
 
         for (PadFileModel padFileModel : leasePadEntities) {
-            if (!padFileModel.percent().isNull()) {
-                BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
+            enshurePercentNotRoundedIsSet(padFileModel);
+
+            if (!padFileModel._processorInformation().percentNotRounded().isNull()) {
+                BigDecimal percent = new BigDecimal(padFileModel._processorInformation().percentNotRounded().getValue());
                 BigDecimal percentRound = percent.setScale(4, BigDecimal.ROUND_HALF_UP);
                 padFileModel._processorInformation().percent().setValue(percentRound);
                 percentTotal = percentTotal.add(percent);
@@ -246,7 +362,7 @@ public class TenantPadProcessor {
         if ((percentTotal.compareTo(percentRoundTotal) != 0) && (percentTotal.subtract(BigDecimal.ONE).abs().compareTo(new BigDecimal("0.0001")) < 1)) {
             BigDecimal unapidPercentBalance = percentRoundTotal.subtract(BigDecimal.ONE);
             recordLargest._processorInformation().percent().setValue(recordLargest._processorInformation().percent().getValue().add(unapidPercentBalance));
-            recordLargest._import().message().setValue("Percent value rounded reaminder added to this record");
+            recordLargest._import().message().setValue("Percent value rounded remainder added to this record");
         }
     }
 

@@ -20,11 +20,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 
 @Transient
 public interface PadFileReportModel extends PadFileModel {
 
     IPrimitive<Boolean> invalid();
+
+    IPrimitive<PadProcessingStatus> status();
 
     IPrimitive<String> message();
 
