@@ -412,9 +412,11 @@ public class TenantPadProcessor {
                     counters.updated++;
                 } else {
                     counters.unchanged++;
+                    padFileModel._processorInformation().status().setValue(PadProcessingStatus.unchangedInDB);
                 }
             } else {
                 counters.unchanged++;
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.unchangedInDB);
             }
         } else {
             LeasePaymentMethod method = EntityFactory.create(LeasePaymentMethod.class);
