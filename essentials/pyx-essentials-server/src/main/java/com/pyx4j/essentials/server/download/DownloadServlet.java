@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.server.contexts.Context;
 
 @SuppressWarnings("serial")
 public class DownloadServlet extends HttpServlet {
@@ -45,9 +46,13 @@ public class DownloadServlet extends HttpServlet {
         if (fileName == null) {
             throw new ServletException("Can't find documents name in request.");
         }
+        if (Context.getSession() == null) {
+            throw new ServletException("No Session");
+        }
 
         Downloadable d = Downloadable.getDownloadable(fileName);
         if (d == null) {
+            log.warn("No document [{}] found on the HTTP session {}.", fileName, Context.getSession().getId());
             throw new ServletException("No document [" + fileName + "] found on the HTTP session.");
         }
         log.debug("download", fileName);
