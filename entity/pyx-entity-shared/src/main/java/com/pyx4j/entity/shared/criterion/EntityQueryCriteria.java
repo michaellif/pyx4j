@@ -201,6 +201,19 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return ((filters != null) && (filters.size() > 0)) || ((sorts != null) && (sorts.size() > 0));
     }
 
+    public PropertyCriterion getCriterion(IObject<?> member) {
+        if (getFilters() == null) {
+            return null;
+        } else {
+            for (Criterion citerion : getFilters()) {
+                if ((citerion instanceof PropertyCriterion) && (member.getPath().toString().equals(((PropertyCriterion) citerion).getPropertyPath()))) {
+                    return (PropertyCriterion) citerion;
+                }
+            }
+        }
+        return null;
+    }
+
     public List<Criterion> getFilters() {
         return filters;
     }
