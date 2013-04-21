@@ -94,7 +94,7 @@ public class TenantPadProcessor {
         String message = SimpleMessageFormat.format("{0} payment methods created, {1} unchanged, {2} amounts updated", counters.imported, counters.unchanged,
                 counters.updated);
         if (counters.invalid != 0 || counters.notFound != 0) {
-            message += SimpleMessageFormat.format("\n{0} invalid records, {1} tenants not found", counters.invalid, counters.notFound);
+            message += SimpleMessageFormat.format(", {0} invalid records, {1} tenants not found", counters.invalid, counters.notFound);
         }
         log.info(message);
         return message;
@@ -161,27 +161,29 @@ public class TenantPadProcessor {
     }
 
     private boolean validateLeasePads(List<PadFileModel> leasePadEntities, TenantPadCounter counters) {
-        boolean valid = true;
+        PadFileModel invalid = null;
         for (PadFileModel padFileModel : leasePadEntities) {
             String message = validationMessagePadModel(padFileModel);
             if (message != null) {
                 padFileModel._import().message().setValue(message);
                 padFileModel._import().invalid().setValue(Boolean.TRUE);
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
-                valid = false;
+                invalid = padFileModel;
             }
         }
-        if (!valid) {
+        if (invalid != null) {
             counters.invalid += leasePadEntities.size();
             for (PadFileModel padFileModel : leasePadEntities) {
                 if (!padFileModel._import().invalid().getValue(Boolean.FALSE)) {
                     padFileModel._import().invalid().setValue(Boolean.TRUE);
                     padFileModel._processorInformation().status().setValue(PadProcessingStatus.anotherRecordInvalid);
-                    padFileModel._import().message().setValue(i18n.tr("Other Pads on this lease are invalid"));
+                    padFileModel._import().message().setValue(i18n.tr("Other Pad (row {0}) on this lease is invalid", invalid._import().row()));
                 }
             }
+            return false;
+        } else {
+            return true;
         }
-        return valid;
     }
 
     private String validationMessagePadModel(PadFileModel padFileModel) {
@@ -194,7 +196,7 @@ public class TenantPadProcessor {
         if (padFileModel.bankId().isNull()) {
             return i18n.tr("Bank Id/Institution is required");
         }
-        if (!ValidationUtils.isBankIdNumberValid(padFileModel.accountNumber().getValue())) {
+        if (!ValidationUtils.isBankIdNumberValid(padFileModel.bankId().getValue())) {
             return i18n.tr("Bank Id/Institution should consist of 3 digits");
         }
         if (padFileModel.transitNumber().isNull()) {
