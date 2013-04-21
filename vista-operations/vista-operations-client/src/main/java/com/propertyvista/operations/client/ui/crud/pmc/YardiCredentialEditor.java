@@ -79,7 +79,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         get(proto().residentTransactionsServiceURL()).setValue(null);
         get(proto().sysBatchServiceURL()).setValue(null);
         get(proto().maintenanceRequestsServiceURL()).setValue(null);
-
+        get(proto().platform()).setValue(PmcYardiCredential.Platform.SQL);
         switch (q) {
         case 0:
             get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
