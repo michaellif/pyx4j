@@ -25,6 +25,9 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -41,6 +44,7 @@ import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudService
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -57,6 +61,30 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     public LeaseViewerCrudServiceImpl() {
         super(LeaseDTO.class);
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<Lease> dbCriteria, EntityListCriteria<LeaseDTO> dtoCriteria) {
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+        PropertyCriterion papCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().papPresent());
+        if (papCriteria != null) {
+            if (papCriteria.getValue() == Boolean.FALSE) {
+                dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+            } else {
+                dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+            }
+        }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Lease in, LeaseDTO dto) {
+        super.enhanceListRetrieved(in, dto);
+
+        {
+            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            criteria.eq(criteria.proto().tenant().lease(), in);
+            dto.papPresent().setValue(Persistence.service().count(criteria) != 0);
+        }
     }
 
     @Override

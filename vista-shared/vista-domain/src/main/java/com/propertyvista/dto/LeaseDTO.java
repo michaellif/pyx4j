@@ -40,6 +40,8 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<String> unitMoveOutNote();
 
+    IPrimitive<Boolean> papPresent();
+
     IList<TenantInsuranceCertificateDTO> tenantInsuranceCertificates();
 
     @NotNull

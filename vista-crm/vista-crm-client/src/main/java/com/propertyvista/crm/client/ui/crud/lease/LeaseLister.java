@@ -52,6 +52,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
             new Builder(proto().billingAccount().accountNumber()).build(),
+            new Builder(proto().papPresent()).sortable(false).build(),
             
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
