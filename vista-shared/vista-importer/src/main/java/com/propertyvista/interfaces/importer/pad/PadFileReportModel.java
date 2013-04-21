@@ -13,8 +13,6 @@
  */
 package com.propertyvista.interfaces.importer.pad;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,6 +30,6 @@ public interface PadFileReportModel extends PadFileModel {
     IPrimitive<String> message();
 
     @Format("#,##0.00")
-    IPrimitive<BigDecimal> percentStored();
+    IPrimitive<Double> percentStored();
 
 }

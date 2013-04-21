@@ -43,7 +43,10 @@ public class TenantPadCreateReport {
             reportModel.message().setValue(reportModel._import().message().getValue());
 
             reportModel.status().setValue(reportModel._processorInformation().status().getValue());
-            reportModel.percentStored().setValue(reportModel._processorInformation().percent().getValue());
+
+            if (!reportModel._processorInformation().percent().isNull()) {
+                reportModel.percentStored().setValue(reportModel._processorInformation().percent().getValue().doubleValue() * 100);
+            }
 
             entityFormatter.reportEntity(formatter, reportModel);
         }
