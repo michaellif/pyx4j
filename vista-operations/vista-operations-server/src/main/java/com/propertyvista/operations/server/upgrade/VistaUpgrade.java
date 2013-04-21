@@ -69,10 +69,14 @@ public class VistaUpgrade {
             public Void execute() {
                 log.info("Execute upgrade Step #{}", step);
                 Lifecycle.startElevatedUserContext();
-                procedure.runUpgradeStep(step);
-                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                pmc.schemaDataUpgradeSteps().setValue(step);
-                Persistence.service().persist(pmc);
+                try {
+                    procedure.runUpgradeStep(step);
+                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+                    pmc.schemaDataUpgradeSteps().setValue(step);
+                    Persistence.service().persist(pmc);
+                } finally {
+                    Lifecycle.endElevatedUserContext();
+                }
                 return null;
             }
 
