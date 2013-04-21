@@ -25,6 +25,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -65,15 +66,20 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<Lease> dbCriteria, EntityListCriteria<LeaseDTO> dtoCriteria) {
-        super.enhanceListCriteria(dbCriteria, dtoCriteria);
         PropertyCriterion papCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().papPresent());
         if (papCriteria != null) {
+            dtoCriteria.getFilters().remove(papCriteria);
+
+            AndCriterion notDeleted = new AndCriterion();
+            notDeleted.eq(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), Boolean.FALSE);
             if (papCriteria.getValue() == Boolean.FALSE) {
-                dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                dbCriteria.notExists(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments(), notDeleted);
             } else {
+                dbCriteria.add(notDeleted);
                 dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
             }
         }
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
     }
 
     @Override
@@ -83,6 +89,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         {
             EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
             criteria.eq(criteria.proto().tenant().lease(), in);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
             dto.papPresent().setValue(Persistence.service().count(criteria) != 0);
         }
     }
