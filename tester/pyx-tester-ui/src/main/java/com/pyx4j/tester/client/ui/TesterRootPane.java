@@ -21,22 +21,24 @@
 package com.pyx4j.tester.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.RootPane;
+import com.pyx4j.tester.client.TesterSiteMap;
 import com.pyx4j.tester.client.mvp.ConsoleActivityMapper;
 import com.pyx4j.tester.client.mvp.MainActivityMapper;
 import com.pyx4j.tester.client.mvp.NavigActivityMapper;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
 
-public class TesterRootPane extends LayoutPanel {
+public class TesterRootPane extends RootPane<LayoutPanel> implements IsWidget {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
@@ -44,17 +46,18 @@ public class TesterRootPane extends LayoutPanel {
         Content, Action, Header, Navigation, Footer, Display, NavigContainer;
     }
 
-    public TesterRootPane() {
+    private final DisplayPanel consoleDisplay;
 
-        EventBus eventBus = AppSite.getEventBus();
+    public TesterRootPane() {
+        super(new LayoutPanel());
 
         StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        asWidget().setStyleName(DEFAULT_STYLE_PREFIX);
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
         contentPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Content);
-        add(contentPanel);
+        asWidget().add(contentPanel);
 
         SplitLayoutPanel splitPanel = new SplitLayoutPanel(3);
         splitPanel.ensureDebugId("splitPanel");
@@ -67,7 +70,7 @@ public class TesterRootPane extends LayoutPanel {
         splitPanel.addWest(navigDisplay, 250);
         splitPanel.setWidgetMinSize(navigDisplay, 150);
 
-        DisplayPanel consoleDisplay = new DisplayPanel();
+        consoleDisplay = new DisplayPanel();
         navigDisplay.setSize("100%", "100%");
 
         splitPanel.addEast(consoleDisplay, 500);
@@ -76,9 +79,18 @@ public class TesterRootPane extends LayoutPanel {
         DisplayPanel mainDisplay = new DisplayPanel();
         splitPanel.add(mainDisplay);
 
-        DisplayPanel.bind(new NavigActivityMapper(), navigDisplay, eventBus);
-        DisplayPanel.bind(new ConsoleActivityMapper(), consoleDisplay, eventBus);
-        DisplayPanel.bind(new MainActivityMapper(), mainDisplay, eventBus);
+        bind(new NavigActivityMapper(), navigDisplay);
+        bind(new ConsoleActivityMapper(), consoleDisplay);
+        bind(new MainActivityMapper(), mainDisplay);
+    }
+
+    @Override
+    protected void onPlaceChange(Place place) {
+        if (place instanceof TesterSiteMap.FormTester) {
+            consoleDisplay.setVisible(true);
+        } else {
+            consoleDisplay.setVisible(false);
+        }
     }
 
 }

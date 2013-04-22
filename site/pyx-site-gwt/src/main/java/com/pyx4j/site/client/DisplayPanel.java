@@ -20,17 +20,10 @@
  */
 package com.pyx4j.site.client;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.web.bindery.event.shared.EventBus;
-
-import com.pyx4j.site.client.activity.AppActivityManager;
-import com.pyx4j.site.client.activity.AppActivityMapper;
 
 public class DisplayPanel extends SimplePanel implements RequiresResize, ProvidesResize {
 
@@ -43,16 +36,6 @@ public class DisplayPanel extends SimplePanel implements RequiresResize, Provide
         if ((child != null) && (child instanceof RequiresResize)) {
             ((RequiresResize) child).onResize();
         }
-    }
-
-    public static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        ActivityManager activityManager = new ActivityManager(mapper, eventBus);
-        activityManager.setDisplay(widget);
-    }
-
-    public static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        AppActivityManager activityManager = new AppActivityManager(mapper, eventBus);
-        activityManager.setDisplay(widget);
     }
 
 }

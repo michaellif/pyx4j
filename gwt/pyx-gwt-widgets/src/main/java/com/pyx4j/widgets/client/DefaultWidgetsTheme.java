@@ -168,6 +168,8 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("display", "inline-block");
         style.addProperty("padding-left", "4px");
         style.addProperty("vertical-align", "middle");
+        style.addProperty("font-size", "1.1em");
+        style.addProperty("font-weight", "bolder");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarSeparator);
@@ -180,8 +182,6 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.Toolbar, " .", StyleName.Anchor);
         style.addProperty("color", ThemeColor.object1, 1);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
         style.addProperty("padding", "3px 6px");
         addStyle(style);
     }

@@ -42,16 +42,6 @@ public class TesterSiteMap implements SiteMap {
 
     }
 
-    public static class Form extends AppPlace {
-
-        public static class FormBasic extends AppPlace {
-        }
-
-        public static class FormVisibility extends AppPlace {
-        }
-
-    }
-
     public static class NativeWidget extends AppPlace {
 
         public static class NativeWidgetBasic extends AppPlace {
