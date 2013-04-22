@@ -56,7 +56,7 @@ public class PadPercentsCalulationsTests {
         model.transitNumber().setValue("1");
         model.accountNumber().setValue(account);
 
-        model.chargeCode().setValue(chargeCode);
+        model.chargeId().setValue(chargeCode);
         model.estimatedCharge().setValue(Double.toString(estimatedCharge));
 
         return model;
@@ -87,5 +87,18 @@ public class PadPercentsCalulationsTests {
         assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(1)._processorInformation().percent().getValue());
 
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(2)._processorInformation().status().getValue());
+    }
+
+    @Test
+    public void testRentParking_Merged() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "90", 1000));
+        leasePadEntities.add(createModelFull("1", "park", "100", 100));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.9091"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(1)._processorInformation().status().getValue());
     }
 }

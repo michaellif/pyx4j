@@ -15,6 +15,7 @@ package com.propertyvista.interfaces.importer.pad;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -221,6 +222,11 @@ public class TenantPadProcessor {
         if (!padFileModel.percent().isNull() && (!isValidNumber(padFileModel.percent().getValue()))) {
             return i18n.tr("Percent is not valid number");
         }
+
+        if (!padFileModel.estimatedCharge().isNull() && (!isValidNumber(padFileModel.estimatedCharge().getValue()))) {
+            return i18n.tr("Estimated Charge is not valid number");
+        }
+
         return null;
     }
 
@@ -255,7 +261,7 @@ public class TenantPadProcessor {
             return;
         }
 
-        boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeCode());
+        boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeId());
         boolean allHaveEstimatedCharge = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).estimatedCharge());
 
         if (allHaveChargeCode && allHaveEstimatedCharge) {
@@ -275,17 +281,31 @@ public class TenantPadProcessor {
     }
 
     static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
+        Map<String, Double> estimatedChargeByChargeCode = new HashMap<String, Double>();
+
         double estimatedChargeTotal = 0;
         for (PadFileModel padFileModel : leasePadEntities) {
             double estimatedChargeSplit = 0;
             if (!padFileModel.percent().isNull()) {
-                estimatedChargeSplit = Double.parseDouble(padFileModel.percent().getValue()) * Double.parseDouble(padFileModel.estimatedCharge().getValue())
-                        / 100.0;
+                double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
+                estimatedChargeSplit = Double.parseDouble(padFileModel.percent().getValue()) * estimatedCharge / 100.0;
+                Double prevestimatedCharge = estimatedChargeByChargeCode.get(padFileModel.chargeId().getValue());
+                if (prevestimatedCharge != null) {
+                    if (prevestimatedCharge.doubleValue() != estimatedCharge) {
+                        padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge Id {0} are changing", padFileModel.chargeId()));
+                        padFileModel._import().invalid().setValue(Boolean.TRUE);
+                        padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
+                        continue;
+                    }
+                } else {
+                    estimatedChargeTotal += estimatedCharge;
+                    estimatedChargeByChargeCode.put(padFileModel.chargeId().getValue(), estimatedCharge);
+                }
             } else {
                 estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
+                estimatedChargeTotal += estimatedChargeSplit;
             }
 
-            estimatedChargeTotal += estimatedChargeSplit;
             padFileModel._processorInformation().estimatedChargeSplit().setValue(estimatedChargeSplit);
         }
         return estimatedChargeTotal;
@@ -297,13 +317,21 @@ public class TenantPadProcessor {
 
         for (int i = 1; i < accountPadEntities.size(); i++) {
             PadFileModel padFileModel = accountPadEntities.get(i);
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
             accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
             padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
         }
 
         firstPadFileModel._processorInformation().estimatedChargeSplit().setValue(accountChargeTotal);
 
-        double percentNotRounded = accountChargeTotal / estimatedChargeTotal;
+        double percentNotRounded;
+        if (estimatedChargeTotal == 0) {
+            percentNotRounded = 0;
+        } else {
+            percentNotRounded = accountChargeTotal / estimatedChargeTotal;
+        }
         firstPadFileModel._processorInformation().percentNotRounded().setValue(percentNotRounded);
     }
 
