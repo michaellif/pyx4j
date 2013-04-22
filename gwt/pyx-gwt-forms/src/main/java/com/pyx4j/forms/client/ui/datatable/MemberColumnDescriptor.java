@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 
 public class MemberColumnDescriptor extends ColumnDescriptor {
 
-    protected MemberColumnDescriptor(Builder builder) {
+    protected MemberColumnDescriptor(ColumnDescriptor.Builder builder) {
         super(builder);
     }
 
