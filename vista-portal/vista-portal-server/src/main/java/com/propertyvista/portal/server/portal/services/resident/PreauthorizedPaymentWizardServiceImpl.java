@@ -80,7 +80,6 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         dto.tenant().set(TenantAppContext.getCurrentUserTenant());
 
 //        ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), )
-
 //        dto.allowedAmountTypes().
 
         // some default values:

@@ -238,6 +238,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
+                        if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
+                            profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
+                        }
                         break;
                     }
                 }
