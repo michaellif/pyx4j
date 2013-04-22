@@ -57,7 +57,8 @@ public class CrmLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     public CrmLayoutPanel() {
         setElement(Document.get().createDivElement());
-        setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
+
+        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 
         layout = new Layout(getElement());
         layoutCmd = new DisplaysLayoutCommand();
@@ -97,6 +98,7 @@ public class CrmLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         // ============ Content ============
         {
             contentDisplay = new DisplayPanel();
+            contentDisplay.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
 
             Layer layer = layout.attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
             contentDisplay.setLayoutData(layer);

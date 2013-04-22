@@ -20,8 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
@@ -83,7 +83,9 @@ public class CrmSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
-        RootPanel.get().add(RootLayoutPanel.get());
+        HTML feedbackWidgetContainer = new HTML();
+        feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
+        RootLayoutPanel.get().add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
 
         RootLayoutPanel.get().add(new CrmRootPane());
 
