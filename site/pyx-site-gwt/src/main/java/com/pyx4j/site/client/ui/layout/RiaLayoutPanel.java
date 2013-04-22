@@ -38,6 +38,8 @@ import com.pyx4j.site.client.DisplayPanel;
 
 public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
+    private final int MENU_COLLAPSE_THRESHOLD = 1000;
+
     private final Layout layout;
 
     private final LayoutCommand layoutCmd;
@@ -193,12 +195,14 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
     @Override
     public void onResize() {
 
-        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                setMenuExpanded(Window.getClientWidth() > 1000);
-            }
-        });
+        if ((Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD ^ menuExpanded)) {
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                @Override
+                public void execute() {
+                    setMenuExpanded(Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD);
+                }
+            });
+        }
 
         for (Widget child : getChildren()) {
             if (child instanceof RequiresResize) {
