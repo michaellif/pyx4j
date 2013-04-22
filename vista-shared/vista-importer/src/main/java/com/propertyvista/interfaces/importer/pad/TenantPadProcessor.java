@@ -322,6 +322,7 @@ public class TenantPadProcessor {
             }
             accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
             padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
+            padFileModel._import().message().setValue(i18n.tr("Merged with row {0}", firstPadFileModel._import().row()));
         }
 
         firstPadFileModel._processorInformation().estimatedChargeSplit().setValue(accountChargeTotal);
