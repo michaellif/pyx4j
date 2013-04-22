@@ -498,11 +498,24 @@ BEGIN
         CREATE TABLE maintenance_request_category
         (
                 id                      BIGINT                  NOT NULL,
+                level                   BIGINT,
                 name                    VARCHAR(500),
                         CONSTRAINT      maintenance_request_category_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE maintenance_request_category OWNER TO vista;
+        
+        -- maintenance_request_category_level
+        
+        CREATE TABLE maintenance_request_category_level
+        (
+                id                      BIGINT                  NOT NULL,
+                level                   INT,
+                name                    VARCHAR(500),
+                        CONSTRAINT      maintenance_request_category_level_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_category_level OWNER TO vista;
         
         -- maintenance_request_category$sub_categories
         
@@ -836,6 +849,14 @@ BEGIN
         ALTER TABLE billing_invoice_line_item   DROP COLUMN target_date,
                                                 DROP COLUMN debit_type ;
         
+        -- building$external_utilities
+        
+        DROP TABLE building$external_utilities;
+        
+        -- building$included_utilities
+        
+        DROP TABLE building$included_utilities;
+        
         -- concession_v
         
         ALTER TABLE concession_v        DROP COLUMN product_item_type,
@@ -890,6 +911,10 @@ BEGIN
         
         ALTER TABLE product_tax_policy_item     DROP COLUMN product_item_type,
                                                 DROP COLUMN product_item_type_discriminator;
+                                                
+        -- utility
+        
+        DROP TABLE utility;
                                                 
         -- yardi_charge_code
         
@@ -960,10 +985,6 @@ BEGIN
         ALTER TABLE boiler ADD CONSTRAINT boiler_warranty_contract_contractor_fk FOREIGN KEY(warranty_contract_contractor) REFERENCES vendor(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE boilerwarranty$items ADD CONSTRAINT boilerwarranty$items_owner_fk FOREIGN KEY(owner) REFERENCES boiler(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE boilerwarranty$items ADD CONSTRAINT boilerwarranty$items_value_fk FOREIGN KEY(value) REFERENCES warranty_item(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE building$external_utilities ADD CONSTRAINT building$external_utilities_owner_fk FOREIGN KEY(owner) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE building$external_utilities ADD CONSTRAINT building$external_utilities_value_fk FOREIGN KEY(value) REFERENCES utility(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE building$included_utilities ADD CONSTRAINT building$included_utilities_owner_fk FOREIGN KEY(owner) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE building$included_utilities ADD CONSTRAINT building$included_utilities_value_fk FOREIGN KEY(value) REFERENCES utility(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building$media ADD CONSTRAINT building$media_owner_fk FOREIGN KEY(owner) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building$media ADD CONSTRAINT building$media_value_fk FOREIGN KEY(value) REFERENCES media(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building_amenity ADD CONSTRAINT building_amenity_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1177,6 +1198,8 @@ BEGIN
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_category_fk FOREIGN KEY(category) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_issue_classification_fk FOREIGN KEY(issue_classification) REFERENCES issue_classification(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_lease_participant_fk FOREIGN KEY(lease_participant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_level_fk 
+                FOREIGN KEY(level) REFERENCES maintenance_request_category_level(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_owner_fk FOREIGN KEY(owner) REFERENCES marketing(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_value_fk FOREIGN KEY(value) REFERENCES advertising_blurb(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE news ADD CONSTRAINT news_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1358,7 +1381,7 @@ BEGIN
         ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
                 CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
                  'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
-        ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('Any', 'FixedAmount', 'OwingBalance'));
+        ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
         ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
                 CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
                  'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));

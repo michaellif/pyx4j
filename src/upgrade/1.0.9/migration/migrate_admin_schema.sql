@@ -102,7 +102,8 @@ SET search_path = '_admin_';
         
         -- admin_pmc_yardi_credential
         
-        ALTER TABLE admin_pmc_yardi_credential  ADD COLUMN maintenance_requests_service_url VARCHAR(500);
+        ALTER TABLE admin_pmc_yardi_credential  ADD COLUMN maintenance_requests_service_url VARCHAR(500),
+                                                ADD COLUMN service_urlbase VARCHAR(500);
         
         -- pad_file
         
