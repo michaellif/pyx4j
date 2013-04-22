@@ -83,7 +83,9 @@ public interface ARCode extends IEntity {
 
         ExternalCredit(ActionType.Credit),
 
-        ExternalCharge(ActionType.Debit);
+        ExternalCharge(ActionType.Debit),
+
+        Payment(ActionType.Credit);
 
         // -----------------------------
 

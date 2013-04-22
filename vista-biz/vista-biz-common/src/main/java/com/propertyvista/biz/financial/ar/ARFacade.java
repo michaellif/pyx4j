@@ -85,7 +85,7 @@ public interface ARFacade {
 
     List<InvoiceLineItem> getLatestBillingActivity(BillingAccount billingAccount);
 
-    ARCode getDefaultARCode(ARCode.Type type);
+    ARCode getReservedARCode(ARCode.Type type);
 
     BillingFacade getBillingFacade();
 }

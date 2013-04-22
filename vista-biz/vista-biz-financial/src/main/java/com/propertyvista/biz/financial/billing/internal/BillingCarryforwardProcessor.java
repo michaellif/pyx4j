@@ -58,7 +58,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
             InvoiceCarryforwardCharge charge = EntityFactory.create(InvoiceCarryforwardCharge.class);
             charge.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
             charge.taxTotal().setValue(BigDecimal.ZERO);
-            charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.CarryForwardCharge));
+            charge.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.CarryForwardCharge));
             zeroCycleBalance = charge;
         }
         zeroCycleBalance.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());

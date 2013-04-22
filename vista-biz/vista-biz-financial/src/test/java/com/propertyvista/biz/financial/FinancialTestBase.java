@@ -581,7 +581,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCredit), immediate);
+        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.AccountCredit), immediate);
     }
 
     protected LeaseAdjustment addAccountCharge(String amount) {
@@ -589,7 +589,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addAccountCharge(String amount, boolean immediate) {
-        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCharge), immediate);
+        return addLeaseAdjustment(amount, ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.AccountCharge), immediate);
     }
 
     private LeaseAdjustment addLeaseAdjustment(String amount, ARCode arCode, boolean immediate) {

@@ -38,7 +38,7 @@ public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmen
 
         {
             ARCode creditCode;
-            creditCode = ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCredit);
+            creditCode = ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.AccountCredit);
             LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
             item.code().set(creditCode);
             policy.policyItems().add(item);
@@ -46,7 +46,7 @@ public class LeaseAdjustmentPolicyDataModel extends MockDataModel<LeaseAdjustmen
 
         {
             ARCode chargeCode;
-            chargeCode = ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.AccountCharge);
+            chargeCode = ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.AccountCharge);
             LeaseAdjustmentPolicyItem item = EntityFactory.create(LeaseAdjustmentPolicyItem.class);
             item.code().set(chargeCode);
             item.taxes().add(getDataModel(TaxesDataModel.class).getAllItems().get(0));

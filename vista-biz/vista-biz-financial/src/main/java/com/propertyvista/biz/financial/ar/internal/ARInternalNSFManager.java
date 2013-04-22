@@ -65,7 +65,7 @@ class ARInternalNSFManager {
 
         InvoiceNSF charge = EntityFactory.create(InvoiceNSF.class);
         charge.billingAccount().set(paymentRecord.billingAccount());
-        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.NSF));
+        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.NSF));
         charge.amount().setValue(nsfItem.fee().getValue());
         charge.dueDate().setValue(
                 ARInternalTransactionManager.instance().getTransactionDueDate(paymentRecord.billingAccount(), new LogicalDate(SystemDateManager.getDate())));

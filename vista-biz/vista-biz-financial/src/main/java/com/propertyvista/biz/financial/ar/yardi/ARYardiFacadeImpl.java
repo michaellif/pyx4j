@@ -181,7 +181,7 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public ARCode getDefaultARCode(Type type) {
+    public ARCode getReservedARCode(Type type) {
         return ARYardiTransactionManager.instance().getDefaultARCode(type);
     }
 

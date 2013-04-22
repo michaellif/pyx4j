@@ -163,7 +163,7 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public ARCode getDefaultARCode(Type type) {
+    public ARCode getReservedARCode(Type type) {
         return ARInternalTransactionManager.instance().getDefaultARCode(type);
     }
 

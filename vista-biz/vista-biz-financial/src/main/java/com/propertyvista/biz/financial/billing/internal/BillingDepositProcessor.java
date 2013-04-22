@@ -73,7 +73,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
                 invoiceDeposit.billingAccount().set(getBillProducer().getNextPeriodBill().billingAccount());
                 invoiceDeposit.dueDate().setValue(getBillProducer().getNextPeriodBill().dueDate().getValue());
-                invoiceDeposit.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.Deposit));
+                invoiceDeposit.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.Deposit));
                 invoiceDeposit.description().setValue(deposit.description().getStringView());
                 invoiceDeposit.amount().setValue(deposit.amount().getValue());
                 invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);

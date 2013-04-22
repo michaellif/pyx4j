@@ -34,7 +34,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -156,6 +158,7 @@ public class YardiIntegrationAgent {
         yp.amount().setValue(new BigDecimal(detail.getAmount()).negate());
         yp.description().setValue(detail.getDescription());
         yp.postDate().setValue(new LogicalDate(detail.getTransactionDate().getTime()));
+        yp.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(ARCode.Type.Payment));
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(account.lease(), yp.postDate().getValue());
         yp.billingCycle().set(billingCycle);
 

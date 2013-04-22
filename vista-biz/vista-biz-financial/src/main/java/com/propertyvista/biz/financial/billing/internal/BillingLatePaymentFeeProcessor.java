@@ -96,7 +96,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         charge.amount().setValue(latePaymentFee);
         charge.taxTotal().setValue(BigDecimal.ZERO);
         charge.description().setValue(i18n.tr("Late payment fee"));
-        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getDefaultARCode(Type.LatePayment));
+        charge.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.LatePayment));
         nextBill.lineItems().add(charge);
 
         nextBill.latePaymentFees().setValue(nextBill.latePaymentFees().getValue().add(charge.amount().getValue()));

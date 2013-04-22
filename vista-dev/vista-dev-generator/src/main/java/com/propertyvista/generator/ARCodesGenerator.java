@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
 
+//TODO move to Proper place
 public class ARCodesGenerator {
 
     private final List<ARCode> codes = new ArrayList<ARCode>();
@@ -56,6 +57,7 @@ public class ARCodesGenerator {
         createARCode("Deposit", ARCode.Type.Deposit, 0, true);
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);
         createARCode("NSF", ARCode.Type.NSF, 0, true);
+        createARCode("Payment", ARCode.Type.Payment, 0, true);
     }
 
     public List<ARCode> getARCodes() {
