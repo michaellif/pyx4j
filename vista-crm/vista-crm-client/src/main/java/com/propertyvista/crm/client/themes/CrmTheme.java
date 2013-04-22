@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
@@ -32,16 +33,15 @@ import com.pyx4j.widgets.client.richtext.DefaultRichTextEditorTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
-import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.crm.client.ui.HeaderViewImpl;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
-import com.propertyvista.crm.client.ui.HeaderViewImpl;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
@@ -100,7 +100,7 @@ public class CrmTheme extends VistaTheme {
 
         addTheme(new DefaultTabTheme());
 
-        addTheme(new CrmSitePanelTheme());
+        addTheme(new RiaLayoutPanelTheme());
         addTheme(new DraggerMixin());
 
         addTheme(new BillingTheme());

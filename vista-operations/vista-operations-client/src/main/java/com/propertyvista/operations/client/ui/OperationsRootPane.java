@@ -22,8 +22,8 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.operations.client.mvp.LogoActivityMapper;
 import com.propertyvista.operations.client.mvp.MainDisplayActivityMapper;
 import com.propertyvista.operations.client.mvp.TopRightActionsActivityMapper;
@@ -39,17 +39,17 @@ public class OperationsRootPane extends LayoutPanel {
 
         StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
-        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
+        setStyleName(RiaLayoutPanelTheme.StyleName.SiteView.name());
 
         DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
+        contentPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewContent.name());
         add(contentPanel);
 
         //============ Header Panel ============
 
         FlowPanel headerPanel = new FlowPanel();
         contentPanel.addNorth(headerPanel, 5);
-        headerPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewHeader.name());
+        headerPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
 
         DisplayPanel logoDisplay = new DisplayPanel();
         //VS should correspond with the logo size

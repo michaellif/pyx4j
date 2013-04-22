@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.operations.client.mvp.ContentActivityMapper;
 import com.propertyvista.operations.client.mvp.FooterActivityMapper;
 import com.propertyvista.operations.client.mvp.NavigActivityMapper;
@@ -68,7 +68,7 @@ public class MainDisplayViewImpl extends SplitLayoutPanel implements MainDisplay
         leftPanel.setCellWidth(footerDisplay, "100%");
         leftPanel.setCellHeight(footerDisplay, "40px");
 
-        leftPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewNavigContainer.name());
+        leftPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewNavigContainer.name());
 
         //============ Main Panel ============
 

@@ -23,9 +23,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.widgets.client.Anchor;
-
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 
 public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
 
@@ -40,7 +39,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     private final Anchor login;
 
     public TopRightActionsViewImpl() {
-        setStyleName(CrmSitePanelTheme.StyleName.SiteViewAction.name());
+        setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewAction.name());
         setSize("100%", "100%");
 
         HorizontalPanel container = new HorizontalPanel();

@@ -17,6 +17,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.crm.client.mvp.ContentActivityMapper;
@@ -26,10 +27,10 @@ import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class CrmRootPane extends RootPane<CrmLayoutPanel> implements IsWidget {
+public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
 
     public CrmRootPane() {
-        super(new CrmLayoutPanel());
+        super(new RiaLayoutPanel());
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
         bind(new NavigActivityMapper(), asWidget().getNavigDisplay());

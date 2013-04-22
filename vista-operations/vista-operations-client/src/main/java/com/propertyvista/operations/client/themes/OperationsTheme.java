@@ -22,19 +22,19 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
+import com.propertyvista.common.client.theme.DraggerMixin;
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.operations.client.ui.NavigViewImpl;
 import com.propertyvista.operations.client.ui.SearchBox;
 import com.propertyvista.operations.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.operations.client.ui.ShortCutsViewImpl;
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.common.client.theme.DraggerMixin;
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
-import com.propertyvista.common.client.theme.VistaTheme;
 
 public class OperationsTheme extends VistaTheme {
 
@@ -81,7 +81,7 @@ public class OperationsTheme extends VistaTheme {
 
         addTheme(new DefaultTabTheme());
 
-        addTheme(new CrmSitePanelTheme());
+        addTheme(new RiaLayoutPanelTheme());
         addTheme(new DraggerMixin());
 
         initGeneralStyles();

@@ -24,17 +24,17 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.config.client.ClientApplicationVersion;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.widgets.client.Tooltip;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.domain.media.Media;
 
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
         setSize("100%", "100%");
-        setStyleName(CrmSitePanelTheme.StyleName.SiteViewFooter.name());
+        setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewFooter.name());
         VerticalPanel panel = new VerticalPanel();
         final Image image = new Image(VistaImages.INSTANCE.logo().getSafeUri());
 
