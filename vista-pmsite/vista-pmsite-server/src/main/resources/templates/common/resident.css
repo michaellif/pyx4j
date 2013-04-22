@@ -1295,6 +1295,7 @@ div.LandingButtonHolder, div.gwt-Label {
 	padding: 1px 7px;
 	margin-top: 3px;
 	width: 12em;
+	white-space: nowrap !important;
 }
 
 .TSPurchaseViewNextStepButton {
