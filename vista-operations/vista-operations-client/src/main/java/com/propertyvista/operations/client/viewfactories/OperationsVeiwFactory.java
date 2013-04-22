@@ -20,10 +20,8 @@ import com.propertyvista.operations.client.ui.AlertView;
 import com.propertyvista.operations.client.ui.AlertViewImpl;
 import com.propertyvista.operations.client.ui.FooterView;
 import com.propertyvista.operations.client.ui.FooterViewImpl;
-import com.propertyvista.operations.client.ui.LogoView;
-import com.propertyvista.operations.client.ui.LogoViewImpl;
-import com.propertyvista.operations.client.ui.MainDisplayView;
-import com.propertyvista.operations.client.ui.MainDisplayViewImpl;
+import com.propertyvista.operations.client.ui.HeaderView;
+import com.propertyvista.operations.client.ui.HeaderViewImpl;
 import com.propertyvista.operations.client.ui.MessageView;
 import com.propertyvista.operations.client.ui.MessageViewImpl;
 import com.propertyvista.operations.client.ui.NavigView;
@@ -32,8 +30,6 @@ import com.propertyvista.operations.client.ui.SettingsView;
 import com.propertyvista.operations.client.ui.SettingsViewImpl;
 import com.propertyvista.operations.client.ui.ShortCutsView;
 import com.propertyvista.operations.client.ui.ShortCutsViewImpl;
-import com.propertyvista.operations.client.ui.TopRightActionsView;
-import com.propertyvista.operations.client.ui.TopRightActionsViewImpl;
 
 public class OperationsVeiwFactory extends ViewFactoryBase {
 
@@ -41,20 +37,14 @@ public class OperationsVeiwFactory extends ViewFactoryBase {
 
         if (!map.containsKey(type)) {
 
-            if (MainDisplayView.class.equals(type)) {
-                map.put(type, new MainDisplayViewImpl());
-
-            } else if (NavigView.class.equals(type)) {
+            if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());
 
             } else if (ShortCutsView.class.equals(type)) {
                 map.put(type, new ShortCutsViewImpl());
 
-            } else if (TopRightActionsView.class.equals(type)) {
-                map.put(type, new TopRightActionsViewImpl());
-
-            } else if (LogoView.class.equals(type)) {
-                map.put(type, new LogoViewImpl());
+            } else if (HeaderView.class.equals(type)) {
+                map.put(type, new HeaderViewImpl());
 
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());

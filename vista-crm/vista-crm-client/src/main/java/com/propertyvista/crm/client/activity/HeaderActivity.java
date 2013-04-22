@@ -46,13 +46,13 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class TopRightActionsActivity extends AbstractActivity implements HeaderView.Presenter {
+public class HeaderActivity extends AbstractActivity implements HeaderView.Presenter {
 
-    private static final I18n i18n = I18n.get(TopRightActionsActivity.class);
+    private static final I18n i18n = I18n.get(HeaderActivity.class);
 
     private final HeaderView view;
 
-    public TopRightActionsActivity(Place place) {
+    public HeaderActivity(Place place) {
         view = CrmVeiwFactory.instance(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
@@ -126,7 +126,7 @@ public class TopRightActionsActivity extends AbstractActivity implements HeaderV
         ClientNavigUtils.changeApplicationLocale(locale);
     }
 
-    public TopRightActionsActivity withPlace(Place place) {
+    public HeaderActivity withPlace(Place place) {
         return this;
     }
 

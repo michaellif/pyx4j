@@ -17,7 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.crm.client.activity.TopRightActionsActivity;
+import com.propertyvista.crm.client.activity.HeaderActivity;
 
 public class HeaderActivityMapper implements ActivityMapper {
 
@@ -26,6 +26,6 @@ public class HeaderActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new TopRightActionsActivity(place);
+        return new HeaderActivity(place);
     }
 }

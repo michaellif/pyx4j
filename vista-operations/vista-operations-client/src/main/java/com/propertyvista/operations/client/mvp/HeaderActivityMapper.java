@@ -17,21 +17,15 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.operations.client.activity.SigningOutActivity;
-import com.propertyvista.operations.client.activity.TopRightActionsActivity;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.client.activity.HeaderActivity;
 
-public class TopRightActionsActivityMapper implements ActivityMapper {
+public class HeaderActivityMapper implements ActivityMapper {
 
-    public TopRightActionsActivityMapper() {
+    public HeaderActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof OperationsSiteMap.SigningOut) {
-            return new SigningOutActivity(place);
-        } else {
-            return new TopRightActionsActivity(place);
-        }
+        return new HeaderActivity(place);
     }
 }

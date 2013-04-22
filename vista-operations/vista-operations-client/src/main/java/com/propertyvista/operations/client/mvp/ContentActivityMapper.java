@@ -69,7 +69,11 @@ import com.propertyvista.operations.client.activity.crud.simulation.SimulationEd
 import com.propertyvista.operations.client.activity.crud.simulation.SimulationViewerActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorAcitvity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivty;
+import com.propertyvista.operations.client.activity.login.LoginActivity;
+import com.propertyvista.operations.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.operations.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.operations.client.activity.security.PasswordResetActivity;
+import com.propertyvista.operations.client.activity.security.PasswordResetRequesetActivity;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
@@ -361,6 +365,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new EncryptedStorageActivity((AppPlace) place);
 
 // - Other:
+
+                } else if (place instanceof OperationsSiteMap.Login) {
+                    activity = new LoginActivity(place);
+                } else if (place instanceof OperationsSiteMap.LoginWithToken) {
+                    activity = new LoginWithTokenActivity(place);
+                } else if (place instanceof OperationsSiteMap.PasswordResetRequest) {
+                    activity = new PasswordResetRequesetActivity(place);
+                } else if (place instanceof OperationsSiteMap.PasswordReset) {
+                    activity = new PasswordResetActivity(place);
+
                 } else if (place instanceof OperationsSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof OperationsSiteMap.Message) {

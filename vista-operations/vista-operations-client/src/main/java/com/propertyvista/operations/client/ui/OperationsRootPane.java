@@ -13,64 +13,40 @@
  */
 package com.propertyvista.operations.client.ui;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.RootPane;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
+import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
+import com.pyx4j.site.shared.meta.PublicPlace;
 
-import com.propertyvista.operations.client.mvp.LogoActivityMapper;
-import com.propertyvista.operations.client.mvp.MainDisplayActivityMapper;
-import com.propertyvista.operations.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.operations.client.themes.OperationsPalette;
-import com.propertyvista.operations.client.themes.OperationsTheme;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
+import com.propertyvista.operations.client.mvp.ContentActivityMapper;
+import com.propertyvista.operations.client.mvp.FooterActivityMapper;
+import com.propertyvista.operations.client.mvp.HeaderActivityMapper;
+import com.propertyvista.operations.client.mvp.NavigActivityMapper;
+import com.propertyvista.operations.client.mvp.ShortCutsActivityMapper;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 
-public class OperationsRootPane extends LayoutPanel {
+public class OperationsRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
 
     public static String DEFAULT_STYLE_PREFIX = "SiteView";
 
     public OperationsRootPane() {
-
-        StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
-
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteView.name());
-
-        DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewContent.name());
-        add(contentPanel);
-
-        //============ Header Panel ============
-
-        FlowPanel headerPanel = new FlowPanel();
-        contentPanel.addNorth(headerPanel, 5);
-        headerPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
-
-        DisplayPanel logoDisplay = new DisplayPanel();
-        //VS should correspond with the logo size
-        logoDisplay.setSize("30%", "100%");
-        logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerPanel.add(logoDisplay);
-
-        DisplayPanel actionsDisplay = new DisplayPanel();
-        actionsDisplay.setSize("70%", "100%");
-        actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerPanel.add(actionsDisplay);
-
-        DisplayPanel mainDisplay = new DisplayPanel();
-        contentPanel.add(mainDisplay);
-
-        RootPane.bind(new LogoActivityMapper(), logoDisplay);
-        RootPane.bind(new TopRightActionsActivityMapper(), actionsDisplay);
-        RootPane.bind(new MainDisplayActivityMapper(), mainDisplay);
-
-        OperationsVeiwFactory.instance(MainDisplayView.class);
+        super(new RiaLayoutPanel());
+        bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
+        bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
+        bind(new NavigActivityMapper(), asWidget().getNavigDisplay());
+        bind(new ShortCutsActivityMapper(), asWidget().getShortcutsDisplay());
+        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
 
     }
 
+    @Override
+    protected void onPlaceChange(Place place) {
+        if (place instanceof PublicPlace || place instanceof OperationsSiteMap.PasswordReset) {
+            asWidget().setMenuVisible(false);
+        } else {
+            asWidget().setMenuVisible(true);
+        }
+    }
 }

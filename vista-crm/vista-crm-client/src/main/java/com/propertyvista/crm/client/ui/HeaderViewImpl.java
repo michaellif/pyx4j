@@ -121,8 +121,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Widget createActionsContainer() {
 
         Toolbar toolbar = new Toolbar();
-        toolbar.getElement().getStyle().setMargin(10, Unit.PX);
-        toolbar.getElement().getStyle().setFloat(Style.Float.RIGHT);
         toolbar.addStyleName(RiaLayoutPanelTheme.StyleName.SiteViewAction.name());
 
         thisIsProduction = new HTML("PRODUCTION SUPPORT!");
@@ -215,16 +213,16 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         getSatisfaction.ensureDebugId("getSatisfaction");
         getSatisfaction.setHTML(i18n.tr("Support"));
 
-        toolbar.addItem(thisIsProduction);
-        toolbar.addItem(thisIsDemo);
+        toolbar.add(thisIsProduction);
+        toolbar.add(thisIsDemo);
 
-        toolbar.addItem(greetings);
-        toolbar.addItem(home);
-        toolbar.addItem(settings);
-        toolbar.addItem(login);
-        toolbar.addItem(logout);
-        toolbar.addItem(languageMenu);
-        toolbar.addItem(getSatisfaction);
+        toolbar.add(greetings);
+        toolbar.add(home);
+        toolbar.add(settings);
+        toolbar.add(login);
+        toolbar.add(logout);
+        toolbar.add(languageMenu);
+        toolbar.add(getSatisfaction);
 
         return toolbar;
     }

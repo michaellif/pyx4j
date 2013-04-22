@@ -79,7 +79,7 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
     public void addFooterItem(Widget widget) {
         footer.setHeight(footerHeight);
-        footerToolbar.addItem(widget);
+        footerToolbar.add(widget);
     }
 
     public void setFooterHeight(String footerToolbarHeight) {

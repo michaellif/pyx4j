@@ -256,7 +256,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     });
 
                     btnSave.setVisible(false);
-                    tb.addItem(btnSave);
+                    tb.add(btnSave);
 
                     btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
                         @Override
@@ -278,7 +278,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     });
 
                     btnCancel.setVisible(false);
-                    tb.addItem(btnCancel);
+                    tb.add(btnCancel);
 
                     content.setWidget(++row, 0, tb);
 

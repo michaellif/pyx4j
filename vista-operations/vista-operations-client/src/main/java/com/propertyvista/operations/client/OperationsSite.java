@@ -18,16 +18,19 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
+import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.VistaSite;
+import com.propertyvista.operations.client.themes.OperationsPalette;
+import com.propertyvista.operations.client.themes.OperationsTheme;
 import com.propertyvista.operations.client.ui.OperationsRootPane;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
-import com.propertyvista.common.client.site.Message;
-import com.propertyvista.common.client.site.VistaSite;
 
 public class OperationsSite extends VistaSite {
 
@@ -43,6 +46,7 @@ public class OperationsSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OperationsSiteMap.Management());
         RootPanel.get().add(RootLayoutPanel.get());
+        StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
         RootLayoutPanel.get().add(new OperationsRootPane());
         hideLoadingIndicator();
         SessionInactiveDialog.register();
