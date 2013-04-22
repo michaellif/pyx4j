@@ -43,7 +43,7 @@ public class TenantPadFileUploadDeferredProcess extends AbstractUploadWithDownlo
         TenantPadCreateReport report = new TenantPadCreateReport();
         report.createReport(model);
 
-        String fileName = "processingResults.xlsx";
+        String fileName = FilenameUtils.getBaseName(getResponse().fileName) + "_processingResults.xlsx";
         report.createDownloadable(fileName);
 
         getResponse().data.success().setValue(Boolean.TRUE);
