@@ -138,9 +138,9 @@ public class MerchantAccountParser {
                                             rAccount = Persistence.service().retrieve(criteria);
                                         }
 
-                                        if (rAccount.bankId().getValue().equals(model.bankId().getValue())
-                                                && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue())
-                                                && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue())) {
+                                        if (rAccount.bankId().getValue().equals(model.bankId().getValue().replaceAll("\\D", ""))
+                                                && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue().replaceAll("\\D", ""))
+                                                && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue().replaceAll("\\D", ""))) {
                                             retrievedAccount = rAccount;
                                         }
                                         return null;
@@ -171,9 +171,9 @@ public class MerchantAccountParser {
 
                                 final MerchantAccount account = EntityFactory.create(MerchantAccount.class);
                                 account.accountNumber().setValue(model.accountNumber().getValue());
-                                account.bankId().setValue(model.bankId().getValue());
-                                account.branchTransitNumber().setValue(model.transitNumber().getValue());
-                                account.merchantTerminalId().setValue(model.terminalId().getValue());
+                                account.bankId().setValue(model.bankId().getValue().replaceAll("\\D", ""));
+                                account.branchTransitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", ""));
+                                account.merchantTerminalId().setValue(model.terminalId().getValue().replaceAll("\\D", ""));
                                 account.status().setValue(MerchantAccountActivationStatus.Active);
                                 ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
                                 TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
