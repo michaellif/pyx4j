@@ -56,14 +56,12 @@ public abstract class RootPane<E extends Widget> implements IsWidget {
         return container;
     }
 
-    //TODO:1 change to protected and remove static
-    public static void bind(ActivityMapper mapper, AcceptsOneWidget widget) {
+    protected void bind(ActivityMapper mapper, AcceptsOneWidget widget) {
         ActivityManager activityManager = new ActivityManager(mapper, AppSite.getEventBus());
         activityManager.setDisplay(widget);
     }
 
-    //TODO:1 change to protected and remove static
-    public static void bind(AppActivityMapper mapper, AcceptsOneWidget widget) {
+    protected void bind(AppActivityMapper mapper, AcceptsOneWidget widget) {
         AppActivityManager activityManager = new AppActivityManager(mapper, AppSite.getEventBus());
         activityManager.setDisplay(widget);
     }
