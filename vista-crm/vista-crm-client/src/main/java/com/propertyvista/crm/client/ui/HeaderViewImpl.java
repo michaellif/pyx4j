@@ -95,7 +95,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
             Image logoImage = new Image(MediaUtils.createCrmLogoUrl());
             logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
             logoImage.getElement().getStyle().setMarginLeft(20, Unit.PX);
-            logoImage.getElement().getStyle().setMarginTop(4, Unit.PX);
             logoImage.getElement().getStyle().setFloat(Style.Float.LEFT);
             logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
             logoElement = logoImage;
