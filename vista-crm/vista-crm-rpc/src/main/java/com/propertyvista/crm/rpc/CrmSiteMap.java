@@ -20,15 +20,11 @@ import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.site.shared.meta.PublicPlace;
-import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class CrmSiteMap implements SiteMap {
 
     public static class Login extends AppPlace implements PublicPlace {
-    }
-
-    public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
     /**

@@ -55,7 +55,7 @@ import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.CrmRootPane;
-import com.propertyvista.crm.client.ui.LogoViewImpl;
+import com.propertyvista.crm.client.ui.HeaderViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -144,7 +144,7 @@ public class CrmSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
-                LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
+                HeaderViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().crmHeader().getStringView(), descriptor.logoAvalable().isBooleanTrue());
                 Window.setTitle(i18n.tr("Property Vista") + " - " + descriptor.siteTitles().crmHeader().getStringView());
                 StyleManager.installTheme(new CrmTheme(), new VistaPalette(descriptor.palette()));
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());

@@ -50,12 +50,13 @@ public class CrmSitePanelTheme extends Theme {
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewFooter.name());
 //        style.addProperty("background", "url('" + VistaImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
         style.addProperty("background-color", ThemeColor.object1);
-        style.addProperty("background-color", ThemeColor.object1);
         addStyle(style);
 
         // NavigationContainer (Accordion menu):
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewNavigContainer.name());
-        style.addProperty("min-width", "100px");
+        style.addProperty("border-right", "4px solid");
+        style.addProperty("border-right-color", ThemeColor.object1);
+
         addStyle(style);
 
         // Action (Header right side hyperlinks):

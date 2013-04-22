@@ -41,7 +41,7 @@ import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
 import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
-import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
+import com.propertyvista.crm.client.ui.HeaderViewImpl;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
@@ -376,7 +376,7 @@ public class CrmTheme extends VistaTheme {
 
         //
         // Back2CRM link:
-        buttonEx = Selector.valueOf(TopRightActionsViewImpl.BACK_TO_CRM);
+        buttonEx = Selector.valueOf(HeaderViewImpl.BACK_TO_CRM);
         style = new Style(buttonEx);
         style.addProperty("font-weight", "bolder");
         style.addProperty("padding-bottom", "0.2em");

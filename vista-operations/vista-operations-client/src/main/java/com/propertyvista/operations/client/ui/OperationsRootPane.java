@@ -18,11 +18,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.RootPane;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.operations.client.mvp.LogoActivityMapper;
@@ -66,11 +65,9 @@ public class OperationsRootPane extends LayoutPanel {
         DisplayPanel mainDisplay = new DisplayPanel();
         contentPanel.add(mainDisplay);
 
-        EventBus eventBus = AppSite.getEventBus();
-
-        DisplayPanel.bind(new LogoActivityMapper(), logoDisplay, eventBus);
-        DisplayPanel.bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
-        DisplayPanel.bind(new MainDisplayActivityMapper(), mainDisplay, eventBus);
+        RootPane.bind(new LogoActivityMapper(), logoDisplay);
+        RootPane.bind(new TopRightActionsActivityMapper(), actionsDisplay);
+        RootPane.bind(new MainDisplayActivityMapper(), mainDisplay);
 
         OperationsVeiwFactory.instance(MainDisplayView.class);
 

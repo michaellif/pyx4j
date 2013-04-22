@@ -26,9 +26,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
+import com.propertyvista.crm.client.activity.crud.account.MandatoryAccountRecoveryOptionsSetupActivity;
 import com.propertyvista.crm.client.activity.crud.auditrecords.CrmAuditRecordsListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
@@ -151,6 +153,8 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementEditorActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementListerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewerActivity;
+import com.propertyvista.crm.client.activity.login.LoginActivity;
+import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
@@ -206,6 +210,8 @@ import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActi
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
+import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
@@ -1166,6 +1172,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PasswordChangeActivity(place);
 
 // - Other:
+                } else if (place instanceof CrmSiteMap.Login) {
+                    activity = new LoginActivity(place);
+                } else if (place instanceof CrmSiteMap.PasswordResetRequest) {
+                    activity = new PasswordResetRequestActivity(place);
+                } else if (place instanceof CrmSiteMap.PasswordReset) {
+                    activity = new PasswordResetActivity(place);
+                } else if (place instanceof CrmSiteMap.Account.AccountRecoveryOptionsRequired) {
+                    activity = new MandatoryAccountRecoveryOptionsSetupActivity();
+                } else if (place instanceof CrmSiteMap.LoginWithToken) {
+                    activity = new LoginWithTokenActivity(place);
+                } else if (place instanceof CrmSiteMap.RuntimeError) {
+                    activity = new RuntimeErrorActivity(place);
+
                 } else if (place instanceof CrmSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {

@@ -14,17 +14,22 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
@@ -32,22 +37,23 @@ import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
-import com.propertyvista.crm.client.ui.TopRightActionsView;
+import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
+import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
+public class TopRightActionsActivity extends AbstractActivity implements HeaderView.Presenter {
 
     private static final I18n i18n = I18n.get(TopRightActionsActivity.class);
 
-    private final TopRightActionsView view;
+    private final HeaderView view;
 
     public TopRightActionsActivity(Place place) {
-        view = CrmVeiwFactory.instance(TopRightActionsView.class);
+        view = CrmVeiwFactory.instance(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
     }
@@ -87,8 +93,23 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     }
 
     @Override
+    public void navigToLanding() {
+        AppSite.getPlaceController().goTo(CrmSite.getSystemDashboardPlace());
+    }
+
+    @Override
     public void logout() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.SigningOut());
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                    }
+                });
+            }
+        });
     }
 
     @Override

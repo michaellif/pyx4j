@@ -6,11 +6,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public interface TopRightActionsView extends IsWidget {
+public interface HeaderView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
     interface Presenter {
+
+        void navigToLanding();
 
         void logout();
 

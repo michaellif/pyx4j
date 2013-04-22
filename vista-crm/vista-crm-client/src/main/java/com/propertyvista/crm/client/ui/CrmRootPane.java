@@ -13,66 +13,61 @@
  */
 package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.shared.meta.PublicPlace;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
-import com.propertyvista.crm.client.mvp.LogoActivityMapper;
-import com.propertyvista.crm.client.mvp.MainDisplayActivityMapper;
-import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
+import com.propertyvista.crm.client.mvp.ContentActivityMapper;
+import com.propertyvista.crm.client.mvp.FooterActivityMapper;
+import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
+import com.propertyvista.crm.client.mvp.NavigActivityMapper;
+import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class CrmRootPane extends LayoutPanel {
+public class CrmRootPane extends RootPane<LayoutPanel> implements IsWidget {
+
+    private final CrmLayoutPanel layoutPanel;
 
     public CrmRootPane() {
+        super(new LayoutPanel());
 
         HTML feedbackWidgetContainer = new HTML();
         feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
-        add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
+        asWidget().add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
 
-        setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
+        asWidget().setStyleName(CrmSitePanelTheme.StyleName.SiteView.name());
 
-        DockLayoutPanel contentPanel = new DockLayoutPanel(Unit.EM);
-        contentPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewContent.name());
+        layoutPanel = new CrmLayoutPanel();
+        asWidget().add(layoutPanel);
 
-        add(contentPanel);
+        bind(new HeaderActivityMapper(), layoutPanel.getHeaderDisplay());
 
-        //============ Header Panel ============
+        bind(new FooterActivityMapper(), layoutPanel.getFooterDisplay());
+        bind(new NavigActivityMapper(), layoutPanel.getNavigDisplay());
+        bind(new ShortCutsActivityMapper(), layoutPanel.getShortcutsDisplay());
 
-        FlowPanel headerPanel = new FlowPanel();
-        contentPanel.addNorth(headerPanel, 5);
-        headerPanel.setStyleName(CrmSitePanelTheme.StyleName.SiteViewHeader.name());
+        bind(new ContentActivityMapper(), layoutPanel.getContentDisplay());
 
-        DisplayPanel logoDisplay = new DisplayPanel();
-        //VS should correspond with the logo size
-        logoDisplay.setSize("30%", "100%");
-        logoDisplay.getElement().getStyle().setFloat(Style.Float.LEFT);
-        headerPanel.add(logoDisplay);
+    }
 
-        DisplayPanel actionsDisplay = new DisplayPanel();
-        actionsDisplay.setSize("70%", "100%");
-        actionsDisplay.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        headerPanel.add(actionsDisplay);
+    @Override
+    protected void onPlaceChange(Place place) {
+        if (place instanceof PublicPlace ||
 
-        DisplayPanel mainDisplay = new DisplayPanel();
-        contentPanel.add(mainDisplay);
+        place instanceof CrmSiteMap.PasswordReset ||
 
-        EventBus eventBus = AppSite.getEventBus();
+        place instanceof CrmSiteMap.Account.AccountRecoveryOptionsRequired ||
 
-        DisplayPanel.bind(new LogoActivityMapper(), logoDisplay, eventBus);
-        DisplayPanel.bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
-        DisplayPanel.bind(new MainDisplayActivityMapper(), mainDisplay, eventBus);
-
-        CrmVeiwFactory.instance(MainDisplayView.class);
-
+        place instanceof CrmSiteMap.RuntimeError) {
+            layoutPanel.setMenuVisible(false);
+        } else {
+            layoutPanel.setMenuVisible(true);
+        }
     }
 
 }

@@ -11,16 +11,21 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui;
+package com.propertyvista.crm.client.mvp;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-public interface LogoView extends IsWidget {
+import com.propertyvista.crm.client.activity.TopRightActionsActivity;
 
-    public void setPresenter(Presenter presenter);
+public class HeaderActivityMapper implements ActivityMapper {
 
-    public interface Presenter {
-        public void navigToLanding();
+    public HeaderActivityMapper() {
     }
 
+    @Override
+    public Activity getActivity(Place place) {
+        return new TopRightActionsActivity(place);
+    }
 }

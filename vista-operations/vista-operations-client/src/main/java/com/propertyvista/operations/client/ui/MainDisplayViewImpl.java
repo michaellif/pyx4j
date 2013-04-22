@@ -15,10 +15,9 @@ package com.propertyvista.operations.client.ui;
 
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.RootPane;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.operations.client.mvp.ContentActivityMapper;
@@ -76,13 +75,11 @@ public class MainDisplayViewImpl extends SplitLayoutPanel implements MainDisplay
         DisplayPanel contentDisplay = new DisplayPanel();
         add(contentDisplay);
 
-        EventBus eventBus = AppSite.getEventBus();
+        RootPane.bind(new FooterActivityMapper(), footerDisplay);
+        RootPane.bind(new NavigActivityMapper(), navigDisplay);
+        RootPane.bind(new ShortCutsActivityMapper(), shortcutsDisplay);
 
-        DisplayPanel.bind(new FooterActivityMapper(), footerDisplay, eventBus);
-        DisplayPanel.bind(new NavigActivityMapper(), navigDisplay, eventBus);
-        DisplayPanel.bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
-
-        DisplayPanel.bind(new ContentActivityMapper(), contentDisplay, eventBus);
+        RootPane.bind(new ContentActivityMapper(), contentDisplay);
 
     }
 
