@@ -40,12 +40,15 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private final int MENU_COLLAPSE_THRESHOLD = 1000;
 
+    private final int HEADER_HEIGHT = 50;
+
     private final Layout layout;
 
     private final LayoutCommand layoutCmd;
 
     private final DisplayPanel headerDisplay;
 
+    //TODO leave navigDisplay and move shortcuts and footer under it
     private final DisplayPanel navigDisplay;
 
     private final DisplayPanel shortcutsDisplay;
@@ -123,10 +126,14 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         return navigDisplay;
     }
 
+    @Deprecated
+    //TODO combine with NavigDisplay
     public DisplayPanel getShortcutsDisplay() {
         return shortcutsDisplay;
     }
 
+    @Deprecated
+    //TODO combine with NavigDisplay
     public DisplayPanel getFooterDisplay() {
         return footerDisplay;
     }
@@ -150,20 +157,20 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         Layer menuLayer = (Layer) menuPanel.getLayoutData();
         Layer contentLayer = (Layer) contentDisplay.getLayoutData();
 
-        headerLayer.setTopHeight(0.0, Unit.PCT, 5, Unit.EM);
+        headerLayer.setTopHeight(0.0, Unit.PCT, HEADER_HEIGHT, Unit.PX);
         headerLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
 
         if (menuVisible) {
-            menuLayer.setTopBottom(5, Unit.EM, 0, Unit.EM);
-            menuLayer.setLeftWidth(0, Unit.EM, menuWidth, Unit.PX);
-            contentLayer.setLeftRight(menuWidth, Unit.PX, 0, Unit.EM);
+            menuLayer.setTopBottom(HEADER_HEIGHT, Unit.PX, 0, Unit.PX);
+            menuLayer.setLeftWidth(0, Unit.PX, menuWidth, Unit.PX);
+            contentLayer.setLeftRight(menuWidth, Unit.PX, 0, Unit.PX);
             menuLayer.setVisible(true);
         } else {
-            contentLayer.setLeftRight(0, Unit.EM, 0, Unit.EM);
+            contentLayer.setLeftRight(0, Unit.PX, 0, Unit.PX);
             menuLayer.setVisible(false);
         }
 
-        contentLayer.setTopBottom(5, Unit.EM, 0, Unit.EM);
+        contentLayer.setTopBottom(HEADER_HEIGHT, Unit.PX, 0, Unit.PX);
 
     }
 
