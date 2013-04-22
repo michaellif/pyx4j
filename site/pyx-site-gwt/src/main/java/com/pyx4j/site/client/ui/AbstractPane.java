@@ -140,12 +140,12 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     public void addHeaderToolbarItem(Widget widget) {
         setWidgetSize(headerContainer, headerToolbarHeight);
-        headerToolbar.addItem(widget);
+        headerToolbar.add(widget);
     }
 
     public void addFooterToolbarItem(Widget widget) {
         setWidgetSize(footerToolbarHolder, footerToolbarHeight);
-        footerToolbar.addItem(widget);
+        footerToolbar.add(widget);
     }
 
     public void setFooterToolbarHeight(int footerToolbarHeight) {

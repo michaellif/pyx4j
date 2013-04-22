@@ -91,7 +91,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        topActionsBar.getToolbar().addItem(filterButton);
+        topActionsBar.getToolbar().add(filterButton);
 
         filterButton.addClickHandler(new ClickHandler() {
             @Override
@@ -122,13 +122,13 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void setAddActionCommand(Command addActionCommand) {
-        topActionsBar.getToolbar().insertItem(
+        topActionsBar.getToolbar().insert(
                 addButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New {0}", entityPrototype.getEntityMeta()
                         .getCaption()), addActionCommand), 0);
     }
 
     public void setDelActionCommand(Command delActionCommand) {
-        topActionsBar.getToolbar().insertItem(
+        topActionsBar.getToolbar().insert(
                 delButton = new Button(new Image(EntityFolderImages.INSTANCE.delButton().hover()), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
@@ -184,7 +184,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void addUpperActionItem(Widget widget) {
-        topActionsBar.getToolbar().addItem(widget);
+        topActionsBar.getToolbar().add(widget);
     }
 
     public DataTable<E> getDataTable() {
