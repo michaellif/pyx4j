@@ -38,8 +38,6 @@ import com.pyx4j.site.client.DisplayPanel;
 
 public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
-    private final int animationDuration = 500;
-
     private final Layout layout;
 
     private final LayoutCommand layoutCmd;

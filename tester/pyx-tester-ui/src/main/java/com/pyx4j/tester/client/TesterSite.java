@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
@@ -39,6 +40,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.tester.client.theme.TesterPalette;
+import com.pyx4j.tester.client.theme.TesterTheme;
 import com.pyx4j.tester.client.ui.TesterRootPane;
 import com.pyx4j.tester.shared.TesterAuthenticationService;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -75,7 +78,7 @@ public class TesterSite extends AppSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new TesterSiteMap.Landing());
 
-        RootPanel.get().add(RootLayoutPanel.get());
+        StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
         RootLayoutPanel.get().add(new TesterRootPane());
 
