@@ -23,7 +23,7 @@ import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.interfaces.importer.parser.MerchantAccountParser;
+import com.propertyvista.interfaces.importer.processor.MerchantAccountProcessor;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 
 public class MerchantAccountFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements MerchantAccountFileUploadService {
@@ -43,7 +43,8 @@ public class MerchantAccountFileUploadServiceImpl extends AbstractUploadServiceI
     @Override
     public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
             UploadResponse<IEntity> response) {
-        response.message = new MerchantAccountParser().persistMerchantAccounts(data.data, DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
+        response.message = new MerchantAccountProcessor().persistMerchantAccounts(data.data,
+                DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
         return ProcessingStatus.completed;
     }
 
