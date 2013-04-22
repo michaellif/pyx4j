@@ -42,7 +42,7 @@ public interface PadFileModel extends IEntity {
     @ImportColumn(names = { "Bank Account Holder", "Name" })
     IPrimitive<String> name();
 
-    @ImportColumn(names = { "Institution" })
+    @ImportColumn(names = { "Institution", "Bank Id" })
     @NotNull
     IPrimitive<String> bankId();
 
@@ -57,6 +57,7 @@ public interface PadFileModel extends IEntity {
     @ImportColumn(names = { "Charge", "Amount" })
     IPrimitive<String> charge();
 
+    @ImportColumn(names = { "Percent", "Percentage" })
     IPrimitive<String> percent();
 
     @ImportColumn(names = { "Charge Id", "Charge Code", "ChargeCode", "Charge_Code" })

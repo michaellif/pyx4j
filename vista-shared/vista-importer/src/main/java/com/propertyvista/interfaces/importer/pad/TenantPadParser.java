@@ -55,6 +55,7 @@ public class TenantPadParser {
                 continue;
             }
             EntityCSVReciver<PadFileModel> receiver = new PadFileCSVReciver(loader.getSheetName(sheetNumber));
+            receiver.setHeaderIgnoreCase(true);
             try {
                 if (!loader.loadSheet(sheetNumber, receiver)) {
                     new UserRuntimeException(i18n.tr("Column header declaration not found"));
