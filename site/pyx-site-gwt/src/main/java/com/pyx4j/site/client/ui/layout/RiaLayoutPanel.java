@@ -83,7 +83,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
             adopt(headerDisplay);
         }
 
-        // ============ Message ============
+        // ============ Notifications ============
         {
             notificationsDisplay = new DisplayPanel();
             Layer layer = layout.attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
