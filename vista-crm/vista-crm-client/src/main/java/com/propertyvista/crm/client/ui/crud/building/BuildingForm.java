@@ -56,6 +56,7 @@ import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -282,6 +283,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
+        main.setH1(row++, 0, 2, proto().utilities().getMeta().getCaption());
+        main.setWidget(row, 0, inject(proto().utilities(), new BuildingUtilityFolder()));
+        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+
         main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
@@ -377,6 +382,22 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         public BuildingAmenityFolder() {
             super(BuildingAmenity.class, BuildingForm.this.isEditable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+            return columns;
+        }
+    }
+
+    private class BuildingUtilityFolder extends VistaTableFolder<BuildingUtility> {
+
+        public BuildingUtilityFolder() {
+            super(BuildingUtility.class, BuildingForm.this.isEditable());
         }
 
         @Override

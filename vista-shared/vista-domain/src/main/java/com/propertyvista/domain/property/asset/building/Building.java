@@ -127,6 +127,10 @@ public interface Building extends PolicyNode {
     @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
 
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    IList<BuildingUtility> utilities();
+
     @Detached(level = AttachLevel.Detached)
     @Owned
     ISet<BuildingMerchantAccount> merchantAccounts();
@@ -175,4 +179,5 @@ public interface Building extends PolicyNode {
     ISet<BillingCycle> billingCycles();
 
     IPrimitive<Boolean> useExternalBilling();
+
 }
