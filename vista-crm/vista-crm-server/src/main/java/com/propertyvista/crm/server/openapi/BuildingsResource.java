@@ -52,6 +52,7 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -160,6 +161,12 @@ public class BuildingsResource {
                         Persistence.service().retrieveMember(building.amenities());
                         for (BuildingAmenity amenity : building.amenities()) {
                             buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
+                        }
+                    }
+                    {
+                        Persistence.service().retrieveMember(building.utilities());
+                        for (BuildingUtility utility : building.utilities()) {
+                            buildingRS.includedUtilities.add(Converter.convertBuildingUtiltiy(utility));
                         }
                     }
                     //Parking

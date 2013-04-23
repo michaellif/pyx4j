@@ -33,6 +33,7 @@ import com.propertyvista.crm.server.openapi.model.MarketingRS;
 import com.propertyvista.crm.server.openapi.model.MediaRS;
 import com.propertyvista.crm.server.openapi.model.ParkingRS;
 import com.propertyvista.crm.server.openapi.model.PhoneRS;
+import com.propertyvista.crm.server.openapi.model.UtilityRS;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
@@ -46,6 +47,7 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
+import com.propertyvista.domain.property.asset.building.BuildingUtility;
 
 public class Converter {
 
@@ -210,6 +212,18 @@ public class Converter {
             to.name = from.type().getStringView();
         }
         to.description = from.description().getStringView();
+
+        return to;
+    }
+
+    public static UtilityRS convertBuildingUtiltiy(BuildingUtility from) {
+        UtilityRS to = new UtilityRS();
+
+        if (!from.name().isNull()) {
+            to.name = from.name().getStringView();
+        } else {
+            to.name = from.type().getStringView();
+        }
 
         return to;
     }
