@@ -76,6 +76,8 @@ public interface ARCode extends IEntity {
 
         AccountCharge(ActionType.Debit),
 
+        CarryForwardCredit(ActionType.Credit),
+
         CarryForwardCharge(ActionType.Debit),
 
         NSF(ActionType.Debit),

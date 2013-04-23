@@ -53,6 +53,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         InvoiceLineItem zeroCycleBalance = null;
         if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
             InvoiceCarryforwardCredit credit = EntityFactory.create(InvoiceCarryforwardCredit.class);
+            credit.arCode().set(ServerSideFactory.create(ARFacade.class).getReservedARCode(Type.CarryForwardCredit));
             zeroCycleBalance = credit;
         } else {
             InvoiceCarryforwardCharge charge = EntityFactory.create(InvoiceCarryforwardCharge.class);
