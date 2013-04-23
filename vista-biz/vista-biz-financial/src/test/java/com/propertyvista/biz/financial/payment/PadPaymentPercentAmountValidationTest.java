@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -122,6 +123,7 @@ public class PadPaymentPercentAmountValidationTest extends FinancialTestBase {
 
     }
 
+    @Ignore
     public void testScenario2() throws Exception {
         setSysDate("31-Mar-2013");
 
@@ -198,6 +200,7 @@ public class PadPaymentPercentAmountValidationTest extends FinancialTestBase {
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
     }
 
+    @Ignore
     public void testScenario3() throws Exception {
         setupScenario();
 
