@@ -373,8 +373,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
             for (ValidationFailure failure : validationFailures) {
                 errorMessages.add(failure.getMessage());
             }
-            String errorsRoster = StringUtils.join(errorMessages, ",\n");
-            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
+            String jointErrors = StringUtils.join(errorMessages, ",\n");
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", jointErrors));
+            } else {
+                log.warn("Lease approval validation for lease pk='" + lease.getPrimaryKey() + "', id='" + lease.leaseId().getValue()
+                        + "' has discovered the following errors: " + jointErrors);
+            }
         }
 
         // memorize entry LeaseStatus:
