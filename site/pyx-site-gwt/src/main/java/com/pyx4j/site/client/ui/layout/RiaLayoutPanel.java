@@ -40,13 +40,13 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private final int MENU_COLLAPSE_THRESHOLD = 1000;
 
-    private final int HEADER_HEIGHT = 50;
-
     private final Layout layout;
 
     private final LayoutCommand layoutCmd;
 
     private final DisplayPanel headerDisplay;
+
+    private final DisplayPanel notificationsDisplay;
 
     //TODO leave navigDisplay and move shortcuts and footer under it
     private final DisplayPanel navigDisplay;
@@ -74,11 +74,23 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         // ============ Header ============
         {
             headerDisplay = new DisplayPanel();
+            headerDisplay.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
+
             Layer layer = layout.attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
             headerDisplay.setLayoutData(layer);
 
             getChildren().add(headerDisplay);
             adopt(headerDisplay);
+        }
+
+        // ============ Message ============
+        {
+            notificationsDisplay = new DisplayPanel();
+            Layer layer = layout.attachChild(notificationsDisplay.asWidget().getElement(), notificationsDisplay);
+            notificationsDisplay.setLayoutData(layer);
+
+            getChildren().add(notificationsDisplay);
+            adopt(notificationsDisplay);
         }
 
         // ============ Menu ============
@@ -142,6 +154,10 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         return contentDisplay;
     }
 
+    public DisplayPanel getNotificationsDisplay() {
+        return notificationsDisplay;
+    }
+
     public void forceLayout() {
         layoutCmd.cancel();
         doLayout();
@@ -154,34 +170,41 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         double menuWidth = menuExpanded ? 200 : 150;
 
         Layer headerLayer = (Layer) headerDisplay.getLayoutData();
+        Layer notificationsLayer = (Layer) notificationsDisplay.getLayoutData();
         Layer menuLayer = (Layer) menuPanel.getLayoutData();
         Layer contentLayer = (Layer) contentDisplay.getLayoutData();
 
-        headerLayer.setTopHeight(0.0, Unit.PCT, HEADER_HEIGHT, Unit.PX);
-        headerLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
+        int top = 0;
+        int height = headerDisplay.getOffsetHeight();
 
+        headerLayer.setTopHeight(top, Unit.PX, height, Unit.PX);
+        headerLayer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+
+        top += height;
+        height = notificationsDisplay.getOffsetHeight();
+
+        notificationsLayer.setTopHeight(top, Unit.PX, height, Unit.PX);
+        notificationsLayer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+
+        top += height;
+
+        menuLayer.setVisible(menuVisible);
         if (menuVisible) {
-            menuLayer.setTopBottom(HEADER_HEIGHT, Unit.PX, 0, Unit.PX);
+            menuLayer.setTopBottom(top, Unit.PX, 0, Unit.PX);
             menuLayer.setLeftWidth(0, Unit.PX, menuWidth, Unit.PX);
-            contentLayer.setLeftRight(menuWidth, Unit.PX, 0, Unit.PX);
-            menuLayer.setVisible(true);
-        } else {
-            contentLayer.setLeftRight(0, Unit.PX, 0, Unit.PX);
-            menuLayer.setVisible(false);
         }
 
-        contentLayer.setTopBottom(HEADER_HEIGHT, Unit.PX, 0, Unit.PX);
+        contentLayer.setTopBottom(top, Unit.PX, 0, Unit.PX);
+        contentLayer.setLeftRight(menuVisible ? menuWidth : 0, Unit.PX, 0, Unit.PX);
 
     }
 
     public void setMenuVisible(boolean visible) {
         this.menuVisible = visible;
-        forceLayout();
     }
 
     protected void setMenuExpanded(boolean expanded) {
         this.menuExpanded = expanded;
-        forceLayout();
     }
 
     private class DisplaysLayoutCommand extends LayoutCommand {

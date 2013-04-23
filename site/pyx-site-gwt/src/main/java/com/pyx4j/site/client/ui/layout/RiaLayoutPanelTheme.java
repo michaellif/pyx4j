@@ -49,6 +49,8 @@ public class RiaLayoutPanelTheme extends Theme {
         style = new Style(".", StyleName.SiteViewHeader.name());
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.7);
         style.addProperty("color", "white");
+        style.addProperty("height", "50px");
+        style.addProperty("width", "100%");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
         addStyle(style);
