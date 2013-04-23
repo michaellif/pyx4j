@@ -1718,3 +1718,7 @@ ul.footer_locations li {
     padding-top: 1em;
     text-align: center;
 }
+
+.WizardPanel {
+    min-height: 25em;
+}
