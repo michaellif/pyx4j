@@ -59,10 +59,6 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
     }
 
     @Override
-    protected void addItem() {
-    }
-
-    @Override
     protected CEntityFolderItem<PreauthorizedPayment> createItem(boolean first) {
         // TODO Auto-generated method stub
         return super.createItem(first);
