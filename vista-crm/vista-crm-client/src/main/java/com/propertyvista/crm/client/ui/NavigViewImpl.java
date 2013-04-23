@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.NavigationIDs;
 import com.pyx4j.site.rpc.AppPlace;
@@ -54,10 +53,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     private final static double HEADER_SIZE = 3;
-
-    public static enum StyleSuffix implements IStyleName {
-        Item, NoBottomMargin
-    }
 
     private MainNavigPresenter presenter;
 
@@ -408,4 +403,14 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
         }
         return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
     }
+
+    @Override
+    public void onResize() {
+        if (getOffsetWidth() == CrmRootPane.COLLAPSED_MENU_WIDTH) {
+            addStyleDependentName(SiteViewTheme.StyleDependent.collapsed.name());
+        } else {
+            removeStyleDependentName(SiteViewTheme.StyleDependent.collapsed.name());
+        }
+        super.onResize();
+    };
 }

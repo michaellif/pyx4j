@@ -13,8 +13,15 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface NotificationsView extends IsWidget {
 
+    public interface Presenter {
+
+    }
+
+    void showNotifications(List<String> notifications);
 }

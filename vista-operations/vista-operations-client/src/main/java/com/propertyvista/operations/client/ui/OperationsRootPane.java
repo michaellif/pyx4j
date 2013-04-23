@@ -34,6 +34,9 @@ public class OperationsRootPane extends RootPane<RiaLayoutPanel> implements IsWi
 
     public OperationsRootPane() {
         super(new RiaLayoutPanel());
+
+        asWidget().setMenuWidth(200);
+        asWidget().setHeaderHeight(50);
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());

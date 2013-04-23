@@ -28,7 +28,7 @@ public class SiteViewTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected
+        selected, collapsed
     }
 
     public SiteViewTheme() {
@@ -47,7 +47,7 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewHeader.name());
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.7);
         style.addProperty("color", "white");
-        style.addProperty("height", "50px");
+        style.addProperty("height", "100%");
         style.addProperty("width", "100%");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
@@ -75,6 +75,10 @@ public class SiteViewTheme extends Theme {
         style.addProperty("cursor", "pointer");
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
+        addStyle(style);
+
+        style = new Style(".", StyleName.SiteViewNavigContainer.name(), "-", StyleDependent.collapsed.name(), " .gwt-Label");
+        style.addProperty("display", "none");
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewNavigContainer.name(), " a:link, .", StyleName.SiteViewNavigContainer.name(), " a:visited, .",

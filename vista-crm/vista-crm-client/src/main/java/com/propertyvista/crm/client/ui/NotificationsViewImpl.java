@@ -13,14 +13,23 @@
  */
 package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import java.util.List;
 
-public class NotificationsViewImpl extends SimplePanel implements NotificationsView {
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+
+public class NotificationsViewImpl extends FlowPanel implements NotificationsView {
 
     public NotificationsViewImpl() {
-        setSize("100%", "40px");
-        HTML label = new HTML("List of Notifications is blocked in this demo version");
-        setWidget(label);
+
+    }
+
+    @Override
+    public void showNotifications(List<String> notifications) {
+        for (String string : notifications) {
+            HTML label = new HTML(string);
+            label.setSize("100%", CrmRootPane.NOTIFICATION_HEIGHT + "px");
+            add(label);
+        }
     }
 }

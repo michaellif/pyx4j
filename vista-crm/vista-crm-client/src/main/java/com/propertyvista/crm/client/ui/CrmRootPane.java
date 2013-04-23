@@ -13,7 +13,9 @@
  */
 package com.propertyvista.crm.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.RootPane;
@@ -31,8 +33,39 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
 
+    private static final int MENU_COLLAPSE_THRESHOLD = 1000;
+
+    public static final int EXPENDED_MENU_WIDTH = 200;
+
+    public static final int COLLAPSED_MENU_WIDTH = 80;
+
+    public static final int HEADER_HEIGHT = 50;
+
+    public static final int NOTIFICATION_HEIGHT = 30;
+
     public CrmRootPane() {
-        super(new RiaLayoutPanel());
+        super(new RiaLayoutPanel() {
+            private boolean menuExpanded = true;
+
+            @Override
+            public void onResize() {
+                if ((Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD ^ menuExpanded)) {
+                    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            menuExpanded = Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD;
+                            setMenuWidth(menuExpanded ? EXPENDED_MENU_WIDTH : COLLAPSED_MENU_WIDTH);
+                            forceLayout();
+                        }
+                    });
+                }
+                super.onResize();
+            }
+        });
+
+        asWidget().setMenuWidth(EXPENDED_MENU_WIDTH);
+        asWidget().setHeaderHeight(HEADER_HEIGHT);
+
         asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
@@ -41,6 +74,11 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
         bind(new ShortCutsActivityMapper(), asWidget().getShortcutsDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new NotificationsActivityMapper(), asWidget().getNotificationsDisplay());
+    }
+
+    public void allocateNotificationsSpace(int number) {
+        asWidget().setNotificationsHeight(number * NOTIFICATION_HEIGHT);
+        asWidget().forceLayout();
     }
 
     @Override

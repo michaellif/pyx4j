@@ -87,7 +87,7 @@ public class CrmSite extends VistaSite {
         feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container
         RootLayoutPanel.get().add(feedbackWidgetContainer); //must be done before add(contentPanel) else the container blocks all interaction with site
 
-        RootLayoutPanel.get().add(new CrmRootPane());
+        setRootPane(new CrmRootPane());
 
         CrmEntityMapper.init();
 

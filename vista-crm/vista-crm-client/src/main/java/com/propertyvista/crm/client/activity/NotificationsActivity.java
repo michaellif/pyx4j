@@ -13,15 +13,21 @@
  */
 package com.propertyvista.crm.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.NotificationsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
-public class NotificationsActivity extends AbstractActivity {
+public class NotificationsActivity extends AbstractActivity implements NotificationsView.Presenter {
 
     private final NotificationsView view;
 
@@ -33,9 +39,18 @@ public class NotificationsActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         container.setWidget(view);
+
+        List<String> notifList = new ArrayList<String>();
+//        notifList.add("Message 1");
+//        notifList.add("Message 2");
+
+        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
+        view.showNotifications(notifList);
+        rootPane.allocateNotificationsSpace(notifList.size());
     }
 
     public NotificationsActivity withPlace(Place place) {
         return this;
     }
+
 }
