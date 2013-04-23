@@ -38,6 +38,16 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>RobotsFilter</filter-name>
+        <filter-class>com.propertyvista.server.security.RobotsFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>RobotsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
         <!--
@@ -64,12 +74,12 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>RobotsTxtFilter</filter-name>
-        <filter-class>com.propertyvista.pmsite.server.RobotsTxtFilter</filter-class>
+        <filter-name>PMSiteRobotsTxtFilter</filter-name>
+        <filter-class>com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter</filter-class>
     </filter>
 
     <filter-mapping>
-        <filter-name>RobotsTxtFilter</filter-name>
+        <filter-name>PMSiteRobotsTxtFilter</filter-name>
         <url-pattern>/portal/robots.txt</url-pattern>
     </filter-mapping>
 
