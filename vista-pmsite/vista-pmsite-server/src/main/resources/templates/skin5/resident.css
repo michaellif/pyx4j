@@ -337,4 +337,10 @@ h2 {
 
 .PaymentEditorLegalTerms {
     height: auto !important;
+    background-color: inherit !important;
+}
+
+.PaymentEditorLegalTermsHeader {
+    background-color: inherit !important;
+    color: #000000 !important;
 }

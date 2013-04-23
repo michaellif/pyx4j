@@ -1723,14 +1723,9 @@ ul.footer_locations li {
     min-height: 25em;
 }
 
-.popupContent > table {
-    width:700px !important;
-    height:320px !important;
-}
-
 .PaymentEditorLegalTerms {
     border:none !important;
-    height: 250px !important;
+    width: 60em !important;
     overflow: auto !important;
 }
 
