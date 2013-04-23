@@ -280,26 +280,49 @@ public class TenantPadProcessor {
 
     }
 
+    private static class ChargeCodeRecords {
+
+        double estimatedCharge;
+
+        boolean potencialUinitializedChargeSplit;
+
+        PadFileModel firstRecord;
+
+        List<PadFileModel> entities = new ArrayList<PadFileModel>();
+
+    }
+
     static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
-        Map<String, Double> estimatedChargeByChargeCode = new HashMap<String, Double>();
+        Map<String, ChargeCodeRecords> recordsByChargeCode = new HashMap<String, ChargeCodeRecords>();
 
         double estimatedChargeTotal = 0;
         for (PadFileModel padFileModel : leasePadEntities) {
             double estimatedChargeSplit = 0;
             if (!padFileModel.percent().isNull()) {
                 double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
-                estimatedChargeSplit = Double.parseDouble(padFileModel.percent().getValue()) * estimatedCharge / 100.0;
-                Double prevestimatedCharge = estimatedChargeByChargeCode.get(padFileModel.chargeId().getValue());
-                if (prevestimatedCharge != null) {
-                    if (prevestimatedCharge.doubleValue() != estimatedCharge) {
+                double percent = Double.parseDouble(padFileModel.percent().getValue());
+                estimatedChargeSplit = percent * estimatedCharge / 100.0;
+
+                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(padFileModel.chargeId().getValue());
+                if (chargeCodeRecords == null) {
+                    estimatedChargeTotal += estimatedCharge;
+                    chargeCodeRecords = new ChargeCodeRecords();
+                    chargeCodeRecords.firstRecord = padFileModel;
+                    chargeCodeRecords.estimatedCharge = estimatedCharge;
+                    chargeCodeRecords.potencialUinitializedChargeSplit = (percent == 100.0);
+                    recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
+                } else {
+                    if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
                         padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge Id {0} are changing", padFileModel.chargeId()));
                         padFileModel._import().invalid().setValue(Boolean.TRUE);
                         padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
                         continue;
                     }
-                } else {
-                    estimatedChargeTotal += estimatedCharge;
-                    estimatedChargeByChargeCode.put(padFileModel.chargeId().getValue(), estimatedCharge);
+                    if (chargeCodeRecords.potencialUinitializedChargeSplit && (percent == 100.0)) {
+                        chargeCodeRecords.entities.add(padFileModel);
+                    } else {
+                        chargeCodeRecords.potencialUinitializedChargeSplit = false;
+                    }
                 }
             } else {
                 estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
@@ -308,6 +331,19 @@ public class TenantPadProcessor {
 
             padFileModel._processorInformation().estimatedChargeSplit().setValue(estimatedChargeSplit);
         }
+
+        // This is done because of the complexity in creation opf extract from yardi 
+        // Eliminate uninitialized charge split in Yardi
+        for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
+            if (chargeCodeRecords.potencialUinitializedChargeSplit) {
+                for (PadFileModel padFileModel : chargeCodeRecords.entities) {
+                    padFileModel._import().message()
+                            .setValue(i18n.tr("Ignored as uninitialized ChargeSplit; used record {0}", chargeCodeRecords.firstRecord._import().row()));
+                    padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredUinitializedChargeSplit);
+                }
+            }
+        }
+
         return estimatedChargeTotal;
     }
 

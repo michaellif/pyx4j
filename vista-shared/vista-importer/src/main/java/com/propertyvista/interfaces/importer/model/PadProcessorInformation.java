@@ -39,6 +39,8 @@ public interface PadProcessorInformation extends IEntity {
 
         mergedWithAnotherRecord,
 
+        ignoredUinitializedChargeSplit,
+
         // Statuses set in persist
 
         unchangedInDB,
