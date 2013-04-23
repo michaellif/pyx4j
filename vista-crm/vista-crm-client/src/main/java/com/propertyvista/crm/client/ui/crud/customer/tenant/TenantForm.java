@@ -65,7 +65,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                     return null;
                 }
 
-                if (value.isEmpty()) {
+                if (!VistaFeatures.instance().yardiIntegration() & value.isEmpty()) {
                     return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
                 }
 
@@ -73,6 +73,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });
+
+        get(proto().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
+        get(proto().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
+
+        get(proto().customer().emergencyContacts()).setMandatory(!VistaFeatures.instance().yardiIntegration());
     }
 
     private FormFlexPanel createContactsTab(String title) {
@@ -103,7 +108,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         (get(proto().minimumRequiredLiability())).setVisible(!getValue().minimumRequiredLiability().isNull());
         noRequirementsLabel.setVisible(getValue().minimumRequiredLiability().isNull());
 
-        if (VistaFeatures.instance().yardiIntegration()) {
+        if (!isEditable() & VistaFeatures.instance().yardiIntegration()) {
             get(proto().leaseTermV()).setVisible(!getValue().isPotentialTenant().isBooleanTrue());
         }
     }

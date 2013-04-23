@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.editors.EmergencyContactEditor;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
@@ -60,7 +61,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (modifyable && getValue().isEmpty()) {
+        if (!VistaFeatures.instance().yardiIntegration() && modifyable && getValue().isEmpty()) {
             addItem(); // at least one Emergency Contact should be present!..
         }
     }
