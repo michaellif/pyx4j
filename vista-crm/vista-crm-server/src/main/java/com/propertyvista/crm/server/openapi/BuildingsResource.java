@@ -32,6 +32,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -163,12 +164,6 @@ public class BuildingsResource {
                             buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                         }
                     }
-                    {
-                        Persistence.service().retrieveMember(building.utilities());
-                        for (BuildingUtility utility : building.utilities()) {
-                            buildingRS.includedUtilities.add(Converter.convertBuildingUtiltiy(utility));
-                        }
-                    }
                     //Parking
                     {
                         EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
@@ -186,6 +181,14 @@ public class BuildingsResource {
                         }
                     }
 
+                    {
+                        if (building.utilities().getAttachLevel() == AttachLevel.Detached) {
+                            Persistence.service().retrieveMember(building.utilities());
+                        }
+                        for (BuildingUtility utility : building.utilities()) {
+                            buildingRS.includedUtilities.add(Converter.convertBuildingUtiltiy(utility));
+                        }
+                    }
                 }
 
                 EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
