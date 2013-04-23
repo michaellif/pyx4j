@@ -13,14 +13,8 @@
  */
 package com.propertyvista.crm.client.ui;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class AlertViewImpl extends SimplePanel implements AlertView {
+public interface NotificationsView extends IsWidget {
 
-    public AlertViewImpl() {
-        setSize("100%", "100%");
-        HTML label = new HTML("List of Alerts is blocked in this demo version");
-        setWidget(label);
-    }
 }

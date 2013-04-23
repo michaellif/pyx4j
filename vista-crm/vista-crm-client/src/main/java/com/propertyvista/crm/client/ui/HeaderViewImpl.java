@@ -55,15 +55,11 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private HTML thisIsDemo;
 
-    private CompiledLocale language;
-
     MenuBar languageMenu;
 
     MenuBar languages;
 
     private Anchor getSatisfaction;
-
-    private final Theme otherTheme = Theme.BrownWarm;
 
     private static String brandedHeader;
 
@@ -77,9 +73,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     }
 
     public HeaderViewImpl() {
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
-
-        setSize("100%", "100%");
 
         add(createLogoContainer());
 

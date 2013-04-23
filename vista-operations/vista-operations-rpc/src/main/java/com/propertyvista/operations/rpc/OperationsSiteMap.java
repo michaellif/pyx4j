@@ -177,17 +177,6 @@ public class OperationsSiteMap implements SiteMap {
 
     }
 
-    @PlaceProperties(navigLabel = "Alerts")
-    public static class Alert extends AppPlace {
-    }
-
-    @PlaceProperties(navigLabel = "Messages")
-    public static class Message extends AppPlace {
-    }
-
-    public static class Settings extends AppPlace {
-    }
-
     @PlaceProperties(navigLabel = "Accounts")
     public static class Account extends CrudAppPlace {
     }

@@ -24,7 +24,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.AlertActivity;
+import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
@@ -1185,8 +1185,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.RuntimeError) {
                     activity = new RuntimeErrorActivity(place);
 
-                } else if (place instanceof CrmSiteMap.Alert) {
-                    activity = new AlertActivity(place);
+                } else if (place instanceof CrmSiteMap.Notifications) {
+                    activity = new NotificationsActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
                 }

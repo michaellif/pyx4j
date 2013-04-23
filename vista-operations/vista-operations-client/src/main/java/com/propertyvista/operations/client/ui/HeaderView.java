@@ -22,12 +22,6 @@ public interface HeaderView extends IsWidget {
 
         public void showAccount();
 
-        public void showAlerts();
-
-        public void showMessages();
-
-        public void showSettings();
-
     }
 
     public void onLogedOut();

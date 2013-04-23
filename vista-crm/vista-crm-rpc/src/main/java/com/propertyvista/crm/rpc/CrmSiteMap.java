@@ -482,7 +482,7 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "Alerts")
-    public static class Alert extends AppPlace {
+    public static class Notifications extends AppPlace {
     }
 
     @PlaceProperties(navigLabel = "Messages")

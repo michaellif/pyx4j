@@ -108,18 +108,4 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
         AppSite.getPlaceController().goTo(new OperationsSiteMap.Account().formViewerPlace(ClientContext.getUserVisit().getPrincipalPrimaryKey()));
     }
 
-    @Override
-    public void showAlerts() {
-        AppSite.getPlaceController().goTo(new OperationsSiteMap.Alert());
-    }
-
-    @Override
-    public void showMessages() {
-        AppSite.getPlaceController().goTo(new OperationsSiteMap.Message());
-    }
-
-    @Override
-    public void showSettings() {
-        AppSite.getPlaceController().goTo(new OperationsSiteMap.Settings());
-    }
 }

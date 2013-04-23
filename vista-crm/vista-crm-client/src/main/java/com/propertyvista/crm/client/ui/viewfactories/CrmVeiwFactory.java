@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.crm.client.ui.AlertView;
-import com.propertyvista.crm.client.ui.AlertViewImpl;
+import com.propertyvista.crm.client.ui.NotificationsView;
+import com.propertyvista.crm.client.ui.NotificationsViewImpl;
 import com.propertyvista.crm.client.ui.FooterView;
 import com.propertyvista.crm.client.ui.FooterViewImpl;
 import com.propertyvista.crm.client.ui.HeaderView;
@@ -47,8 +47,8 @@ public class CrmVeiwFactory extends ViewFactoryBase {
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
 
-            } else if (AlertView.class.equals(type)) {
-                map.put(type, new AlertViewImpl());
+            } else if (NotificationsView.class.equals(type)) {
+                map.put(type, new NotificationsViewImpl());
 
             } else if (MessageView.class.equals(type)) {
                 map.put(type, new MessageViewImpl());

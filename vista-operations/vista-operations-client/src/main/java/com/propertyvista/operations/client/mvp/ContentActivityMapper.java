@@ -23,9 +23,6 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.operations.client.activity.AlertActivity;
-import com.propertyvista.operations.client.activity.MessageActivity;
-import com.propertyvista.operations.client.activity.SettingsActivity;
 import com.propertyvista.operations.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.operations.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserEditorActivity;
@@ -357,9 +354,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
                     }
-// - Settings:
-                } else if (place instanceof OperationsSiteMap.Settings) {
-                    activity = new SettingsActivity(place);
 
                 } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
                     activity = new EncryptedStorageActivity((AppPlace) place);
@@ -374,11 +368,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PasswordResetRequesetActivity(place);
                 } else if (place instanceof OperationsSiteMap.PasswordReset) {
                     activity = new PasswordResetActivity(place);
-
-                } else if (place instanceof OperationsSiteMap.Alert) {
-                    activity = new AlertActivity(place);
-                } else if (place instanceof OperationsSiteMap.Message) {
-                    activity = new MessageActivity(place);
 
                 } else if (place instanceof OperationsSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);

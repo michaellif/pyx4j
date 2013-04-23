@@ -34,11 +34,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Anchor account;
 
-    private Anchor settings;
-
     public HeaderViewImpl() {
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
-        setSize("100%", "100%");
 
         add(createLogoContainer());
 
@@ -107,17 +103,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         account.setHTML(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        settings = new Anchor(null);
-        settings.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showSettings();
-            }
-        });
-
         toolbar.add(greetings);
         toolbar.add(account);
-        toolbar.add(settings);
         toolbar.add(login);
         toolbar.add(logout);
 
@@ -133,7 +120,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     public void onLogedOut() {
         logout.setVisible(false);
         account.setVisible(false);
-        settings.setVisible(false);
         login.setVisible(true);
         greetings.setHTML("");
     }
@@ -143,7 +129,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         logout.setVisible(true);
         login.setVisible(false);
         account.setVisible(true);
-        settings.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
     }
 }

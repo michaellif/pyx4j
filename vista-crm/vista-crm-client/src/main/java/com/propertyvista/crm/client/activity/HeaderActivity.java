@@ -21,7 +21,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.config.shared.ApplicationBackend;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
@@ -47,8 +46,6 @@ import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class HeaderActivity extends AbstractActivity implements HeaderView.Presenter {
-
-    private static final I18n i18n = I18n.get(HeaderActivity.class);
 
     private final HeaderView view;
 
@@ -138,11 +135,6 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     @Override
     public void showAccount() {
         AppSite.getPlaceController().goTo(new CrmSiteMap.Account.AccountData());
-    }
-
-    @Override
-    public void showAlerts() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Alert());
     }
 
     @Override

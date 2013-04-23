@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.mvp.ContentActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
+import com.propertyvista.crm.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
@@ -36,6 +37,7 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
         bind(new NavigActivityMapper(), asWidget().getNavigDisplay());
         bind(new ShortCutsActivityMapper(), asWidget().getShortcutsDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
+        bind(new NotificationsActivityMapper(), asWidget().getNotificationsDisplay());
     }
 
     @Override
@@ -51,6 +53,8 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
         } else {
             asWidget().setMenuVisible(true);
         }
+
+        asWidget().forceLayout();
     }
 
 }

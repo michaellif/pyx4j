@@ -11,16 +11,16 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui;
+package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class SettingsViewImpl extends SimplePanel implements SettingsView {
+public class NotificationsViewImpl extends SimplePanel implements NotificationsView {
 
-    public SettingsViewImpl() {
-        setSize("100%", "100%");
-        HTML label = new HTML("Settings...");
+    public NotificationsViewImpl() {
+        setSize("100%", "40px");
+        HTML label = new HTML("List of Notifications is blocked in this demo version");
         setWidget(label);
     }
 }

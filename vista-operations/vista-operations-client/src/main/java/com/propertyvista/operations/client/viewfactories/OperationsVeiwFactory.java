@@ -16,18 +16,12 @@ package com.propertyvista.operations.client.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.operations.client.ui.AlertView;
-import com.propertyvista.operations.client.ui.AlertViewImpl;
 import com.propertyvista.operations.client.ui.FooterView;
 import com.propertyvista.operations.client.ui.FooterViewImpl;
 import com.propertyvista.operations.client.ui.HeaderView;
 import com.propertyvista.operations.client.ui.HeaderViewImpl;
-import com.propertyvista.operations.client.ui.MessageView;
-import com.propertyvista.operations.client.ui.MessageViewImpl;
 import com.propertyvista.operations.client.ui.NavigView;
 import com.propertyvista.operations.client.ui.NavigViewImpl;
-import com.propertyvista.operations.client.ui.SettingsView;
-import com.propertyvista.operations.client.ui.SettingsViewImpl;
 import com.propertyvista.operations.client.ui.ShortCutsView;
 import com.propertyvista.operations.client.ui.ShortCutsViewImpl;
 
@@ -48,15 +42,6 @@ public class OperationsVeiwFactory extends ViewFactoryBase {
 
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
-
-            } else if (AlertView.class.equals(type)) {
-                map.put(type, new AlertViewImpl());
-
-            } else if (MessageView.class.equals(type)) {
-                map.put(type, new MessageViewImpl());
-
-            } else if (SettingsView.class.equals(type)) {
-                map.put(type, new SettingsViewImpl());
 
             }
 

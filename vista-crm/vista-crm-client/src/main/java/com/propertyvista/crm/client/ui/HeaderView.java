@@ -22,8 +22,6 @@ public interface HeaderView extends IsWidget {
 
         void showAccount();
 
-        void showAlerts();
-
         void showMessages();
 
         void showSettings();

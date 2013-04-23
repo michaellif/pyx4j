@@ -11,32 +11,31 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.operations.client.activity;
+package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.operations.client.ui.MessageView;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
+import com.propertyvista.crm.client.ui.NotificationsView;
+import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
-public class MessageActivity extends AbstractActivity {
+public class NotificationsActivity extends AbstractActivity {
 
-    private final MessageView view;
+    private final NotificationsView view;
 
-    public MessageActivity(Place place) {
-        view = OperationsVeiwFactory.instance(MessageView.class);
+    public NotificationsActivity(Place place) {
+        view = CrmVeiwFactory.instance(NotificationsView.class);
+        withPlace(place);
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         container.setWidget(view);
-
     }
 
-    public MessageActivity withPlace(Place place) {
+    public NotificationsActivity withPlace(Place place) {
         return this;
     }
-
 }
