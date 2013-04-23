@@ -198,7 +198,7 @@ public class MerchantAccountProcessor {
         });
     }
 
-    protected boolean accountAlreadySet(MerchantAccount retrievedAccount, MerchantAccount account) {
+    private boolean accountAlreadySet(MerchantAccount retrievedAccount, MerchantAccount account) {
         if (retrievedAccount != null && !retrievedAccount.isNull()) {
             if (retrievedAccount.bankId() != null && !retrievedAccount.bankId().isNull() && retrievedAccount.branchTransitNumber() != null
                     && !retrievedAccount.branchTransitNumber().isNull() && retrievedAccount.accountNumber() != null
