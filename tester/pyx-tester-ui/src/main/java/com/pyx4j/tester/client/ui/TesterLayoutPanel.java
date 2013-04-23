@@ -32,9 +32,8 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 
-public class TeterLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
+public class TesterLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
     private final Layout layout;
 
@@ -48,10 +47,8 @@ public class TeterLayoutPanel extends ComplexPanel implements RequiresResize, Pr
 
     private boolean consoleVisible;
 
-    public TeterLayoutPanel() {
+    public TesterLayoutPanel() {
         setElement(Document.get().createDivElement());
-
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteView.name());
 
         layout = new Layout(getElement());
         layoutCmd = new DisplaysLayoutCommand();

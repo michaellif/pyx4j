@@ -29,10 +29,10 @@ import com.pyx4j.tester.client.mvp.ConsoleActivityMapper;
 import com.pyx4j.tester.client.mvp.MainActivityMapper;
 import com.pyx4j.tester.client.mvp.NavigActivityMapper;
 
-public class TesterRootPane extends RootPane<TeterLayoutPanel> implements IsWidget {
+public class TesterRootPane extends RootPane<TesterLayoutPanel> implements IsWidget {
 
     public TesterRootPane() {
-        super(new TeterLayoutPanel());
+        super(new TesterLayoutPanel());
 
         bind(new NavigActivityMapper(), asWidget().getNavigDisplay());
         bind(new MainActivityMapper(), asWidget().getContentDisplay());

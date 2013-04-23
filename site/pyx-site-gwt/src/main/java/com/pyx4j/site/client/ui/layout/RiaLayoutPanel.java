@@ -66,15 +66,12 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
     public RiaLayoutPanel() {
         setElement(Document.get().createDivElement());
 
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteView.name());
-
         layout = new Layout(getElement());
         layoutCmd = new DisplaysLayoutCommand();
 
         // ============ Header ============
         {
             headerDisplay = new DisplayPanel();
-            headerDisplay.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewHeader.name());
 
             Layer layer = layout.attachChild(headerDisplay.asWidget().getElement(), headerDisplay);
             headerDisplay.setLayoutData(layer);
@@ -96,7 +93,6 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         // ============ Menu ============
         {
             menuPanel = new DockLayoutPanel(Unit.PX);
-            menuPanel.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewNavigContainer.name());
 
             Layer layer = layout.attachChild(menuPanel.asWidget().getElement(), menuPanel);
             menuPanel.setLayoutData(layer);
@@ -118,7 +114,6 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         // ============ Content ============
         {
             contentDisplay = new DisplayPanel();
-            contentDisplay.setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewContent.name());
 
             Layer layer = layout.attachChild(contentDisplay.asWidget().getElement(), contentDisplay);
             contentDisplay.setLayoutData(layer);
@@ -167,36 +162,42 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private void doLayout() {
 
-        double menuWidth = menuExpanded ? 200 : 150;
-
-        Layer headerLayer = (Layer) headerDisplay.getLayoutData();
-        Layer notificationsLayer = (Layer) notificationsDisplay.getLayoutData();
-        Layer menuLayer = (Layer) menuPanel.getLayoutData();
-        Layer contentLayer = (Layer) contentDisplay.getLayoutData();
+        double menuWidth = menuExpanded ? 200 : 50;
 
         int top = 0;
-        int height = headerDisplay.getOffsetHeight();
+        int height = 50;
 
-        headerLayer.setTopHeight(top, Unit.PX, height, Unit.PX);
-        headerLayer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+        {
+            Layer layer = (Layer) headerDisplay.getLayoutData();
+            layer.setTopHeight(top, Unit.PX, height, Unit.PX);
+            layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+        }
 
         top += height;
         height = notificationsDisplay.getOffsetHeight();
 
-        notificationsLayer.setTopHeight(top, Unit.PX, height, Unit.PX);
-        notificationsLayer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+        {
+            Layer layer = (Layer) notificationsDisplay.getLayoutData();
+            layer.setTopHeight(top, Unit.PX, height, Unit.PX);
+            layer.setLeftWidth(0.0, Unit.PX, 100.0, Unit.PCT);
+        }
 
         top += height;
 
-        menuLayer.setVisible(menuVisible);
-        if (menuVisible) {
-            menuLayer.setTopBottom(top, Unit.PX, 0, Unit.PX);
-            menuLayer.setLeftWidth(0, Unit.PX, menuWidth, Unit.PX);
+        {
+            Layer layer = (Layer) menuPanel.getLayoutData();
+            layer.setVisible(menuVisible);
+            if (menuVisible) {
+                layer.setTopBottom(top, Unit.PX, 0, Unit.PX);
+                layer.setLeftWidth(0, Unit.PX, menuWidth, Unit.PX);
+            }
         }
 
-        contentLayer.setTopBottom(top, Unit.PX, 0, Unit.PX);
-        contentLayer.setLeftRight(menuVisible ? menuWidth : 0, Unit.PX, 0, Unit.PX);
-
+        {
+            Layer layer = (Layer) contentDisplay.getLayoutData();
+            layer.setTopBottom(top, Unit.PX, 0, Unit.PX);
+            layer.setLeftRight(menuVisible ? menuWidth : 0, Unit.PX, 0, Unit.PX);
+        }
     }
 
     public void setMenuVisible(boolean visible) {
@@ -230,6 +231,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
                 @Override
                 public void execute() {
                     setMenuExpanded(Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD);
+                    forceLayout();
                 }
             });
         }
