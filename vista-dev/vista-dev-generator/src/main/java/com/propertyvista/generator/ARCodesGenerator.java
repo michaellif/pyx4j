@@ -54,10 +54,13 @@ public class ARCodesGenerator {
         createARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, false);
         createARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, false);
 
+        // reserved codes:
         createARCode("Deposit", ARCode.Type.Deposit, 0, true);
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);
         createARCode("NSF", ARCode.Type.NSF, 0, true);
+
         createARCode("Payment", ARCode.Type.Payment, 0, true);
+
         createARCode("Carry Forward Credit", ARCode.Type.CarryForwardCredit, 0, true);
         createARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, true);
     }
