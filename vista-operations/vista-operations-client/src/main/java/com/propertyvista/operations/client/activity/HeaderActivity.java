@@ -29,10 +29,10 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.operations.client.ui.HeaderView;
 import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
 public class HeaderActivity extends AbstractActivity implements HeaderView.Presenter {
 
@@ -84,12 +84,13 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
-                    @Override
-                    public void onSuccess(AuthenticationResponse result) {
-                        AppSite.getPlaceController().goTo(new OperationsSiteMap.Login());
-                    }
-                });
+                ClientContext.logout((AuthenticationService) GWT.create(OperationsAuthenticationService.class),
+                        new DefaultAsyncCallback<AuthenticationResponse>() {
+                            @Override
+                            public void onSuccess(AuthenticationResponse result) {
+                                AppSite.getPlaceController().goTo(new OperationsSiteMap.Login());
+                            }
+                        });
             }
         });
     }

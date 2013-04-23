@@ -48,5 +48,6 @@ public class OperationsRootPane extends RootPane<RiaLayoutPanel> implements IsWi
         } else {
             asWidget().setMenuVisible(true);
         }
+        asWidget().forceLayout();
     }
 }

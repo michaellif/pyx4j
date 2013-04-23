@@ -44,8 +44,13 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     private Widget createLogoContainer() {
         SimplePanel logoContainer = new SimplePanel();
-        HTML logo = new HTML("<h1>Property Vista Software - Operations</h1>");
+        logoContainer.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        logoContainer.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        logoContainer.getElement().getStyle().setMargin(5, Unit.PX);
+
+        HTML logo = new HTML("Property Vista Software<br/>Operations");
         logo.getElement().getStyle().setCursor(Cursor.POINTER);
+
         logo.addClickHandler(new ClickHandler() {
 
             @Override
