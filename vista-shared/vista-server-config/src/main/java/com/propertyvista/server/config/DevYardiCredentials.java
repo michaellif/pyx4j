@@ -25,10 +25,10 @@ public class DevYardiCredentials {
         if (true) {
             cr.propertyCode().setValue(".pvberk");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            cr.username().setValue("sa");
+            cr.username().setValue("gran0002");
             cr.credential().setValue("akan1212");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
-            cr.database().setValue("sl_0411");
+            cr.database().setValue("sl_0404");
         } else if (false) {
             cr.propertyCode().setValue("prvista2");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");

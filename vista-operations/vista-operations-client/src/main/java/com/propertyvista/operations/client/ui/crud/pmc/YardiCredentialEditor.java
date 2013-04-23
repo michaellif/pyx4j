@@ -86,7 +86,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
             get(proto().username()).setValue("sa");
             get(proto().credential()).setValue("akan1212");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
-            get(proto().database()).setValue("sl_0411");
+            get(proto().database()).setValue("sl_0404");
             break;
         case 1:
             get(proto().serviceURLBase()).setValue("https://yardi.starlightinvest.com/voyager6008sp17");
