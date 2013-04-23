@@ -16,7 +16,6 @@ package com.propertyvista.operations.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
@@ -45,7 +44,6 @@ public class OperationsSite extends VistaSite {
         DefaultErrorHandlerDialog.register();
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OperationsSiteMap.Management());
-        RootPanel.get().add(RootLayoutPanel.get());
         StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
         RootLayoutPanel.get().add(new OperationsRootPane());
         hideLoadingIndicator();
