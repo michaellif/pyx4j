@@ -58,6 +58,8 @@ public class ARCodesGenerator {
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);
         createARCode("NSF", ARCode.Type.NSF, 0, true);
         createARCode("Payment", ARCode.Type.Payment, 0, true);
+        createARCode("Carry Forward Credit", ARCode.Type.CarryForwardCredit, 0, true);
+        createARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, true);
     }
 
     public List<ARCode> getARCodes() {
