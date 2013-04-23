@@ -140,7 +140,8 @@ public class TenantPadProcessor {
         calulateLeasePercents(leasePadEntities);
 
         for (final PadFileModel padFileModel : leasePadEntities) {
-            if (!padFileModel._processorInformation().status().isNull()) {
+            if ((!padFileModel._processorInformation().status().isNull())
+                    && (padFileModel._processorInformation().status().getValue() != PadProcessingStatus.ignoredUinitializedChargeSplit)) {
                 continue;
             }
 
