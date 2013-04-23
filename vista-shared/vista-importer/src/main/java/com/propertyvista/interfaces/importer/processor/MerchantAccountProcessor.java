@@ -58,8 +58,8 @@ public class MerchantAccountProcessor {
         accounts = new MerchantAccountParser().parseFile(data, format);
         counters.add(saveMerchantAccounts(accounts));
 
-        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} skipped, {2} updated", counters.imported, counters.skipped,
-                counters.updated);
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} skipped, {2} updated. {3} buildings affected.", counters.imported,
+                counters.skipped, counters.updated, counters.buildingsAffected);
         log.info(message);
         return message;
     }
@@ -83,7 +83,7 @@ public class MerchantAccountProcessor {
                             pmc = Persistence.service().retrieve(criteria);
                         }
 
-                        if (model.pmc() != null && model.propertyCode() != null) {
+                        if (model.pmc() != null) {
 
                             List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
                             {
@@ -116,7 +116,9 @@ public class MerchantAccountProcessor {
                             if (retrievedAccount != null) {
                                 if (retrievedAccount.merchantTerminalId() != null) {
                                     if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
-                                        setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
+                                        if (model.propertyCode() != null) {
+                                            setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
+                                        }
                                         log.info(SimpleMessageFormat.format("Record skipped at sheet {0}, row {1}", model._import().sheet().getValue(), model
                                                 ._import().row().getValue()));
                                         counters.skipped++;
@@ -129,7 +131,9 @@ public class MerchantAccountProcessor {
                                     }
                                 } else {
                                     retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
-                                    setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
+                                    if (model.propertyCode() != null) {
+                                        setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
+                                    }
                                     log.info(SimpleMessageFormat.format("Terminal ID value updated from sheet {0}, row {1}",
                                             model._import().sheet().getValue(), model._import().row().getValue()));
                                     counters.updated++;
@@ -143,7 +147,9 @@ public class MerchantAccountProcessor {
                                 account.merchantTerminalId().setValue(model.terminalId().getValue());
                                 account.status().setValue(MerchantAccountActivationStatus.Active);
                                 ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
-                                setAccountInBuilding(model.propertyCode().getValue(), account, pmc);
+                                if (model.propertyCode() != null) {
+                                    setAccountInBuilding(model.propertyCode().getValue(), account, pmc);
+                                }
                                 counters.imported++;
                             }
 
@@ -183,6 +189,7 @@ public class MerchantAccountProcessor {
                 return null;
             }
         });
+        counters.buildingsAffected++;
     }
 
     public class MerchantAccountCounter {
@@ -193,16 +200,20 @@ public class MerchantAccountProcessor {
 
         public int updated;
 
+        public int buildingsAffected;
+
         public MerchantAccountCounter() {
             this.imported = 0;
             this.skipped = 0;
             this.updated = 0;
+            this.buildingsAffected = 0;
         }
 
         public void add(MerchantAccountCounter counters) {
             this.imported += counters.imported;
             this.skipped += counters.skipped;
             this.updated += counters.updated;
+            this.buildingsAffected += counters.buildingsAffected;
         }
     }
 }
