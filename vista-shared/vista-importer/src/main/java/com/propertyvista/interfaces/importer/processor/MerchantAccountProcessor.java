@@ -116,7 +116,7 @@ public class MerchantAccountProcessor {
                             if (retrievedAccount != null) {
                                 if (retrievedAccount.merchantTerminalId() != null) {
                                     if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
-                                        if (model.propertyCode() != null) {
+                                        if (model.propertyCode() != null && !model.propertyCode().isNull()) {
                                             setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
                                         }
                                         log.info(SimpleMessageFormat.format("Record skipped at sheet {0}, row {1}", model._import().sheet().getValue(), model
@@ -131,7 +131,7 @@ public class MerchantAccountProcessor {
                                     }
                                 } else {
                                     retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
-                                    if (model.propertyCode() != null) {
+                                    if (model.propertyCode() != null && !model.propertyCode().isNull()) {
                                         setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
                                     }
                                     log.info(SimpleMessageFormat.format("Terminal ID value updated from sheet {0}, row {1}",
@@ -147,7 +147,7 @@ public class MerchantAccountProcessor {
                                 account.merchantTerminalId().setValue(model.terminalId().getValue());
                                 account.status().setValue(MerchantAccountActivationStatus.Active);
                                 ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
-                                if (model.propertyCode() != null) {
+                                if (model.propertyCode() != null && !model.propertyCode().isNull()) {
                                     setAccountInBuilding(model.propertyCode().getValue(), account, pmc);
                                 }
                                 counters.imported++;
@@ -181,15 +181,38 @@ public class MerchantAccountProcessor {
                 }
 
                 Persistence.service().retrieveMember(building.merchantAccounts());
+                if (!building.merchantAccounts().isNull() && !building.merchantAccounts().isEmpty()) {
+                    MerchantAccount retrievedAccount = building.merchantAccounts().iterator().next().merchantAccount();
+                    if (accountAlreadySet(retrievedAccount, account)) {
+                        return null;
+                    }
+                }
                 building.merchantAccounts().clear();
                 BuildingMerchantAccount bma = building.merchantAccounts().$();
                 bma.merchantAccount().set(account);
                 building.merchantAccounts().add(bma);
                 Persistence.service().persist(building);
+                counters.buildingsAffected++;
                 return null;
             }
         });
-        counters.buildingsAffected++;
+    }
+
+    protected boolean accountAlreadySet(MerchantAccount retrievedAccount, MerchantAccount account) {
+        if (retrievedAccount != null && !retrievedAccount.isNull()) {
+            if (retrievedAccount.bankId() != null && !retrievedAccount.bankId().isNull() && retrievedAccount.branchTransitNumber() != null
+                    && !retrievedAccount.branchTransitNumber().isNull() && retrievedAccount.accountNumber() != null
+                    && !retrievedAccount.accountNumber().isNull() && retrievedAccount.merchantTerminalId() != null
+                    && !retrievedAccount.merchantTerminalId().isNull()) {
+                if (retrievedAccount.bankId().getValue().equals(account.bankId().getValue())
+                        && retrievedAccount.branchTransitNumber().getValue().equals(account.branchTransitNumber().getValue())
+                        && retrievedAccount.accountNumber().getValue().equals(account.accountNumber().getValue())
+                        && retrievedAccount.merchantTerminalId().getValue().equals(account.merchantTerminalId().getValue())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public class MerchantAccountCounter {

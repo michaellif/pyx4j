@@ -33,7 +33,6 @@ public interface MerchantAccountFileModel extends IEntity {
     IPrimitive<String> pmc();
 
     @ImportColumn(names = { "Property Code" })
-    @NotNull
     IPrimitive<String> propertyCode();
 
     @ImportColumn(names = { "Terminal ID" })
