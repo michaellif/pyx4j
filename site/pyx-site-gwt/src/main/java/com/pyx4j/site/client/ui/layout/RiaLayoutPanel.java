@@ -20,13 +20,11 @@
  */
 package com.pyx4j.site.client.ui.layout;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout;
 import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.layout.client.Layout.Layer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutCommand;
@@ -37,8 +35,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.DisplayPanel;
 
 public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
-
-    private final int MENU_COLLAPSE_THRESHOLD = 1000;
 
     private final Layout layout;
 
@@ -61,7 +57,11 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private boolean menuVisible;
 
-    private boolean menuExpanded;
+    private int menuWidth = 20;
+
+    private int headerHeight = 20;
+
+    private int notificationsHeight = 0;
 
     public RiaLayoutPanel() {
         setElement(Document.get().createDivElement());
@@ -162,10 +162,8 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private void doLayout() {
 
-        double menuWidth = menuExpanded ? 200 : 50;
-
         int top = 0;
-        int height = 50;
+        int height = headerHeight;
 
         {
             Layer layer = (Layer) headerDisplay.getLayoutData();
@@ -174,7 +172,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         }
 
         top += height;
-        height = notificationsDisplay.getOffsetHeight();
+        height = notificationsHeight;
 
         {
             Layer layer = (Layer) notificationsDisplay.getLayoutData();
@@ -204,8 +202,16 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
         this.menuVisible = visible;
     }
 
-    protected void setMenuExpanded(boolean expanded) {
-        this.menuExpanded = expanded;
+    public void setMenuWidth(int width) {
+        this.menuWidth = width;
+    }
+
+    public void setHeaderHeight(int height) {
+        this.headerHeight = height;
+    }
+
+    public void setNotificationsHeight(int height) {
+        this.notificationsHeight = height;
     }
 
     private class DisplaysLayoutCommand extends LayoutCommand {
@@ -225,16 +231,6 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     @Override
     public void onResize() {
-
-        if ((Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD ^ menuExpanded)) {
-            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    setMenuExpanded(Window.getClientWidth() > MENU_COLLAPSE_THRESHOLD);
-                    forceLayout();
-                }
-            });
-        }
 
         for (Widget child : getChildren()) {
             if (child instanceof RequiresResize) {

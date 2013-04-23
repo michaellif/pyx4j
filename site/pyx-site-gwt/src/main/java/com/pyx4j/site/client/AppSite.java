@@ -36,6 +36,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
@@ -67,6 +68,8 @@ public abstract class AppSite implements EntryPoint {
     private final AppPlaceContorller placeController;
 
     private final String appId;
+
+    private RootPane<?> rootPane;
 
     public final long applicationStartTime = System.currentTimeMillis();
 
@@ -145,6 +148,15 @@ public abstract class AppSite implements EntryPoint {
 
     public String getAppId() {
         return appId;
+    }
+
+    protected void setRootPane(RootPane<?> rootPane) {
+        RootLayoutPanel.get().add(rootPane);
+        this.rootPane = rootPane;
+    }
+
+    public RootPane<?> getRootPane() {
+        return rootPane;
     }
 
     public static AppPlaceHistoryMapper getHistoryMapper() {

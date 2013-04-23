@@ -25,7 +25,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.Consts;
@@ -80,7 +79,7 @@ public class TesterSite extends AppSite {
 
         StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 
-        RootLayoutPanel.get().add(new TesterRootPane());
+        setRootPane(new TesterRootPane());
 
         hideLoadingIndicator();
 
