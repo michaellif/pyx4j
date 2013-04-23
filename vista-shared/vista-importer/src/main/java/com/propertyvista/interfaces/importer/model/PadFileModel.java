@@ -35,6 +35,12 @@ public interface PadFileModel extends IEntity {
     @XmlTransient
     PadProcessorInformation _processorInformation();
 
+    @ImportColumn(names = { "Property", "Property Code" })
+    IPrimitive<String> property();
+
+    @ImportColumn(names = { "Unit", "Unit Number" })
+    IPrimitive<String> unit();
+
     @ImportColumn(names = { "Tenant ID" })
     @NotNull
     IPrimitive<String> tenantId();
