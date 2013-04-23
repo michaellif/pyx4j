@@ -20,6 +20,7 @@ import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.operations.client.mvp.ContentActivityMapper;
 import com.propertyvista.operations.client.mvp.FooterActivityMapper;
 import com.propertyvista.operations.client.mvp.HeaderActivityMapper;
@@ -33,6 +34,8 @@ public class OperationsRootPane extends RootPane<RiaLayoutPanel> implements IsWi
 
     public OperationsRootPane() {
         super(new RiaLayoutPanel());
+        asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
+
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
         bind(new NavigActivityMapper(), asWidget().getNavigDisplay());

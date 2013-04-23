@@ -38,7 +38,6 @@ import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
-import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.NavigationIDs;
@@ -48,21 +47,16 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
 
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.activity.NavigFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
 public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
-    public static String DEFAULT_STYLE_PREFIX = "vistaCrm_Navig";
-
     private final static double HEADER_SIZE = 3;
 
     public static enum StyleSuffix implements IStyleName {
         Item, NoBottomMargin
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        hover, selected
     }
 
     private MainNavigPresenter presenter;
@@ -71,7 +65,8 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
     public NavigViewImpl() {
         super(Unit.EM);
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        setStyleName(SiteViewTheme.StyleName.SiteViewNavigContainer.name());
+
         setHeight("100%");
 
         addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
@@ -199,12 +194,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     lastKnownPlaces.add(navigFolderWidget);
                 }
             }
-            if (navigFolderWidget != null) {
-                Widget lastheader = this.getHeaderWidget(navigFolderWidget);
-                if (lastheader != null) {//the last stack - remove bottom margin
-                    lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
-                }
-            }
+
         } else {
             lastKnownPlaces = new ArrayList<NavigFolderWidget>(10);
             NavigFolderWidget navigFolderWidget = null;
@@ -213,12 +203,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 add(navigFolderWidget, navigFolderWidget.getStackHeaderWidget(), HEADER_SIZE);
                 lastKnownPlaces.add(navigFolderWidget);
             }
-            if (navigFolderWidget != null) {
-                Widget lastheader = this.getHeaderWidget(navigFolderWidget);
-                if (lastheader != null) {//the last stack - remove bottom margin
-                    lastheader.addStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.NoBottomMargin);
-                }
-            }
+
         }
     }
 
@@ -361,9 +346,9 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                 this.selected = selected;
 
                 if (selected) {
-                    addStyleDependentName(StyleDependent.selected.name());
+                    addStyleDependentName(SiteViewTheme.StyleDependent.selected.name());
                 } else {
-                    removeStyleDependentName(StyleDependent.selected.name());
+                    removeStyleDependentName(SiteViewTheme.StyleDependent.selected.name());
                 }
 
                 if (image != null) {
@@ -381,7 +366,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
         public NavigItemAnchor(AppPlace place) {
             this.place = place;
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
+
             anchor = new Anchor(getNavigLabel(place));
             anchor.addClickHandler(new ClickHandler() {
                 @Override

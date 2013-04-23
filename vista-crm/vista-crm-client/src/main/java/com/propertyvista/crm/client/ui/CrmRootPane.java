@@ -20,6 +20,7 @@ import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.RiaLayoutPanel;
 import com.pyx4j.site.shared.meta.PublicPlace;
 
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.mvp.ContentActivityMapper;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
 import com.propertyvista.crm.client.mvp.HeaderActivityMapper;
@@ -32,6 +33,8 @@ public class CrmRootPane extends RootPane<RiaLayoutPanel> implements IsWidget {
 
     public CrmRootPane() {
         super(new RiaLayoutPanel());
+        asWidget().setStyleName(SiteViewTheme.StyleName.SiteView.name());
+
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
         bind(new NavigActivityMapper(), asWidget().getNavigDisplay());

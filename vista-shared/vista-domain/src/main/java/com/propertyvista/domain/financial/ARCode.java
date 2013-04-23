@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -146,6 +147,7 @@ public interface ARCode extends IEntity {
     @Timestamp
     IPrimitive<Date> updated();
 
+    @NotNull
     IPrimitive<Boolean> reserved();
 
     /** Named "charge code", however it's applied to both charges and credits */

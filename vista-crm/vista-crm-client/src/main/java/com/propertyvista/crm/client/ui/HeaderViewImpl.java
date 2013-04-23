@@ -21,11 +21,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -74,6 +74,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
     public HeaderViewImpl() {
 
+        setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
+
         add(createLogoContainer());
 
         add(createActionsContainer());
@@ -113,7 +115,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Widget createActionsContainer() {
 
         Toolbar toolbar = new Toolbar();
-        toolbar.addStyleName(RiaLayoutPanelTheme.StyleName.SiteViewAction.name());
+        toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
         thisIsProduction = new HTML("PRODUCTION SUPPORT!");
         thisIsProduction.getElement().getStyle().setColor("red");

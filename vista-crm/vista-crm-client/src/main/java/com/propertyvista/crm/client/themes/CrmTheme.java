@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
@@ -35,13 +34,12 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.crm.client.ui.HeaderViewImpl;
-import com.propertyvista.crm.client.ui.NavigViewImpl;
 import com.propertyvista.crm.client.ui.SearchBox;
 import com.propertyvista.crm.client.ui.SearchBox.StyleSuffix;
-import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.components.KeywordsBox;
 import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
@@ -100,7 +98,7 @@ public class CrmTheme extends VistaTheme {
 
         addTheme(new DefaultTabTheme());
 
-        addTheme(new RiaLayoutPanelTheme());
+        addTheme(new SiteViewTheme());
         addTheme(new DraggerMixin());
 
         addTheme(new BillingTheme());
@@ -109,9 +107,6 @@ public class CrmTheme extends VistaTheme {
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();
-
-        intitNavigationStyles();
-        intitShortCutStyles();
 
         initSearchBoxStyles();
         initButtonStylesEx();
@@ -152,114 +147,6 @@ public class CrmTheme extends VistaTheme {
         super.initBodyStyles();
         Style style = new Style("body");
         style.addProperty("overflow", "hidden");
-        addStyle(style);
-    }
-
-    protected void intitNavigationStyles() {
-        String prefix = NavigViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(prefix);
-
-        /*
-         * anchors within the class:
-         */
-        style = new Style(Selector.valueOf(prefix + " a:hover"));
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active"));
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
-        /*
-         * components within the class:
-         */
-        // stack header
-        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
-        style.addProperty("font-size", "1.3em");
-//        style.addProperty("padding-top", "0.2em");
-        style.addProperty("padding-left", "0.5em");
-        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColor.object1, 0.1);
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
-        style.addProperty("font-weight", "bold");
-        style.addShadow(ThemeColor.foreground, "1px 1px 0");
-        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
-        addStyle(style);
-
-        // stack content
-        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColor.foreground, 0.02);
-        addStyle(style);
-
-        // Item style defines anchor specific styling
-        style = new Style(Selector.valueOf(prefix, NavigViewImpl.StyleSuffix.Item));
-        style.addProperty("margin-bottom", "0.3em");
-        addStyle(style);
-
-        // ???
-        style = new Style(Selector.valueOf(NavigViewImpl.DEFAULT_STYLE_PREFIX, NavigViewImpl.StyleSuffix.NoBottomMargin));
-        style.addProperty("margin-bottom", "0 !important");
-        addStyle(style);
-    }
-
-    /*
-     * TODO When the layout is finalised it might make sense to combine
-     * Navigation and ShortCuts styling due to their similarity
-     */
-    protected void intitShortCutStyles() {
-        String prefix = ShortCutsViewImpl.DEFAULT_STYLE_PREFIX;
-
-        Style style = new Style(Selector.valueOf(prefix));
-
-        /*
-         * anchors within the class:
-         */
-        style = new Style(prefix + " a:link, " + prefix + " a:visited, " + prefix + " a:active");
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix + " a:hover"));
-        style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        /*
-         * components within the class:
-         */
-        //stack header
-        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader"));
-        style.addProperty("font-size", "1.3em");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "1em");
-//        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColor.foreground, 0.9);
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        style.addProperty("border-top", "solid 4px");
-        style.addProperty("border-top-color", ThemeColor.object1);
-        // NOTE: must correspond with the header size defined by stackpanel
-        style.addProperty("line-height", "2.2em");
-        addStyle(style);
-
-        // stack content
-        style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
-        // Item style defines anchor specific styling
-        style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.Item));
-        style.addProperty("margin-left", "0.3em");
-        style.addProperty("margin-right", "0.2em");
-        style.addProperty("margin-bottom", "0.3em");
-        addStyle(style);
-
-        // Search line style
-        style = new Style(Selector.valueOf(prefix, ShortCutsViewImpl.StyleSuffix.SearchBar));
         addStyle(style);
     }
 

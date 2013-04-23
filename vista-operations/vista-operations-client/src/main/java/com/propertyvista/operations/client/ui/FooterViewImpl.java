@@ -21,13 +21,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.config.client.ClientApplicationVersion;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
+
+import com.propertyvista.common.client.theme.SiteViewTheme;
 
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
     public FooterViewImpl() {
         setSize("100%", "100%");
-        setStyleName(RiaLayoutPanelTheme.StyleName.SiteViewFooter.name());
+        setStyleName(SiteViewTheme.StyleName.SiteViewFooter.name());
         HTML label = new HTML(ClientApplicationVersion.instance().getBuildInformation());
         label.getElement().getStyle().setFontSize(1.2, Unit.EM);
         label.getElement().getStyle().setColor("white");

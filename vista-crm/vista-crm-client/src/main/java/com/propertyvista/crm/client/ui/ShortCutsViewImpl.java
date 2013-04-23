@@ -32,13 +32,12 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.crm.client.activity.NavigFolder;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
 
     public static int MAX_SHORTCUT_LENGTH = 20;
-
-    public static String DEFAULT_STYLE_PREFIX = "vistaCrm_ShortCuts";
 
     public static enum StyleSuffix implements IStyleName {
         Item, SearchBar
@@ -52,7 +51,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
     public ShortCutsViewImpl() {
         super(Unit.EM);
-        setStyleName(DEFAULT_STYLE_PREFIX);
+        setStyleName(SiteViewTheme.StyleName.SiteViewShortCuts.name());
+
         setHeight("100%");
 
         search = new SearchBox();
@@ -147,7 +147,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
             });
             anchor.setTitle(typeLabel + (value != null ? ": " + value.getStringView() : ""));
 
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
+            setStyleName(SiteViewTheme.StyleName.SiteViewShortCutsItem.name());
+
             setWidget(anchor);
         }
 

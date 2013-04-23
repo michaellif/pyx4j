@@ -12,9 +12,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.layout.RiaLayoutPanelTheme;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+
+import com.propertyvista.common.client.theme.SiteViewTheme;
 
 public class HeaderViewImpl extends FlowPanel implements HeaderView {
 
@@ -35,6 +36,8 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Anchor account;
 
     public HeaderViewImpl() {
+
+        setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
         add(createLogoContainer());
 
@@ -65,7 +68,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     private Widget createActionsContainer() {
 
         Toolbar toolbar = new Toolbar();
-        toolbar.addStyleName(RiaLayoutPanelTheme.StyleName.SiteViewAction.name());
+        toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
