@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
+
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
@@ -20,7 +22,11 @@ import com.propertyvista.portal.client.ui.residents.ViewImpl;
 public class ViewPaymentMethodViewImpl extends ViewImpl<LeasePaymentMethod> implements ViewPaymentMethodView {
 
     public ViewPaymentMethodViewImpl() {
-        super(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class), true, false);
-        getForm().setViewable(true);
+        super(true, false);
+
+        CEntityForm<LeasePaymentMethod> form = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class);
+        form.setViewable(true);
+        form.setEditable(false);
+        setForm(form);
     }
 }

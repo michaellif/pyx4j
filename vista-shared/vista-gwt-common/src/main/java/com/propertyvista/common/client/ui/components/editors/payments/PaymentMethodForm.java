@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.text.ParseException;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,8 +25,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IFormat;
@@ -61,9 +62,14 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         paymentMethods.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
         paymentMethods.setWidth("100%");
 
-        Widget w;
-        paymentMethods.add(w = inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
-        w.getElement().getStyle().setMarginLeft(15, Unit.EM);
+        if (isViewable()) {
+            paymentMethods.add(inject(proto().type(), new CLabel<PaymentType>()).asWidget());
+            get(proto().type()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            get(proto().type()).asWidget().getElement().getStyle().setFontSize(1.3, Unit.EM);
+        } else {
+            paymentMethods.add(inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
+            get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
+        }
 
         paymentMethods.add(paymentDetailsHolder);
         DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
@@ -82,21 +88,23 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
 
         // tweaks:
-        get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
-        get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                selectPaymentDetailsEditor(event.getValue(), false);
-            }
-        });
+        get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
+        if (isEditable()) {
+            get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                    selectPaymentDetailsEditor(event.getValue(), false);
+                }
+            });
 
-        get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
-                get(proto().billingAddress()).setEditable(!event.getValue());
-            }
-        });
+            get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
+                    get(proto().billingAddress()).setEditable(!event.getValue());
+                }
+            });
+        }
 
         return content;
     }
@@ -105,14 +113,15 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        // set single-available option preselected for new items: 
-        @SuppressWarnings("unchecked")
-        CRadioGroup<PaymentType> type = ((CRadioGroup<PaymentType>) get(proto().type()));
-        if (getValue().id().isNull() && type.getOptions().size() == 1) {
-            type.setValue(type.getOptions().get(0));
+        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
+            // set single-available option preselected for new items: 
+            @SuppressWarnings("unchecked")
+            CRadioGroup<PaymentType> type = ((CRadioGroup<PaymentType>) get(proto().type()));
+            if (getValue().id().isNull() && type.getOptions().size() == 1) {
+                type.setValue(type.getOptions().get(0));
+            }
+            setPaymentTypeSelectionEditable(getValue().id().isNull());
         }
-
-        setPaymentTypeSelectionEditable(getValue().id().isNull());
     }
 
     private CRadioGroupEnum<PaymentType> createPaymentTypesRadioGroup() {
