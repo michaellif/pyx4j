@@ -309,11 +309,9 @@ public class TenantPadProcessor {
 
         double estimatedCharge;
 
-        boolean potencialUinitializedChargeSplit;
-
         PadFileModel firstRecord;
 
-        List<PadFileModel> entities = new ArrayList<PadFileModel>();
+        List<PadFileModel> uinitializedEntities = new ArrayList<PadFileModel>();
 
     }
 
@@ -340,7 +338,6 @@ public class TenantPadProcessor {
                     chargeCodeRecords = new ChargeCodeRecords();
                     chargeCodeRecords.firstRecord = padFileModel;
                     chargeCodeRecords.estimatedCharge = estimatedCharge;
-                    chargeCodeRecords.potencialUinitializedChargeSplit = padFileModel.percent().isNull();
                     recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
                 } else {
                     if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
@@ -349,10 +346,8 @@ public class TenantPadProcessor {
                         padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
                         continue;
                     }
-                    if (chargeCodeRecords.potencialUinitializedChargeSplit && (padFileModel.percent().isNull())) {
-                        chargeCodeRecords.entities.add(padFileModel);
-                    } else {
-                        chargeCodeRecords.potencialUinitializedChargeSplit = false;
+                    if (padFileModel.percent().isNull()) {
+                        chargeCodeRecords.uinitializedEntities.add(padFileModel);
                     }
                 }
             } else {
@@ -366,8 +361,8 @@ public class TenantPadProcessor {
         // This is done because of the complexity in creation opf extract from yardi 
         // Eliminate uninitialized charge split in Yardi
         for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
-            if (chargeCodeRecords.potencialUinitializedChargeSplit) {
-                for (PadFileModel padFileModel : chargeCodeRecords.entities) {
+            if (chargeCodeRecords.uinitializedEntities.size() > 0) {
+                for (PadFileModel padFileModel : chargeCodeRecords.uinitializedEntities) {
                     padFileModel._import().message()
                             .setValue(i18n.tr("Ignored as uninitialized ChargeSplit; used record {0}", chargeCodeRecords.firstRecord._import().row()));
                     padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredUinitializedChargeSplit);

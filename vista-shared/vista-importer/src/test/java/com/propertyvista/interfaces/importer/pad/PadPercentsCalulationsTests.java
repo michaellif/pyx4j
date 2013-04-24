@@ -103,7 +103,7 @@ public class PadPercentsCalulationsTests {
     }
 
     @Test
-    public void testUninitializedChargeCplit() {
+    public void testUninitializedChargeSplit() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
         leasePadEntities.add(createModelFull("1", "rent", null, 1000));
         leasePadEntities.add(createModelFull("2", "rent", null, 1000));
@@ -116,5 +116,22 @@ public class PadPercentsCalulationsTests {
         Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(1)._processorInformation().status().getValue());
 
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(2)._processorInformation().status().getValue());
+    }
+
+    @Test
+    public void testUninitializedChargeSplitCase2() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "park", "100", 100));
+        leasePadEntities.add(createModelFull("2", "park", null, 100));
+        leasePadEntities.add(createModelFull("1", "rent", null, 1000));
+        leasePadEntities.add(createModelFull("2", "rent", null, 1000));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("1.0000"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+
+        Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(1)._processorInformation().status().getValue());
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(2)._processorInformation().status().getValue());
+        Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(3)._processorInformation().status().getValue());
     }
 }
