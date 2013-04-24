@@ -17,15 +17,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
@@ -37,7 +38,9 @@ public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
             return null;
         }
 
-        List<IssueClassification> issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+        EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
+        crit.add(PropertyCriterion.eq(crit.proto().level().level(), 4));
+        List<MaintenanceRequestCategory> issueClassifications = Persistence.service().query(crit);
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().status(), Lease.Status.Active));
         List<Lease> leases = Persistence.service().query(leaseCriteria);
@@ -53,18 +56,16 @@ public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
         return null;
     }
 
-    private void makeMaintenanceRequest(List<IssueClassification> issueClassifications, Lease lease, LogicalDate when) {
-        MaintenanceRequest maintenanceRequest = EntityFactory.create(MaintenanceRequest.class);
+    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, LogicalDate when) {
+        Persistence.service().retrieveMember(lease.leaseParticipants());
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(
+                lease.leaseParticipants().iterator().next().<Tenant> cast());
         maintenanceRequest.submitted().setValue(when);
         maintenanceRequest.updated().setValue(when);
-        maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
         maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
         maintenanceRequest.petInstructions().setValue(RandomUtil.randomLetters(50));
-
-        Persistence.service().retrieveMember(lease.leaseParticipants());
-        maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());
-        maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
+        maintenanceRequest.category().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
         Persistence.service().persist(maintenanceRequest);
     }
 

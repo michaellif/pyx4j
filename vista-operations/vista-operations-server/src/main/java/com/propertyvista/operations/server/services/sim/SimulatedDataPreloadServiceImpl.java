@@ -25,20 +25,21 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.domain.maintenance.IssueClassification;
+import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
 import com.propertyvista.server.jobs.PmcProcessContext;
@@ -102,7 +103,9 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         if (ApplicationMode.isDevelopment()) {
             NamespaceManager.setNamespace("vista");
 
-            List<IssueClassification> issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+            EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
+            crit.add(PropertyCriterion.eq(crit.proto().level().level(), 4));
+            List<MaintenanceRequestCategory> issueClassifications = Persistence.service().query(crit);
             EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
             leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().status(), Lease.Status.Active));
             List<Lease> leases = Persistence.service().query(leaseCriteria);
@@ -144,18 +147,16 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         }
     }
 
-    private void makeMaintenanceRequest(List<IssueClassification> issueClassifications, Lease lease, LogicalDate when) {
-        MaintenanceRequest maintenanceRequest = EntityFactory.create(MaintenanceRequest.class);
+    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, LogicalDate when) {
+        Persistence.service().retrieveMember(lease.leaseParticipants());
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(
+                lease.leaseParticipants().iterator().next().<Tenant> cast());
         maintenanceRequest.submitted().setValue(when);
         maintenanceRequest.updated().setValue(when);
-        maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
         maintenanceRequest.permissionToEnter().setValue(RandomUtil.randomBoolean());
         maintenanceRequest.petInstructions().setValue(RandomUtil.randomLetters(50));
-
-        Persistence.service().retrieveMember(lease.leaseParticipants());
-        maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());
-        maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
+        maintenanceRequest.category().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
         Persistence.service().persist(maintenanceRequest);
     }
 

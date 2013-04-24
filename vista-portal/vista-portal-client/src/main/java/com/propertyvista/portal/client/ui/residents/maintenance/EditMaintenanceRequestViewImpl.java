@@ -15,15 +15,15 @@ package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
 public class EditMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
-    private MaintenanceRequestCategoryMeta categoryMeta;
+    private MaintenanceRequestMetadata categoryMeta;
 
     public EditMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());
@@ -35,9 +35,9 @@ public class EditMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestD
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
         } else if (presenter != null) {
-            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                public void onSuccess(MaintenanceRequestMetadata meta) {
                     EditMaintenanceRequestViewImpl.this.categoryMeta = meta;
                     ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
                 }
@@ -47,7 +47,7 @@ public class EditMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestD
 
     @Override
     public void populate(MaintenanceRequestDTO value) {
-        boolean editable = (value.status().getValue() == MaintenanceRequestStatus.Submitted);
+        boolean editable = (value.status().phase().getValue() == StatusPhase.Submitted);
 
         getForm().setViewable(!editable);
 

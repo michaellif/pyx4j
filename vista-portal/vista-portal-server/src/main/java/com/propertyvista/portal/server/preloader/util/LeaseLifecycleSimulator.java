@@ -35,18 +35,19 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -61,6 +62,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
@@ -101,7 +103,7 @@ public class LeaseLifecycleSimulator {
 
     private final int maintenanceRequestsPerMonth = 0;
 
-    private List<IssueClassification> issueClassifications;
+    private List<MaintenanceRequestCategory> issueClassifications;
 
     public int numOfBills = -1;
 
@@ -131,7 +133,9 @@ public class LeaseLifecycleSimulator {
 
         issueClassifications = CacheService.get(LeaseLifecycleSimulator.class.getName() + "issueClassifications");
         if (issueClassifications == null) {
-            issueClassifications = Persistence.service().query(EntityQueryCriteria.create(IssueClassification.class));
+            EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
+            crit.add(PropertyCriterion.eq(crit.proto().level().level(), 4));
+            issueClassifications = Persistence.service().query(crit);
             CacheService.put(LeaseLifecycleSimulator.class.getName() + "issueClassifications", issueClassifications);
         }
     }
@@ -245,13 +249,12 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            MaintenanceRequest maintenanceRequest = EntityFactory.create(MaintenanceRequest.class);
+            MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(
+                    lease.leaseParticipants().iterator().next().<Tenant> cast());
             maintenanceRequest.submitted().setValue(now());
             maintenanceRequest.updated().setValue(now());
-            maintenanceRequest.status().setValue(MaintenanceRequestStatus.Submitted);
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
-            maintenanceRequest.leaseParticipant().setPrimaryKey(lease.leaseParticipants().iterator().next().getPrimaryKey());
-            maintenanceRequest.issueClassification().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
+            maintenanceRequest.category().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
             Persistence.service().persist(maintenanceRequest);
         }
     }

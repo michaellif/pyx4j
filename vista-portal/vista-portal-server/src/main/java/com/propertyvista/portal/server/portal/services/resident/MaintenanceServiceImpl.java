@@ -28,8 +28,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -77,11 +77,6 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     @Override
     protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTraget retrieveTraget) {
         enhanceAll(dto);
-        MaintenanceRequestCategory parent = dto.category().parent();
-        while (!parent.isNull()) {
-            Persistence.ensureRetrieve(parent, AttachLevel.Attached);
-            parent = parent.parent();
-        }
     }
 
     @Override
@@ -92,6 +87,11 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         Persistence.service().retrieve(dto.leaseParticipant());
         Persistence.service().retrieve(dto.category());
+        MaintenanceRequestCategory parent = dto.category().parent();
+        while (!parent.isNull()) {
+            Persistence.ensureRetrieve(parent, AttachLevel.Attached);
+            parent = parent.parent();
+        }
     }
 
     @Override
@@ -101,23 +101,29 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
-        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(callback, dto);
+        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(dto);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
-        ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(callback, dto, rate);
+        SurveyResponse response = EntityFactory.create(SurveyResponse.class);
+        response.rating().setValue(rate);
+        ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(dto, response);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback) {
-        MaintenanceRequestDTO dto = EntityFactory.create(MaintenanceRequestDTO.class);
-        dto.status().setValue(MaintenanceRequestStatus.Submitted);
-        callback.onSuccess(dto);
+        MaintenanceRequest dbo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(
+                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
+        callback.onSuccess(createDTO(dbo));
     }
 
     @Override
-    public void getCategoryMeta(AsyncCallback<MaintenanceRequestCategoryMeta> callback, boolean levelsOnly) {
-        callback.onSuccess(ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequestCategoryMeta(levelsOnly));
+    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
+        callback.onSuccess(ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(levelsOnly));
     }
 }

@@ -21,7 +21,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 
 public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceRequestCategory> {
 
@@ -35,7 +35,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
 
     private MaintenanceRequestCategoryChoice parent;
 
-    private MaintenanceRequestCategoryMeta meta;
+    private MaintenanceRequestMetadata meta;
 
     private LoadOptionsMode optionsMode = LoadOptionsMode.EMPTY_SET;
 
@@ -97,7 +97,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     }
 
     // must be called only once
-    public void setOptionsMeta(MaintenanceRequestCategoryMeta meta) {
+    public void setOptionsMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         if (isEditable()) {
             // refresh options in case this call comes after setValue()
@@ -165,7 +165,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
                     }
                 }
             } else {
-                setOptions(meta != null ? meta.root().subCategories() : null);
+                setOptions(meta != null ? meta.rootCategory().subCategories() : null);
             }
             break;
         }
@@ -193,7 +193,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
 
     private MaintenanceRequestCategory findMetaEntry(MaintenanceRequestCategory entry, MaintenanceRequestCategory parent) {
         if (parent == null) {
-            parent = meta.root();
+            parent = meta.rootCategory();
         }
         if (entry == null || parent.subCategories() == null) {
             return null;

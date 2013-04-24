@@ -29,7 +29,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
-import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 @Ignore
 public class YardiMaintenanceRequestsServiceClient {
@@ -53,8 +52,8 @@ public class YardiMaintenanceRequestsServiceClient {
         //2. Unit should exist
         //3. Tenant should exist
         //4. Vendor should exist
-        //YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, createServiceRequest());
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, createShortServiceRequest());
+        //YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(createServiceRequest());
+//        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(createShortServiceRequest());
     }
 
     private ServiceRequests createServiceRequest() throws IOException, JAXBException {

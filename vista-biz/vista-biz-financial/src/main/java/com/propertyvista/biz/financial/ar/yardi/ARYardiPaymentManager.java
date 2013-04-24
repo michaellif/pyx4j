@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
-import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -64,8 +64,8 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         Persistence.ensureRetrieve(paymentRecord.billingAccount().lease(), AttachLevel.Attached);
 
         try {
-            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiProcessFacade.class).postReceipt(receipt);
+            ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
+            ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt);
         } catch (RemoteException e) {
             throw new ARException("Posting receipt to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {
@@ -98,7 +98,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         Persistence.service().persist(reversal);
 
         try {
-            ServerSideFactory.create(YardiProcessFacade.class).postReceiptReversal(reversal);
+            ServerSideFactory.create(YardiARFacade.class).postReceiptReversal(reversal);
         } catch (RemoteException e) {
             throw new ARException("Posting receipt reversal to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {
@@ -107,7 +107,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         try {
             Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiProcessFacade.class).updateLease(paymentRecord.billingAccount().lease());
+            ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
         } catch (Throwable ignoreDataRetrivalFromYardy) {
             log.debug("ignoreDataRetrivalFromYardy", ignoreDataRetrivalFromYardy);
         }
@@ -136,7 +136,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         YardiReceipt receipt = createReceipt(payment);
 
         try {
-            ServerSideFactory.create(YardiProcessFacade.class).validateReceipt(receipt);
+            ServerSideFactory.create(YardiARFacade.class).validateReceipt(receipt);
         } catch (RemoteException e) {
             throw new ARException("Receipt validation failed due to communication failure with Yardi", e);
         } catch (YardiServiceException e) {

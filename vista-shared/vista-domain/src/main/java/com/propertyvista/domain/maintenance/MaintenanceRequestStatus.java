@@ -16,24 +16,34 @@ package com.propertyvista.domain.maintenance;
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n(context = "Maintenance Request")
-public enum MaintenanceRequestStatus {
+public interface MaintenanceRequestStatus extends IEntity {
+    @I18n(context = "Maintenance Request")
+    public enum StatusPhase {
 
-    Submitted, Scheduled, Resolved, Cancelled;
+        Submitted, Scheduled, Resolved, Cancelled;
 
-    public static Set<MaintenanceRequestStatus> opened() {
-        return EnumSet.of(Submitted, Scheduled);
+        public static Set<StatusPhase> opened() {
+            return EnumSet.of(Submitted, Scheduled);
+        }
+
+        public static Set<StatusPhase> closed() {
+            return EnumSet.of(Resolved, Cancelled);
+        }
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
-    public static Set<MaintenanceRequestStatus> closed() {
-        return EnumSet.of(Resolved, Cancelled);
-    }
+    IPrimitive<StatusPhase> phase();
 
-    @Override
-    public String toString() {
-        return I18nEnum.toString(this);
-    }
+    @ToString
+    IPrimitive<String> name();
 }

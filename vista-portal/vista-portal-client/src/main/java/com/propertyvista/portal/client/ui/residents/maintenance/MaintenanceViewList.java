@@ -104,7 +104,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                 openRequestsPanel.setHTML(++row, ++col, issueDetails(request));
                 openRequestsPanel.getCellFormatter().getElement(row, col).getStyle().setPaddingLeft(4, Unit.PX);
 
-                switch (request.status().getValue()) {
+                switch (request.status().phase().getValue()) {
                 case Submitted:
                     openRequestsPanel.setHTML(row, ++col, request.status().getStringView() + "<p><i style='font-size:0.8em'>"
                             + request.submitted().getStringView() + "</i>");

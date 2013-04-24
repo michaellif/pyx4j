@@ -27,7 +27,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
@@ -43,7 +43,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     private final Key entityId;
 
-    private MaintenanceRequestCategoryMeta meta;
+    private MaintenanceRequestMetadata meta;
 
     public EditMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
@@ -91,11 +91,11 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
         if (meta == null) {
-            srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                public void onSuccess(MaintenanceRequestMetadata result) {
                     meta = result;
                     callback.onSuccess(result);
                 }

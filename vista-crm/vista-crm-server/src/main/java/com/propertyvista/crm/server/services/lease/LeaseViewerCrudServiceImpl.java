@@ -35,7 +35,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
@@ -246,7 +246,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         Lease lease = Persistence.service().retrieve(dboClass, entityId);
 
         try {
-            ServerSideFactory.create(YardiProcessFacade.class).updateLease(lease);
+            ServerSideFactory.create(YardiARFacade.class).updateLease(lease);
         } catch (RemoteException e) {
             throw new UserRuntimeException(i18n.tr("Yardi connection problem"));
         } catch (YardiServiceException e) {

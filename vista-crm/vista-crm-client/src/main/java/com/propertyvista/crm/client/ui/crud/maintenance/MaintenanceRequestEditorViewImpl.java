@@ -19,12 +19,12 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestEditorView {
 
-    private MaintenanceRequestCategoryMeta categoryMeta;
+    private MaintenanceRequestMetadata categoryMeta;
 
     public MaintenanceRequestEditorViewImpl() {
         setForm(new MaintenanceRequestForm(this));
@@ -36,9 +36,9 @@ public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<Main
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
         } else if (presenter != null) {
-            ((MaintenanceRequestEditorView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            ((MaintenanceRequestEditorView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                public void onSuccess(MaintenanceRequestMetadata meta) {
                     MaintenanceRequestEditorViewImpl.this.categoryMeta = meta;
                     ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
                 }

@@ -37,27 +37,25 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
     public static ColumnDescriptor[] createColumnDescriptors() {
         MaintenanceRequestDTO proto = EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class);
 
-        return new ColumnDescriptor[] {// @formatter:off
-                new ColumnDescriptor(proto.issueClassification().issue().getPath().toString(), proto.issueClassification().issue().getMeta().getCaption()) {
+        return new ColumnDescriptor[] {
+                new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
                     @Override
                     public String convert(IEntity entity) {
                         if (entity instanceof MaintenanceRequestDTO) {
                             // return the first available value
                             MaintenanceRequestCategory issue = ((MaintenanceRequestDTO)entity).category();
-                            if (!issue.name().isNull()) {
-                                return issue.name().getValue();
-                            } else if (!issue.parent().name().isNull()) {
-                                return issue.parent().name().getValue();
-                            } else if (!issue.parent().parent().name().isNull()) {
-                                return issue.parent().parent().name().getValue();
-                            } else if (!issue.parent().parent().parent().name().isNull()) {
-                                return issue.parent().parent().parent().name().getValue();
+                            while (issue != null && issue.level().level().getValue() > 0) {
+                                if (!issue.name().isNull()) {
+                                    return issue.name().getValue();
+                                }
+                                issue = issue.parent();
                             }
+                            return "";
                         }
                         return super.convert(entity);
                     }
-                },
-                new MemberColumnDescriptor.Builder(proto.issueClassification().priority()).build(),
+                },// @formatter:off
+                new MemberColumnDescriptor.Builder(proto.priority()).build(),
                 new MemberColumnDescriptor.Builder(proto.description()).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name().firstName(), false).build(),

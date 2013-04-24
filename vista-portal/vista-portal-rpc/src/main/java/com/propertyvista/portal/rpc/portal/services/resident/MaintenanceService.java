@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceService extends AbstractCrudService<MaintenanceRequestDTO> {
@@ -36,6 +36,6 @@ public interface MaintenanceService extends AbstractCrudService<MaintenanceReque
 
     void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback);
 
-    void getCategoryMeta(AsyncCallback<MaintenanceRequestCategoryMeta> callback, boolean levelsOnly);
+    void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly);
 
 }

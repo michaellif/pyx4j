@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.YardiProcessFacade;
+import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -40,7 +40,7 @@ public class YardiImportProcess implements PmcProcess {
         ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         if (VistaFeatures.instance().yardiIntegration()) {
             try {
-                ServerSideFactory.create(YardiProcessFacade.class).doAllImport(executionMonitor);
+                ServerSideFactory.create(YardiARFacade.class).doAllImport(executionMonitor);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             } catch (YardiServiceException e) {

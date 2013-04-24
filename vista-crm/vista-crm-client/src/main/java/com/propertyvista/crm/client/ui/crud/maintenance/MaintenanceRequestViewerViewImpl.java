@@ -30,8 +30,8 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -39,7 +39,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private static final I18n i18n = I18n.get(MaintenanceRequestViewerViewImpl.class);
 
-    private MaintenanceRequestCategoryMeta categoryMeta;
+    private MaintenanceRequestMetadata categoryMeta;
 
     private final MenuItem scheduleAction;
 
@@ -58,7 +58,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue());
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(), getValue().time().getValue());
                         return true;
                     }
                 }.show();
@@ -108,9 +108,9 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
         } else if (presenter != null) {
-            ((MaintenanceRequestViewerView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            ((MaintenanceRequestViewerView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta meta) {
+                public void onSuccess(MaintenanceRequestMetadata meta) {
                     MaintenanceRequestViewerViewImpl.this.categoryMeta = meta;
                     ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
                 }
@@ -131,14 +131,13 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     public void populate(MaintenanceRequestDTO value) {
         super.populate(value);
 
-        setEditingVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
+        StatusPhase phase = value.status().phase().getValue();
+        setEditingVisible(phase == StatusPhase.Submitted);
 
-        setActionVisible(scheduleAction, value.status().getValue() == MaintenanceRequestStatus.Submitted
-                || value.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        setActionVisible(resolveAction, value.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        setActionVisible(rateAction, value.status().getValue() == MaintenanceRequestStatus.Resolved);
-        setActionVisible(cancelAction, value.status().getValue() != MaintenanceRequestStatus.Cancelled
-                && value.status().getValue() != MaintenanceRequestStatus.Resolved);
+        setActionVisible(scheduleAction, phase == StatusPhase.Submitted || phase == StatusPhase.Scheduled);
+        setActionVisible(resolveAction, phase == StatusPhase.Scheduled);
+        setActionVisible(rateAction, phase == StatusPhase.Resolved);
+        setActionVisible(cancelAction, phase != StatusPhase.Cancelled && phase != StatusPhase.Resolved);
     }
 
     // Internals:

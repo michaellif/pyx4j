@@ -32,8 +32,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
-import com.propertyvista.domain.maintenance.IssuePriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -76,12 +76,12 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(today);
 
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), new Vector<MaintenanceRequestStatus>(MaintenanceRequestStatus.opened())));
+        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), MaintenanceRequestStatus.StatusPhase.opened()));
 
         if (proto.openWorkOrders() == member) {
             // already this is just to enforce the validity of the parameter
         } else if (proto.urgentWorkOrders() == member) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().issueClassification().priority(), IssuePriority.EMERGENCY));
+            criteria.add(PropertyCriterion.eq(criteria.proto().priority().level(), PriorityLevel.EMERGENCY));
         } else if (proto.outstandingWorkOrders1to2days() == member) {
             cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
             upperBound = new LogicalDate(cal.getTime());

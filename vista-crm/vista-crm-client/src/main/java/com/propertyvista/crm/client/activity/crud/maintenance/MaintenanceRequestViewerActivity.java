@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
+import java.sql.Time;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -25,15 +28,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
-import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> implements MaintenanceRequestViewerView.Presenter {
-    private MaintenanceRequestCategoryMeta meta;
+    private MaintenanceRequestMetadata meta;
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
@@ -47,13 +49,13 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void scheduleAction(ScheduleDataDTO data) {
+    public void scheduleAction(LogicalDate date, Time time) {
         ((MaintenanceCrudService) getService()).sheduleAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, data, getEntityId());
+        }, date, time, getEntityId());
     }
 
     @Override
@@ -87,11 +89,11 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
         if (meta == null) {
-            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                public void onSuccess(MaintenanceRequestMetadata result) {
                     meta = result;
                     callback.onSuccess(result);
                 }

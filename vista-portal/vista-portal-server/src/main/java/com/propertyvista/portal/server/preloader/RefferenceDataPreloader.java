@@ -24,12 +24,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.domain.maintenance.IssueClassification;
-import com.propertyvista.domain.maintenance.IssueElement;
-import com.propertyvista.domain.maintenance.IssueRepairSubject;
-import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryLevel;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.portal.server.preloader.ido.MaintenanceTreeImport;
 
@@ -51,63 +51,10 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createNamed(PhoneProvider.class, "Rogers", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
-//        createIssueClassifications();
         createMaintenanceCategories();
+        createMaintenancePriorities();
+        createMaintenanceStatuses();
         return null;
-    }
-
-    private void createIssueClassifications() {
-        List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
-                IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
-
-        Map<String, IssueElement> elements = new HashMap<String, IssueElement>();
-        for (MaintenanceTreeImport row : data) {
-            // Find or create Element
-            IssueElement element = elements.get(row.type().getValue() + row.rooms().getValue());
-            if (element == null) {
-                element = EntityFactory.create(IssueElement.class);
-                element.type().set(row.type());
-                element.name().set(row.rooms());
-                Persistence.service().persist(element);
-                elements.put(row.type().getValue() + row.rooms().getValue(), element);
-            }
-            // Find or create  Subject
-            IssueRepairSubject subject = null;
-            for (IssueRepairSubject subj : element.subjects()) {
-                if (subj.name().getValue().equals(row.repairSubject().getValue())) {
-                    subject = subj;
-                    break;
-                }
-            }
-            if (subject == null) {
-                subject = EntityFactory.create(IssueRepairSubject.class);
-                subject.issueElement().set(element);
-                subject.name().set(row.repairSubject());
-                Persistence.service().persist(subject);
-                element.subjects().add(subject);
-            }
-            // Find or create Subject Details
-            IssueSubjectDetails detail = null;
-            for (IssueSubjectDetails det : subject.details()) {
-                if (det.name().getValue().equals(row.subjectDetails().getValue())) {
-                    detail = det;
-                    break;
-                }
-            }
-            if (detail == null) {
-                detail = EntityFactory.create(IssueSubjectDetails.class);
-                detail.subject().set(subject);
-                detail.name().set(row.subjectDetails());
-                Persistence.service().persist(detail);
-                subject.details().add(detail);
-            }
-            // Create IssueClassification
-            IssueClassification classification = EntityFactory.create(IssueClassification.class);
-            classification.subjectDetails().set(detail);
-            classification.issue().set(row.issue());
-            classification.priority().set(row.priority());
-            Persistence.service().persist(classification);
-        }
     }
 
     private void createMaintenanceCategories() {
@@ -181,4 +128,23 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
         catLevel.level().setValue(level);
         return catLevel;
     }
+
+    private void createMaintenancePriorities() {
+        for (PriorityLevel level : PriorityLevel.values()) {
+            MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
+            priority.level().setValue(level);
+            priority.name().setValue(level.toString());
+            Persistence.service().persist(priority);
+        }
+    }
+
+    private void createMaintenanceStatuses() {
+        for (StatusPhase phase : StatusPhase.values()) {
+            MaintenanceRequestStatus status = EntityFactory.create(MaintenanceRequestStatus.class);
+            status.phase().setValue(phase);
+            status.name().setValue(phase.toString());
+            Persistence.service().persist(status);
+        }
+    }
+
 }

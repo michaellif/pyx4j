@@ -13,17 +13,9 @@
  */
 package com.propertyvista.biz.financial.maintenance.internal;
 
-import java.util.List;
+import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.lease.Tenant;
-
-public class MaintenanceInternalManager {
+public class MaintenanceInternalManager extends MaintenanceAbstractManager {
 
     private static class SingletonHolder {
         public static final MaintenanceInternalManager INSTANCE = new MaintenanceInternalManager();
@@ -32,24 +24,4 @@ public class MaintenanceInternalManager {
     static MaintenanceInternalManager instance() {
         return SingletonHolder.INSTANCE;
     }
-
-    protected void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant) {
-        maintenanceRequest.leaseParticipant().set(tenant);
-        Persistence.secureSave(maintenanceRequest);
-    }
-
-    protected List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.closed()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
-    }
-
-    protected List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.opened()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
-    }
-
 }

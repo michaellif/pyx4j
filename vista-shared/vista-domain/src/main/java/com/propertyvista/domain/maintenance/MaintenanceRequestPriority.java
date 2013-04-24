@@ -13,18 +13,28 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n
-public enum IssuePriority {
+public interface MaintenanceRequestPriority extends IEntity {
+    @I18n
+    public enum PriorityLevel {
 
-    STANDARD,
+        STANDARD,
 
-    EMERGENCY;
+        EMERGENCY;
 
-    @Override
-    public String toString() {
-        return I18nEnum.toString(this);
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
+
+    IPrimitive<PriorityLevel> level();
+
+    @ToString
+    IPrimitive<String> name();
 }

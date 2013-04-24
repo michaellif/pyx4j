@@ -13,12 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.sql.Time;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -26,7 +28,7 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
 
     interface Presenter extends IViewer.Presenter {
 
-        void scheduleAction(ScheduleDataDTO data);
+        void scheduleAction(LogicalDate date, Time time);
 
         void resolveAction();
 
@@ -34,6 +36,6 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
 
         void cancelAction();
 
-        void getCategoryMeta(AsyncCallback<MaintenanceRequestCategoryMeta> callback);
+        void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback);
     }
 }

@@ -53,9 +53,9 @@ import com.propertyvista.domain.financial.yardi.YardiService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.services.ARCodeAdapter;
 
-public class YardiIntegrationAgent {
+public class YardiARIntegrationAgent {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiIntegrationAgent.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiARIntegrationAgent.class);
 
     public enum YardiReversalType {
         NSF, Chargeback, Adjustment, Other

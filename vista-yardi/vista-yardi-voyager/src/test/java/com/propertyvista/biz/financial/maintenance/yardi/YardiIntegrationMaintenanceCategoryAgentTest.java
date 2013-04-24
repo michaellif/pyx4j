@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
+import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 public class YardiIntegrationMaintenanceCategoryAgentTest {
 
@@ -26,21 +27,15 @@ public class YardiIntegrationMaintenanceCategoryAgentTest {
      * @throws YardiServiceException
      */
     public static void main(String[] args) throws YardiServiceException {
-        YardiIntegrationMaintenanceCategoryAgent maintenanceCategoryAgent = new YardiIntegrationMaintenanceCategoryAgent() {
-            @Override
-            PmcYardiCredential getYardiCredential() {
-                PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
-                yc.username().setValue("propertyvista-srws");
-                yc.credential().setValue("55548");
-                yc.serverName().setValue("aspdb04");
-                yc.database().setValue("afqoml_live");
-                yc.platform().setValue(Platform.SQL);
-                yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
-                return yc;
-            }
-        };
+        PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
+        yc.username().setValue("propertyvista-srws");
+        yc.credential().setValue("55548");
+        yc.serverName().setValue("aspdb04");
+        yc.database().setValue("afqoml_live");
+        yc.platform().setValue(Platform.SQL);
+        yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
 
-        maintenanceCategoryAgent.getMaintenanceRequestCategories();
+        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta();
     }
 
 }

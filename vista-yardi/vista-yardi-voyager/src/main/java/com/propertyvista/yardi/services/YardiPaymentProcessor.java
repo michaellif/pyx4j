@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
+import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
@@ -49,7 +49,7 @@ public class YardiPaymentProcessor {
 
                 log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
                 // 1. get customer's YardiBillingAccount
-                YardiBillingAccount account = YardiIntegrationAgent.getYardiBillingAccount(cust);
+                YardiBillingAccount account = YardiARIntegrationAgent.getYardiBillingAccount(cust);
                 if (account == null) {
                     try {
                         Persistence.service().rollback();
@@ -68,7 +68,7 @@ public class YardiPaymentProcessor {
                     }
                     Payment payment = tr.getPayment();
                     // add new payment transaction
-                    Persistence.service().persist(YardiIntegrationAgent.createPayment(account, payment));
+                    Persistence.service().persist(YardiARIntegrationAgent.createPayment(account, payment));
                 }
                 Persistence.service().commit();
             }
@@ -90,7 +90,7 @@ public class YardiPaymentProcessor {
 
         // Create Payment transaction
         Transactions transactions = new Transactions();
-        transactions.setPayment(YardiIntegrationAgent.getPaymentReceipt(yp));
+        transactions.setPayment(YardiARIntegrationAgent.getPaymentReceipt(yp));
         return transactions;
     }
 
@@ -101,7 +101,7 @@ public class YardiPaymentProcessor {
 
         // Create Payment transaction
         Transactions transactions = new Transactions();
-        transactions.setPayment(YardiIntegrationAgent.getReceiptReversal(yr));
+        transactions.setPayment(YardiARIntegrationAgent.getReceiptReversal(yr));
         return transactions;
     }
 

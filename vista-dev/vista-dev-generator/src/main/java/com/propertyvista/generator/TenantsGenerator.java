@@ -25,7 +25,6 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -177,7 +176,6 @@ public class TenantsGenerator {
 
     public MaintenanceRequest createMntRequest() {
         MaintenanceRequest req = EntityFactory.create(MaintenanceRequest.class);
-        req.status().setValue(RandomUtil.randomEnum(MaintenanceRequestStatus.class));
         req.description().setValue(MntReqDescription[RandomUtil.randomInt(MntReqDescription.length - 1)]);
         if (RandomUtil.randomInt(5) > 2) {
             req.surveyResponse().rating().setValue(RandomUtil.randomInt(6));

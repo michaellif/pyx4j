@@ -23,12 +23,12 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
-    private MaintenanceRequestCategoryMeta meta;
+    private MaintenanceRequestMetadata meta;
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
         super(place, MaintenanceViewFactory.instance(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
@@ -41,11 +41,11 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestCategoryMeta> callback) {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
         if (meta == null) {
-            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestCategoryMeta>() {
+            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestCategoryMeta result) {
+                public void onSuccess(MaintenanceRequestMetadata result) {
                     meta = result;
                     callback.onSuccess(result);
                 }

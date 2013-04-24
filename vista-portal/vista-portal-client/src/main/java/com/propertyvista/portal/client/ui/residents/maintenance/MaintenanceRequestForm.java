@@ -23,14 +23,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private MaintenanceRequestCategoryMeta meta;
+    private MaintenanceRequestMetadata meta;
 
     private VerticalPanel categoryPanel;
 
@@ -40,7 +40,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
     }
 
-    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestCategoryMeta meta) {
+    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
         // set value again in case meta comes after the form was populated
@@ -76,13 +76,13 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         if (meta == null || choicesReady) {
             return;
         }
-        int levels = meta.levels().size();
+        int levels = meta.categoryLevels().size();
         // create selectors
         MaintenanceRequestCategoryChoice child = null;
         MaintenanceRequestCategoryChoice mrCategory = null;
         for (int i = 0; i < levels; i++) {
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
-            String choiceLabel = meta.levels().get(levels - 1 - i).name().getValue();
+            String choiceLabel = meta.categoryLevels().get(levels - 1 - i).name().getValue();
             if (i == 0) {
                 categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;

@@ -14,6 +14,11 @@
 package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -25,6 +30,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.maintenance.ServiceRequest;
 import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.entity.maintenance.meta.CustomConfig;
 import com.yardi.entity.maintenance.meta.YardiMaintenanceConfigMeta;
@@ -37,18 +43,34 @@ import com.yardi.ws.operations.GetServiceRequest_SearchResponse;
 import com.yardi.ws.operations.ServiceRequestXml_type0;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.financial.maintenance.yardi.YardiMaintenanceIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Messages;
+import com.propertyvista.yardi.mapper.MaintenanceRequestMapper;
 
+/*
+ * The agent is responsible for persisting all imported data in the DB by requests from MaintenanceFacade.
+ * The requesting facade will then grab the data directly from DB.
+ */
 public class YardiMaintenanceRequestsService {
 
     private static final Logger log = LoggerFactory.getLogger(YardiMaintenanceRequestsService.class);
+
+    private final Map<String, Date> lastTicketUpdate = new HashMap<String, Date>();
+
+    private final Map<String, Date> lastMetaUpdate = new HashMap<String, Date>();
+
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
 
     private static class SingletonHolder {
         public static final YardiMaintenanceRequestsService INSTANCE = new YardiMaintenanceRequestsService();
@@ -58,7 +80,75 @@ public class YardiMaintenanceRequestsService {
         return SingletonHolder.INSTANCE;
     }
 
-    public YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException {
+    public Date getMetaTimestamp() {
+        return lastMetaUpdate.get(getYardiCredential().pmc().namespace().getValue());
+    }
+
+    public Date getTicketTimestamp() {
+        return lastTicketUpdate.get(getYardiCredential().pmc().namespace().getValue());
+    }
+
+    /*
+     * We grab Metadata on first request and then every time a new category found in requested ticket.
+     */
+    public void loadMaintenanceRequestMeta() throws YardiServiceException {
+        assert VistaFeatures.instance().yardiIntegration();
+
+        PmcYardiCredential yc = getYardiCredential();
+        if (lastMetaUpdate.get(yc.pmc().namespace().getValue()) == null) {
+            loadMeta(yc);
+        }
+    }
+
+    /*
+     * We only grab tickets that have been modified since last request. If last request date is empty
+     * we get the latest update date from previously persisted tickets.
+     */
+    public void loadMaintenanceRequests() throws YardiServiceException {
+        assert VistaFeatures.instance().yardiIntegration();
+        PmcYardiCredential yc = getYardiCredential();
+        Date lastModified = lastTicketUpdate.get(yc.pmc().namespace().getValue());
+        if (lastModified == null) {
+            lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
+        }
+        loadRequests(yc, lastModified);
+    }
+
+    public void postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
+        ServiceRequest serviceRequest = new MaintenanceRequestMapper().map(request);
+        ServiceRequests requests = new ServiceRequests();
+        requests.getServiceRequest().add(serviceRequest);
+
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), requests);
+    }
+
+    protected void loadRequests(PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
+        Date now = SystemDateManager.getDate();
+        GetServiceRequest_Search params = new GetServiceRequest_Search();
+        params.setFromDate(dateFormat.format(fromDate));
+        ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
+        for (ServiceRequest request : newRequests.getServiceRequest()) {
+            processor.mergeRequest(request);
+        }
+        lastTicketUpdate.put(yc.pmc().namespace().getValue(), now);
+    }
+
+    protected void loadMeta(PmcYardiCredential yc) throws YardiServiceException {
+        Date now = SystemDateManager.getDate();
+        YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
+        YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
+        processor.mergeCategories(meta.getCategories());
+        processor.mergeStatuses(meta.getStatuses());
+        processor.mergePriorities(meta.getPriorities());
+        lastMetaUpdate.put(yc.pmc().namespace().getValue(), now);
+    }
+
+    protected PmcYardiCredential getYardiCredential() {
+        return VistaDeployment.getPmcYardiCredential();
+    }
+
+    protected YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException {
         try {
 
             YardiClient client = ServerSideFactory.create(YardiClient.class);
@@ -92,35 +182,19 @@ public class YardiMaintenanceRequestsService {
         }
     }
 
-    public ServiceRequests getOpenMaintenanceRequests(PmcYardiCredential yc, String propertyCode, String residentCode) throws YardiServiceException {
-        return getRequestsByParameters(yc, "Open", propertyCode, residentCode);
-    }
-
-    public ServiceRequests getClosedMaintenanceRequests(PmcYardiCredential yc, String propertyCode, String residentCode) throws YardiServiceException {
-        return getRequestsByParameters(yc, "Closed", propertyCode, residentCode);
-    }
-
-    private ServiceRequests getRequestsByParameters(PmcYardiCredential yc, String openOrClosed, String propertyCode, String residentCode)
-            throws YardiServiceException {
+    protected ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search params) throws YardiServiceException {
         try {
-            Validate.notEmpty(residentCode, "residentCode can not be empty or null");
-            Validate.notEmpty(propertyCode, "propertyCode can not be empty or null");
-
             YardiClient client = ServerSideFactory.create(YardiClient.class);
             client.setPmcYardiCredential(yc);
             client.transactionIdStart();
             client.setCurrentAction(Action.GetServiceRequests);
 
-            GetServiceRequest_Search params = new GetServiceRequest_Search();
             params.setUserName(yc.username().getValue());
             params.setPassword(yc.credential().getValue());
             params.setServerName(yc.serverName().getValue());
             params.setDatabase(yc.database().getValue());
             params.setPlatform(yc.platform().getValue().name());
             params.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
-            params.setYardiPropertyId(propertyCode);
-            params.setResidentCode(residentCode);
-            params.setOpenOrClosed(openOrClosed);
 
             GetServiceRequest_SearchResponse response = client.getMaintenanceRequestsService().getServiceRequest_Search(params);
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
@@ -140,7 +214,7 @@ public class YardiMaintenanceRequestsService {
         }
     }
 
-    public void postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException {
+    protected void postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException {
         try {
             Validate.notNull(requests, "requests can not be null");
 

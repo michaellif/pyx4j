@@ -13,23 +13,22 @@
  */
 package com.propertyvista.biz.financial.maintenance.yardi;
 
+import java.sql.Time;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean labelsOnly) {
-        return MaintenanceYardiCategoryManager.instance().getMaintenanceRequestCategoryMeta(labelsOnly);
+    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly) {
+        return MaintenanceMetadataYardiManager.instance().getMaintenanceMetadata(labelsOnly);
     }
 
     @Override
@@ -48,19 +47,33 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
-        MaintenanceYardiManager.instance().cancelMaintenanceRequest(dto);
+    public MaintenanceRequest getMaintenanceRequest(String requestId) {
+        return MaintenanceYardiManager.instance().getMaintenanceRequest(requestId);
     }
 
     @Override
-    public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
-        throw new Error("This method should not be called for Yardi maintenance requests");
+    public MaintenanceRequest createNewRequest(Tenant tenant) {
+        return MaintenanceYardiManager.instance().createNewRequest(tenant);
     }
 
     @Override
-    public MaintenanceRequest getMaintenanceRequest(String id) {
-        // TODO Auto-generated method stub
-        return null;
+    public void cancelMaintenanceRequest(MaintenanceRequest request) {
+        MaintenanceYardiManager.instance().cancelMaintenanceRequest(request);
+    }
+
+    @Override
+    public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
+        MaintenanceYardiManager.instance().rateMaintenanceRequest(request, rate);
+    }
+
+    @Override
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
+        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, date, time);
+    }
+
+    @Override
+    public void resolveMaintenanceRequest(MaintenanceRequest request) {
+        MaintenanceYardiManager.instance().resolveMaintenanceRequest(request);
     }
 
 }

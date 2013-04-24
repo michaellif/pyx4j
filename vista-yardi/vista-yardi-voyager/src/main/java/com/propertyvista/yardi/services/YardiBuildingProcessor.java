@@ -29,7 +29,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
+import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -136,7 +136,7 @@ public class YardiBuildingProcessor {
         Map<String, RTUnit> map = new HashMap<String, RTUnit>();
 
         for (RTCustomer customer : property.getRTCustomer()) {
-            String unitId = YardiIntegrationAgent.getUnitId(customer);
+            String unitId = YardiARIntegrationAgent.getUnitId(customer);
             if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
                 map.put(unitId, customer.getRTUnit());
             }

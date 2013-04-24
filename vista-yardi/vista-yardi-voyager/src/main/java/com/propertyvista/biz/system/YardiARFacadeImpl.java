@@ -24,7 +24,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
-public class YardiProcessFacadeImpl implements YardiProcessFacade {
+public class YardiARFacadeImpl implements YardiARFacade {
 
     @Override
     public void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {

@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -32,21 +31,15 @@ public class YardiIntegrationMaintenanceAgentTest {
      * @throws YardiServiceException
      */
     public static void main(String[] args) throws YardiServiceException {
-        YardiIntegrationMaintenanceAgent maintenanceAgent = new YardiIntegrationMaintenanceAgent() {
-            @Override
-            PmcYardiCredential getYardiCredential() {
-                PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
-                yc.username().setValue("propertyvista-srws");
-                yc.credential().setValue("55548");
-                yc.serverName().setValue("aspdb04");
-                yc.database().setValue("afqoml_live");
-                yc.platform().setValue(Platform.SQL);
-                yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
-                return yc;
-            }
-        };
+        PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
+        yc.username().setValue("propertyvista-srws");
+        yc.credential().setValue("55548");
+        yc.serverName().setValue("aspdb04");
+        yc.database().setValue("afqoml_live");
+        yc.platform().setValue(Platform.SQL);
+        yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
 
-        maintenanceAgent.getOpenMaintenanceRequests(createTenant());
+        //maintenanceAgent.getOpenMaintenanceRequests(createTenant());
         //maintenanceAgent.getClosedMaintenanceRequests(createTenant());
         //maintenanceAgent.postMaintenanceRequest(createMaintenanceRequest(createTenant()));
         //maintenanceAgent.cancelMaintenanceRequest(createMaintenanceRequest(createTenant()));
@@ -77,7 +70,7 @@ public class YardiIntegrationMaintenanceAgentTest {
 
         //req.submitted().setValue(new LogicalDate());
         req.updated().setValue(new LogicalDate());
-        req.status().setValue(MaintenanceRequestStatus.Submitted);
+        // TODO req.status().setValue(MaintenanceRequestStatus.Submitted);
         return req;
     }
 }

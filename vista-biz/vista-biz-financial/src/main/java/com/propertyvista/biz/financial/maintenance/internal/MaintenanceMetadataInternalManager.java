@@ -11,22 +11,18 @@
  * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.biz.financial.maintenance.yardi;
+package com.propertyvista.biz.financial.maintenance.internal;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager;
 
-public class MaintenanceYardiCategoryManager {
+public class MaintenanceMetadataInternalManager extends MaintenanceMetadataAbstractManager {
 
     private static class SingletonHolder {
-        public static final MaintenanceYardiCategoryManager INSTANCE = new MaintenanceYardiCategoryManager();
+        public static final MaintenanceMetadataInternalManager INSTANCE = new MaintenanceMetadataInternalManager();
     }
 
-    static MaintenanceYardiCategoryManager instance() {
+    static MaintenanceMetadataInternalManager instance() {
         return SingletonHolder.INSTANCE;
-    }
-
-    protected MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean labelsOnly) {
-        return null;
     }
 
 }

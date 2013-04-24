@@ -19,7 +19,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.maintenance.IssueElementType;
-import com.propertyvista.domain.maintenance.IssuePriority;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Transient
@@ -34,7 +33,4 @@ public interface MaintenanceTreeImport extends IEntity {
     IPrimitive<String> subjectDetails();
 
     IPrimitive<String> issue();
-
-    IPrimitive<IssuePriority> priority();
-
 }

@@ -18,8 +18,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -33,8 +33,10 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -48,7 +50,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private FormFlexPanel surveyPanel;
 
-    private MaintenanceRequestCategoryMeta meta;
+    private final PrioritySelector priority = new PrioritySelector();
+
+    private final StatusSelector status = new StatusSelector();
+
+    private MaintenanceRequestMetadata meta;
 
     private boolean choicesReady = false;
 
@@ -57,7 +63,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         selectTab(addTab(createGeneralTab()));
     }
 
-    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestCategoryMeta meta) {
+    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
         // set value again in case meta comes after the form was populated
@@ -94,6 +100,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         }), 25).build());
         panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().priority(), priority), 10).build());
         // create category selection panel
         categoryPanel = new VerticalPanel();
         panel.setWidget(row + 1, 0, categoryPanel);
@@ -118,7 +125,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         {
             int innerRow = -1;
             statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
+            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), status), 10).build());
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
@@ -144,13 +151,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         if (meta == null || choicesReady) {
             return;
         }
-        int levels = meta.levels().size();
+        int levels = meta.categoryLevels().size();
         // create selectors
         MaintenanceRequestCategoryChoice child = null;
         MaintenanceRequestCategoryChoice mrCategory = null;
         for (int i = 0; i < levels; i++) {
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
-            String choiceLabel = meta.levels().get(levels - 1 - i).name().getValue();
+            String choiceLabel = meta.categoryLevels().get(levels - 1 - i).name().getValue();
             if (i == 0) {
                 categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;
@@ -163,6 +170,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             child = choice;
         }
         mrCategory.setOptionsMeta(meta);
+        priority.setOptions(meta.priorities());
+        status.setOptions(meta.statuses());
         choicesReady = true;
     }
 
@@ -181,20 +190,51 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
-        get(proto().scheduledDate()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        get(proto().scheduledTime()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
+        StatusPhase phase = mr.status().phase().getValue();
+        get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTime()).setVisible(phase == StatusPhase.Scheduled);
 
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
         get(proto().updated()).setVisible(!mr.updated().isNull());
         get(proto().status()).setVisible(!mr.submitted().isNull());
 
         statusPanel.setVisible(!mr.category().isNull());
-        surveyPanel.setVisible(mr.status().getValue() == MaintenanceRequestStatus.Resolved);
+        surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
         if (isEditable()) {
             get(proto().leaseParticipant()).setEditable(getValue().leaseParticipant().isNull());
         }
 
         get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+    }
+
+    class PrioritySelector extends CComboBox<MaintenanceRequestPriority> {
+        public PrioritySelector() {
+            super();
+        }
+
+        @Override
+        public String getItemName(MaintenanceRequestPriority o) {
+            if (o == null) {
+                return super.getItemName(o);
+            } else {
+                return o.getStringView();
+            }
+        }
+    }
+
+    class StatusSelector extends CComboBox<MaintenanceRequestStatus> {
+        public StatusSelector() {
+            super();
+        }
+
+        @Override
+        public String getItemName(MaintenanceRequestStatus o) {
+            if (o == null) {
+                return super.getItemName(o);
+            } else {
+                return o.getStringView();
+            }
+        }
     }
 }

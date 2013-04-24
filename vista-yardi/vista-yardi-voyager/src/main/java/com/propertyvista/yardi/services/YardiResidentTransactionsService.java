@@ -55,7 +55,7 @@ import com.pyx4j.server.mail.SMTPMailServiceConfig;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
+import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -274,13 +274,13 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
                     if (tr != null) {
                         if (tr.getCharge() != null) {
                             log.info("          Updating charge");
-                            InvoiceLineItem charge = YardiIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
+                            InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
                             Persistence.service().persist(charge);
                             state.addCharge(charge.amount().getValue());
                         }
                         if (tr.getPayment() != null) {
                             log.info("          Updating payment");
-                            YardiPayment payment = YardiIntegrationAgent.createPayment(account, tr.getPayment());
+                            YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
                             Persistence.service().persist(payment);
                             state.addPayment(payment.amount().getValue());
 

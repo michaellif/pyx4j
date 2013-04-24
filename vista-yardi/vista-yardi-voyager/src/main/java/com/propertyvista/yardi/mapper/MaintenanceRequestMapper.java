@@ -24,18 +24,81 @@ import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.maintenance.ServiceRequest;
 import com.yardi.entity.maintenance.ServiceRequests;
+import com.yardi.entity.maintenance.meta.Categories;
+import com.yardi.entity.maintenance.meta.Category;
+import com.yardi.entity.maintenance.meta.Priorities;
+import com.yardi.entity.maintenance.meta.Status;
+import com.yardi.entity.maintenance.meta.Statuses;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.domain.maintenance.IssuePriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 
 public class MaintenanceRequestMapper {
+
+    public MaintenanceRequestCategory map(Categories categories) {
+        MaintenanceRequestCategory topCategory = EntityFactory.create(MaintenanceRequestCategory.class);
+
+        if (categories != null) {
+            for (Category yCategory : categories.getCategory()) {
+                MaintenanceRequestCategory category = createCategory(yCategory.getName());
+                category.subCategories().addAll(getSubCategories(yCategory.getSubCategory()));
+
+                topCategory.subCategories().add(category);
+            }
+        }
+
+        return topCategory;
+    }
+
+    public List<MaintenanceRequestStatus> map(Statuses statuses) {
+        List<MaintenanceRequestStatus> result = new ArrayList<MaintenanceRequestStatus>();
+        if (statuses != null) {
+            for (Status status : statuses.getStatus()) {
+                for (Object statusName : status.getContent()) {
+                    MaintenanceRequestStatus mrStatus = EntityFactory.create(MaintenanceRequestStatus.class);
+                    mrStatus.name().setValue(statusName.toString());
+                    result.add(mrStatus);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<MaintenanceRequestPriority> map(Priorities priorities) {
+        List<MaintenanceRequestPriority> result = new ArrayList<MaintenanceRequestPriority>();
+        if (priorities != null) {
+            for (String priorityName : priorities.getPriority()) {
+                MaintenanceRequestPriority mrPriority = EntityFactory.create(MaintenanceRequestPriority.class);
+                mrPriority.name().setValue(priorityName);
+                result.add(mrPriority);
+            }
+        }
+        return result;
+    }
+
+    private List<MaintenanceRequestCategory> getSubCategories(List<String> ySubCategories) {
+        List<MaintenanceRequestCategory> subCategories = new ArrayList<MaintenanceRequestCategory>();
+
+        for (String ySubCategory : ySubCategories) {
+            MaintenanceRequestCategory subCategory = createCategory(ySubCategory);
+            subCategories.add(subCategory);
+        }
+
+        return subCategories;
+    }
+
+    private MaintenanceRequestCategory createCategory(String name) {
+        MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
+        category.name().setValue(name);
+        return category;
+    }
 
     public List<MaintenanceRequest> map(ServiceRequests serviceRequests) {
         List<MaintenanceRequest> maintenanceRequests = new ArrayList<MaintenanceRequest>();
@@ -83,26 +146,29 @@ public class MaintenanceRequestMapper {
             req.updated().setValue(new LogicalDate(serviceRequest.getUpdateDate().toGregorianCalendar().getTimeInMillis()));
         }
 
-        req.status().setValue(getStatus(serviceRequest.getCurrentStatus()));
+// TODO        req.status().setValue(getStatus(serviceRequest.getCurrentStatus()));
 
         return req;
     }
 
-    private IssuePriority getPriority(String priority) {
-        for (IssuePriority issuePriority : IssuePriority.values()) {
-            if (issuePriority.name().equalsIgnoreCase(priority)) {
-                return issuePriority;
-            }
-        }
-        return IssuePriority.STANDARD;
+    private MaintenanceRequestPriority getPriority(String priority) {
+// TODO
+//        for (MaintenanceRequestPriority issuePriority : MaintenanceRequestPriority.values()) {
+//            if (issuePriority.name().equalsIgnoreCase(priority)) {
+//                return issuePriority;
+//            }
+//        }
+//        return MaintenanceRequestPriority.STANDARD;
+        return null;
     }
 
     private MaintenanceRequestStatus getStatus(String currentStatus) {
-        for (MaintenanceRequestStatus status : MaintenanceRequestStatus.values()) {
-            if (status.name().equalsIgnoreCase(currentStatus)) {
-                return status;
-            }
-        }
+// TODO
+//        for (MaintenanceRequestStatus status : MaintenanceRequestStatus.values()) {
+//            if (status.name().equalsIgnoreCase(currentStatus)) {
+//                return status;
+//            }
+//        }
         return null;
     }
 

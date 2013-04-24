@@ -20,7 +20,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface YardiProcessFacade {
+public interface YardiARFacade {
 
     void doAllImport(ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException;
 

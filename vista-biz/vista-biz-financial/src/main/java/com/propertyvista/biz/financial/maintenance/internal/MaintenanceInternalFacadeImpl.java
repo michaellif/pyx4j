@@ -13,29 +13,22 @@
  */
 package com.propertyvista.biz.financial.maintenance.internal;
 
+import java.sql.Time;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean levelsOnly) {
-        return MaintenanceInternalCategoryManager.instance().getMaintenanceRequestCategoryMeta(levelsOnly);
+    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
+        return MaintenanceMetadataInternalManager.instance().getMaintenanceMetadata(levelsOnly);
     }
 
     @Override
@@ -49,46 +42,37 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant) {
-        MaintenanceInternalManager.instance().postMaintenanceRequest(maintenanceRequest, tenant);
+    public void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant) {
+        MaintenanceInternalManager.instance().postMaintenanceRequest(request, tenant);
     }
 
     @Override
-    public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
-        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
-        if (rs.size() > 0) {
-            MaintenanceRequest req = rs.get(0);
-            req.status().setValue(MaintenanceRequestStatus.Cancelled);
-            req.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
-            Persistence.service().merge(req);
-            Persistence.service().commit();
-            callback.onSuccess(null);
-        } else {
-            callback.onFailure(new Throwable("Ticket not found."));
-        }
+    public void cancelMaintenanceRequest(MaintenanceRequest request) {
+        MaintenanceInternalManager.instance().cancelMaintenanceRequest(request);
     }
 
     @Override
-    public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), dto.id()));
-        List<MaintenanceRequest> rs = Persistence.service().query(criteria);
-        if (rs.size() > 0) {
-            MaintenanceRequest req = rs.get(0);
-            req.surveyResponse().rating().setValue(rate);
-            Persistence.service().merge(req);
-            Persistence.service().commit();
-            callback.onSuccess(null);
-        } else {
-            callback.onFailure(new Throwable("Ticket not found."));
-        }
+    public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
+        MaintenanceInternalManager.instance().rateMaintenanceRequest(request, rate);
     }
 
     @Override
-    public MaintenanceRequest getMaintenanceRequest(String id) {
-        // TODO Auto-generated method stub
-        return null;
+    public MaintenanceRequest getMaintenanceRequest(String requestId) {
+        return MaintenanceInternalManager.instance().getMaintenanceRequest(requestId);
+    }
+
+    @Override
+    public MaintenanceRequest createNewRequest(Tenant tenant) {
+        return MaintenanceInternalManager.instance().createNewRequest(tenant);
+    }
+
+    @Override
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
+        MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, date, time);
+    }
+
+    @Override
+    public void resolveMaintenanceRequest(MaintenanceRequest request) {
+        MaintenanceInternalManager.instance().resolveMaintenanceRequest(request);
     }
 }

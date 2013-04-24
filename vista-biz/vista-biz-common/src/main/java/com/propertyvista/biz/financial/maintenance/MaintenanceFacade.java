@@ -13,16 +13,15 @@
  */
 package com.propertyvista.biz.financial.maintenance;
 
+import java.sql.Time;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryMeta;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 
 /*
  * Open/Update/Close request
@@ -30,18 +29,24 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
  */
 public interface MaintenanceFacade {
 
-    MaintenanceRequestCategoryMeta getMaintenanceRequestCategoryMeta(boolean labelsOnly);
+    MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly);
 
     List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant);
 
     List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant);
 
-    MaintenanceRequest getMaintenanceRequest(String id);
+    MaintenanceRequest createNewRequest(Tenant tenant);
 
-    void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant);
+    MaintenanceRequest getMaintenanceRequest(String requestId);
 
-    void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto);
+    void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant);
 
-    void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate);
+    void cancelMaintenanceRequest(MaintenanceRequest request);
+
+    void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate);
+
+    void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time);
+
+    void resolveMaintenanceRequest(MaintenanceRequest request);
 
 }
