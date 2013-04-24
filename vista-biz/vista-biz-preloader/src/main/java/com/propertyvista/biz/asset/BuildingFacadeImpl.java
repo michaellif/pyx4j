@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -50,6 +51,7 @@ public class BuildingFacadeImpl implements BuildingFacade {
         }
 
         PublicDataUpdater.updateIndexData(building);
+        ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
         return building;
     }
 

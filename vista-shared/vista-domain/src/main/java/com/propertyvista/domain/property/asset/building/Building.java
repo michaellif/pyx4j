@@ -139,7 +139,7 @@ public interface Building extends PolicyNode {
     // parent <-> child relationship:
 
     @Owned
-    @Detached(level = AttachLevel.IdOnly)
+    @Detached(level = AttachLevel.Detached)
     ISet<Floorplan> floorplans();
 
     @Owned(cascade = {})

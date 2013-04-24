@@ -28,4 +28,6 @@ public interface PolicyFacade {
 
     <T extends PolicyNode> List<T> getGovernedNodesOfType(Policy policy, Class<T> nodeType);
 
+    public void resetPolicyCache();
+
 }

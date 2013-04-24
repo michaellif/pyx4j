@@ -53,6 +53,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         Persistence.service().retrieveMember(entity.amenities());
         Persistence.service().retrieveMember(entity.utilities());
+        //TODO count only
+        Persistence.service().retrieveMember(entity.floorplans(), AttachLevel.IdOnly);
     }
 
     @Override

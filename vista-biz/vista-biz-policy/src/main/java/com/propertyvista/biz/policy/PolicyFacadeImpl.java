@@ -56,4 +56,9 @@ public class PolicyFacadeImpl implements PolicyFacade {
         return PolicyManager.descendantsOf(policy.node(), nodeType);
     }
 
+    @Override
+    public void resetPolicyCache() {
+        PolicyManager.resetPolicyCache();
+    }
+
 }

@@ -26,6 +26,7 @@ import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -54,6 +55,7 @@ public class YardiBuildingProcessor {
 
     public AptUnit updateUnit(String propertyCode, RTUnit unit) throws YardiServiceException {
         Building building = getBuilding(propertyCode);
+        Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         AptUnit importedUnit = new UnitsMapper().map(unit);
         return updateUnitForBuilding(importedUnit, building);
 

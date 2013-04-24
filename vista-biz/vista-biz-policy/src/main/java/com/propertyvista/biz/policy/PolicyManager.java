@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -64,8 +65,13 @@ class PolicyManager {
             throw new IllegalArgumentException("PolicyNode must not be null");
         }
 
-        PolicyNode currentNode = node.duplicate();
+        PolicyNode currentNode = node;
+        policy = CacheService.get(policyCacheKey(policyClass, currentNode));
+        if (policy != null) {
+            return policy;
+        }
         if (currentNode.isValueDetached()) {
+            currentNode = currentNode.duplicate();
             Persistence.service().retrieve(currentNode);
         }
         do {
@@ -73,7 +79,6 @@ class PolicyManager {
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), currentNode));
             policy = Persistence.service().retrieve(criteria);
             if (policy != null) {
-                policy = correctAccordingToVistaFeatures(policy);
                 break;
             }
             currentNode = parentOf(currentNode);
@@ -88,8 +93,19 @@ class PolicyManager {
                 nodeStringView = node.getStringView();
             }
             throw new PolicyNotFoundException(policyClass, nodeStringView);
+        } else {
+            policy = correctAccordingToVistaFeatures(policy);
+            CacheService.put(policyCacheKey(policyClass, node), policy);
+            return policy;
         }
-        return policy;
+    }
+
+    private static String policyCacheKey(final Class<? extends Policy> policyClass, PolicyNode node) {
+        return PolicyManager.class.getName() + policyClass.getName() + node.getPrimaryKey() + node.getEntityMeta().getEntityClass().getName();
+    }
+
+    static void resetPolicyCache() {
+        CacheService.reset();
     }
 
     // TODO move this method to another class (i.e. something that manages/defines heirarchy)

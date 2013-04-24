@@ -91,7 +91,7 @@ public class UnitMarshaller implements Marshaller<AptUnit, UnitIO> {
         unit.building().set(building);
 
         // floorplan
-        Persistence.service().retrieve(building.floorplans());
+        Persistence.service().retrieveMember(building.floorplans());
         for (Floorplan floorplan : building.floorplans()) {
             if (floorplan.name().getValue().equals(unitIO.floorplanName)) {
                 if (!floorplan.bathrooms().getValue().equals(unitIO.baths.getValue())) {
