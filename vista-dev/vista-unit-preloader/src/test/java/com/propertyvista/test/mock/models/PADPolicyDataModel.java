@@ -17,9 +17,11 @@ import java.util.HashMap;
 
 import org.apache.commons.lang.NotImplementedException;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
@@ -52,6 +54,9 @@ public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
             getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.rent), OwingBalanceType.LastBill);
             getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.outdoorParking), OwingBalanceType.ToDateTotal);
             getConfig().padBalanceTypeMap.put(getDataModel(ARCodeDataModel.class).getARCode(ARCodeDataModel.Code.largeLocker), OwingBalanceType.ToDateTotal);
+            getConfig().padBalanceTypeMap.put(ServerSideFactory.create(ARFacade.class).getReservedARCode(ARCode.Type.AccountCredit),
+                    OwingBalanceType.ToDateTotal);
+
         }
         for (ARCode code : getConfig().padBalanceTypeMap.keySet()) {
             PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
