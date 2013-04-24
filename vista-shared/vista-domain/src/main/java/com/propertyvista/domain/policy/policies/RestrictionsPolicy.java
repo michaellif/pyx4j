@@ -15,6 +15,7 @@ package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -40,4 +41,9 @@ public interface RestrictionsPolicy extends Policy, TenantsAccessiblePolicy {
     @Caption(description = "Maximum allowed pets quantity")
     IPrimitive<Integer> maxPets();
 
+    @NotNull
+    IPrimitive<Boolean> enforceAgeOfMajority();
+
+    @NotNull
+    IPrimitive<Integer> ageOfMajority();
 }

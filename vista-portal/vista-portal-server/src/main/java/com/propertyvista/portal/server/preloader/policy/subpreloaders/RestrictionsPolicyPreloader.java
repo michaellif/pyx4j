@@ -13,9 +13,13 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<RestrictionsPolicy> {
@@ -30,23 +34,60 @@ public class RestrictionsPolicyPreloader extends AbstractPolicyPreloader<Restric
 
     private static final boolean OCCUPANTS_OVER_18_ARE_APPLICANTS = false;
 
+    private Integer ageOfMajority;
+
+    private String provinceCode;
+
     public RestrictionsPolicyPreloader() {
         super(RestrictionsPolicy.class);
+        this.ageOfMajority = null;
+    }
+
+    public RestrictionsPolicyPreloader ageOfMajority(int ageOfMajority) {
+        this.ageOfMajority = ageOfMajority;
+        return this;
+    }
+
+    public RestrictionsPolicyPreloader province(String provinceCode) {
+        this.provinceCode = provinceCode;
+        return this;
+    }
+
+    @Override
+    public PolicyNode getTopNode() {
+        if (provinceCode == null) {
+            return super.getTopNode();
+        } else {
+            EntityQueryCriteria<Province> c = EntityQueryCriteria.create(Province.class);
+            c.eq(c.proto().code(), provinceCode);
+            Province p = Persistence.service().retrieve(c);
+            if (p == null) {
+                throw new Error("Province with code '" + provinceCode + "' was not found");
+            }
+            return p;
+        }
     }
 
     @Override
     protected RestrictionsPolicy createPolicy(StringBuilder log) {
-        RestrictionsPolicy misc = EntityFactory.create(RestrictionsPolicy.class);
+        RestrictionsPolicy policy = EntityFactory.create(RestrictionsPolicy.class);
 
-        misc.occupantsOver18areApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
-        misc.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
-        misc.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
-        misc.maxLockers().setValue(MAX_LOCKERS);
-        misc.maxPets().setValue(MAX_PETS);
+        policy.occupantsOver18areApplicants().setValue(OCCUPANTS_OVER_18_ARE_APPLICANTS);
+        policy.occupantsPerBedRoom().setValue(OCCUPANTS_PER_BEDROOM);
+        policy.maxParkingSpots().setValue(MAX_PARKING_SPOTS);
+        policy.maxLockers().setValue(MAX_LOCKERS);
+        policy.maxPets().setValue(MAX_PETS);
 
-        log.append(misc.getStringView());
+        if (ageOfMajority != null) {
+            policy.enforceAgeOfMajority().setValue(true);
+            policy.ageOfMajority().setValue(ageOfMajority);
+        } else {
+            policy.enforceAgeOfMajority().setValue(false);
+        }
 
-        return misc;
+        log.append(policy.getStringView());
+
+        return policy;
 
     }
 
