@@ -15,7 +15,9 @@ package com.propertyvista.portal.client.ui.residents.personalinfo;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -38,19 +41,23 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
     private static final I18n i18n = I18n.get(PersonalInfoForm.class);
 
+    private PersonalInfoView.Presenter presenter;
+
     public PersonalInfoForm() {
         super(ResidentDTO.class, new VistaEditorsComponentFactory());
+    }
+
+    public void setPresenter(PersonalInfoView.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
         Widget widget = null;
-
         int row = -1;
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-
         container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().name().firstName(), new CLabel<String>()), 12).build());
         widget.getElement().getStyle().setMarginTop(20, Unit.PX);
 
@@ -62,10 +69,25 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
         container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().email()), 20).build());
         widget.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
-        //Emergency Contacts
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
         container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
+
+        if (isViewable()) {
+            container.setH1(++row, 0, 1, i18n.tr("Miscellaneous"));
+
+            Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.resetPassword();
+                }
+            });
+            resetPassword.asWidget().getElement().getStyle().setMarginLeft(1, Unit.EM);
+            resetPassword.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            resetPassword.asWidget().getElement().getStyle().setColor("#F3931F");
+
+            container.setWidget(++row, 0, resetPassword);
+        }
 
         return container;
     }

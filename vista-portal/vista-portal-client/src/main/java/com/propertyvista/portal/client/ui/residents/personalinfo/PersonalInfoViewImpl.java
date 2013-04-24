@@ -13,12 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
-
-import com.pyx4j.widgets.client.Anchor;
-
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
@@ -26,19 +20,11 @@ public class PersonalInfoViewImpl extends ViewImpl<ResidentDTO> implements Perso
 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm(), false, true);
+    }
 
-        Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
-            @Override
-            public void execute() {
-                ((PersonalInfoView.Presenter) getPresenter()).resetPassword();
-            }
-        });
-        resetPassword.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        resetPassword.asWidget().getElement().getStyle().setMarginRight(30, Unit.PX);
-        resetPassword.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        resetPassword.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        resetPassword.asWidget().getElement().getStyle().setColor("#F3931F");
-
-        add(resetPassword);
+    @Override
+    public void setPresenter(com.propertyvista.portal.client.ui.residents.ViewBase.Presenter<ResidentDTO> presenter) {
+        super.setPresenter(presenter);
+        ((PersonalInfoForm) getForm()).setPresenter((PersonalInfoView.Presenter) presenter);
     }
 }
