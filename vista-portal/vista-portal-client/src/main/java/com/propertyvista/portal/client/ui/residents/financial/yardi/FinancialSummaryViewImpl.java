@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.financial.yardi;
 
 import com.google.gwt.user.client.Command;
 
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewBase;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
@@ -36,7 +36,7 @@ public class FinancialSummaryViewImpl extends ViewImpl<YardiFinancialSummaryDTO>
     }
 
     @Override
-    public void setPresenter(View.Presenter<YardiFinancialSummaryDTO> presenter) {
+    public void setPresenter(ViewBase.Presenter<YardiFinancialSummaryDTO> presenter) {
         this.presenter = (FinancialSummaryView.Presenter) presenter;
     }
 

@@ -60,12 +60,13 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void cancel() {
-        History.back();
+    public void edit(Key id) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void save(LeasePaymentMethod entity) {
-        // TODO Auto-generated method stub
+    public void back() {
+        History.back();
     }
 }

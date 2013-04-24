@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.activity.residents;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
@@ -63,32 +62,38 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
 
     }
 
-    @Override
-    public void save(ResidentDTO info) {
-        srv.save(new DefaultAsyncCallback<Key>() {
-            @Override
-            public void onSuccess(Key result) {
-                srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
-                    @Override
-                    public void onSuccess(ResidentDTO result) {
-                        view.populate(result);
-                        view.showNote("Operation completed successfully.");
-                    }
-
-                }, null, AbstractCrudService.RetrieveTraget.View);
-            }
-
-        }, info);
-    }
-
-    @Override
-    public void cancel() {
-        History.back();
-    }
+//    @Override
+//    public void save(ResidentDTO info) {
+//        srv.save(new DefaultAsyncCallback<Key>() {
+//            @Override
+//            public void onSuccess(Key result) {
+//                srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
+//                    @Override
+//                    public void onSuccess(ResidentDTO result) {
+//                        view.populate(result);
+//                        view.showNote("Operation completed successfully.");
+//                    }
+//
+//                }, null, AbstractCrudService.RetrieveTraget.View);
+//            }
+//
+//        }, info);
+//    }
 
     @Override
     public void resetPassword() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
     }
 
+    @Override
+    public void edit(Key id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void back() {
+        // TODO Auto-generated method stub
+
+    }
 }

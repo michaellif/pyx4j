@@ -61,17 +61,18 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
     }
 
     @Override
-    public void save(BillDTO entity) {
-        // nothing to do here...
-    }
-
-    @Override
-    public void cancel() {
-        History.back();
-    }
-
-    @Override
     public void payBill() {
         AppSite.getPlaceController().goTo(new Financial.PayNow());
+    }
+
+    @Override
+    public void edit(Key id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void back() {
+        History.back();
     }
 }

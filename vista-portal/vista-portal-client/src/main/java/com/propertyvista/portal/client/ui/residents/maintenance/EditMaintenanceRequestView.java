@@ -17,11 +17,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.Edit;
 
-public interface EditMaintenanceRequestView extends View<MaintenanceRequestDTO> {
+public interface EditMaintenanceRequestView extends Edit<MaintenanceRequestDTO> {
 
-    interface Presenter extends View.Presenter<MaintenanceRequestDTO> {
+    interface Presenter extends Edit.Presenter<MaintenanceRequestDTO> {
+
         void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback);
     }
 }

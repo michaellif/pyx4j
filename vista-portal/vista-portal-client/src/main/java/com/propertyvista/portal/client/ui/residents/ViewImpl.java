@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,142 +7,75 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-25
- * @author Vlad
+ * Created on 2013-04-24
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
-public class ViewImpl<E extends IEntity> extends FlowPanel implements View<E> {
+public class ViewImpl<E extends IEntity> extends ViewBaseImpl<E> implements View<E> {
 
-    protected static final I18n i18n = I18n.get(ViewImpl.class);
+    private final Anchor back;
 
-    private final UserMessagePanel messagePanel;
-
-    private final SimplePanel formHolder;
-
-    private CEntityForm<E> form;
-
-    private final Button submit;
-
-    private final Anchor cancel;
-
-    private Presenter<E> presenter;
+    private final Button edit;
 
     public ViewImpl() {
         this(null);
+
     }
 
-    public ViewImpl(boolean noSubmit, boolean noCancel) {
-        this(null, noSubmit, noCancel);
+    public ViewImpl(CEntityForm<E> form) {
+        this(form, false, false);
     }
 
-    public ViewImpl(CEntityForm<E> viewForm) {
-        this(viewForm, false, false);
+    public ViewImpl(boolean noEdit, boolean noBack) {
+        this(null, noEdit, noBack);
     }
 
-    public ViewImpl(CEntityForm<E> viewForm, boolean noSubmit, boolean noCancel) {
-        add(messagePanel = new UserMessagePanel());
+    public ViewImpl(CEntityForm<E> form, boolean noEdit, boolean noBack) {
+        super(form);
 
-        add(formHolder = new SimplePanel());
-
-        submit = new Button(i18n.tr("Submit"));
-        submit.getElement().getStyle().setMargin(10, Unit.PX);
-        submit.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        submit.setCommand(new Command() {
+        edit = new Button(i18n.tr("Edit"));
+        edit.getElement().getStyle().setMargin(10, Unit.PX);
+        edit.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        edit.setCommand(new Command() {
             @Override
             public void execute() {
-                onSubmit();
+                ((View.Presenter<E>) getPresenter()).edit(getForm().getValue().getPrimaryKey());
             }
         });
-        if (!noSubmit) {
-            add(DecorationUtils.inline(submit));
+        if (!noEdit) {
+            addToFooter(DecorationUtils.inline(edit));
         }
 
-        cancel = new Anchor(i18n.tr("Cancel"), new Command() {
+        back = new Anchor(i18n.tr("Back"), new Command() {
             @Override
             public void execute() {
-                presenter.cancel();
+                ((View.Presenter<E>) getPresenter()).back();
             }
         });
-        cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
-        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        if (!noCancel) {
-            add(cancel);
-        }
-
-        if (viewForm != null) {
-            setForm(viewForm);
+        back.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        back.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        if (!noBack) {
+            addToFooter(back);
         }
     }
 
-    protected void setForm(CEntityForm<E> viewForm) {
-        form = viewForm;
-        form.initContent();
-        formHolder.setWidget(form.asWidget());
+    protected Anchor getBack() {
+        return back;
     }
 
-    @Override
-    public void setPresenter(Presenter<E> presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void populate(E value) {
-        messagePanel.clearMessage();
-
-        form.reset();
-        form.populate(value);
-    }
-
-    @Override
-    public void showError(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.ERROR);
-    }
-
-    @Override
-    public void showNote(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.INFO);
-    }
-
-    protected void onSubmit() {
-        if (!form.isValid()) {
-            Window.scrollTo(0, 0);
-            showError(form.getValidationResults().getValidationMessage(true, false));
-        } else {
-            presenter.save(form.getValue());
-        }
-    }
-
-    public Presenter<E> getPresenter() {
-        return presenter;
-    }
-
-    public CEntityForm<E> getForm() {
-        return form;
-    }
-
-    protected Button getSubmit() {
-        return submit;
-    }
-
-    protected Anchor getCancel() {
-        return cancel;
+    protected Button getEdit() {
+        return edit;
     }
 }

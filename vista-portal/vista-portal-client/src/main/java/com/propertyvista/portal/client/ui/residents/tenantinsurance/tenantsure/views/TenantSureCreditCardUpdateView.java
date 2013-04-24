@@ -15,11 +15,11 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.Edit;
 
-public interface TenantSureCreditCardUpdateView extends View<InsurancePaymentMethod> {
+public interface TenantSureCreditCardUpdateView extends Edit<InsurancePaymentMethod> {
 
-    interface Presenter extends View.Presenter<InsurancePaymentMethod> {
+    interface Presenter extends Edit.Presenter<InsurancePaymentMethod> {
 
         void onTenantAddressRequested();
 

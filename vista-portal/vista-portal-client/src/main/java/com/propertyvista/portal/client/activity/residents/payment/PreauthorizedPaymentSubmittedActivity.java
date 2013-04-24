@@ -59,13 +59,14 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
     }
 
     @Override
-    public void save(PreauthorizedPaymentDTO entity) {
+    public void edit(Key id) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void cancel() {
+    public void back() {
         // TODO Auto-generated method stub
+
     }
 }

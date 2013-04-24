@@ -7,22 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on 2012-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.billing;
+package com.propertyvista.portal.client.ui.residents;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.dto.BillDTO;
-import com.propertyvista.portal.client.ui.residents.ViewImpl;
+import com.pyx4j.entity.shared.IEntity;
 
-public class ViewBillViewImpl extends ViewImpl<BillDTO> implements ViewBillView {
+public interface ViewBase<E extends IEntity> extends IsWidget {
 
-    private static final I18n i18n = I18n.get(ViewBillViewImpl.class);
+    interface Presenter<E extends IEntity> {
 
-    public ViewBillViewImpl() {
-        super(new ViewBillForm(), true, false);
     }
+
+    void setPresenter(Presenter<E> presenter);
+
+    void populate(E value);
+
+    void showError(String msg);
+
+    void showNote(String msg);
 }

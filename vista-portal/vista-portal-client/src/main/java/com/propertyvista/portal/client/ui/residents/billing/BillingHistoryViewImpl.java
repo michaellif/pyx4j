@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewBase;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
@@ -24,7 +24,7 @@ public class BillingHistoryViewImpl extends ViewImpl<BillListDTO> implements Bil
     }
 
     @Override
-    public void setPresenter(View.Presenter<BillListDTO> presenter) {
+    public void setPresenter(ViewBase.Presenter<BillListDTO> presenter) {
         super.setPresenter(presenter);
         ((BillingHistoryForm) getForm()).setPresenter((BillingHistoryView.Presenter) presenter);
     }

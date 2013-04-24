@@ -61,17 +61,19 @@ public class PaymentSubmittedActivity extends SecurityAwareActivity implements P
     }
 
     @Override
-    public void save(PaymentRecordDTO entity) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void cancel() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void goToAutoPay() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+    }
+
+    @Override
+    public void edit(Key id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void back() {
+        // TODO Auto-generated method stub
+
     }
 }

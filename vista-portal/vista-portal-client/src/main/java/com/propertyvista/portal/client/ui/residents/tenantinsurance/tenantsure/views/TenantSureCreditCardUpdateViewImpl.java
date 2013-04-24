@@ -22,10 +22,11 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.client.ui.residents.ViewImpl;
+import com.propertyvista.portal.client.ui.residents.EditImpl;
+import com.propertyvista.portal.client.ui.residents.ViewBase;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSurePaymentMethodForm;
 
-public class TenantSureCreditCardUpdateViewImpl extends ViewImpl<InsurancePaymentMethod> implements TenantSureCreditCardUpdateView {
+public class TenantSureCreditCardUpdateViewImpl extends EditImpl<InsurancePaymentMethod> implements TenantSureCreditCardUpdateView {
 
     private static final I18n i18n = I18n.get(TenantSureCreditCardUpdateViewImpl.class);
 
@@ -39,7 +40,7 @@ public class TenantSureCreditCardUpdateViewImpl extends ViewImpl<InsurancePaymen
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.client.ui.residents.View.Presenter<InsurancePaymentMethod> presenter) {
+    public void setPresenter(ViewBase.Presenter<InsurancePaymentMethod> presenter) {
         super.setPresenter(presenter);
         getForm().setVisited(false);
     }

@@ -83,7 +83,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         })).asWidget());
 
         // Edit button:
-        if (!viewOnly) {
+        if (!this.viewOnly) {
             editButton = new Button(i18n.tr("Edit"), new Command() {
                 @Override
                 public void execute() {

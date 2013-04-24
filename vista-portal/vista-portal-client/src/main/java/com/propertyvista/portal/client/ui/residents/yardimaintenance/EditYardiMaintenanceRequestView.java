@@ -14,10 +14,10 @@
 package com.propertyvista.portal.client.ui.residents.yardimaintenance;
 
 import com.propertyvista.dto.YardiServiceRequestDTO;
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.Edit;
 
-public interface EditYardiMaintenanceRequestView extends View<YardiServiceRequestDTO> {
+public interface EditYardiMaintenanceRequestView extends Edit<YardiServiceRequestDTO> {
 
-    interface Presenter extends View.Presenter<YardiServiceRequestDTO> {
+    interface Presenter extends Edit.Presenter<YardiServiceRequestDTO> {
     }
 }

@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
@@ -67,13 +68,13 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     }
 
     @Override
-    public void save(PvBillingFinancialSummaryDTO entity) {
+    public void edit(Key id) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void cancel() {
+    public void back() {
         // TODO Auto-generated method stub
 
     }

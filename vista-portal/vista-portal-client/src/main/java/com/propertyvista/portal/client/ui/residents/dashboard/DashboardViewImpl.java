@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.dashboard;
 
-import com.propertyvista.portal.client.ui.residents.View;
+import com.propertyvista.portal.client.ui.residents.ViewBase;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
@@ -24,7 +24,7 @@ public class DashboardViewImpl extends ViewImpl<TenantDashboardDTO> implements D
     }
 
     @Override
-    public void setPresenter(View.Presenter<TenantDashboardDTO> presenter) {
+    public void setPresenter(ViewBase.Presenter<TenantDashboardDTO> presenter) {
         ((DashboardForm) getForm()).setPresenter((DashboardView.Presenter) presenter);
     }
 
