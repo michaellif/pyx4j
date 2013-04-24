@@ -32,6 +32,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
@@ -78,8 +79,10 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
                     return null;
                 }
 
-                if (value.isEmpty()) {
-                    return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                if (!VistaFeatures.instance().yardiIntegration()) {
+                    if (value.isEmpty()) {
+                        return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
+                    }
                 }
 
                 return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
