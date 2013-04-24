@@ -832,6 +832,25 @@ td.DatePickerMonth {
 	height: 20em;
 }
 
+.Dialog .PaymentEditorLegalTerms {
+    border:none !important;
+    width: 60em !important;
+    overflow: auto !important;
+}
+
+.Dialog .PaymentEditorLegalTerms .PaymentEditorLegalTermsContent {
+    overflow: hidden !important;
+}
+
+.Dialog .PaymentEditorLegalTerms .PaymentEditorLegalTermsHeader {
+    font-size: 1.5em;
+    padding: 0.5em 0;
+}
+
+.Dialog .PaymentEditorLegalTerms .gwt-HTML {
+    text-align: justify;
+}
+
 .EntityFolder {
 	width: 100%;
 }
@@ -1723,21 +1742,3 @@ ul.footer_locations li {
     min-height: 25em;
 }
 
-.PaymentEditorLegalTerms {
-    border:none !important;
-    width: 60em !important;
-    overflow: auto !important;
-}
-
-.PaymentEditorLegalTerms .PaymentEditorLegalTermsContent {
-    overflow: hidden !important;
-}
-
-.PaymentEditorLegalTerms .PaymentEditorLegalTermsHeader {
-    font-size: 1.5em;
-    padding: 0.5em 0;
-}
-
-.PaymentEditorLegalTerms .gwt-HTML {
-    text-align: justify;
-}
