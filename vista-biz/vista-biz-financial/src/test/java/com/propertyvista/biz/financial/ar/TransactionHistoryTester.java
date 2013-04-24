@@ -40,7 +40,7 @@ public class TransactionHistoryTester extends Tester {
         super();
         InternalBillingAccount internalBillingAccount = billingAccount.<InternalBillingAccount> cast();
         transactionHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(internalBillingAccount);
-        notCoveredDebitInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(internalBillingAccount, false);
+        notCoveredDebitInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(internalBillingAccount);
         notConsumedCreditInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotConsumedCreditInvoiceLineItems(internalBillingAccount);
     }
 

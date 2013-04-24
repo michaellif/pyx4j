@@ -44,8 +44,8 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
 //        notifList.add("Message 1");
 //        notifList.add("Message 2");
 
-        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
         view.showNotifications(notifList);
+        CrmRootPane rootPane = (CrmRootPane) AppSite.instance().getRootPane();
         rootPane.allocateNotificationsSpace(notifList.size());
     }
 

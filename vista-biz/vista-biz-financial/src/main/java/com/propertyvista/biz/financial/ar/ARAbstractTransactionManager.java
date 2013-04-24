@@ -113,7 +113,7 @@ public abstract class ARAbstractTransactionManager {
         return th;
     }
 
-    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly);
+    abstract protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
 
     abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 
@@ -128,14 +128,17 @@ public abstract class ARAbstractTransactionManager {
             debitBalanceType.put(item.debitType(), item.owingBalanceType().getValue());
         }
         BigDecimal balance = BigDecimal.ZERO;
-        for (InvoiceDebit charge : getNotCoveredDebitInvoiceLineItems(billingAccount, true)) {
-            OwingBalanceType balanceType = debitBalanceType.get(charge.arCode());
+        for (InvoiceDebit debit : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
+            OwingBalanceType balanceType = debitBalanceType.get(debit.arCode());
             if (balanceType == null) {
                 continue;
             }
-            if (balanceType.equals(OwingBalanceType.ToDateTotal) || charge.billingCycle().equals(cycle)) {
-                balance = balance.add(charge.outstandingDebit().getValue());
+            if (balanceType.equals(OwingBalanceType.ToDateTotal) || debit.billingCycle().equals(cycle)) {
+                balance = balance.add(debit.outstandingDebit().getValue());
             }
+        }
+        for (InvoiceCredit credit : getNotConsumedCreditInvoiceLineItems(billingAccount)) {
+            balance = balance.add(credit.outstandingCredit().getValue());
         }
         return balance;
     }

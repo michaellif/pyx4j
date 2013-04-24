@@ -15,10 +15,7 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -32,8 +29,6 @@ import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -44,10 +39,6 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
-import com.propertyvista.domain.policy.policies.ARPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 class ARInternalTransactionManager extends ARAbstractTransactionManager {
@@ -100,41 +91,17 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
+    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
         List<InvoiceDebit> lineItems;
         {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-            criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), BigDecimal.ZERO));
-            criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+            criteria.eq(criteria.proto().billingAccount(), billingAccount);
+            criteria.ne(criteria.proto().outstandingDebit(), BigDecimal.ZERO);
+            criteria.isNotNull(criteria.proto().postDate());
             lineItems = Persistence.service().query(criteria);
         }
 
-        //Find building that billingAccount belongs to
-        Building building;
-        {
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccount));
-            building = Persistence.service().retrieve(criteria);
-        }
-
-        PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
-        if (padItemsOnly) {
-            Set<ARCode> debitTypes = new HashSet<ARCode>();
-            for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
-                debitTypes.add(item.debitType());
-            }
-            Iterator<InvoiceDebit> it = lineItems.iterator();
-            while (it.hasNext()) {
-                InvoiceDebit debit = it.next();
-                if (!debitTypes.contains(debit.arCode())) {
-                    it.remove();
-                }
-            }
-        }
-        // Sort items according to AR and PAD policies
-        ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
-        Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy, padPolicy, padItemsOnly));
+        Collections.sort(lineItems, new InvoiceDebitComparator(billingAccount));
 
         return lineItems;
     }
@@ -142,9 +109,9 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
     @Override
     protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        criteria.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO);
+        criteria.isNotNull(criteria.proto().postDate());
         criteria.asc(criteria.proto().postDate());
         List<InvoiceCredit> lineItems = Persistence.service().query(criteria);
         return lineItems;

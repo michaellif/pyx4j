@@ -88,15 +88,14 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         Persistence.service().commit();
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(
-                retrieveLease().billingAccount().<InternalBillingAccount> cast(), false);
+                retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
         policy = getDataModel(ARPolicyDataModel.class).getCurrentItem();
         policy.creditDebitRule().setValue(CreditDebitRule.oldestDebtFirst);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast(),
-                false);
+        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
 
     }
 

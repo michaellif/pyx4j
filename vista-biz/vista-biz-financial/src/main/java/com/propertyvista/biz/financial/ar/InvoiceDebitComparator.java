@@ -21,14 +21,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.property.asset.building.Building;
 
 /*
  * The debit comparator is used to prioritize debit items for credit coverage according to to following rules:
@@ -41,13 +48,22 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private final ARPolicy arPolicy;
 
-    private final boolean padOnly;
-
     private final Map<ARCode, OwingBalanceType> padDebitTypes = new HashMap<ARCode, OwingBalanceType>();
 
-    public InvoiceDebitComparator(ARPolicy arPolicy, PADPolicy padPolicy, boolean padOnly) {
-        this.arPolicy = arPolicy;
-        this.padOnly = padOnly;
+    public InvoiceDebitComparator(BillingAccount billingAccount) {
+
+        //Find building that billingAccount belongs to
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccount));
+            building = Persistence.service().retrieve(criteria);
+        }
+
+        // Sort items according to AR and PAD policies
+        arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
+        PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
+
         // create product map
         for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
             padDebitTypes.put(item.debitType(), item.owingBalanceType().getValue());
@@ -70,9 +86,6 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
         if (padType1 != null && padType2 != null) {
             if (padType1 == OwingBalanceType.ToDateTotal && padType2 == OwingBalanceType.ToDateTotal) {
                 return arCompare(debit1, debit2);
-            } else if (padOnly) {
-                // LastBill goes first
-                return new Boolean(padType2 == OwingBalanceType.LastBill).compareTo(padType1 == OwingBalanceType.LastBill);
             } else {
                 // LastBill goes last
                 return new Boolean(padType1 == OwingBalanceType.LastBill).compareTo(padType2 == OwingBalanceType.LastBill);

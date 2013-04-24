@@ -145,7 +145,7 @@ public class ARArrearsManager {
     }
 
     public final Collection<AgingBuckets> getAgingBuckets(BillingAccount account) {
-        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(account, false);
+        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(account);
         Collection<AgingBuckets> buckets = calculateAgingBuckets(debits);
         return buckets;
     }

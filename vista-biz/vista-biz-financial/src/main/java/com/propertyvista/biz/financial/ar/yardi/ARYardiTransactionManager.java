@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.ARAbstractTransactionManager;
 import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
@@ -58,20 +60,32 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
     }
 
     @Override
-    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
-        List<InvoiceDebit> debits = new ArrayList<InvoiceDebit>();
+    protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
+        List<InvoiceDebit> lineItems = new ArrayList<InvoiceDebit>();
 
         EntityQueryCriteria<YardiDebit> criteria = EntityQueryCriteria.create(YardiDebit.class);
         criteria.eq(criteria.proto().billingAccount(), billingAccount);
         criteria.ge(criteria.proto().outstandingDebit(), BigDecimal.ZERO);
-        debits.addAll(Persistence.service().query(criteria));
-        return debits;
+        lineItems.addAll(Persistence.service().query(criteria));
+
+        Collections.sort(lineItems, new InvoiceDebitComparator(billingAccount));
+
+        return lineItems;
 
     }
 
     @Override
     protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
-        throw new UnsupportedOperationException();
+        List<InvoiceCredit> lineItems = new ArrayList<InvoiceCredit>();
+
+        EntityQueryCriteria<YardiCredit> criteria = EntityQueryCriteria.create(YardiCredit.class);
+        criteria.eq(criteria.proto().billingAccount(), billingAccount);
+        criteria.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO);
+        criteria.asc(criteria.proto().postDate());
+        lineItems.addAll(Persistence.service().query(criteria));
+
+        return lineItems;
+
     }
 
     @Override
