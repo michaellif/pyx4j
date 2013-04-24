@@ -15,6 +15,7 @@ package com.propertyvista.config.tests;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 public abstract class VistaDBTestBase extends TestCase {
@@ -30,6 +31,7 @@ public abstract class VistaDBTestBase extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        CacheService.resetAll();
         VistaTestDBSetup.init();
         //TODO investigate memory problem
         if ((runningTestsCount > 0) && (false)) {
