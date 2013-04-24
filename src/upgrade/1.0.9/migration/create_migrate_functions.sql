@@ -644,8 +644,21 @@ BEGIN
                 ||' FROM        '||v_schema_name||'.product_item_type '
                 ||' ORDER BY    id ) ';
                 
-              
         
+        -- Set all imported arcodes not reserved
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.arcode '
+                ||'SET reserved = FALSE ';      
+        
+        -- new arcodes
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,updated,reserved) VALUES '
+                ||'(nextval(''public.arcode_seq''),''Deposit'',''Deposit'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''LatePayment'',''LatePayment'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''NSF'',''NSF'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''Payment'',''Payment'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''CarryForwardCredit'',''CarryForwardCredit'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''CarryForwardCharge'',''CarryForwardCharge'',DATE_TRUNC(''sec'',current_timestamp),TRUE) ';
         
         -- arpolicy
         
@@ -678,6 +691,10 @@ BEGIN
                 ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type_new = a.name)) AS b '
                 ||'WHERE a.id = b.id ';   
         
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item '
+                ||'SET id_discriminator = ''YardiDebit'' '
+                ||'WHERE id_discriminator = ''YardiCharge'' ';
         
         -- concession_v
         

@@ -9,14 +9,16 @@
 **/
 
 
-USE sl_0411_v2;
+USE sl_0422;
 
-CREATE VIEW eft_report AS
+DROP VIEW eft_trans_report;
+
+CREATE VIEW eft_trans_report AS
 (SELECT	at.DAMOUNT AS amount,
 		SUBSTRING(at.srectransit,2,3) AS bank_id,
 		SUBSTRING(at.SRECTRANSIT,5,LEN(at.srectransit)) AS transit_no,
 		at.SRECTRANCODE AS transit_code,
-		at.SRECACCT AS account_no,
+		REPLACE(at.SRECACCT,'-','')AS account_no,
 		at.srecname AS tenant_name,
 		t.SCODE AS tenant_id,
 		t.SUNITCODE AS unit_code,
@@ -24,4 +26,5 @@ CREATE VIEW eft_report AS
 FROM	ACHTRANS at
 JOIN	ACHFILE af ON (af.HMY = at.HFILE)
 JOIN	TENANT t ON (at.HPERSON = t.HMYPERSON));
+
 
