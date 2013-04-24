@@ -455,7 +455,7 @@ public class TenantPadProcessor {
         LeasePaymentMethod existingPaymentMethod = retrievePaymentMethod(tenant.customer(), details);
         if (existingPaymentMethod != null) {
             // Update PAP if one exists for existing PaymentMethod
-            if (!padFileModel.charge().isNull() || !padFileModel.percent().isNull()) {
+            if (!padFileModel.charge().isNull() || !padFileModel._processorInformation().percent().isNull()) {
                 List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
                 {
                     EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
@@ -499,7 +499,7 @@ public class TenantPadProcessor {
             Persistence.service().retrieve(tenant.lease().unit());
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, tenant.lease().unit().building());
 
-            if (!padFileModel.charge().isNull() || !padFileModel.percent().isNull()) {
+            if (!padFileModel.charge().isNull() || !padFileModel._processorInformation().percent().isNull()) {
                 Persistence.service().persist(createPAP(method, padFileModel, tenant));
             }
             counters.imported++;
