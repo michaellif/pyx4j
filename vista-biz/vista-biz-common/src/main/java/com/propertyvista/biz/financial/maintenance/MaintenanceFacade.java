@@ -49,4 +49,7 @@ public interface MaintenanceFacade {
 
     void resolveMaintenanceRequest(MaintenanceRequest request);
 
+    void beforeItemRequest();
+
+    void beforeListRequest();
 }

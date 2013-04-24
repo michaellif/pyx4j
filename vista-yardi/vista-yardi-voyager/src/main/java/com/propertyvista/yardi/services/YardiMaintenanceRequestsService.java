@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -44,12 +45,19 @@ import com.yardi.ws.operations.ServiceRequestXml_type0;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.financial.maintenance.yardi.YardiMaintenanceIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.YardiClient;
@@ -81,11 +89,11 @@ public class YardiMaintenanceRequestsService {
     }
 
     public Date getMetaTimestamp() {
-        return lastMetaUpdate.get(getYardiCredential().pmc().namespace().getValue());
+        return lastMetaUpdate.get(NamespaceManager.getNamespace());
     }
 
     public Date getTicketTimestamp() {
-        return lastTicketUpdate.get(getYardiCredential().pmc().namespace().getValue());
+        return lastTicketUpdate.get(NamespaceManager.getNamespace());
     }
 
     /*
@@ -95,7 +103,7 @@ public class YardiMaintenanceRequestsService {
         assert VistaFeatures.instance().yardiIntegration();
 
         PmcYardiCredential yc = getYardiCredential();
-        if (lastMetaUpdate.get(yc.pmc().namespace().getValue()) == null) {
+        if (lastMetaUpdate.get(NamespaceManager.getNamespace()) == null) {
             loadMeta(yc);
         }
     }
@@ -107,7 +115,7 @@ public class YardiMaintenanceRequestsService {
     public void loadMaintenanceRequests() throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
         PmcYardiCredential yc = getYardiCredential();
-        Date lastModified = lastTicketUpdate.get(yc.pmc().namespace().getValue());
+        Date lastModified = lastTicketUpdate.get(NamespaceManager.getNamespace());
         if (lastModified == null) {
             lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
         }
@@ -122,26 +130,62 @@ public class YardiMaintenanceRequestsService {
         YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), requests);
     }
 
-    protected void loadRequests(PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
-        Date now = SystemDateManager.getDate();
-        GetServiceRequest_Search params = new GetServiceRequest_Search();
-        params.setFromDate(dateFormat.format(fromDate));
-        ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
-        YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
-        for (ServiceRequest request : newRequests.getServiceRequest()) {
-            processor.mergeRequest(request);
-        }
-        lastTicketUpdate.put(yc.pmc().namespace().getValue(), now);
+    protected void loadRequests(final PmcYardiCredential yc, final Date fromDate) throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                GetServiceRequest_Search params = new GetServiceRequest_Search();
+                // ensure buildings are available
+                String propertyList = new YardiMaintenanceProcessor().getProprtyList();
+                if (propertyList == null || propertyList.length() == 0) {
+                    return null;
+                }
+                params.setYardiPropertyId(propertyList);
+                Date now = SystemDateManager.getDate();
+                if (fromDate != null) {
+                    params.setFromDate(dateFormat.format(fromDate));
+                }
+                ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+                YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
+                for (ServiceRequest request : newRequests.getServiceRequest()) {
+                    MaintenanceRequest mr = processor.mergeRequest(request);
+                    if (mr != null) {
+                        Persistence.service().persist(mr);
+                    }
+                }
+                lastTicketUpdate.put(NamespaceManager.getNamespace(), now);
+                log.debug("loaded requests: {}", newRequests.getServiceRequest().size());
+                return null;
+            }
+        });
     }
 
-    protected void loadMeta(PmcYardiCredential yc) throws YardiServiceException {
-        Date now = SystemDateManager.getDate();
-        YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
-        YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
-        processor.mergeCategories(meta.getCategories());
-        processor.mergeStatuses(meta.getStatuses());
-        processor.mergePriorities(meta.getPriorities());
-        lastMetaUpdate.put(yc.pmc().namespace().getValue(), now);
+    protected void loadMeta(final PmcYardiCredential yc) throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                Date now = SystemDateManager.getDate();
+                YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
+                YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
+                // categories
+                Persistence.service().persist(processor.mergeCategories(meta.getCategories()));
+                log.debug("loaded categories: {}", meta.getCategories().getCategory().size());
+                // statuses
+                List<MaintenanceRequestStatus> statuses = processor.mergeStatuses(meta.getStatuses());
+                if (statuses != null) {
+                    Persistence.service().persist(statuses);
+                }
+                log.debug("loaded statuses: {}", statuses.size());
+                // priorities
+                List<MaintenanceRequestPriority> priorities = processor.mergePriorities(meta.getPriorities());
+                if (priorities != null) {
+                    Persistence.service().persist(priorities);
+                }
+                log.debug("loaded priorities: {}", priorities.size());
+                lastMetaUpdate.put(NamespaceManager.getNamespace(), now);
+                return null;
+            }
+        });
     }
 
     protected PmcYardiCredential getYardiCredential() {

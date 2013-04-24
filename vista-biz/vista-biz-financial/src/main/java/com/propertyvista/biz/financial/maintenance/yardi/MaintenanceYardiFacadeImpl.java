@@ -76,4 +76,14 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
         MaintenanceYardiManager.instance().resolveMaintenanceRequest(request);
     }
 
+    @Override
+    public void beforeItemRequest() {
+        MaintenanceYardiManager.instance().beforeItemRequest();
+    }
+
+    @Override
+    public void beforeListRequest() {
+        MaintenanceYardiManager.instance().beforeListRequest();
+    }
+
 }

@@ -42,27 +42,39 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
 
+    public String getProprtyList() {
+        StringBuilder sb = new StringBuilder();
+        for (Building property : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(property.propertyCode().getValue());
+        }
+        return sb.toString();
+    }
+
     // we will need to update and reload meta from here if request categories, status, or priority do not exist
-    public void mergeRequest(ServiceRequest request) {
+    public MaintenanceRequest mergeRequest(ServiceRequest request) {
         EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-        crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId()));
+        crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId().toString()));
         MaintenanceRequest mr = Persistence.service().retrieve(crit);
         if (mr == null) {
             mr = createRequest(request);
         } else {
             updateRequest(mr, createRequest(request));
         }
-        Persistence.service().persist(mr);
+        return mr;
     }
 
-    public void mergeStatuses(Statuses statuses) {
+    public List<MaintenanceRequestStatus> mergeStatuses(Statuses statuses) {
         if (statuses == null) {
-            return;
+            return null;
         }
         List<MaintenanceRequestStatus> oldStatuses = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).statuses();
         Map<String, MaintenanceRequestStatus> oldMap = new HashMap<String, MaintenanceRequestStatus>();
@@ -72,8 +84,7 @@ public class YardiMaintenanceProcessor {
         }
         Set<String> oldNames = oldMap.keySet();
         for (Status status : statuses.getStatus()) {
-            for (Object statusName : status.getContent()) {
-                String newName = statusName.toString();
+            for (String newName : getStatusesRecursive(status)) {
                 if (oldNames.contains(newName)) {
                     toBeRemoved.remove(oldMap.get(newName));
                 } else {
@@ -90,12 +101,12 @@ public class YardiMaintenanceProcessor {
                 Persistence.service().delete(stat);
             }
         }
-        Persistence.service().persist(oldStatuses);
+        return oldStatuses;
     }
 
-    public void mergePriorities(Priorities priorities) {
+    public List<MaintenanceRequestPriority> mergePriorities(Priorities priorities) {
         if (priorities == null) {
-            return;
+            return null;
         }
         List<MaintenanceRequestPriority> oldPriorities = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).priorities();
         Map<String, MaintenanceRequestPriority> oldMap = new HashMap<String, MaintenanceRequestPriority>();
@@ -120,34 +131,38 @@ public class YardiMaintenanceProcessor {
                 Persistence.service().delete(stat);
             }
         }
-        Persistence.service().persist(oldPriorities);
+        return oldPriorities;
     }
 
-    public void mergeCategories(Categories categories) {
+    public MaintenanceRequestCategory mergeCategories(Categories categories) {
         MaintenanceRequestCategory oldRoot = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).rootCategory();
         mergeCategoriesRecursive(oldRoot, categories.getCategory());
-        Persistence.service().persist(oldRoot);
+        return oldRoot;
     }
 
     private void mergeCategoriesRecursive(MaintenanceRequestCategory oldParent, List<?> newList) {
-        List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>(oldParent.subCategories());
+        List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>();
         Map<String, MaintenanceRequestCategory> oldMap = new HashMap<String, MaintenanceRequestCategory>();
-        for (MaintenanceRequestCategory oldCat : oldParent.subCategories()) {
-            oldMap.put(oldCat.name().getValue(), oldCat);
+        if (oldParent.subCategories() != null) {
+            toBeRemoved.addAll(oldParent.subCategories());
+            for (MaintenanceRequestCategory oldCat : oldParent.subCategories()) {
+                oldMap.put(oldCat.name().getValue(), oldCat);
+            }
         }
         Set<String> oldNames = oldMap.keySet();
         for (Object newCat : newList) {
             String newName = newCat instanceof Category ? ((Category) newCat).getName() : newCat.toString();
+            MaintenanceRequestCategory category;
             if (oldNames.contains(newName)) {
-                MaintenanceRequestCategory oldCat = oldMap.get(newName);
-                toBeRemoved.remove(oldCat);
-                if (newCat instanceof Category) {
-                    mergeCategoriesRecursive(oldCat, ((Category) newCat).getSubCategory());
-                }
+                category = oldMap.get(newName);
+                toBeRemoved.remove(category);
             } else {
-                MaintenanceRequestCategory category = createCategory(newName);
+                category = createCategory(newName);
                 category.parent().set(oldParent);
                 oldParent.subCategories().add(category);
+            }
+            if (newCat instanceof Category) {
+                mergeCategoriesRecursive(category, ((Category) newCat).getSubCategory());
             }
         }
         for (MaintenanceRequestCategory cat : toBeRemoved) {
@@ -183,12 +198,12 @@ public class YardiMaintenanceProcessor {
         // TODO
         MaintenanceRequest mr = EntityFactory.create(MaintenanceRequest.class);
         boolean metaReloaded = false;
-        // find tenant first
-        {
+        // find tenant first (if ticket is TenantCaused)
+        if (request.getTenantCode() != null) {
             EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
-            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
-            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().info().number(), request.getUnitCode()));
             crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
+            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().info().number(), request.getUnitCode()));
+            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
             Tenant tenant = Persistence.service().retrieve(crit);
             if (tenant == null) {
                 log.warn("Tenant not found: {}", request.getTenantCode());
@@ -196,9 +211,11 @@ public class YardiMaintenanceProcessor {
             } else {
                 mr.leaseParticipant().set(tenant);
             }
+        } else {
+            return null;
         }
         // category
-        {
+        if (request.getCategory() != null) {
             MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
             if (category == null) {
                 metaReloaded = reloadMeta();
@@ -268,6 +285,18 @@ public class YardiMaintenanceProcessor {
         mr.summary().set(newData.summary());
         mr.permissionToEnter().set(newData.permissionToEnter());
         mr.petInstructions().set(newData.petInstructions());
+    }
+
+    private List<String> getStatusesRecursive(Status status) {
+        List<String> result = new ArrayList<String>();
+        for (Object cont : status.getContent()) {
+            if (cont instanceof Status) {
+                result.addAll(getStatusesRecursive((Status) cont));
+            } else {
+                result.add(cont.toString());
+            }
+        }
+        return result;
     }
 
     private boolean reloadMeta() {

@@ -20,9 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
@@ -63,6 +65,12 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntityListCriteria<MaintenanceRequestDTO> dtoCriteria) {
+        ServerSideFactory.create(MaintenanceFacade.class).beforeListRequest();
+        super.list(callback, dtoCriteria);
     }
 
     @Override

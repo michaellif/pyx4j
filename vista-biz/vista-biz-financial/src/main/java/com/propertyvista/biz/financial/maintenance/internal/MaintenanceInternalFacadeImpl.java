@@ -75,4 +75,14 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
         MaintenanceInternalManager.instance().resolveMaintenanceRequest(request);
     }
+
+    @Override
+    public void beforeItemRequest() {
+        // N/A - do nothing
+    }
+
+    @Override
+    public void beforeListRequest() {
+        // N/A - do nothing
+    }
 }

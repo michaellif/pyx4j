@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.maintenance;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -57,11 +58,20 @@ public abstract class MaintenanceMetadataAbstractManager {
         result.priorities().set(meta.priorities());
         if (!levelsOnly) {
             // retrieve categories
-            if (meta.rootCategory().isEmpty()) {
+            if (meta.rootCategory().isNull()) {
                 EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
                 crit.add(PropertyCriterion.eq(crit.proto().name(), "ROOT"));
                 meta.rootCategory().set(Persistence.service().retrieve(crit));
                 retrieveSubCategoriesRecursive(meta.rootCategory());
+
+                if (meta.rootCategory().isNull()) {
+                    // create root
+                    MaintenanceRequestCategory root = EntityFactory.create(MaintenanceRequestCategory.class);
+                    root.name().setValue("ROOT");
+                    meta.rootCategory().set(root);
+                    Persistence.service().persist(root);
+                    root.subCategories().setAttachLevel(AttachLevel.Attached);
+                }
             }
             result.rootCategory().set(meta.rootCategory());
         }

@@ -102,6 +102,14 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         return Persistence.service().retrieve(criteria);
     }
 
+    protected void beforeItemRequest() {
+        importModifiedRequests();
+    }
+
+    protected void beforeListRequest() {
+        importModifiedRequests();
+    }
+
     private void postRequest(MaintenanceRequest request) {
         try {
             ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
@@ -121,6 +129,5 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
                 throw new RuntimeException(e);
             }
         }
-
     }
 }
