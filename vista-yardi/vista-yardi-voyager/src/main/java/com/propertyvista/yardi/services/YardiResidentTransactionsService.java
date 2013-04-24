@@ -168,11 +168,11 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
         List<Property> properties = getProperties(transaction);
 
         for (final Property property : properties) {
-        	String propertyId = null;
-        	if ((property.getPropertyID()!= null) && (property.getPropertyID().size() > 0)) {
-        		propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
-        	}
-        	
+            String propertyId = null;
+            if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
+                propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
+            }
+
             try {
                 final Building building = importProperty(property);
                 executionMonitor.addProcessedEvent("Building");
@@ -330,9 +330,10 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             l.setYardiPropertyId(propertyId);
 
             GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(l);
-            if (response == null) {
-                throw new YardiServiceException("Yardi connection configuration error, probably database '" + yc.database().getValue()
-                        + "' do not exists on Yardi server");
+            if ((response == null) || (response.getGetResidentTransactions_LoginResult() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format(
+                        "Yardi connection configuration error, Login error or database ''{0}'' or Property Id ''{1}'' do not exists on Yardi server",
+                        yc.database(), propertyId));
             }
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 

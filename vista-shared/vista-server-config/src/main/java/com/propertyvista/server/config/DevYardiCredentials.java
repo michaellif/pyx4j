@@ -23,9 +23,9 @@ public class DevYardiCredentials {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         if (true) {
-            cr.propertyCode().setValue(".pvberk");
+            cr.propertyCode().setValue("gran0002");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            cr.username().setValue("gran0002");
+            cr.username().setValue("sa");
             cr.credential().setValue("akan1212");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
             cr.database().setValue("sl_0404");
