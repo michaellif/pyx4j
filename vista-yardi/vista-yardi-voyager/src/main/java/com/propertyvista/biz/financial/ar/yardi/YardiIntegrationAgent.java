@@ -43,8 +43,9 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiDebit;
+import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -112,16 +113,13 @@ public class YardiIntegrationAgent {
         if (billingCycle == null) {
             throw new IllegalStateException("failed to create charge for Yardi account = " + account.getPrimaryKey() + ": billing cycle was not found");
         }
-        InvoiceLineItem item = null;
+        YardiCharge item = null;
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             YardiDebit charge = EntityFactory.create(YardiDebit.class);
-            charge.chargeCode().setValue(detail.getChargeCode());
             charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode(), detail.getCustomerID()));
-            charge.transactionId().setValue(detail.getTransactionID());
             charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
             charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
             charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
-            charge.comment().setValue(detail.getComment());
             charge.taxTotal().setValue(BigDecimal.ZERO);
             charge.dueDate().setValue(ARYardiTransactionManager.instance().getTransactionDueDate(account, transactionDate));
             if (detail.getService() != null) {
@@ -138,6 +136,10 @@ public class YardiIntegrationAgent {
             credit.postDate().setValue(transactionDate);
             item = credit;
         }
+        item.chargeCode().setValue(detail.getChargeCode());
+        item.comment().setValue(detail.getComment());
+        item.transactionId().setValue(detail.getTransactionID());
+
         // we don't have postDate
         item.billingAccount().set(account);
         item.amount().setValue(amount);
