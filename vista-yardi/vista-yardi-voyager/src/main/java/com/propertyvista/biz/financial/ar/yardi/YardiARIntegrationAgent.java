@@ -139,6 +139,7 @@ public class YardiARIntegrationAgent {
         item.chargeCode().setValue(detail.getChargeCode());
         item.comment().setValue(detail.getComment());
         item.transactionId().setValue(detail.getTransactionID());
+        item.description().setValue(detail.getDescription());
 
         // we don't have postDate
         item.billingAccount().set(account);
