@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -151,6 +152,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     @Override
     protected void tearDown() throws Exception {
+        // Clear memory
+        CacheService.reset();
         try {
             Persistence.service().commit();
         } finally {
