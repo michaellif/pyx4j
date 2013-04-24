@@ -68,7 +68,7 @@ table td,table td {
 	padding: 0;
 }
 
-ul {
+.MainMenu ul {
     border-bottom: 1px solid #666666;
     border-top: 1px solid black;
     margin: 10px 1px;
@@ -116,7 +116,7 @@ a:hover {
 
 .WidgetDecoratorComponentHolder {
     overflow: visible !important;
-    width: 15em !important;
+    /*width: 15em !important;*/
 }
 
 label {
@@ -198,6 +198,7 @@ div.Button, button.gwt-Button {
     background: none repeat scroll 0 0 #1B3E94;
     border: 1px solid #A4C1DB;
     border-radius: 4px !important;
+    padding: 2px 12px;
 }
 
 div.ButtonText, button.gwt-Button {
@@ -225,6 +226,7 @@ input[type="checkbox"], input[type="radio"] {
 table {
     width: auto;
     border-radius: 0 !important;
+    margin-bottom: 0;
 }
 
 table tbody tr:first-child td:first-child {
@@ -235,12 +237,49 @@ table tbody tr:first-child td:first-child {
     border-radius: 0 0 0 0 !important;
 }
 
-#gwt-debug-PaymentMethodListDTO-paymentMethods-row-0-TableFolderItemDecorator-Label > ul, #gwt-debug-PvBillingFinancialSummaryDTO-latestActivities-row-0-TableFolderItemDecorator-Label > ul, #gwt-debug-BillListDTO-bills-row-0-TableFolderItemDecorator-Label > ul {
-    border: none !important;
+#gwt-debug-BoxFolderItemToolbar-Decorator table {
+    margin-bottom: 0 !important;
 }
 
-.EntityFolderAddButton {
-    margin-top: 30px;
+.EntityFolderTableDecorator, .EntityFolderBoxDecorator {
+    padding: 0 10px;
+}
+
+.PaymentEditor td {
+    text-align: right;
+}
+
+#gwt-debug-LeasePaymentMethod-type td {
+    text-align: left;
+}
+
+.PortalViewDisplay table, .Dialog table, .gwt-DatePicker table {
+    margin-bottom: 0;
+}
+
+.content > table {
+    padding: 0 10px;
+}
+
+.TenantSureContentPanel .FormFlexPanel div {
+    max-width: 698px;
+}
+
+.PaymentEditorLegalTerms {
+    padding: 0 !important;
+}
+
+.FormFlexPanel table {
+    border-collapse: collapse !important;
+}
+
+.PaymentEditorForm {
+    margin: 1em auto !important;
+}
+
+.TenantSureContentPanel {
+    margin: 1em;
+    text-align: justify;
 }
 
 </style>
