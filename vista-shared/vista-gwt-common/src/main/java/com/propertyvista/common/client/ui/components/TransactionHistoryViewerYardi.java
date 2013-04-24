@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -66,14 +66,14 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
         FormFlexPanel contentPanel = new FormFlexPanel();
         if (value != null) {
             List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
-            List<YardiCharge> outstangingCharges = new ArrayList<YardiCharge>();
+            List<YardiDebit> outstangingCharges = new ArrayList<YardiDebit>();
             List<YardiCredit> accountCredits = new ArrayList<YardiCredit>();
 
             for (InvoiceLineItem invoiceLineItem : value.lineItems()) {
                 if (invoiceLineItem.isInstanceOf(YardiPayment.class)) {
                     unappliedPayments.add((YardiPayment) invoiceLineItem);
-                } else if (invoiceLineItem.isInstanceOf(YardiCharge.class)) {
-                    outstangingCharges.add((YardiCharge) invoiceLineItem);
+                } else if (invoiceLineItem.isInstanceOf(YardiDebit.class)) {
+                    outstangingCharges.add((YardiDebit) invoiceLineItem);
                 } else if (invoiceLineItem.isInstanceOf(YardiCredit.class)) {
                     accountCredits.add((YardiCredit) invoiceLineItem);
                 }
@@ -119,7 +119,7 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
             BigDecimal totalAmount = new BigDecimal("0.00");
 
             for (E item : items) {
-                LogicalDate date = item.isInstanceOf(YardiCharge.class) ? ((YardiCharge) item).dueDate().getValue() : item.postDate().getValue();
+                LogicalDate date = item.isInstanceOf(YardiDebit.class) ? ((YardiDebit) item).dueDate().getValue() : item.postDate().getValue();
                 HTML dateHtml = date != null ? new HTML(dateFormat.format(date)) : new HTML("&nbsp;");
 
                 String description = !item.description().isNull() ? item.description().getValue() : "";

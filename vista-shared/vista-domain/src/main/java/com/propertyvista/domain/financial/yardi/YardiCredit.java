@@ -22,5 +22,5 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
  * Must be accounted when calculating total balance
  */
 @DiscriminatorValue("YardiCredit")
-public interface YardiCredit extends InvoiceCredit {
+public interface YardiCredit extends InvoiceCredit, YardiCharge {
 }

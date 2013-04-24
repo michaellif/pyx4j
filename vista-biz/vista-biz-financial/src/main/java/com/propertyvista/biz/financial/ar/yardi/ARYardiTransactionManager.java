@@ -39,7 +39,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -61,7 +61,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
     protected List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount, boolean padItemsOnly) {
         List<InvoiceDebit> debits = new ArrayList<InvoiceDebit>();
 
-        EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);
+        EntityQueryCriteria<YardiDebit> criteria = EntityQueryCriteria.create(YardiDebit.class);
         criteria.eq(criteria.proto().billingAccount(), billingAccount);
         criteria.ge(criteria.proto().outstandingDebit(), BigDecimal.ZERO);
         debits.addAll(Persistence.service().query(criteria));
@@ -82,7 +82,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
     @Override
     protected TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
-        List<YardiCharge> charges = getYardiCharges(billingAccount);
+        List<YardiDebit> charges = getYardiCharges(billingAccount);
         List<YardiCredit> credits = getYardiCredits(billingAccount);
         List<YardiPayment> payments = getYardiPayments(billingAccount);
         th.lineItems().addAll(charges);
@@ -110,8 +110,8 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         return new LogicalDate(calendar.getTime());
     }
 
-    private List<YardiCharge> getYardiCharges(BillingAccount billingAccount) {
-        EntityQueryCriteria<YardiCharge> criteria = EntityQueryCriteria.create(YardiCharge.class);
+    private List<YardiDebit> getYardiCharges(BillingAccount billingAccount) {
+        EntityQueryCriteria<YardiDebit> criteria = EntityQueryCriteria.create(YardiDebit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().dueDate()));
         criteria.asc(criteria.proto().id());
@@ -134,7 +134,7 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         return Persistence.service().query(criteria);
     }
 
-    private BigDecimal calculateTotal(List<YardiCharge> charges, List<YardiCredit> credits, List<YardiPayment> payments) {
+    private BigDecimal calculateTotal(List<YardiDebit> charges, List<YardiCredit> credits, List<YardiPayment> payments) {
         BigDecimal total = BigDecimal.ZERO;
         for (InvoiceLineItem item : charges) {
             total = total.add(item.amount().getValue());

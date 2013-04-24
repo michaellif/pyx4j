@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.yardi.YardiIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 
 public class YardiChargeProcessor {
@@ -36,7 +36,7 @@ public class YardiChargeProcessor {
 
     void removeOldCharges(YardiBillingAccount account) {
         // regular charges
-        EntityQueryCriteria<YardiCharge> oldCharges = EntityQueryCriteria.create(YardiCharge.class);
+        EntityQueryCriteria<YardiDebit> oldCharges = EntityQueryCriteria.create(YardiDebit.class);
         oldCharges.add(PropertyCriterion.eq(oldCharges.proto().billingAccount(), account));
         Persistence.service().delete(oldCharges);
         // negative charges

@@ -7,24 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 19, 2013
+ * Created on Jan 14, 2013
  * @author stanp
  * @version $Id$
  */
 package com.propertyvista.domain.financial.yardi;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
+import com.propertyvista.domain.financial.billing.InvoiceCharge;
 
-/**
- * Vista Payment Backouts; to be posted to Yardi
- * Must NOT be used when calculating total balance
- */
-@DiscriminatorValue("YardiReversal")
-public interface YardiReceiptReversal extends InvoicePaymentBackOut {
+@DiscriminatorValue("YardiDebit")
+public interface YardiDebit extends InvoiceCharge, YardiCharge {
 
-    IPrimitive<Boolean> applyNSF();
+    YardiService service();
+
+    IPrimitive<BigDecimal> amountPaid();
+
+    IPrimitive<BigDecimal> balanceDue();
 
 }

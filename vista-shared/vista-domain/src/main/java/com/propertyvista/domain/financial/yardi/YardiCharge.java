@@ -7,31 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 14, 2013
- * @author stanp
+ * Created on 2013-04-24
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.domain.financial.yardi;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.InvoiceCharge;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
-@DiscriminatorValue("YardiCharge")
-public interface YardiCharge extends InvoiceCharge {
-
-    YardiService service();
+@AbstractEntity
+public interface YardiCharge extends InvoiceLineItem {
 
     IPrimitive<String> chargeCode();
 
     IPrimitive<String> transactionId();
-
-    IPrimitive<BigDecimal> amountPaid();
-
-    IPrimitive<BigDecimal> balanceDue();
 
     IPrimitive<String> comment();
 }

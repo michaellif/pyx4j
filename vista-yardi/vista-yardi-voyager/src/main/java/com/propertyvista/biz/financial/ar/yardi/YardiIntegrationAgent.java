@@ -43,7 +43,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiCharge;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
@@ -114,7 +114,7 @@ public class YardiIntegrationAgent {
         }
         InvoiceLineItem item = null;
         if (amount.compareTo(BigDecimal.ZERO) >= 0) {
-            YardiCharge charge = EntityFactory.create(YardiCharge.class);
+            YardiDebit charge = EntityFactory.create(YardiDebit.class);
             charge.chargeCode().setValue(detail.getChargeCode());
             charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode(), detail.getCustomerID()));
             charge.transactionId().setValue(detail.getTransactionID());
