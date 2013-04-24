@@ -13,10 +13,9 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
-import java.util.List;
-import java.util.concurrent.Callable;
-
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
@@ -25,17 +24,13 @@ import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredProcess {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 5026863365365592547L;
 
     private volatile int progress;
@@ -44,35 +39,14 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
 
     private String fileName;
 
-    private final Pmc pmc;
-
-    public ExportTenantsPortalSecretsDeferredProcess(Pmc pmc) {
+    public ExportTenantsPortalSecretsDeferredProcess() {
         this.completed = false;
-        this.pmc = pmc;
     }
 
     @Override
     public void execute() {
         completed = false;
         ReportTableFormatter formatter = new ReportTableXLSXFormatter();
-
-        Persistence.service().startTransaction();
-
-        final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
-        criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
-        List<Tenant> tenants = TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<List<Tenant>>() {
-            @Override
-            public List<Tenant> call() throws Exception {
-                List<Tenant> tenants = Persistence.service().query(criteria);
-                for (Tenant tenant : tenants) {
-                    Persistence.service().retrieveMember(tenant.lease());
-                    Persistence.service().retrieveMember(tenant.lease().unit().building());
-                }
-                return tenants;
-            }
-        });
-        Persistence.service().endTransaction();
 
         formatter.header("Address");
         formatter.header("City Zip");
@@ -83,29 +57,53 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         formatter.header("Portal Registration Token");
         formatter.newRow();
 
-        maximum = tenants.size();
         progress = 0;
-        for (Tenant tenant : tenants) {
-            formatter.cell(getAddress(tenant.lease().unit().building()));
-            formatter.cell(getCityZip(tenant.lease().unit().building()));
-            formatter.cell(tenant.lease().unit().info().number().getValue());
-            formatter.cell(tenant.customer().person().name().firstName().getStringView());
-            if (tenant.customer().person().name().middleName() != null && !tenant.customer().person().name().middleName().isNull()) {
-                formatter.cell(tenant.customer().person().name().middleName().getStringView());
-                formatter.cell(tenant.customer().person().name().lastName().getStringView());
-            } else {
-                formatter.cell(tenant.customer().person().name().lastName().getStringView());
-                formatter.cell("");
+        try {
+            Persistence.service().startBackgroundProcessTransaction();
+
+            final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+            criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
+            criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
+            maximum = Persistence.service().count(criteria);
+
+            ICursorIterator<Tenant> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            try {
+                while (tenants.hasNext()) {
+                    Tenant tenant = tenants.next();
+                    Persistence.service().retrieveMember(tenant.lease());
+                    Persistence.service().retrieveMember(tenant.lease().unit().building());
+                    formatTenant(formatter, tenant);
+                    ++progress;
+                }
+            } finally {
+                tenants.close();
             }
-            formatter.cell(tenant.customer().portalRegistrationToken().getValue());
-            formatter.newRow();
-            ++progress;
+
+        } finally {
+            Persistence.service().endTransaction();
         }
+
         Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
-        fileName = pmc.name().getValue() + "-tenants-portal-secrets.xlsx";
+        fileName = VistaDeployment.getCurrentPmc().name().getValue() + "-tenants-portal-secrets.xlsx";
         d.save(fileName);
         completed = true;
 
+    }
+
+    private void formatTenant(ReportTableFormatter formatter, Tenant tenant) {
+        formatter.cell(getAddress(tenant.lease().unit().building()));
+        formatter.cell(getCityZip(tenant.lease().unit().building()));
+        formatter.cell(tenant.lease().unit().info().number().getValue());
+        formatter.cell(tenant.customer().person().name().firstName().getStringView());
+        if (tenant.customer().person().name().middleName() != null && !tenant.customer().person().name().middleName().isNull()) {
+            formatter.cell(tenant.customer().person().name().middleName().getStringView());
+            formatter.cell(tenant.customer().person().name().lastName().getStringView());
+        } else {
+            formatter.cell(tenant.customer().person().name().lastName().getStringView());
+            formatter.cell("");
+        }
+        formatter.cell(tenant.customer().portalRegistrationToken().getValue());
+        formatter.newRow();
     }
 
     private String getAddress(Building building) {

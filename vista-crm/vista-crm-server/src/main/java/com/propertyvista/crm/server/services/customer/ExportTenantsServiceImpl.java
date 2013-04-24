@@ -21,14 +21,13 @@ import com.pyx4j.essentials.server.report.ReportServiceImpl;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 
 public class ExportTenantsServiceImpl extends ReportServiceImpl<IEntity> implements ExportTenantsService {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPortalSecretsDeferredProcess(VistaDeployment.getCurrentPmc()), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPortalSecretsDeferredProcess(), ThreadPoolNames.DOWNLOADS));
     }
 
 }
