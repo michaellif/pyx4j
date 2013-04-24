@@ -21,5 +21,6 @@ public class ViewPaymentMethodViewImpl extends ViewImpl<LeasePaymentMethod> impl
 
     public ViewPaymentMethodViewImpl() {
         super(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class), true, false);
+        getForm().setViewable(true);
     }
 }
