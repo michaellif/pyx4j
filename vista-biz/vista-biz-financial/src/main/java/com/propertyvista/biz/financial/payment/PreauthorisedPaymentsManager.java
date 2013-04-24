@@ -221,6 +221,7 @@ class PreauthorisedPaymentsManager {
             BigDecimal unapidBalance = currentBalance.subtract(percentAmountTotal);
             // Make the Largest to  pay fractions
             recordLargest.amount = recordLargest.amount.add(unapidBalance);
+            total = total.add(unapidBalance);
         }
 
         if ((currentBalance != null) && (total.compareTo(currentBalance) != 0)) {
