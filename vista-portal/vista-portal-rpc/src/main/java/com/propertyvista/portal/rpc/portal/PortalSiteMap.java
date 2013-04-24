@@ -71,7 +71,10 @@ public class PortalSiteMap implements SiteMap {
     @PlaceProperties(navigLabel = "Dashboard", caption = "Dashboard")
     public static class Residents extends AppPlace {
 
-        public static class PersonalInformation extends AppPlace {
+        public static class PersonalInformationView extends AppPlace {
+        }
+
+        public static class PersonalInformationEdit extends AppPlace {
         }
 
         public static class Financial extends AppPlace {

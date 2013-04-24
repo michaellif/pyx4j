@@ -7,44 +7,40 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 9, 2011
- * @author dad
+ * Created on May 18, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.residents.paymentmethod;
+package com.propertyvista.portal.client.activity.residents.personalinfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.paymentmethod.ViewPaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PersonalInformationEdit;
+import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 
-public class ViewPaymentMethodActivity extends SecurityAwareActivity implements ViewPaymentMethodView.Presenter {
+public class PersonalInfoViewActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
 
-    protected final ViewPaymentMethodView view;
+    private final PersonalInfoView view;
 
-    protected final PaymentMethodCrudService srv;
+    PersonalInfoCrudService srv;
 
-    private final Key entityId;
-
-    public ViewPaymentMethodActivity(AppPlace place) {
-        this.view = ResidentsViewFactory.instance(ViewPaymentMethodView.class);
+    public PersonalInfoViewActivity(Place place) {
+        this.view = ResidentsViewFactory.instance(PersonalInfoView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(PaymentMethodCrudService.class);
-
-        entityId = place.getItemId();
+        srv = GWT.create(PersonalInfoCrudService.class);
     }
 
     @Override
@@ -52,22 +48,26 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
+        srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
             @Override
-            public void onSuccess(LeasePaymentMethod result) {
+            public void onSuccess(ResidentDTO result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.View);
+        }, null, AbstractCrudService.RetrieveTraget.View);
+    }
+
+    @Override
+    public void resetPassword() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
     }
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod().formPlace(id));
+        AppSite.getPlaceController().goTo(new PersonalInformationEdit());
     }
 
     @Override
     public void back() {
-        History.back();
+        // TODO Auto-generated method stub
     }
 }

@@ -24,7 +24,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
-import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.ViewBillActivity;
@@ -43,6 +42,8 @@ import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentM
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
+import com.propertyvista.portal.client.activity.residents.personalinfo.PersonalInfoEditActivity;
+import com.propertyvista.portal.client.activity.residents.personalinfo.PersonalInfoViewActivity;
 import com.propertyvista.portal.client.activity.residents.yardimaintenance.EditYardiMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.yardimaintenance.NewYardiMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.yardimaintenance.YardiMaintenanceActivity;
@@ -75,8 +76,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     Activity activity = null;
                     if (appPlace instanceof Residents) {
                         activity = new DashboardActivity(appPlace);
-                    } else if (appPlace instanceof Residents.PersonalInformation) {
-                        activity = new PersonalInfoActivity(appPlace);
+                    } else if (appPlace instanceof Residents.PersonalInformationView) {
+                        activity = new PersonalInfoViewActivity(appPlace);
+                    } else if (appPlace instanceof Residents.PersonalInformationEdit) {
+                        activity = new PersonalInfoEditActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
                         activity = new PotentialTenantActivity(appPlace);
 

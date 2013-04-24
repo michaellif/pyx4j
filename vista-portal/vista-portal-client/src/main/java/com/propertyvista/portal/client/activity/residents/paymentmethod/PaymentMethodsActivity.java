@@ -23,7 +23,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
@@ -64,8 +63,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void editPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppPlace place = new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod().formPlace(paymentMethod.id().getValue()));
     }
 
     @Override

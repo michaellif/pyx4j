@@ -20,6 +20,6 @@ import com.propertyvista.portal.client.ui.residents.ViewImpl;
 public class ViewPaymentMethodViewImpl extends ViewImpl<LeasePaymentMethod> implements ViewPaymentMethodView {
 
     public ViewPaymentMethodViewImpl() {
-        super(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class), true, false);
+        super(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class));
     }
 }

@@ -51,7 +51,7 @@ public class ViewImpl<E extends IEntity> extends ViewBaseImpl<E> implements View
         edit.setCommand(new Command() {
             @Override
             public void execute() {
-                ((View.Presenter<E>) getPresenter()).edit(getForm().getValue().getPrimaryKey());
+                ((View.Presenter<E>) getPresenter()).edit(getForm().getValue().id().getValue());
             }
         });
         if (!noEdit) {

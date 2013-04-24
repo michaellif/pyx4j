@@ -11,11 +11,12 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.residents;
+package com.propertyvista.portal.client.activity.residents.personalinfo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
@@ -24,27 +25,22 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
+import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoEdit;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PersonalInformationView;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 
-public class PersonalInfoActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
+public class PersonalInfoEditActivity extends SecurityAwareActivity implements PersonalInfoEdit.Presenter {
 
-    private final PersonalInfoView view;
+    private final PersonalInfoEdit view;
 
     PersonalInfoCrudService srv;
 
-    public PersonalInfoActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PersonalInfoView.class);
+    public PersonalInfoEditActivity(Place place) {
+        this.view = ResidentsViewFactory.instance(PersonalInfoEdit.class);
         this.view.setPresenter(this);
-        withPlace(place);
         srv = GWT.create(PersonalInfoCrudService.class);
-    }
-
-    public PersonalInfoActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
@@ -58,42 +54,21 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
                 view.populate(result);
             }
 
-        }, null, AbstractCrudService.RetrieveTraget.View);
-
-    }
-
-//    @Override
-//    public void save(ResidentDTO info) {
-//        srv.save(new DefaultAsyncCallback<Key>() {
-//            @Override
-//            public void onSuccess(Key result) {
-//                srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
-//                    @Override
-//                    public void onSuccess(ResidentDTO result) {
-//                        view.populate(result);
-//                        view.showNote("Operation completed successfully.");
-//                    }
-//
-//                }, null, AbstractCrudService.RetrieveTraget.View);
-//            }
-//
-//        }, info);
-//    }
-
-    @Override
-    public void resetPassword() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
+        }, null, AbstractCrudService.RetrieveTraget.Edit);
     }
 
     @Override
-    public void edit(Key id) {
-        // TODO Auto-generated method stub
-
+    public void save(ResidentDTO info) {
+        srv.save(new DefaultAsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key result) {
+                AppSite.getPlaceController().goTo(new PersonalInformationView());
+            }
+        }, info);
     }
 
     @Override
-    public void back() {
-        // TODO Auto-generated method stub
-
+    public void cancel() {
+        History.back();
     }
 }
