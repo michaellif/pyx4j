@@ -148,3 +148,9 @@
 .LandingButtonHolder {
     text-align: center !important;
 }
+
+.FormFlexPanel .FormFlexPanel .PaymentEditorLegalTerms {
+    height: auto !important;
+    padding-right: 0 !important;
+    width: auto !important;
+}

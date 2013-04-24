@@ -170,3 +170,9 @@
 .ListBox-readonly {
     border-color: #C2C2C2 !important;
 }
+
+.FormFlexPanel .FormFlexPanel .PaymentEditorLegalTerms {
+    height: auto !important;
+    padding-right: 0 !important;
+    width: auto !important;
+}
