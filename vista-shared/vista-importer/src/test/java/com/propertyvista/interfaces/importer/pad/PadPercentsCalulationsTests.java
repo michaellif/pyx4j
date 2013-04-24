@@ -105,8 +105,8 @@ public class PadPercentsCalulationsTests {
     @Test
     public void testUninitializedChargeCplit() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
-        leasePadEntities.add(createModelFull("1", "rent", "100", 1000));
-        leasePadEntities.add(createModelFull("2", "rent", "100", 1000));
+        leasePadEntities.add(createModelFull("1", "rent", null, 1000));
+        leasePadEntities.add(createModelFull("2", "rent", null, 1000));
         leasePadEntities.add(createModelFull("1", "park", "100", 100));
 
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);

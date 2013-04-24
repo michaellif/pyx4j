@@ -43,6 +43,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
@@ -107,24 +108,44 @@ public class TenantPadProcessor {
     private Map<Lease, List<PadFileModel>> findLeases(List<PadFileModel> entities, TenantPadCounter counters) {
         Map<Lease, List<PadFileModel>> mappedByLease = new LinkedHashMap<Lease, List<PadFileModel>>();
         for (PadFileModel padFileModel : entities) {
-            String tenantId = padFileModel.tenantId().getValue().trim();
-            EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-            criteria.eq(criteria.proto().participantId(), tenantId);
-            padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+            if (!padFileModel.tenantId().isNull()) {
+                String tenantId = padFileModel.tenantId().getValue().trim();
+                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+                criteria.eq(criteria.proto().participantId(), tenantId);
+                padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+                if (padFileModel._processorInformation().tenant().isNull()) {
+                    padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database", tenantId));
+                }
+            } else if (!padFileModel.leaseId().isNull()) {
+                String leaseId = padFileModel.leaseId().getValue().trim();
+                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+                criteria.eq(criteria.proto().lease().leaseId(), leaseId);
+                criteria.isCurrent(criteria.proto().leaseTermParticipants().$().leaseTermV());
+                criteria.eq(criteria.proto().leaseTermParticipants().$().role(), LeaseTermParticipant.Role.Applicant);
+                padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+                if (padFileModel._processorInformation().tenant().isNull()) {
+                    padFileModel._import().message().setValue(i18n.tr("Lease Id ''{0}'' not found in database", leaseId));
+                }
+            } else {
+                padFileModel._import().invalid().setValue(Boolean.TRUE);
+                padFileModel._import().message().setValue(i18n.tr("Tenant Id or Lease Id are required"));
+                continue;
+            }
 
             if (padFileModel._processorInformation().tenant().isNull()) {
-                padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database", tenantId));
                 padFileModel._import().invalid().setValue(Boolean.TRUE);
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.notFound);
                 counters.notFound++;
-            } else {
-                List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());
-                if (leaseEntities == null) {
-                    leaseEntities = new ArrayList<PadFileModel>();
-                    mappedByLease.put(padFileModel._processorInformation().tenant().lease(), leaseEntities);
-                }
-                leaseEntities.add(padFileModel);
+                continue;
             }
+
+            List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());
+            if (leaseEntities == null) {
+                leaseEntities = new ArrayList<PadFileModel>();
+                mappedByLease.put(padFileModel._processorInformation().tenant().lease(), leaseEntities);
+            }
+            leaseEntities.add(padFileModel);
+
         }
         return mappedByLease;
     }
@@ -258,6 +279,9 @@ public class TenantPadProcessor {
                 BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
                 BigDecimal percentRound = percent.setScale(4, BigDecimal.ROUND_HALF_UP);
                 padFileModel._processorInformation().percent().setValue(percentRound);
+            } else if (padFileModel.charge().isNull()) {
+                //Default Yardi records import, first row, no percent only estimated charges
+                padFileModel._processorInformation().percent().setValue(BigDecimal.ONE);
             }
             return;
         }
@@ -299,10 +323,16 @@ public class TenantPadProcessor {
         double estimatedChargeTotal = 0;
         for (PadFileModel padFileModel : leasePadEntities) {
             double estimatedChargeSplit = 0;
-            if (!padFileModel.percent().isNull()) {
+            if (padFileModel.charge().isNull()) {
                 double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
-                double percent = Double.parseDouble(padFileModel.percent().getValue());
-                estimatedChargeSplit = percent * estimatedCharge / 100.0;
+
+                if (!padFileModel.percent().isNull()) {
+                    double percent = Double.parseDouble(padFileModel.percent().getValue());
+                    estimatedChargeSplit = percent * estimatedCharge / 100.0;
+                } else {
+                    // 100% assumed
+                    estimatedChargeSplit = estimatedCharge;
+                }
 
                 ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(padFileModel.chargeId().getValue());
                 if (chargeCodeRecords == null) {
@@ -310,7 +340,7 @@ public class TenantPadProcessor {
                     chargeCodeRecords = new ChargeCodeRecords();
                     chargeCodeRecords.firstRecord = padFileModel;
                     chargeCodeRecords.estimatedCharge = estimatedCharge;
-                    chargeCodeRecords.potencialUinitializedChargeSplit = (percent == 100.0);
+                    chargeCodeRecords.potencialUinitializedChargeSplit = padFileModel.percent().isNull();
                     recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
                 } else {
                     if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
@@ -319,7 +349,7 @@ public class TenantPadProcessor {
                         padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
                         continue;
                     }
-                    if (chargeCodeRecords.potencialUinitializedChargeSplit && (percent == 100.0)) {
+                    if (chargeCodeRecords.potencialUinitializedChargeSplit && (padFileModel.percent().isNull())) {
                         chargeCodeRecords.entities.add(padFileModel);
                     } else {
                         chargeCodeRecords.potencialUinitializedChargeSplit = false;

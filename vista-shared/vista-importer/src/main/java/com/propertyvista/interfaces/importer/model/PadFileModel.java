@@ -41,8 +41,10 @@ public interface PadFileModel extends IEntity {
     @ImportColumn(names = { "Unit", "Unit Number" })
     IPrimitive<String> unit();
 
-    @ImportColumn(names = { "Tenant ID" })
-    @NotNull
+    @ImportColumn(names = { "Lease Id", "Lease" })
+    IPrimitive<String> leaseId();
+
+    @ImportColumn(names = { "Tenant Id" })
     IPrimitive<String> tenantId();
 
     @ImportColumn(names = { "Bank Account Holder", "Name" })
