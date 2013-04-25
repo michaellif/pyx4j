@@ -92,6 +92,11 @@ SET search_path = '_admin_';
         ALTER TABLE vista_terms_v DROP CONSTRAINT vista_terms_v_holder_fk;
         
         
+        -- Check constraints
+        
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
+        
+        
         /**
         ***     =======================================================================================================
         ***
@@ -136,6 +141,12 @@ SET search_path = '_admin_';
        
         UPDATE  _admin_.pad_file
         SET     company_id = 'BIRCHWOOD';
+        
+        DELETE FROM _admin_.scheduler_trigger_notification WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
+        DELETE FROM _admin_.scheduler_trigger_schedule WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
+        DELETE FROM _admin_.scheduler_run WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
+        DELETE FROM _admin_.scheduler_trigger_pmc WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
+        DELETE FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess';
         
         
         
@@ -253,6 +264,14 @@ SET search_path = '_admin_';
         ALTER TABLE vista_terms_v ADD CONSTRAINT vista_terms_v_holder_fk FOREIGN KEY(holder) REFERENCES vista_terms(id)  DEFERRABLE INITIALLY DEFERRED;
         
 
+        -- check constraints
+        
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+                CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
+                'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadReceiveAcknowledgment', 'paymentsPadReceiveReconciliation', 'paymentsPadSend', 
+                'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 
+                'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'yardiImportProcess'));
+                
         /**
         ***     ============================================================================================================
         ***     

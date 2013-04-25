@@ -408,8 +408,13 @@ BEGIN
         
         ALTER TABLE aging_buckets DROP CONSTRAINT aging_buckets_debit_type_e_ck;
         ALTER TABLE arpolicy DROP CONSTRAINT arpolicy_credit_debit_rule_e_ck;
+        ALTER TABLE billing_debit_credit_link DROP CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck;
+        ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_debit_type_e_ck;
+        ALTER TABLE billing_invoice_line_item DROP CONSTRAINT billing_invoice_line_item_id_discriminator_ck;
         ALTER TABLE concession_v DROP CONSTRAINT concession_v_product_item_type_discriminator_d_ck;
         ALTER TABLE deposit_policy_item DROP CONSTRAINT deposit_policy_item_product_type_discriminator_d_ck;
+        ALTER TABLE issue_classification DROP CONSTRAINT issue_classification_priority_e_ck;
+        ALTER TABLE issue_element DROP CONSTRAINT issue_element_tp_e_ck;
         ALTER TABLE lead DROP CONSTRAINT lead_lease_type_e_ck;
         ALTER TABLE lease_adjustment_reason DROP CONSTRAINT lease_adjustment_reason_action_type_e_ck;
         ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
@@ -473,6 +478,22 @@ BEGIN
         ALTER TABLE billing_invoice_line_item ADD COLUMN ar_code BIGINT;
         
         
+        -- building_utility
+        
+        CREATE TABLE building_utility
+        (
+                id                              BIGINT                          NOT NULL,
+                building                        BIGINT                          NOT NULL,
+                order_in_building               INTEGER,
+                building_utility_type           VARCHAR(50),
+                name                            VARCHAR(128),
+                description                     VARCHAR(2048),
+                        CONSTRAINT      building_utility_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE building_utility OWNER TO vista;     
+        
+        
         -- concession_v
         
         ALTER TABLE concession_v ADD COLUMN product_code BIGINT;
@@ -491,45 +512,54 @@ BEGIN
         
         -- maintenance_request
         
-        ALTER TABLE maintenance_request ADD COLUMN category BIGINT;
+        
+        ALTER TABLE maintenance_request RENAME COLUMN status TO status_old;
+        
+        ALTER TABLE maintenance_request ADD COLUMN category BIGINT,
+                                        ADD COLUMN priority BIGINT,
+                                        ADD COLUMN status BIGINT,
+                                        ADD COLUMN request_id VARCHAR(14),
+                                        ADD COLUMN request_id_s VARCHAR(26),
+                                        ADD COLUMN resolution VARCHAR(250),
+                                        ADD COLUMN summary VARCHAR(500);
+                                          
+                                                
         
         -- maintenance_request_category
         
         CREATE TABLE maintenance_request_category
         (
                 id                      BIGINT                  NOT NULL,
-                level                   BIGINT,
+                parent                  BIGINT,
                 name                    VARCHAR(500),
                         CONSTRAINT      maintenance_request_category_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE maintenance_request_category OWNER TO vista;
         
-        -- maintenance_request_category_level
+        -- maintenance_request_priority
         
-        CREATE TABLE maintenance_request_category_level
+        CREATE TABLE maintenance_request_priority
         (
                 id                      BIGINT                  NOT NULL,
-                level                   INT,
+                level                   VARCHAR(50),
                 name                    VARCHAR(500),
-                        CONSTRAINT      maintenance_request_category_level_pk PRIMARY KEY(id)
+                        CONSTRAINT      maintenance_request_priority_pk PRIMARY KEY(id)
         );
+               
+        ALTER TABLE maintenance_request_priority OWNER TO vista;
         
-        ALTER TABLE maintenance_request_category_level OWNER TO vista;
+        -- maintenance_request_status
         
-        -- maintenance_request_category$sub_categories
-        
-        CREATE TABLE maintenance_request_category$sub_categories
+        CREATE TABLE maintenance_request_status
         (
                 id                      BIGINT                  NOT NULL,
-                owner                   BIGINT,
-                value                   BIGINT,
-                seq                     INTEGER,
-                        CONSTRAINT      maintenance_request_category$sub_categories_pk PRIMARY KEY(id)
+                phase                   VARCHAR(50),
+                name                    VARCHAR(500),
+                        CONSTRAINT      maintenance_request_status_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE maintenance_request_category$sub_categories OWNER TO vista;
-        
+        ALTER TABLE maintenance_request_status OWNER TO vista;
         
         -- padpolicy_item
         
@@ -553,6 +583,12 @@ BEGIN
         -- product_tax_policy_item
         
         ALTER TABLE product_tax_policy_item ADD COLUMN product_code BIGINT;
+        
+        
+        -- restrictions_policy
+        
+        ALTER TABLE restrictions_policy ADD COLUMN enforce_age_of_majority BOOLEAN,
+                                        ADD COLUMN age_of_majority INT;
         
         -- yardi_charge_code
         
@@ -696,6 +732,15 @@ BEGIN
                 ||'SET id_discriminator = ''YardiDebit'' '
                 ||'WHERE id_discriminator = ''YardiCharge'' ';
         
+        
+        -- building_utility;
+        
+        EXECUTE 'INSERT INTO building_utility (id,building,order_in_building,building_utility_type,name) '
+                ||'(SELECT nextval(''public.building_utility_seq'') AS id, i.owner AS building, i.seq AS order_in_building, '
+                ||'LOWER(u.name) AS  building_utility_type, u.name '
+                ||'FROM '||v_schema_name||'.building$included_utilities i '
+                ||'JOIN '||v_schema_name||'.utility u ON (u.id = i.value) )';
+        
         -- concession_v
         
         EXECUTE 'UPDATE '||v_schema_name||'.concession_v AS c '
@@ -761,6 +806,41 @@ BEGIN
                 ||'SET  code = a.id '
                 ||'FROM '||v_schema_name||'.arcode AS a '
                 ||'WHERE        l.lease_adjustment_reason = a.lad_id ';
+                
+                
+        -- maintenance_request_status
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_status (id,phase,name) VALUES '
+                ||'(nextval(''public.maintenance_request_status_seq''),''Submitted'',''Submitted''),'
+                ||'(nextval(''public.maintenance_request_status_seq''),''Scheduled'',''Scheduled''),'
+                ||'(nextval(''public.maintenance_request_status_seq''),''Resolved'',''Resolved''),'
+                ||'(nextval(''public.maintenance_request_status_seq''),''Cancelled'',''Cancelled'')';
+                
+                
+        -- maintenance_request_priority
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_priority (id,level,name) VALUES '
+                ||'(nextval(''public.maintenance_request_priority_seq''),''STANDARD'',''STANDARD''),'
+                ||'(nextval(''public.maintenance_request_priority_seq''),''EMERGENCY'',''EMERGENCY'')';
+                
+                
+        -- maintenance_request_category
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name) VALUES '
+                ||'(nextval(''public.maintenance_request_category_seq''),NULL,''ROOT'') ';
+        
+        
+        IF NOT EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
+                        ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+        
+                EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                        ||'SET status = s.id '
+                        ||'FROM '||v_schema_name||'.maintenance_request_status s '
+                        ||'WHERE UPPER(m.status_old) = UPPER(s.name) ';
+       
+        END IF;
+        
                 
         -- padpolicy_item
        
@@ -865,6 +945,28 @@ BEGIN
         
         ALTER TABLE billing_invoice_line_item   DROP COLUMN target_date,
                                                 DROP COLUMN debit_type ;
+                                                
+        -- Truncate table for pmc with yardi_integration enabled
+        
+        IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
+                        ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ) )
+        THEN
+                
+                EXECUTE 'DELETE FROM '||v_schema_name||'.invoice_adjustment_sub_line_item '
+                        ||'WHERE line_item IN (SELECT id FROM '||v_schema_name||'.billing_invoice_line_item )';
+                
+                EXECUTE 'DELETE FROM '||v_schema_name||'.invoice_charge_sub_line_item '
+                        ||'WHERE line_item IN (SELECT id FROM '||v_schema_name||'.billing_invoice_line_item )';
+                
+                EXECUTE 'DELETE FROM '||v_schema_name||'.billing_debit_credit_link '
+                        ||'WHERE credit_item IN (SELECT id FROM '||v_schema_name||'.billing_invoice_line_item )';
+                        
+                EXECUTE 'DELETE FROM '||v_schema_name||'.billing_debit_credit_link '
+                        ||'WHERE debit_item IN (SELECT id FROM '||v_schema_name||'.billing_invoice_line_item )'; 
+                
+                EXECUTE 'TRUNCATE TABLE '||v_schema_name||'.billing_invoice_line_item ';
+        END IF;
+        
         
         -- building$external_utilities
         
@@ -897,6 +999,10 @@ BEGIN
         
         DROP TABLE lease_adjustment_reason;
         
+        
+        -- maintenance_request 
+        
+        ALTER TABLE maintenance_request DROP COLUMN status_old;
         
         -- padpolicy_item
         
@@ -1025,7 +1131,7 @@ BEGIN
         ALTER TABLE campaign_history ADD CONSTRAINT campaign_history_campaign_fk FOREIGN KEY(campaign) REFERENCES phone_call_campaign(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign_history ADD CONSTRAINT campaign_history_tenant_fk FOREIGN KEY(tenant) REFERENCES customer(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign ADD CONSTRAINT campaign_message_fk FOREIGN KEY(message) REFERENCES message(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_owner_fk FOREIGN KEY(owner) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_owbilling_debit_credit_linkner_fk FOREIGN KEY(owner) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_value_fk FOREIGN KEY(value) REFERENCES charge_line(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charges ADD CONSTRAINT charges_application_charges_fk FOREIGN KEY(application_charges) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charges ADD CONSTRAINT charges_application_fk FOREIGN KEY(application) REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1208,15 +1314,9 @@ BEGIN
         ALTER TABLE locker_area ADD CONSTRAINT locker_area_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE locker ADD CONSTRAINT locker_locker_area_fk FOREIGN KEY(locker_area) REFERENCES locker_area(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance ADD CONSTRAINT maintenance_contract_contractor_fk FOREIGN KEY(contract_contractor) REFERENCES vendor(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE maintenance_request_category$sub_categories ADD CONSTRAINT maintenance_request_category$sub_categories_owner_fk 
-                FOREIGN KEY(owner) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE maintenance_request_category$sub_categories ADD CONSTRAINT maintenance_request_category$sub_categories_value_fk 
-                FOREIGN KEY(value) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_category_fk FOREIGN KEY(category) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_issue_classification_fk FOREIGN KEY(issue_classification) REFERENCES issue_classification(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_lease_participant_fk FOREIGN KEY(lease_participant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_level_fk 
-                FOREIGN KEY(level) REFERENCES maintenance_request_category_level(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_owner_fk FOREIGN KEY(owner) REFERENCES marketing(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_value_fk FOREIGN KEY(value) REFERENCES advertising_blurb(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE news ADD CONSTRAINT news_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1386,22 +1486,32 @@ BEGIN
         -- Check Constraints
         
          ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
-                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
-                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arcode ADD CONSTRAINT arcode_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
-                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_credit_debit_rule_e_ck CHECK ((credit_debit_rule) IN ('oldestDebtFirst', 'rentDebtLast'));
+        ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck 
+                CHECK ((debit_item_discriminator) IN ('AccountCharge', 'CarryforwardCharge', 'Deposit', 'LatePaymentFee', 'NSF', 'PaymentBackOut', 'ProductCharge', 
+                'Withdrawal', 'YardiDebit', 'YardiReversal'));
+        ALTER TABLE billing_invoice_line_item ADD CONSTRAINT billing_invoice_line_item_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('AccountCharge', 'AccountCredit', 'CarryforwardCharge', 'CarryforwardCredit', 'Deposit', 'DepositRefund', 'LatePaymentFee', 
+                'NSF', 'Payment', 'PaymentBackOut', 'ProductCharge', 'ProductCredit', 'Withdrawal', 'YardiCredit', 'YardiDebit', 'YardiPayment', 'YardiReceipt', 'YardiReversal'));
+        ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_utility_type_e_ck CHECK ((building_utility_type) IN ('cable', 'gas', 'hydro', 'internet', 'water'));
         ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
-                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
-                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+        ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_level_e_ck CHECK ((level) IN ('EMERGENCY', 'STANDARD'));
+        ALTER TABLE maintenance_request_status ADD CONSTRAINT maintenance_request_status_phase_e_ck CHECK ((phase) IN ('Cancelled', 'Resolved', 'Scheduled', 'Submitted'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
         ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'Commercial', 'Deposit', 'ExternalCharge', 'ExternalCredit',
-                 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+
 
         
         /**
@@ -1414,7 +1524,7 @@ BEGIN
         
         CREATE INDEX billing_invoice_line_item_billing_account_idx ON billing_invoice_line_item USING btree (billing_account);
         CREATE INDEX billing_invoice_line_item_billing_account_discriminator_idx ON billing_invoice_line_item USING btree (billing_account_discriminator);
-        CREATE INDEX maintenance_request_category$sub_categories_owner_idx ON maintenance_request_category$sub_categories USING btree (owner);
+       
         
         
         -- Finishing touch
