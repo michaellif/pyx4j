@@ -29,8 +29,6 @@ import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.client.ui.LeaseContextSelectionViewImpl;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.NavigViewImpl;
-import com.propertyvista.portal.client.ui.PotentialTenantView;
-import com.propertyvista.portal.client.ui.PotentialTenantViewImpl;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
@@ -49,6 +47,8 @@ import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceR
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceViewImpl;
+import com.propertyvista.portal.client.ui.residents.maintenance.ViewMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.maintenance.ViewMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedViewImpl;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
@@ -95,6 +95,8 @@ import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageView;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageViewImpl;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestViewImpl;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.ViewYardiMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.yardimaintenance.ViewYardiMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceView;
 import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceViewImpl;
 
@@ -134,21 +136,26 @@ public class ResidentsViewFactory extends ViewFactoryBase {
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
+            } else if (ViewPaymentMethodView.class.equals(type)) {
+                map.put(type, new ViewPaymentMethodViewImpl());
+            } else if (EditPaymentMethodView.class.equals(type)) {
+                map.put(type, new EditPaymentMethodViewImpl());
             } else if (PaymentMethodWizardView.class.equals(type)) {
                 map.put(type, new PaymentMethodWizardViewImpl());
             } else if (PaymentMethodSubmittedView.class.equals(type)) {
                 map.put(type, new PaymentMethodSubmittedViewImpl());
-            } else if (EditPaymentMethodView.class.equals(type)) {
-                map.put(type, new EditPaymentMethodViewImpl());
-            } else if (ViewPaymentMethodView.class.equals(type)) {
-                map.put(type, new ViewPaymentMethodViewImpl());
 
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
-            } else if (YardiMaintenanceView.class.equals(type)) {
-                map.put(type, new YardiMaintenanceViewImpl());
+            } else if (ViewMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new ViewMaintenanceRequestViewImpl());
             } else if (EditMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditMaintenanceRequestViewImpl());
+
+            } else if (YardiMaintenanceView.class.equals(type)) {
+                map.put(type, new YardiMaintenanceViewImpl());
+            } else if (ViewYardiMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new ViewYardiMaintenanceRequestViewImpl());
             } else if (EditYardiMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditYardiMaintenanceRequestViewImpl());
 

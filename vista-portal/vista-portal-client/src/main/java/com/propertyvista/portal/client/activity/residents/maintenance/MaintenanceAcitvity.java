@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
@@ -71,9 +70,8 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
     }
 
     @Override
-    public void editRequest(MaintenanceRequestDTO requests) {
-        AppPlace place = new PortalSiteMap.Residents.Maintenance.EditMaintenanceRequest();
-        AppSite.getPlaceController().goTo(place.formPlace(requests.id().getValue()));
+    public void viewRequest(MaintenanceRequestDTO requests) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.ViewMaintenanceRequest().formPlace(requests.id().getValue()));
     }
 
     @Override

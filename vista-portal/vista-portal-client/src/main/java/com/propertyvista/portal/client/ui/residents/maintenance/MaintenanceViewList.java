@@ -133,7 +133,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                 viewlTicket.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        presenter.editRequest(request);
+                        presenter.viewRequest(request);
                     }
                 });
                 openRequestsPanel.setWidget(row, ++col, viewlTicket);

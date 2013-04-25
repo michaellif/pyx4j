@@ -7,34 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 29, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
-import java.util.Vector;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.client.ui.residents.View;
 
-public interface MaintenanceView extends IsWidget {
+public interface ViewMaintenanceRequestView extends View<MaintenanceRequestDTO> {
 
-    interface Presenter {
+    interface Presenter extends View.Presenter<MaintenanceRequestDTO> {
 
-        void createNewRequest();
-
-        void viewRequest(MaintenanceRequestDTO requests);
-
-        void cancelRequest(MaintenanceRequestDTO request);
-
-        void rateRequest(MaintenanceRequestDTO request, Integer rate);
+        void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback);
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests);
-
-    void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests);
 }

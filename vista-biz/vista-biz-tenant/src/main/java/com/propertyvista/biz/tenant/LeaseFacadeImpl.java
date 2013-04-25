@@ -589,7 +589,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDay, LogicalDate leseEndDate) {
+    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDay, LogicalDate leaseEndDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
@@ -607,7 +607,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         case Skip:
             break;
         case Termination:
-            lease.terminationLeaseTo().setValue(leseEndDate);
+            lease.terminationLeaseTo().setValue(leaseEndDate);
             break;
         default:
             break;
