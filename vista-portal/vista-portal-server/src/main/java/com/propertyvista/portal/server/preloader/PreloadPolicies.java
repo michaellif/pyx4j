@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
@@ -31,12 +30,11 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupPADP
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PADPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPoliciesPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.OrganizationPoliciesNodePreloader;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class PreloadPolicies extends AbstractPoliciesPreloader {
 
@@ -46,8 +44,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
-        add(new RestrictionsPolicyPreloader());
-        addLocalRestrictionsPolicies();
+        add(new PreloadRestrictionsPolicies());
         add(new DatesPolicyPreloader());
         add(new TenantInsurancePolicyPreloader());
         add(new PaymentMethodSelectionPolicyPreloader());
@@ -69,26 +66,6 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new MockupLeaseAdjustmentPolicyPreloader());
             add(new MockupLeaseBillingPolicyPreloader());
             add(new MockupPADPolicyPreloader());
-        }
-    }
-
-    private void addLocalRestrictionsPolicies() {
-        if (false) { // TODO this is for commit only: it seems that calling VistaFeatures.instance().countryOfOperation() screws the testDefaultPreload 
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                add(new RestrictionsPolicyPreloader().province("AB").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("BC").ageOfMajority(19));
-                add(new RestrictionsPolicyPreloader().province("MB").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("NB").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("NL").ageOfMajority(19));
-                add(new RestrictionsPolicyPreloader().province("NT").ageOfMajority(19));
-                add(new RestrictionsPolicyPreloader().province("NS").ageOfMajority(19));
-                add(new RestrictionsPolicyPreloader().province("NU").ageOfMajority(19));
-                add(new RestrictionsPolicyPreloader().province("ON").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("PE").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("QC").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("SK").ageOfMajority(18));
-                add(new RestrictionsPolicyPreloader().province("YT").ageOfMajority(19));
-            }
         }
     }
 
