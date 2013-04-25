@@ -119,7 +119,7 @@ public class YardiARIntegrationAgent {
             charge.arCode().set(new ARCodeAdapter().findARCode(ActionType.Debit, detail.getChargeCode(), detail.getCustomerID()));
             charge.amountPaid().setValue(new BigDecimal(detail.getAmountPaid()));
             charge.balanceDue().setValue(new BigDecimal(detail.getBalanceDue()));
-            charge.outstandingDebit().setValue(new BigDecimal(detail.getAmount()));
+            charge.outstandingDebit().setValue(amount);
             charge.taxTotal().setValue(BigDecimal.ZERO);
             charge.dueDate().setValue(ARYardiTransactionManager.instance().getTransactionDueDate(account, transactionDate));
             if (detail.getService() != null) {
@@ -134,6 +134,7 @@ public class YardiARIntegrationAgent {
             YardiCredit credit = EntityFactory.create(YardiCredit.class);
             credit.arCode().set(new ARCodeAdapter().findARCode(ActionType.Credit, detail.getChargeCode(), detail.getCustomerID()));
             credit.postDate().setValue(transactionDate);
+            credit.outstandingCredit().setValue(amount);
             item = credit;
         }
         item.chargeCode().setValue(detail.getChargeCode());
