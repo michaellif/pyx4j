@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -62,17 +61,8 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     }
 
     @Override
-    public void editPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod().formPlace(paymentMethod.id().getValue()));
-    }
-
-    @Override
-    public void savePaymentMethod(LeasePaymentMethod paymentMethod) {
-        srv.save(new DefaultAsyncCallback<Key>() {
-            @Override
-            public void onSuccess(Key result) {
-            }
-        }, paymentMethod);
+    public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
     }
 
     @Override

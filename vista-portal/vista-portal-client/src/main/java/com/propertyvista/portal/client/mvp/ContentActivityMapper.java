@@ -76,9 +76,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     Activity activity = null;
                     if (appPlace instanceof Residents) {
                         activity = new DashboardActivity(appPlace);
-                    } else if (appPlace instanceof Residents.PersonalInformationView) {
+                    } else if (appPlace instanceof Residents.ViewPersonalInformation) {
                         activity = new PersonalInfoViewActivity(appPlace);
-                    } else if (appPlace instanceof Residents.PersonalInformationEdit) {
+                    } else if (appPlace instanceof Residents.EditPersonalInformation) {
                         activity = new PersonalInfoEditActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
                         activity = new PotentialTenantActivity(appPlace);

@@ -118,7 +118,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                     comp = new CEntityHyperlink<PaymentDetails>(null, new Command() {
                         @Override
                         public void execute() {
-                            presenter.editPaymentMethod(getValue());
+                            presenter.viewPaymentMethod(getValue());
                         }
                     });
                     comp.setViewable(true);

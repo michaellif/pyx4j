@@ -94,7 +94,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
             items.add(new Residents.PaymentMethods());
         }
 
-        items.add(new Residents.PersonalInformationView());
+        items.add(new Residents.ViewPersonalInformation());
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             items.add(new Residents.TenantInsurance());
