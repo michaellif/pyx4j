@@ -184,6 +184,10 @@ public class MaintenanceRequestMapper {
         req.setUnitCode(mr.leaseParticipant().lease().unit().info().number().getValue());
         req.setTenantCode(mr.leaseParticipant().participantId().getValue());
         req.setServiceRequestFullDescription(mr.description().getValue());
+        req.setServiceRequestBriefDescription(mr.summary().getValue());
+
+        req.setHasPermissionToEnter(mr.permissionToEnter().getValue());
+        req.setAccessNotes(mr.petInstructions().getValue());
 
         req.setCurrentStatus(mr.status().name().getValue());
         req.setPriority(mr.priority().name().getValue());
@@ -194,7 +198,6 @@ public class MaintenanceRequestMapper {
         req.setSubCategory(mr.category().name().getValue());
         req.setCategory(mr.category().parent().name().getValue());
 
-        req.setHasPermissionToEnter(mr.permissionToEnter().getValue());
         req.setRequestorName(mr.leaseParticipant().customer().person().name().firstName().getValue());
 
         String homePhone = mr.leaseParticipant().customer().person().homePhone().getValue();
