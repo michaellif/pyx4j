@@ -36,6 +36,7 @@ public interface PasswordChangeView extends IsWidget {
 
         void changePassword(PasswordChangeRequest request);
 
+        void cancel();
     }
 
     public void setPresenter(Presenter presenter);

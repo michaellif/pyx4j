@@ -33,12 +33,12 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.operations.client.viewfactories.SecurityViewFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.operations.rpc.services.OnboardingUserPasswordChangeManagedService;
-import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -120,6 +120,11 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
             }, request);
         }
+    }
+
+    @Override
+    public void cancel() {
+        History.back();
     }
 
     private boolean isSelfAdmin() {

@@ -19,7 +19,9 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Panel;
@@ -33,8 +35,10 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.login.PasswordChangeForm;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 
 public class PasswordChangeViewImpl implements PasswordChangeView {
 
@@ -51,15 +55,21 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     public PasswordChangeViewImpl() {
         FormFlexPanel content = new FormFlexPanel();
         content.getElement().getStyle().setPaddingTop(1, Unit.EM);
+
         int row = -1;
+
         userNameLabel = new HTML();
         content.setWidget(++row, 0, userNameLabel);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         form = new PasswordChangeForm();
         form.initContent();
         form.setWidth("100%");
         content.setWidget(++row, 0, form);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        FlowPanel footer = new FlowPanel();
+
         Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -70,9 +80,22 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
                 }
             }
         });
-        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???
-        content.setWidget(++row, 0, submitButton);
-        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
+        submitButton.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        submitButton.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        footer.add(DecorationUtils.inline(submitButton));
+
+        Anchor cancel = new Anchor(i18n.tr("Cancel"), new Command() {
+            @Override
+            public void execute() {
+                presenter.cancel();
+            }
+        });
+        cancel.asWidget().getElement().getStyle().setMargin(10, Unit.PX);
+        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        footer.add(DecorationUtils.inline(cancel));
+
+        content.setWidget(++row, 0, footer);
 
         panel = new ScrollPanel(content);
     }

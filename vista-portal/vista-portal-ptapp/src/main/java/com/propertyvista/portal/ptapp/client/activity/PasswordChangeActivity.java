@@ -70,4 +70,9 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
             }
         }, request);
     }
+
+    @Override
+    public void cancel() {
+        History.back();
+    }
 }

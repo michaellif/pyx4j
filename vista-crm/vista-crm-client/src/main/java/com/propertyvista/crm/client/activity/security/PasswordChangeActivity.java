@@ -118,8 +118,12 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
         }, request);
     }
 
+    @Override
+    public void cancel() {
+        History.back();
+    }
+
     private boolean isSelfAdmin() {
         return (principalClass == PrincipalClass.EMPLOYEE) & EqualsHelper.equals(userPk, ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
-
 }
