@@ -15,7 +15,9 @@ package com.propertyvista.misc;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-public interface VistaTODO {
+import com.propertyvista.shared.config.VistaFeatures;
+
+public class VistaTODO {
 
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
     public static final boolean ENABLE_ONBOARDING_WIZARDS = ApplicationMode.isDevelopment();
@@ -32,6 +34,16 @@ public interface VistaTODO {
      * TODO: Do not forget to turn it on/off during/after production release !!!
      */
     public static boolean removedForProduction = true;
+
+    public static boolean removedYardiMaintenanceRequestsForProduction = true;
+
+    public static boolean isMaintenanceRequestsEnabled() {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return !VistaTODO.removedYardiMaintenanceRequestsForProduction;
+        } else {
+            return true;
+        }
+    }
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
@@ -55,27 +67,27 @@ public interface VistaTODO {
     public static boolean vladsLeaseMigration = true;
 
     /** joins with conditions */
-    public final boolean complextQueryCriteria = true;
+    public static final boolean complextQueryCriteria = true;
 
-    public final boolean VISTA_1588 = true;
+    public static final boolean VISTA_1588 = true;
 
-    public final boolean Equifax_Short_VISTA_478 = false;
+    public static final boolean Equifax_Short_VISTA_478 = false;
 
-    public final boolean Equifax_Long_VISTA_478 = true;
+    public static final boolean Equifax_Long_VISTA_478 = true;
 
-    public final boolean UploadedBlobSecurity = true;
+    public static final boolean UploadedBlobSecurity = true;
 
-    public final boolean ApplicationDocumentationPolicyRefacotring = true;
+    public static final boolean ApplicationDocumentationPolicyRefacotring = true;
 
-    public final boolean VISTA_2127_Attachments_For_Notes = true;
+    public static final boolean VISTA_2127_Attachments_For_Notes = true;
 
-    public final boolean VISTA_2108_View_Lease_Application = false;
+    public static final boolean VISTA_2108_View_Lease_Application = false;
 
-    public final boolean VISTA_1789_Renew_Lease = false;
+    public static final boolean VISTA_1789_Renew_Lease = false;
 
-    public static boolean VISTA_1756_Concessions_Should_Be_Hidden = true;
+    public static final boolean VISTA_1756_Concessions_Should_Be_Hidden = true;
 
-    public static boolean VISTA_2242_Simple_Lease_Renewal = true;
+    public static final boolean VISTA_2242_Simple_Lease_Renewal = true;
 
     public static boolean VISTA_2256_Default_Product_Catalog = false;
 

@@ -24,6 +24,7 @@ import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -48,7 +49,10 @@ public class DashboardServiceImpl implements DashboardService {
         dashboard.general().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
-        dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
+
+        if (VistaTODO.isMaintenanceRequestsEnabled()) {
+            dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
+        }
 
         // TODO review this: (i think tenant insurance status can be used for other countries as well but the problem is with TenantSure
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
