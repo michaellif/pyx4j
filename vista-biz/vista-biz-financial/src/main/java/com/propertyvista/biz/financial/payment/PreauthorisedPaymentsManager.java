@@ -40,7 +40,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
 
@@ -81,6 +81,7 @@ class PreauthorisedPaymentsManager {
             criteria.lt(criteria.proto().targetPadGenerationDate(), runDate);
             criteria.gt(criteria.proto().padExecutionDate(), runDate);
             criteria.isNotNull(criteria.proto().actualPadGenerationDate());
+            criteria.asc(criteria.proto().building().propertyCode());
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {
@@ -105,6 +106,7 @@ class PreauthorisedPaymentsManager {
                     criteria.eq(criteria.proto().lease().unit().building(), billingCycle.building());
                     criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
                     criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                    criteria.asc(criteria.proto().lease().leaseId());
                     billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
                 }
                 try {
@@ -162,9 +164,29 @@ class PreauthorisedPaymentsManager {
 
         BigDecimal currentBalance = null;
 
+        List<LeaseTermTenant> leaseParticipants;
+        {
+            EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+            criteria.eq(criteria.proto().leaseTermV().holder().lease().billingAccount(), billingAccount);
+            criteria.isCurrent(criteria.proto().leaseTermV());
+            criteria.asc(criteria.proto().leaseParticipant().participantId());
+            leaseParticipants = Persistence.service().query(criteria);
+
+            // Make Applicant first 
+            for (int i = 0; i < leaseParticipants.size(); i++) {
+                LeaseTermTenant leaseParticipant = leaseParticipants.get(i);
+                if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
+                    if (i != 0) {
+                        leaseParticipants.remove(i);
+                        leaseParticipants.add(0, leaseParticipant);
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Need building for getPADBalance
         Persistence.service().retrieve(billingAccount.lease());
-        Lease lease = billingAccount.lease();
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
         BigDecimal total = BigDecimal.ZERO;
         // Calculate Percentage with rounding.
@@ -173,12 +195,13 @@ class PreauthorisedPaymentsManager {
 
         PreauthorizedAmount recordLargest = null;
 
-        for (LeaseTermTenant leaseParticipant : lease.currentTerm().version().tenants()) {
+        for (LeaseTermTenant leaseParticipant : leaseParticipants) {
             List<PreauthorizedPayment> preauthorizedPayments;
             {
                 EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
                 criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
                 criteria.eq(criteria.proto().isDeleted(), false);
+                criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }
             for (PreauthorizedPayment pap : preauthorizedPayments) {
