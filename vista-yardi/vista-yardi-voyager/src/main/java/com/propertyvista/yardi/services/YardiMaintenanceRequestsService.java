@@ -130,22 +130,22 @@ public class YardiMaintenanceRequestsService {
         YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), requests);
     }
 
-    protected void loadRequests(final PmcYardiCredential yc, final Date fromDate) throws YardiServiceException {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+    protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
+        GetServiceRequest_Search params = new GetServiceRequest_Search();
+        // ensure buildings are available
+        String propertyList = new YardiMaintenanceProcessor().getProprtyList();
+        if (propertyList == null || propertyList.length() == 0) {
+            return;
+        }
+        params.setYardiPropertyId(propertyList);
+        final Date now = SystemDateManager.getDate();
+        if (fromDate != null) {
+            params.setFromDate(dateFormat.format(fromDate));
+        }
+        final ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                GetServiceRequest_Search params = new GetServiceRequest_Search();
-                // ensure buildings are available
-                String propertyList = new YardiMaintenanceProcessor().getProprtyList();
-                if (propertyList == null || propertyList.length() == 0) {
-                    return null;
-                }
-                params.setYardiPropertyId(propertyList);
-                Date now = SystemDateManager.getDate();
-                if (fromDate != null) {
-                    params.setFromDate(dateFormat.format(fromDate));
-                }
-                ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
                     MaintenanceRequest mr = processor.mergeRequest(request);
@@ -161,11 +161,11 @@ public class YardiMaintenanceRequestsService {
     }
 
     protected void loadMeta(final PmcYardiCredential yc) throws YardiServiceException {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+        final YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
+        new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 Date now = SystemDateManager.getDate();
-                YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 // categories
                 Persistence.service().persist(processor.mergeCategories(meta.getCategories()));
