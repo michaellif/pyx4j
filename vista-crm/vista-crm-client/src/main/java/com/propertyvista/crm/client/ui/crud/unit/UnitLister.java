@@ -40,11 +40,15 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
 
     public UnitLister() {
         this(true);
-        getDataTablePanel().getAddButton().setCaption(i18n.tr("New Unit"));
     }
 
     public UnitLister(boolean allowAddNew) {
         super(AptUnitDTO.class, !VistaFeatures.instance().yardiIntegration() ? allowAddNew : false);
+
+        if (getDataTablePanel().getAddButton() != null) {
+            getDataTablePanel().getAddButton().setCaption(i18n.tr("New Unit"));
+        }
+
         setupColumns();
     }
 
