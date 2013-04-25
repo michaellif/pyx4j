@@ -33,10 +33,6 @@ public class Messages {
         return StringUtils.startsWith(s, "<Messages>") && StringUtils.endsWith(s, "</Messages>");
     }
 
-    public static boolean isErrorMessageResponse(String s) {
-        return StringUtils.contains(s, "<ErrorMessages>") && StringUtils.contains(s, "</ErrorMessages>");
-    }
-
     public static Messages create(Message... messages) {
         Messages msgs = new Messages();
         msgs.getMessages().addAll(Arrays.asList(messages));

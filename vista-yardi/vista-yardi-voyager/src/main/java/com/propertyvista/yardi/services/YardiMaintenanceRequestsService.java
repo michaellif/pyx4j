@@ -206,8 +206,13 @@ public class YardiMaintenanceRequestsService {
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
 
             log.info("GetCustomValues: {}", xml);
-            if (Messages.isErrorMessageResponse(xml)) {
-                throw new YardiServiceException(getErrors(xml));
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
             }
 
             CustomConfig config = MarshallUtil.unmarshal(CustomConfig.class, xml);
@@ -238,8 +243,13 @@ public class YardiMaintenanceRequestsService {
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
 
             log.info("GetServiceRequests: {}", xml);
-            if (Messages.isErrorMessageResponse(xml)) {
-                throw new YardiServiceException(getErrors(xml));
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
             }
 
             ServiceRequests requests = MarshallUtil.unmarshal(ServiceRequests.class, xml);
@@ -280,8 +290,13 @@ public class YardiMaintenanceRequestsService {
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
             log.info("CreateOrEditServiceRequests: {}", responseXml);
 
-            if (Messages.isErrorMessageResponse(responseXml)) {
-                throw new YardiServiceException(getErrors(responseXml));
+            if (Messages.isMessageResponse(responseXml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
+                if (messages.isError()) {
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
             }
         } catch (JAXBException e) {
             throw new Error(e);
