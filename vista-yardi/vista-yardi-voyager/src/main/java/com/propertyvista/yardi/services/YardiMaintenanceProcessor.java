@@ -48,23 +48,11 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
-
-    public String getProprtyList() {
-        StringBuilder sb = new StringBuilder();
-        for (Building property : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
-            if (sb.length() > 0) {
-                sb.append(",");
-            }
-            sb.append(property.propertyCode().getValue());
-        }
-        return sb.toString();
-    }
 
     public ServiceRequest convertRequest(MaintenanceRequest mr) {
         Persistence.ensureRetrieve(mr.leaseParticipant().lease(), AttachLevel.Attached);
@@ -325,7 +313,7 @@ public class YardiMaintenanceProcessor {
             mr.status().set(stat);
         }
         // priority
-        {
+        if (request.getPriority() != null) {
             MaintenanceRequestPriority pr = findPriority(request.getPriority());
             if (pr == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
