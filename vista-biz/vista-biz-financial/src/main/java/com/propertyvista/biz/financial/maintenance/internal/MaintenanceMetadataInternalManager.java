@@ -25,4 +25,8 @@ public class MaintenanceMetadataInternalManager extends MaintenanceMetadataAbstr
         return SingletonHolder.INSTANCE;
     }
 
+    @Override
+    protected String[] getLevels() {
+        return new String[] { "IssueElement", "IssueRepairSubject", "IssueSubjectDetails", "IssueClassification" };
+    }
 }

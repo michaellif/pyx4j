@@ -134,7 +134,7 @@ public class LeaseLifecycleSimulator {
         issueClassifications = CacheService.get(LeaseLifecycleSimulator.class.getName() + "issueClassifications");
         if (issueClassifications == null) {
             EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
-            crit.add(PropertyCriterion.eq(crit.proto().level().level(), 4));
+            crit.add(PropertyCriterion.isNull(crit.proto().subCategories()));
             issueClassifications = Persistence.service().query(crit);
             CacheService.put(LeaseLifecycleSimulator.class.getName() + "issueClassifications", issueClassifications);
         }

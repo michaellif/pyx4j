@@ -132,7 +132,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         super.populate(value);
 
         StatusPhase phase = value.status().phase().getValue();
-        setEditingVisible(phase == StatusPhase.Submitted);
+// TODO - need to accomodate yardi statuses (no phases assigned when on first import)
+//        setEditingVisible(phase == StatusPhase.Submitted);
 
         setActionVisible(scheduleAction, phase == StatusPhase.Submitted || phase == StatusPhase.Scheduled);
         setActionVisible(resolveAction, phase == StatusPhase.Scheduled);

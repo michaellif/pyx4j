@@ -198,18 +198,14 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (entry == null || parent.subCategories() == null) {
             return null;
         }
-        // start meta lookup
+        // start meta lookup; we only look for matches on the lowest level
         MaintenanceRequestCategory found = null;
         for (MaintenanceRequestCategory subCat : parent.subCategories()) {
-            int levelDiff = subCat.level().level().getValue() - entry.level().level().getValue();
-            if (levelDiff < 0) {
+            if (!subCat.subCategories().isNull()) {
                 // go down one level
                 if ((found = findMetaEntry(entry, subCat)) != null) {
                     return found;
                 }
-            } else if (levelDiff > 0) {
-                // finish search on this level
-                break;
             } else if (isValuesEquals(entry, subCat)) {
                 return subCat;
             }

@@ -42,4 +42,9 @@ public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstract
         }
         return super.getMaintenanceMetadata(levelsOnly);
     }
+
+    @Override
+    protected String[] getLevels() {
+        return new String[] { "Category", "SubCategory" };
+    }
 }

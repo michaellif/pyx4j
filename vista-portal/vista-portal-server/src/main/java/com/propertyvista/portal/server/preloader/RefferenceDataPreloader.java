@@ -25,7 +25,6 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -58,17 +57,8 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     }
 
     private void createMaintenanceCategories() {
-        // persist levels
-        MaintenanceRequestCategoryLevel level1 = createMaintenanceCategoryLevel("IssueElement", 1);
-        MaintenanceRequestCategoryLevel level2 = createMaintenanceCategoryLevel("IssueRepairSubject", 2);
-        MaintenanceRequestCategoryLevel level3 = createMaintenanceCategoryLevel("IssueSubjectDetails", 3);
-        MaintenanceRequestCategoryLevel level4 = createMaintenanceCategoryLevel("IssueClassification", 4);
-        Persistence.service().persist(level1);
-        Persistence.service().persist(level2);
-        Persistence.service().persist(level3);
-        Persistence.service().persist(level4);
         // create categories for each level
-        MaintenanceRequestCategory root = createMaintenanceCategory("ROOT", null);
+        MaintenanceRequestCategory root = createMaintenanceCategory("ROOT");
         List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
 
@@ -77,7 +67,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
             // Find or create Element
             MaintenanceRequestCategory element = categories.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {
-                element = createMaintenanceCategory(row.rooms().getValue(), level1);
+                element = createMaintenanceCategory(row.rooms().getValue());
                 categories.put(row.type().getValue() + row.rooms().getValue(), element);
                 root.subCategories().add(element);
             }
@@ -90,7 +80,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (subject == null) {
-                subject = createMaintenanceCategory(row.repairSubject().getValue(), level2);
+                subject = createMaintenanceCategory(row.repairSubject().getValue());
                 subject.parent().set(element);
                 element.subCategories().add(subject);
             }
@@ -103,30 +93,22 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (detail == null) {
-                detail = createMaintenanceCategory(row.subjectDetails().getValue(), level3);
+                detail = createMaintenanceCategory(row.subjectDetails().getValue());
                 detail.parent().set(subject);
                 subject.subCategories().add(detail);
             }
             // Create IssueClassification
-            MaintenanceRequestCategory classification = createMaintenanceCategory(row.issue().getValue(), level4);
+            MaintenanceRequestCategory classification = createMaintenanceCategory(row.issue().getValue());
             classification.parent().set(detail);
             detail.subCategories().add(classification);
         }
         Persistence.service().persist(root);
     }
 
-    private MaintenanceRequestCategory createMaintenanceCategory(String name, MaintenanceRequestCategoryLevel level) {
+    private MaintenanceRequestCategory createMaintenanceCategory(String name) {
         MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
-        category.level().set(level);
         category.name().setValue(name);
         return category;
-    }
-
-    private MaintenanceRequestCategoryLevel createMaintenanceCategoryLevel(String name, int level) {
-        MaintenanceRequestCategoryLevel catLevel = EntityFactory.create(MaintenanceRequestCategoryLevel.class);
-        catLevel.name().setValue(name);
-        catLevel.level().setValue(level);
-        return catLevel;
     }
 
     private void createMaintenancePriorities() {

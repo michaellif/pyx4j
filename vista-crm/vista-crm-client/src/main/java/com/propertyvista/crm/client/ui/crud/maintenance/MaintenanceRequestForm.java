@@ -209,10 +209,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     class PrioritySelector extends CComboBox<MaintenanceRequestPriority> {
-        public PrioritySelector() {
-            super();
-        }
-
         @Override
         public String getItemName(MaintenanceRequestPriority o) {
             if (o == null) {
@@ -224,10 +220,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     class StatusSelector extends CComboBox<MaintenanceRequestStatus> {
-        public StatusSelector() {
-            super();
-        }
-
         @Override
         public String getItemName(MaintenanceRequestStatus o) {
             if (o == null) {

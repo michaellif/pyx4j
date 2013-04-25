@@ -34,6 +34,8 @@ public abstract class MaintenanceMetadataAbstractManager {
         CacheService.remove(cacheKey);
     }
 
+    protected abstract String[] getLevels();
+
     public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
         MaintenanceRequestMetadata meta = (MaintenanceRequestMetadata) CacheService.get(cacheKey);
 
@@ -43,8 +45,10 @@ public abstract class MaintenanceMetadataAbstractManager {
         }
         // retrieve levels
         if (meta.categoryLevels().isEmpty()) {
-            EntityQueryCriteria<MaintenanceRequestCategoryLevel> crit = EntityQueryCriteria.create(MaintenanceRequestCategoryLevel.class);
-            meta.categoryLevels().addAll(Persistence.service().query(crit));
+            String[] levels = getLevels();
+            for (int i = 0; i < levels.length; i++) {
+                meta.categoryLevels().add(createLevel(levels[i], i + 1));
+            }
         }
         result.categoryLevels().set(meta.categoryLevels());
         // retrieve statuses
@@ -85,9 +89,21 @@ public abstract class MaintenanceMetadataAbstractManager {
     private void retrieveSubCategoriesRecursive(MaintenanceRequestCategory parent) {
         if (parent.subCategories() != null) {
             Persistence.service().retrieveMember(parent.subCategories());
+            Integer level = parent.level().getValue();
+            if (level == null) {
+                level = 0;
+            }
             for (MaintenanceRequestCategory cat : parent.subCategories()) {
+                cat.level().setValue(level + 1);
                 retrieveSubCategoriesRecursive(cat);
             }
         }
+    }
+
+    private MaintenanceRequestCategoryLevel createLevel(String name, int id) {
+        MaintenanceRequestCategoryLevel level = EntityFactory.create(MaintenanceRequestCategoryLevel.class);
+        level.level().setValue(id);
+        level.name().setValue(name);
+        return level;
     }
 }

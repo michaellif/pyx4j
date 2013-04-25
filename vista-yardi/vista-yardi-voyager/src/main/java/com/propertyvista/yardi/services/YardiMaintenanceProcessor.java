@@ -161,6 +161,7 @@ public class YardiMaintenanceProcessor {
                 category = oldMap.get(newName);
                 toBeRemoved.remove(category);
             } else {
+                log.debug("new category: {} -> {}", oldParent.name().getValue(), newName);
                 category = createCategory(newName);
                 category.parent().set(oldParent);
                 oldParent.subCategories().add(category);

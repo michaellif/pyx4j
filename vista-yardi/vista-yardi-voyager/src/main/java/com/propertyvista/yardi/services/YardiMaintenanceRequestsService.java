@@ -128,14 +128,15 @@ public class YardiMaintenanceRequestsService {
     protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         // ensure buildings are available
-        String propertyList = new YardiMaintenanceProcessor().getProprtyList();
+        String propertyList = "prvista1";//new YardiMaintenanceProcessor().getProprtyList();
         if (propertyList == null || propertyList.length() == 0) {
             return;
         }
         params.setYardiPropertyId(propertyList);
         final Date now = SystemDateManager.getDate();
         if (fromDate != null) {
-            params.setFromDate(dateFormat.format(fromDate));
+// TODO - find out proper format (?)
+//            params.setFromDate(dateFormat.format(fromDate));
         }
         final ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
