@@ -96,7 +96,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity, TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
     }
 
     @Override

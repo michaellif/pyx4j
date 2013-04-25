@@ -77,6 +77,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId()), 20).build());
+        get(proto().requestId()).setEditable(false);
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<Tenant>() {
             @Override

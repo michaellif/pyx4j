@@ -42,8 +42,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant) {
-        MaintenanceInternalManager.instance().postMaintenanceRequest(request, tenant);
+    public void postMaintenanceRequest(MaintenanceRequest request) {
+        MaintenanceInternalManager.instance().postMaintenanceRequest(request);
     }
 
     @Override

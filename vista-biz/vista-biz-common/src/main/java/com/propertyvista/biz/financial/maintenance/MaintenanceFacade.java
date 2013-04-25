@@ -39,7 +39,7 @@ public interface MaintenanceFacade {
 
     MaintenanceRequest getMaintenanceRequest(String requestId);
 
-    void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant);
+    void postMaintenanceRequest(MaintenanceRequest request);
 
     void cancelMaintenanceRequest(MaintenanceRequest request);
 

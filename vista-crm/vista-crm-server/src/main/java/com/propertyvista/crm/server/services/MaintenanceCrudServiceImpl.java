@@ -115,4 +115,9 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
         callback.onSuccess(ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(levelsOnly));
     }
+
+    @Override
+    protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
+    }
 }

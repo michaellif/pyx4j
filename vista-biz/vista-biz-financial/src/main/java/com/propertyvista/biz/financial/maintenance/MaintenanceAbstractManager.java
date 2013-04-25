@@ -41,8 +41,7 @@ public abstract class MaintenanceAbstractManager {
         return request;
     }
 
-    public void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant) {
-        request.leaseParticipant().set(tenant);
+    public void postMaintenanceRequest(MaintenanceRequest request) {
         Persistence.secureSave(request);
     }
 

@@ -38,6 +38,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
         MaintenanceRequestDTO proto = EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class);
 
         return new ColumnDescriptor[] {
+                new MemberColumnDescriptor.Builder(proto.requestId()).build(),
                 new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
                     @Override
                     public String convert(IEntity entity) {
@@ -56,7 +57,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                     }
                 },// @formatter:off
                 new MemberColumnDescriptor.Builder(proto.priority()).build(),
-                new MemberColumnDescriptor.Builder(proto.description()).build(),
+                new MemberColumnDescriptor.Builder(proto.summary()).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name().firstName(), false).build(),
                 new MemberColumnDescriptor.Builder(proto.leaseParticipant().customer().person().name().lastName(), false).build(),

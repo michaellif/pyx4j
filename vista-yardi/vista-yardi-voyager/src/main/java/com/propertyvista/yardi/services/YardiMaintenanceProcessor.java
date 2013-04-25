@@ -167,7 +167,14 @@ public class YardiMaintenanceProcessor {
                 oldParent.subCategories().add(category);
             }
             if (newCat instanceof Category) {
-                mergeCategoriesRecursive(category, ((Category) newCat).getSubCategory());
+                List<?> subCategories = ((Category) newCat).getSubCategory();
+                if (subCategories == null || subCategories.size() == 0) {
+                    MaintenanceRequestCategory empty = createCategory(null);
+                    empty.parent().set(category);
+//                    category.subCategories().add(empty);
+                } else {
+                    mergeCategoriesRecursive(category, subCategories);
+                }
             }
         }
         for (MaintenanceRequestCategory cat : toBeRemoved) {

@@ -42,8 +42,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest, Tenant tenant) {
-        MaintenanceYardiManager.instance().postMaintenanceRequest(maintenanceRequest, tenant);
+    public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest) {
+        MaintenanceYardiManager.instance().postMaintenanceRequest(maintenanceRequest);
     }
 
     @Override

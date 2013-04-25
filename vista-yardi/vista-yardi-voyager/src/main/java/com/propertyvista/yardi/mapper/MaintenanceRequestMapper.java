@@ -32,6 +32,8 @@ import com.yardi.entity.maintenance.meta.Statuses;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.YardiServiceException;
@@ -172,40 +174,40 @@ public class MaintenanceRequestMapper {
         return null;
     }
 
-    public ServiceRequest map(MaintenanceRequest maintenanceRequest) throws YardiServiceException {
+    public ServiceRequest map(MaintenanceRequest mr) throws YardiServiceException {
+        Persistence.ensureRetrieve(mr.leaseParticipant().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.leaseParticipant().lease().unit().building(), AttachLevel.Attached);
+
         ServiceRequest req = new ServiceRequest();
+        req.setServiceRequestId(Short.valueOf(mr.requestId().getValue()));
+        req.setPropertyCode(mr.leaseParticipant().lease().unit().building().propertyCode().getValue());
+        req.setUnitCode(mr.leaseParticipant().lease().unit().info().number().getValue());
+        req.setTenantCode(mr.leaseParticipant().participantId().getValue());
+        req.setServiceRequestFullDescription(mr.description().getValue());
 
-        if (maintenanceRequest.id().getValue() != null) {
-            req.setServiceRequestId((short) maintenanceRequest.id().getValue().asLong());
-        }
-        req.setPropertyCode(maintenanceRequest.leaseParticipant().lease().unit().building().propertyCode().getValue());
-        req.setUnitCode(maintenanceRequest.leaseParticipant().lease().unit().info().number().getValue());
-        req.setTenantCode(maintenanceRequest.leaseParticipant().participantId().getValue());
-        req.setServiceRequestFullDescription(maintenanceRequest.description().getValue());
+        req.setCurrentStatus(mr.status().name().getValue());
+        req.setPriority(mr.priority().name().getValue());
 
-        //TODO how map to actual status from Yardi
-        //req.setCurrentStatus(getStatus(maintenanceRequest.status().getValue()));
-        //req.setPriority(value);
+        Persistence.ensureRetrieve(mr.category(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.category().parent(), AttachLevel.Attached);
 
-        req.setCategory(maintenanceRequest.category().name().getValue());
-        if (!maintenanceRequest.category().subCategories().isEmpty()) {
-            req.setSubCategory(maintenanceRequest.category().subCategories().get(0).name().getValue());
-        }
+        req.setSubCategory(mr.category().name().getValue());
+        req.setCategory(mr.category().parent().name().getValue());
 
-        req.setHasPermissionToEnter(maintenanceRequest.permissionToEnter().getValue());
-        req.setRequestorName(maintenanceRequest.leaseParticipant().customer().person().name().firstName().getValue());
+        req.setHasPermissionToEnter(mr.permissionToEnter().getValue());
+        req.setRequestorName(mr.leaseParticipant().customer().person().name().firstName().getValue());
 
-        String homePhone = maintenanceRequest.leaseParticipant().customer().person().homePhone().getValue();
+        String homePhone = mr.leaseParticipant().customer().person().homePhone().getValue();
         if (StringUtils.isNotEmpty(homePhone) && StringUtils.isNumeric(homePhone)) {
             req.setRequestorPhoneNumber(Long.valueOf(homePhone));
         }
-        req.setRequestorEmail(maintenanceRequest.leaseParticipant().customer().person().email().getValue());
+        req.setRequestorEmail(mr.leaseParticipant().customer().person().email().getValue());
 
-        req.setServiceRequestDate(maintenanceRequest.submitted().getValue());
+        req.setServiceRequestDate(mr.submitted().getValue());
         try {
-            if (maintenanceRequest.updated().getValue() != null) {
+            if (mr.updated().getValue() != null) {
                 GregorianCalendar cal = new GregorianCalendar();
-                cal.setTime(maintenanceRequest.updated().getValue());
+                cal.setTime(mr.updated().getValue());
                 req.setUpdateDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(cal));
             }
         } catch (DatatypeConfigurationException e) {

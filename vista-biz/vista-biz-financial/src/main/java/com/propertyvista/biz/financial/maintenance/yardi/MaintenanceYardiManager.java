@@ -44,8 +44,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest request, Tenant tenant) {
-        request.leaseParticipant().set(tenant);
+    public void postMaintenanceRequest(MaintenanceRequest request) {
         postRequest(request);
     }
 

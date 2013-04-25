@@ -201,13 +201,11 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         // start meta lookup; we only look for matches on the lowest level
         MaintenanceRequestCategory found = null;
         for (MaintenanceRequestCategory subCat : parent.subCategories()) {
-            if (!subCat.subCategories().isNull()) {
-                // go down one level
-                if ((found = findMetaEntry(entry, subCat)) != null) {
-                    return found;
-                }
-            } else if (isValuesEquals(entry, subCat)) {
+            // if not this one, go to the next level down the tree
+            if (isValuesEquals(entry, subCat)) {
                 return subCat;
+            } else if ((found = findMetaEntry(entry, subCat)) != null) {
+                return found;
             }
         }
         return null;
