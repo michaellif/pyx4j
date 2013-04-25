@@ -129,7 +129,7 @@ public class YardiMaintenanceRequestsService {
     protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         // ensure buildings are available
-        String propertyList = "prvista1";// TODO - use yardi property list - new YardiMaintenanceProcessor().getProprtyList();
+        String propertyList = new YardiMaintenanceProcessor().getProprtyList();
         if (propertyList == null || propertyList.length() == 0) {
             return;
         }
