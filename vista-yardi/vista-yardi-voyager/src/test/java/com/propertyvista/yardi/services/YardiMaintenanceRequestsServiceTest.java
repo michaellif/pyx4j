@@ -35,6 +35,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.tests.VistaTestDBSetup;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
@@ -73,6 +74,7 @@ public class YardiMaintenanceRequestsServiceTest {
         Persistence.service().commit();
     }
 
+    @Ignore
     @Test
     public void testGetRequestsByPropertyId() throws YardiServiceException, IOException, JAXBException {
 
@@ -90,6 +92,7 @@ public class YardiMaintenanceRequestsServiceTest {
 //        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(createShortServiceRequest());
     }
 
+    @Ignore
     @Test
     public void testGetLeaseOpenMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
@@ -101,6 +104,7 @@ public class YardiMaintenanceRequestsServiceTest {
 
     }
 
+    @Ignore
     @Test
     public void testGetLeaseClosedMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
@@ -110,6 +114,16 @@ public class YardiMaintenanceRequestsServiceTest {
         params.setOpenOrClosed("Closed");
         YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
 
+    }
+
+    @Test
+    public void testPostMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
+        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        request.leaseParticipant().lease().unit().building().propertyCode().setValue("prvista1");
+        request.leaseParticipant().lease().unit().info().number().setValue("145");
+        request.leaseParticipant().participantId().setValue("t0005339");
+
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(yc, request);
     }
 
     private ServiceRequests createServiceRequest() throws IOException, JAXBException {

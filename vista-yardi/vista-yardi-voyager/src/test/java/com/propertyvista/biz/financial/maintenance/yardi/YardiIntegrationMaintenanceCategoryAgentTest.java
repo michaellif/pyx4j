@@ -35,7 +35,7 @@ public class YardiIntegrationMaintenanceCategoryAgentTest {
         yc.platform().setValue(Platform.SQL);
         yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
 
-        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta();
+        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta(yc);
     }
 
 }

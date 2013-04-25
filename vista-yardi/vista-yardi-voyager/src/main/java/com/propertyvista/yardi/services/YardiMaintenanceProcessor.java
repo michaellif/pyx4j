@@ -43,6 +43,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class YardiMaintenanceProcessor {
@@ -60,14 +61,14 @@ public class YardiMaintenanceProcessor {
     }
 
     // we will need to update and reload meta from here if request categories, status, or priority do not exist
-    public MaintenanceRequest mergeRequest(ServiceRequest request) {
+    public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) {
         EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
         crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId().toString()));
         MaintenanceRequest mr = Persistence.service().retrieve(crit);
         if (mr == null) {
-            mr = createRequest(request);
+            mr = createRequest(yc, request);
         } else {
-            updateRequest(mr, createRequest(request));
+            updateRequest(mr, createRequest(yc, request));
         }
         return mr;
     }
@@ -197,7 +198,7 @@ public class YardiMaintenanceProcessor {
         return priority;
     }
 
-    private MaintenanceRequest createRequest(ServiceRequest request) {
+    private MaintenanceRequest createRequest(PmcYardiCredential yc, ServiceRequest request) {
         // TODO
         MaintenanceRequest mr = EntityFactory.create(MaintenanceRequest.class);
         boolean metaReloaded = false;
@@ -221,7 +222,7 @@ public class YardiMaintenanceProcessor {
         if (request.getCategory() != null) {
             MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
             if (category == null) {
-                metaReloaded = reloadMeta();
+                metaReloaded = reloadMeta(yc);
                 category = findCategory(request.getCategory(), null);
                 if (category == null) {
                     log.warn("Category not found: {}", request.getCategory());
@@ -230,7 +231,7 @@ public class YardiMaintenanceProcessor {
             }
             MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
             if (subcat == null && !metaReloaded) {
-                metaReloaded = reloadMeta();
+                metaReloaded = reloadMeta(yc);
                 subcat = findCategory(request.getSubCategory(), category);
                 if (subcat == null) {
                     log.warn("SubCategory not found: {}", request.getSubCategory());
@@ -243,7 +244,7 @@ public class YardiMaintenanceProcessor {
         {
             MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus());
             if (stat == null && !metaReloaded) {
-                metaReloaded = reloadMeta();
+                metaReloaded = reloadMeta(yc);
                 stat = findStatus(request.getCurrentStatus());
                 if (stat == null) {
                     log.warn("Status not found: {}", request.getCurrentStatus());
@@ -256,7 +257,7 @@ public class YardiMaintenanceProcessor {
         {
             MaintenanceRequestPriority pr = findPriority(request.getPriority());
             if (pr == null && !metaReloaded) {
-                metaReloaded = reloadMeta();
+                metaReloaded = reloadMeta(yc);
                 pr = findPriority(request.getPriority());
                 if (pr == null) {
                     log.warn("Priority not found: {}", request.getPriority());
@@ -302,9 +303,9 @@ public class YardiMaintenanceProcessor {
         return result;
     }
 
-    private boolean reloadMeta() {
+    private boolean reloadMeta(PmcYardiCredential yc) {
         try {
-            YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta();
+            YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta(yc);
             return true;
         } catch (YardiServiceException e) {
             log.warn("Could not reload service metadata");

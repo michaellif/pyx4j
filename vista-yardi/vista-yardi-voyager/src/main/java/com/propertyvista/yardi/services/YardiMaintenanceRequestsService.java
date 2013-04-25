@@ -52,7 +52,6 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.financial.maintenance.yardi.YardiMaintenanceIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -97,10 +96,9 @@ public class YardiMaintenanceRequestsService {
     /*
      * We grab Metadata on first request and then every time a new category found in requested ticket.
      */
-    public void loadMaintenanceRequestMeta() throws YardiServiceException {
+    public void loadMaintenanceRequestMeta(PmcYardiCredential yc) throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
 
-        PmcYardiCredential yc = getYardiCredential();
         if (getMetaTimestamp() == null) {
             loadMeta(yc);
         }
@@ -110,9 +108,8 @@ public class YardiMaintenanceRequestsService {
      * We only grab tickets that have been modified since last request. If last request date is empty
      * we get the latest update date from previously persisted tickets.
      */
-    public void loadMaintenanceRequests() throws YardiServiceException {
+    public void loadMaintenanceRequests(PmcYardiCredential yc) throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
-        PmcYardiCredential yc = getYardiCredential();
         Date lastModified = getTicketTimestamp();
         if (lastModified == null) {
             lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
@@ -120,12 +117,12 @@ public class YardiMaintenanceRequestsService {
         loadRequests(yc, lastModified);
     }
 
-    public void postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
+    public void postMaintenanceRequest(PmcYardiCredential yc, MaintenanceRequest request) throws YardiServiceException {
         ServiceRequest serviceRequest = new MaintenanceRequestMapper().map(request);
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(serviceRequest);
 
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(getYardiCredential(), requests);
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, requests);
     }
 
     protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
@@ -146,7 +143,7 @@ public class YardiMaintenanceRequestsService {
             public Void execute() throws YardiServiceException {
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
-                    MaintenanceRequest mr = processor.mergeRequest(request);
+                    MaintenanceRequest mr = processor.mergeRequest(yc, request);
                     if (mr != null) {
                         Persistence.service().persist(mr);
                     }
@@ -186,10 +183,6 @@ public class YardiMaintenanceRequestsService {
                 return null;
             }
         });
-    }
-
-    protected PmcYardiCredential getYardiCredential() {
-        return VistaDeployment.getPmcYardiCredential();
     }
 
     protected YardiMaintenanceConfigMeta getMaintenanceConfigMeta(PmcYardiCredential yc) throws YardiServiceException {

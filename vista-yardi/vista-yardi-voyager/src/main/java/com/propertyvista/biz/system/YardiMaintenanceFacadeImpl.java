@@ -15,6 +15,7 @@ package com.propertyvista.biz.system;
 
 import java.util.Date;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
@@ -32,11 +33,11 @@ public class YardiMaintenanceFacadeImpl implements YardiMaintenanceFacade {
 
     @Override
     public void postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(request);
+        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(), request);
     }
 
     @Override
     public void loadMaintenanceRequests() throws YardiServiceException {
-        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests();
+        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(VistaDeployment.getPmcYardiCredential());
     }
 }
