@@ -268,6 +268,7 @@ public class YardiMaintenanceProcessor {
             mr.priority().set(pr);
         }
         // other data
+        mr.requestId().setValue(request.getServiceRequestId().toString());
         mr.summary().setValue(request.getServiceRequestBriefDescription());
         mr.description().setValue(request.getServiceRequestFullDescription());
         mr.permissionToEnter().setValue(request.isHasPermissionToEnter());
