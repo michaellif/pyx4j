@@ -23,7 +23,7 @@ public interface YardiMaintenanceFacade {
 
     Date getTicketTimestamp();
 
-    void postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException;
+    MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException;
 
     void loadMaintenanceRequests() throws YardiServiceException;
 }

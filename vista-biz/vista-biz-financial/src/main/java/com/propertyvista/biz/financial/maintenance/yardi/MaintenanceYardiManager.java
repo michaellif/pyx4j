@@ -111,8 +111,8 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     private void postRequest(MaintenanceRequest request) {
         try {
-            ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
-            Persistence.secureSave(request);
+            MaintenanceRequest result = ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
+            Persistence.secureSave(result);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -61,7 +61,6 @@ import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Messages;
-import com.propertyvista.yardi.mapper.MaintenanceRequestMapper;
 
 /*
  * The agent is responsible for persisting all imported data in the DB by requests from MaintenanceFacade.
@@ -117,18 +116,20 @@ public class YardiMaintenanceRequestsService {
         loadRequests(yc, lastModified);
     }
 
-    public void postMaintenanceRequest(PmcYardiCredential yc, MaintenanceRequest request) throws YardiServiceException {
-        ServiceRequest serviceRequest = new MaintenanceRequestMapper().map(request);
+    public MaintenanceRequest postMaintenanceRequest(PmcYardiCredential yc, MaintenanceRequest request) throws YardiServiceException {
+        ServiceRequest serviceRequest = new YardiMaintenanceProcessor().convertRequest(request);
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(serviceRequest);
 
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, requests);
+        requests = YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, requests);
+        new YardiMaintenanceProcessor().updateRequest(yc, request, requests.getServiceRequest().get(0));
+        return request;
     }
 
     protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         // ensure buildings are available
-        String propertyList = "prvista1";//new YardiMaintenanceProcessor().getProprtyList();
+        String propertyList = "prvista1";// TODO - use yardi property list - new YardiMaintenanceProcessor().getProprtyList();
         if (propertyList == null || propertyList.length() == 0) {
             return;
         }
@@ -262,7 +263,7 @@ public class YardiMaintenanceRequestsService {
         }
     }
 
-    protected void postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException {
+    protected ServiceRequests postMaintenanceRequests(PmcYardiCredential yc, ServiceRequests requests) throws YardiServiceException {
         try {
             Validate.notNull(requests, "requests can not be null");
 
@@ -298,6 +299,8 @@ public class YardiMaintenanceRequestsService {
                     log.info(messages.toString());
                 }
             }
+
+            return MarshallUtil.unmarshal(ServiceRequests.class, responseXml);
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (RemoteException e) {

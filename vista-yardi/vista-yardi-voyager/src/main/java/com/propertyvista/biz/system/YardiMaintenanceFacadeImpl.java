@@ -32,8 +32,8 @@ public class YardiMaintenanceFacadeImpl implements YardiMaintenanceFacade {
     }
 
     @Override
-    public void postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
-        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(), request);
+    public MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
+        return YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(), request);
     }
 
     @Override

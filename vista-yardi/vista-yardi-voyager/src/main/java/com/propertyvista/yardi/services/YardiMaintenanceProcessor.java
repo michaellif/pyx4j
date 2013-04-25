@@ -14,11 +14,16 @@
 package com.propertyvista.yardi.services;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +37,7 @@ import com.yardi.entity.maintenance.meta.Statuses;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -60,6 +66,63 @@ public class YardiMaintenanceProcessor {
         return sb.toString();
     }
 
+    public ServiceRequest convertRequest(MaintenanceRequest mr) {
+        Persistence.ensureRetrieve(mr.leaseParticipant().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.leaseParticipant().lease().unit().building(), AttachLevel.Attached);
+
+        ServiceRequest req = new ServiceRequest();
+
+        if (!mr.requestId().isNull()) {
+            try {
+                req.setServiceRequestId(Short.valueOf(mr.requestId().getValue()));
+            } catch (NumberFormatException ignore) {
+            }
+        }
+
+        req.setPropertyCode(mr.leaseParticipant().lease().unit().building().propertyCode().getValue());
+        req.setUnitCode(mr.leaseParticipant().lease().unit().info().number().getValue());
+        req.setTenantCode(mr.leaseParticipant().participantId().getValue());
+        req.setServiceRequestFullDescription(mr.description().getValue());
+        req.setServiceRequestBriefDescription(mr.summary().getValue());
+
+        req.setHasPermissionToEnter(mr.permissionToEnter().getValue());
+        req.setAccessNotes(mr.petInstructions().getValue());
+
+        req.setCurrentStatus(mr.status().name().getValue());
+        req.setPriority(mr.priority().name().getValue());
+
+        Persistence.ensureRetrieve(mr.category(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.category().parent(), AttachLevel.Attached);
+
+        req.setSubCategory(mr.category().name().getValue());
+        req.setCategory(mr.category().parent().name().getValue());
+
+        req.setRequestorName(mr.leaseParticipant().customer().person().name().firstName().getValue());
+        req.setRequestorEmail(mr.leaseParticipant().customer().person().email().getValue());
+        // TODO - extract numbers, then convert to long
+        String homePhone = mr.leaseParticipant().customer().person().homePhone().getValue();
+        if (StringUtils.isNotEmpty(homePhone) && StringUtils.isNumeric(homePhone)) {
+            req.setRequestorPhoneNumber(Long.valueOf(homePhone));
+        }
+
+        req.setServiceRequestDate(mr.submitted().getValue());
+
+        if (mr.updated().getValue() != null) {
+            try {
+                GregorianCalendar cal = new GregorianCalendar();
+                cal.setTime(mr.updated().getValue());
+                req.setUpdateDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(cal));
+            } catch (DatatypeConfigurationException ignore) {
+            }
+        }
+
+        return req;
+    }
+
+    public void updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest sr) {
+        updateRequest(mr, createRequest(yc, sr));
+    }
+
     // we will need to update and reload meta from here if request categories, status, or priority do not exist
     public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) {
         EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
@@ -68,7 +131,7 @@ public class YardiMaintenanceProcessor {
         if (mr == null) {
             mr = createRequest(yc, request);
         } else {
-            updateRequest(mr, createRequest(yc, request));
+            updateRequest(yc, mr, request);
         }
         return mr;
     }
@@ -288,6 +351,7 @@ public class YardiMaintenanceProcessor {
 
     private void updateRequest(MaintenanceRequest mr, MaintenanceRequest newData) {
         // TODO
+        mr.requestId().set(newData.requestId());
         mr.category().set(newData.category());
         mr.priority().set(newData.priority());
         mr.status().set(newData.status());
