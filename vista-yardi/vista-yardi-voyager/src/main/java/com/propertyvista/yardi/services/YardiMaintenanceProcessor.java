@@ -144,6 +144,7 @@ public class YardiMaintenanceProcessor {
         List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>();
         Map<String, MaintenanceRequestCategory> oldMap = new HashMap<String, MaintenanceRequestCategory>();
         if (oldParent.subCategories() != null) {
+            Persistence.service().retrieveMember(oldParent.subCategories());
             toBeRemoved.addAll(oldParent.subCategories());
             for (MaintenanceRequestCategory oldCat : oldParent.subCategories()) {
                 oldMap.put(oldCat.name().getValue(), oldCat);
