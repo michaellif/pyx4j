@@ -44,7 +44,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                         if (entity instanceof MaintenanceRequestDTO) {
                             // return the first available value
                             MaintenanceRequestCategory issue = ((MaintenanceRequestDTO)entity).category();
-                            while (issue != null) {
+                            while (!issue.isNull()) {
                                 if (!issue.name().isNull()) {
                                     return issue.name().getValue();
                                 }
