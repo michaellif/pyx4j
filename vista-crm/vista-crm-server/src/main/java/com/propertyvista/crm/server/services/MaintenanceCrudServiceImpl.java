@@ -68,6 +68,12 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
+    public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        ServerSideFactory.create(MaintenanceFacade.class).beforeItemRequest();
+        super.retrieve(callback, entityId, retrieveTraget);
+    }
+
+    @Override
     public void list(AsyncCallback<EntitySearchResult<MaintenanceRequestDTO>> callback, EntityListCriteria<MaintenanceRequestDTO> dtoCriteria) {
         ServerSideFactory.create(MaintenanceFacade.class).beforeListRequest();
         super.list(callback, dtoCriteria);

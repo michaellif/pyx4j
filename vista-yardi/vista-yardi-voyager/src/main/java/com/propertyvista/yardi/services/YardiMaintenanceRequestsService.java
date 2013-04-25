@@ -24,7 +24,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +73,7 @@ public class YardiMaintenanceRequestsService {
 
     private static final Logger log = LoggerFactory.getLogger(YardiMaintenanceRequestsService.class);
 
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd H:m:s");
 
     private static class SingletonHolder {
         public static final YardiMaintenanceRequestsService INSTANCE = new YardiMaintenanceRequestsService();
@@ -131,8 +130,7 @@ public class YardiMaintenanceRequestsService {
         params.setYardiPropertyId(yc.propertyCode().getValue());
         final Date now = SystemDateManager.getDate();
         if (fromDate != null) {
-// TODO - find out proper format (?)
-//            params.setFromDate(dateFormat.format(fromDate));
+            params.setFromDate(dateFormat.format(fromDate));
         }
         final ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
@@ -140,6 +138,14 @@ public class YardiMaintenanceRequestsService {
             public Void execute() throws YardiServiceException {
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
+                    // When no records found Yardi returns empty request with undocumented Error element inside !?
+                    //   <ServiceRequests><ServiceRequest><ErrorMessages>
+                    //     <Error>There are no work orders found for these input values. </Error>
+                    //   </ErrorMessages></ServiceRequest></ServiceRequests>
+                    if (request.getServiceRequestId() == null) {
+                        log.debug("Empty request skipped");
+                        continue;
+                    }
                     MaintenanceRequest mr = processor.mergeRequest(yc, request);
                     if (mr != null) {
                         Persistence.service().persist(mr);
@@ -242,6 +248,7 @@ public class YardiMaintenanceRequestsService {
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    log.warn("Yardi Error: {}", messages.getMessages().get(0).getValue());
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());
@@ -303,15 +310,5 @@ public class YardiMaintenanceRequestsService {
         } catch (XMLStreamException e) {
             throw new Error(e);
         }
-    }
-
-    private String getErrors(String xml) {
-        String[] errors = StringUtils.substringsBetween(xml, "<Error>", "</Error>");
-
-        StringBuilder sb = new StringBuilder();
-        for (String error : errors) {
-            sb.append(error).append("\n");
-        }
-        return sb.toString();
     }
 }

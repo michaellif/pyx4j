@@ -70,6 +70,7 @@ public class YardiMaintenanceProcessor {
         req.setPropertyCode(mr.leaseParticipant().lease().unit().building().propertyCode().getValue());
         req.setUnitCode(mr.leaseParticipant().lease().unit().info().number().getValue());
         req.setTenantCode(mr.leaseParticipant().participantId().getValue());
+        req.setTenantCaused(true);
         req.setServiceRequestFullDescription(mr.description().getValue());
         req.setServiceRequestBriefDescription(mr.summary().getValue());
 
@@ -269,12 +270,14 @@ public class YardiMaintenanceProcessor {
             crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
             Tenant tenant = Persistence.service().retrieve(crit);
             if (tenant == null) {
-                log.warn("Tenant not found: {}", request.getTenantCode());
+                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
                 return null;
             } else {
                 mr.leaseParticipant().set(tenant);
             }
         } else {
+            // TODO - remove tenant ownership for MaintenanceRequest domain object
+            log.warn("Request dropped - Tenant is null");
             return null;
         }
         // category
@@ -284,7 +287,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 category = findCategory(request.getCategory(), null);
                 if (category == null) {
-                    log.warn("Category not found: {}", request.getCategory());
+                    log.warn("Request dropped - Category not found: {}", request.getCategory());
                     return null;
                 }
             }
@@ -306,7 +309,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 stat = findStatus(request.getCurrentStatus());
                 if (stat == null) {
-                    log.warn("Status not found: {}", request.getCurrentStatus());
+                    log.warn("Request dropped - Status not found: {}", request.getCurrentStatus());
                     return null;
                 }
             }
@@ -319,7 +322,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 pr = findPriority(request.getPriority());
                 if (pr == null) {
-                    log.warn("Priority not found: {}", request.getPriority());
+                    log.warn("Request dropped - Priority not found: {}", request.getPriority());
                     return null;
                 }
             }
