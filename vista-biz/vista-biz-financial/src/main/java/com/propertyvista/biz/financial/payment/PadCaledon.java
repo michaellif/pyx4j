@@ -217,6 +217,9 @@ public class PadCaledon {
 
     public PadFile receivePadAcknowledgementFile() {
         final PadAkFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
+        if (padAkFile == null) {
+            return null;
+        }
 
         PadFile padFile;
         boolean processedOk = false;
@@ -239,6 +242,9 @@ public class PadCaledon {
 
     public PadReconciliationFile receivePadReconciliation() {
         final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
+        if (reconciliationFile == null) {
+            return null;
+        }
 
         boolean processedOk = false;
         try {
