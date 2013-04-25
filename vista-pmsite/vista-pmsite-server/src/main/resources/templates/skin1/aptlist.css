@@ -1,8 +1,14 @@
+.vista-pmsite-main .caption2 h1 {
+    color: #0458B3;
+}
+
 .vista-pmsite-aptListPage .vista-pmsite-sidebar {
 	width: 211px;
+	height: 711px;
 	float:left;
 	border-right:1px solid ${foreground_20};
 	color: ${foreground_60};
+	background-color: #dfebf7;
 }
 
 .vista-pmsite-aptListPage h3 {
@@ -13,6 +19,7 @@
 	font-weight:bold;
 	padding: 10px 0;
 	margin-top:5px;
+	color: #0458b3;
 }
 .advancedSearchNarrowWrap {
 	width: 190px;
@@ -135,6 +142,11 @@
 	color:${foreground_10} !important;
 	background-color:${foreground_60} !important;
 }
+
+.advancedSearchNarrowWrap #id1.advancedSearchCriteria > input {
+    margin-left: 33px;
+}
+
 .vista-pmsite-aptListPage .vista-pmsite-main {
 	margin-left: 211px;
 }
@@ -264,15 +276,23 @@ a.listingCtlButton {
 	color:${foreground_50} !important;
 	text-decoration:none;
 }
-.apartmentListingWrap .listingEntry:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
+.apartmentListingWrap .listingEntry:hover .listingCtlButton btnShowOnMap {
+	/*background-image: url("images/aptListIcons-hlight.png");*/
+	background-image: url("images/map_for_redridge.png");
 	color:${foreground_80} !important;
 }
+
+.apartmentListingWrap .listingEntry:hover .listingCtlButton btnViewDetails {
+    /*background-image: url("images/aptListIcons-hlight.png");*/
+    background-image: url("images/details_for_redridge.png");
+}
+
 .btnShowOnMap {
 	background-position:0px 0px;
 }
 .btnViewDetails {
-	background-position:0px -30px;
+	/*background-position:0px -30px;*/
+	background-position:0px 0px;
 }
 /*
  * Map style

@@ -9,11 +9,12 @@
 
 .quickSearch {
 	padding:20px 30px;
-	background:${object2_100};
+	/*background:${object2_100};*/
+	background-color: #0458B3;
 }
 
 .quickSearch label {
-	color: #555555;
+	color: #A4C5E8;
 	display: block;
 	padding: 0 0 3px;
 }
@@ -34,7 +35,7 @@
 .vista-pmsite-sidebar {
 	float: left;
 	width: 280px;
-	border-right: 1px solid #C1D7F0;
+	border-right: 1px solid #D1D1D1;
 }
 
 .vista-pmsite-main{
@@ -62,6 +63,10 @@
 	position: absolute;
 	top:150px;
 	left:250px;
+}
+
+.testimBox .infobox_header_title {
+    color: #00C4FF;
 }
 
 .testimBox .infobox_content {
@@ -93,6 +98,10 @@
 	padding: 20px 30px;
 }
 
+.newsBox .infobox_header_title {
+    color: #00C4FF;
+}
+
 .newsBox .date {
 	color: ${foreground_40};
 	padding-top: 10px;
@@ -109,6 +118,7 @@
 .infobox_header_title {
 	font-size: 22px;
 	line-height: 40px;
+	color: #FF0000;
 }
 
 .infobox_header_title:lang(fr) {
