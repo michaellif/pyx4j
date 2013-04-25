@@ -42,6 +42,8 @@ import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
 @Ignore
 public class YardiMaintenanceRequestsServiceTest {
 
+    private PmcYardiCredential yc;
+
     @Before
     public void init() throws Exception {
         VistaTestDBSetup.init();
@@ -55,16 +57,8 @@ public class YardiMaintenanceRequestsServiceTest {
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.testNamespace(NamespaceManager.getNamespace());
         TestLifecycle.beginRequest();
-    }
 
-    @After
-    public void end() {
-        Persistence.service().commit();
-    }
-
-    @Test
-    public void testPostRequests() throws YardiServiceException, IOException, JAXBException {
-        PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
+        yc = EntityFactory.create(PmcYardiCredential.class);
         yc.username().setValue("propertyvista-srws");
         yc.credential().setValue("55548");
         yc.serverName().setValue("aspdb04");
@@ -72,8 +66,17 @@ public class YardiMaintenanceRequestsServiceTest {
         yc.platform().setValue(Platform.SQL);
         yc.maintenanceRequestsServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/webservices/itfservicerequests.asmx");
 
-        //YardiMaintenanceRequestsService.getInstance().getOpenMaintenanceRequests(yc, "prvista1", "t0005339");
-        //YardiMaintenanceRequestsService.getInstance().getClosedMaintenanceRequests(yc, "prvista1", "t0005339");
+    }
+
+    @After
+    public void end() {
+        Persistence.service().commit();
+    }
+
+    @Ignore
+    @Test
+    public void testGetRequestsByPropertyId() throws YardiServiceException, IOException, JAXBException {
+
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         params.setYardiPropertyId("prvista1");
@@ -86,6 +89,26 @@ public class YardiMaintenanceRequestsServiceTest {
         //4. Vendor should exist
         //YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(createServiceRequest());
 //        YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(createShortServiceRequest());
+    }
+
+    @Test
+    public void testGetLeaseOpenMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
+        YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
+        GetServiceRequest_Search params = new GetServiceRequest_Search();
+        params.setYardiPropertyId("prvista1");
+        params.setResidentCode("t0005339");
+        params.setOpenOrClosed("Open");
+        YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+    }
+
+    @Test
+    public void testGetLeaseClosedMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
+        YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
+        GetServiceRequest_Search params = new GetServiceRequest_Search();
+        params.setYardiPropertyId("prvista1");
+        params.setResidentCode("t0005339");
+        params.setOpenOrClosed("Closed");
+        YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
     }
 
     private ServiceRequests createServiceRequest() throws IOException, JAXBException {
