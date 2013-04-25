@@ -409,6 +409,9 @@ public class TenantPadProcessor {
     private static Map<String, List<PadFileModel>> mapByAccount(List<PadFileModel> entities) {
         Map<String, List<PadFileModel>> mappedByAccount = new LinkedHashMap<String, List<PadFileModel>>();
         for (PadFileModel padFileModel : entities) {
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
             String account = getAccount(padFileModel);
             List<PadFileModel> accountEntities = mappedByAccount.get(account);
             if (accountEntities == null) {
