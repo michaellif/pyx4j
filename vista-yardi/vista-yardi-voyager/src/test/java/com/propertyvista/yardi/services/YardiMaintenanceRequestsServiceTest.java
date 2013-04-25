@@ -73,7 +73,6 @@ public class YardiMaintenanceRequestsServiceTest {
         Persistence.service().commit();
     }
 
-    @Ignore
     @Test
     public void testGetRequestsByPropertyId() throws YardiServiceException, IOException, JAXBException {
 
@@ -99,6 +98,7 @@ public class YardiMaintenanceRequestsServiceTest {
         params.setResidentCode("t0005339");
         params.setOpenOrClosed("Open");
         YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+
     }
 
     @Test
@@ -109,6 +109,7 @@ public class YardiMaintenanceRequestsServiceTest {
         params.setResidentCode("t0005339");
         params.setOpenOrClosed("Closed");
         YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+
     }
 
     private ServiceRequests createServiceRequest() throws IOException, JAXBException {

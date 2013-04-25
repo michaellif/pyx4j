@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.maintenance;
 
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -27,13 +28,15 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 
 public abstract class MaintenanceMetadataAbstractManager {
 
-    private MaintenanceRequestMetadata meta;
+    public static final String cacheKey = "maintenance-metadata";
 
     protected void invalidateMeta() {
-        meta = null;
+        CacheService.remove(cacheKey);
     }
 
     public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
+        MaintenanceRequestMetadata meta = (MaintenanceRequestMetadata) CacheService.get(cacheKey);
+
         MaintenanceRequestMetadata result = EntityFactory.create(MaintenanceRequestMetadata.class);
         if (meta == null) {
             meta = EntityFactory.create(MaintenanceRequestMetadata.class);
@@ -75,6 +78,7 @@ public abstract class MaintenanceMetadataAbstractManager {
             }
             result.rootCategory().set(meta.rootCategory());
         }
+        CacheService.put(cacheKey, meta);
         return result;
     }
 

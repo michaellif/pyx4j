@@ -17,9 +17,7 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -45,12 +43,12 @@ import com.yardi.ws.operations.ServiceRequestXml_type0;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.financial.maintenance.yardi.YardiMaintenanceIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -72,11 +70,11 @@ import com.propertyvista.yardi.mapper.MaintenanceRequestMapper;
  */
 public class YardiMaintenanceRequestsService {
 
+    public static final String lastTicketUpdateCacheKey = "yardi-maintenance-requests-last-ticket-update";
+
+    public static final String lastMetaUpdateCacheKey = "yardi-maintenance-requests-last-meta-update";
+
     private static final Logger log = LoggerFactory.getLogger(YardiMaintenanceRequestsService.class);
-
-    private final Map<String, Date> lastTicketUpdate = new HashMap<String, Date>();
-
-    private final Map<String, Date> lastMetaUpdate = new HashMap<String, Date>();
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'H:m:s");
 
@@ -89,11 +87,11 @@ public class YardiMaintenanceRequestsService {
     }
 
     public Date getMetaTimestamp() {
-        return lastMetaUpdate.get(NamespaceManager.getNamespace());
+        return (Date) CacheService.get(lastMetaUpdateCacheKey);
     }
 
     public Date getTicketTimestamp() {
-        return lastTicketUpdate.get(NamespaceManager.getNamespace());
+        return (Date) CacheService.get(lastTicketUpdateCacheKey);
     }
 
     /*
@@ -103,7 +101,7 @@ public class YardiMaintenanceRequestsService {
         assert VistaFeatures.instance().yardiIntegration();
 
         PmcYardiCredential yc = getYardiCredential();
-        if (lastMetaUpdate.get(NamespaceManager.getNamespace()) == null) {
+        if (getMetaTimestamp() == null) {
             loadMeta(yc);
         }
     }
@@ -115,7 +113,7 @@ public class YardiMaintenanceRequestsService {
     public void loadMaintenanceRequests() throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
         PmcYardiCredential yc = getYardiCredential();
-        Date lastModified = lastTicketUpdate.get(NamespaceManager.getNamespace());
+        Date lastModified = getTicketTimestamp();
         if (lastModified == null) {
             lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
         }
@@ -153,7 +151,8 @@ public class YardiMaintenanceRequestsService {
                         Persistence.service().persist(mr);
                     }
                 }
-                lastTicketUpdate.put(NamespaceManager.getNamespace(), now);
+
+                CacheService.put(lastTicketUpdateCacheKey, now);
                 log.debug("loaded requests: {}", newRequests.getServiceRequest().size());
                 return null;
             }
@@ -168,7 +167,7 @@ public class YardiMaintenanceRequestsService {
                 Date now = SystemDateManager.getDate();
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 // categories
-                Persistence.service().persist(processor.mergeCategories(meta.getCategories()));
+                processor.mergeCategories(meta.getCategories());
                 log.debug("loaded categories: {}", meta.getCategories().getCategory().size());
                 // statuses
                 List<MaintenanceRequestStatus> statuses = processor.mergeStatuses(meta.getStatuses());
@@ -182,7 +181,8 @@ public class YardiMaintenanceRequestsService {
                     Persistence.service().persist(priorities);
                 }
                 log.debug("loaded priorities: {}", priorities.size());
-                lastMetaUpdate.put(NamespaceManager.getNamespace(), now);
+                CacheService.put(lastMetaUpdateCacheKey, now);
+
                 return null;
             }
         });

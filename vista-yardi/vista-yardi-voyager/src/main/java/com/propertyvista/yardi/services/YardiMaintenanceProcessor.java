@@ -137,6 +137,7 @@ public class YardiMaintenanceProcessor {
     public MaintenanceRequestCategory mergeCategories(Categories categories) {
         MaintenanceRequestCategory oldRoot = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).rootCategory();
         mergeCategoriesRecursive(oldRoot, categories.getCategory());
+        Persistence.service().persist(oldRoot);
         return oldRoot;
     }
 
@@ -153,6 +154,7 @@ public class YardiMaintenanceProcessor {
         Set<String> oldNames = oldMap.keySet();
         for (Object newCat : newList) {
             String newName = newCat instanceof Category ? ((Category) newCat).getName() : newCat.toString();
+
             MaintenanceRequestCategory category;
             if (oldNames.contains(newName)) {
                 category = oldMap.get(newName);
