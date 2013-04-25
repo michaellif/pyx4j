@@ -38,6 +38,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface MaintenanceRequest extends IEntity {
 
+    //TODO change Owner of MaintenanceRequest to property. Add originator - user that created MaintenanceRequest. 
+    //Add optional Lease (or BuildingElement?) - can be selected in CRM or automatically assigned if MaintenanceRequest is created on portal
     @Owner
     @Detached
     @NotNull
