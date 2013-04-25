@@ -39,7 +39,9 @@ public class BuildingFacadeImpl implements BuildingFacade {
         boolean isNewBuilding = building.updated().isNull();
         if (building.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(building);
-            building.marketing().visibility().setValue(PublicVisibilityType.global);
+            if (building.marketing().visibility().isNull()) {
+                building.marketing().visibility().setValue(PublicVisibilityType.global);
+            }
         }
         Persistence.service().merge(building);
 
