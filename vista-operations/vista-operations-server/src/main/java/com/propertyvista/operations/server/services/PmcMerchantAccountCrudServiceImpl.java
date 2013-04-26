@@ -43,7 +43,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     public static void retriveMerchantAccountFromPmc(final PmcMerchantAccountIndex entity, final PmcMerchantAccountDTO dto) {
-        TaskRunner.runInTargetNamespace(entity.pmc().namespace().getValue(), new Callable<Void>() {
+        TaskRunner.runInTargetNamespace(entity.pmc(), new Callable<Void>() {
             @Override
             public Void call() {
                 dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));

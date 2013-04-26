@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,10 +41,12 @@ public class TaskRunner {
     }
 
     public static <T> T runInTargetNamespace(final Pmc pmc, final Callable<T> task) {
+        Validate.notEmpty(pmc.namespace().getValue());
         return NamespaceManager.runInTargetNamespace(pmc.namespace().getValue(), task);
     }
 
     public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
+        Validate.notEmpty(targetNamespace);
         return NamespaceManager.runInTargetNamespace(targetNamespace, task);
     }
 

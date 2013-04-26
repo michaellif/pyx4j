@@ -22,13 +22,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.rpc.OnboardingUserDTO;
-import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.rpc.OnboardingUserDTO;
+import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -64,7 +64,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
      * Data from PMC database takes priority
      */
     private void bindCrmUser(final OnboardingUserCredential credential, final OnboardingUserDTO dto) {
-        TaskRunner.runInTargetNamespace(dto.pmc().namespace().getValue(), new Callable<Void>() {
+        TaskRunner.runInTargetNamespace(dto.pmc(), new Callable<Void>() {
             @Override
             public Void call() {
                 CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, credential.crmUser().getValue());
@@ -136,7 +136,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
 
             if (pmc.status().getValue() != PmcStatus.Created) {
                 // Update existing CRM user
-                TaskRunner.runInTargetNamespace(pmc.namespace().getValue(), new Callable<Void>() {
+                TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
                     @Override
                     public Void call() {
                         CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, dbo.crmUser().getValue());

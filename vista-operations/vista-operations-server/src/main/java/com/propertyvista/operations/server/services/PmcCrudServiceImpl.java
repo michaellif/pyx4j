@@ -15,6 +15,7 @@ package com.propertyvista.operations.server.services;
 
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -32,7 +33,6 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.PmcFacade;
@@ -49,6 +49,7 @@ import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
 
@@ -107,7 +108,13 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             }
         }
 
-        CacheService.reset();
+        TaskRunner.runInTargetNamespace(entity, new Callable<Void>() {
+            @Override
+            public Void call() {
+                CacheService.reset();
+                return null;
+            }
+        });
     }
 
     @Override
@@ -140,14 +147,14 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void resetCache(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        final String namespace = NamespaceManager.getNamespace();
-        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
-        NamespaceManager.setNamespace(pmc.namespace().getValue());
-        try {
-            CacheService.reset();
-        } finally {
-            NamespaceManager.setNamespace(namespace);
-        }
+        Pmc pmc = Persistence.service().retrieve(Pmc.class, entityId);
+        TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+            @Override
+            public Void call() {
+                CacheService.reset();
+                return null;
+            }
+        });
         callback.onSuccess(null);
     }
 
