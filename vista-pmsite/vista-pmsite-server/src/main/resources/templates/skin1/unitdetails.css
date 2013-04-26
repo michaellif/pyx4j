@@ -4,13 +4,19 @@
 
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
 	width: 318px;
+	height: 610px;
 	float: left;
 	padding:20px 16px;
 	border-right:1px solid ${foreground_20};
+	background-color: #DFEBF7;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	margin-left: 350px;
 	min-height:650px;
+}
+
+.vista-pmsite-main .caption2 h1 {
+    color: #0458B3 !important;
 }
 
 .apartmentDetailsWrap .detailBox {
