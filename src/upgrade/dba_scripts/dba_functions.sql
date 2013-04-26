@@ -425,7 +425,7 @@ BEGIN
                 IF EXISTS (SELECT 'x' FROM pg_class WHERE relname = v_seq_name AND relkind = 'S')
                 THEN
                         EXECUTE 'ALTER SEQUENCE public.'||v_seq_name||' RESTART WITH 1';
-                        RAISE NOTICE 'Sequence % restarted',v_seq_name;
+                        -- RAISE NOTICE 'Sequence % restarted',v_seq_name;
                 END IF;
         END LOOP;
 END;

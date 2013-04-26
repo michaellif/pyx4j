@@ -420,6 +420,8 @@ BEGIN
         ALTER TABLE lease DROP CONSTRAINT lease_lease_type_e_ck;
         ALTER TABLE padpolicy DROP CONSTRAINT padpolicy_charge_type_e_ck;
         ALTER TABLE padpolicy_item DROP CONSTRAINT padpolicy_item_debit_type_e_ck;
+        ALTER TABLE payment_record DROP CONSTRAINT payment_record_payment_status_e_ck;
+        ALTER TABLE payments_summary DROP CONSTRAINT payments_summary_status_e_ck;
         ALTER TABLE pet_constraints DROP CONSTRAINT pet_constraints_pet_discriminator_d_ck;
         ALTER TABLE product DROP CONSTRAINT product_feature_type_ck;
         ALTER TABLE product DROP CONSTRAINT product_feature_type_e_ck;
@@ -696,7 +698,9 @@ BEGIN
                 ||'(nextval(''public.arcode_seq''),''NSF'',''NSF'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
                 ||'(nextval(''public.arcode_seq''),''Payment'',''Payment'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
                 ||'(nextval(''public.arcode_seq''),''CarryForwardCredit'',''CarryForwardCredit'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
-                ||'(nextval(''public.arcode_seq''),''CarryForwardCharge'',''CarryForwardCharge'',DATE_TRUNC(''sec'',current_timestamp),TRUE) ';
+                ||'(nextval(''public.arcode_seq''),''CarryForwardCharge'',''CarryForwardCharge'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''AccountCharge'',''Misc. Generic(no tax)'',DATE_TRUNC(''sec'',current_timestamp),FALSE), '
+                ||'(nextval(''public.arcode_seq''),''AccountCharge'',''Misc. Generic(tax included)'',DATE_TRUNC(''sec'',current_timestamp),FALSE) ';
         
         -- arpolicy
         
@@ -726,13 +730,20 @@ BEGIN
                 ||'SET  ar_code = b.arcode '
                 ||'FROM (SELECT t.id,a.id AS arcode '
                 ||'     FROM t '
-                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type_new = a.name)) AS b '
+                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type_new = a.code_type)) AS b '
                 ||'WHERE a.id = b.id ';   
-        
+                
         
         EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item '
                 ||'SET id_discriminator = ''YardiDebit'' '
                 ||'WHERE id_discriminator = ''YardiCharge'' ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.billing_invoice_line_item AS b '
+                ||'SET ar_code = a.id '
+                ||'FROM '||v_schema_name||'.arcode a '
+                ||'WHERE UPPER(b.id_discriminator) = UPPER(a.code_type) '
+                ||'AND b.ar_code IS NULL ';
         
         
         -- building_utility;
@@ -1037,6 +1048,25 @@ BEGIN
         ALTER TABLE deposit_policy_item DROP COLUMN product_type,
                                         DROP COLUMN product_type_discriminator;
                                         
+                                        
+        -- issue_classification
+        
+        DROP TABLE issue_classification;
+        
+        
+        -- issue_subject_details
+        
+        DROP TABLE issue_subject_details;
+        
+        -- issue_repair_subject
+        
+        DROP TABLE issue_repair_subject;
+        
+        
+        -- issue_element
+        
+        DROP TABLE issue_element;
+                                        
         -- lease_adjustment
         
         ALTER TABLE lease_adjustment    DROP COLUMN item_type;
@@ -1053,7 +1083,14 @@ BEGIN
         
         -- maintenance_request 
         
-        ALTER TABLE maintenance_request DROP COLUMN status_old;
+        ALTER TABLE maintenance_request DROP COLUMN status_old,
+                                        DROP COLUMN issue_classification;
+        
+        
+        -- maintenance_request_category
+        
+        ALTER TABLE maintenance_request_category        DROP COLUMN old_id,
+                                                        DROP COLUMN old_table;
         
         -- padpolicy_item
         
@@ -1174,6 +1211,7 @@ BEGIN
                 FOREIGN KEY(value) REFERENCES organization_contact(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE buildingcontacts$property_contacts ADD CONSTRAINT buildingcontacts$property_contacts_owner_fk FOREIGN KEY(owner) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE buildingcontacts$property_contacts ADD CONSTRAINT buildingcontacts$property_contacts_value_fk FOREIGN KEY(value) REFERENCES property_contact(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign$audience ADD CONSTRAINT campaign$audience_owner_fk FOREIGN KEY(owner) REFERENCES campaign(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign$audience ADD CONSTRAINT campaign$audience_value_fk FOREIGN KEY(value) REFERENCES recipient(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign$media ADD CONSTRAINT campaign$media_owner_fk FOREIGN KEY(owner) REFERENCES campaign(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1182,8 +1220,8 @@ BEGIN
         ALTER TABLE campaign_history ADD CONSTRAINT campaign_history_campaign_fk FOREIGN KEY(campaign) REFERENCES phone_call_campaign(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign_history ADD CONSTRAINT campaign_history_tenant_fk FOREIGN KEY(tenant) REFERENCES customer(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE campaign ADD CONSTRAINT campaign_message_fk FOREIGN KEY(message) REFERENCES message(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_owbilling_debit_credit_linkner_fk FOREIGN KEY(owner) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_value_fk FOREIGN KEY(value) REFERENCES charge_line(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE charge_line_list$charges ADD CONSTRAINT charge_line_list$charges_owner_fk FOREIGN KEY(owner) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charges ADD CONSTRAINT charges_application_charges_fk FOREIGN KEY(application_charges) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charges ADD CONSTRAINT charges_application_fk FOREIGN KEY(application) REFERENCES online_application(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE charges ADD CONSTRAINT charges_monthly_charges_fk FOREIGN KEY(monthly_charges) REFERENCES charge_line_list(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1298,9 +1336,6 @@ BEGIN
         ALTER TABLE invoice_concession_sub_line_item ADD CONSTRAINT invoice_concession_sub_line_item_concession_fk FOREIGN KEY(concession) REFERENCES concession(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE invoice_concession_sub_line_item ADD CONSTRAINT invoice_concession_sub_line_item_line_item_fk 
                 FOREIGN KEY(line_item) REFERENCES billing_invoice_line_item(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE issue_classification ADD CONSTRAINT issue_classification_subject_details_fk FOREIGN KEY(subject_details) REFERENCES issue_subject_details(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE issue_repair_subject ADD CONSTRAINT issue_repair_subject_issue_element_fk FOREIGN KEY(issue_element) REFERENCES issue_element(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE issue_subject_details ADD CONSTRAINT issue_subject_details_subject_fk FOREIGN KEY(subject) REFERENCES issue_repair_subject(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE late_fee_item ADD CONSTRAINT late_fee_item_policy_fk FOREIGN KEY(policy) REFERENCES lease_billing_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lead ADD CONSTRAINT lead_agent_fk FOREIGN KEY(agent) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE lead ADD CONSTRAINT lead_floorplan_fk FOREIGN KEY(floorplan) REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1365,8 +1400,10 @@ BEGIN
         ALTER TABLE locker_area ADD CONSTRAINT locker_area_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE locker ADD CONSTRAINT locker_locker_area_fk FOREIGN KEY(locker_area) REFERENCES locker_area(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance ADD CONSTRAINT maintenance_contract_contractor_fk FOREIGN KEY(contract_contractor) REFERENCES vendor(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_parent_fk FOREIGN KEY(parent) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_priority_fk FOREIGN KEY(priority) REFERENCES maintenance_request_priority(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_status_fk FOREIGN KEY(status) REFERENCES maintenance_request_status(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_category_fk FOREIGN KEY(category) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_issue_classification_fk FOREIGN KEY(issue_classification) REFERENCES issue_classification(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_lease_participant_fk FOREIGN KEY(lease_participant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_owner_fk FOREIGN KEY(owner) REFERENCES marketing(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing$ad_blurbs ADD CONSTRAINT marketing$ad_blurbs_value_fk FOREIGN KEY(value) REFERENCES advertising_blurb(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1559,6 +1596,10 @@ BEGIN
         ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_level_e_ck CHECK ((level) IN ('EMERGENCY', 'STANDARD'));
         ALTER TABLE maintenance_request_status ADD CONSTRAINT maintenance_request_status_phase_e_ck CHECK ((phase) IN ('Cancelled', 'Resolved', 'Scheduled', 'Submitted'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_payment_status_e_ck 
+                CHECK ((payment_status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted'));
+        ALTER TABLE payments_summary ADD CONSTRAINT payments_summary_status_e_ck 
+                CHECK ((status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted'));
         ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
                 CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
                 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
@@ -1575,6 +1616,8 @@ BEGIN
         
         CREATE INDEX billing_invoice_line_item_billing_account_idx ON billing_invoice_line_item USING btree (billing_account);
         CREATE INDEX billing_invoice_line_item_billing_account_discriminator_idx ON billing_invoice_line_item USING btree (billing_account_discriminator);
+        CREATE INDEX building_utility_building_idx ON building_utility USING btree (building);
+        CREATE UNIQUE INDEX maintenance_request_request_id_idx ON maintenance_request USING btree (LOWER(request_id));
        
         
         
