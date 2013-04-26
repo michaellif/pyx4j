@@ -407,6 +407,32 @@ $$
 LANGUAGE plpgsql VOLATILE;
 
 
+CREATE OR REPLACE FUNCTION _dba_.restart_pmc_seq(v_schema_name TEXT) RETURNS VOID AS
+$$
+DECLARE 
+        v_seq_name              VARCHAR(64);
+        v_table_name            VARCHAR(64);
+BEGIN
+        FOR     v_table_name IN
+        SELECT  relname
+        FROM    pg_class a
+        JOIN    pg_namespace b ON (a.relnamespace = b.oid)
+        WHERE   a.relkind = 'r'
+        AND     b.nspname = v_schema_name
+        LOOP
+                v_seq_name := v_table_name||'_seq';
+                
+                IF EXISTS (SELECT 'x' FROM pg_class WHERE relname = v_seq_name AND relkind = 'S')
+                THEN
+                        EXECUTE 'ALTER SEQUENCE public.'||v_seq_name||' RESTART WITH 1';
+                        RAISE NOTICE 'Sequence % restarted',v_seq_name;
+                END IF;
+        END LOOP;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+
 CREATE OR REPLACE FUNCTION _dba_.table_diff (v_source_schema text, v_target_schema text, v_table text)
 RETURNS TABLE (table_name VARCHAR(64),column_name VARCHAR(64),data_type	VARCHAR(64),is_nullable	BOOLEAN,schema_version VARCHAR(12))
 AS

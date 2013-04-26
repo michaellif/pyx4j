@@ -2,6 +2,7 @@
 rem @version $Revision$ ($Author$)  $Date$
 title psql
 set PGPASSWORD=root
+psql --username postgres -d "vista" 'CREATE SCHEMA _dba_ ;'
 psql --username postgres -d "vista" --file dba_functions.sql
 @if errorlevel 1 goto errormark
 
