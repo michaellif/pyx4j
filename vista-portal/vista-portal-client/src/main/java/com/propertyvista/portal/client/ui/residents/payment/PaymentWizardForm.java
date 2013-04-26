@@ -184,7 +184,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 if (event.getValue() != null) {
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.setValue(event.getValue());
                 }
             }
         });
@@ -254,15 +254,6 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                         true, populate);
             }
         });
-
-        if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
-            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
-        } else {
-            paymentMethodEditor.setViewable(false);
-        }
-
-        // TODO : this is the HACK - check CComponent.setVisible implementation!!!
-        paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {

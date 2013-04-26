@@ -206,7 +206,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 if (event.getValue() != null) {
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.setValue(event.getValue());
                 }
             }
         });
@@ -265,12 +265,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                         true, populate);
             }
         });
-
-        if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
-            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
-        } else {
-            paymentMethodEditor.setViewable(false);
-        }
     }
 
     private void setAmountEditor(AmountType amountType) {

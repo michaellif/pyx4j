@@ -107,10 +107,17 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     }
 
     @Override
+    public void onReset() {
+        super.onReset();
+
+        setPaymentTypeSelectionEditable(true);
+    }
+
+    @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroupEnum) {
+        if (isEditable() && get(proto().type()) instanceof CRadioGroupEnum) {
             // set single-available option preselected for new items: 
             @SuppressWarnings("unchecked")
             CRadioGroupEnum<PaymentType> type = ((CRadioGroupEnum<PaymentType>) get(proto().type()));
