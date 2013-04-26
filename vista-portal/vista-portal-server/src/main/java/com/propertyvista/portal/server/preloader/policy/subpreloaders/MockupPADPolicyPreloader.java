@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupPADPolicyPreloader extends AbstractPolicyPreloader<PADPolicy> {
@@ -38,20 +38,20 @@ public class MockupPADPolicyPreloader extends AbstractPolicyPreloader<PADPolicy>
         PADPolicy policy = EntityFactory.create(PADPolicy.class);
         policy.chargeType().setValue(PADChargeType.OwingBalance);
         for (ARCode code : getARCodes(ARCode.Type.Residential)) {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().set(code);
+            PADDebitPolicyItem item = EntityFactory.create(PADDebitPolicyItem.class);
+            item.arCode().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }
         for (ARCode code : getARCodes(ARCode.Type.Parking)) {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().set(code);
+            PADDebitPolicyItem item = EntityFactory.create(PADDebitPolicyItem.class);
+            item.arCode().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }
         for (ARCode code : getARCodes(ARCode.Type.Locker)) {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().set(code);
+            PADDebitPolicyItem item = EntityFactory.create(PADDebitPolicyItem.class);
+            item.arCode().set(code);
             item.owingBalanceType().setValue(OwingBalanceType.LastBill);
             policy.debitBalanceTypes().add(item);
         }

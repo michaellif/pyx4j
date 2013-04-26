@@ -34,7 +34,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /*
@@ -65,8 +65,8 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
         PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
 
         // create product map
-        for (PADPolicyItem item : padPolicy.debitBalanceTypes()) {
-            padDebitTypes.put(item.debitType(), item.owingBalanceType().getValue());
+        for (PADDebitPolicyItem item : padPolicy.debitBalanceTypes()) {
+            padDebitTypes.put(item.arCode(), item.owingBalanceType().getValue());
         }
     }
 

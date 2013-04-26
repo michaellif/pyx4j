@@ -48,7 +48,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 /**
@@ -111,8 +111,8 @@ class ARInternalCreditDebitLinkManager {
                         .obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
                 // create product map
                 Map<ARCode, OwingBalanceType> debitBalanceType = new HashMap<ARCode, OwingBalanceType>();
-                for (PADPolicyItem item : policy.debitBalanceTypes()) {
-                    debitBalanceType.put(item.debitType(), item.owingBalanceType().getValue());
+                for (PADDebitPolicyItem item : policy.debitBalanceTypes()) {
+                    debitBalanceType.put(item.arCode(), item.owingBalanceType().getValue());
                 }
                 List<InvoiceDebit> padDebits = new ArrayList<InvoiceDebit>();
                 for (InvoiceDebit debit : debits) {

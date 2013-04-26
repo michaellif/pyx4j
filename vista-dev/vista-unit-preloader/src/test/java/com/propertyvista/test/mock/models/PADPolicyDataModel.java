@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
@@ -59,8 +59,8 @@ public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
 
         }
         for (ARCode code : getConfig().padBalanceTypeMap.keySet()) {
-            PADPolicyItem item = EntityFactory.create(PADPolicyItem.class);
-            item.debitType().set(code);
+            PADDebitPolicyItem item = EntityFactory.create(PADDebitPolicyItem.class);
+            item.arCode().set(code);
             item.owingBalanceType().setValue(getConfig().padBalanceTypeMap.get(code));
             policy.debitBalanceTypes().add(item);
 

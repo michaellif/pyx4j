@@ -40,8 +40,9 @@ import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBas
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.PADPolicyDTO;
+import com.propertyvista.domain.policy.policies.PADCreditPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
 
 public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
 
@@ -58,16 +59,23 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
 
     private FormFlexPanel createItemsPanel() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
+        int col = 0;
         int row = -1;
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
-        panel.setWidget(++row, 0, inject(proto().debitBalanceTypes(), new PADPolicyItemEditorFolder()));
+        panel.setH1(++row, col, 1, i18n.tr("Debits"));
+        panel.setWidget(++row, col, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
+        panel.setWidget(++row, col, inject(proto().debitBalanceTypes(), new PADDebitPolicyItemEditorFolder()));
         get(proto().chargeType()).addValueChangeHandler(new ValueChangeHandler<PADChargeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PADChargeType> event) {
                 get(proto().debitBalanceTypes()).setVisible(!PADChargeType.FixedAmount.equals(event.getValue()));
             }
         });
+        col = 1;
+        row = -1;
+        panel.setH1(++row, col, 1, i18n.tr("Credits"));
+        panel.setWidget(++row, col, inject(proto().creditBalanceTypes(), new PADCreditPolicyItemEditorFolder()));
+
+        panel.getColumnFormatter().setWidth(0, "50%");
 
         return panel;
     }
@@ -78,24 +86,54 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
         get(proto().debitBalanceTypes()).setVisible(getValue().isNull() || !PADChargeType.FixedAmount.equals(getValue().chargeType().getValue()));
     }
 
-    private static class PADPolicyItemEditorFolder extends VistaBoxFolder<PADPolicyItem> {
+    private static class PADCreditPolicyItemEditorFolder extends VistaBoxFolder<PADCreditPolicyItem> {
 
-        public PADPolicyItemEditorFolder() {
-            super(PADPolicyItem.class);
+        public PADCreditPolicyItemEditorFolder() {
+            super(PADCreditPolicyItem.class);
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof PADPolicyItem) {
-                return new PADPolicyItemEditor();
+            if (member instanceof PADCreditPolicyItem) {
+                return new PADCreditPolicyItemEditor();
             }
             return super.create(member);
         }
 
-        private static class PADPolicyItemEditor extends CEntityDecoratableForm<PADPolicyItem> {
+        private static class PADCreditPolicyItemEditor extends CEntityDecoratableForm<PADCreditPolicyItem> {
 
-            public PADPolicyItemEditor() {
-                super(PADPolicyItem.class);
+            public PADCreditPolicyItemEditor() {
+                super(PADCreditPolicyItem.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+
+                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().arCode()), 20).build());
+                return content;
+            }
+        }
+    }
+
+    private static class PADDebitPolicyItemEditorFolder extends VistaBoxFolder<PADDebitPolicyItem> {
+
+        public PADDebitPolicyItemEditorFolder() {
+            super(PADDebitPolicyItem.class);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PADDebitPolicyItem) {
+                return new PADDebitPolicyItemEditor();
+            }
+            return super.create(member);
+        }
+
+        private static class PADDebitPolicyItemEditor extends CEntityDecoratableForm<PADDebitPolicyItem> {
+
+            public PADDebitPolicyItemEditor() {
+                super(PADDebitPolicyItem.class);
             }
 
             @Override
@@ -103,12 +141,12 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
                 FormFlexPanel content = new FormFlexPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().debitType()), 20).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().arCode()), 20).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().owingBalanceType()), 20).build());
 
                 // tweaks:
-                get(proto().debitType()).inheritViewable(false);
-                get(proto().debitType()).setViewable(true);
+                get(proto().arCode()).inheritViewable(false);
+                get(proto().arCode()).setViewable(true);
 
                 return content;
             }
@@ -117,18 +155,18 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
         @Override
         protected void addItem() {
             final List<ARCode> alreadySelectedTypes = new ArrayList<ARCode>();
-            for (PADPolicyItem di : getValue()) {
-                if (!di.debitType().isNull()) {
-                    alreadySelectedTypes.add(di.debitType());
+            for (PADDebitPolicyItem di : getValue()) {
+                if (!di.arCode().isNull()) {
+                    alreadySelectedTypes.add(di.arCode());
                 }
             }
 
             new EntitySelectorTableDialog<ARCode>(ARCode.class, false, alreadySelectedTypes, i18n.tr("Select Debit Type")) {
                 @Override
                 public boolean onClickOk() {
-                    PADPolicyItem newItem = EntityFactory.create(PADPolicyItem.class);
-                    newItem.debitType().set(getSelectedItems().get(0));
-                    PADPolicyItemEditorFolder.this.addItem(newItem);
+                    PADDebitPolicyItem newItem = EntityFactory.create(PADDebitPolicyItem.class);
+                    newItem.arCode().set(getSelectedItems().get(0));
+                    PADDebitPolicyItemEditorFolder.this.addItem(newItem);
                     return true;
                 }
 

@@ -53,5 +53,8 @@ public interface PADPolicy extends Policy {
     IPrimitive<PADChargeType> chargeType();
 
     @Owned
-    IList<PADPolicyItem> debitBalanceTypes();
+    IList<PADDebitPolicyItem> debitBalanceTypes();
+
+    @Owned
+    IList<PADCreditPolicyItem> creditBalanceTypes();
 }

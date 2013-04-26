@@ -26,10 +26,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 
-public interface PADPolicyItem extends IEntity {
+public interface PADDebitPolicyItem extends IEntity {
 
     @NotNull
-    ARCode debitType();
+    ARCode arCode();
 
     @NotNull
     IPrimitive<OwingBalanceType> owingBalanceType();

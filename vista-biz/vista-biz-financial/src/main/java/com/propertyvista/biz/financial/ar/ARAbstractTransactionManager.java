@@ -27,6 +27,7 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -55,9 +56,10 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.policy.policies.PADCreditPolicyItem;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADPolicyItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -124,8 +126,8 @@ public abstract class ARAbstractTransactionManager {
         PADPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
         // create product map
         Map<ARCode, OwingBalanceType> debitBalanceType = new HashMap<ARCode, OwingBalanceType>();
-        for (PADPolicyItem item : policy.debitBalanceTypes()) {
-            debitBalanceType.put(item.debitType(), item.owingBalanceType().getValue());
+        for (PADDebitPolicyItem item : policy.debitBalanceTypes()) {
+            debitBalanceType.put(item.arCode(), item.owingBalanceType().getValue());
         }
         BigDecimal balance = BigDecimal.ZERO;
         for (InvoiceDebit debit : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
@@ -137,8 +139,14 @@ public abstract class ARAbstractTransactionManager {
                 balance = balance.add(debit.outstandingDebit().getValue());
             }
         }
+        List<ARCode> padCreditCodes = new ArrayList<ARCode>();
+        for (PADCreditPolicyItem item : policy.creditBalanceTypes()) {
+            padCreditCodes.add(item.arCode());
+        }
         for (InvoiceCredit credit : getNotConsumedCreditInvoiceLineItems(billingAccount)) {
-            balance = balance.add(credit.outstandingCredit().getValue());
+            if (padCreditCodes.contains(credit.arCode())) {
+                balance = balance.add(credit.outstandingCredit().getValue());
+            }
         }
         return balance;
     }
