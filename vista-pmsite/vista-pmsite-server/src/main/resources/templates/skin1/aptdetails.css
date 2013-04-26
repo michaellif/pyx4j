@@ -17,6 +17,10 @@
 	padding-bottom: 20px;
 }
 
+.vista-pmsite-main .caption2 h1 {
+    color: #0458B3 !important;
+}
+
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_60};
 	padding-bottom:20px;
