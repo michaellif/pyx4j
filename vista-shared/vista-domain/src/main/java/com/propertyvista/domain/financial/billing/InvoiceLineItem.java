@@ -71,4 +71,8 @@ public interface InvoiceLineItem extends IEntity {
 
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderId();
+
+    //This was added from interface YardiCharge to enable search by this column in LeaseLister
+    @Deprecated
+    IPrimitive<String> chargeCode();
 }

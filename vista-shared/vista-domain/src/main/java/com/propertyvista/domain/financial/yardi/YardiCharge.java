@@ -21,6 +21,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 @AbstractEntity
 public interface YardiCharge extends InvoiceLineItem {
 
+    @Override
     IPrimitive<String> chargeCode();
 
     IPrimitive<String> transactionId();
