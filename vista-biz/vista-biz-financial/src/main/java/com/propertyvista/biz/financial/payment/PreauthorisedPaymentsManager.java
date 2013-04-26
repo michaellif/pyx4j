@@ -299,12 +299,23 @@ class PreauthorisedPaymentsManager {
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
             criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
             criteria.eq(criteria.proto().preauthorizedPayment().amountType(), AmountType.Percent);
-            List<PaymentRecord> paymentRecords = Persistence.service().query(criteria);
-            if (paymentRecords.size() == 0) {
+            if (Persistence.service().count(criteria) == 0) {
                 //Nothing to update
                 return;
             }
         }
+
+        boolean hasPendingAction = false;
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
+            criteria.eq(criteria.proto().billingAccount(), billingAccount);
+            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.PendingAction);
+            criteria.eq(criteria.proto().preauthorizedPayment().amountType(), AmountType.Percent);
+            hasPendingAction = (Persistence.service().count(criteria) != 0);
+
+        }
+        boolean electronicPaymentsNotSetup = !PaymentUtils.isElectronicPaymentsSetup(billingAccount);
 
         List<PreauthorizedAmount> records = calulatePapAmounts(billingCycle, billingAccount);
 
@@ -317,7 +328,7 @@ class PreauthorisedPaymentsManager {
             criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
             PaymentRecord paymentRecord = Persistence.service().retrieve(criteria);
-            if ((paymentRecord != null) && (paymentRecord.amount().getValue().compareTo(record.amount) != 0)) {
+            if ((electronicPaymentsNotSetup || hasPendingAction) || ((paymentRecord != null) && (paymentRecord.amount().getValue().compareTo(record.amount) != 0))) {
                 paymentRecord.amount().setValue(record.amount);
                 createNoticeMessage(paymentRecord, record.notice);
                 ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
