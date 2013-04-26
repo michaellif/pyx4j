@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.reports.AbstractReport;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -48,13 +49,23 @@ public class EftReport extends Composite implements Report {
         // TODO use AppPlaceEntityMapper to resolve places (now its' not optimized and works really slow)        
         final PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
         COLUMN_DESCRIPTORS = Arrays.<ITableColumnFormatter> asList(//@formatter:off
-                new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.notice()).build()) {
+                new ITableColumnFormatter() {
+                    
+                    @Override
+                    public SafeHtml formatHeader() {
+                        return new SafeHtmlBuilder()
+                            .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                            .appendEscaped(i18n.tr("Notice"))
+                            .appendHtmlConstant("</span>")
+                            .toSafeHtml();
+                    }
+                    
                     @Override
                     public SafeHtml formatContent(IEntity entity) {                        
                         PaymentRecord r = (PaymentRecord) entity;
                         if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                                                       
                             return new SafeHtmlBuilder()
-                                    .appendHtmlConstant("<div style='text-align:center'>")
+                                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
                                     .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
                                              " src='data:image/png;base64," + warningImageBase64 + "'" + 
                                              " border='0' " +
@@ -65,6 +76,28 @@ public class EftReport extends Composite implements Report {
                         } else {
                             return new SafeHtmlBuilder().toSafeHtml();
                         }
+                    }
+                },
+                new ITableColumnFormatter() {                   
+                    @Override
+                    public SafeHtml formatHeader() {                        
+                        return new SafeHtmlBuilder()
+                                .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                                .appendEscaped(i18n.tr("Notice"))
+                                .appendHtmlConstant("</span>")
+                                .toSafeHtml();
+                    }
+                    
+                    @Override
+                    public SafeHtml formatContent(IEntity entity) {
+                        PaymentRecord r = (PaymentRecord) entity;
+                        SafeHtmlBuilder b = new SafeHtmlBuilder();
+                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                            
+                            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                             .appendEscaped(r.notice().getValue())
+                             .appendHtmlConstant("</span>");
+                        }
+                        return b.toSafeHtml();                            
                     }
                 },
                 new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build()),

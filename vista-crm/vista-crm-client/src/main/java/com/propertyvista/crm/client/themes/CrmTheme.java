@@ -131,6 +131,8 @@ public class CrmTheme extends VistaTheme {
         initCreditCheckReportTypeSelectorStyles();
         initPmcSignatureFormStyles();
         initLegalTermsContentViewerStyles();
+
+        initReportRelatedStyles();
     }
 
     @Override
@@ -614,6 +616,12 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("height", "20em");
         style.addProperty("padding-left", "1em");
         style.addProperty("padding-right", "1em");
+        addStyle(style);
+    }
+
+    private void initReportRelatedStyles() {
+        Style style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
+        style.addProperty("display", "none");
         addStyle(style);
     }
 
