@@ -13,7 +13,11 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -21,5 +25,19 @@ public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImp
 
     public GuarantorCrudServiceImpl() {
         super(Guarantor.class, GuarantorDTO.class);
+    }
+
+    @Override
+    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
+
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+                    RestrictionsPolicy.class);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            }
+        }
+
     }
 }

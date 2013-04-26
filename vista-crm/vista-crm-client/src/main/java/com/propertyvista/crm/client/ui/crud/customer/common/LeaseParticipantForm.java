@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -78,6 +82,18 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     @Override
     public void addValidations() {
         new PastDateValidation(get(proto().customer().person().birthDate()));
+        get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null && !getValue().ageOfMajority().isNull()) {
+                    if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue() - 1)) {
+                        return new ValidationError(component, i18n.tr("this lease participant is to young: the minimum age required is {0}.", getValue()
+                                .ageOfMajority().getValue()));
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     protected FormFlexPanel createDetailsTab(String title) {
@@ -169,4 +185,5 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         return main;
     }
+
 }

@@ -32,10 +32,12 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantDTO;
@@ -65,10 +67,18 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             insuranceCertificate.tenant().set(insuranceCertificate.tenant().createIdentityStub());
         }
 
-        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
-                TenantInsurancePolicy.class);
-        if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
-            dto.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+                    TenantInsurancePolicy.class);
+            if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
+                dto.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
+            }
+
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+                    RestrictionsPolicy.class);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                dto.ageOfMajority().setValue((dto.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
+            }
         }
 
         if (VistaFeatures.instance().yardiIntegration() & (retrieveTraget == RetrieveTraget.View || retrieveTraget == RetrieveTraget.Edit)) {
@@ -76,6 +86,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             boolean isPotentialTenant = leaseTerm.status().getValue() != LeaseTerm.Status.Current & leaseTerm.status().getValue() != LeaseTerm.Status.Historic;
             dto.isPotentialTenant().setValue(isPotentialTenant);
         }
+
     }
 
     @Override

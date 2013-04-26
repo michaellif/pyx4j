@@ -23,4 +23,5 @@ import com.propertyvista.dto.TenantDTO;
 public interface TenantCrudService extends LeaseParticipantCrudServiceBase<TenantDTO> {
 
     void getAssosiatedTenant(AsyncCallback<Tenant> callback, Key entityId);
+
 }

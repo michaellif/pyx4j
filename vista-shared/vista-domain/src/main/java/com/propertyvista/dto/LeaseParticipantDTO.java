@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
 @AbstractEntity
@@ -38,4 +38,8 @@ public interface LeaseParticipantDTO<E extends LeaseTermParticipant<?>> extends 
     IList<LeasePaymentMethod> paymentMethods();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
+
+    /** Sets the age of majority for validation, null if no validation is required */
+    IPrimitive<Integer> ageOfMajority();
+
 }
