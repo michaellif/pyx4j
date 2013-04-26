@@ -178,6 +178,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -226,7 +227,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(CrmAuthenticationService.class));
         grant(VistaBasicBehavior.CRMPasswordChangeRequired, new IServiceExecutePermission(CrmPasswordResetService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(FeedbackService.class));
+        grant(VistaApplication.crm, new IServiceExecutePermission(FeedbackService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPolicyRetrieveService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BreadcrumbsService.class));
