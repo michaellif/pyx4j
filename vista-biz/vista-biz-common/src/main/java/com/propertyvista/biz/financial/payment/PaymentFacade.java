@@ -29,11 +29,11 @@ public interface PaymentFacade {
 
     Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
-    boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId);
+    boolean isElectronicPaymentsSetup(BillingAccount billingAccountId);
 
-    boolean isElectronicPaymentsAllowed(Lease leaseId);
+    boolean isElectronicPaymentsSetup(Lease leaseId);
 
-    boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId);
+    boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId);
 
     //boolean isPaymentsAllowedInPortal(BillingAccount billingAccountId);
 

@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -45,6 +46,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
 
 class PreauthorisedPaymentsManager {
+
+    private static final I18n i18n = I18n.get(PreauthorisedPaymentsManager.class);
 
     private static class PreauthorizedAmount {
 
@@ -149,6 +152,7 @@ class PreauthorisedPaymentsManager {
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);
             paymentRecord.targetDate().setValue(billingCycle.padExecutionDate().getValue());
+            createNoticeMessage(paymentRecord, record.notice);
 
             ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
             ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
@@ -249,7 +253,7 @@ class PreauthorisedPaymentsManager {
 
         if ((currentBalance != null) && (total.compareTo(currentBalance) != 0)) {
             // Validate total
-            String notice = SimpleMessageFormat.format("Outstanding account Balance {0} is not equal sum of payments {1}", currentBalance, total);
+            String notice = i18n.tr("Outstanding account Balance {0} is not equal sum of payments {1}", currentBalance, total);
             for (PreauthorizedAmount record : records) {
                 record.notice = notice;
             }
@@ -293,7 +297,7 @@ class PreauthorisedPaymentsManager {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Scheduled);
+            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
             criteria.eq(criteria.proto().preauthorizedPayment().amountType(), AmountType.Percent);
             List<PaymentRecord> paymentRecords = Persistence.service().query(criteria);
             if (paymentRecords.size() == 0) {
@@ -310,15 +314,29 @@ class PreauthorisedPaymentsManager {
             criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
             criteria.eq(criteria.proto().preauthorizedPayment(), record.preauthorizedPayment);
-            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Scheduled);
+            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
             PaymentRecord paymentRecord = Persistence.service().retrieve(criteria);
             if ((paymentRecord != null) && (paymentRecord.amount().getValue().compareTo(record.amount) != 0)) {
                 paymentRecord.amount().setValue(record.amount);
-                paymentRecord.notice().setValue(record.notice);
-                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+                createNoticeMessage(paymentRecord, record.notice);
+                ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
                 executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
             }
         }
+    }
+
+    private void createNoticeMessage(PaymentRecord paymentRecord, String calulationsNotice) {
+        StringBuilder m = new StringBuilder();
+        if (PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
+            m.append(i18n.tr("No active merchantAccount found to process the payment."));
+        }
+        if (calulationsNotice != null) {
+            if (m.length() > 0) {
+                m.append("\n");
+            }
+            m.append(calulationsNotice);
+        }
+        paymentRecord.notes().setValue(m.toString());
     }
 }

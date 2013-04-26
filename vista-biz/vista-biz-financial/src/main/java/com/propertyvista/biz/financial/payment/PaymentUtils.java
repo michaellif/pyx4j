@@ -41,7 +41,7 @@ class PaymentUtils {
 
     private static final I18n i18n = I18n.get(PaymentUtils.class);
 
-    static boolean isElectronicPaymentsAllowed(MerchantAccount merchantAccount) {
+    static boolean isElectronicPaymentsSetup(MerchantAccount merchantAccount) {
         if ((merchantAccount == null) || merchantAccount.invalid().getValue(Boolean.TRUE)) {
             return false;
         } else {
@@ -59,22 +59,22 @@ class PaymentUtils {
         }
     }
 
-    public static boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
+    public static boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
-        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
+        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
-    public static boolean isElectronicPaymentsAllowed(Lease leaseId) {
+    public static boolean isElectronicPaymentsSetup(Lease leaseId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases(), leaseId));
-        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
+        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
-    public static boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId) {
+    public static boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().leaseTerms(), leaseTermId));
-        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
+        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
     }
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
@@ -103,7 +103,7 @@ class PaymentUtils {
             return Collections.emptyList();
         }
 
-        boolean electronicPaymentsAllowed = isElectronicPaymentsAllowed(billingAccountId);
+        boolean electronicPaymentsAllowed = isElectronicPaymentsSetup(billingAccountId);
         PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);

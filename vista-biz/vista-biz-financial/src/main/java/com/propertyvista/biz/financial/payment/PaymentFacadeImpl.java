@@ -38,6 +38,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
@@ -58,18 +59,18 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
-        return PaymentUtils.isElectronicPaymentsAllowed(billingAccountId);
+    public boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
+        return PaymentUtils.isElectronicPaymentsSetup(billingAccountId);
     }
 
     @Override
-    public boolean isElectronicPaymentsAllowed(Lease leaseId) {
-        return PaymentUtils.isElectronicPaymentsAllowed(leaseId);
+    public boolean isElectronicPaymentsSetup(Lease leaseId) {
+        return PaymentUtils.isElectronicPaymentsSetup(leaseId);
     }
 
     @Override
-    public boolean isElectronicPaymentsAllowed(LeaseTerm leaseTermId) {
-        return PaymentUtils.isElectronicPaymentsAllowed(leaseTermId);
+    public boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId) {
+        return PaymentUtils.isElectronicPaymentsSetup(leaseTermId);
     }
 
     @Override
@@ -83,7 +84,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         }
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
+                paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
@@ -125,7 +127,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord schedulePayment(PaymentRecord paymentId) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
-        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
+                paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
         if (paymentRecord.targetDate().isNull()) {
@@ -134,6 +137,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Validate.isTrue(paymentRecord.paymentMethod().type().getValue().isSchedulable());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
+
+        MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
+        if ((merchantAccount == null) || (!PaymentUtils.isElectronicPaymentsSetup(merchantAccount))) {
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.PendingAction);
+        }
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
@@ -141,7 +149,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException {
         final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
+                paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 

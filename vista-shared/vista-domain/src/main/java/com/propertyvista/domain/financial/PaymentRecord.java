@@ -66,6 +66,9 @@ public interface PaymentRecord extends IEntity {
         // Payment Scheduled from Submitted state if targetDate > now (not posted to AR)
         Scheduled,
 
+        // Scheduled but there are no Valid MerchantAccount on building, records would be canceled when posting
+        PendingAction,
+
         // Waiting to be sent/resent to payment gateway (posted to AR)
         Queued,
 
@@ -94,7 +97,7 @@ public interface PaymentRecord extends IEntity {
         }
 
         public static Collection<PaymentStatus> cancelable() {
-            return EnumSet.of(Submitted, Scheduled, Queued);
+            return EnumSet.of(Submitted, Scheduled, PendingAction, Queued);
         }
 
         /**

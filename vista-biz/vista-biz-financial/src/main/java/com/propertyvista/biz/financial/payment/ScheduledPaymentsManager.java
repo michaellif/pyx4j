@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -42,7 +43,7 @@ class ScheduledPaymentsManager {
 
     void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
+        criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
         criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), SystemDateManager.getDate()));
 
@@ -65,6 +66,9 @@ class ScheduledPaymentsManager {
                     if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
                         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
                         executionMonitor.addProcessedEvent("Canceled");
+                    } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
+                        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+                        executionMonitor.addProcessedEvent("Canceled ElectronicPayments Not Setup");
                     } else {
                         PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
                         if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
@@ -86,7 +90,7 @@ class ScheduledPaymentsManager {
     void cancelScheduledPayments(LeasePaymentMethod paymentMethod) {
         EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
         criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
-        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled);
+        criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
         for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
@@ -96,7 +100,7 @@ class ScheduledPaymentsManager {
     void cancelScheduledPayments(PreauthorizedPayment preauthorizedPayment) {
         EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
         criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
-        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled);
+        criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
         for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);

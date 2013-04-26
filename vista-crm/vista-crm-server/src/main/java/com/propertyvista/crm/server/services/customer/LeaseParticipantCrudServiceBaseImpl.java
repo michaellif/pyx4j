@@ -70,7 +70,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
             }
         }
 
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.leaseTermV().holder()));
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.leaseTermV().holder()));
     }
 
     @Override
