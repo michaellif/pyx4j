@@ -1,3 +1,7 @@
+.vista-pmsite-main .content {
+    background-color: #EDE8F0 !important;
+}
+
 .vista-pmsite-findAptPage .vista-pmsite-content {
     color: ${foreground_100};
     font-size: 16px;

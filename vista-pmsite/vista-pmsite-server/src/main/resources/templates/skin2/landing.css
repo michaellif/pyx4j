@@ -1,6 +1,10 @@
+.header .main {
+    margin-top: 0 !important;
+}
+
 .infobox_body {
 	padding: 20px 20px;
-	border-left: solid 1px ${object2_20};
+	/*border-left: solid 1px ${object2_20};*/
 }
 
 .banner .infobox_header {
@@ -107,6 +111,7 @@
 
 .newsBox {
 	min-height: 450px;
+	border-right: 1px solid #DCD2E1;
 }
 
 .newsBox .infobox_header {
@@ -192,4 +197,5 @@
 }
 .narrowGadgetBox .infobox_body {
 	border:0;
+	border-right: 1px solid #DCD2E1;
 }
