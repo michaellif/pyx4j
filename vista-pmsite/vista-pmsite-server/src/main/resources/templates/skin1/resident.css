@@ -1,10 +1,13 @@
 .vista-pmsite-residentPage {
 	color: ${foreground_100};
 }
+.vista-pmsite-main .caption h1 {
+    color: #0458B3 !important;
+}
 
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 400px;
-	padding-bottom: 20px;
+	/*padding-bottom: 20px;*/
 }
 
 .vista-pmsite-residentPage .secondaryNavig {
@@ -175,4 +178,8 @@
     height: auto !important;
     padding-right: 0 !important;
     width: auto !important;
+}
+
+.LandingViewSectionFooter > div:last-child {
+    padding-bottom: 20px;
 }

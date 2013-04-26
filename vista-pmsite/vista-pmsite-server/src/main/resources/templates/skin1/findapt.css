@@ -141,3 +141,9 @@
 	color:${object1_20} !important;
 	background-color:${foreground_60} !important;
 }
+
+.vista-pmsite-findAptPage .vista-pmsite-content .content {
+    background-image: url("images/foto_for_redridge.jpg");
+    background-position: right 30px;
+    background-repeat: no-repeat; 
+}

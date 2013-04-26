@@ -89,7 +89,8 @@
 }
 
 .read_more {
-	color: ${contrast2_100};
+	/*color: ${contrast2_100};*/
+	color: #FF0000;
 	font-size: 16px;
 	padding-left: 10px;
 }

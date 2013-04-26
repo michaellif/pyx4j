@@ -4,6 +4,8 @@
 
 .vista-pmsite-inquiryFormPage .vista-pmsite-sidebar {
 	width: 318px;
+	height: 900px;
+	background-color: #DFEBF7;
 	float:left;
 	padding:20px 16px;
 	border-right:1px solid ${foreground_20};
@@ -11,4 +13,7 @@
 .vista-pmsite-inquiryFormPage .vista-pmsite-main {
 	min-height:600px;
 	margin-left: 350px;
+}
+.vista-pmsite-main .caption2 h1 {
+    color: #0458B3 !important;
 }

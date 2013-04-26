@@ -1,9 +1,17 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-sidebar {
 	width: 318px;
+	height: 618px;
+	min-height: 477px;
 	float:left;
 	padding:20px 16px;
 	border-right:1px solid ${foreground_20};
+	background-color: #DFEBF7;
 }
+
+.navigation ul {
+    padding: 0 7px !important;
+}
+
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	margin-left: 350px;
 	padding-bottom: 20px;
@@ -18,6 +26,7 @@
 	font-size:14px;
 	font-weight:bold;
 	text-transform:uppercase;
+	color: #0458B3;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry {
 	padding: 10px 0 10px 10px;
@@ -115,8 +124,9 @@ a.listingCtlButton {
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
+	background-image: url("images/details_for_redridge.png");
 	color:${foreground_80} !important;
+	background-position:0px 2px !important;
 }
 #btnViewDetails {
 	background-position:0px -30px;

@@ -17,7 +17,8 @@
 	padding-right:20px;
 	text-align:right;
 	vertical-align:top;
-	color:${foreground_40};
+	/*color:${foreground_40};*/
+	color: #767676;
 }
 .inquiryPanel .inputEntry .inputLabel.altApmnt {
 	display:inline;
