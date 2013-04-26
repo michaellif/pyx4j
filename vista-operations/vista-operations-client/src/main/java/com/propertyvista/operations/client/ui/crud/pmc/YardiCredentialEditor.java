@@ -73,6 +73,12 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
 
     private int q = 0;
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        q = 0;
+    }
+
     private void devGenerateTestCredencials() {
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
 
@@ -84,7 +90,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         case 0:
             get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             get(proto().username()).setValue("sa");
-            get(proto().credential()).setValue("akan1212");
+            get(proto().credential()).setValue("Vista2012!");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
             get(proto().database()).setValue("sl_0404");
             break;

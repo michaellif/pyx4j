@@ -26,7 +26,7 @@ public class DevYardiCredentials {
             cr.propertyCode().setValue("gran0002");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             cr.username().setValue("sa");
-            cr.credential().setValue("akan1212");
+            cr.credential().setValue("Vista2012!");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
             cr.database().setValue("sl_0404");
         } else if (false) {
