@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.preloader;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +51,12 @@ public class LocationsGenerator {
                 country.provinces().add(province);
             }
         }
-
+        Collections.sort(countries, new Comparator<Country>() {
+            @Override
+            public int compare(Country o1, Country o2) {
+                return o1.name().compareTo(o2.name());
+            }
+        });
         return countries;
     }
 
