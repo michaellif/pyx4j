@@ -176,10 +176,14 @@ public class MerchantAccountProcessor {
                 Building building = EntityFactory.create(Building.class);
                 {
                     EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                    criteria.eq(criteria.proto().propertyCode(), propertyCode);
+                    criteria.eq(criteria.proto().propertyCode(), propertyCode.trim());
                     building = Persistence.service().retrieve(criteria);
                 }
 
+                if (building.isNull()) {
+                    throw new UserRuntimeException(
+                            SimpleMessageFormat.format("Building with property code {0} not found in the database.", propertyCode.trim()));
+                }
                 Persistence.service().retrieveMember(building.merchantAccounts());
                 if (!building.merchantAccounts().isNull() && !building.merchantAccounts().isEmpty()) {
                     MerchantAccount retrievedAccount = building.merchantAccounts().iterator().next().merchantAccount();
