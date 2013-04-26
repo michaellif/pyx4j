@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ClassBasedThemeId;
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -56,7 +57,13 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     }
 
-    private static class ReportPrintTheme extends Theme {
+    public static class ReportPrintTheme extends Theme {
+
+        public enum Styles implements IStyleName {
+
+            ReportNonPrintable, ReportPrintableOnly
+
+        }
 
         public ReportPrintTheme() {
             Style style = new Style("*");
@@ -68,6 +75,11 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
             style.addProperty("color", "black");
             style.addProperty("text-decoration", "none");
             addStyle(style);
+
+            style = new Style("." + Styles.ReportNonPrintable.name());
+            style.addProperty("display", "none");
+            addStyle(style);
+
         }
 
         @Override
