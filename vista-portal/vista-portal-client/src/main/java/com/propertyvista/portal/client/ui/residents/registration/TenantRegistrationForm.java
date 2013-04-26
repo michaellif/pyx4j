@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -44,7 +43,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
 
     private static final I18n i18n = I18n.get(TenantRegistrationForm.class);
 
-    private CSimpleEntityComboBox<SelfRegistrationBuildingDTO> buildingComboBox;
+    private CBuildingSuggestBox buildingSelector;
 
     private EntityValidationException entityValidationError;
 
@@ -60,9 +59,10 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        buildingComboBox = ((CSimpleEntityComboBox<SelfRegistrationBuildingDTO>) inject(proto().building(),
-                new CSimpleEntityComboBox<SelfRegistrationBuildingDTO>()));
-        userDataPanel.add(new LoginDecoratorBuilder(buildingComboBox, false).customLabel(i18n.tr("Select your building")).build());
+        buildingSelector = ((CBuildingSuggestBox) inject(proto().building(), new CBuildingSuggestBox()));
+        buildingSelector.setWatermark(i18n.tr("Your building's address"));
+        buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
+        userDataPanel.add(center(new LoginDecoratorBuilder(buildingSelector, false).customLabel(i18n.tr("Select your building")).build()));
 
         Label userDataLabel = new Label();
         userDataLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
@@ -140,7 +140,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
     }
 
     public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
-        buildingComboBox.setOptions(buildings);
+        buildingSelector.setOptions(buildings);
     }
 
     public void setEntityValidationError(EntityValidationException caught) {
