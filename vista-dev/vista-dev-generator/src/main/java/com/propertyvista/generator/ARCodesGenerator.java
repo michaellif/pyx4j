@@ -56,6 +56,7 @@ public class ARCodesGenerator {
 
         // reserved codes:
         createARCode("Deposit", ARCode.Type.Deposit, 0, true);
+        createARCode("DepositRefund", ARCode.Type.DepositRefund, 0, true);
         createARCode("LatePayment", ARCode.Type.LatePayment, 0, true);
         createARCode("NSF", ARCode.Type.NSF, 0, true);
 
