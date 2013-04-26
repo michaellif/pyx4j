@@ -162,15 +162,6 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
             }
         }));
 
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
-            }
-        }));
-
         return panel;
     }
 }

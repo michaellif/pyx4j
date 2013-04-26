@@ -33,7 +33,7 @@ public class LegalTermsDialog extends OkDialog {
 
     @com.pyx4j.i18n.annotations.I18n
     public enum TermsType {
-        TermsOfUse, PrivacyPolicy, BillingAndRefundPolicy;
+        TermsOfUse, PrivacyPolicy, BillingAndRefundPolicy, PreauthorisedPAD, PreauthorisedCC;
 
         @Override
         public String toString() {
@@ -49,6 +49,7 @@ public class LegalTermsDialog extends OkDialog {
     private IsWidget createBody(TermsType type) {
         HTML legalTerms = new HTML();
         switch (type) {
+
         case TermsOfUse:
             legalTerms.setHTML(VistaResources.INSTANCE.termsAndConditions().getText());
             break;
@@ -58,6 +59,13 @@ public class LegalTermsDialog extends OkDialog {
         case BillingAndRefundPolicy:
             legalTerms.setHTML(VistaResources.INSTANCE.billingAndRefundPolicy().getText());
             break;
+        case PreauthorisedPAD:
+            legalTerms.setHTML(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());
+            break;
+        case PreauthorisedCC:
+            legalTerms.setHTML(VistaResources.INSTANCE.paymentPreauthorisedCC().getText());
+            break;
+
         default:
             assert false : "Illegal term type!?";
             break;

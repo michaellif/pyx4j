@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -89,22 +88,20 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
         // tweaks:
         get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
-        if (isEditable()) {
-            get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                    selectPaymentDetailsEditor(event.getValue(), false);
-                }
-            });
+        get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                selectPaymentDetailsEditor(event.getValue(), false);
+            }
+        });
 
-            get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
-                    get(proto().billingAddress()).setEditable(!event.getValue());
-                }
-            });
-        }
+        get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
+                get(proto().billingAddress()).setEditable(!event.getValue());
+            }
+        });
 
         return content;
     }
@@ -113,12 +110,12 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
+        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroupEnum) {
             // set single-available option preselected for new items: 
             @SuppressWarnings("unchecked")
-            CRadioGroup<PaymentType> type = ((CRadioGroup<PaymentType>) get(proto().type()));
+            CRadioGroupEnum<PaymentType> type = ((CRadioGroupEnum<PaymentType>) get(proto().type()));
             if (getValue().id().isNull() && type.getOptions().size() == 1) {
-                type.setValue(type.getOptions().get(0));
+                type.setValue(type.getOptions().get(0), false, populate);
             }
             setPaymentTypeSelectionEditable(getValue().id().isNull());
         }

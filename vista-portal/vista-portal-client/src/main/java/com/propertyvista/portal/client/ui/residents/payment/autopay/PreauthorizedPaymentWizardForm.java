@@ -105,7 +105,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         super(PreauthorizedPaymentDTO.class, view);
 
         amountPlaceholder.setWidth("15em");
-        percent = new DecoratorBuilder(inject(proto().percent()), 10).build();
+        percent = new DecoratorBuilder(inject(proto().percent()), 10).customLabel(i18n.tr("Percent of Lease Charges")).build();
         value = new DecoratorBuilder(inject(proto().value()), 10).build();
 
         addStep(createDetailsStep());
@@ -120,8 +120,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
 
-        panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
+//        panel.setBR(++row, 0, 1);
+//        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
+        inject(proto().propertyAddress(), new AddressSimpleEditor());
 
         panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10).build());
@@ -137,7 +138,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         });
 
         // filled with 'percent' by default and isn't allowed to change!
-        get(proto().amountType()).setEditable(false);
+//        get(proto().amountType()).setEditable(false);
+        get(proto().amountType()).setVisible(false);
 
         return panel;
     }
@@ -371,10 +373,20 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
+        panel.add(w = new Anchor(i18n.tr("Pre-Authorized Agreement"), new Command() {
             @Override
             public void execute() {
-                new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
+                switch (get(proto().paymentMethod()).getValue().type().getValue()) {
+                case Echeck:
+                    new LegalTermsDialog(TermsType.PreauthorisedPAD).show();
+                    break;
+                case CreditCard:
+                    new LegalTermsDialog(TermsType.PreauthorisedCC).show();
+                    break;
+                default:
+                    assert false : "Illegal payment method type!";
+                    break;
+                }
             }
         }));
 
