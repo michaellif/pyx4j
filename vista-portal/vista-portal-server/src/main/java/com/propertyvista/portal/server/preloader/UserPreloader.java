@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -28,7 +27,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -41,6 +39,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -105,7 +104,11 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
-        credential.roles().addAll(Arrays.asList(roles));
+        for (CrmRole role : roles) {
+            if (role != null) {
+                credential.roles().add(role);
+            }
+        }
 
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             SecurityGenerator.assignSecurityQuestion(credential);
@@ -136,7 +139,12 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue("Executive");
             emp.email().setValue(email);
 
-            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, null, defaultRole, accountOwnerRole));
+            CrmRole additinalRole = null;
+            if (i == 2) {
+                additinalRole = CrmRolesPreloader.getSupportRole();
+            }
+
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, null, defaultRole, accountOwnerRole, additinalRole));
 
             Persistence.service().persist(emp);
 
