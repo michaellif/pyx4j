@@ -532,6 +532,8 @@ BEGIN
                 id                      BIGINT                  NOT NULL,
                 parent                  BIGINT,
                 name                    VARCHAR(500),
+                old_id                  BIGINT,                 -- temporary for migration
+                old_table               VARCHAR(50),            -- to be removed as well
                         CONSTRAINT      maintenance_request_category_pk PRIMARY KEY(id)
         );
         
@@ -828,6 +830,42 @@ BEGIN
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name) VALUES '
                 ||'(nextval(''public.maintenance_request_category_seq''),NULL,''ROOT'') ';
+                
+        -- data from issue_element
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name,old_id,old_table) '
+                ||'(SELECT nextval(''public.maintenance_request_category_seq'') AS id, c.id AS parent, '
+                ||'e.name,e.id AS old_id,''issue_element'' AS old_table '
+                ||'FROM '||v_schema_name||'.issue_element e JOIN '||v_schema_name||'.maintenance_request_category c '
+                ||'ON (c.name = ''ROOT'') '
+                ||'ORDER BY e.id )';
+                
+        -- issue_repair_subject
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name,old_id,old_table) '
+                ||'(SELECT nextval(''public.maintenance_request_category_seq'') AS id, c.id AS parent, '
+                ||'r.name,r.id AS old_id,''issue_repair_subject'' AS old_table '
+                ||'FROM '||v_schema_name||'.issue_repair_subject r JOIN '||v_schema_name||'.maintenance_request_category c '
+                ||'ON (c.old_id = r.issue_element AND c.old_table = ''issue_element'' ) '
+                ||'ORDER BY r.id )';
+                
+        -- issue_subject_details
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name,old_id,old_table) '
+                ||'(SELECT nextval(''public.maintenance_request_category_seq'') AS id, c.id AS parent, '
+                ||'d.name,d.id AS old_id,''issue_subject_details'' AS old_table '
+                ||'FROM '||v_schema_name||'.issue_subject_details d JOIN '||v_schema_name||'.maintenance_request_category c '
+                ||'ON (c.old_id = d.subject AND c.old_table = ''issue_repair_subject'' ) '
+                ||'ORDER BY d.id )';
+                
+        -- issue_classification
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_category (id,parent,name,old_id,old_table) '
+                ||'(SELECT nextval(''public.maintenance_request_category_seq'') AS id, c.id AS parent, '
+                ||'i.issue AS name,i.id AS old_id,''issue_classification'' AS old_table '
+                ||'FROM '||v_schema_name||'.issue_classification i JOIN '||v_schema_name||'.maintenance_request_category c '
+                ||'ON (c.old_id = i.subject_details AND c.old_table = ''issue_subject_details'' ) '
+                ||'ORDER BY i.id )';
         
         
         IF NOT EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
@@ -838,6 +876,19 @@ BEGIN
                         ||'SET status = s.id '
                         ||'FROM '||v_schema_name||'.maintenance_request_status s '
                         ||'WHERE UPPER(m.status_old) = UPPER(s.name) ';
+                        
+                        
+                EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                        ||'SET priority = b.id '
+                        ||'FROM (SELECT p.id,i.id AS issue FROM '||v_schema_name||'.maintenance_request_priority p '
+                        ||'JOIN '||v_schema_name||'.issue_classification i ON (UPPER(i.priority) = UPPER(p.name))) AS b '
+                        ||'WHERE m.issue_classification = b.issue ';
+                        
+                EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                        ||'SET category = c.id '
+                        ||'FROM '||v_schema_name||'.maintenance_request_category c '
+                        ||'WHERE m.issue_classification = c.old_id '
+                        ||'AND c.old_table = ''issue_classification'' ';
        
         END IF;
         
