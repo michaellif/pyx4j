@@ -70,6 +70,8 @@ public interface ARCode extends IEntity {
 
         OneTime(ActionType.Debit),
 
+        DepositRefund(ActionType.Credit),
+
         Deposit(ActionType.Debit),
 
         AccountCredit(ActionType.Credit),
