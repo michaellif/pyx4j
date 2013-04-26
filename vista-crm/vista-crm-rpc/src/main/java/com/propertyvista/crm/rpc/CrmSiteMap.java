@@ -327,10 +327,7 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
-        public static class AccountRecoveryOptionsRequired extends CrmCrudAppPlace {
-        }
-
-        public static class AccountRecoveryOptions extends CrmCrudAppPlace {
+        public static class AccountRecoveryOptionsRequired extends AppPlace {
         }
 
         public static class LoginAttemptsLog extends CrmCrudAppPlace {
