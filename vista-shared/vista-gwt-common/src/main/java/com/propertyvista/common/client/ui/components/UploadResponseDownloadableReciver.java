@@ -24,10 +24,16 @@ public class UploadResponseDownloadableReciver<R extends DownloadableUploadRespo
 
     private static final I18n i18n = I18n.get(UploadResponseDownloadableReciver.class);
 
+    private String downloadServletPath;
+
     private final String processNameCaption;
 
     public UploadResponseDownloadableReciver(String processNameCaption) {
         this.processNameCaption = processNameCaption;
+    }
+
+    public void setDownloadServletPath(String path) {
+        downloadServletPath = path;
     }
 
     @Override
@@ -41,9 +47,15 @@ public class UploadResponseDownloadableReciver<R extends DownloadableUploadRespo
         } else {
             if (serverUploadResponse.data.success().getValue()) {
                 DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("{0} Complete", processNameCaption));
+                if (downloadServletPath != null) {
+                    d.setDownloadServletPath(downloadServletPath);
+                }
                 d.show(serverUploadResponse.message, i18n.tr("Download processing results"), serverUploadResponse.data.resultUrl().getValue());
             } else {
                 DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("{0} Error", processNameCaption));
+                if (downloadServletPath != null) {
+                    d.setDownloadServletPath(downloadServletPath);
+                }
                 d.show(serverUploadResponse.message, i18n.tr("Download messages"), serverUploadResponse.data.resultUrl().getValue());
             }
         }

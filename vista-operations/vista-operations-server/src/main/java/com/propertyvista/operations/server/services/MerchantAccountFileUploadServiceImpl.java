@@ -13,20 +13,15 @@
  */
 package com.propertyvista.operations.server.services;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.interfaces.importer.processor.MerchantAccountProcessor;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
+import com.propertyvista.server.common.upload.AbstractUploadWithDownloadableResponceDeferredProcess;
+import com.propertyvista.server.common.upload.AbstractUploadWithDownloadableResponceServiceImpl;
 
-public class MerchantAccountFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements MerchantAccountFileUploadService {
+public class MerchantAccountFileUploadServiceImpl extends AbstractUploadWithDownloadableResponceServiceImpl<IEntity> implements
+        MerchantAccountFileUploadService {
 
     private static final I18n i18n = I18n.get(MerchantAccountFileUploadServiceImpl.class);
 
@@ -41,11 +36,8 @@ public class MerchantAccountFileUploadServiceImpl extends AbstractUploadServiceI
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process,
-            UploadResponse<IEntity> response) {
-        response.message = new MerchantAccountProcessor().persistMerchantAccounts(data.data,
-                DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
-        return ProcessingStatus.completed;
+    protected AbstractUploadWithDownloadableResponceDeferredProcess<IEntity> createUploadDeferredProcess(IEntity data) {
+        return new MerchantAccountFileUploadDeferredProcess(data);
     }
 
 }

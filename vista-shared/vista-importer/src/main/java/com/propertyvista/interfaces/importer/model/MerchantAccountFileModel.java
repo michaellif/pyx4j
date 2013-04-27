@@ -20,11 +20,13 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
+import com.pyx4j.essentials.rpc.report.ReportColumn;
 
 @Transient
 public interface MerchantAccountFileModel extends IEntity {
 
     @ImportColumn(ignore = true)
+    @ReportColumn(ignore = true)
     @XmlTransient
     ImportInformation _import();
 
@@ -50,5 +52,8 @@ public interface MerchantAccountFileModel extends IEntity {
     @ImportColumn(names = { "Account No", "Account" })
     @NotNull
     IPrimitive<String> accountNumber();
+
+    @ImportColumn(ignore = true)
+    IPrimitive<String> processingStatus();
 
 }

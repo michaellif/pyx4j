@@ -30,7 +30,6 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -40,149 +39,161 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;
-import com.propertyvista.interfaces.importer.parser.MerchantAccountParser;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class MerchantAccountProcessor {
 
-    private MerchantAccount retrievedAccount = null;
-
     private final static Logger log = LoggerFactory.getLogger(MerchantAccountProcessor.class);
 
-    private List<MerchantAccountFileModel> accounts = new ArrayList<MerchantAccountFileModel>();
+    private final MerchantAccountCounter counters = new MerchantAccountCounter();
 
-    MerchantAccountCounter counters = new MerchantAccountCounter();
+    public String persistMerchantAccounts(List<MerchantAccountFileModel> model) {
+        counters.add(saveMerchantAccounts(model));
 
-    public String persistMerchantAccounts(byte[] data, DownloadFormat format) {
-        MerchantAccountCounter counters = new MerchantAccountCounter();
-        accounts = new MerchantAccountParser().parseFile(data, format);
-        counters.add(saveMerchantAccounts(accounts));
-
-        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} skipped, {2} updated. {3} buildings affected.", counters.imported,
-                counters.skipped, counters.updated, counters.buildingsAffected);
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} Not Changed, {2} updated. {3} buildings affected.", counters.imported,
+                counters.notChanged, counters.updated, counters.buildingsAffected);
+        if (counters.invalid != 0 || counters.notFound != 0 || counters.buildingNotFound != 0) {
+            message += SimpleMessageFormat.format(", {0} invalid records, {1} pmc not found, {2} building not found", counters.invalid, counters.notFound,
+                    counters.buildingNotFound);
+        }
         log.info(message);
+
         return message;
     }
 
     private MerchantAccountCounter saveMerchantAccounts(List<MerchantAccountFileModel> entities) {
-
         for (final MerchantAccountFileModel model : entities) {
-
-            retrievedAccount = null;
-
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Throwable>() {
 
                     @Override
                     public Void execute() {
-
-                        Pmc pmc = EntityFactory.create(Pmc.class);
-                        {
-                            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                            criteria.eq(criteria.proto().namespace(), model.pmc().getValue());
-                            pmc = Persistence.service().retrieve(criteria);
-                        }
-
-                        if (model.pmc() != null) {
-
-                            List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
-                            {
-                                EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-                                criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-                                indexes = Persistence.service().query(criteria);
-                            }
-
-                            for (final PmcMerchantAccountIndex index : indexes) {
-                                TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
-                                    @Override
-                                    public Void call() {
-                                        MerchantAccount rAccount = EntityFactory.create(MerchantAccount.class);
-                                        {
-                                            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-                                            criteria.eq(criteria.proto().id(), index.merchantAccountKey());
-                                            rAccount = Persistence.service().retrieve(criteria);
-                                        }
-
-                                        if (rAccount.bankId().getValue().equals(model.bankId().getValue().replaceAll("\\D", ""))
-                                                && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue().replaceAll("\\D", ""))
-                                                && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue().replaceAll("\\D", ""))) {
-                                            retrievedAccount = rAccount;
-                                        }
-                                        return null;
-                                    }
-                                });
-                            }
-
-                            if (retrievedAccount != null) {
-                                if (retrievedAccount.merchantTerminalId() != null) {
-                                    if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
-                                        if (model.propertyCode() != null && !model.propertyCode().isNull()) {
-                                            setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
-                                        }
-                                        log.info(SimpleMessageFormat.format("Record skipped at sheet {0}, row {1}", model._import().sheet().getValue(), model
-                                                ._import().row().getValue()));
-                                        counters.skipped++;
-                                    } else {
-                                        throw new Error(
-                                                SimpleMessageFormat
-                                                        .format("The account from sheet {0}, row {1} already exists in the database with a terminal ID {2}. Please make sure your information is correct.",
-                                                                model._import().sheet().getValue(), model._import().row().getValue(), retrievedAccount
-                                                                        .merchantTerminalId().getValue()));
-                                    }
-                                } else {
-                                    retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
-                                    if (model.propertyCode() != null && !model.propertyCode().isNull()) {
-                                        setAccountInBuilding(model.propertyCode().getValue(), retrievedAccount, pmc);
-                                    }
-                                    log.info(SimpleMessageFormat.format("Terminal ID value updated from sheet {0}, row {1}",
-                                            model._import().sheet().getValue(), model._import().row().getValue()));
-                                    counters.updated++;
-                                }
-                            } else {
-
-                                final MerchantAccount account = EntityFactory.create(MerchantAccount.class);
-                                account.accountNumber().setValue(model.accountNumber().getValue().replaceAll("\\D", ""));
-                                account.bankId().setValue(model.bankId().getValue().replaceAll("\\D", ""));
-                                account.branchTransitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", ""));
-                                account.merchantTerminalId().setValue(model.terminalId().getValue());
-                                account.status().setValue(MerchantAccountActivationStatus.Active);
-                                ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
-                                if (model.propertyCode() != null && !model.propertyCode().isNull()) {
-                                    setAccountInBuilding(model.propertyCode().getValue(), account, pmc);
-                                }
-                                counters.imported++;
-                            }
-
-                        } else {
-                            // TODO nothing so far, assume all accounts come with property code and pmc info.
-                        }
+                        processOneRow(model);
                         return null;
                     }
                 });
             } catch (Throwable t) {
                 log.error("Error", t);
-                throw new UserRuntimeException(SimpleMessageFormat.format("Error during execution at sheet {0}, row {1}: {2}", model._import().sheet()
-                        .getValue(), model._import().row().getValue(), t));
+                throw new UserRuntimeException(SimpleMessageFormat.format("Error during execution at sheet {0}, row {1}: {2}", model._import().sheet(), model
+                        ._import().row(), t));
             }
         }
-
         return counters;
     }
 
-    protected void setAccountInBuilding(final String propertyCode, final MerchantAccount account, Pmc pmc) {
+    private void processOneRow(final MerchantAccountFileModel model) {
+        model.accountNumber().setValue(model.accountNumber().getValue().replaceAll("\\D", ""));
+        model.bankId().setValue(model.bankId().getValue().replaceAll("\\D", ""));
+        model.transitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", ""));
+
+        // TODO validate the records
+
+        Pmc pmc;
+        {
+            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+            criteria.eq(criteria.proto().namespace(), model.pmc().getValue());
+            pmc = Persistence.service().retrieve(criteria);
+            if (pmc == null) {
+                counters.notFound++;
+                return;
+            }
+        }
+        model.processingStatus().setValue("");
+
+        List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
+        {
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            indexes = Persistence.service().query(criteria);
+        }
+
+        final MerchantAccount retrievedAccount = EntityFactory.create(MerchantAccount.class);
+
+        for (final PmcMerchantAccountIndex index : indexes) {
+            TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+                @Override
+                public Void call() {
+                    MerchantAccount rAccount = EntityFactory.create(MerchantAccount.class);
+                    {
+                        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+                        criteria.eq(criteria.proto().id(), index.merchantAccountKey());
+                        rAccount = Persistence.service().retrieve(criteria);
+                    }
+
+                    if (rAccount.bankId().getValue().equals(model.bankId().getValue())
+                            && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue())
+                            && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue())) {
+                        retrievedAccount.set(rAccount);
+                    }
+                    return null;
+                }
+            });
+            if (!retrievedAccount.isNull()) {
+                break;
+            }
+        }
+
+        if (!retrievedAccount.isNull()) {
+            if (!retrievedAccount.merchantTerminalId().isNull()) {
+                if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
+                    addStatus(model, "Terminal ID Record is the same");
+                    setAccountInBuilding(model, retrievedAccount, pmc);
+                    counters.notChanged++;
+                } else {
+                    addStatus(model, "The account already exists in the database with a terminal ID {0}. Please make sure your information is correct.",
+                            retrievedAccount.merchantTerminalId());
+                }
+            } else {
+                retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
+                addStatus(model, "Terminal ID value updated");
+
+                setAccountInBuilding(model, retrievedAccount, pmc);
+
+                counters.updated++;
+            }
+        } else {
+
+            final MerchantAccount account = EntityFactory.create(MerchantAccount.class);
+            account.accountNumber().setValue(model.accountNumber().getValue());
+            account.bankId().setValue(model.bankId().getValue());
+            account.branchTransitNumber().setValue(model.transitNumber().getValue());
+            account.merchantTerminalId().setValue(model.terminalId().getValue());
+            account.status().setValue(MerchantAccountActivationStatus.Active);
+            ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, account);
+
+            setAccountInBuilding(model, account, pmc);
+
+            counters.imported++;
+        }
+    }
+
+    private void addStatus(final MerchantAccountFileModel model, final String fmt, Object... arguments) {
+        StringBuilder b = new StringBuilder(model.processingStatus().getValue());
+        if (b.length() > 0) {
+            b.append(" ");
+        }
+        b.append(SimpleMessageFormat.format(fmt, arguments));
+        model.processingStatus().setValue(b.toString());
+    }
+
+    private void setAccountInBuilding(final MerchantAccountFileModel model, final MerchantAccount account, Pmc pmc) {
+        if (model.propertyCode().isNull()) {
+            return;
+        }
         TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
             @Override
             public Void call() {
-                Building building = EntityFactory.create(Building.class);
+                Building building;
                 {
                     EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-                    criteria.eq(criteria.proto().propertyCode(), propertyCode.trim());
+                    criteria.eq(criteria.proto().propertyCode(), model.propertyCode().getValue().trim());
                     building = Persistence.service().retrieve(criteria);
                 }
 
-                if (building.isNull()) {
-                    throw new UserRuntimeException(
-                            SimpleMessageFormat.format("Building with property code {0} not found in the database.", propertyCode.trim()));
+                if (building == null) {
+                    counters.buildingNotFound++;
+                    addStatus(model, "Building with property code {0} not found in the database.", model.propertyCode().getValue().trim());
+                    return null;
                 }
                 Persistence.service().retrieveMember(building.merchantAccounts());
                 if (!building.merchantAccounts().isNull() && !building.merchantAccounts().isEmpty()) {
@@ -219,27 +230,32 @@ public class MerchantAccountProcessor {
         return false;
     }
 
-    public class MerchantAccountCounter {
+    static class MerchantAccountCounter {
+
+        public int invalid;
+
+        public int notFound;
 
         public int imported;
 
-        public int skipped;
+        public int notChanged;
 
         public int updated;
 
         public int buildingsAffected;
 
+        int buildingNotFound;
+
         public MerchantAccountCounter() {
-            this.imported = 0;
-            this.skipped = 0;
-            this.updated = 0;
-            this.buildingsAffected = 0;
         }
 
         public void add(MerchantAccountCounter counters) {
             this.imported += counters.imported;
-            this.skipped += counters.skipped;
+            this.notChanged += counters.notChanged;
             this.updated += counters.updated;
+            this.notFound += counters.notFound;
+            this.invalid += counters.invalid;
+            this.buildingNotFound += counters.buildingNotFound;
             this.buildingsAffected += counters.buildingsAffected;
         }
     }

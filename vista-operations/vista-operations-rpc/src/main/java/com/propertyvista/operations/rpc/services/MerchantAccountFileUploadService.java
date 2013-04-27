@@ -20,7 +20,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-public interface MerchantAccountFileUploadService extends UploadService<IEntity, IEntity> {
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
+
+public interface MerchantAccountFileUploadService extends UploadService<IEntity, DownloadableUploadResponseDTO> {
 
     public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX);
 

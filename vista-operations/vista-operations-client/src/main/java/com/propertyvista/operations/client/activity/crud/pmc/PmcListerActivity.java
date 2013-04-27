@@ -23,11 +23,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
+import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements PmcListerView.Presenter {
 
@@ -41,8 +44,15 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     @Override
     public void uploadMerchantAccounts() {
-        new UploadDialogBase<IEntity, IEntity>(i18n.tr("Upload Merchant Accounts"),
-                GWT.<UploadService<IEntity, IEntity>> create(MerchantAccountFileUploadService.class), MerchantAccountFileUploadService.SUPPORTED_FORMATS)
-                .show();
+        UploadDialogBase<IEntity, DownloadableUploadResponseDTO> dialog = new UploadDialogBase<IEntity, DownloadableUploadResponseDTO>(
+                i18n.tr("Upload Merchant Accounts"),
+                GWT.<UploadService<IEntity, DownloadableUploadResponseDTO>> create(MerchantAccountFileUploadService.class),
+                MerchantAccountFileUploadService.SUPPORTED_FORMATS);
+
+        UploadResponseDownloadableReciver<DownloadableUploadResponseDTO> r = new UploadResponseDownloadableReciver<DownloadableUploadResponseDTO>(
+                i18n.tr("Merchant Accounts Upload"));
+        r.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+        dialog.setUploadReciver(r);
+        dialog.show();
     }
 }
