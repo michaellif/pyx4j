@@ -567,10 +567,38 @@ BEGIN
         
         -- padpolicy_item
         
-        ALTER TABLE padpolicy_item RENAME COLUMN debit_type TO debit_type_old;
+        --ALTER TABLE padpolicy_item RENAME COLUMN debit_type TO debit_type_old;
         
-        ALTER TABLE padpolicy_item ADD COLUMN debit_type BIGINT;
+        -- ALTER TABLE padpolicy_item ADD COLUMN debit_type BIGINT;
         
+        
+        -- padcredit_policy_item
+        
+        CREATE TABLE padcredit_policy_item
+        (
+                id                      BIGINT                  NOT NULL,
+                ar_code                 BIGINT,
+                padpolicy               BIGINT                  NOT NULL,
+                order_in_parent         INT,
+                        CONSTRAINT      padcredit_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE padcredit_policy_item OWNER TO vista;
+        
+        
+        -- paddebit_policy_item
+        
+        CREATE TABLE paddebit_policy_item
+        (
+                id                      BIGINT                  NOT NULL,
+                ar_code                 BIGINT,
+                owing_balance_type      VARCHAR(50),
+                padpolicy               BIGINT                  NOT NULL,
+                order_in_parent         INT,
+                        CONSTRAINT      paddebit_policy_item_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE paddebit_policy_item OWNER TO vista;
         
         -- payment_record
         
@@ -699,6 +727,7 @@ BEGIN
                 ||'(nextval(''public.arcode_seq''),''Payment'',''Payment'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
                 ||'(nextval(''public.arcode_seq''),''CarryForwardCredit'',''CarryForwardCredit'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
                 ||'(nextval(''public.arcode_seq''),''CarryForwardCharge'',''CarryForwardCharge'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
+                ||'(nextval(''public.arcode_seq''),''DepositRefund'',''DepositRefund'',DATE_TRUNC(''sec'',current_timestamp),TRUE), '
                 ||'(nextval(''public.arcode_seq''),''AccountCharge'',''Misc. Generic(no tax)'',DATE_TRUNC(''sec'',current_timestamp),FALSE), '
                 ||'(nextval(''public.arcode_seq''),''AccountCharge'',''Misc. Generic(tax included)'',DATE_TRUNC(''sec'',current_timestamp),FALSE) ';
         
@@ -905,7 +934,7 @@ BEGIN
         
                 
         -- padpolicy_item
-       
+       /*
         EXECUTE 'WITH t AS (SELECT debit_type_old, '
                 ||'             CASE WHEN debit_type_old = ''accountCharge'' THEN ''AccountCharge'' '
                 ||'             WHEN debit_type_old = ''addOn'' THEN ''AddOn'' '
@@ -925,8 +954,10 @@ BEGIN
                 ||'SET  debit_type = b.id '
                 ||'FROM (SELECT t.debit_type_old,a.id '
                 ||'     FROM t '
-                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type = a.name)) AS b '
+                ||'     JOIN '||v_schema_name||'.arcode a ON (t.debit_type = a.code_type)) AS b '
                 ||'WHERE a.debit_type_old = b.debit_type_old ';   
+        
+        */
         
         
         -- pet_constraints
@@ -1094,7 +1125,9 @@ BEGIN
         
         -- padpolicy_item
         
-        ALTER TABLE padpolicy_item DROP COLUMN debit_type_old;
+       --  ALTER TABLE padpolicy_item DROP COLUMN debit_type_old;
+       
+       DROP TABLE padpolicy_item;
         
         -- pet_constraints
         
@@ -1427,8 +1460,10 @@ BEGIN
         ALTER TABLE owner ADD CONSTRAINT owner_company_fk FOREIGN KEY(company) REFERENCES company(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE owner_group$owner_list ADD CONSTRAINT owner_group$owner_list_owner_fk FOREIGN KEY(owner) REFERENCES owner_group(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE owner_group$owner_list ADD CONSTRAINT owner_group$owner_list_value_fk FOREIGN KEY(value) REFERENCES owner(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_debit_type_fk FOREIGN KEY(debit_type) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE padpolicy_item ADD CONSTRAINT padpolicy_item_padpolicy_fk FOREIGN KEY(padpolicy) REFERENCES padpolicy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE padcredit_policy_item ADD CONSTRAINT padcredit_policy_item_ar_code_fk FOREIGN KEY(ar_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE padcredit_policy_item ADD CONSTRAINT padcredit_policy_item_padpolicy_fk FOREIGN KEY(padpolicy) REFERENCES padpolicy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE paddebit_policy_item ADD CONSTRAINT paddebit_policy_item_ar_code_fk FOREIGN KEY(ar_code) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE paddebit_policy_item ADD CONSTRAINT paddebit_policy_item_padpolicy_fk FOREIGN KEY(padpolicy) REFERENCES padpolicy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE page_caption ADD CONSTRAINT page_caption_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE page_content ADD CONSTRAINT page_content_descriptor_fk FOREIGN KEY(descriptor) REFERENCES page_descriptor(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE page_content ADD CONSTRAINT page_content_image_fk FOREIGN KEY(image) REFERENCES portal_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -1574,10 +1609,10 @@ BEGIN
         -- Check Constraints
         
          ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_ar_code_e_ck 
-                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
-                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((ar_code) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'DepositRefund', 
+                'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arcode ADD CONSTRAINT arcode_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'DepositRefund', 'ExternalCharge', 
                 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE arpolicy ADD CONSTRAINT arpolicy_credit_debit_rule_e_ck CHECK ((credit_debit_rule) IN ('oldestDebtFirst', 'rentDebtLast'));
         ALTER TABLE billing_debit_credit_link ADD CONSTRAINT billing_debit_credit_link_debit_item_discriminator_d_ck 
@@ -1588,21 +1623,23 @@ BEGIN
                 'NSF', 'Payment', 'PaymentBackOut', 'ProductCharge', 'ProductCredit', 'Withdrawal', 'YardiCredit', 'YardiDebit', 'YardiPayment', 'YardiReceipt', 'YardiReversal'));
         ALTER TABLE building_utility ADD CONSTRAINT building_utility_building_utility_type_e_ck CHECK ((building_utility_type) IN ('cable', 'gas', 'hydro', 'internet', 'water'));
         ALTER TABLE lead ADD CONSTRAINT lead_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
-                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'DepositRefund', 
+                'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE lease ADD CONSTRAINT lease_lease_type_e_ck 
-                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
-                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((lease_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'DepositRefund', 
+                'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
         ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_level_e_ck CHECK ((level) IN ('EMERGENCY', 'STANDARD'));
         ALTER TABLE maintenance_request_status ADD CONSTRAINT maintenance_request_status_phase_e_ck CHECK ((phase) IN ('Cancelled', 'Resolved', 'Scheduled', 'Submitted'));
+        ALTER TABLE paddebit_policy_item ADD CONSTRAINT paddebit_policy_item_owing_balance_type_e_ck CHECK ((owing_balance_type) IN ('LastBill', 'ToDateTotal'));
         ALTER TABLE padpolicy ADD CONSTRAINT padpolicy_charge_type_e_ck CHECK ((charge_type) IN ('FixedAmount', 'OwingBalance'));
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_payment_status_e_ck 
                 CHECK ((payment_status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted'));
         ALTER TABLE payments_summary ADD CONSTRAINT payments_summary_status_e_ck 
                 CHECK ((status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted'));
         ALTER TABLE product ADD CONSTRAINT product_code_type_e_ck 
-                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'ExternalCharge', 
-                'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+                CHECK ((code_type) IN ('AccountCharge', 'AccountCredit', 'AddOn', 'CarryForwardCharge', 'CarryForwardCredit', 'Commercial', 'Deposit', 'DepositRefund', 
+                'ExternalCharge', 'ExternalCredit', 'LatePayment', 'Locker', 'NSF', 'OneTime', 'Parking', 'Payment', 'Pet', 'Residential', 'ResidentialShortTerm', 'Utility'));
+
 
 
         

@@ -25,6 +25,7 @@ BEGIN
                 ||'JOIN         '||v_schema_name||'.lease_participant lp ON (lp.id = ltp.lease_participant) '
                 ||'JOIN         '||v_schema_name||'.lease l ON (lp.lease = l.id)) ';
                 
+        EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_transactions OWNER TO vista';       
                 
         -- Join view 
         
@@ -49,6 +50,8 @@ BEGIN
                 ||'                     FROM    _admin_.test_yardi_eft '
                 ||'                     WHERE batch_id = '||quote_literal(v_batch_id)||') b ' 
                 ||' ON   (a.client_id = b.client_id AND a.bank_id = b.bank_id AND a.branch_transit_number = b.branch_transit_number AND a.account_number = b.account_number)) ';
+                
+        EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_diff_join OWNER TO vista';
                 
 END;
 $$

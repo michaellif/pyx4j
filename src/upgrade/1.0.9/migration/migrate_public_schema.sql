@@ -21,6 +21,7 @@ BEGIN TRANSACTION;
  DROP SEQUENCE issue_repair_subject_seq;
  DROP SEQUENCE issue_subject_details_seq;
  DROP SEQUENCE lease_adjustment_reason_seq;
+ DROP SEQUENCE padpolicy_item_seq;
  DROP SEQUENCE product_item_type_seq;
  DROP SEQUENCE utility_seq;
  
@@ -31,6 +32,8 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE maintenance_request_category_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE maintenance_request_priority_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE maintenance_request_status_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE padcredit_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE paddebit_policy_item_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE yardi_service_request_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
   
@@ -40,6 +43,8 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE maintenance_request_category_seq OWNER TO vista ;
  ALTER SEQUENCE maintenance_request_priority_seq OWNER TO vista ;
  ALTER SEQUENCE maintenance_request_status_seq OWNER TO vista ;
+ ALTER SEQUENCE padcredit_policy_item_seq OWNER TO vista ;
+ ALTER SEQUENCE paddebit_policy_item_seq OWNER TO vista ;
  ALTER SEQUENCE yardi_service_request_seq OWNER TO vista ;
 
  
