@@ -47,7 +47,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
@@ -120,16 +119,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
 
-//        panel.setBR(++row, 0, 1);
-//        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
-        inject(proto().propertyAddress(), new AddressSimpleEditor());
-
-        panel.setHR(++row, 0, 1);
+//        panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10).build());
         panel.setWidget(++row, 0, amountPlaceholder);
 
         // tweak UI:
-        get(proto().propertyAddress()).setViewable(true);
         get(proto().amountType()).addValueChangeHandler(new ValueChangeHandler<AmountType>() {
             @Override
             public void onValueChange(ValueChangeEvent<AmountType> event) {
@@ -137,7 +131,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             }
         });
 
-        // filled with 'percent' by default and isn't allowed to change!
+//  filled with 'percent' by default and isn't allowed to change!
 //        get(proto().amountType()).setEditable(false);
         get(proto().amountType()).setVisible(false);
 
@@ -191,7 +185,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
                         profiledPaymentMethodsCombo.reset();
                         profiledPaymentMethodsCombo.setVisible(true);
-                        if (profiledPaymentMethodsCombo.getOptions().size() == 1) {
+                        if (!profiledPaymentMethodsCombo.getOptions().isEmpty()) {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
                         }
 

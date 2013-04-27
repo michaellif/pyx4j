@@ -121,7 +121,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
             // set single-available option preselected for new items: 
             @SuppressWarnings("unchecked")
             CRadioGroupEnum<PaymentType> type = ((CRadioGroupEnum<PaymentType>) get(proto().type()));
-            if (getValue().id().isNull() && type.getOptions().size() == 1) {
+            if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
                 type.setValue(type.getOptions().get(0), false, populate);
             }
             setPaymentTypeSelectionEditable(getValue().id().isNull());
