@@ -48,10 +48,11 @@ public class MerchantAccountProcessor {
     private final MerchantAccountCounter counters = new MerchantAccountCounter();
 
     public String persistMerchantAccounts(List<MerchantAccountFileModel> model) {
-        counters.add(saveMerchantAccounts(model));
+        saveMerchantAccounts(model);
 
-        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} Not Changed, {2} updated. {3} buildings affected.", counters.imported,
-                counters.notChanged, counters.updated, counters.buildingsAffected);
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} MID Not Changed, {2} MID updated. {3} buildings updated.",
+                counters.imported, counters.notChanged, counters.updated, counters.buildingsAffected);
+
         if (counters.invalid != 0 || counters.notFound != 0 || counters.buildingNotFound != 0) {
             message += SimpleMessageFormat.format(", {0} invalid records, {1} pmc not found, {2} building not found", counters.invalid, counters.notFound,
                     counters.buildingNotFound);
@@ -136,7 +137,7 @@ public class MerchantAccountProcessor {
         if (!retrievedAccount.isNull()) {
             if (!retrievedAccount.merchantTerminalId().isNull()) {
                 if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
-                    addStatus(model, "Terminal ID Record is the same");
+                    addStatus(model, "Terminal ID Record is the same.");
                     setAccountInBuilding(model, retrievedAccount, pmc);
                     counters.notChanged++;
                 } else {
@@ -145,7 +146,7 @@ public class MerchantAccountProcessor {
                 }
             } else {
                 retrievedAccount.merchantTerminalId().setValue(model.terminalId().getValue());
-                addStatus(model, "Terminal ID value updated");
+                addStatus(model, "Terminal ID value updated.");
 
                 setAccountInBuilding(model, retrievedAccount, pmc);
 
@@ -232,31 +233,18 @@ public class MerchantAccountProcessor {
 
     static class MerchantAccountCounter {
 
-        public int invalid;
+        int invalid;
 
-        public int notFound;
+        int notFound;
 
-        public int imported;
+        int imported;
 
-        public int notChanged;
+        int notChanged;
 
-        public int updated;
+        int updated;
 
-        public int buildingsAffected;
+        int buildingsAffected;
 
         int buildingNotFound;
-
-        public MerchantAccountCounter() {
-        }
-
-        public void add(MerchantAccountCounter counters) {
-            this.imported += counters.imported;
-            this.notChanged += counters.notChanged;
-            this.updated += counters.updated;
-            this.notFound += counters.notFound;
-            this.invalid += counters.invalid;
-            this.buildingNotFound += counters.buildingNotFound;
-            this.buildingsAffected += counters.buildingsAffected;
-        }
     }
 }
