@@ -1,3 +1,9 @@
+.vista-pmsite-findAptPage .vista-pmsite-content .content {
+    background-image: url("images/foto_for_rockville.jpg");
+    background-position: right 30px;
+    background-repeat: no-repeat; 
+}
+
 .vista-pmsite-main .content {
     background-color: #EDE8F0 !important;
 }

@@ -1,7 +1,7 @@
 .vista-pmsite-residentPage .vista-pmsite-content {
 	min-height: 400px;
-	padding-bottom: 20px;
-	background-color: #fff;
+	/*background-color: #fff;*/
+	background-color: #EDE8F0;
 }
 
 .vista-pmsite-residentPage .caption {
@@ -153,4 +153,12 @@
     height: auto !important;
     padding-right: 0 !important;
     width: auto !important;
+}
+
+.LandingViewSectionFooter > div:last-child {
+    padding-bottom: 20px;
+}
+
+.TenantDashboardRight {
+    background-color: #FFFFFF;
 }

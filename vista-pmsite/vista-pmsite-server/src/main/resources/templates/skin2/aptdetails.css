@@ -10,6 +10,7 @@
 }
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	margin-left: 350px;
+	background-color: #FFFFFF;
 }
 
 .vista-pmsite-aptDetailsPage .apartmentDetailsWrap {
@@ -136,8 +137,9 @@ a.listingCtlButton {
 	text-decoration:none;
 }
 .apartmentDetailsWrap .detailBox .detailBoxEntry.units:hover .listingCtlButton {
-	background-image: url("images/aptListIcons-hlight.png");
 	color:${foreground_100} !important;
+	background-image: url("images/details_for_rockville.png");
+    background-position:0px 2px !important;
 }
 #btnViewDetails {
 	background-position:0px -30px;
