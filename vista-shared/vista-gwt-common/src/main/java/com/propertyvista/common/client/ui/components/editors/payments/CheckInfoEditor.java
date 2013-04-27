@@ -77,6 +77,6 @@ public class CheckInfoEditor extends CEntityDecoratableForm<CheckInfo> {
         get(proto().checkNo()).setValue("1");
         get(proto().institutionNo()).setValue("123");
         get(proto().transitNo()).setValue("12345");
-        ((CTextFieldBase<?, ?>) get(proto().accountNo())).setValueByString("2345 6789");
+        ((CTextFieldBase<?, ?>) get(proto().accountNo())).setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }

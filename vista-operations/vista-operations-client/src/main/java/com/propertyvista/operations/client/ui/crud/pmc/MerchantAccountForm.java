@@ -13,12 +13,16 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -53,6 +57,31 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         get(proto().merchantAccount().paymentsStatus()).setVisible(!getValue().id().isNull());
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateAccount();
+                    }
+                }
+
+            });
+        }
+    }
+
+    private void devGenerateAccount() {
+        get(proto().merchantAccount().status()).setValue(MerchantAccountActivationStatus.Active);
+        get(proto().merchantTerminalId()).setValue("T" + System.currentTimeMillis() % 1000000);
+        get(proto().merchantAccount().bankId()).setValue("123");
+        get(proto().merchantAccount().branchTransitNumber()).setValue("12345");
+        get(proto().merchantAccount().accountNumber()).setValue(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 
 }

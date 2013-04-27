@@ -47,6 +47,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
@@ -290,7 +291,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         request.dnsName().setValue(id);
         request.firstName().setValue("F");
         request.lastName().setValue("L");
-        request.email().setValue(id + "@pyx4j.com");
+        request.email().setValue(id + DemoData.USERS_DOMAIN);
         request.confirmEmail().setValue(request.email().getValue());
         request.countryOfOperation().setValue(CountryOfOperation.Canada);
 

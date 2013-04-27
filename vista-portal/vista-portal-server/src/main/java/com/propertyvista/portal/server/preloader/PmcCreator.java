@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -154,8 +153,11 @@ public class PmcCreator {
         }
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
-        credential.roles().addAll(Arrays.asList(roles));
-
+        for (CrmRole role : roles) {
+            if (role != null) {
+                credential.roles().add(role);
+            }
+        }
         Persistence.service().persist(credential);
 
         return user;

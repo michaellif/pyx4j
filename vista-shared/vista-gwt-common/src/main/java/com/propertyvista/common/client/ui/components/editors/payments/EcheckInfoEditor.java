@@ -126,6 +126,6 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
         id.onEditingStop(); // assume new user input; will obfuscate the value if focused
-        id.setValueByString("2345 6789");
+        id.setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
     }
 }

@@ -13,10 +13,14 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.PmcDTO;
 
@@ -62,4 +66,31 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         get(proto().password()).setVisible(!existingOnboardingUser);
     }
 
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateAccount();
+                    }
+                }
+
+            });
+        }
+    }
+
+    private void devGenerateAccount() {
+        get(proto().name()).setValue("P" + System.currentTimeMillis() % 1000000);
+        get(proto().dnsName()).setValue(get(proto().name()).getValue());
+
+        get(proto().person().name().firstName()).setValue("F" + get(proto().name()).getValue());
+        get(proto().person().name().lastName()).setValue("L" + get(proto().name()).getValue());
+
+        get(proto().email()).setValue(get(proto().name()).getValue() + DemoData.USERS_DOMAIN);
+        get(proto().password()).setValue(get(proto().email()).getValue());
+    }
 }
