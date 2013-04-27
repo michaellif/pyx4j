@@ -130,7 +130,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                 ++row,
                 0,
                 new DecoratorBuilder(inject(proto().selectPaymentMethod(),
-                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
+                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))).build());
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
 
