@@ -32,14 +32,19 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
+import com.propertyvista.shared.config.VistaDemo;
+
 public class RobotsFilter implements Filter {
 
     private static Logger log = LoggerFactory.getLogger(RobotsFilter.class);
 
     private static final List<String> agentsPaterns = Arrays.asList("googlebot", "crawl", "spider", "msnbot", "bingbot", "twitterbot");
 
+    private boolean enabled;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        enabled = VistaDemo.isDemo() || ApplicationMode.isDevelopment();
     }
 
     @Override
@@ -48,7 +53,7 @@ public class RobotsFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (ApplicationMode.isDevelopment() && (request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
+        if (enabled && (request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
             String servletPath = ((HttpServletRequest) request).getServletPath();
             if (servletPath.endsWith("robots.txt")) {
                 log.warn("robots access blocked in development");
