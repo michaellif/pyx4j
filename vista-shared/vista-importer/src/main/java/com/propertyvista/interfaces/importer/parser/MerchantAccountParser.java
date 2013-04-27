@@ -55,8 +55,10 @@ public class MerchantAccountParser {
             }
             EntityCSVReciver<MerchantAccountFileModel> receiver = new MerchantAccountFileCSVReciver(loader.getSheetName(sheetNumber));
             try {
-                if (!loader.loadSheet(sheetNumber, receiver)) {
-                    new UserRuntimeException(i18n.tr("Column header declaration not found"));
+                if (loader.loadSheet(sheetNumber, receiver)) {
+                    if (!receiver.isHeaderFound()) {
+                        throw new UserRuntimeException(i18n.tr("Column header declaration not found"));
+                    }
                 }
             } catch (UserRuntimeException e) {
                 log.error("XLSLoad error", e);
@@ -76,6 +78,7 @@ public class MerchantAccountParser {
             this.sheetNumber = sheetName;
             this.setMemberNamesAsHeaders(false);
             this.setHeaderLinesCount(1, 2);
+            this.setHeaderIgnoreCase(true);
             this.setHeadersMatchMinimum(3);
             this.setVerifyRequiredHeaders(true);
             this.setVerifyRequiredValues(true);

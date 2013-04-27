@@ -68,16 +68,18 @@ public class UnitAvailabilityImportParser implements ImportParser {
             if (loader.isSheetHidden(sheetNumber)) {
                 continue;
             }
-            EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
+            EntityCSVReciver<UnitModel> receiver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
             try {
-                if (!loader.loadSheet(sheetNumber, reciver)) {
-                    new UserRuntimeException(i18n.tr("Column header declaration not found"));
+                if (loader.loadSheet(sheetNumber, receiver)) {
+                    if (!receiver.isHeaderFound()) {
+                        throw new UserRuntimeException(i18n.tr("Column header declaration not found"));
+                    }
                 }
             } catch (UserRuntimeException e) {
                 log.error("XLSLoad error", e);
                 throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
             }
-            convertUnits(reciver.getEntities());
+            convertUnits(receiver.getEntities());
         }
 
         return importIO;
