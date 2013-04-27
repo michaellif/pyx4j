@@ -84,7 +84,7 @@ public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> imple
         List<ARCode> arCodes = Persistence.service().query(criteria);
         for (ARCode otherCode : arCodes) {
             if (!otherCode.getPrimaryKey().equals(arCode.getPrimaryKey())
-                    && otherCode.type().getValue().getActionType() == otherCode.type().getValue().getActionType()) {
+                    && otherCode.type().getValue().getActionType() == arCode.type().getValue().getActionType()) {
                 throw new UserRuntimeException(i18n.tr("An ARCode with the same mapping to yardi code already exits: ARCode \"{0}\" > YardiCode \"{1}\"",
                         otherCode.name().getValue(), yardiCode));
             }
