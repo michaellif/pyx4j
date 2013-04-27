@@ -104,21 +104,35 @@ public class XLSLoad {
         return wb.isSheetHidden(sheetNumber);
     }
 
+    /**
+     * @param sheetNumber
+     * @param reciver
+     * @return true is sheet is not empty
+     */
     public boolean loadSheet(int sheetNumber, CSVReciver reciver) {
         Sheet sheet = wb.getSheetAt(sheetNumber);
         return loadSheet(sheet, reciver);
     }
 
+    /**
+     * @param sheetNumber
+     * @param reciver
+     * @return true is sheet is not empty
+     */
     public boolean loadSheet(Sheet sheet, CSVReciver reciver) {
         int lineNumber = 0;
         try {
             boolean header = true;
+            boolean nonBlankRowFound = false;
             for (Row row : sheet) {
                 lineNumber++;
                 List<String> values = new Vector<String>();
                 short cells = row.getLastCellNum();
                 for (int cellnum = 0; cellnum < cells; cellnum++) {
                     Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
+                    if ((cell != null) && (cell.getCellType() != Cell.CELL_TYPE_BLANK)) {
+                        nonBlankRowFound = true;
+                    }
                     values.add(getCellStringValue(cellnum, cell));
                 }
                 if (header) {
@@ -129,7 +143,7 @@ public class XLSLoad {
                     reciver.onRow(values.toArray(new String[values.size()]));
                 }
             }
-            return !header;
+            return nonBlankRowFound;
         } catch (UserRuntimeException e) {
             throw e;
         } catch (Throwable e) {

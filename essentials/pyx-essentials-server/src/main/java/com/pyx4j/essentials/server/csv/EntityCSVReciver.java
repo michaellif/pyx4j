@@ -328,6 +328,10 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         return false;
     }
 
+    public boolean isHeaderFound() {
+        return headersPath != null;
+    }
+
     protected int matchAcceptable(String[] headers, List<Path> paths, boolean throwError) {
         int headersFound = 0;
         for (Path path : paths) {
