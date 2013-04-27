@@ -69,9 +69,4 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSugge
         ((MultiWordSuggestOracle) getEditor().getSuggestOracle()).add(optionName);
     }
 
-    @Override
-    public String getNativeText() {
-        return ((SuggestBox) getWidget()).getText();
-    }
-
 }
