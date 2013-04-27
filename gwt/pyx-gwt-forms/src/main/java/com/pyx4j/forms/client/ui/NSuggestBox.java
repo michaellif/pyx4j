@@ -74,9 +74,4 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSugge
         return ((SuggestBox) getWidget()).getText();
     }
 
-    @Override
-    public void setNativeText(String newValue) {
-        ((SuggestBox) getWidget()).setText(newValue);
-    }
-
 }

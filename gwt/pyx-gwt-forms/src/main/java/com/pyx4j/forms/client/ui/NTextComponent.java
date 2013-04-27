@@ -61,12 +61,6 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
     }
 
     @Override
-    @Deprecated
-    public void setNativeText(String newValue) {
-        assert false : "setNativeText shouldn't be called";
-    }
-
-    @Override
     public String getNativeText() {
         if (!isViewable()) {
             return getEditor().getText();

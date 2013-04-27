@@ -92,11 +92,6 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, Tex
     }
 
     @Override
-    public void setNativeText(String newValue) {
-        // does nothing; use native value setter instead
-    }
-
-    @Override
     public String getNativeText() {
         E value = getNativeValue();
         return (value == null ? "" : value.getStringView());

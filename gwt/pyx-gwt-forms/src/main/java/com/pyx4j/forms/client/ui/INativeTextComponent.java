@@ -20,10 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
 public interface INativeTextComponent<DATA> extends INativeFocusComponent<DATA> {
-
-    public void setNativeText(String newValue);
 
     public String getNativeText();
 
