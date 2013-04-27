@@ -334,8 +334,9 @@ class PreauthorisedPaymentsManager {
                 paymentRecord.amount().setValue(record.amount);
                 createNoticeMessage(paymentRecord, record.notice);
                 ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-                ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
-                if (paymentRecord.amount().getValue().compareTo(record.amount) != 0) {
+                PaymentRecord paymentRecordUpdated = ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+                if ((paymentRecord.amount().getValue().compareTo(record.amount) != 0)
+                        || (!paymentRecordUpdated.paymentStatus().equals(paymentRecord.paymentStatus()))) {
                     executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
                 }
             }
