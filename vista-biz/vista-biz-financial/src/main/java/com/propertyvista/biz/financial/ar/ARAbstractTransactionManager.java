@@ -62,6 +62,7 @@ import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class ARAbstractTransactionManager {
 
@@ -144,6 +145,10 @@ public abstract class ARAbstractTransactionManager {
             padCreditCodes.add(item.arCode());
         }
         for (InvoiceCredit credit : getNotConsumedCreditInvoiceLineItems(billingAccount)) {
+            // TODO - work around for yardi integration - only consider credits for the given cycle
+            if (VistaFeatures.instance().yardiIntegration() && !credit.billingCycle().equals(cycle)) {
+                continue;
+            }
             if (padCreditCodes.contains(credit.arCode())) {
                 balance = balance.add(credit.outstandingCredit().getValue());
             }

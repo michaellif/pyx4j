@@ -20,6 +20,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -59,23 +60,29 @@ public class PADPolicyForm extends PolicyDTOTabPanelBasedForm<PADPolicyDTO> {
 
     private FormFlexPanel createItemsPanel() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
-        int col = 0;
+        FormFlexPanel leftPanel = new FormFlexPanel();
+        leftPanel.setWidth("98%");
         int row = -1;
-        panel.setH1(++row, col, 1, i18n.tr("Debits"));
-        panel.setWidget(++row, col, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
-        panel.setWidget(++row, col, inject(proto().debitBalanceTypes(), new PADDebitPolicyItemEditorFolder()));
+        leftPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeType()), 20).build());
+        leftPanel.setWidget(++row, 0, inject(proto().debitBalanceTypes(), new PADDebitPolicyItemEditorFolder()));
         get(proto().chargeType()).addValueChangeHandler(new ValueChangeHandler<PADChargeType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PADChargeType> event) {
                 get(proto().debitBalanceTypes()).setVisible(!PADChargeType.FixedAmount.equals(event.getValue()));
             }
         });
-        col = 1;
+        FormFlexPanel rightPanel = new FormFlexPanel();
+        rightPanel.setWidth("98%");
         row = -1;
-        panel.setH1(++row, col, 1, i18n.tr("Credits"));
-        panel.setWidget(++row, col, inject(proto().creditBalanceTypes(), new PADCreditPolicyItemEditorFolder()));
+        rightPanel.setWidget(++row, 0, inject(proto().creditBalanceTypes(), new PADCreditPolicyItemEditorFolder()));
 
+        panel.setH1(0, 0, 1, i18n.tr("Debits"));
+        panel.setWidget(1, 0, leftPanel);
+        panel.setH1(0, 1, 1, i18n.tr("Credits"));
+        panel.setWidget(1, 1, rightPanel);
         panel.getColumnFormatter().setWidth(0, "50%");
+        panel.getCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
+        panel.getCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
 
         return panel;
     }
