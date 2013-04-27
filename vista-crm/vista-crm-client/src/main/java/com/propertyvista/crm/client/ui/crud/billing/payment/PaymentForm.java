@@ -287,6 +287,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+        get(proto().profiledPaymentMethod()).setNote(null);
     }
 
     @Override
@@ -301,6 +302,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
+
+        get(proto().profiledPaymentMethod()).setNote(getValue().notice().getValue());
 
         if (isEditable()) {
             paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());

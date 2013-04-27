@@ -328,18 +328,23 @@ class PreauthorisedPaymentsManager {
             criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
 
             PaymentRecord paymentRecord = Persistence.service().retrieve(criteria);
-            if ((electronicPaymentsNotSetup || hasPendingAction) || ((paymentRecord != null) && (paymentRecord.amount().getValue().compareTo(record.amount) != 0))) {
+
+            if ((paymentRecord != null)
+                    && (electronicPaymentsNotSetup || hasPendingAction || (paymentRecord.amount().getValue().compareTo(record.amount) != 0))) {
                 paymentRecord.amount().setValue(record.amount);
                 createNoticeMessage(paymentRecord, record.notice);
+                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
                 ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
-                executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
+                if (paymentRecord.amount().getValue().compareTo(record.amount) != 0) {
+                    executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
+                }
             }
         }
     }
 
     private void createNoticeMessage(PaymentRecord paymentRecord, String calulationsNotice) {
         StringBuilder m = new StringBuilder();
-        if (PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
+        if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
             m.append(i18n.tr("No active merchantAccount found to process the payment."));
         }
         if (calulationsNotice != null) {
@@ -348,6 +353,6 @@ class PreauthorisedPaymentsManager {
             }
             m.append(calulationsNotice);
         }
-        paymentRecord.notes().setValue(m.toString());
+        paymentRecord.notice().setValue(m.toString());
     }
 }

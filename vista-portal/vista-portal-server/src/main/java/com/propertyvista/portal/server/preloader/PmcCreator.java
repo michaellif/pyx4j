@@ -90,7 +90,11 @@ public class PmcCreator {
             if (ApplicationMode.isDevelopment()) {
                 for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                     String email = DemoData.UserType.PM.getEmail(i);
-                    createCrmEmployee(email, email, email, email, null, defaultRole);
+                    CrmRole additinalRole = null;
+                    if (i == 2) {
+                        additinalRole = CrmRolesPreloader.getSupportRole();
+                    }
+                    createCrmEmployee(email, email, email, email, null, defaultRole, additinalRole);
                 }
             }
 

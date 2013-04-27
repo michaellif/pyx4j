@@ -44,7 +44,7 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().notes()).visible(false).build()
+            new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build()
         );//@formatter:on
     }
 
