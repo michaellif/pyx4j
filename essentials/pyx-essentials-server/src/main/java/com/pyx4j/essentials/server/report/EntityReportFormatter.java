@@ -20,6 +20,7 @@
  */
 package com.pyx4j.essentials.server.report;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -118,6 +119,12 @@ public class EntityReportFormatter<E extends IEntity> {
 
     protected void reportEntityEnds(ReportTableFormatter formatter, E entity) {
         formatter.newRow();
+    }
+
+    public void reportAll(ReportTableFormatter formatter, Collection<E> entityCollection) {
+        for (E entity : entityCollection) {
+            reportEntity(formatter, entity);
+        }
     }
 
     public void reportEntity(ReportTableFormatter formatter, E entity) {
