@@ -63,7 +63,7 @@ class ScheduledPaymentsManager {
 
                 @Override
                 public Void execute() throws PaymentException {
-                    if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
+                    if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
                         executionMonitor.addProcessedEvent("Canceled");
                     } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {

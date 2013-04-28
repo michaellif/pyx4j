@@ -435,12 +435,40 @@ public class TenantPadProcessor {
         BigDecimal percentRoundTotal = BigDecimal.ZERO;
         PadFileModel recordLargest = null;
 
+        // All records here are for different accounts
+        // Ensure there are no negative %
+        PadFileModel invalid = null;
         for (PadFileModel padFileModel : leasePadEntities) {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
             }
             enshurePercentNotRoundedIsSet(padFileModel);
+            if (!padFileModel._processorInformation().percentNotRounded().isNull()) {
+                if (padFileModel._processorInformation().percentNotRounded().getValue() < 0) {
+                    invalid = padFileModel;
+                    padFileModel._import().invalid().setValue(Boolean.TRUE);
+                    padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalidResultingValues);
+                    padFileModel._import().message().setValue(i18n.tr("Calculations results in negative percentage value"));
+                    break;
+                }
+            }
+        }
+        if (invalid != null) {
+            for (PadFileModel padFileModel : leasePadEntities) {
+                if (!padFileModel._processorInformation().status().isNull()) {
+                    continue;
+                }
+                padFileModel._import().invalid().setValue(Boolean.TRUE);
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.anotherRecordInvalid);
+                padFileModel._import().message().setValue(i18n.tr("Other Pad (row {0}) on this lease is invalid", invalid._import().row()));
+            }
+            return;
+        }
 
+        for (PadFileModel padFileModel : leasePadEntities) {
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
             if (!padFileModel._processorInformation().percentNotRounded().isNull()) {
                 BigDecimal percent = new BigDecimal(padFileModel._processorInformation().percentNotRounded().getValue());
                 BigDecimal percentRound = percent.setScale(4, BigDecimal.ROUND_HALF_UP);
@@ -572,10 +600,17 @@ public class TenantPadProcessor {
 
         if (!padFileModel._processorInformation().percent().isNull()) {
             pap.amountType().setValue(AmountType.Percent);
-            pap.percent().setValue(padFileModel._processorInformation().percent().getValue());
+            BigDecimal percent = padFileModel._processorInformation().percent().getValue();
+            if (percent.compareTo(BigDecimal.ZERO) < 0) {
+                percent = BigDecimal.ZERO;
+            }
+            pap.percent().setValue(percent);
         } else if (!padFileModel.charge().isNull()) {
             pap.amountType().setValue(AmountType.Value);
             BigDecimal amount = new BigDecimal(padFileModel.charge().getValue());
+            if (amount.compareTo(BigDecimal.ZERO) < 0) {
+                amount = BigDecimal.ZERO;
+            }
             pap.value().setValue(amount);
         } else {
             throw new IllegalArgumentException();

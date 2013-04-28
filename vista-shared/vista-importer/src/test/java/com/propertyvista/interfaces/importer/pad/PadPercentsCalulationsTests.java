@@ -19,7 +19,10 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.interfaces.importer.model.PadFileModel;
@@ -27,10 +30,23 @@ import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadPr
 
 public class PadPercentsCalulationsTests {
 
+    private final static Logger log = LoggerFactory.getLogger(PadPercentsCalulationsTests.class);
+
     private PadFileModel createModelPercent(String percent) {
         PadFileModel model = EntityFactory.create(PadFileModel.class);
         model.percent().setValue(percent);
         return model;
+    }
+
+    static void print(List<PadFileModel> leasePadEntities) {
+        for (PadFileModel model : leasePadEntities) {
+            print(model);
+        }
+    }
+
+    static void print(PadFileModel m) {
+        log.info(SimpleMessageFormat.format("account:{0} {1}% status:{2}", m.accountNumber(), m._processorInformation().percent(), m._processorInformation()
+                .status()));
     }
 
     private void assertEquals(BigDecimal expected, BigDecimal actual) {
@@ -71,6 +87,29 @@ public class PadPercentsCalulationsTests {
 
         assertEquals(new BigDecimal("0.3333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
         assertEquals(new BigDecimal("0.6667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+    }
+
+    @Test
+    public void testRentDiscount() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", null, 1000));
+        leasePadEntities.add(createModelFull("1", "rasuper", null, -500));
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("1.00"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(1)._processorInformation().status().getValue());
+    }
+
+    @Test
+    public void testRentDiscountError() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rasuper", null, -500));
+        leasePadEntities.add(createModelFull("2", "rent", null, 1000));
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        //print(leasePadEntities);
+        Assert.assertEquals(PadProcessingStatus.invalidResultingValues, leasePadEntities.get(0)._processorInformation().status().getValue());
+        Assert.assertEquals(PadProcessingStatus.anotherRecordInvalid, leasePadEntities.get(1)._processorInformation().status().getValue());
     }
 
     @Test
