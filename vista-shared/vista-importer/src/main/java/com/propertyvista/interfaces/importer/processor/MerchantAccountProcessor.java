@@ -29,7 +29,6 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -38,6 +37,7 @@ import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivat
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.MerchantAccountFileModel;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -83,11 +83,21 @@ public class MerchantAccountProcessor {
     }
 
     private void processOneRow(final MerchantAccountFileModel model) {
-        model.accountNumber().setValue(model.accountNumber().getValue().replaceAll("\\D", ""));
-        model.bankId().setValue(model.bankId().getValue().replaceAll("\\D", ""));
-        model.transitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", ""));
+        model.accountNumber().setValue(model.accountNumber().getValue().replaceAll("\\D", "").trim());
+        model.bankId().setValue(model.bankId().getValue().replaceAll("\\D", "").trim());
+        model.transitNumber().setValue(model.transitNumber().getValue().replaceAll("\\D", "").trim());
+        model.terminalId().setValue(model.terminalId().getValue().trim());
+        if (!model.propertyCode().isNull()) {
+            model.propertyCode().setValue(model.propertyCode().getValue().trim());
+        }
 
         // TODO validate the records
+        String validationMessage = getValidationMessage(model);
+        if (validationMessage != null) {
+            addStatus(model, validationMessage);
+            counters.invalid++;
+            return;
+        }
 
         Pmc pmc;
         {
@@ -101,29 +111,42 @@ public class MerchantAccountProcessor {
         }
         model.processingStatus().setValue("");
 
+        {
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+            criteria.eq(criteria.proto().merchantTerminalId(), model.terminalId());
+            criteria.ne(criteria.proto().pmc(), pmc);
+            PmcMerchantAccountIndex otherPmcAccount = Persistence.service().retrieve(criteria);
+
+            if (otherPmcAccount != null) {
+                addStatus(model, "Terminal ID already belong to another PMC {0}", otherPmcAccount.pmc().name());
+                counters.invalid++;
+                return;
+            }
+        }
+
         List<PmcMerchantAccountIndex> indexes = new ArrayList<PmcMerchantAccountIndex>();
         {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
             indexes = Persistence.service().query(criteria);
         }
 
         final MerchantAccount retrievedAccount = EntityFactory.create(MerchantAccount.class);
 
+        // Same account
         for (final PmcMerchantAccountIndex index : indexes) {
             TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
                 @Override
                 public Void call() {
-                    MerchantAccount rAccount = EntityFactory.create(MerchantAccount.class);
+                    MerchantAccount rAccount;
                     {
                         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
                         criteria.eq(criteria.proto().id(), index.merchantAccountKey());
                         rAccount = Persistence.service().retrieve(criteria);
                     }
 
-                    if (rAccount.bankId().getValue().equals(model.bankId().getValue())
-                            && rAccount.accountNumber().getValue().equals(model.accountNumber().getValue())
-                            && rAccount.branchTransitNumber().getValue().equals(model.transitNumber().getValue())) {
+                    if (rAccount.bankId().equals(model.bankId()) && rAccount.accountNumber().equals(model.accountNumber())
+                            && rAccount.branchTransitNumber().equals(model.transitNumber())) {
                         retrievedAccount.set(rAccount);
                     }
                     return null;
@@ -134,10 +157,25 @@ public class MerchantAccountProcessor {
             }
         }
 
+        // Moving merchantTerminalId to different account ?
+        PmcMerchantAccountIndex otherAccountWithSameMID = null;
+        {
+            EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
+            criteria.eq(criteria.proto().merchantTerminalId(), model.terminalId());
+            criteria.eq(criteria.proto().pmc(), pmc);
+            otherAccountWithSameMID = Persistence.service().retrieve(criteria);
+        }
+
+        if ((otherAccountWithSameMID != null) && (!otherAccountWithSameMID.merchantAccountKey().equals(retrievedAccount.getPrimaryKey()))) {
+            addStatus(model, "Terminal ID already assigned to different account in this PMC");
+            counters.invalid++;
+            return;
+        }
+
         if (!retrievedAccount.isNull()) {
             if (!retrievedAccount.merchantTerminalId().isNull()) {
                 if (retrievedAccount.merchantTerminalId().getValue().equals(model.terminalId().getValue())) {
-                    addStatus(model, "Terminal ID Record is the same.");
+                    addStatus(model, "Terminal ID Record is not updated.");
                     setAccountInBuilding(model, retrievedAccount, pmc);
                     counters.notChanged++;
                 } else {
@@ -166,6 +204,32 @@ public class MerchantAccountProcessor {
 
             counters.imported++;
         }
+    }
+
+    private String getValidationMessage(MerchantAccountFileModel model) {
+        if (model.pmc().isNull()) {
+            return "PMC is required";
+        }
+
+        if (model.accountNumber().isNull()) {
+            return "Account Number is required";
+        }
+        if (!ValidationUtils.isAccountNumberValid(model.accountNumber().getValue())) {
+            return "Account Number should consist of up to 12 digits";
+        }
+        if (model.bankId().isNull()) {
+            return "Bank Id/Institution is required";
+        }
+        if (!ValidationUtils.isBankIdNumberValid(model.bankId().getValue())) {
+            return "Bank Id/Institution should consist of 3 digits";
+        }
+        if (model.transitNumber().isNull()) {
+            return "Transit Number is required";
+        }
+        if (!ValidationUtils.isBranchTransitNumberValid(model.transitNumber().getValue())) {
+            return "Transit Number should consist of 5 digits";
+        }
+        return null;
     }
 
     private void addStatus(final MerchantAccountFileModel model, final String fmt, Object... arguments) {
@@ -221,9 +285,9 @@ public class MerchantAccountProcessor {
                     && !retrievedAccount.accountNumber().isNull() && retrievedAccount.merchantTerminalId() != null
                     && !retrievedAccount.merchantTerminalId().isNull()) {
                 if (retrievedAccount.bankId().getValue().equals(account.bankId().getValue())
-                        && retrievedAccount.branchTransitNumber().getValue().equals(account.branchTransitNumber().getValue())
-                        && retrievedAccount.accountNumber().getValue().equals(account.accountNumber().getValue())
-                        && retrievedAccount.merchantTerminalId().getValue().equals(account.merchantTerminalId().getValue())) {
+                        && retrievedAccount.branchTransitNumber().equals(account.branchTransitNumber())
+                        && retrievedAccount.accountNumber().equals(account.accountNumber())
+                        && retrievedAccount.merchantTerminalId().equals(account.merchantTerminalId())) {
                     return true;
                 }
             }
