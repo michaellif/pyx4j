@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -252,6 +253,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
 
     }
 
+    @Ignore
     public void TODO_StestScenario3() throws Exception {
         setupScenario();
 
@@ -304,6 +306,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         taxes("122.13").
         totalDueAmount("0.00"); // 3133.74(previous) + 1139.90(monthly charges) - 4273.64(received amount)
         // @formatter:on
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         advanceSysDate("3-Dec-2013");
 
