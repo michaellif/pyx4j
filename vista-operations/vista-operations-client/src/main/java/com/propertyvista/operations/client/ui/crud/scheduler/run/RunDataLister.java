@@ -35,7 +35,10 @@ public class RunDataLister extends AbstractLister<RunData> {
     private List<ColumnDescriptor> createViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().execution().trigger()).build(),
+                new MemberColumnDescriptor.Builder(proto().execution().trigger().name()).title("Trigger Name").searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().execution().trigger().triggerType()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().started()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
@@ -53,6 +56,7 @@ public class RunDataLister extends AbstractLister<RunData> {
     private List<ColumnDescriptor> createInlineViewColumnDescriptors() {
         List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc namespace").searchableOnly().build(),
                 new MemberColumnDescriptor.Builder(proto().started()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
