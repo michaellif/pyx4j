@@ -23,7 +23,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.client.ui.crud.scheduler.NotificationFolder;
 import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
 import com.propertyvista.operations.rpc.TriggerDTO;
 

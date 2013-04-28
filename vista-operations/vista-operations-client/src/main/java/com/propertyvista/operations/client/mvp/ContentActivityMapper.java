@@ -55,6 +55,7 @@ import com.propertyvista.operations.client.activity.crud.scheduler.RunListerActi
 import com.propertyvista.operations.client.activity.crud.scheduler.RunViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerEditorActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerListerActivity;
+import com.propertyvista.operations.client.activity.crud.scheduler.RunDataListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 import com.propertyvista.operations.client.activity.crud.simulatedpad.PadBatchEditorActivity;
@@ -124,7 +125,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.Run) {
+                    } else if (place instanceof OperationsSiteMap.Management.TriggerRun) {
                         switch (crudPlace.getType()) {
                         case viewer:
                             activity = new RunViewerActivity(crudPlace);
@@ -134,8 +135,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.RunData) {
+                    } else if (place instanceof OperationsSiteMap.Management.TriggerRunData) {
                         switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new RunDataListerActivity(crudPlace);
+                            break;
                         case viewer:
                             activity = new RunDataViewerActivity(crudPlace);
                             break;

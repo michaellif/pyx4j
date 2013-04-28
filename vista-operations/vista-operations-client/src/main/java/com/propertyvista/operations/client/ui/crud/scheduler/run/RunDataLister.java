@@ -13,6 +13,11 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
@@ -20,21 +25,50 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 
 public class RunDataLister extends AbstractLister<RunData> {
 
-    public RunDataLister() {
-        super(RunData.class, false);
+    private boolean isInlineMode;
 
-        setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().pmc().dnsName()).build(),
-            new MemberColumnDescriptor.Builder(proto().started()).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionReport().message()).build(),
-            new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
-            new MemberColumnDescriptor.Builder(proto().updated()).build()
+    public RunDataLister(boolean isInlineMode) {
+        super(RunData.class, false);
+        setColumnDescriptors((this.isInlineMode = isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors());
+    }
+
+    private List<ColumnDescriptor> createViewColumnDescriptors() {
+        List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().execution().trigger()).build(),
+                new MemberColumnDescriptor.Builder(proto().started()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().message()).build(),
+                new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
+        return c;
+    }
+
+    private List<ColumnDescriptor> createInlineViewColumnDescriptors() {
+        List<ColumnDescriptor> c = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().started()).build(),
+                new MemberColumnDescriptor.Builder(proto().status()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().total()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().processed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().failed()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().erred()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().totalDuration()).build(),
+                new MemberColumnDescriptor.Builder(proto().executionReport().message()).build(),
+                new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).build()
+        );//@formatter:on
+        return c;
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(isInlineMode ? new Sort(proto().started(), true) : new Sort(proto().pmc(), true));
     }
 }

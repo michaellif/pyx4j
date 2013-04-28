@@ -42,6 +42,8 @@ import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerView;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerView;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerViewImpl;
+import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerView;
+import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorView;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
@@ -84,6 +86,9 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
 
             } else if (RunDataViewerView.class.equals(type)) {
                 map.put(type, new RunDataViewerViewImpl());
+
+            } else if (RunDataListerView.class.equals(type)) {
+                map.put(type, new RunDataListerViewImpl());
 
             } else if (MerchantAccountEditorView.class.equals(type)) {
                 map.put(type, new MerchantAccountEditorViewImpl());

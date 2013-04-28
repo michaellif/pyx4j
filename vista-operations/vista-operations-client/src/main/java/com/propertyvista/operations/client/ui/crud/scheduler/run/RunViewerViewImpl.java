@@ -28,7 +28,7 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
     public RunViewerViewImpl() {
         super(true);
 
-        runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister());
+        runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister(true));
 
         setForm(new RunForm(this));
     }

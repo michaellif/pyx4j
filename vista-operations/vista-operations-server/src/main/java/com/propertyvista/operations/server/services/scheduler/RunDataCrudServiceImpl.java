@@ -14,6 +14,8 @@
 package com.propertyvista.operations.server.services.scheduler;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
@@ -29,4 +31,11 @@ public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> imp
         bindCompleteDBO();
     }
 
+    @Override
+    protected void enhanceListRetrieved(RunData entity, RunData dto) {
+        super.enhanceListRetrieved(entity, dto);
+
+        Persistence.ensureRetrieve(dto.execution(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dto.execution().trigger(), AttachLevel.ToStringMembers);
+    }
 }

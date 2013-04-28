@@ -40,8 +40,8 @@ public class OperationsEntityMapper {
         register(OnboardingUser.class, OperationsSiteMap.Management.OnboardingUser.class, DEFAULT_IMAGE);
         register(PmcDTO.class, OperationsSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
-        register(Run.class, OperationsSiteMap.Management.Run.class, DEFAULT_IMAGE);
-        register(RunData.class, OperationsSiteMap.Management.RunData.class, DEFAULT_IMAGE);
+        register(Run.class, OperationsSiteMap.Management.TriggerRun.class, DEFAULT_IMAGE);
+        register(RunData.class, OperationsSiteMap.Management.TriggerRunData.class, DEFAULT_IMAGE);
         register(PadSimFile.class, OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
         register(PadSimBatch.class, OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
         register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,

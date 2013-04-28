@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.scheduler;
+package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

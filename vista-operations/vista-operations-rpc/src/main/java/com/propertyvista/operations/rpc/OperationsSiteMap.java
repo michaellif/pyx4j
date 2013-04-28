@@ -66,10 +66,11 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Trigger Runs")
-        public static class Run extends CrudAppPlace {
+        public static class TriggerRun extends CrudAppPlace {
         }
 
-        public static class RunData extends CrudAppPlace {
+        @PlaceProperties(navigLabel = "Trigger Runs Data")
+        public static class TriggerRunData extends CrudAppPlace {
         }
 
         public static class BillingSetup extends CrudAppPlace {
