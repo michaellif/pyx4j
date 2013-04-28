@@ -12,6 +12,12 @@
 	margin-left: 350px;
 }
 
+.vista-pmsite-unitDetailsPage .apartmentDetailsWrap  {
+	border-left:1px solid ${foreground_20};
+	background: ${background_10};
+	height: 583px;
+}
+
 .apartmentDetailsWrap .detailBox {
 	color:${foreground_100};
 	padding: 20px 0;
