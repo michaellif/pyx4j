@@ -233,7 +233,10 @@ public class MerchantAccountProcessor {
     }
 
     private void addStatus(final MerchantAccountFileModel model, final String fmt, Object... arguments) {
-        StringBuilder b = new StringBuilder(model.processingStatus().getValue());
+        StringBuilder b = new StringBuilder();
+        if (!model.processingStatus().isNull()) {
+            b.append(model.processingStatus().getValue());
+        }
         if (b.length() > 0) {
             b.append(" ");
         }
