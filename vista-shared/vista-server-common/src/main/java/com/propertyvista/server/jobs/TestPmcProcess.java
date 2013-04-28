@@ -27,6 +27,9 @@ public class TestPmcProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         log.info("Test Job started");
+        ExecutionMonitor executionMonitor = context.getExecutionMonitor();
+        executionMonitor.addErredEvent("test", "Test Start error message");
+        executionMonitor.addFailedEvent("test", "Test Start failed message");
         return true;
     }
 

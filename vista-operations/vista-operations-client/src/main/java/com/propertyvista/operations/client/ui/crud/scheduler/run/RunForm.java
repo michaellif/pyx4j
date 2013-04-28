@@ -19,12 +19,15 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.scheduler.ExecutionReport;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.TriggerDTO;
 
 public class RunForm extends OperationsEntityForm<Run> {
 
     private static final I18n i18n = I18n.get(RunForm.class);
+
+    private final ExecutionReportSectionLister reportSectionLister;
 
     public RunForm(IForm<Run> view) {
         super(Run.class, view);
@@ -54,6 +57,10 @@ public class RunForm extends OperationsEntityForm<Run> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionReport().message()), 40).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
+        reportSectionLister = new ExecutionReportSectionLister();
+        content.setH4(++row, 0, 2, i18n.tr("Details"));
+        content.setWidget(++row, 0, reportSectionLister);
+
         content.setH2(++row, 0, 2, i18n.tr("Data"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
         content.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
@@ -68,5 +75,8 @@ public class RunForm extends OperationsEntityForm<Run> {
         super.onValueSet(populate);
 
         get(proto().errorMessage()).setVisible(!getValue().errorMessage().isNull());
+
+        reportSectionLister.getDataSource().setParentFiltering(getValue().executionReport().getPrimaryKey(), ExecutionReport.class);
+        reportSectionLister.restoreState();
     }
 }
