@@ -59,7 +59,7 @@ public class RiaLayoutPanel extends ComplexPanel implements RequiresResize, Prov
 
     private int menuWidth = 20;
 
-    private int headerHeight = 20;
+    private int headerHeight = 50;
 
     private int notificationsHeight = 0;
 
