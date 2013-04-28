@@ -50,13 +50,14 @@ public class MerchantAccountProcessor {
     public String persistMerchantAccounts(List<MerchantAccountFileModel> model) {
         saveMerchantAccounts(model);
 
-        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} MID Not Changed, {2} MID updated. {3} buildings updated.",
+        String message = SimpleMessageFormat.format("{0} merchant accounts created, {1} MID Not Changed, {2} MID updated. {3} buildings updated",
                 counters.imported, counters.notChanged, counters.updated, counters.buildingsAffected);
 
         if (counters.invalid != 0 || counters.notFound != 0 || counters.buildingNotFound != 0) {
             message += SimpleMessageFormat.format(", {0} invalid records, {1} pmc not found, {2} building not found", counters.invalid, counters.notFound,
                     counters.buildingNotFound);
         }
+        message += ".";
         log.info(message);
 
         return message;
@@ -166,8 +167,8 @@ public class MerchantAccountProcessor {
             otherAccountWithSameMID = Persistence.service().retrieve(criteria);
         }
 
-        if ((otherAccountWithSameMID != null) && (!otherAccountWithSameMID.merchantAccountKey().equals(retrievedAccount.getPrimaryKey()))) {
-            addStatus(model, "Terminal ID already assigned to different account in this PMC");
+        if ((otherAccountWithSameMID != null) && (!otherAccountWithSameMID.merchantAccountKey().equals(retrievedAccount.id()))) {
+            addStatus(model, "Terminal ID already assigned to different account {0} in this PMC", retrievedAccount);
             counters.invalid++;
             return;
         }
