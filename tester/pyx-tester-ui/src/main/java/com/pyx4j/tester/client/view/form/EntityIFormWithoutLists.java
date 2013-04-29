@@ -87,7 +87,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().enumBox())));
 
         Collection<String> options = new ArrayList<String>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 200; i++) {
             options.add("string" + i);
         }
 

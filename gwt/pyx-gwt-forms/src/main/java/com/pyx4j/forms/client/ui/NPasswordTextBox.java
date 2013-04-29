@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.widgets.client.PasswordTextBox;
 
-public class NPasswordTextBox extends NTextFieldBase<String, PasswordTextBox, CTextFieldBase<String, ?>> implements INativeTextComponent<String> {
+public class NPasswordTextBox extends NTextFieldBase<String, PasswordTextBox, CTextFieldBase<String, ?>> {
 
     public NPasswordTextBox(final CPasswordTextField cTextField) {
         super(cTextField);

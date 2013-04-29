@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 
 import com.pyx4j.widgets.client.SuggestBox;
 
-public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSuggestBox<E>> implements INativeTextComponent<E> {
+public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSuggestBox<E>> {
 
     public NSuggestBox(final CAbstractSuggestBox<E> cSuggestBox) {
         super(cSuggestBox);
