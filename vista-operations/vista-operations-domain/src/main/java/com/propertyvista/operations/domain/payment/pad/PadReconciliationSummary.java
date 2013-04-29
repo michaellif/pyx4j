@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -46,9 +46,6 @@ public interface PadReconciliationSummary extends IEntity {
     @JoinColumn
     @Indexed
     PadReconciliationFile reconciliationFile();
-
-    @OrderColumn
-    IPrimitive<Integer> odr();
 
     IPrimitive<LogicalDate> paymentDate();
 
@@ -105,6 +102,7 @@ public interface PadReconciliationSummary extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
     IList<PadReconciliationDebitRecord> records();
 
 }

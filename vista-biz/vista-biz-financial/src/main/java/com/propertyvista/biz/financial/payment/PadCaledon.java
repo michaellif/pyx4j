@@ -259,7 +259,7 @@ public class PadCaledon {
 
                 @Override
                 public Void execute() {
-                    new PadCaledonReconciliation().validateAndPersistFile(reconciliationFile);
+                    new PadCaledonReconciliation(executionMonitor).validateAndPersistFile(reconciliationFile);
                     return null;
                 }
             });

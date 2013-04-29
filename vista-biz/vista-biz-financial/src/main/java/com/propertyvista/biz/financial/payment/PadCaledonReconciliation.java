@@ -13,16 +13,26 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 
 class PadCaledonReconciliation {
+
+    private final ExecutionMonitor executionMonitor;
+
+    PadCaledonReconciliation(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
 
     void validateAndPersistFile(PadReconciliationFile reconciliationFile) {
         Persistence.service().persist(reconciliationFile);
@@ -39,11 +49,30 @@ class PadCaledonReconciliation {
             summary.merchantAccount().set(macc);
 
             summary.processingStatus().setValue(false);
+
+            List<PadReconciliationDebitRecord> records = new ArrayList<PadReconciliationDebitRecord>(summary.records());
+
             Persistence.service().persist(summary);
 
-            for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
+            for (final PadReconciliationDebitRecord debitRecord : records) {
+                debitRecord.reconciliationSummary().set(summary);
                 debitRecord.processingStatus().setValue(false);
                 Persistence.service().persist(debitRecord);
+
+                switch (debitRecord.reconciliationStatus().getValue()) {
+                case PROCESSED:
+                    executionMonitor.addProcessedEvent("Processed", debitRecord.amount().getValue());
+                    break;
+                case REJECTED:
+                    executionMonitor.addFailedEvent("Rejected", debitRecord.amount().getValue());
+                    break;
+                case RETURNED:
+                    executionMonitor.addFailedEvent("Returned", debitRecord.amount().getValue());
+                    break;
+                case DUPLICATE:
+                    executionMonitor.addErredEvent("Duplicate", debitRecord.amount().getValue(), "TransactionId " + debitRecord.transactionId().getValue());
+                    break;
+                }
             }
 
         }

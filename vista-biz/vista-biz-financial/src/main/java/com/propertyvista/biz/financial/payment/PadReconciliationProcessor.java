@@ -330,6 +330,9 @@ class PadReconciliationProcessor {
                 padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.ReconciliationProcesed);
                 padDebitRecord.processed().setValue(Boolean.TRUE);
                 Persistence.service().persist(padDebitRecord);
+
+                debitRecord.processingStatus().setValue(Boolean.TRUE);
+                Persistence.service().persist(debitRecord);
                 return null;
             }
         });

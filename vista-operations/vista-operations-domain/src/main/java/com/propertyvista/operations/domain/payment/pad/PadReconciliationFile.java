@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.payment.pad;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -36,5 +37,6 @@ public interface PadReconciliationFile extends IEntity {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
     IList<PadReconciliationSummary> batches();
 }
