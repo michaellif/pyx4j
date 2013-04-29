@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -40,7 +43,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     private static class TenantSureInvitationPanel extends Composite {
 
-        public TenantSureInvitationPanel(Command acceptInvitation) {
+        public TenantSureInvitationPanel(final Command acceptInvitation) {
             HorizontalPanel getTenantSurePanel = new HorizontalPanel();
             getTenantSurePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
             getTenantSurePanel.getElement().getStyle().setProperty("marginLeft", "auto");
@@ -48,6 +51,13 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
             TenantSureLogo tenantSureLogo = new TenantSureLogo();
             tenantSureLogo.addStyleName(Styles.ProvideTITenantSureLogo.name());
+            tenantSureLogo.addHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    acceptInvitation.execute();
+                }
+            }, ClickEvent.getType());
+            tenantSureLogo.getElement().getStyle().setCursor(Cursor.POINTER);
             getTenantSurePanel.add(tenantSureLogo);
 
             Button getTenantSureButton = new Button(i18n.tr("Get TenantSure"), acceptInvitation);

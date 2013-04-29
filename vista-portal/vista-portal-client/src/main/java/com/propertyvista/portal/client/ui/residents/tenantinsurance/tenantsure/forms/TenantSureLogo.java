@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -26,6 +27,7 @@ public class TenantSureLogo extends Composite {
 
     public TenantSureLogo() {
         FlowPanel logoPanel = new FlowPanel();
+        logoPanel.sinkEvents(Event.ONCLICK);
         logoPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureLogo.name());
 
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
