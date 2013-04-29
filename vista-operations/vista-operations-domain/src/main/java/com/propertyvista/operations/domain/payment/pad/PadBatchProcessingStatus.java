@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-26
+ * Created on 2013-04-28
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.operations.domain.payment.pad;
 
-public enum PadDebitRecordProcessingStatus {
+public enum PadBatchProcessingStatus {
 
     AcknowledgedReceived,
 
-    AcknowledgeProcesed,
+    AcknowledgeProcesed
 
-    ReconciliationReceived,
-
-    ReconciliationProcesed
 }

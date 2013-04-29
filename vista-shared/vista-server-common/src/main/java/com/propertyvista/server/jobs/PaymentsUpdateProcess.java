@@ -27,7 +27,7 @@ public class PaymentsUpdateProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).updateScheduledPreauthorisedPayments(context.getExecutionMonitor(),
+        ServerSideFactory.create(PaymentProcessFacade.class).updatePmcScheduledPreauthorisedPayments(context.getExecutionMonitor(),
                 new LogicalDate(context.getForDate()));
     }
 

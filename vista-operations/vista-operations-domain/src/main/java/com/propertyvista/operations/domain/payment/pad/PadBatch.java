@@ -94,4 +94,6 @@ public interface PadBatch extends IEntity {
 
     IPrimitive<String> acknowledgmentStatusCode();
 
+    IPrimitive<PadBatchProcessingStatus> processingStatus();
+
 }

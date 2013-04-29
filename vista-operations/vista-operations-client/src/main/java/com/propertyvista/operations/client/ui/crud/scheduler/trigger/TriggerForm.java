@@ -83,6 +83,8 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().population()).setVisible(!getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.allPmc);
+        get(proto().population()).setVisible(
+                !getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.allPmc
+                        && getValue().populationType().getValue() != TriggerPmcSelectionType.none);
     }
 }

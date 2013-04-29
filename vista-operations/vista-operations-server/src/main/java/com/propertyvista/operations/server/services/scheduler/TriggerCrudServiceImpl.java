@@ -27,7 +27,6 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
@@ -98,8 +97,8 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
         Trigger triggerStub = EntityFactory.createIdentityStub(Trigger.class, triggerDTOStub.getPrimaryKey());
         {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunStatus.Running));
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.eq(criteria.proto().status(), RunStatus.Running);
             Run existingRun = Persistence.service().retrieve(criteria);
             if (existingRun != null) {
                 throw new UserRuntimeException("The process is already running");
@@ -112,9 +111,9 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
         Run run = null;
         do {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
-            criteria.add(PropertyCriterion.ge(criteria.proto().updated(), startDate));
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.ge(criteria.proto().updated(), startDate);
+            criteria.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running);
             run = Persistence.service().retrieve(criteria);
             if (run != null) {
                 break;
@@ -123,8 +122,8 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
 
         if (run == null) {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
-            criteria.add(PropertyCriterion.ge(criteria.proto().updated(), startDate));
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.ge(criteria.proto().updated(), startDate);
             run = Persistence.service().retrieve(criteria);
         }
 

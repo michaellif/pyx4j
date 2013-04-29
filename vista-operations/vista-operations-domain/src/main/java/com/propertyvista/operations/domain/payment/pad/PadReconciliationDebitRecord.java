@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -68,5 +69,8 @@ public interface PadReconciliationDebitRecord extends IEntity {
     @Caption(description = "Reject/Return Item Fee; This field will contain the fee for the reject or returned item.")
     @Format("#0.00")
     IPrimitive<BigDecimal> fee();
+
+    @NotNull
+    IPrimitive<Boolean> processingStatus();
 
 }

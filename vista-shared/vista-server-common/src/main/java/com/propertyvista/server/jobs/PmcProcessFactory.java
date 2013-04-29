@@ -30,6 +30,8 @@ public class PmcProcessFactory {
 // Billing-related:
         case billing:
             return new BillingProcess();
+        case initializeFutureBillingCycles:
+            return new FutureBillingCycleInitializationProcess();
         case paymentsIssue:
             return new PaymentsIssueProcess();
         case paymentsUpdate:
@@ -38,16 +40,21 @@ public class PmcProcessFactory {
             return new PaymentsScheduledProcess(PaymentType.CreditCard);
         case paymentsScheduledEcheck:
             return new PaymentsScheduledProcess(PaymentType.Echeck);
+
+// Caledon            
         case paymentsPadSend:
             return new PadSendProcess();
         case paymentsPadReceiveAcknowledgment:
             return new PadReceiveAcknowledgmentProcess();
+        case paymentsPadProcesAcknowledgment:
+            return new PadProcessAcknowledgmentProcess();
         case paymentsPadReceiveReconciliation:
             return new PadReceiveReconciliationProcess();
+        case paymentsPadProcesReconciliation:
+            return new PadProcessReconciliationProcess();
+
         case paymentsTenantSure:
             return new PaymentsTenantSureProcess();
-        case initializeFutureBillingCycles:
-            return new FutureBillingCycleInitializationProcess();
 
 // Lease-related:
         case leaseActivation:

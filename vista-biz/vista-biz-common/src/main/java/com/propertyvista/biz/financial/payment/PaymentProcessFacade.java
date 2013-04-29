@@ -18,7 +18,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 
 public interface PaymentProcessFacade {
 
@@ -28,22 +27,18 @@ public interface PaymentProcessFacade {
 
     boolean sendPadFile(PadFile padFile);
 
-    PadFile receivePadAcknowledgementFile();
+    boolean receivePadAcknowledgementFile(ExecutionMonitor executionMonitor);
 
-    void processAcknowledgement(ExecutionMonitor executionMonitor, PadFile padFile);
+    void processPmcPadAcknowledgement(ExecutionMonitor executionMonitor);
 
-    void updatePadFileAcknowledProcessingStatus(PadFile padFileId);
+    boolean receivePadReconciliation(ExecutionMonitor executionMonitor);
 
-    PadReconciliationFile receivePadReconciliation();
+    void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
 
-    void processPadReconciliation(ExecutionMonitor executionMonitor, PadReconciliationFile reconciliationFile);
+    void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 
-    void updatePadFileReconciliationProcessingStatus();
+    void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 
-    void createPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
-
-    void updateScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
-
-    void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType);
+    void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType);
 
 }

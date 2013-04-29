@@ -55,11 +55,7 @@ public interface PadFile extends IEntity {
 
         Canceled,
 
-        Acknowledged,
-
-        AcknowledgeProcesed,
-
-        Procesed;
+        Acknowledged;
 
     };
 

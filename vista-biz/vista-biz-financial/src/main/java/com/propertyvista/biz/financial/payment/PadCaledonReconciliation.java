@@ -18,14 +18,18 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 
 class PadCaledonReconciliation {
 
-    PadReconciliationFile processFile(PadReconciliationFile reconciliationFile) {
+    void validateAndPersistFile(PadReconciliationFile reconciliationFile) {
+        Persistence.service().persist(reconciliationFile);
+
         // Match merchantAccounts.
         for (PadReconciliationSummary summary : reconciliationFile.batches()) {
+
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
             PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
@@ -33,8 +37,16 @@ class PadCaledonReconciliation {
                 throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + reconciliationFile.fileName().getValue());
             }
             summary.merchantAccount().set(macc);
+
+            summary.processingStatus().setValue(false);
+            Persistence.service().persist(summary);
+
+            for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
+                debitRecord.processingStatus().setValue(false);
+                Persistence.service().persist(debitRecord);
+            }
+
         }
-        Persistence.service().persist(reconciliationFile);
-        return reconciliationFile;
+
     }
 }

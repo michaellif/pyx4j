@@ -43,9 +43,17 @@ public enum PmcProcessType implements Serializable {
     @Translate("Send eCheque Payments to Caledon")
     paymentsPadSend,
 
+    @Translate("Payments Pad Receive Acknowledgment from Caledon")
     paymentsPadReceiveAcknowledgment,
 
+    @Translate("Payments Pad Process Acknowledgment (triggered by ReceiveReconciliation)")
+    paymentsPadProcesAcknowledgment,
+
+    @Translate("Payments Pad Receive Reconciliation from Caledon")
     paymentsPadReceiveReconciliation,
+
+    @Translate("Payments Pad Process Reconciliation (triggered by ReceiveReconciliation)")
+    paymentsPadProcesReconciliation,
 
     paymentsTenantSure(true),
 

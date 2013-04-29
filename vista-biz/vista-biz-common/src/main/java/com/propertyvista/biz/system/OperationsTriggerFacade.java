@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-26
+ * Created on 2013-04-28
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.domain.payment.pad;
+package com.propertyvista.biz.system;
 
-public enum PadDebitRecordProcessingStatus {
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
-    AcknowledgedReceived,
+public interface OperationsTriggerFacade {
 
-    AcknowledgeProcesed,
+    public void startProcess(PmcProcessType pmcProcessType);
 
-    ReconciliationReceived,
-
-    ReconciliationProcesed
 }

@@ -16,30 +16,29 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
 public class PadReceiveReconciliationProcess implements PmcProcess {
-
-    private PadReconciliationFile reconciliationFile;
 
     @Override
     public boolean start(PmcProcessContext context) {
         if (VistaDeployment.isVistaStaging()) {
             return false;
+        } else {
+            return ServerSideFactory.create(PaymentProcessFacade.class).receivePadReconciliation(context.getExecutionMonitor());
         }
-        reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).receivePadReconciliation();
-        return (reconciliationFile != null);
     }
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processPadReconciliation(context.getExecutionMonitor(), reconciliationFile);
+
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).updatePadFileReconciliationProcessingStatus();
+        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcesReconciliation);
     }
 
 }

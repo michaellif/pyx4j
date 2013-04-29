@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.payment.pad;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
@@ -26,6 +27,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -53,6 +55,7 @@ public interface PadReconciliationSummary extends IEntity {
     IPrimitive<String> merchantTerminalId();
 
     // found based on merchantTerminalId
+    @Indexed
     PmcMerchantAccountIndex merchantAccount();
 
     IPrimitive<MerchantReconciliationStatus> reconciliationStatus();
@@ -97,7 +100,11 @@ public interface PadReconciliationSummary extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> fundsReleased();
 
-    @Owned
+    @NotNull
+    IPrimitive<Boolean> processingStatus();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
     IList<PadReconciliationDebitRecord> records();
 
 }

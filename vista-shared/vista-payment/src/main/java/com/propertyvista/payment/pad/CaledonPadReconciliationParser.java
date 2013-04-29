@@ -62,6 +62,7 @@ class CaledonPadReconciliationParser {
                     parsSummary(values);
                 } else if (values[0].equals("TDTL")) {
                     PadReconciliationDebitRecord record = EntityFactory.create(PadReconciliationDebitRecord.class);
+                    record.processingStatus().setValue(Boolean.FALSE);
                     int v = 1;
                     record.paymentDate().setValue(CaledonPadUtils.parsDateReconciliation(values[v++]));
                     record.merchantTerminalId().setValue(values[v++]);
@@ -88,6 +89,7 @@ class CaledonPadReconciliationParser {
 
             private void parsSummary(String[] values) {
                 summary = EntityFactory.create(PadReconciliationSummary.class);
+                summary.processingStatus().setValue(Boolean.FALSE);
                 int v = 1;
                 summary.paymentDate().setValue(CaledonPadUtils.parsDateReconciliation(values[v++]));
                 summary.merchantTerminalId().setValue(values[v++]);

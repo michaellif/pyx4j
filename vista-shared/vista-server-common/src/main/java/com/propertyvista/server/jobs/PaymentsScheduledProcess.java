@@ -33,7 +33,7 @@ public class PaymentsScheduledProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processScheduledPayments(context.getExecutionMonitor(), paymentType);
+        ServerSideFactory.create(PaymentProcessFacade.class).processPmcScheduledPayments(context.getExecutionMonitor(), paymentType);
     }
 
     @Override

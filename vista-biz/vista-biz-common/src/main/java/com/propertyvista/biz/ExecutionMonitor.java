@@ -96,10 +96,11 @@ public class ExecutionMonitor {
 
     public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
         ReportSectionId id = new ReportSectionId(sectionName, type);
-        if (!sections.containsKey(id)) {
-            sections.put(id, new ReportSection());
-        }
         ReportSection section = sections.get(id);
+        if (section == null) {
+            sections.put(id, section = new ReportSection());
+        }
+
         section.counter++;
         section.add(value);
         section.addMessage(message);
@@ -160,11 +161,11 @@ public class ExecutionMonitor {
         addFailedEvent(sectionName, throwable.toString());
     }
 
-    public void addFailedEvent(String sectionName, String message,  Throwable throwable) {
+    public void addFailedEvent(String sectionName, String message, Throwable throwable) {
         log.error("Event Failed {}", message, throwable);
         addFailedEvent(sectionName, message + " " + throwable.toString());
     }
-    
+
     public void addErredEvent(String sectionName, String message) {
         addEvent(sectionName, CompletionType.erred, null, message);
     }
@@ -191,8 +192,8 @@ public class ExecutionMonitor {
         log.error("Event Erred {}", message, throwable);
         addErredEvent(sectionName, value, message + " " + throwable.toString());
     }
-    
-    public void addErredEvent(String sectionName,String message, Throwable throwable) {
+
+    public void addErredEvent(String sectionName, String message, Throwable throwable) {
         log.error("Event Erred {}", message, throwable);
         addErredEvent(sectionName, null, message + " " + throwable.toString());
     }
@@ -237,6 +238,8 @@ public class ExecutionMonitor {
 
         public long counter;
 
+        ExecutionReportSection executionReportSection;
+
         ReportSection() {
             accumulator = BigDecimal.ZERO;
             messages = new ArrayList<ReportMessage>();
@@ -279,13 +282,33 @@ public class ExecutionMonitor {
     public void updateExecutionReport(ExecutionReport executionReport) {
         updateExecutionReportMajorStats(executionReport);
 
-        // TODO copy executionReport.details()  to sections
-        // executionReport.details().clear();
+        //  copy executionReport.details()  to sections
+        for (ExecutionReportSection executionReportSection : executionReport.details()) {
+            ReportSectionId id = new ReportSectionId(executionReportSection.name().getValue(), executionReportSection.type().getValue());
+            ReportSection section = sections.get(id);
+            if (section == null) {
+                sections.put(id, section = new ReportSection());
+            }
+            section.executionReportSection = executionReportSection;
+
+            section.counter += executionReportSection.counter().getValue();
+            if (section.accumulator != null) {
+                if (!executionReportSection.value().isNull()) {
+                    section.accumulator = section.accumulator.add(executionReportSection.value().getValue());
+                }
+            } else {
+                section.accumulator = executionReportSection.value().getValue();
+            }
+        }
 
         executionReport.message().setValue(message);
 
         for (Map.Entry<ReportSectionId, ReportSection> section : sections.entrySet()) {
-            ExecutionReportSection executionReportSection = EntityFactory.create(ExecutionReportSection.class);
+            ExecutionReportSection executionReportSection = section.getValue().executionReportSection;
+            if (executionReportSection == null) {
+                executionReportSection = EntityFactory.create(ExecutionReportSection.class);
+                executionReport.details().add(executionReportSection);
+            }
 
             executionReportSection.name().setValue(section.getKey().name);
             executionReportSection.type().setValue(section.getKey().type);
@@ -299,7 +322,6 @@ public class ExecutionMonitor {
                 executionReportMessage.eventTime().setValue(message.eventTime);
                 executionReportSection.messages().add(executionReportMessage);
             }
-            executionReport.details().add(executionReportSection);
         }
     }
 

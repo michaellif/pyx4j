@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -41,6 +42,7 @@ public interface PadDebitRecord extends IEntity {
 
     // A unique value to represent the client/cardholder
     @Length(29)
+    @ToString
     IPrimitive<String> clientId();
 
     IPrimitive<BigDecimal> amount();
@@ -57,11 +59,14 @@ public interface PadDebitRecord extends IEntity {
     //A unique value to represent the transaction/payment
     @Length(15)
     @Indexed
+    @ToString
     IPrimitive<String> transactionId();
 
     IPrimitive<String> acknowledgmentStatusCode();
 
     // Record processing status
     IPrimitive<Boolean> processed();
+
+    IPrimitive<PadDebitRecordProcessingStatus> processingStatus();
 
 }

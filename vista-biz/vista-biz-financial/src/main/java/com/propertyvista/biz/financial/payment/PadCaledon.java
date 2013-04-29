@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
@@ -183,8 +184,7 @@ public class PadCaledon {
             previousFileCriteria.eq(previousFileCriteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
             PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
             if (padFile != null) {
-                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.AcknowledgeProcesed, PadFile.PadFileStatus.Procesed,
-                        PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
+                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
                     throw new Error("Can't send PAD file until previous file is processed");
                 }
 
@@ -215,35 +215,14 @@ public class PadCaledon {
         }
     }
 
-    public PadFile receivePadAcknowledgementFile() {
+    public boolean receivePadAcknowledgementFile(final ExecutionMonitor executionMonitor) {
         final PadAkFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
         if (padAkFile == null) {
-            return null;
-        }
-
-        PadFile padFile;
-        boolean processedOk = false;
-        try {
-            padFile = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
-
-                @Override
-                public PadFile execute() {
-                    return new PadCaledonAcknowledgement().processFile(padAkFile);
-                }
-            });
-
-            processedOk = true;
-        } finally {
-            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(padAkFile.fileName().getValue(), !processedOk);
-        }
-
-        return padFile;
-    }
-
-    public PadReconciliationFile receivePadReconciliation() {
-        final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
-        if (reconciliationFile == null) {
-            return null;
+            executionMonitor.addProcessedEvent("Pooled, No file found on server");
+            return false;
+        } else {
+            executionMonitor.addProcessedEvent("received file", padAkFile.fileName().getValue());
+            executionMonitor.addProcessedEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
         }
 
         boolean processedOk = false;
@@ -252,7 +231,35 @@ public class PadCaledon {
 
                 @Override
                 public Void execute() {
-                    new PadCaledonReconciliation().processFile(reconciliationFile);
+                    new PadCaledonAcknowledgement(executionMonitor).validateAndPersistFile(padAkFile);
+                    return null;
+                }
+            });
+
+            processedOk = true;
+        } finally {
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(padAkFile.fileName().getValue(), !processedOk);
+        }
+
+        return true;
+    }
+
+    public boolean receivePadReconciliation(final ExecutionMonitor executionMonitor) {
+        final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
+        if (reconciliationFile == null) {
+            executionMonitor.addProcessedEvent("Pooled, No file found on server");
+            return false;
+        } else {
+            executionMonitor.addProcessedEvent("received file", reconciliationFile.fileName().getValue());
+        }
+
+        boolean processedOk = false;
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                @Override
+                public Void execute() {
+                    new PadCaledonReconciliation().validateAndPersistFile(reconciliationFile);
                     return null;
                 }
             });
@@ -262,7 +269,7 @@ public class PadCaledon {
             ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(reconciliationFile.fileName().getValue(), !processedOk);
         }
 
-        return reconciliationFile;
+        return true;
     }
 
 }
