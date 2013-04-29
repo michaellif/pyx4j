@@ -20,5 +20,7 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 public interface RunDataViewerView extends IViewer<RunData> {
 
     interface Presenter extends IViewer.Presenter {
+
+        void stopRun();
     }
 }

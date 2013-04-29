@@ -23,6 +23,8 @@ import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
 public interface RunViewerView extends IViewer<Run> {
 
     interface Presenter extends IViewer.Presenter {
+
+        void stopRun();
     }
 
     ILister<RunData> getRunDataListerView();

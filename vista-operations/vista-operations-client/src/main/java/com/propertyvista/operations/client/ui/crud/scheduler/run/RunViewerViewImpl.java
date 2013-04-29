@@ -13,17 +13,27 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
 
 public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> implements RunViewerView {
 
+    private static final I18n i18n = I18n.get(RunViewerViewImpl.class);
+
     private final ILister<RunData> runDataLister;
+
+    private final Button stopRun;
 
     public RunViewerViewImpl() {
         super(true);
@@ -31,6 +41,26 @@ public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> impleme
         runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister(true));
 
         setForm(new RunForm(this));
+
+        stopRun = new Button(i18n.tr("Stop Run"), new Command() {
+            @Override
+            public void execute() {
+                MessageDialog.confirm(i18n.tr("Stop Run"), i18n.tr("Do you really want to stop the Run?"), new Command() {
+                    @Override
+                    public void execute() {
+                        ((RunViewerView.Presenter) getPresenter()).stopRun();
+                    }
+                });
+            }
+        });
+        addHeaderToolbarItem(stopRun.asWidget());
+    }
+
+    @Override
+    public void populate(Run value) {
+        super.populate(value);
+
+        stopRun.setVisible(value.status().getValue() == RunStatus.Running);
     }
 
     @Override

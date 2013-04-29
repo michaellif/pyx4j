@@ -13,10 +13,14 @@
  */
 package com.propertyvista.operations.rpc.services.scheduler;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 
 public interface RunDataCrudService extends AbstractCrudService<RunData> {
 
+    void stopRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub);
 }

@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -38,27 +38,21 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
 
     private final Presenter<RunData> runDataLister;
 
-    final RunCrudService runCrudService;
-
-    final AsyncCallback<ExecutionStatusUpdateDTO> actionsCallback;
+    private final AsyncCallback<ExecutionStatusUpdateDTO> actionsCallback;
 
     private Timer updateViewTimer;
 
-    @SuppressWarnings("unchecked")
     public RunViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(RunViewerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class));
+        super(place, ManagementVeiwFactory.instance(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
 
         runDataLister = new ListerController<RunData>(((RunViewerView) getView()).getRunDataListerView(),
-                (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class), RunData.class);
+                GWT.<RunDataCrudService> create(RunDataCrudService.class), RunData.class);
 
-        runCrudService = GWT.create(RunCrudService.class);
         actionsCallback = new DefaultAsyncCallback<ExecutionStatusUpdateDTO>() {
-
             @Override
             public void onSuccess(ExecutionStatusUpdateDTO result) {
                 updateState(result);
             }
-
         };
     }
 
@@ -81,6 +75,16 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
         super.onStop();
     }
 
+    @Override
+    public void stopRun() {
+        ((RunCrudService) getService()).stopRun(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        }, EntityFactory.createIdentityStub(Run.class, getEntityId()));
+    }
+
     private void updateState(ExecutionStatusUpdateDTO result) {
         ((RunViewerView) getView()).populateExecutionState(result);
         updateState(result.status().getValue());
@@ -93,7 +97,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
                 updateViewTimer = new Timer() {
                     @Override
                     public void run() {
-                        runCrudService.retrieveExecutionState(actionsCallback, EntityFactory.createIdentityStub(Run.class, getEntityId()));
+                        ((RunCrudService) getService()).retrieveExecutionState(actionsCallback, EntityFactory.createIdentityStub(Run.class, getEntityId()));
                     }
                 };
                 updateViewTimer.scheduleRepeating(2000);
@@ -107,5 +111,4 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
             }
         }
     }
-
 }

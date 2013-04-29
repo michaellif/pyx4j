@@ -13,14 +13,44 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.scheduler.RunStatus;
 
 public class RunDataViewerViewImpl extends OperationsViewerViewImplBase<RunData> implements RunDataViewerView {
+
+    private static final I18n i18n = I18n.get(RunDataViewerViewImpl.class);
+
+    private final Button stopRun;
 
     public RunDataViewerViewImpl() {
         super(true);
 
         setForm(new RunDataForm(this));
+        stopRun = new Button(i18n.tr("Stop Run"), new Command() {
+            @Override
+            public void execute() {
+                MessageDialog.confirm(i18n.tr("Stop Run"), i18n.tr("Do you really want to stop the Run?"), new Command() {
+                    @Override
+                    public void execute() {
+                        ((RunViewerView.Presenter) getPresenter()).stopRun();
+                    }
+                });
+            }
+        });
+        addHeaderToolbarItem(stopRun.asWidget());
+    }
+
+    @Override
+    public void populate(RunData value) {
+        super.populate(value);
+
+        stopRun.setVisible(value.execution().status().getValue() == RunStatus.Running);
     }
 }

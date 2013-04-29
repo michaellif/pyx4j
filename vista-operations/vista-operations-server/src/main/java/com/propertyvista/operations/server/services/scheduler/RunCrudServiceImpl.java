@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
@@ -43,4 +44,12 @@ public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements 
         callback.onSuccess(dto);
     }
 
+    @Override
+    public void stopRun(AsyncCallback<VoidSerializable> callback, Run runStub) {
+        Run run = Persistence.service().retrieve(Run.class, runStub.getPrimaryKey());
+
+        // TODO: stop run here... 
+
+        callback.onSuccess(null);
+    }
 }

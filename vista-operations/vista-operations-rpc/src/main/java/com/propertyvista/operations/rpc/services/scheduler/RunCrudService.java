@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
@@ -25,6 +26,7 @@ public interface RunCrudService extends AbstractCrudService<Run> {
 
     // This is fallback for WebSocket
     @ServiceExecution(operationType = ServiceExecution.OperationType.NonBlocking)
-    public void retrieveExecutionState(AsyncCallback<ExecutionStatusUpdateDTO> callback, Run runStub);
+    void retrieveExecutionState(AsyncCallback<ExecutionStatusUpdateDTO> callback, Run runStub);
 
+    void stopRun(AsyncCallback<VoidSerializable> callback, Run runStub);
 }

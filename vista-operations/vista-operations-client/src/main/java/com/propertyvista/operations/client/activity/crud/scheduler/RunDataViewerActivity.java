@@ -15,7 +15,9 @@ package com.propertyvista.operations.client.activity.crud.scheduler;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
@@ -26,8 +28,17 @@ import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
 public class RunDataViewerActivity extends AdminViewerActivity<RunData> implements RunDataViewerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public RunDataViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(RunDataViewerView.class), (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class));
+        super(place, ManagementVeiwFactory.instance(RunDataViewerView.class), GWT.<RunDataCrudService> create(RunDataCrudService.class));
+    }
+
+    @Override
+    public void stopRun() {
+        ((RunDataCrudService) getService()).stopRun(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        }, EntityFactory.createIdentityStub(RunData.class, getEntityId()));
     }
 }

@@ -13,9 +13,12 @@
  */
 package com.propertyvista.operations.server.services.scheduler;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
@@ -32,10 +35,28 @@ public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> imp
     }
 
     @Override
+    protected void enhanceRetrieved(RunData entity, RunData dto, RetrieveTraget retrieveTraget) {
+        super.enhanceRetrieved(entity, dto, retrieveTraget);
+
+        Persistence.ensureRetrieve(dto.execution(), AttachLevel.Attached);
+    }
+
+    @Override
     protected void enhanceListRetrieved(RunData entity, RunData dto) {
         super.enhanceListRetrieved(entity, dto);
 
         Persistence.ensureRetrieve(dto.execution(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.execution().trigger(), AttachLevel.ToStringMembers);
+    }
+
+    @Override
+    public void stopRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub) {
+        RunData runData = Persistence.service().retrieve(RunData.class, runDataStub.getPrimaryKey());
+
+        Persistence.ensureRetrieve(runData.execution(), AttachLevel.Attached);
+
+        // TODO: stop run here...
+
+        callback.onSuccess(null);
     }
 }
