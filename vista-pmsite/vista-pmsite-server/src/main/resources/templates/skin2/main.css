@@ -390,9 +390,12 @@ ul.footer_locations li {
 
 .vista-pmsite-main .content{
 		/*background-color:white;*/
+		background-color: #EDE8F0;
+		border-left: 1px solid #D1D1D1;
 }
 
 .container {
 	width: 960px;
 	margin: 0 auto;
+	background-color: #EDE8F0;
 }

@@ -1,12 +1,18 @@
 .vista-pmsite-unitDetailsPage {
 	font-size:14px;
 	overflow: hidden;
+	background-color: #FFFFFF;
+}
+
+.vista-pmsite-unitDetailsPage .vista-pmsite-content {
+    background-color: #EDE8F0;
 }
 
 .vista-pmsite-unitDetailsPage .vista-pmsite-sidebar {
 	width: 318px;
 	float:left;
 	padding:20px 16px;
+	background-color: #EDE8F0;
 }
 .vista-pmsite-unitDetailsPage .vista-pmsite-main {
 	margin-left: 350px;
