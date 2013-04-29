@@ -25,11 +25,9 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 
 public class RunDataLister extends AbstractLister<RunData> {
 
-    private boolean isInlineMode;
-
     public RunDataLister(boolean isInlineMode) {
         super(RunData.class, false);
-        setColumnDescriptors((this.isInlineMode = isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors());
+        setColumnDescriptors((isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors());
     }
 
     private List<ColumnDescriptor> createViewColumnDescriptors() {
@@ -73,6 +71,6 @@ public class RunDataLister extends AbstractLister<RunData> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(isInlineMode ? new Sort(proto().started(), true) : new Sort(proto().pmc(), true));
+        return Arrays.asList(new Sort(proto().started(), true));
     }
 }
