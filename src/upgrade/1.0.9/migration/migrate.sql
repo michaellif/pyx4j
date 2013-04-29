@@ -8,6 +8,12 @@
 ***     ======================================================================================================================
 **/
 
+-- pre-migration delete
+\i pre_migration_delete.sql
+
+-- pre-migration update
+\i pre_migration_update.sql
+
 -- public schema migration
 \i migrate_public_schema.sql;
 
