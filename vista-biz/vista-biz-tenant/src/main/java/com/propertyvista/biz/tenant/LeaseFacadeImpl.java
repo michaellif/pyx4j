@@ -477,7 +477,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.activationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.secureSave(lease);
 
-        ensureLeaseUniqness(lease);
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            ensureLeaseUniqness(lease);
+        }
 
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
@@ -1182,10 +1184,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
 
         for (Lease concurrent : Persistence.service().query(criteria)) {
-            if (concurrent.completion().isNull() && !VistaFeatures.instance().yardiIntegration()) {
+            if (concurrent.completion().isNull()) {
                 throw new IllegalStateException("Lease has no completion mark");
             }
-            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), 1));
+            // set termination date to day before current(new) lease:
+            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), -1));
             updateLeaseDates(concurrent);
             Persistence.secureSave(concurrent);
             complete(concurrent);
