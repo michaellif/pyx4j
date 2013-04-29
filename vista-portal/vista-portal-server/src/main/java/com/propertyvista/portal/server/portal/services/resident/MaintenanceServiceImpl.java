@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,7 +30,10 @@ import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -48,30 +52,23 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     public void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
-        callback.onSuccess(listOpenIssues());
+        callback.onSuccess(listIssues(MaintenanceRequestStatus.StatusPhase.open()));
     }
 
-    static Vector<MaintenanceRequestDTO> listOpenIssues() {
+    @Override
+    public void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
+        callback.onSuccess(listIssues(MaintenanceRequestStatus.StatusPhase.closed()));
+    }
+
+    static Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
-        List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getOpenMaintenanceRequests(
-                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
+        List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(statuses,
+                TenantAppContext.getCurrentCustomerUnit());
         for (MaintenanceRequest mr : requests) {
             Persistence.service().retrieve(mr.category());
             dto.add(Converter.convert(mr));
         }
         return dto;
-    }
-
-    @Override
-    public void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
-        Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
-        List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getClosedMaintenanceRequests(
-                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
-        for (MaintenanceRequest mr : requests) {
-            Persistence.service().retrieve(mr.category());
-            dto.add(Converter.convert(mr));
-        }
-        callback.onSuccess(dto);
     }
 
     @Override
@@ -117,9 +114,9 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback) {
-        MaintenanceRequest dbo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(
-                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant());
-        callback.onSuccess(createDTO(dbo));
+        Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(tenant.lease().unit().building());
+        callback.onSuccess(createDTO(maintenanceRequest));
     }
 
     @Override

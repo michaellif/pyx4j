@@ -14,10 +14,12 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
 @Caption(name = "User")
+@DiscriminatorValue("CustomerUser")
 public interface CustomerUser extends AbstractPmcUser {
 
 }

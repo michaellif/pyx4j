@@ -14,10 +14,12 @@
 package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
 @Caption(name = "User")
+@DiscriminatorValue("CrmUser")
 public interface CrmUser extends AbstractPmcUser {
 
     public static final String VISTA_SUPPORT_ACCOUNT_EMAIL = "support@propertyvista.com";

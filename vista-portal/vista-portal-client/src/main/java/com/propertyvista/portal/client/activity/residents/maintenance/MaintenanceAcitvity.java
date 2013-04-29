@@ -55,10 +55,10 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
             }
         });
 
-        srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
+        srv.listClosedIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
             @Override
             public void onSuccess(Vector<MaintenanceRequestDTO> result) {
-                view.populateHistoryRequests(result);
+                view.populateClosedRequests(result);
             }
         });
 
@@ -85,10 +85,10 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
                         view.populateOpenRequests(result);
                     }
                 });
-                srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
+                srv.listClosedIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
                     @Override
                     public void onSuccess(Vector<MaintenanceRequestDTO> result) {
-                        view.populateHistoryRequests(result);
+                        view.populateClosedRequests(result);
                     }
                 });
             }

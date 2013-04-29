@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.misc.VistaTODO;
@@ -51,7 +52,7 @@ public class DashboardServiceImpl implements DashboardService {
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
 
         if (VistaTODO.isMaintenanceRequestsEnabled()) {
-            dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
+            dashboard.maintanances().addAll(MaintenanceServiceImpl.listIssues(MaintenanceRequestStatus.StatusPhase.open()));
         }
 
         // TODO review this: (i think tenant insurance status can be used for other countries as well but the problem is with TenantSure

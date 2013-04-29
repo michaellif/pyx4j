@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
@@ -44,10 +43,6 @@ public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
 
     // ----------------------------------------------------
     // parent <-> child relationship:
-
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
-    ISet<MaintenanceRequest> maintenanceRequests();
 
     //TODO move
     @Override

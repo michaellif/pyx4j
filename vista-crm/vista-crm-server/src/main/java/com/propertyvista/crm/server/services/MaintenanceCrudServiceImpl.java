@@ -113,8 +113,10 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Key tenantId) {
-        MaintenanceRequest dbo = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(Persistence.service().retrieve(Tenant.class, tenantId));
-        callback.onSuccess(createDTO(dbo));
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId);
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(tenant.lease().unit().building());
+        maintenanceRequest.leaseParticipant().set(tenant);
+        callback.onSuccess(createDTO(maintenanceRequest));
     }
 
     @Override

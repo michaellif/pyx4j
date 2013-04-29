@@ -36,5 +36,5 @@ public interface MaintenanceView extends IsWidget {
 
     void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests);
 
-    void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests);
+    void populateClosedRequests(Vector<MaintenanceRequestDTO> historyRequests);
 }

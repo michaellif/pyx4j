@@ -15,14 +15,17 @@ package com.propertyvista.biz.financial.maintenance.internal;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
@@ -32,13 +35,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) {
-        return MaintenanceInternalManager.instance().getOpenMaintenanceRequests(tenant);
-    }
-
-    @Override
-    public List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) {
-        return MaintenanceInternalManager.instance().getClosedMaintenanceRequests(tenant);
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
+        return MaintenanceInternalManager.instance().getMaintenanceRequests(statuses, buildingElement);
     }
 
     @Override
@@ -62,8 +60,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public MaintenanceRequest createNewRequest(Tenant tenant) {
-        return MaintenanceInternalManager.instance().createNewRequest(tenant);
+    public MaintenanceRequest createNewRequest(Building building) {
+        return MaintenanceInternalManager.instance().createNewRequest(building);
     }
 
     @Override

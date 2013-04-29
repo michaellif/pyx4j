@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.maintenance;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -29,14 +30,14 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class MaintenanceAbstractManager {
 
-    public MaintenanceRequest createNewRequest(Tenant tenant) {
-        MaintenanceRequestDTO request = EntityFactory.create(MaintenanceRequestDTO.class);
-        request.leaseParticipant().set(tenant);
+    public MaintenanceRequest createNewRequest(Building building) {
+        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        request.building().set(building);
         request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         return request;
     }
@@ -68,17 +69,10 @@ public abstract class MaintenanceAbstractManager {
         Persistence.secureSave(request);
     }
 
-    public List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) {
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), StatusPhase.closed()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
-    }
-
-    public List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), StatusPhase.opened()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
+        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), statuses));
+        criteria.add(PropertyCriterion.eq(criteria.proto().buildingElement(), buildingElement));
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 

@@ -28,7 +28,7 @@ public interface MaintenanceService extends AbstractCrudService<MaintenanceReque
     // Can't use List, this should be serializable collection
     void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
-    void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
+    void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
     void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
 

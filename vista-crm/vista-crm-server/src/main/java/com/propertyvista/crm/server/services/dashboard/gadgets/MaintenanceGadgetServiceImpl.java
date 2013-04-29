@@ -76,7 +76,7 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(today);
 
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), MaintenanceRequestStatus.StatusPhase.opened()));
+        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), MaintenanceRequestStatus.StatusPhase.open()));
 
         if (proto.openWorkOrders() == member) {
             // already this is just to enforce the validity of the parameter

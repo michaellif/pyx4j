@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.maintenance.yardi;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -29,7 +30,7 @@ import com.propertyvista.biz.system.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.property.asset.BuildingElement;
 
 public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
@@ -76,21 +77,9 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant) {
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
         importModifiedRequests();
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), StatusPhase.closed()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
-    }
-
-    @Override
-    public List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant) {
-        importModifiedRequests();
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), StatusPhase.opened()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        return Persistence.service().query(criteria.desc(criteria.proto().updated()));
+        return super.getMaintenanceRequests(statuses, buildingElement);
     }
 
     @Override

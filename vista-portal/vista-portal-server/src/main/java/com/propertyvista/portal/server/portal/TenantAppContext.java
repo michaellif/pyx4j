@@ -25,6 +25,7 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -71,6 +72,12 @@ public class TenantAppContext extends VistaCustomerContext {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().customer().user(), TenantAppContext.getCurrentUser()));
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant().lease(), getCurrentUserLeaseIdStub()));
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static AptUnit getCurrentCustomerUnit() {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto()._Leases(), getCurrentUserLeaseIdStub());
         return Persistence.service().retrieve(criteria);
     }
 

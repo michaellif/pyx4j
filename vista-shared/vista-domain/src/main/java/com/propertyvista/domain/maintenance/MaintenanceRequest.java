@@ -34,17 +34,24 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface MaintenanceRequest extends IEntity {
 
-    //TODO change Owner of MaintenanceRequest to property. Add originator - user that created MaintenanceRequest. 
-    //Add optional Lease (or BuildingElement?) - can be selected in CRM or automatically assigned if MaintenanceRequest is created on portal
     @Owner
     @Detached
     @NotNull
     @MemberColumn(notNull = true)
     @JoinColumn
+    Building building();
+
+    BuildingElement buildingElement();
+
+    AbstractPmcUser originator();
+
     Tenant leaseParticipant();
 
     @NotNull

@@ -15,13 +15,16 @@ package com.propertyvista.biz.financial.maintenance;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.property.asset.building.Building;
 
 /*
  * Open/Update/Close request
@@ -31,11 +34,9 @@ public interface MaintenanceFacade {
 
     MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly);
 
-    List<MaintenanceRequest> getOpenMaintenanceRequests(Tenant tenant);
+    List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement);
 
-    List<MaintenanceRequest> getClosedMaintenanceRequests(Tenant tenant);
-
-    MaintenanceRequest createNewRequest(Tenant tenant);
+    MaintenanceRequest createNewRequest(Building building);
 
     MaintenanceRequest getMaintenanceRequest(String requestId);
 

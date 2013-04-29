@@ -39,7 +39,7 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
     }
 
     @Override
-    public void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests) {
-        list.populateHistoryRequests(historyRequests);
+    public void populateClosedRequests(Vector<MaintenanceRequestDTO> historyRequests) {
+        list.populateClosedRequests(historyRequests);
     }
 }

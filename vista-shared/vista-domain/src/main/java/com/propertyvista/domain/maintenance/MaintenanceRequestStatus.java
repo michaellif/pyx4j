@@ -28,7 +28,7 @@ public interface MaintenanceRequestStatus extends IEntity {
 
         Submitted, Scheduled, Resolved, Cancelled;
 
-        public static Set<StatusPhase> opened() {
+        public static Set<StatusPhase> open() {
             return EnumSet.of(Submitted, Scheduled);
         }
 

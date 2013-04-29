@@ -14,9 +14,11 @@
 package com.propertyvista.domain.security.common;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.i18n.annotations.I18n;
 
 @AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.TABLE_PER_CLASS)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AbstractPmcUser extends AbstractUser {
 

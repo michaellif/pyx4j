@@ -150,7 +150,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
     }
 
     @Override
-    public void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests) {
+    public void populateClosedRequests(Vector<MaintenanceRequestDTO> historyRequests) {
         historyRequestsPanel.removeAllRows();
 
         int row = -1;
