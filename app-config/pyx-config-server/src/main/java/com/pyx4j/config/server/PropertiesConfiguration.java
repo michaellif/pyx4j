@@ -90,7 +90,7 @@ public class PropertiesConfiguration {
 
             for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
                 if (value.endsWith(me.getKey())) {
-                    value.substring(0, value.length() - me.getKey().length());
+                    value = value.substring(0, value.length() - me.getKey().length());
                     multiplier = me.getValue();
                     break;
                 }
