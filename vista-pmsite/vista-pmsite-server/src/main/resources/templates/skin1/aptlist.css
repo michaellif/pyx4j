@@ -6,7 +6,7 @@
 	width: 211px;
 	height: 711px;
 	float:left;
-	border-right:1px solid ${foreground_20};
+	/*border-right:1px solid ${foreground_20};*/
 	color: ${foreground_60};
 	background-color: #dfebf7;
 }
@@ -147,8 +147,14 @@
     margin-left: 33px;
 }
 
+.vista-pmsite-content {
+    background-color: #DFEBF7;
+}
+
 .vista-pmsite-aptListPage .vista-pmsite-main {
+    background-color: #FFFFFF;
 	margin-left: 211px;
+	border-left: 1px solid #D1D1D1;
 }
 
 #aptListModeSwitch {

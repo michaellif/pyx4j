@@ -30,6 +30,7 @@
 
 .vista-pmsite-mainWrap {
 	overflow: hidden;
+	background-color: #FFFFFF;
 }
 
 .vista-pmsite-sidebar {
@@ -66,7 +67,7 @@
 }
 
 .testimBox .infobox_header_title {
-    color: #00C4FF;
+    color: #0458b3;
 }
 
 .testimBox .infobox_content {
@@ -100,7 +101,7 @@
 }
 
 .newsBox .infobox_header_title {
-    color: #00C4FF;
+    color: #0458b3 !important;
 }
 
 .newsBox .date {
@@ -116,10 +117,14 @@
 	padding-top: 10px;
 }
 
+.narrowBox .infobox_header .infobox_header_title {
+    color: #dfebf7;
+}
+
 .infobox_header_title {
 	font-size: 22px;
 	line-height: 40px;
-	color: #FF0000;
+	color: #0458b3;
 }
 
 .infobox_header_title:lang(fr) {

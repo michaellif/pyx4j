@@ -4,7 +4,7 @@
 	min-height: 477px;
 	float:left;
 	padding:20px 16px;
-	border-right:1px solid ${foreground_20};
+	/*border-right:1px solid ${foreground_20};*/
 	background-color: #DFEBF7;
 }
 
@@ -15,6 +15,7 @@
 .vista-pmsite-aptDetailsPage .vista-pmsite-main {
 	margin-left: 350px;
 	padding-bottom: 20px;
+	border-left: 1px solid #D1D1D1;
 }
 
 .vista-pmsite-main .caption2 h1 {

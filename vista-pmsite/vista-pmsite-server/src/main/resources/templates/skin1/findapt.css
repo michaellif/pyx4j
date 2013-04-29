@@ -9,6 +9,10 @@
 	overflow: hidden;
 }
 
+.caption {
+    border-left: none !important;
+}
+
 .vista-pmsite-findAptPage .caption h1 {
 	font-size: 36px;
 	font-weight: normal;
