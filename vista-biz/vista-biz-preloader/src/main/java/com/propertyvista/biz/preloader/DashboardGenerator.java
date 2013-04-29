@@ -43,6 +43,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.demo.OccupancyChartGadget
 import com.propertyvista.domain.dashboard.gadgets.type.demo.OutstandingMaintenanceChartGadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.shared.config.VistaDemo;
+import com.propertyvista.shared.config.VistaFeatures;
 
 @SuppressWarnings("unchecked")
 public class DashboardGenerator {
@@ -56,7 +57,11 @@ public class DashboardGenerator {
     public DashboardGenerator() {
         systemDashboards.add(makeDefaultMiscDashboard());
         systemDashboards.add(makeDefaultSystemDashboard());
-        systemDashboards.add(makeDefaultUnitAvailabilityDashboard());
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            systemDashboards.add(makeDefaultUnitAvailabilityDashboard());
+        }
+
         systemDashboards.add(makeDefaultArrearsDashboard());
         systemDashboards.add(makeDefaultPaymentsDashboard());
     }

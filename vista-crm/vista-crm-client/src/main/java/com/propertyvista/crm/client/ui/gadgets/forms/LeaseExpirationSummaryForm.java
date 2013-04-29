@@ -20,6 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpirationGadgetDataDTO> {
 
@@ -33,9 +34,11 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancyLabel())).customLabel(i18n.tr("Units Occupied")).componentWidth(15)
-                .build());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitOccupancyLabel())).customLabel(i18n.tr("Units Occupied")).componentWidth(15)
+                    .build());
+        }
 
         content.setH2(++row, 0, 1, i18n.tr("Leases on Month to Month:"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5)
@@ -58,10 +61,11 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        int total = getValue().totalUnits().getValue();
-        int occupied = getValue().occupiedUnits().getValue();
-        double percent = total != 0 ? occupied / (double) total : 0;
-        get(proto().unitOccupancyLabel()).setValue(i18n.tr("{0} of {1} ({2,number,percent})", occupied, total, percent));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            int total = getValue().totalUnits().getValue();
+            int occupied = getValue().occupiedUnits().getValue();
+            double percent = total != 0 ? occupied / (double) total : 0;
+            get(proto().unitOccupancyLabel()).setValue(i18n.tr("{0} of {1} ({2,number,percent})", occupied, total, percent));
+        }
     }
 }

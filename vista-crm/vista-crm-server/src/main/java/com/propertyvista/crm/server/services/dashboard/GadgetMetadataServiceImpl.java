@@ -37,11 +37,15 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
@@ -55,6 +59,12 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
             ArrearsYOYAnalysisChartGadgetMetadata.class,
             CollectionsGadgetMetadata.class            
     );//@formatter:on 
+
+    public static final List<Class<?>> YARDI_INTEGRATION_GADGETS_BLACKLIST = Arrays.<Class<?>> asList(//@formatter:off
+            UnitAvailabilityGadgetMetadata.class,
+            UnitTurnoverAnalysisGadgetMetadata.class,
+            UnitAvailabilitySummaryGadgetMetadata.class
+    );//@formatter:on
 
     @Override
     public void createGadgetMetadata(AsyncCallback<GadgetMetadata> callback, GadgetMetadata proto) {
@@ -94,12 +104,16 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
         for (Class<? extends GadgetMetadata> gadgetMetadataClass : GadgetMetadataRepository.get().getGadgetMetadataClasses()) {
             GadgetDescription gadgetDescription = gadgetMetadataClass.getAnnotation(GadgetDescription.class);
-            if (isAcceptedBy(boardType, gadgetMetadataClass) &//@formatter:off
-                    SecurityController.checkAnyBehavior(gadgetDescription.allowedBehaviors()) &
-                    !gadgetMetadataClass.equals(AccessDeniedGagetMetadata.class)
-                    ) {//@formatter:on
+
+            if (//@formatter:off
+                    isAcceptedBy(boardType, gadgetMetadataClass)
+                        & isVistaFeaturesCompatible(gadgetMetadataClass)
+                        & SecurityController.checkAnyBehavior(gadgetDescription.allowedBehaviors())
+                        & !gadgetMetadataClass.equals(AccessDeniedGagetMetadata.class)) {//@formatter:on
+
                 GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
-                descriptors.add(new GadgetDescriptorDTO(//@formatter:off
+                descriptors.add(//@formatter:off
+                        new GadgetDescriptorDTO(
                         i18n.translate(null, proto.getEntityMeta().getCaption()),
                         i18n.translate(null, gadgetDescription.description()),
                         translate(null, gadgetDescription.keywords()),
@@ -118,6 +132,13 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
         }
         return (boardType == DashboardType.building & BuildingGadget.class.isAssignableFrom(gadgetMetadataClass))
                 | (boardType != DashboardType.building & !BuildingGadget.class.isAssignableFrom(gadgetMetadataClass));
+    }
+
+    private static boolean isVistaFeaturesCompatible(Class<? extends GadgetMetadata> gadgetMetadataClass) {
+        if (VistaFeatures.instance().yardiIntegration() && YARDI_INTEGRATION_GADGETS_BLACKLIST.contains(gadgetMetadataClass)) {
+            return false;
+        }
+        return true;
     }
 
     private static List<String> translate(String context, String... words) {
