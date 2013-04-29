@@ -93,8 +93,9 @@ SET search_path = '_admin_';
         
         
         -- Check constraints
-        
+        ALTER TABLE pad_file DROP CONSTRAINT pad_file_status_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
+        
         
         
         /**
@@ -110,9 +111,25 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_yardi_credential  ADD COLUMN maintenance_requests_service_url VARCHAR(500),
                                                 ADD COLUMN service_urlbase VARCHAR(500);
         
+        -- pad_batch
+        
+        ALTER TABLE pad_batch ADD COLUMN processing_status VARCHAR(50);
+        
+        -- pad_debit_record
+        
+        ALTER TABLE pad_debit_record ADD COLUMN processing_status VARCHAR(50);
+        
         -- pad_file
         
         ALTER TABLE pad_file ADD COLUMN company_id VARCHAR(500);
+        
+        -- pad_reconciliation_debit_record
+        
+        ALTER TABLE pad_reconciliation_debit_record ADD COLUMN processing_status BOOLEAN;
+        
+        -- pad_reconciliation_summary
+        
+        ALTER TABLE pad_reconciliation_summary ADD COLUMN processing_status BOOLEAN;
         
         -- pad_sim_file
         
@@ -138,9 +155,38 @@ SET search_path = '_admin_';
         ***
         ***     ============================================================================================================
         **/
-       
+        
+        
+        -- pad_batch
+        
+        UPDATE  pad_batch 
+        SET     processing_status = 'AcknowledgeProcesed';
+        
+        --  pad_debit_record
+        
+        UPDATE  pad_debit_record
+        SET     processing_status = 
+                CASE WHEN acknowledgment_status_code IS NULL THEN 'ReconciliationProcesed'
+                ELSE 'AcknowledgeProcesed' END;
+                
+        -- pad_file
+        
         UPDATE  _admin_.pad_file
         SET     company_id = 'BIRCHWOOD';
+        
+        UPDATE  _admin_.pad_file
+        SET     status = 'Acknowledged'
+        WHERE   status = 'Procesed';
+        
+        -- pad_reconciliation_debit_record
+        
+        UPDATE  pad_reconciliation_debit_record
+        SET     processing_status = TRUE;
+        
+        -- pad_reconciliation_summary
+        
+        UPDATE  pad_reconciliation_summary
+        SET     processing_status = TRUE;
         
         DELETE FROM _admin_.scheduler_trigger_notification WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
         DELETE FROM _admin_.scheduler_trigger_schedule WHERE trgr IN (SELECT id FROM _admin_.scheduler_trigger WHERE trigger_type = 'yardiBatchProcess');
@@ -265,12 +311,18 @@ SET search_path = '_admin_';
         
 
         -- check constraints
-        
+        ALTER TABLE pad_batch ADD CONSTRAINT pad_batch_processing_status_e_ck CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgedReceived'));
+        ALTER TABLE pad_debit_record ADD CONSTRAINT pad_debit_record_processing_status_e_ck 
+                CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgedReceived', 'ReconciliationProcesed', 'ReconciliationReceived'));
+        ALTER TABLE pad_file ADD CONSTRAINT pad_file_status_e_ck 
+                CHECK ((status) IN ('Acknowledged', 'Canceled', 'Creating', 'Invalid', 'SendError', 'Sending', 'Sent'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
-                CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 
-                'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadReceiveAcknowledgment', 'paymentsPadReceiveReconciliation', 'paymentsPadSend', 
-                'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 
-                'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'yardiImportProcess'));
+                CHECK ((trigger_type) IN ('billing', 'cleanup', 'equifaxRetention', 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion',
+                 'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadProcesAcknowledgment', 'paymentsPadProcesReconciliation',
+                  'paymentsPadReceiveAcknowledgment', 'paymentsPadReceiveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 
+                  'paymentsScheduledEcheck', 'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 
+                  'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'yardiImportProcess'));
+
                 
         /**
         ***     ============================================================================================================
@@ -280,7 +332,7 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
-        
+        CREATE INDEX pad_reconciliation_summary_merchant_account_idx ON pad_reconciliation_summary USING btree (merchant_account);
        
 
 
