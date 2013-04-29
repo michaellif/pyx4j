@@ -23,7 +23,8 @@ BEGIN
                 ||'JOIN         '||v_schema_name||'.payment_payment_details pmd ON (pm.details = pmd.id) '
                 ||'JOIN         '||v_schema_name||'.lease_term_participant ltp ON (ltp.id = pr.lease_term_participant) '
                 ||'JOIN         '||v_schema_name||'.lease_participant lp ON (lp.id = ltp.lease_participant) '
-                ||'JOIN         '||v_schema_name||'.lease l ON (lp.lease = l.id)) ';
+                ||'JOIN         '||v_schema_name||'.lease l ON (lp.lease = l.id) '
+                ||'WHERE        pr.created_date >= ''2013-04-28'' )';
                 
         EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_transactions OWNER TO vista';       
                 
