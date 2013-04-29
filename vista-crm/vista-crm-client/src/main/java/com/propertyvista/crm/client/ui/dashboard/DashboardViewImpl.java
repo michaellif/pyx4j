@@ -103,7 +103,7 @@ public class DashboardViewImpl extends AbstractPrimePane implements DashboardVie
     private void updateCaption() {
         String caption = "";
         if (getDashboardMetadata() != null) {
-            caption = SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr("(read only)") : "");
+            caption = SimpleMessageFormat.format("{0} {1}", dashboard.getDashboardMetadata().name().getValue(), isReadOnly ? i18n.tr(" - Read only mode") : "");
         }
         setCaption(caption);
     }
