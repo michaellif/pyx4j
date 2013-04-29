@@ -22,8 +22,6 @@ public class VistaTODO {
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
     public static final boolean ENABLE_ONBOARDING_WIZARDS = ApplicationMode.isDevelopment();
 
-    public static final boolean VISTA_2428_FORBID_ARREARS_GADGETS = false;
-
     /*
      * This is changed by BuildMaster when creating Branch.
      * Used by configurations to enable dual development environments.
