@@ -25,11 +25,19 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.Consts;
+
 public class PropertiesConfigurationTest extends TestCase {
 
     public void testPropertiesInclude() {
         Map<String, String> configProperties = PropertiesConfiguration.loadProperties(new File("./src/test/resources", "p1.properties"));
         assertEquals("v2", "2", configProperties.get("v2"));
         assertEquals("v3", "3", configProperties.get("v3"));
+
+    }
+
+    public void testPropertiesSecondsValue() {
+        Map<String, String> configProperties = PropertiesConfiguration.loadProperties(new File("./src/test/resources", "p1.properties"));
+        assertEquals("v1_seconds", Consts.HOURS2SEC, new PropertiesConfiguration(configProperties).getSecondsValue("v1_seconds", 0));
     }
 }
