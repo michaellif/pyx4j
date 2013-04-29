@@ -60,6 +60,10 @@ public class EftReportGenerator implements ReportGenerator {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.desc(criteria.proto().padBillingCycle().billingType());
         criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
+        criteria.asc(criteria.proto().billingAccount().lease().unit().building());
+        criteria.asc(criteria.proto().billingAccount().lease().leaseId());
+        criteria.asc(criteria.proto().preauthorizedPayment().tenant().participantId());
+        criteria.asc(criteria.proto().amount());
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
