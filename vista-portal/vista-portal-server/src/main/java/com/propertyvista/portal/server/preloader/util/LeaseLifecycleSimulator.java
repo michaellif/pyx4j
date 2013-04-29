@@ -250,7 +250,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
-            maintenanceRequest.leaseParticipant().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
+            maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
             maintenanceRequest.submitted().setValue(now());
             maintenanceRequest.updated().setValue(now());
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));

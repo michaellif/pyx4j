@@ -82,7 +82,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.leaseParticipant());
+        Persistence.service().retrieve(dto.reporter());
         Persistence.service().retrieve(dto.category());
         MaintenanceRequestCategory parent = dto.category().parent();
         while (!parent.isNull()) {

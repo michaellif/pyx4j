@@ -71,7 +71,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
             @Override
             public void onSuccess(Tenant result) {
                 MaintenanceRequestDTO maintenanceRequest = EntityFactory.create(MaintenanceRequestDTO.class);
-                maintenanceRequest.leaseParticipant().set(result);
+                maintenanceRequest.reporter().set(result);
 
                 AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(maintenanceRequest));
             }

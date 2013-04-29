@@ -119,9 +119,9 @@ public class YardiMaintenanceRequestsServiceTest {
     @Test
     public void testPostMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
-        request.leaseParticipant().lease().unit().building().propertyCode().setValue("prvista1");
-        request.leaseParticipant().lease().unit().info().number().setValue("145");
-        request.leaseParticipant().participantId().setValue("t0005339");
+        request.reporter().lease().unit().building().propertyCode().setValue("prvista1");
+        request.reporter().lease().unit().info().number().setValue("145");
+        request.reporter().participantId().setValue("t0005339");
 
         YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(yc, request);
     }

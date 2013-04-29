@@ -80,7 +80,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId()), 20).build());
         get(proto().requestId()).setEditable(false);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<Tenant>() {
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reporter(), new CEntitySelectorHyperlink<Tenant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
@@ -204,7 +204,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
         if (isEditable()) {
-            get(proto().leaseParticipant()).setEditable(getValue().leaseParticipant().isNull());
+            get(proto().reporter()).setEditable(getValue().reporter().isNull());
         }
 
         get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));

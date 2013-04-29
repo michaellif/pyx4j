@@ -52,7 +52,7 @@ public interface MaintenanceRequest extends IEntity {
 
     AbstractPmcUser originator();
 
-    Tenant leaseParticipant();
+    Tenant reporter();
 
     @NotNull
     @Length(14)

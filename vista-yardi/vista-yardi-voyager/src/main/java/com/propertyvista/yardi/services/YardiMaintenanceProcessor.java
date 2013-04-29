@@ -55,8 +55,8 @@ public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
 
     public ServiceRequest convertRequest(MaintenanceRequest mr) {
-        Persistence.ensureRetrieve(mr.leaseParticipant().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(mr.leaseParticipant().lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.reporter().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(mr.reporter().lease().unit().building(), AttachLevel.Attached);
 
         ServiceRequest req = new ServiceRequest();
 
@@ -67,9 +67,9 @@ public class YardiMaintenanceProcessor {
             }
         }
 
-        req.setPropertyCode(mr.leaseParticipant().lease().unit().building().propertyCode().getValue());
-        req.setUnitCode(mr.leaseParticipant().lease().unit().info().number().getValue());
-        req.setTenantCode(mr.leaseParticipant().participantId().getValue());
+        req.setPropertyCode(mr.reporter().lease().unit().building().propertyCode().getValue());
+        req.setUnitCode(mr.reporter().lease().unit().info().number().getValue());
+        req.setTenantCode(mr.reporter().participantId().getValue());
         req.setTenantCaused(true);
         req.setServiceRequestFullDescription(mr.description().getValue());
         req.setServiceRequestBriefDescription(mr.summary().getValue());
@@ -86,10 +86,10 @@ public class YardiMaintenanceProcessor {
         req.setSubCategory(mr.category().name().getValue());
         req.setCategory(mr.category().parent().name().getValue());
 
-        req.setRequestorName(mr.leaseParticipant().customer().person().name().firstName().getValue());
-        req.setRequestorEmail(mr.leaseParticipant().customer().person().email().getValue());
+        req.setRequestorName(mr.reporter().customer().person().name().firstName().getValue());
+        req.setRequestorEmail(mr.reporter().customer().person().email().getValue());
         // TODO - extract numbers, then convert to long
-        String homePhone = mr.leaseParticipant().customer().person().homePhone().getValue();
+        String homePhone = mr.reporter().customer().person().homePhone().getValue();
         if (StringUtils.isNotEmpty(homePhone) && StringUtils.isNumeric(homePhone)) {
             req.setRequestorPhoneNumber(Long.valueOf(homePhone));
         }
@@ -273,7 +273,7 @@ public class YardiMaintenanceProcessor {
                 log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
                 return null;
             } else {
-                mr.leaseParticipant().set(tenant);
+                mr.reporter().set(tenant);
             }
         } else {
             // TODO - remove tenant ownership for MaintenanceRequest domain object
