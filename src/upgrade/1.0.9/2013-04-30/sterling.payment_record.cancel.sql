@@ -19,6 +19,6 @@ UPDATE sterling.payment_record p
    AND NOT EXISTS (SELECT 1 FROM sterling.building b, sterling.billing_billing_cycle bc
                            WHERE b.id = bc.building
                              AND bc.id = p.pad_billing_cycle
-                             AND b.property_code IN ('bath4141', 'bath4190'))
+                             AND b.property_code IN ('bath4141', 'bath4190'));
 
 COMMIT;
