@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
 public class AbstractGadgetMetadataCommonDefaultSettings<G extends GadgetMetadata> implements GadgetMetadataDefaultSettings<G> {
@@ -26,9 +25,6 @@ public class AbstractGadgetMetadataCommonDefaultSettings<G extends GadgetMetadat
     public void init(G gadgetMetadata) {
         gadgetMetadata.refreshInterval().setValue(RefreshInterval.Never);
         gadgetMetadata.gadgetId().setValue(UUID.randomUUID().toString());
-        if (ListerGadgetBaseMetadata.class.isAssignableFrom(gadgetMetadata.getInstanceValueClass())) {
-            ((ListerGadgetBaseMetadata) gadgetMetadata).pageSize().setValue(10);
-        }
         for (String memberName : gadgetMetadata.getEntityMeta().getMemberNames()) {
             if (gadgetMetadata.getMember(memberName) instanceof ListerUserSettings) {
                 ((ListerUserSettings) gadgetMetadata.getMember(memberName)).pageSize().setValue(10);

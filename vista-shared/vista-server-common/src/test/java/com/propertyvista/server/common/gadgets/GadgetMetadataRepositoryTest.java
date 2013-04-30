@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBase {
 
@@ -68,27 +67,6 @@ public class GadgetMetadataRepositoryTest extends GadgetMetadataRepositoryTestBa
                         return hasUUID ? null : "";
                     }
                 });
-    }
-
-    public void testEachListerGadgetHasPageSize() {
-        assertForEachGagetMetadataClass("The followning lister gadgets don't have a defined pagesize filed", new Predicate() {
-
-            @Override
-            public String reportWhatIsWrongWith(Class<? extends GadgetMetadata> klass) {
-                if (ListerGadgetBaseMetadata.class.isAssignableFrom(klass)) {
-                    boolean hasPageSize = false;
-                    try {
-                        ListerGadgetBaseMetadata metadata = (ListerGadgetBaseMetadata) GadgetMetadataRepository.get().createGadgetMetadata(klass);
-                        hasPageSize = !metadata.isNull();
-                    } catch (Throwable e) {
-                        // in this test it's not relevant
-                    }
-                    return hasPageSize ? null : "";
-                } else {
-                    return null;
-                }
-            }
-        });
     }
 
     public void testEveryGadgetMetadataHasValidDescription() {

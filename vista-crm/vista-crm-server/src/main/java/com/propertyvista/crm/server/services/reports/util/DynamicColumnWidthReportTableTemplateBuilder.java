@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.Path;
 
 import com.propertyvista.crm.server.services.reports.util.XMLBuilder.ElementBuilder;
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 public class DynamicColumnWidthReportTableTemplateBuilder {
 
@@ -38,8 +37,6 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
     private final XMLBuilder xmlBuilder;
 
     private final IEntity proto;
-
-    private final ListerGadgetBaseMetadata metadata;
 
     private final int pageWidth = 555;
 
@@ -57,9 +54,11 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
 
     private final List<String> subTitleParams;
 
-    public DynamicColumnWidthReportTableTemplateBuilder(IEntity proto, ListerGadgetBaseMetadata metadata) {
+    private final List<ColumnDescriptorEntity> columnDescriptors;
+
+    public DynamicColumnWidthReportTableTemplateBuilder(IEntity proto, List<ColumnDescriptorEntity> columnDescriptors) {
         this.proto = proto;
-        this.metadata = metadata;
+        this.columnDescriptors = columnDescriptors;
         this.subTitleParams = new LinkedList<String>();
         this.xmlBuilder = new XMLBuilder();
     }
@@ -288,7 +287,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
         visibleColumns = new ArrayList<ColumnDescriptorEntity>();
 
         int columnNum = 0;
-        for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
+        for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
             if (columnDescriptor.isVisible().isBooleanTrue()) {
                 visibleColumns.add(columnDescriptor);
             }
@@ -329,7 +328,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
     private void addDetailMembers() {
         int offset = 0;
         int columnNum = 0;
-        for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
+        for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
             if (columnDescriptor.isVisible().isBooleanTrue()) {
                 int width = columnWidths[columnNum++];
                 addMemberField(columnDescriptor, offset, width);

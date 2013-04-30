@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.reports.util;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
@@ -25,7 +26,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
 import com.propertyvista.domain.dashboard.gadgets.common.ColumnDescriptorEntity;
-import com.propertyvista.domain.dashboard.gadgets.type.base.ListerGadgetBaseMetadata;
 
 /**
  * This class knows to build templates (designs) for tabular reports that has columns that can hide themselves on demand;
@@ -43,8 +43,6 @@ public class ReportTableTemplateBuilder {
 
     private final IEntity proto;
 
-    private final ListerGadgetBaseMetadata metadata;
-
     private StringBuilder template;
 
     private Map<String, Integer> columnWidths;
@@ -57,9 +55,11 @@ public class ReportTableTemplateBuilder {
 
     public boolean isElementDefinitionInProgress = false;
 
-    public ReportTableTemplateBuilder(IEntity proto, ListerGadgetBaseMetadata metadata) {
+    private final List<ColumnDescriptorEntity> columnDescriptors;
+
+    public ReportTableTemplateBuilder(IEntity proto, List<ColumnDescriptorEntity> columnDescriptors) {
         this.proto = proto;
-        this.metadata = metadata;
+        this.columnDescriptors = columnDescriptors;
     }
 
     public String generateReportTemplate() {
@@ -126,18 +126,18 @@ public class ReportTableTemplateBuilder {
     private void initEvenColumnWidths() {
         columnWidths = new HashMap<String, Integer>();
 
-        if (metadata.columnDescriptors().isEmpty()) {
+        if (columnDescriptors.isEmpty()) {
             return;
         }
 
-        int columnWidth = tableWidth / metadata.columnDescriptors().size();
-        for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
+        int columnWidth = tableWidth / columnDescriptors.size();
+        for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
             columnWidths.put(columnDescriptor.propertyPath().getValue(), columnWidth);
         }
 
         // compensate for integer truncation for the last column
-        String lastColumnPath = metadata.columnDescriptors().get(metadata.columnDescriptors().size() - 1).propertyPath().getValue();
-        columnWidths.put(lastColumnPath, tableWidth - columnWidth * (metadata.columnDescriptors().size() - 1));
+        String lastColumnPath = columnDescriptors.get(columnDescriptors.size() - 1).propertyPath().getValue();
+        columnWidths.put(lastColumnPath, tableWidth - columnWidth * (columnDescriptors.size() - 1));
     }
 
     private void addProperties() {
@@ -340,7 +340,7 @@ public class ReportTableTemplateBuilder {
     }//@formatter:on
 
     private void appendColumns() {
-        for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
+        for (ColumnDescriptorEntity columnDescriptor : columnDescriptors) {
             addTableColumnDeclaration(columnDescriptor);
         }
     }
