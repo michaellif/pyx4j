@@ -17,13 +17,16 @@ BEGIN
         EXECUTE 'CREATE OR REPLACE VIEW _admin_.'||v_schema_name||'_transactions AS '
                 ||'(SELECT      l.lease_id AS client_id, '
                 ||'             pr.amount,pmd.bank_id,pmd.branch_transit_number,'
-                ||'             pmd.account_no_number AS account_number '
+                ||'             pmd.account_no_number AS account_number, '
+                ||'             b.property_code '
                 ||'FROM         '||v_schema_name||'.payment_record pr '
                 ||'JOIN         '||v_schema_name||'.payment_method pm ON (pm.id = pr.payment_method) '
                 ||'JOIN         '||v_schema_name||'.payment_payment_details pmd ON (pm.details = pmd.id) '
                 ||'JOIN         '||v_schema_name||'.lease_term_participant ltp ON (ltp.id = pr.lease_term_participant) '
                 ||'JOIN         '||v_schema_name||'.lease_participant lp ON (lp.id = ltp.lease_participant) '
                 ||'JOIN         '||v_schema_name||'.lease l ON (lp.lease = l.id) '
+                ||'JOIN         '||v_schema_name||'.apt_unit a ON (a.id = l.unit) '
+                ||'JOIN         '||v_schema_name||'.building b ON (b.id = a.building) '
                 ||'WHERE        pr.created_date >= ''2013-04-28'' )';
                 
         EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_transactions OWNER TO vista';       
@@ -32,6 +35,7 @@ BEGIN
         
         EXECUTE 'CREATE OR REPLACE VIEW _admin_.'||v_schema_name||'_diff_join  AS '
                 ||'(SELECT      CASE WHEN a.client_id IS NULL THEN b.client_id ELSE a.client_id END AS client_id, '
+                ||'             c.property_code, '
                 ||'             a.amount AS yardi_amount, '
                 ||'             b.amount AS vista_amount, '
                 ||'             abs(COALESCE(a.amount,0) - COALESCE(b.amount,0)) AS delta, '
@@ -50,7 +54,9 @@ BEGIN
                 ||'                     SELECT  client_id,amount,bank_id,branch_transit_number,account_number '
                 ||'                     FROM    _admin_.test_yardi_eft '
                 ||'                     WHERE batch_id = '||quote_literal(v_batch_id)||') b ' 
-                ||' ON   (a.client_id = b.client_id AND a.bank_id = b.bank_id AND a.branch_transit_number = b.branch_transit_number AND a.account_number = b.account_number)) ';
+                ||' ON   (a.client_id = b.client_id AND a.bank_id = b.bank_id AND a.branch_transit_number = b.branch_transit_number AND a.account_number = b.account_number) '
+                ||'LEFT JOIN         _admin_.'||v_schema_name||'_transactions c ON (b.client_id = c.client_id)) ';
+                
                 
         EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_diff_join OWNER TO vista';
                 
