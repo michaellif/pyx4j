@@ -115,7 +115,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     @Override
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback) {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(tenant.lease().unit().building());
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         callback.onSuccess(createDTO(maintenanceRequest));
     }
 

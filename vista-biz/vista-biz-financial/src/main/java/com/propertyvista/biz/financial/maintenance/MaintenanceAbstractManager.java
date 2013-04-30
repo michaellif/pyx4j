@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class MaintenanceAbstractManager {
 
@@ -42,7 +44,23 @@ public abstract class MaintenanceAbstractManager {
         return request;
     }
 
+    public MaintenanceRequest createNewRequest(Tenant tenant) {
+        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+        if (tenant != null) {
+            Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+            request.building().set(tenant.lease().unit().building());
+            request.buildingElement().set(tenant.lease().unit());
+            request.reporter().set(tenant);
+        }
+        request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
+        return request;
+    }
+
     public void postMaintenanceRequest(MaintenanceRequest request) {
+        if (!request.reporter().isNull() && request.buildingElement().isNull()) {
+            Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
+            request.buildingElement().set(request.reporter().lease().unit());
+        }
         Persistence.secureSave(request);
     }
 

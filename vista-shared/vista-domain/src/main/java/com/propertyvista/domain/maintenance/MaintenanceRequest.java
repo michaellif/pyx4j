@@ -48,6 +48,7 @@ public interface MaintenanceRequest extends IEntity {
     @JoinColumn
     Building building();
 
+    @Caption(name = "Element")
     BuildingElement buildingElement();
 
     AbstractPmcUser originator();

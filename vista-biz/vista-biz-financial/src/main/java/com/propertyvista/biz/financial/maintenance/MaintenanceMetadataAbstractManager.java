@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.maintenance;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -77,7 +76,6 @@ public abstract class MaintenanceMetadataAbstractManager {
                     root.name().setValue("ROOT");
                     meta.rootCategory().set(root);
                     Persistence.service().persist(root);
-                    root.subCategories().setAttachLevel(AttachLevel.Attached);
                 }
             }
             result.rootCategory().set(meta.rootCategory());
@@ -87,16 +85,14 @@ public abstract class MaintenanceMetadataAbstractManager {
     }
 
     private void retrieveSubCategoriesRecursive(MaintenanceRequestCategory parent) {
-        if (parent.subCategories() != null) {
-            Persistence.service().retrieveMember(parent.subCategories());
-            Integer level = parent.level().getValue();
-            if (level == null) {
-                level = 0;
-            }
-            for (MaintenanceRequestCategory cat : parent.subCategories()) {
-                cat.level().setValue(level + 1);
-                retrieveSubCategoriesRecursive(cat);
-            }
+        Persistence.service().retrieveMember(parent.subCategories());
+        Integer level = parent.level().getValue();
+        if (level == null) {
+            level = 0;
+        }
+        for (MaintenanceRequestCategory cat : parent.subCategories()) {
+            cat.level().setValue(level + 1);
+            retrieveSubCategoriesRecursive(cat);
         }
     }
 

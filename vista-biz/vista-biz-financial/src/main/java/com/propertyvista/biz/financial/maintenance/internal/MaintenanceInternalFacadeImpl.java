@@ -26,6 +26,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
@@ -62,6 +63,11 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     @Override
     public MaintenanceRequest createNewRequest(Building building) {
         return MaintenanceInternalManager.instance().createNewRequest(building);
+    }
+
+    @Override
+    public MaintenanceRequest createNewRequestForTenant(Tenant tenant) {
+        return MaintenanceInternalManager.instance().createNewRequest(tenant);
     }
 
     @Override

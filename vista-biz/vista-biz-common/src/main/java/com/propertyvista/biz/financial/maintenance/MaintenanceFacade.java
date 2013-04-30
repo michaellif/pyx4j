@@ -25,6 +25,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 /*
  * Open/Update/Close request
@@ -37,6 +38,8 @@ public interface MaintenanceFacade {
     List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement);
 
     MaintenanceRequest createNewRequest(Building building);
+
+    MaintenanceRequest createNewRequestForTenant(Tenant tenant);
 
     MaintenanceRequest getMaintenanceRequest(String requestId);
 

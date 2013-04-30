@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,8 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -55,9 +58,6 @@ public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
 
     public ServiceRequest convertRequest(MaintenanceRequest mr) {
-        Persistence.ensureRetrieve(mr.reporter().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(mr.reporter().lease().unit().building(), AttachLevel.Attached);
-
         ServiceRequest req = new ServiceRequest();
 
         if (!mr.requestId().isNull()) {
@@ -67,10 +67,15 @@ public class YardiMaintenanceProcessor {
             }
         }
 
-        req.setPropertyCode(mr.reporter().lease().unit().building().propertyCode().getValue());
-        req.setUnitCode(mr.reporter().lease().unit().info().number().getValue());
-        req.setTenantCode(mr.reporter().participantId().getValue());
-        req.setTenantCaused(true);
+        req.setPropertyCode(mr.building().propertyCode().getValue());
+        if (mr.buildingElement().getInstanceValueClass().equals(AptUnit.class)) {
+            req.setUnitCode(mr.buildingElement().<AptUnit> cast().info().number().getValue());
+        }
+        if (!mr.reporter().isNull()) {
+            req.setTenantCode(mr.reporter().participantId().getValue());
+        }
+        req.setTenantCaused(!mr.reporter().isNull());
+
         req.setServiceRequestFullDescription(mr.description().getValue());
         req.setServiceRequestBriefDescription(mr.summary().getValue());
 
@@ -195,10 +200,12 @@ public class YardiMaintenanceProcessor {
     }
 
     private void mergeCategoriesRecursive(MaintenanceRequestCategory oldParent, List<?> newList) {
+        if (oldParent.subCategories().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(oldParent.subCategories());
+        }
         List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>();
         Map<String, MaintenanceRequestCategory> oldMap = new HashMap<String, MaintenanceRequestCategory>();
-        if (oldParent.subCategories() != null) {
-            Persistence.service().retrieveMember(oldParent.subCategories());
+        if (!oldParent.subCategories().isNull()) {
             toBeRemoved.addAll(oldParent.subCategories());
             for (MaintenanceRequestCategory oldCat : oldParent.subCategories()) {
                 oldMap.put(oldCat.name().getValue(), oldCat);
@@ -206,7 +213,7 @@ public class YardiMaintenanceProcessor {
         }
         Set<String> oldNames = oldMap.keySet();
         for (Object newCat : newList) {
-            String newName = newCat instanceof Category ? ((Category) newCat).getName() : newCat.toString();
+            String newName = newCat == null ? null : (newCat instanceof Category ? ((Category) newCat).getName() : newCat.toString());
 
             MaintenanceRequestCategory category;
             if (oldNames.contains(newName)) {
@@ -221,12 +228,10 @@ public class YardiMaintenanceProcessor {
             if (newCat instanceof Category) {
                 List<?> subCategories = ((Category) newCat).getSubCategory();
                 if (subCategories == null || subCategories.size() == 0) {
-                    MaintenanceRequestCategory empty = createCategory(null);
-                    empty.parent().set(category);
-//                    category.subCategories().add(empty);
-                } else {
-                    mergeCategoriesRecursive(category, subCategories);
+                    // our parent category must have a single null-named sub-category
+                    subCategories = Arrays.asList(new String[] { null });
                 }
+                mergeCategoriesRecursive(category, subCategories);
             }
         }
         for (MaintenanceRequestCategory cat : toBeRemoved) {
@@ -262,11 +267,35 @@ public class YardiMaintenanceProcessor {
         // TODO
         MaintenanceRequest mr = EntityFactory.create(MaintenanceRequest.class);
         boolean metaReloaded = false;
-        // find tenant first (if ticket is TenantCaused)
+        // find building - propertyCode field is mandatory
+        {
+            EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
+            crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
+            Building building = Persistence.service().retrieve(crit);
+            if (building == null) {
+                log.warn("Request dropped - Building not found: {}", request.getPropertyCode());
+                return null;
+            } else {
+                mr.building().set(building);
+            }
+        }
+        // unit
+        if (request.getUnitCode() != null) {
+            EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
+            crit.add(PropertyCriterion.eq(crit.proto().building(), mr.building()));
+            crit.add(PropertyCriterion.eq(crit.proto().info().number(), request.getUnitCode()));
+            AptUnit unit = Persistence.service().retrieve(crit);
+            if (unit == null) {
+                log.warn("Request dropped - Unit not found: {}", request.getUnitCode());
+                return null;
+            } else {
+                mr.buildingElement().set(unit);
+            }
+        }
+        // find tenant (if ticket is TenantCaused)
         if (request.getTenantCode() != null) {
             EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
             crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
-            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().info().number(), request.getUnitCode()));
             crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
             Tenant tenant = Persistence.service().retrieve(crit);
             if (tenant == null) {
@@ -275,10 +304,6 @@ public class YardiMaintenanceProcessor {
             } else {
                 mr.reporter().set(tenant);
             }
-        } else {
-            // TODO - remove tenant ownership for MaintenanceRequest domain object
-            log.warn("Request dropped - Tenant is null");
-            return null;
         }
         // category
         if (request.getCategory() != null) {
@@ -343,9 +368,6 @@ public class YardiMaintenanceProcessor {
     private void updateRequest(MaintenanceRequest mr, MaintenanceRequest newData) {
         // TODO
         mr.requestId().set(newData.requestId());
-        mr.category().set(newData.category());
-        mr.priority().set(newData.priority());
-        mr.status().set(newData.status());
         mr.updated().set(newData.updated());
         mr.scheduledDate().set(newData.scheduledDate());
         mr.scheduledTime().set(newData.scheduledTime());
@@ -378,14 +400,12 @@ public class YardiMaintenanceProcessor {
     }
 
     private MaintenanceRequestCategory findCategory(String name, MaintenanceRequestCategory parent) {
-        if (name == null) {
-            return null;
-        }
         if (parent == null) {
             parent = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).rootCategory();
         }
+        // name could be null
         for (MaintenanceRequestCategory cat : parent.subCategories()) {
-            if (name.equals(cat.name().getValue())) {
+            if ((name == null && cat.name().isNull()) || (name != null && name.equals(cat.name().getValue()))) {
                 return cat;
             }
         }

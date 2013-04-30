@@ -46,7 +46,7 @@ import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Messages;
 
-public class YardiSystemBatchesService extends YardiAbstarctService {
+public class YardiSystemBatchesService extends YardiAbstractService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
 

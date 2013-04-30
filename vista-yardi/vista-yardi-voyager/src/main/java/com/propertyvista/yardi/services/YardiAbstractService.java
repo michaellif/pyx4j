@@ -39,9 +39,9 @@ import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.bean.Messages;
 import com.propertyvista.yardi.bean.Properties;
 
-public class YardiAbstarctService {
+public class YardiAbstractService {
 
-    private final static Logger log = LoggerFactory.getLogger(YardiAbstarctService.class);
+    private final static Logger log = LoggerFactory.getLogger(YardiAbstractService.class);
 
     /**
      * The Ping function accepts no parameters, but will return the

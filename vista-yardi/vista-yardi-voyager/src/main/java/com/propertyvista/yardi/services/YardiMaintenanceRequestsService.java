@@ -16,6 +16,7 @@ package com.propertyvista.yardi.services;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,7 @@ import com.propertyvista.yardi.bean.Messages;
  * The agent is responsible for persisting all imported data in the DB by requests from MaintenanceFacade.
  * The requesting facade will then grab the data directly from DB.
  */
-public class YardiMaintenanceRequestsService {
+public class YardiMaintenanceRequestsService extends YardiAbstractService {
 
     public static final String lastTicketUpdateCacheKey = "yardi-maintenance-requests-last-ticket-update";
 
@@ -77,6 +78,10 @@ public class YardiMaintenanceRequestsService {
 
     private static class SingletonHolder {
         public static final YardiMaintenanceRequestsService INSTANCE = new YardiMaintenanceRequestsService();
+        static {
+            CacheService.remove(lastMetaUpdateCacheKey);
+            CacheService.remove(lastTicketUpdateCacheKey);
+        }
     }
 
     public static YardiMaintenanceRequestsService getInstance() {
@@ -108,11 +113,29 @@ public class YardiMaintenanceRequestsService {
      */
     public void loadMaintenanceRequests(PmcYardiCredential yc) throws YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
+
+        // make sure meta was loaded
+        loadMaintenanceRequestMeta(yc);
+
         Date lastModified = getTicketTimestamp();
         if (lastModified == null) {
             lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
         }
-        loadRequests(yc, lastModified);
+
+        List<String> propertyCodes = null;
+        if (yc.propertyCode().isNull()) {
+            propertyCodes = getPropertyCodes(ServerSideFactory.create(YardiClient.class), yc);
+        } else {
+            propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
+        }
+
+        if (propertyCodes != null) {
+            for (String propertyCode : propertyCodes) {
+                loadRequests(yc, lastModified, propertyCode);
+            }
+        } else {
+            log.trace("No PropertyCodes provided");
+        }
     }
 
     public MaintenanceRequest postMaintenanceRequest(PmcYardiCredential yc, MaintenanceRequest request) throws YardiServiceException {
@@ -120,19 +143,20 @@ public class YardiMaintenanceRequestsService {
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(serviceRequest);
 
-        requests = YardiMaintenanceRequestsService.getInstance().postMaintenanceRequests(yc, requests);
+        requests = postMaintenanceRequests(yc, requests);
         new YardiMaintenanceProcessor().updateRequest(yc, request, requests.getServiceRequest().get(0));
+
         return request;
     }
 
-    protected void loadRequests(final PmcYardiCredential yc, Date fromDate) throws YardiServiceException {
+    protected void loadRequests(final PmcYardiCredential yc, Date fromDate, String propertyCode) throws YardiServiceException {
         GetServiceRequest_Search params = new GetServiceRequest_Search();
-        params.setYardiPropertyId(yc.propertyCode().getValue());
+        params.setYardiPropertyId(propertyCode);
         final Date now = SystemDateManager.getDate();
         if (fromDate != null) {
             params.setFromDate(dateFormat.format(fromDate));
         }
-        final ServiceRequests newRequests = YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        final ServiceRequests newRequests = getRequestsByParameters(yc, params);
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
@@ -160,7 +184,7 @@ public class YardiMaintenanceRequestsService {
     }
 
     protected void loadMeta(final PmcYardiCredential yc) throws YardiServiceException {
-        final YardiMaintenanceConfigMeta meta = YardiMaintenanceRequestsService.getInstance().getMaintenanceConfigMeta(yc);
+        final YardiMaintenanceConfigMeta meta = getMaintenanceConfigMeta(yc);
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {

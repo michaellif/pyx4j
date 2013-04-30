@@ -22,6 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -46,6 +47,10 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void postMaintenanceRequest(MaintenanceRequest request) {
+        if (!request.reporter().isNull() && request.buildingElement().isNull()) {
+            Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
+            request.buildingElement().set(request.reporter().lease().unit());
+        }
         postRequest(request);
     }
 

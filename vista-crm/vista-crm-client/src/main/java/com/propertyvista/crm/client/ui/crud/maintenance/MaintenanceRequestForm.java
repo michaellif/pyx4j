@@ -31,12 +31,14 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -78,7 +80,30 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId()), 20).build());
-        get(proto().requestId()).setEditable(false);
+        get(proto().requestId()).inheritViewable(false);
+        get(proto().requestId()).setViewable(true);
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected BuildingSelectorDialog getSelectorDialog() {
+                return new BuildingSelectorDialog(false) {
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (getSelectedItems().isEmpty()) {
+                            return false;
+                        }
+                        setValue(getSelectedItems().get(0));
+                        return true;
+                    }
+                };
+            }
+        }), 25).build());
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reporter(), new CEntitySelectorHyperlink<Tenant>() {
             @Override
@@ -153,8 +178,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         if (meta == null || choicesReady) {
             return;
         }
-        int levels = meta.categoryLevels().size();
+        priority.setOptions(meta.priorities());
+        status.setOptions(meta.statuses());
         // create selectors
+        int levels = meta.categoryLevels().size();
         MaintenanceRequestCategoryChoice child = null;
         MaintenanceRequestCategoryChoice mrCategory = null;
         for (int i = 0; i < levels; i++) {
@@ -172,8 +199,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             child = choice;
         }
         mrCategory.setOptionsMeta(meta);
-        priority.setOptions(meta.priorities());
-        status.setOptions(meta.statuses());
         choicesReady = true;
     }
 
@@ -204,6 +229,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
         if (isEditable()) {
+            get(proto().building()).setEditable(getValue().building().isNull());
             get(proto().reporter()).setEditable(getValue().reporter().isNull());
         }
 
@@ -219,6 +245,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 return o.getStringView();
             }
         }
+
+        @Override
+        public boolean isValuesEquals(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
+            return value1 != null && value2 != null && value1.name().equals(value2.name());
+        }
     }
 
     class StatusSelector extends CComboBox<MaintenanceRequestStatus> {
@@ -229,6 +260,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             } else {
                 return o.getStringView();
             }
+        }
+
+        @Override
+        public boolean isValuesEquals(MaintenanceRequestStatus value1, MaintenanceRequestStatus value2) {
+            return value1 != null && value2 != null && value1.name().equals(value2.name());
         }
     }
 }

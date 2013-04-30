@@ -58,7 +58,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.reporter());
+        Persistence.service().retrieve(dto.building());
         Persistence.service().retrieve(dto.category());
         MaintenanceRequestCategory parent = dto.category().parent();
         while (!parent.isNull()) {
@@ -114,8 +114,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Key tenantId) {
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId);
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(tenant.lease().unit().building());
-        maintenanceRequest.reporter().set(tenant);
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         callback.onSuccess(createDTO(maintenanceRequest));
     }
 

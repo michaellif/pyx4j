@@ -80,7 +80,7 @@ import com.propertyvista.yardi.bean.Messages;
  * @author Mykola
  * 
  */
-public class YardiResidentTransactionsService extends YardiAbstarctService {
+public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsService.class);
 
