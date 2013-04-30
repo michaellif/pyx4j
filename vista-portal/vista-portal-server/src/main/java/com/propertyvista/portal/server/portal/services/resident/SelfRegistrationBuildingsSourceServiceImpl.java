@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,7 +34,26 @@ public class SelfRegistrationBuildingsSourceServiceImpl implements SelfRegistrat
     @Override
     public void obtainBuildings(AsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>> callback) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        List<Building> buildingsDbo = Persistence.service().query(criteria);
+        List<Building> buildingsDbo = new Vector<Building>(Persistence.service().query(criteria));
+        Collections.sort(buildingsDbo, new Comparator<Building>() {
+            @Override
+            public int compare(Building o1, Building o2) {
+                int c = o1.info().address().country().name().compareTo(o2.info().address().country().name());
+                if (c == 0) {
+                    c = o1.info().address().province().name().compareTo(o2.info().address().province().name());
+                    if (c == 0) {
+                        c = o1.info().address().city().compareTo(o2.info().address().city());
+                        if (c == 0) {
+                            c = o1.info().address().streetName().compareTo(o2.info().address().streetName());
+                            if (c == 0) {
+                                c = o1.info().address().streetNumber().compareTo(o2.info().address().streetNumber());
+                            }
+                        }
+                    }
+                }
+                return c;
+            }
+        });
 
         Vector<SelfRegistrationBuildingDTO> buildingsDto = new Vector<SelfRegistrationBuildingDTO>();
         for (Building dbo : buildingsDbo) {
