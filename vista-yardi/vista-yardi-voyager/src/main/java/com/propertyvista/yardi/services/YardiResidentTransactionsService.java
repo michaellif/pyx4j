@@ -114,7 +114,7 @@ public class YardiResidentTransactionsService extends YardiAbstarctService {
             List<String> propertyCodes = getPropertyCodes(client, yc);
             allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
         } else {
-            List<String> propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("[\\s\"]+,[\\s\"]+"));
+            List<String> propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s+,\\s+"));
             allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
         }
 
