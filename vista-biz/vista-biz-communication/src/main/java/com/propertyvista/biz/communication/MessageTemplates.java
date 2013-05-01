@@ -28,6 +28,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -335,25 +336,42 @@ public class MessageTemplates {
             if (EntityGraph.fullyEqual(t.customer(), paymentReversal.paymentRecord().paymentMethod().customer())) {
                 Tenant tenant = t.cast();
                 tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Tenant().formViewerPlace(tenant.getPrimaryKey()));
-                tenantId = tenant.getPrimaryKey().toString();
+                tenantId = tenant.participantId().getValue();
                 break;
             }
         }
 
+        String unitId = billingAccount.lease().unit().info().number().getValue();
+        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);
+        String buildingId = billingAccount.lease().unit().building().getStringView();
+
         String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
                 new CrmSiteMap.Finance.Payment().formViewerPlace(paymentReversal.paymentRecord().getPrimaryKey()));
         String paymentId = paymentReversal.paymentRecord().getPrimaryKey().toString();
+        String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentReversal.paymentRecord().amount().getValue());
 
-        email.setSubject(i18n.tr("NSF Alert for {0}, id {1}, lease: {2}", tenantName, tenantId, leaseId));
+        email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));
 
-        email.setHtmlBody(i18n.tr(//@formatter:off
-                "NSF alert for <a href=\"{0}\">{1}, id: {2}</a>, lease: <a href=\"{3}\">{4}</a>: <br/>" +
-                "The <a href=\"{5}\">payment #{6}</a> was returned/rejected. The associated acccount had Non Sufficient Funds to process the payment. <br/>" +
-                "NSF fee will be applied.",
-                tenantUrl, tenantName, tenantId,
-                leaseUrl, leaseId,
-                paymentRecordUrl, paymentId
-        ));//@formatter:on
+        String emailBody = "";
+        try {
+            emailBody = IOUtils.getTextResource("email/nsf-notification.html");
+        } catch (IOException e) {
+            throw new Error("Failed to load email template for nsf notifications", e);
+        }
+        //@formatter:off
+        emailBody = emailBody
+                .replace("${buildingId}", buildingId)
+                .replace("${unitId}", unitId)
+                .replace("${leaseId}", leaseId)
+                .replace("${leaseUrl}", leaseUrl)
+                .replace("${tenantId}", tenantId)
+                .replace("${tenantName}", tenantName)
+                .replace("${tenantUrl}", tenantUrl)
+                .replace("${paymentId}", paymentId)
+                .replace("${paymentAmount}", paymentAmount)
+                .replace("${paymentUrl}", paymentRecordUrl);
+        //@formatter:on
+        email.setHtmlBody(wrapAdminHtml(emailBody));
 
         return email;
     }
