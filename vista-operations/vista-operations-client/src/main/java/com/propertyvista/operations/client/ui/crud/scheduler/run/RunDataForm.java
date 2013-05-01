@@ -20,10 +20,13 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.ExecutionReport;
+import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.TriggerDTO;
 
 public class RunDataForm extends OperationsEntityForm<RunData> {
 
@@ -36,6 +39,13 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
+
+        content.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().execution().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)), 40)
+                        .build());
+
+        content.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().execution(), OperationsEditorsComponentFactory.createEntityHyperlink(Run.class)), 40).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))),
                 10).build());

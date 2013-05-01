@@ -96,14 +96,14 @@ public class PmcProcessDispatcherJob implements Job {
             }
 
             log.info("starting {}", process.getStringView());
-            startAndRun(process, scheduledFireTime);
+            startAndRun(process, scheduledFireTime, dataMap.getLong(JobData.startedBy.name()));
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();
         }
     }
 
-    private void startAndRun(Trigger trigger, Date scheduledFireTime) {
+    private void startAndRun(Trigger trigger, Date scheduledFireTime, Long operationsUserKey) {
         EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
@@ -118,6 +118,9 @@ public class PmcProcessDispatcherJob implements Job {
         }
         run.started().setValue(new Date());
         run.status().setValue(RunStatus.Running);
+        if (operationsUserKey != null) {
+            run.startedBy().setPrimaryKey(new Key(operationsUserKey));
+        }
         run.trigger().set(trigger);
 
         if (run.forDate().isNull()) {

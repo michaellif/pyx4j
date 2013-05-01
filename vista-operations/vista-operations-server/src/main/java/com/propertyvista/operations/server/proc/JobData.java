@@ -21,4 +21,6 @@ public enum JobData {
 
     manualExecution,
 
+    startedBy
+
 }
