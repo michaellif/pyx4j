@@ -83,17 +83,14 @@ public class AptListPanel extends Panel {
                 } else {
                     item.add(new Label("aptMapview").setVisible(false));
                 }
+                // address
                 AddressStructured addr = propInfo.info().address();
-                String addrFmt = "";
-                if (addr != null) {
-                    addrFmt += addr.streetNumber().getValue() + " " + addr.streetName().getValue() + ", " + addr.city().getValue() + ", "
-                            + addr.province().code().getValue() + " " + addr.postalCode().getValue();
-                }
-                item.add(new Label("address", addrFmt));
+                item.add(new Label("address", addr != null ? addr.getStringView() : ""));
                 String desc = propInfo.marketing().description().getValue();
                 if (desc == null) {
                     desc = "";
                 }
+                // description
                 if (ApplicationMode.isDevelopment()) {
                     desc += " (" + propInfo.propertyCode().getValue() + ")";
                 }
