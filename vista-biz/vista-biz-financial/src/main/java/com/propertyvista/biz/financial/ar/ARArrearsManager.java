@@ -157,8 +157,13 @@ public class ARArrearsManager {
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(currentDate);
+
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         LogicalDate firstDayOfCurrentMonth = new LogicalDate(calendar.getTime());
+
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        LogicalDate lastDayOfCurrentMonth = new LogicalDate(calendar.getTime());
+
         calendar.setTime(currentDate);
         calendar.add(Calendar.DATE, -30);
         LogicalDate date30 = new LogicalDate(calendar.getTime());
@@ -175,7 +180,7 @@ public class ARArrearsManager {
             }
             AgingBuckets agingBuckets = agingBucketsMap.get(arrearsCategory);
 
-            if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(currentDate) < 0) {
+            if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(lastDayOfCurrentMonth) <= 0) {
                 agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
             }
 
