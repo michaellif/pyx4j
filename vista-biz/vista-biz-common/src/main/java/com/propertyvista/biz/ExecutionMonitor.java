@@ -40,6 +40,8 @@ public class ExecutionMonitor {
 
     private final Map<ReportSectionId, ReportSection> sections;
 
+    private final Map<String, Boolean> excludedSectionsFromTotals;
+
     private Long processedCount;
 
     private Long failedCount;
@@ -56,6 +58,7 @@ public class ExecutionMonitor {
 
     public ExecutionMonitor(Long processed, Long failed, Long erred) {
         sections = new HashMap<ReportSectionId, ReportSection>();
+        excludedSectionsFromTotals = new HashMap<String, Boolean>();
         this.processedCount = processed == null ? 0L : processed;
         this.failedCount = failed == null ? 0L : failed;
         this.erredCount = erred == null ? 0L : erred;
@@ -94,6 +97,13 @@ public class ExecutionMonitor {
         }
     }
 
+    /**
+     * Excluded Section Counter From Totals
+     */
+    public void setExcludedSectionsFromTotals(String sectionName, boolean include) {
+        excludedSectionsFromTotals.put(sectionName, include);
+    }
+
     public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
         ReportSectionId id = new ReportSectionId(sectionName, type);
         ReportSection section = sections.get(id);
@@ -105,18 +115,25 @@ public class ExecutionMonitor {
         section.add(value);
         section.addMessage(message);
 
-        switch (type) {
-        case processed:
-            processedCount++;
-            break;
-        case failed:
-            failedCount++;
-            break;
-        case erred:
-            erredCount++;
-            break;
-        default:
-            break;
+        Boolean excluded = excludedSectionsFromTotals.get(sectionName);
+        if (excluded == null) {
+            excluded = false;
+        }
+
+        if (!excluded) {
+            switch (type) {
+            case processed:
+                processedCount++;
+                break;
+            case failed:
+                failedCount++;
+                break;
+            case erred:
+                erredCount++;
+                break;
+            default:
+                break;
+            }
         }
 
         log.debug("Execution event [sectionName={} type={} value={} message={}]", sectionName, type, value, message);
@@ -126,6 +143,11 @@ public class ExecutionMonitor {
 
     public void addEvent(String sectionName, CompletionType type, String message) {
         addEvent(sectionName, type, null, message);
+    }
+
+    public void addInfoEvent(String sectionName, String message) {
+        setExcludedSectionsFromTotals(sectionName, true);
+        addEvent(sectionName, CompletionType.processed, message);
     }
 
     public void addProcessedEvent(String sectionName) {
@@ -236,7 +258,7 @@ public class ExecutionMonitor {
 
         private final List<ReportMessage> messages;
 
-        public long counter;
+        long counter;
 
         ExecutionReportSection executionReportSection;
 

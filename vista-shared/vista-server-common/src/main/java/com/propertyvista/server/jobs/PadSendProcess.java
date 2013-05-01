@@ -41,8 +41,8 @@ public class PadSendProcess implements PmcProcess {
     public void complete(PmcProcessContext context) {
         if (ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile(this.padFile)) {
             context.getExecutionMonitor().setMessage("PAD file# " + padFile.fileCreationNumber().getStringView());
-            context.getExecutionMonitor().addProcessedEvent("sent file", padFile.fileName().getValue());
-            context.getExecutionMonitor().addProcessedEvent("fileCreationNumber", padFile.fileCreationNumber().getValue());
+            context.getExecutionMonitor().addInfoEvent("sent file", padFile.fileName().getValue());
+            context.getExecutionMonitor().addInfoEvent("fileCreationNumber", padFile.fileCreationNumber().getValue());
         } else {
             context.getExecutionMonitor().setMessage("Nothing to send");
         }

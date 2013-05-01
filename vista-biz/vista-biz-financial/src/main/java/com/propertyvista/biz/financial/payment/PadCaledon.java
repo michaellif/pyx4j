@@ -218,11 +218,11 @@ public class PadCaledon {
     public boolean receivePadAcknowledgementFile(final ExecutionMonitor executionMonitor) {
         final PadAkFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
         if (padAkFile == null) {
-            executionMonitor.addProcessedEvent("Pooled, No file found on server");
+            executionMonitor.addInfoEvent("Pooled, No file found on server", null);
             return false;
         } else {
-            executionMonitor.addProcessedEvent("received file", padAkFile.fileName().getValue());
-            executionMonitor.addProcessedEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
+            executionMonitor.addInfoEvent("received file", padAkFile.fileName().getValue());
+            executionMonitor.addInfoEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
         }
 
         boolean processedOk = false;
@@ -247,10 +247,10 @@ public class PadCaledon {
     public boolean receivePadReconciliation(final ExecutionMonitor executionMonitor) {
         final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
         if (reconciliationFile == null) {
-            executionMonitor.addProcessedEvent("Pooled, No file found on server");
+            executionMonitor.addInfoEvent("Pooled, No file found on server", null);
             return false;
         } else {
-            executionMonitor.addProcessedEvent("received file", reconciliationFile.fileName().getValue());
+            executionMonitor.addInfoEvent("received file", reconciliationFile.fileName().getValue());
         }
 
         boolean processedOk = false;
