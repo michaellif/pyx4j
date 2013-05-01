@@ -27,7 +27,7 @@ public class CaptionViewImpl extends SimplePanel implements CaptionView {
 
     @Override
     public void setCaption(String caption) {
-        captionLabel.setHTML("<h1>" + caption + "</h1>");
+        captionLabel.setHTML("<h1>" + (caption == null ? "" : caption) + "</h1>");
     }
 
 }
