@@ -35,7 +35,7 @@ public interface PadReconciliationFile extends IEntity {
 
     IPrimitive<String> fileName();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
     IList<PadReconciliationSummary> batches();

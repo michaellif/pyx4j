@@ -35,10 +35,14 @@ class PadCaledonReconciliation {
     }
 
     void validateAndPersistFile(PadReconciliationFile reconciliationFile) {
+
+        // Save detached objects
+        List<PadReconciliationSummary> batches = new ArrayList<PadReconciliationSummary>(reconciliationFile.batches());
         Persistence.service().persist(reconciliationFile);
 
         // Match merchantAccounts.
-        for (PadReconciliationSummary summary : reconciliationFile.batches()) {
+        for (PadReconciliationSummary summary : batches) {
+            summary.reconciliationFile().set(reconciliationFile);
 
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
@@ -50,8 +54,8 @@ class PadCaledonReconciliation {
 
             summary.processingStatus().setValue(false);
 
+            //Save detached objects
             List<PadReconciliationDebitRecord> records = new ArrayList<PadReconciliationDebitRecord>(summary.records());
-
             Persistence.service().persist(summary);
 
             for (final PadReconciliationDebitRecord debitRecord : records) {
