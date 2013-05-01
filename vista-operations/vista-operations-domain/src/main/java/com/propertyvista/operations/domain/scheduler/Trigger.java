@@ -41,7 +41,6 @@ public interface Trigger extends IEntity {
 
     @NotNull
     @ReadOnly
-    @ToString
     IPrimitive<PmcProcessType> triggerType();
 
     @NotNull

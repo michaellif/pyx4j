@@ -26,33 +26,34 @@ public enum PmcProcessType implements Serializable {
 
     billing(true),
 
-    @Translate("Issue PreAuthorized Payments")
+    @Translate("PAD 1 - Issue PreAuthorized Payments")
     paymentsIssue(true),
 
-    @Translate("Update PreAuthorized Payments")
+    @Translate("PAD 2 - Update PreAuthorized Payments")
     paymentsUpdate(true),
 
-    @Translate("Process Scheduled CreditCards Payments")
-    paymentsScheduledCreditCards,
-
-    @Translate("Process Scheduled eCheque Payments")
+    @Translate("PAD 3 - Process Scheduled eCheque Payments")
     paymentsScheduledEcheck,
 
-    paymentsBmoReceive,
+    @Translate("PAD 4 - Process Scheduled CreditCards Payments")
+    paymentsScheduledCreditCards,
 
-    @Translate("Send eCheque Payments to Caledon")
+    @Translate("PAD 5 - Send eCheque Payments to Caledon")
     paymentsPadSend,
 
-    @Translate("Payments Pad Receive Acknowledgment from Caledon")
+    @Translate("PAD 6A - Payments Pad Receive Acknowledgment from Caledon")
     paymentsPadReceiveAcknowledgment,
 
-    @Translate("Payments Pad Process Acknowledgment (triggered by ReceiveReconciliation)")
+    @Translate("PAD 6B - Payments Pad Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
     paymentsPadProcesAcknowledgment,
 
-    @Translate("Payments Pad Receive Reconciliation from Caledon")
+    @Translate("PAD 7A - Payments Pad Receive Reconciliation from Caledon")
     paymentsPadReceiveReconciliation,
 
-    @Translate("Payments Pad Process Reconciliation (triggered by ReceiveReconciliation)")
+    @Translate("PAD 7B - Receive Payments from BMO")
+    paymentsBmoReceive,
+
+    @Translate("PAD 7C - Payments Pad Process Reconciliation (auto triggered by ReceiveReconciliation)")
     paymentsPadProcesReconciliation,
 
     paymentsTenantSure(true),
@@ -94,6 +95,17 @@ public enum PmcProcessType implements Serializable {
 
     PmcProcessType(boolean dailyExecutions) {
         this.dailyExecutions = dailyExecutions;
+    }
+
+    //TODO
+    PmcProcessType(PmcProcessOptions... options) {
+        boolean runForDay = false;
+        for (PmcProcessOptions otion : options) {
+            if (otion == PmcProcessOptions.RunForDay) {
+                runForDay = true;
+            }
+        }
+        this.dailyExecutions = runForDay;
     }
 
     public boolean isDailyExecutions() {
