@@ -37,6 +37,7 @@ import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
@@ -81,9 +82,15 @@ public class FloorplanInfoPanel extends Panel {
         MinMaxPair<BigDecimal> minMaxMarketRent = PropertyFinder.getMinMaxMarketRent(fpUnits);
         String priceFmt = "Not available";
         if (minMaxMarketRent.getMin() != null && minMaxMarketRent.getMax() != null) {
-            priceFmt = "$" + minMaxMarketRent.getMin().setScale(2) + " - $" + minMaxMarketRent.getMax().setScale(2);
+            BigDecimal min = DomainUtil.roundMoney(minMaxMarketRent.getMin());
+            BigDecimal max = DomainUtil.roundMoney(minMaxMarketRent.getMax());
+            if (max.compareTo(min) > 0) {
+                priceFmt = "$" + min + " - $" + max;
+            } else {
+                priceFmt = "$" + min;
+            }
         }
-        add(new Label("priceRange", priceFmt));
+        add(new Label("rentPrice", priceFmt));
         // phone
         String phone = "Not Available";
         String email = null;

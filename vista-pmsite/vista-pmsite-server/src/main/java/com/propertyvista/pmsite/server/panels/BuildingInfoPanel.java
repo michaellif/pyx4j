@@ -85,9 +85,15 @@ public class BuildingInfoPanel extends Panel {
         }
         String priceFmt = i18n.tr(NAString);
         if (minMaxMarketRent.getMin() != null && minMaxMarketRent.getMax() != null) {
-            priceFmt = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
+            BigDecimal min = DomainUtil.roundMoney(minMaxMarketRent.getMin());
+            BigDecimal max = DomainUtil.roundMoney(minMaxMarketRent.getMax());
+            if (max.compareTo(min) > 0) {
+                priceFmt = "$" + min + " - $" + max;
+            } else {
+                priceFmt = "$" + min;
+            }
         }
-        add(new Label("priceRange", priceFmt));
+        add(new Label("rentPrice", priceFmt));
         // phone
         String phone = i18n.tr(NAString);
         String email = null;

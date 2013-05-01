@@ -109,7 +109,13 @@ public class AptDetailsPage extends BasePage {
                 // price
                 String price = i18n.tr("Not Available");
                 if (minMaxMarketRent.getMin() != null) {
-                    price = "$" + DomainUtil.roundMoney(minMaxMarketRent.getMin()) + " - $" + DomainUtil.roundMoney(minMaxMarketRent.getMax());
+                    BigDecimal min = DomainUtil.roundMoney(minMaxMarketRent.getMin());
+                    BigDecimal max = DomainUtil.roundMoney(minMaxMarketRent.getMax());
+                    if (max.compareTo(min) > 0) {
+                        price = "$" + min + " - $" + max;
+                    } else {
+                        price = "$" + min;
+                    }
                 }
                 item.add(new Label("price", price));
                 // area
