@@ -103,17 +103,23 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
             break;
         case 2:
             get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
+            get(proto().username()).setValue("propertyvistaws");
+            get(proto().credential()).setValue("52673");
+            get(proto().serverName()).setValue("aspdb04");
+            get(proto().database()).setValue("afqoml_live");
+            break;
+        case 3:
+            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
             get(proto().username()).setValue("propertyvista-srws");
             get(proto().credential()).setValue("55548");
             get(proto().serverName()).setValue("aspdb04");
             get(proto().database()).setValue("afqoml_live");
             break;
-        }
-        q++;
-        if (q > 1) {
+        default:
             q = 0;
+            devGenerateTestCredencials();
+            break;
         }
 
     }
-
 }
