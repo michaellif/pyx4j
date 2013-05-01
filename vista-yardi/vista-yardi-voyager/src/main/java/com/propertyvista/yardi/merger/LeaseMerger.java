@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.yardi.services.YardiLeaseProcessor;
 
 public class LeaseMerger {
 
@@ -38,13 +39,13 @@ public class LeaseMerger {
     }
 
     public LeaseTerm updateTerm(YardiLease imported, LeaseTerm existing) {
-        existing.termFrom().setValue(getImportedDate(imported.getLeaseFromDate()));
+        existing.termFrom().setValue(YardiLeaseProcessor.guessFromDate(imported));
         existing.termTo().setValue(getImportedDate(imported.getLeaseToDate()));
         return existing;
     }
 
     public boolean checkTermChanges(YardiLease imported, LeaseTerm existing) {
-        compare(existing.termFrom(), imported.getLeaseFromDate());
+        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDateNoThrow(imported));
         compare(existing.termTo(), imported.getLeaseToDate());
         return isNew;
     }

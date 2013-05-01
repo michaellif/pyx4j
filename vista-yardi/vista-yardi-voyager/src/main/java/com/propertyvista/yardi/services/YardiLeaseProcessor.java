@@ -133,30 +133,41 @@ public class YardiLeaseProcessor {
         lease.leaseId().setValue(rtCustomer.getCustomerID());
         lease.type().setValue(ARCode.Type.Residential);
 
-        // set unit:
+        // unit:
         if (unit.getPrimaryKey() != null) {
             leaseFacade.setUnit(lease, unit);
             leaseFacade.setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
         }
-        // set dates:
-        lease.currentTerm().termFrom().setValue(new LogicalDate(yardiLease.getLeaseFromDate()));
+
+        //  dates:
+        lease.currentTerm().termFrom().setValue(guessFromDate(yardiLease));
+
         if (yardiLease.getLeaseToDate() != null) {
             lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
         } else {
             lease.currentTerm().type().setValue(LeaseTerm.Type.Periodic);
         }
+
         if (yardiLease.getExpectedMoveInDate() != null) {
             lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
         }
         if (yardiLease.getActualMoveIn() != null) {
             lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
         }
+
+//        if (yardiLease.getExpectedMoveOutDate() != null) {
+//            lease.expectedMoveOut().setValue(new LogicalDate(yardiLease.getExpectedMoveOutDate()));
+//        }
+//        if (yardiLease.getActualMoveOut() != null) {
+//            lease.actualMoveOut().setValue(new LogicalDate(yardiLease.getActualMoveOut()));
+//        }
+
+        // misc.
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
 
-        // add tenants:
+        // tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
-            LeaseTermTenant tenantInLease = new TenantMapper().map(yardiCustomer, lease.currentTerm().version().tenants());
-            lease.currentTerm().version().tenants().add(tenantInLease);
+            lease.currentTerm().version().tenants().add(new TenantMapper().map(yardiCustomer, lease.currentTerm().version().tenants()));
         }
 
         return lease;
@@ -170,4 +181,35 @@ public class YardiLeaseProcessor {
         return false;
     }
 
+    /**
+     * We badly depends on this termFrom/leaseFrom date - so try to deduct as much as possible in the cases where it absent in Yardi!
+     */
+    public static LogicalDate guessFromDate(YardiLease yardiLease) {
+        LogicalDate date;
+
+        if (yardiLease.getLeaseFromDate() != null) {
+            date = new LogicalDate(yardiLease.getLeaseFromDate());
+        } else if (yardiLease.getActualMoveIn() != null) {
+            date = new LogicalDate(yardiLease.getActualMoveIn());
+        } else if (yardiLease.getLeaseSignDate() != null) {
+            date = new LogicalDate(yardiLease.getLeaseSignDate());
+        } else {
+            throw new IllegalArgumentException("Can't deduct leaseFrom date!!!");
+        }
+
+        return date;
+    }
+
+    public static LogicalDate guessFromDateNoThrow(YardiLease yardiLease) {
+        LogicalDate date;
+
+        try {
+            date = guessFromDate(yardiLease);
+        } catch (IllegalArgumentException e) {
+            log.error("Error", e);
+            date = null;
+        }
+
+        return date;
+    }
 }

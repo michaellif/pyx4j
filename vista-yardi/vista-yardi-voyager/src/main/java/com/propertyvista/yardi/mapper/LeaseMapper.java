@@ -39,12 +39,16 @@ public class LeaseMapper {
 
         lease.actualMoveIn().setValue(yardiLease.getActualMoveIn() != null ? new LogicalDate(yardiLease.getActualMoveIn()) : null);
         lease.actualMoveOut().setValue(yardiLease.getActualMoveOut() != null ? new LogicalDate(yardiLease.getActualMoveOut()) : null);
-        ServerSideFactory.create(LeaseFacade.class).setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
+
         lease.expectedMoveIn().setValue(yardiLease.getExpectedMoveInDate() != null ? new LogicalDate(yardiLease.getExpectedMoveInDate()) : null);
         lease.expectedMoveOut().setValue(yardiLease.getExpectedMoveOutDate() != null ? new LogicalDate(yardiLease.getExpectedMoveOutDate()) : null);
+
         term.termFrom().setValue(yardiLease.getLeaseFromDate() != null ? new LogicalDate(yardiLease.getLeaseFromDate()) : null);
         term.termTo().setValue(yardiLease.getLeaseToDate() != null ? new LogicalDate(yardiLease.getLeaseToDate()) : null);
+
         lease.currentTerm().set(term);
+
+        ServerSideFactory.create(LeaseFacade.class).setLeaseAgreedPrice(lease, yardiLease.getCurrentRent());
 
         return lease;
     }
